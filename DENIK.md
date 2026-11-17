@@ -76,6 +76,12 @@ Skupiny: 1 Prototyp a buildy · 2 Terén a tvar · 3 Rozlišení bloku · 4 Ská
   - Rákos zatím není (bude samostatná entita vegetace).
 - **Další krok:** Jan a backend potvrdí hladinu (vrstva 30, nebo jiná / vlastní materiál vody). Pak zrychlit vkládání (viz C2, C5).
 
+### 🧪 Voda jako data v buňkách: propustnost materiálů, toky, rybníky, zdroje a kopání u vody (2026-11-17 16:05 · `voda-studie/`, shots `35_voda_*`)
+- **Směr:** Jan 15:47: „Budeme muset materiálu přidat propustnost …“, voda musí být skutečná data (ne jen obraz – v prototypu se dalo chodit po vodě a kopat pod ní), 15:51: každá buňka má svůj objem, zdroje vody jako entity bloku. Hmotový buněčný automat na datových buňkách [4][14]: v každé buňce objem vody (vzduch pojme 1, materiál svou pórovitost), tik = zdroje → pád a vsak → do stran z kopie stavu → přetlak nahoru → odpar. Materiál má 3 čísla: propustnost, pórovitost, odpor povrchu [5][6][7][8]. Zdroje `top_flow`, `hillside_spring`, `underground_pocket` ze seedu bloku [11][12]. Průchodnost podle hloubky vody (0,05 m pomalé, 0,30 m neprůchozí) a bláta [1]. 6 scénářů (10 × 10 × 4, svah 11 × 12 × 6, prameny 10 × 10 × 5).
+- **Zlepšení:** rybník nad jílem pod pískem, přeliv skalní pánve, pomalý průsak vápencovou hrází, louka brzdí odtok (čelo vody řada 9 vs. 11 u písku v tiku 240, písek odvede zemí 4× víc). Kopání: příkop do břehu se zaplaví, průkop jílu pod rybníkem ho vypustí do chodby (neprůchozí 46 → 0). Prokopnutá kapsa vyvěrá šachtou. Deterministické (2 běhy = stejný kontrolní součet), bilance vody se měří každý tik (chyba ≤ 1,6·10⁻⁶).
+- **Komplikace:** přetlak jen o 1 buňku za tik (žádné spojené nádoby, U-trubice) [2]; voda tenčí než `film` zůstane jako kaluž; potoky nemají setrvačnost; výchozí rychlosti jsou odhad (průsak vápencem je hodně pomalý – voda pod hrází až po ~200 tikách). Blok 16 × 16 × 64 stojí 4,6–4,8 ms na tik v GDScriptu.
+- **Další krok:** Jan posoudí 35_*. Otevřené: voda jako vrstva na buňku v datech backendu (návrh v README), trvalost rybníků (odpar), zdroj deště, výměna vody mezi bloky. Nic z toho zatím není v `godot-prototyp`.
+
 ## 3 Rozlišení bloku
 
 ### 🧪 Nastavitelné rozlišení, test 32 × 32 × 64 s buňkou 0,5³ (2026-11-17 11:50 · `--res-test`)
@@ -249,6 +255,9 @@ Nevyzkoušené nápady na zrychlení. Stav: 💡 návrh · 🔬 ověřuje se · 
 - 💡 **Vzdálenostní pole na grafice nebo v C#:** chamfer 4 polí po 96 × 96 texelech stojí v GDScriptu kolem 38 ms na blok. Jump flooding v shaderu, nebo C# ve vlákně.
 - 💡 **Kostkový mesher bez dělení ploch na čtvrtiny:** kvůli duální masce se horní plochy dělí na čtvrtiny a boky na poloviny. Dělit jen buňky na rozhraní duální oblasti.
 
+- 💡 **Voda: skutečný tlak jen pro uzavřené nádrže (16:05, `voda-studie/`):** spojené nádoby a artéské prameny řešit hledáním hladiny souvislého tělesa vody (flood fill při změně), ne po buňkách každý tik [2].
+- 💡 **Voda: „virtual pipes“ pro povrchové potoky:** tok mezi sloupci se setrvačností dá hladší potoky na výškové mapě [15]; buňkový model nechat jen pro vodu v zemi a dutiny.
+
 ## 3 Rozlišení bloku
 - 💡 **Jemnější rozlišení jen u povrchu:** 32 × 32 stojí asi 4× generování a 3× síť. Hloubku nechat hrubou a jemné buňky držet jen v horních vrstvách.
 
@@ -271,4 +280,7 @@ Nevyzkoušené nápady na zrychlení. Stav: 💡 návrh · 🔬 ověřuje se · 
 - 💡 **Měření na skutečné grafice:** všechna čísla jsou zatím ze softwarového vykreslování (llvmpipe). Udělat build a změřit na Janově GPU.
 - 💡 **Profilovací přepínač v buildu:** výpis času na snímek a počtu instancí, ať se dá měřit přímo u Jana.
   Částečně splněno ladicím oknem (`--dev`, FPS, ms, instance), to ale do release exportu nejde. Pro měření u Jana udělat build s doplňkem.
-
+- 💡 **Voda jen v aktivních buňkách a uspávání chunků (16:05, `voda-studie/`):** teď se každý tik projdou všechny buňky (blok 16 × 16 × 64 = 4,6–4,8 ms/tik v GDScriptu). Seznam buněk s vodou a „ustálené“ chunky 8³ přeskakovat jako Noita [13][14]; odhad < 1 ms na blok.
+- 💡 **Voda: kontrolu bilance jen v ladění:** dva součty všech buněk za tik stojí ~0,37 ms z 4,7 ms (8 %); na serveru počítat bilanci jen z přítoků a odtoků.
+- 💡 **Voda v C# / na serveru v celých číslech:** fixed-point objem (např. setiny buňky v uint16) = shodný výsledek klient/server a menší paměť; C# podle skály ~10× rychlejší.
+- 💡 **Voda: nižší frekvence tiků pro vzdálené bloky:** bloky bez hráčů počítat třeba 1× za 4 tiky s větším krokem.

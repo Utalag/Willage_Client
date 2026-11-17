@@ -1,0 +1,9 @@
+Bench studie vody – 2026-11-17T16:02:20, GDScript, Godot 4.7.2-stable (official), 1 vlákno
+scen 1 jilova_misa        10x10x4  0.321 ms/tik  aktivni bunky 160  determinismus OK  max chyba bilance 1.2325438094665242e-06  in 120.00 out 75.30 odpar 9.84
+scen 2 svah_trava_pisek   11x12x6  0.657 ms/tik  aktivni bunky 502  determinismus OK  max chyba bilance 7.020198072443806e-07  in 231.24 out 25.62 odpar 12.27
+scen 3 hraz_porezni       10x10x4  0.150 ms/tik  aktivni bunky 84  determinismus OK  max chyba bilance 9.623542427984744e-07  in 40.00 out 0.00 odpar 3.69
+scen 4 skalni_panev       10x10x4  0.209 ms/tik  aktivni bunky 180  determinismus OK  max chyba bilance 6.602035709166176e-07  in 70.00 out 6.52 odpar 6.14
+scen 5 kopani_u_vody      10x10x4  0.246 ms/tik  aktivni bunky 128  determinismus OK  max chyba bilance 1.5983581542790282e-06  in 43.56 out 0.00 odpar 5.14
+scen 6 prameny            10x10x5  0.303 ms/tik  aktivni bunky 212  determinismus OK  max chyba bilance 6.006937473823637e-07  in 84.80 out 4.56 odpar 7.47
+blok 16x16x64 (16384 bunek), dest, tiky 0–50: 4.60 ms/tik, aktivni bunky 440
+blok 16x16x64 (16384 bunek), dest, tiky 50–100: 4.75 ms/tik, aktivni bunky 632
