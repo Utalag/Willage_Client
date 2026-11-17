@@ -1,0 +1,3112 @@
+{
+  "genVersion": "gen-v3-study-3 (zásobník ze serveru, Jan 18:58; kódování 18:59)",
+  "shapes": {
+    "1": {
+      "name": "pocket",
+      "params": [
+        "maxHeap",
+        "lzMin",
+        "lzMax"
+      ]
+    },
+    "2": {
+      "name": "layer",
+      "params": [
+        "maxHeap",
+        "lzMin",
+        "lzMax",
+        "pH_u16",
+        "pV_u16"
+      ]
+    },
+    "3": {
+      "name": "vein",
+      "params": [
+        "maxHeap",
+        "lzMin",
+        "lzMax",
+        "inertia_permille",
+        "branch_permille"
+      ]
+    },
+    "4": {
+      "name": "chamber",
+      "params": [
+        "maxHeap",
+        "lzMin",
+        "lzMax",
+        "pH_u16",
+        "pV_u16",
+        "roof",
+        "margin"
+      ]
+    }
+  },
+  "waterUnit": "u16, 4096 = plná buňka objemu; v půdě nejvýš pórovitost × 4096",
+  "permeable": "hlína 0,40, písek 0,35, tráva 0,40 (pórovitost voda-studie), vzduch 1; ostatní nepropustné",
+  "edges": "pod povrchem zavřené (bez přetékání mezi bloky); povrchová voda nesmí nad nejnižší okraj bloku, zbytek = odtok (shortfall water)",
+  "cases": [
+    {
+      "id": "louka_101",
+      "recipe": "louka",
+      "seed": 101,
+      "in": {
+        "stack": [
+          {
+            "material": "měděná ruda",
+            "mat_id": 8,
+            "count": 31,
+            "shape": "vein",
+            "maxHeap": 18,
+            "lzMin": 8,
+            "lzMax": 40,
+            "inertia_permille": 700,
+            "branch_permille": 80
+          },
+          {
+            "material": "železná ruda",
+            "mat_id": 9,
+            "count": 33,
+            "shape": "pocket",
+            "maxHeap": 22,
+            "lzMin": 4,
+            "lzMax": 36
+          },
+          {
+            "material": "ložiskový jíl",
+            "mat_id": 12,
+            "count": 43,
+            "shape": "layer",
+            "maxHeap": 120,
+            "lzMin": -10,
+            "lzMax": -3,
+            "pH_u16": 52428,
+            "pV_u16": 6553
+          },
+          {
+            "material": "vzduch (jeskyně)",
+            "mat_id": 0,
+            "count": 132,
+            "shape": "chamber",
+            "maxHeap": 60,
+            "lzMin": 3,
+            "lzMax": 44,
+            "pH_u16": 40632,
+            "pV_u16": 19660,
+            "roof": 2,
+            "margin": 1
+          },
+          {
+            "material": "jíl",
+            "mat_id": 4,
+            "count": 181,
+            "shape": "layer",
+            "maxHeap": 80,
+            "lzMin": -7,
+            "lzMax": -2,
+            "pH_u16": 52428,
+            "pV_u16": 6553
+          },
+          {
+            "material": "písek",
+            "mat_id": 3,
+            "count": 267,
+            "shape": "layer",
+            "maxHeap": 80,
+            "lzMin": -6,
+            "lzMax": -1,
+            "pH_u16": 52428,
+            "pV_u16": 6553
+          },
+          {
+            "material": "hlína",
+            "mat_id": 2,
+            "count": 534,
+            "shape": "layer",
+            "maxHeap": 200,
+            "lzMin": -4,
+            "lzMax": -1,
+            "pH_u16": 58982,
+            "pV_u16": 3276
+          },
+          {
+            "material": "vápenec",
+            "mat_id": 5,
+            "count": 1122,
+            "shape": "layer",
+            "maxHeap": 400,
+            "lzMin": 20,
+            "lzMax": 46,
+            "pH_u16": 52428,
+            "pV_u16": 6553
+          },
+          {
+            "material": "žula",
+            "mat_id": 6,
+            "count": 2624,
+            "shape": "layer",
+            "maxHeap": 400,
+            "lzMin": 10,
+            "lzMax": 28,
+            "pH_u16": 52428,
+            "pV_u16": 6553
+          },
+          {
+            "material": "čedič",
+            "mat_id": 7,
+            "count": 2665,
+            "shape": "layer",
+            "maxHeap": 400,
+            "lzMin": 0,
+            "lzMax": 16,
+            "pH_u16": 52428,
+            "pV_u16": 6553
+          }
+        ],
+        "stackBytesHex": "0a0008001f000000031400120000000800000028000000bc02000050000000090021000000010c001600000004000000240000000c002b00000002140078000000f6fffffffdffffffcccc000099190000000084000000041c003c000000030000002c000000b89e0000cc4c000002000000010000000400b500000002140050000000f9fffffffeffffffcccc00009919000003000b01000002140050000000faffffffffffffffcccc000099190000020016020000021400c8000000fcffffffffffffff66e60000cc0c000005006204000002140090010000140000002e000000cccc0000991900000600400a0000021400900100000a0000001c000000cccc0000991900000700690a0000021400900100000000000010000000cccc000099190000",
+        "stackHash": "cfa961077dd60f9569274a830b4fb32598b9a8b3d2108e5cb223306e5a1d4e7f",
+        "water": 130
+      },
+      "issued": {
+        "voda": 130,
+        "měděná ruda": 31,
+        "železná ruda": 33,
+        "ložiskový jíl": 43,
+        "jeskyně": 132,
+        "jíl": 181,
+        "písek": 267,
+        "hlína": 534,
+        "vápenec": 1122,
+        "žula": 2624,
+        "čedič": 2665
+      },
+      "materials": [
+        {
+          "material": "měděná ruda",
+          "target": 31,
+          "placed": 31,
+          "shortfall": 0,
+          "byLevel": {
+            "L0 semínka": 31
+          }
+        },
+        {
+          "material": "železná ruda",
+          "target": 33,
+          "placed": 33,
+          "shortfall": 0,
+          "byLevel": {
+            "L0 semínka": 33
+          }
+        },
+        {
+          "material": "ložiskový jíl",
+          "target": 43,
+          "placed": 43,
+          "shortfall": 0,
+          "byLevel": {
+            "L0 semínka": 43
+          }
+        },
+        {
+          "material": "jeskyně",
+          "target": 132,
+          "placed": 132,
+          "shortfall": 0,
+          "byLevel": {
+            "L0 semínka": 132
+          }
+        },
+        {
+          "material": "jíl",
+          "target": 181,
+          "placed": 181,
+          "shortfall": 0,
+          "byLevel": {
+            "L1 další semínka": 181
+          }
+        },
+        {
+          "material": "písek",
+          "target": 267,
+          "placed": 267,
+          "shortfall": 0,
+          "byLevel": {
+            "L0 semínka": 127,
+            "L1 další semínka": 140
+          }
+        },
+        {
+          "material": "hlína",
+          "target": 534,
+          "placed": 534,
+          "shortfall": 0,
+          "byLevel": {
+            "L0 semínka": 183,
+            "L1 další semínka": 351
+          }
+        },
+        {
+          "material": "vápenec",
+          "target": 1122,
+          "placed": 1122,
+          "shortfall": 0,
+          "byLevel": {
+            "L0 semínka": 722,
+            "L1 další semínka": 400
+          }
+        },
+        {
+          "material": "žula",
+          "target": 2624,
+          "placed": 2624,
+          "shortfall": 0,
+          "byLevel": {
+            "L0 semínka": 2026,
+            "L1 další semínka": 598
+          }
+        },
+        {
+          "material": "čedič",
+          "target": 2665,
+          "placed": 2665,
+          "shortfall": 0,
+          "byLevel": {
+            "L0 semínka": 1963,
+            "L1 další semínka": 358,
+            "L2 dorůst tělesa": 129,
+            "L3 celá výška": 86,
+            "L4 uvolněný hostitel": 129
+          }
+        }
+      ],
+      "water": {
+        "poured": 130,
+        "placed": 130.0,
+        "inPores": 130.0,
+        "freeInCaves": 0.0,
+        "pond": 0.0,
+        "runoff": 0.0,
+        "level": 27
+      },
+      "wvb1Header": {
+        "shortfall": {}
+      },
+      "validator": {
+        "ok": true,
+        "errorCount": 0,
+        "firstErrors": []
+      },
+      "final": {
+        "tráva": 256,
+        "hlína": 534,
+        "písek": 267,
+        "jíl": 181,
+        "vápenec": 1122,
+        "žula": 2624,
+        "čedič": 2665,
+        "měděná ruda": 31,
+        "železná ruda": 33,
+        "ložiskový jíl": 43,
+        "jeskyně": 132
+      },
+      "layering": {
+        "purity": 0.836347229991892,
+        "boundary": 0.0769230769230769,
+        "stoneSpecks": 4,
+        "dirtSpecks": 0,
+        "deepDirt": 1
+      },
+      "layeringPrototype": {
+        "purity": 0.90798374555777,
+        "boundary": 0.0444983818770227,
+        "stoneSpecks": 3,
+        "dirtSpecks": 0,
+        "deepDirt": 0
+      },
+      "sha256MaterialLayer": "23a5939f2bce3fd84704f3ec76d83e09781db95164d00f3536b92ac7888b68f6",
+      "sha256WaterLayer": "7de3a9faa99c6154bc0f53ad662c70d4f1a2440ca0e4d850398709ded39ecb08"
+    },
+    {
+      "id": "louka_404",
+      "recipe": "louka",
+      "seed": 404,
+      "in": {
+        "stack": [
+          {
+            "material": "měděná ruda",
+            "mat_id": 8,
+            "count": 30,
+            "shape": "vein",
+            "maxHeap": 18,
+            "lzMin": 8,
+            "lzMax": 40,
+            "inertia_permille": 700,
+            "branch_permille": 80
+          },
+          {
+            "material": "železná ruda",
+            "mat_id": 9,
+            "count": 33,
+            "shape": "pocket",
+            "maxHeap": 22,
+            "lzMin": 4,
+            "lzMax": 36
+          },
+          {
+            "material": "ložiskový jíl",
+            "mat_id": 12,
+            "count": 80,
+            "shape": "layer",
+            "maxHeap": 120,
+            "lzMin": -10,
+            "lzMax": -3,
+            "pH_u16": 52428,
+            "pV_u16": 6553
+          },
+          {
+            "material": "písek",
+            "mat_id": 3,
+            "count": 191,
+            "shape": "layer",
+            "maxHeap": 80,
+            "lzMin": -6,
+            "lzMax": -1,
+            "pH_u16": 52428,
+            "pV_u16": 6553
+          },
+          {
+            "material": "vzduch (jeskyně)",
+            "mat_id": 0,
+            "count": 208,
+            "shape": "chamber",
+            "maxHeap": 60,
+            "lzMin": 3,
+            "lzMax": 44,
+            "pH_u16": 40632,
+            "pV_u16": 19660,
+            "roof": 2,
+            "margin": 1
+          },
+          {
+            "material": "jíl",
+            "mat_id": 4,
+            "count": 263,
+            "shape": "layer",
+            "maxHeap": 80,
+            "lzMin": -7,
+            "lzMax": -2,
+            "pH_u16": 52428,
+            "pV_u16": 6553
+          },
+          {
+            "material": "hlína",
+            "mat_id": 2,
+            "count": 541,
+            "shape": "layer",
+            "maxHeap": 200,
+            "lzMin": -4,
+            "lzMax": -1,
+            "pH_u16": 58982,
+            "pV_u16": 3276
+          },
+          {
+            "material": "vápenec",
+            "mat_id": 5,
+            "count": 1017,
+            "shape": "layer",
+            "maxHeap": 400,
+            "lzMin": 20,
+            "lzMax": 46,
+            "pH_u16": 52428,
+            "pV_u16": 6553
+          },
+          {
+            "material": "žula",
+            "mat_id": 6,
+            "count": 2370,
+            "shape": "layer",
+            "maxHeap": 400,
+            "lzMin": 10,
+            "lzMax": 28,
+            "pH_u16": 52428,
+            "pV_u16": 6553
+          },
+          {
+            "material": "čedič",
+            "mat_id": 7,
+            "count": 2978,
+            "shape": "layer",
+            "maxHeap": 400,
+            "lzMin": 0,
+            "lzMax": 16,
+            "pH_u16": 52428,
+            "pV_u16": 6553
+          }
+        ],
+        "stackBytesHex": "0a0008001e000000031400120000000800000028000000bc02000050000000090021000000010c001600000004000000240000000c005000000002140078000000f6fffffffdffffffcccc0000991900000300bf00000002140050000000faffffffffffffffcccc0000991900000000d0000000041c003c000000030000002c000000b89e0000cc4c0000020000000100000004000701000002140050000000f9fffffffeffffffcccc00009919000002001d020000021400c8000000fcffffffffffffff66e60000cc0c00000500f903000002140090010000140000002e000000cccc000099190000060042090000021400900100000a0000001c000000cccc0000991900000700a20b0000021400900100000000000010000000cccc000099190000",
+        "stackHash": "994f0def2abb2134800d3f98e7a485781b95e522942017c01cfd069ef2a36e4e",
+        "water": 126
+      },
+      "issued": {
+        "voda": 126,
+        "měděná ruda": 30,
+        "železná ruda": 33,
+        "ložiskový jíl": 80,
+        "písek": 191,
+        "jeskyně": 208,
+        "jíl": 263,
+        "hlína": 541,
+        "vápenec": 1017,
+        "žula": 2370,
+        "čedič": 2978
+      },
+      "materials": [
+        {
+          "material": "měděná ruda",
+          "target": 30,
+          "placed": 30,
+          "shortfall": 0,
+          "byLevel": {
+            "L0 semínka": 30
+          }
+        },
+        {
+          "material": "železná ruda",
+          "target": 33,
+          "placed": 33,
+          "shortfall": 0,
+          "byLevel": {
+            "L0 semínka": 33
+          }
+        },
+        {
+          "material": "ložiskový jíl",
+          "target": 80,
+          "placed": 80,
+          "shortfall": 0,
+          "byLevel": {
+            "L0 semínka": 80
+          }
+        },
+        {
+          "material": "písek",
+          "target": 191,
+          "placed": 191,
+          "shortfall": 0,
+          "byLevel": {
+            "L0 semínka": 129,
+            "L1 další semínka": 62
+          }
+        },
+        {
+          "material": "jeskyně",
+          "target": 208,
+          "placed": 208,
+          "shortfall": 0,
+          "byLevel": {
+            "L0 semínka": 208
+          }
+        },
+        {
+          "material": "jíl",
+          "target": 263,
+          "placed": 263,
+          "shortfall": 0,
+          "byLevel": {
+            "L0 semínka": 139,
+            "L1 další semínka": 124
+          }
+        },
+        {
+          "material": "hlína",
+          "target": 541,
+          "placed": 541,
+          "shortfall": 0,
+          "byLevel": {
+            "L0 semínka": 207,
+            "L1 další semínka": 334
+          }
+        },
+        {
+          "material": "vápenec",
+          "target": 1017,
+          "placed": 1017,
+          "shortfall": 0,
+          "byLevel": {
+            "L0 semínka": 721,
+            "L1 další semínka": 296
+          }
+        },
+        {
+          "material": "žula",
+          "target": 2370,
+          "placed": 2370,
+          "shortfall": 0,
+          "byLevel": {
+            "L0 semínka": 2130,
+            "L1 další semínka": 240
+          }
+        },
+        {
+          "material": "čedič",
+          "target": 2978,
+          "placed": 2978,
+          "shortfall": 0,
+          "byLevel": {
+            "L0 semínka": 2038,
+            "L1 další semínka": 378,
+            "L2 dorůst tělesa": 249,
+            "L3 celá výška": 117,
+            "L4 uvolněný hostitel": 196
+          }
+        }
+      ],
+      "water": {
+        "poured": 126,
+        "placed": 126.0,
+        "inPores": 126.0,
+        "freeInCaves": 0.0,
+        "pond": 0.0,
+        "runoff": 0.0,
+        "level": 27
+      },
+      "wvb1Header": {
+        "shortfall": {}
+      },
+      "validator": {
+        "ok": true,
+        "errorCount": 0,
+        "firstErrors": []
+      },
+      "final": {
+        "tráva": 256,
+        "hlína": 541,
+        "písek": 191,
+        "jíl": 263,
+        "vápenec": 1017,
+        "žula": 2370,
+        "čedič": 2978,
+        "měděná ruda": 30,
+        "železná ruda": 33,
+        "ložiskový jíl": 80,
+        "jeskyně": 208
+      },
+      "layering": {
+        "purity": 0.754902862160846,
+        "boundary": 0.0819070904645477,
+        "stoneSpecks": 5,
+        "dirtSpecks": 0,
+        "deepDirt": 0
+      },
+      "layeringPrototype": {
+        "purity": 0.919708641840883,
+        "boundary": 0.0337512054001929,
+        "stoneSpecks": 0,
+        "dirtSpecks": 0,
+        "deepDirt": 0
+      },
+      "sha256MaterialLayer": "8fed20210c20809dba98609d1a4a6f91b840a92a74bd07353e7b123f4e8baf28",
+      "sha256WaterLayer": "1528b70673f27b79eec4bae0262c0a8a7ccb9f8fcea4dba34a795331d0a831b9"
+    },
+    {
+      "id": "kopec_303",
+      "recipe": "kopec",
+      "seed": 303,
+      "in": {
+        "stack": [
+          {
+            "material": "měděná ruda",
+            "mat_id": 8,
+            "count": 31,
+            "shape": "vein",
+            "maxHeap": 18,
+            "lzMin": 8,
+            "lzMax": 40,
+            "inertia_permille": 700,
+            "branch_permille": 80
+          },
+          {
+            "material": "železná ruda",
+            "mat_id": 9,
+            "count": 32,
+            "shape": "pocket",
+            "maxHeap": 22,
+            "lzMin": 4,
+            "lzMax": 36
+          },
+          {
+            "material": "ložiskový jíl",
+            "mat_id": 12,
+            "count": 118,
+            "shape": "layer",
+            "maxHeap": 120,
+            "lzMin": -10,
+            "lzMax": -3,
+            "pH_u16": 52428,
+            "pV_u16": 6553
+          },
+          {
+            "material": "písek",
+            "mat_id": 3,
+            "count": 152,
+            "shape": "layer",
+            "maxHeap": 80,
+            "lzMin": -6,
+            "lzMax": -1,
+            "pH_u16": 52428,
+            "pV_u16": 6553
+          },
+          {
+            "material": "vzduch (jeskyně)",
+            "mat_id": 0,
+            "count": 254,
+            "shape": "chamber",
+            "maxHeap": 60,
+            "lzMin": 3,
+            "lzMax": 44,
+            "pH_u16": 40632,
+            "pV_u16": 19660,
+            "roof": 2,
+            "margin": 1
+          },
+          {
+            "material": "jíl",
+            "mat_id": 4,
+            "count": 304,
+            "shape": "layer",
+            "maxHeap": 80,
+            "lzMin": -7,
+            "lzMax": -2,
+            "pH_u16": 52428,
+            "pV_u16": 6553
+          },
+          {
+            "material": "hlína",
+            "mat_id": 2,
+            "count": 534,
+            "shape": "layer",
+            "maxHeap": 200,
+            "lzMin": -4,
+            "lzMax": -1,
+            "pH_u16": 58982,
+            "pV_u16": 3276
+          },
+          {
+            "material": "vápenec",
+            "mat_id": 5,
+            "count": 1468,
+            "shape": "layer",
+            "maxHeap": 400,
+            "lzMin": 20,
+            "lzMax": 46,
+            "pH_u16": 52428,
+            "pV_u16": 6553
+          },
+          {
+            "material": "žula",
+            "mat_id": 6,
+            "count": 2464,
+            "shape": "layer",
+            "maxHeap": 400,
+            "lzMin": 10,
+            "lzMax": 28,
+            "pH_u16": 52428,
+            "pV_u16": 6553
+          },
+          {
+            "material": "čedič",
+            "mat_id": 7,
+            "count": 2800,
+            "shape": "layer",
+            "maxHeap": 400,
+            "lzMin": 0,
+            "lzMax": 16,
+            "pH_u16": 52428,
+            "pV_u16": 6553
+          }
+        ],
+        "stackBytesHex": "0a0008001f000000031400120000000800000028000000bc02000050000000090020000000010c001600000004000000240000000c007600000002140078000000f6fffffffdffffffcccc00009919000003009800000002140050000000faffffffffffffffcccc0000991900000000fe000000041c003c000000030000002c000000b89e0000cc4c0000020000000100000004003001000002140050000000f9fffffffeffffffcccc000099190000020016020000021400c8000000fcffffffffffffff66e60000cc0c00000500bc05000002140090010000140000002e000000cccc0000991900000600a0090000021400900100000a0000001c000000cccc0000991900000700f00a0000021400900100000000000010000000cccc000099190000",
+        "stackHash": "8c4edb81ca9c0e88e02b43eff43ba3f53f75ed52d7cb1872f680a4df28100be6",
+        "water": 94
+      },
+      "issued": {
+        "voda": 94,
+        "měděná ruda": 31,
+        "železná ruda": 32,
+        "ložiskový jíl": 118,
+        "písek": 152,
+        "jeskyně": 254,
+        "jíl": 304,
+        "hlína": 534,
+        "vápenec": 1468,
+        "žula": 2464,
+        "čedič": 2800
+      },
+      "materials": [
+        {
+          "material": "měděná ruda",
+          "target": 31,
+          "placed": 31,
+          "shortfall": 0,
+          "byLevel": {
+            "L0 semínka": 31
+          }
+        },
+        {
+          "material": "železná ruda",
+          "target": 32,
+          "placed": 32,
+          "shortfall": 0,
+          "byLevel": {
+            "L0 semínka": 32
+          }
+        },
+        {
+          "material": "ložiskový jíl",
+          "target": 118,
+          "placed": 118,
+          "shortfall": 0,
+          "byLevel": {
+            "L1 další semínka": 118
+          }
+        },
+        {
+          "material": "písek",
+          "target": 152,
+          "placed": 152,
+          "shortfall": 0,
+          "byLevel": {
+            "L1 další semínka": 152
+          }
+        },
+        {
+          "material": "jeskyně",
+          "target": 254,
+          "placed": 254,
+          "shortfall": 0,
+          "byLevel": {
+            "L0 semínka": 254
+          }
+        },
+        {
+          "material": "jíl",
+          "target": 304,
+          "placed": 304,
+          "shortfall": 0,
+          "byLevel": {
+            "L0 semínka": 80,
+            "L1 další semínka": 224
+          }
+        },
+        {
+          "material": "hlína",
+          "target": 534,
+          "placed": 534,
+          "shortfall": 0,
+          "byLevel": {
+            "L1 další semínka": 529,
+            "L2 dorůst tělesa": 5
+          }
+        },
+        {
+          "material": "vápenec",
+          "target": 1468,
+          "placed": 1468,
+          "shortfall": 0,
+          "byLevel": {
+            "L0 semínka": 1056,
+            "L1 další semínka": 412
+          }
+        },
+        {
+          "material": "žula",
+          "target": 2464,
+          "placed": 2464,
+          "shortfall": 0,
+          "byLevel": {
+            "L0 semínka": 2123,
+            "L1 další semínka": 341
+          }
+        },
+        {
+          "material": "čedič",
+          "target": 2800,
+          "placed": 2800,
+          "shortfall": 0,
+          "byLevel": {
+            "L0 semínka": 1886,
+            "L1 další semínka": 297,
+            "L2 dorůst tělesa": 197,
+            "L3 celá výška": 79,
+            "L4 uvolněný hostitel": 341
+          }
+        }
+      ],
+      "water": {
+        "poured": 94,
+        "placed": 94.0,
+        "inPores": 94.0,
+        "freeInCaves": 0.0,
+        "pond": 0.0,
+        "runoff": 0.0,
+        "level": 28
+      },
+      "wvb1Header": {
+        "shortfall": {}
+      },
+      "validator": {
+        "ok": true,
+        "errorCount": 0,
+        "firstErrors": []
+      },
+      "final": {
+        "tráva": 256,
+        "hlína": 534,
+        "písek": 152,
+        "jíl": 304,
+        "vápenec": 1468,
+        "žula": 2464,
+        "čedič": 2800,
+        "měděná ruda": 31,
+        "železná ruda": 32,
+        "ložiskový jíl": 118,
+        "jeskyně": 254
+      },
+      "layering": {
+        "purity": 0.79794775959999,
+        "boundary": 0.0755861616658469,
+        "stoneSpecks": 7,
+        "dirtSpecks": 0,
+        "deepDirt": 1
+      },
+      "layeringPrototype": {
+        "purity": 0.930863192404518,
+        "boundary": 0.0334287004969131,
+        "stoneSpecks": 1,
+        "dirtSpecks": 1,
+        "deepDirt": 0
+      },
+      "sha256MaterialLayer": "28c385727c61d84e715f112904dca0299c3eacb344d8bf3767a184420fb349f4",
+      "sha256WaterLayer": "e093b6427605d7efbf1413f5b105c7d79bb6067b4b0a159aef956596475de71f"
+    },
+    {
+      "id": "kopec_2302",
+      "recipe": "kopec",
+      "seed": 2302,
+      "in": {
+        "stack": [
+          {
+            "material": "železná ruda",
+            "mat_id": 9,
+            "count": 12,
+            "shape": "pocket",
+            "maxHeap": 22,
+            "lzMin": 4,
+            "lzMax": 36
+          },
+          {
+            "material": "měděná ruda",
+            "mat_id": 8,
+            "count": 21,
+            "shape": "vein",
+            "maxHeap": 18,
+            "lzMin": 8,
+            "lzMax": 40,
+            "inertia_permille": 700,
+            "branch_permille": 80
+          },
+          {
+            "material": "vzduch (jeskyně)",
+            "mat_id": 0,
+            "count": 112,
+            "shape": "chamber",
+            "maxHeap": 60,
+            "lzMin": 3,
+            "lzMax": 44,
+            "pH_u16": 40632,
+            "pV_u16": 19660,
+            "roof": 2,
+            "margin": 1
+          },
+          {
+            "material": "písek",
+            "mat_id": 3,
+            "count": 199,
+            "shape": "layer",
+            "maxHeap": 80,
+            "lzMin": -6,
+            "lzMax": -1,
+            "pH_u16": 52428,
+            "pV_u16": 6553
+          },
+          {
+            "material": "jíl",
+            "mat_id": 4,
+            "count": 273,
+            "shape": "layer",
+            "maxHeap": 80,
+            "lzMin": -7,
+            "lzMax": -2,
+            "pH_u16": 52428,
+            "pV_u16": 6553
+          },
+          {
+            "material": "hlína",
+            "mat_id": 2,
+            "count": 549,
+            "shape": "layer",
+            "maxHeap": 200,
+            "lzMin": -4,
+            "lzMax": -1,
+            "pH_u16": 58982,
+            "pV_u16": 3276
+          },
+          {
+            "material": "vápenec",
+            "mat_id": 5,
+            "count": 2289,
+            "shape": "layer",
+            "maxHeap": 400,
+            "lzMin": 20,
+            "lzMax": 46,
+            "pH_u16": 52428,
+            "pV_u16": 6553
+          },
+          {
+            "material": "žula",
+            "mat_id": 6,
+            "count": 2450,
+            "shape": "layer",
+            "maxHeap": 400,
+            "lzMin": 10,
+            "lzMax": 28,
+            "pH_u16": 52428,
+            "pV_u16": 6553
+          },
+          {
+            "material": "čedič",
+            "mat_id": 7,
+            "count": 2963,
+            "shape": "layer",
+            "maxHeap": 400,
+            "lzMin": 0,
+            "lzMax": 16,
+            "pH_u16": 52428,
+            "pV_u16": 6553
+          }
+        ],
+        "stackBytesHex": "090009000c000000010c00160000000400000024000000080015000000031400120000000800000028000000bc02000050000000000070000000041c003c000000030000002c000000b89e0000cc4c000002000000010000000300c700000002140050000000faffffffffffffffcccc00009919000004001101000002140050000000f9fffffffeffffffcccc000099190000020025020000021400c8000000fcffffffffffffff66e60000cc0c00000500f108000002140090010000140000002e000000cccc000099190000060092090000021400900100000a0000001c000000cccc0000991900000700930b0000021400900100000000000010000000cccc000099190000",
+        "stackHash": "f6a7b51e814935aec6672785058581dc41193e28bf1dfbc85476c78cecbcc0c8",
+        "water": 106
+      },
+      "issued": {
+        "voda": 106,
+        "železná ruda": 12,
+        "měděná ruda": 21,
+        "jeskyně": 112,
+        "písek": 199,
+        "jíl": 273,
+        "hlína": 549,
+        "vápenec": 2289,
+        "žula": 2450,
+        "čedič": 2963
+      },
+      "materials": [
+        {
+          "material": "železná ruda",
+          "target": 12,
+          "placed": 12,
+          "shortfall": 0,
+          "byLevel": {
+            "L0 semínka": 12
+          }
+        },
+        {
+          "material": "měděná ruda",
+          "target": 21,
+          "placed": 21,
+          "shortfall": 0,
+          "byLevel": {
+            "L0 semínka": 21
+          }
+        },
+        {
+          "material": "jeskyně",
+          "target": 112,
+          "placed": 112,
+          "shortfall": 0,
+          "byLevel": {
+            "L0 semínka": 112
+          }
+        },
+        {
+          "material": "písek",
+          "target": 199,
+          "placed": 199,
+          "shortfall": 0,
+          "byLevel": {
+            "L1 další semínka": 199
+          }
+        },
+        {
+          "material": "jíl",
+          "target": 273,
+          "placed": 273,
+          "shortfall": 0,
+          "byLevel": {
+            "L0 semínka": 59,
+            "L1 další semínka": 214
+          }
+        },
+        {
+          "material": "hlína",
+          "target": 549,
+          "placed": 549,
+          "shortfall": 0,
+          "byLevel": {
+            "L0 semínka": 172,
+            "L1 další semínka": 345,
+            "L2 dorůst tělesa": 32
+          }
+        },
+        {
+          "material": "vápenec",
+          "target": 2289,
+          "placed": 2289,
+          "shortfall": 0,
+          "byLevel": {
+            "L0 semínka": 2289
+          }
+        },
+        {
+          "material": "žula",
+          "target": 2450,
+          "placed": 2450,
+          "shortfall": 0,
+          "byLevel": {
+            "L0 semínka": 1428,
+            "L1 další semínka": 1022
+          }
+        },
+        {
+          "material": "čedič",
+          "target": 2963,
+          "placed": 2963,
+          "shortfall": 0,
+          "byLevel": {
+            "L0 semínka": 1831,
+            "L1 další semínka": 368,
+            "L2 dorůst tělesa": 137,
+            "L3 celá výška": 354,
+            "L4 uvolněný hostitel": 273
+          }
+        }
+      ],
+      "water": {
+        "poured": 106,
+        "placed": 81.65,
+        "inPores": 78.65,
+        "freeInCaves": 0.0,
+        "pond": 3.0,
+        "runoff": 24.35,
+        "level": 29
+      },
+      "wvb1Header": {
+        "shortfall": {
+          "water_units": 99738
+        }
+      },
+      "validator": {
+        "ok": true,
+        "errorCount": 0,
+        "firstErrors": []
+      },
+      "final": {
+        "tráva": 256,
+        "hlína": 549,
+        "písek": 199,
+        "jíl": 273,
+        "vápenec": 2289,
+        "žula": 2450,
+        "čedič": 2963,
+        "měděná ruda": 21,
+        "železná ruda": 12,
+        "jeskyně": 112
+      },
+      "layering": {
+        "purity": 0.804220021677481,
+        "boundary": 0.078678763821945,
+        "stoneSpecks": 3,
+        "dirtSpecks": 0,
+        "deepDirt": 0
+      },
+      "layeringPrototype": {
+        "purity": 0.949860980576441,
+        "boundary": 0.0298774611042269,
+        "stoneSpecks": 2,
+        "dirtSpecks": 1,
+        "deepDirt": 0
+      },
+      "sha256MaterialLayer": "ef79390284a3d134337f0eba89cf78d428501bf26e6f51c7e06e86b84eb5496b",
+      "sha256WaterLayer": "919b6fb29e3574511c45ca401f5584190e29b81b4f94409218b6aa71243104c2"
+    },
+    {
+      "id": "hora_202",
+      "recipe": "hora",
+      "seed": 202,
+      "in": {
+        "stack": [
+          {
+            "material": "železná ruda",
+            "mat_id": 9,
+            "count": 22,
+            "shape": "pocket",
+            "maxHeap": 22,
+            "lzMin": 4,
+            "lzMax": 36
+          },
+          {
+            "material": "měděná ruda",
+            "mat_id": 8,
+            "count": 27,
+            "shape": "vein",
+            "maxHeap": 18,
+            "lzMin": 8,
+            "lzMax": 40,
+            "inertia_permille": 700,
+            "branch_permille": 80
+          },
+          {
+            "material": "písek",
+            "mat_id": 3,
+            "count": 53,
+            "shape": "layer",
+            "maxHeap": 80,
+            "lzMin": -6,
+            "lzMax": -1,
+            "pH_u16": 52428,
+            "pV_u16": 6553
+          },
+          {
+            "material": "ložiskový jíl",
+            "mat_id": 12,
+            "count": 223,
+            "shape": "layer",
+            "maxHeap": 120,
+            "lzMin": -10,
+            "lzMax": -3,
+            "pH_u16": 52428,
+            "pV_u16": 6553
+          },
+          {
+            "material": "vzduch (jeskyně)",
+            "mat_id": 0,
+            "count": 252,
+            "shape": "chamber",
+            "maxHeap": 60,
+            "lzMin": 3,
+            "lzMax": 44,
+            "pH_u16": 40632,
+            "pV_u16": 19660,
+            "roof": 2,
+            "margin": 1
+          },
+          {
+            "material": "jíl",
+            "mat_id": 4,
+            "count": 290,
+            "shape": "layer",
+            "maxHeap": 80,
+            "lzMin": -7,
+            "lzMax": -2,
+            "pH_u16": 52428,
+            "pV_u16": 6553
+          },
+          {
+            "material": "hlína",
+            "mat_id": 2,
+            "count": 440,
+            "shape": "layer",
+            "maxHeap": 200,
+            "lzMin": -4,
+            "lzMax": -1,
+            "pH_u16": 58982,
+            "pV_u16": 3276
+          },
+          {
+            "material": "žula",
+            "mat_id": 6,
+            "count": 2381,
+            "shape": "layer",
+            "maxHeap": 400,
+            "lzMin": 10,
+            "lzMax": 28,
+            "pH_u16": 52428,
+            "pV_u16": 6553
+          },
+          {
+            "material": "čedič",
+            "mat_id": 7,
+            "count": 3138,
+            "shape": "layer",
+            "maxHeap": 400,
+            "lzMin": 0,
+            "lzMax": 16,
+            "pH_u16": 52428,
+            "pV_u16": 6553
+          },
+          {
+            "material": "vápenec",
+            "mat_id": 5,
+            "count": 3158,
+            "shape": "layer",
+            "maxHeap": 400,
+            "lzMin": 20,
+            "lzMax": 46,
+            "pH_u16": 52428,
+            "pV_u16": 6553
+          }
+        ],
+        "stackBytesHex": "0a00090016000000010c0016000000040000002400000008001b000000031400120000000800000028000000bc0200005000000003003500000002140050000000faffffffffffffffcccc0000991900000c00df00000002140078000000f6fffffffdffffffcccc0000991900000000fc000000041c003c000000030000002c000000b89e0000cc4c0000020000000100000004002201000002140050000000f9fffffffeffffffcccc0000991900000200b8010000021400c8000000fcffffffffffffff66e60000cc0c000006004d090000021400900100000a0000001c000000cccc0000991900000700420c0000021400900100000000000010000000cccc0000991900000500560c000002140090010000140000002e000000cccc000099190000",
+        "stackHash": "f13460329db77283f2fb914b51c103c3d1e93fb1544b27be2c7d0bd28e691b15",
+        "water": 96
+      },
+      "issued": {
+        "voda": 96,
+        "železná ruda": 22,
+        "měděná ruda": 27,
+        "písek": 53,
+        "ložiskový jíl": 223,
+        "jeskyně": 252,
+        "jíl": 290,
+        "hlína": 440,
+        "žula": 2381,
+        "čedič": 3138,
+        "vápenec": 3158
+      },
+      "materials": [
+        {
+          "material": "železná ruda",
+          "target": 22,
+          "placed": 22,
+          "shortfall": 0,
+          "byLevel": {
+            "L0 semínka": 22
+          }
+        },
+        {
+          "material": "měděná ruda",
+          "target": 27,
+          "placed": 27,
+          "shortfall": 0,
+          "byLevel": {
+            "L0 semínka": 27
+          }
+        },
+        {
+          "material": "písek",
+          "target": 53,
+          "placed": 53,
+          "shortfall": 0,
+          "byLevel": {
+            "L0 semínka": 53
+          }
+        },
+        {
+          "material": "ložiskový jíl",
+          "target": 223,
+          "placed": 223,
+          "shortfall": 0,
+          "byLevel": {
+            "L0 semínka": 98,
+            "L1 další semínka": 125
+          }
+        },
+        {
+          "material": "jeskyně",
+          "target": 252,
+          "placed": 252,
+          "shortfall": 0,
+          "byLevel": {
+            "L0 semínka": 252
+          }
+        },
+        {
+          "material": "jíl",
+          "target": 290,
+          "placed": 290,
+          "shortfall": 0,
+          "byLevel": {
+            "L1 další semínka": 290
+          }
+        },
+        {
+          "material": "hlína",
+          "target": 440,
+          "placed": 440,
+          "shortfall": 0,
+          "byLevel": {
+            "L0 semínka": 12,
+            "L1 další semínka": 347,
+            "L2 dorůst tělesa": 81
+          }
+        },
+        {
+          "material": "žula",
+          "target": 2381,
+          "placed": 2381,
+          "shortfall": 0,
+          "byLevel": {
+            "L0 semínka": 2381
+          }
+        },
+        {
+          "material": "čedič",
+          "target": 3138,
+          "placed": 3138,
+          "shortfall": 0,
+          "byLevel": {
+            "L0 semínka": 2353,
+            "L1 další semínka": 785
+          }
+        },
+        {
+          "material": "vápenec",
+          "target": 3158,
+          "placed": 3158,
+          "shortfall": 0,
+          "byLevel": {
+            "L0 semínka": 1365,
+            "L1 další semínka": 894,
+            "L2 dorůst tělesa": 443,
+            "L3 celá výška": 291,
+            "L4 uvolněný hostitel": 165
+          }
+        }
+      ],
+      "water": {
+        "poured": 96,
+        "placed": 50.388,
+        "inPores": 50.388,
+        "freeInCaves": 0.0,
+        "pond": 0.0,
+        "runoff": 45.612,
+        "level": 30
+      },
+      "wvb1Header": {
+        "shortfall": {
+          "water_units": 186828
+        }
+      },
+      "validator": {
+        "ok": true,
+        "errorCount": 0,
+        "firstErrors": []
+      },
+      "final": {
+        "tráva": 206,
+        "hlína": 440,
+        "písek": 53,
+        "jíl": 290,
+        "vápenec": 3158,
+        "žula": 2381,
+        "čedič": 3138,
+        "měděná ruda": 27,
+        "železná ruda": 22,
+        "sníh": 8,
+        "ložiskový jíl": 223,
+        "jeskyně": 252
+      },
+      "layering": {
+        "purity": 0.819824517809181,
+        "boundary": 0.0911637382225618,
+        "stoneSpecks": 3,
+        "dirtSpecks": 1,
+        "deepDirt": 0
+      },
+      "layeringPrototype": {
+        "purity": 0.944259686919733,
+        "boundary": 0.0275910859568447,
+        "stoneSpecks": 4,
+        "dirtSpecks": 4,
+        "deepDirt": 0
+      },
+      "sha256MaterialLayer": "adc9d271b12f3110e020a7cf98bd9850b2a5d47b5e33107145b363271dceac8e",
+      "sha256WaterLayer": "2db3b440deeda16f54629c00e9a5ab628961c50bd0d9ba85b2df4d277083f870"
+    },
+    {
+      "id": "hora_1000",
+      "recipe": "hora",
+      "seed": 1000,
+      "in": {
+        "stack": [
+          {
+            "material": "měděná ruda",
+            "mat_id": 8,
+            "count": 13,
+            "shape": "vein",
+            "maxHeap": 18,
+            "lzMin": 8,
+            "lzMax": 40,
+            "inertia_permille": 700,
+            "branch_permille": 80
+          },
+          {
+            "material": "železná ruda",
+            "mat_id": 9,
+            "count": 13,
+            "shape": "pocket",
+            "maxHeap": 22,
+            "lzMin": 4,
+            "lzMax": 36
+          },
+          {
+            "material": "ložiskový jíl",
+            "mat_id": 12,
+            "count": 78,
+            "shape": "layer",
+            "maxHeap": 120,
+            "lzMin": -10,
+            "lzMax": -3,
+            "pH_u16": 52428,
+            "pV_u16": 6553
+          },
+          {
+            "material": "písek",
+            "mat_id": 3,
+            "count": 151,
+            "shape": "layer",
+            "maxHeap": 80,
+            "lzMin": -6,
+            "lzMax": -1,
+            "pH_u16": 52428,
+            "pV_u16": 6553
+          },
+          {
+            "material": "vzduch (jeskyně)",
+            "mat_id": 0,
+            "count": 200,
+            "shape": "chamber",
+            "maxHeap": 60,
+            "lzMin": 3,
+            "lzMax": 44,
+            "pH_u16": 40632,
+            "pV_u16": 19660,
+            "roof": 2,
+            "margin": 1
+          },
+          {
+            "material": "jíl",
+            "mat_id": 4,
+            "count": 237,
+            "shape": "layer",
+            "maxHeap": 80,
+            "lzMin": -7,
+            "lzMax": -2,
+            "pH_u16": 52428,
+            "pV_u16": 6553
+          },
+          {
+            "material": "hlína",
+            "mat_id": 2,
+            "count": 474,
+            "shape": "layer",
+            "maxHeap": 200,
+            "lzMin": -4,
+            "lzMax": -1,
+            "pH_u16": 58982,
+            "pV_u16": 3276
+          },
+          {
+            "material": "žula",
+            "mat_id": 6,
+            "count": 2408,
+            "shape": "layer",
+            "maxHeap": 400,
+            "lzMin": 10,
+            "lzMax": 28,
+            "pH_u16": 52428,
+            "pV_u16": 6553
+          },
+          {
+            "material": "vápenec",
+            "mat_id": 5,
+            "count": 2458,
+            "shape": "layer",
+            "maxHeap": 400,
+            "lzMin": 20,
+            "lzMax": 46,
+            "pH_u16": 52428,
+            "pV_u16": 6553
+          },
+          {
+            "material": "čedič",
+            "mat_id": 7,
+            "count": 2885,
+            "shape": "layer",
+            "maxHeap": 400,
+            "lzMin": 0,
+            "lzMax": 16,
+            "pH_u16": 52428,
+            "pV_u16": 6553
+          }
+        ],
+        "stackBytesHex": "0a0008000d000000031400120000000800000028000000bc0200005000000009000d000000010c001600000004000000240000000c004e00000002140078000000f6fffffffdffffffcccc00009919000003009700000002140050000000faffffffffffffffcccc0000991900000000c8000000041c003c000000030000002c000000b89e0000cc4c000002000000010000000400ed00000002140050000000f9fffffffeffffffcccc0000991900000200da010000021400c8000000fcffffffffffffff66e60000cc0c0000060068090000021400900100000a0000001c000000cccc00009919000005009a09000002140090010000140000002e000000cccc0000991900000700450b0000021400900100000000000010000000cccc000099190000",
+        "stackHash": "fe0424f72f0520bbc85fec54cee03bafca585570abb759bc3729c894e29c2b51",
+        "water": 106
+      },
+      "issued": {
+        "voda": 106,
+        "měděná ruda": 13,
+        "železná ruda": 13,
+        "ložiskový jíl": 78,
+        "písek": 151,
+        "jeskyně": 200,
+        "jíl": 237,
+        "hlína": 474,
+        "žula": 2408,
+        "vápenec": 2458,
+        "čedič": 2885
+      },
+      "materials": [
+        {
+          "material": "měděná ruda",
+          "target": 13,
+          "placed": 13,
+          "shortfall": 0,
+          "byLevel": {
+            "L0 semínka": 13
+          }
+        },
+        {
+          "material": "železná ruda",
+          "target": 13,
+          "placed": 13,
+          "shortfall": 0,
+          "byLevel": {
+            "L0 semínka": 13
+          }
+        },
+        {
+          "material": "ložiskový jíl",
+          "target": 78,
+          "placed": 78,
+          "shortfall": 0,
+          "byLevel": {
+            "L0 semínka": 78
+          }
+        },
+        {
+          "material": "písek",
+          "target": 151,
+          "placed": 151,
+          "shortfall": 0,
+          "byLevel": {
+            "L0 semínka": 143,
+            "L1 další semínka": 8
+          }
+        },
+        {
+          "material": "jeskyně",
+          "target": 200,
+          "placed": 200,
+          "shortfall": 0,
+          "byLevel": {
+            "L0 semínka": 200
+          }
+        },
+        {
+          "material": "jíl",
+          "target": 237,
+          "placed": 237,
+          "shortfall": 0,
+          "byLevel": {
+            "L1 další semínka": 237
+          }
+        },
+        {
+          "material": "hlína",
+          "target": 474,
+          "placed": 474,
+          "shortfall": 0,
+          "byLevel": {
+            "L1 další semínka": 364,
+            "L2 dorůst tělesa": 110
+          }
+        },
+        {
+          "material": "žula",
+          "target": 2408,
+          "placed": 2408,
+          "shortfall": 0,
+          "byLevel": {
+            "L0 semínka": 2408
+          }
+        },
+        {
+          "material": "vápenec",
+          "target": 2458,
+          "placed": 2458,
+          "shortfall": 0,
+          "byLevel": {
+            "L0 semínka": 951,
+            "L1 další semínka": 322,
+            "L2 dorůst tělesa": 1185
+          }
+        },
+        {
+          "material": "čedič",
+          "target": 2885,
+          "placed": 2885,
+          "shortfall": 0,
+          "byLevel": {
+            "L0 semínka": 2219,
+            "L1 další semínka": 483,
+            "L2 dorůst tělesa": 145,
+            "L3 celá výška": 35,
+            "L4 uvolněný hostitel": 3
+          }
+        }
+      ],
+      "water": {
+        "poured": 106,
+        "placed": 106.0,
+        "inPores": 106.0,
+        "freeInCaves": 0.0,
+        "pond": 0.0,
+        "runoff": 0.0,
+        "level": 28
+      },
+      "wvb1Header": {
+        "shortfall": {}
+      },
+      "validator": {
+        "ok": true,
+        "errorCount": 0,
+        "firstErrors": []
+      },
+      "final": {
+        "tráva": 229,
+        "hlína": 474,
+        "písek": 151,
+        "jíl": 237,
+        "vápenec": 2458,
+        "žula": 2408,
+        "čedič": 2885,
+        "měděná ruda": 13,
+        "železná ruda": 13,
+        "sníh": 2,
+        "ložiskový jíl": 78,
+        "jeskyně": 200
+      },
+      "layering": {
+        "purity": 0.832390686952769,
+        "boundary": 0.062874251497006,
+        "stoneSpecks": 4,
+        "dirtSpecks": 3,
+        "deepDirt": 0
+      },
+      "layeringPrototype": {
+        "purity": 0.958360059449312,
+        "boundary": 0.0302212628170534,
+        "stoneSpecks": 0,
+        "dirtSpecks": 2,
+        "deepDirt": 0
+      },
+      "sha256MaterialLayer": "c9f63bd379d4cf25e8e6e543d5e7edbbf8cba33c5b686ada73f5f5f2c3afc59c",
+      "sha256WaterLayer": "9777a936f171de5abbc460ae36358012b9c0426223bfe42a8c9238ea21d11c54"
+    },
+    {
+      "id": "piscina_4504",
+      "recipe": "piscina",
+      "seed": 4504,
+      "in": {
+        "stack": [
+          {
+            "material": "měděná ruda",
+            "mat_id": 8,
+            "count": 10,
+            "shape": "vein",
+            "maxHeap": 18,
+            "lzMin": 8,
+            "lzMax": 40,
+            "inertia_permille": 700,
+            "branch_permille": 80
+          },
+          {
+            "material": "jíl",
+            "mat_id": 4,
+            "count": 12,
+            "shape": "layer",
+            "maxHeap": 80,
+            "lzMin": -7,
+            "lzMax": -2,
+            "pH_u16": 52428,
+            "pV_u16": 6553
+          },
+          {
+            "material": "železná ruda",
+            "mat_id": 9,
+            "count": 33,
+            "shape": "pocket",
+            "maxHeap": 22,
+            "lzMin": 4,
+            "lzMax": 36
+          },
+          {
+            "material": "ložiskový jíl",
+            "mat_id": 12,
+            "count": 124,
+            "shape": "layer",
+            "maxHeap": 120,
+            "lzMin": -10,
+            "lzMax": -3,
+            "pH_u16": 52428,
+            "pV_u16": 6553
+          },
+          {
+            "material": "vzduch (jeskyně)",
+            "mat_id": 0,
+            "count": 146,
+            "shape": "chamber",
+            "maxHeap": 60,
+            "lzMin": 3,
+            "lzMax": 44,
+            "pH_u16": 40632,
+            "pV_u16": 19660,
+            "roof": 2,
+            "margin": 1
+          },
+          {
+            "material": "vápenec",
+            "mat_id": 5,
+            "count": 701,
+            "shape": "layer",
+            "maxHeap": 400,
+            "lzMin": 20,
+            "lzMax": 46,
+            "pH_u16": 52428,
+            "pV_u16": 6553
+          },
+          {
+            "material": "písek",
+            "mat_id": 3,
+            "count": 1497,
+            "shape": "layer",
+            "maxHeap": 80,
+            "lzMin": -6,
+            "lzMax": -1,
+            "pH_u16": 52428,
+            "pV_u16": 6553
+          },
+          {
+            "material": "žula",
+            "mat_id": 6,
+            "count": 2413,
+            "shape": "layer",
+            "maxHeap": 400,
+            "lzMin": 10,
+            "lzMax": 28,
+            "pH_u16": 52428,
+            "pV_u16": 6553
+          },
+          {
+            "material": "čedič",
+            "mat_id": 7,
+            "count": 2841,
+            "shape": "layer",
+            "maxHeap": 400,
+            "lzMin": 0,
+            "lzMax": 16,
+            "pH_u16": 52428,
+            "pV_u16": 6553
+          }
+        ],
+        "stackBytesHex": "090008000a000000031400120000000800000028000000bc0200005000000004000c00000002140050000000f9fffffffeffffffcccc000099190000090021000000010c001600000004000000240000000c007c00000002140078000000f6fffffffdffffffcccc000099190000000092000000041c003c000000030000002c000000b89e0000cc4c000002000000010000000500bd02000002140090010000140000002e000000cccc0000991900000300d905000002140050000000faffffffffffffffcccc00009919000006006d090000021400900100000a0000001c000000cccc0000991900000700190b0000021400900100000000000010000000cccc000099190000",
+        "stackHash": "4596859e31055ca9ada5f06c814e0316a7f84ce95e8dbed4b965f49cf578df6d",
+        "water": 161
+      },
+      "issued": {
+        "voda": 161,
+        "měděná ruda": 10,
+        "jíl": 12,
+        "železná ruda": 33,
+        "ložiskový jíl": 124,
+        "jeskyně": 146,
+        "vápenec": 701,
+        "písek": 1497,
+        "žula": 2413,
+        "čedič": 2841
+      },
+      "materials": [
+        {
+          "material": "měděná ruda",
+          "target": 10,
+          "placed": 10,
+          "shortfall": 0,
+          "byLevel": {
+            "L0 semínka": 10
+          }
+        },
+        {
+          "material": "jíl",
+          "target": 12,
+          "placed": 12,
+          "shortfall": 0,
+          "byLevel": {
+            "L0 semínka": 12
+          }
+        },
+        {
+          "material": "železná ruda",
+          "target": 33,
+          "placed": 33,
+          "shortfall": 0,
+          "byLevel": {
+            "L0 semínka": 33
+          }
+        },
+        {
+          "material": "ložiskový jíl",
+          "target": 124,
+          "placed": 124,
+          "shortfall": 0,
+          "byLevel": {
+            "L1 další semínka": 124
+          }
+        },
+        {
+          "material": "jeskyně",
+          "target": 146,
+          "placed": 146,
+          "shortfall": 0,
+          "byLevel": {
+            "L0 semínka": 146
+          }
+        },
+        {
+          "material": "vápenec",
+          "target": 701,
+          "placed": 701,
+          "shortfall": 0,
+          "byLevel": {
+            "L0 semínka": 701
+          }
+        },
+        {
+          "material": "písek",
+          "target": 1497,
+          "placed": 1497,
+          "shortfall": 0,
+          "byLevel": {
+            "L0 semínka": 343,
+            "L1 další semínka": 375,
+            "L2 dorůst tělesa": 119,
+            "L3 celá výška": 10,
+            "L4 uvolněný hostitel": 650
+          }
+        },
+        {
+          "material": "žula",
+          "target": 2413,
+          "placed": 2413,
+          "shortfall": 0,
+          "byLevel": {
+            "L0 semínka": 2413
+          }
+        },
+        {
+          "material": "čedič",
+          "target": 2841,
+          "placed": 2841,
+          "shortfall": 0,
+          "byLevel": {
+            "L0 semínka": 1990,
+            "L1 další semínka": 407,
+            "L2 dorůst tělesa": 356,
+            "L3 celá výška": 54,
+            "L4 uvolněný hostitel": 34
+          }
+        }
+      ],
+      "water": {
+        "poured": 161,
+        "placed": 161.0,
+        "inPores": 136.668,
+        "freeInCaves": 24.332,
+        "pond": 0.0,
+        "runoff": 0.0,
+        "level": 27
+      },
+      "wvb1Header": {
+        "shortfall": {}
+      },
+      "validator": {
+        "ok": true,
+        "errorCount": 0,
+        "firstErrors": []
+      },
+      "final": {
+        "písek": 1497,
+        "jíl": 12,
+        "vápenec": 701,
+        "žula": 2413,
+        "čedič": 2841,
+        "měděná ruda": 10,
+        "železná ruda": 33,
+        "ložiskový jíl": 124,
+        "jeskyně": 146
+      },
+      "layering": {
+        "purity": 0.856446146054819,
+        "boundary": 0.0647855949508075,
+        "stoneSpecks": 3,
+        "dirtSpecks": 0,
+        "deepDirt": 0
+      },
+      "layeringPrototype": {
+        "purity": 0.940930085696418,
+        "boundary": 0.0364449028708956,
+        "stoneSpecks": 2,
+        "dirtSpecks": 0,
+        "deepDirt": 0
+      },
+      "sha256MaterialLayer": "f95c1a667a2acfd3870906de5cfde492c0c3165b47fd58d4d4d716d9dd829745",
+      "sha256WaterLayer": "8654feb79368ff9a5528d31a40474327ababf867a309a1c3c25736358211b023"
+    },
+    {
+      "id": "zatez_jeskyne_x5_hora202",
+      "recipe": "hora",
+      "seed": 202,
+      "in": {
+        "stack": [
+          {
+            "material": "železná ruda",
+            "mat_id": 9,
+            "count": 22,
+            "shape": "pocket",
+            "maxHeap": 22,
+            "lzMin": 4,
+            "lzMax": 36
+          },
+          {
+            "material": "měděná ruda",
+            "mat_id": 8,
+            "count": 27,
+            "shape": "vein",
+            "maxHeap": 18,
+            "lzMin": 8,
+            "lzMax": 40,
+            "inertia_permille": 700,
+            "branch_permille": 80
+          },
+          {
+            "material": "písek",
+            "mat_id": 3,
+            "count": 53,
+            "shape": "layer",
+            "maxHeap": 80,
+            "lzMin": -6,
+            "lzMax": -1,
+            "pH_u16": 52428,
+            "pV_u16": 6553
+          },
+          {
+            "material": "ložiskový jíl",
+            "mat_id": 12,
+            "count": 223,
+            "shape": "layer",
+            "maxHeap": 120,
+            "lzMin": -10,
+            "lzMax": -3,
+            "pH_u16": 52428,
+            "pV_u16": 6553
+          },
+          {
+            "material": "jíl",
+            "mat_id": 4,
+            "count": 290,
+            "shape": "layer",
+            "maxHeap": 80,
+            "lzMin": -7,
+            "lzMax": -2,
+            "pH_u16": 52428,
+            "pV_u16": 6553
+          },
+          {
+            "material": "hlína",
+            "mat_id": 2,
+            "count": 440,
+            "shape": "layer",
+            "maxHeap": 200,
+            "lzMin": -4,
+            "lzMax": -1,
+            "pH_u16": 58982,
+            "pV_u16": 3276
+          },
+          {
+            "material": "vzduch (jeskyně)",
+            "mat_id": 0,
+            "count": 1260,
+            "shape": "chamber",
+            "maxHeap": 60,
+            "lzMin": 3,
+            "lzMax": 44,
+            "pH_u16": 40632,
+            "pV_u16": 19660,
+            "roof": 2,
+            "margin": 1
+          },
+          {
+            "material": "žula",
+            "mat_id": 6,
+            "count": 2104,
+            "shape": "layer",
+            "maxHeap": 400,
+            "lzMin": 10,
+            "lzMax": 28,
+            "pH_u16": 52428,
+            "pV_u16": 6553
+          },
+          {
+            "material": "čedič",
+            "mat_id": 7,
+            "count": 2774,
+            "shape": "layer",
+            "maxHeap": 400,
+            "lzMin": 0,
+            "lzMax": 16,
+            "pH_u16": 52428,
+            "pV_u16": 6553
+          },
+          {
+            "material": "vápenec",
+            "mat_id": 5,
+            "count": 2791,
+            "shape": "layer",
+            "maxHeap": 400,
+            "lzMin": 20,
+            "lzMax": 46,
+            "pH_u16": 52428,
+            "pV_u16": 6553
+          }
+        ],
+        "stackBytesHex": "0a00090016000000010c0016000000040000002400000008001b000000031400120000000800000028000000bc0200005000000003003500000002140050000000faffffffffffffffcccc0000991900000c00df00000002140078000000f6fffffffdffffffcccc00009919000004002201000002140050000000f9fffffffeffffffcccc0000991900000200b8010000021400c8000000fcffffffffffffff66e60000cc0c00000000ec040000041c003c000000030000002c000000b89e0000cc4c00000200000001000000060038080000021400900100000a0000001c000000cccc0000991900000700d60a0000021400900100000000000010000000cccc0000991900000500e70a000002140090010000140000002e000000cccc000099190000",
+        "stackHash": "62490b380f9e4d55802c3eac3472a2a791ba6a7d09a0380937aa278cecd68316",
+        "water": 96
+      },
+      "issued": {
+        "voda": 96,
+        "železná ruda": 22,
+        "měděná ruda": 27,
+        "písek": 53,
+        "ložiskový jíl": 223,
+        "jíl": 290,
+        "hlína": 440,
+        "jeskyně": 1260,
+        "žula": 2104,
+        "čedič": 2774,
+        "vápenec": 2791
+      },
+      "materials": [
+        {
+          "material": "železná ruda",
+          "target": 22,
+          "placed": 22,
+          "shortfall": 0,
+          "byLevel": {
+            "L0 semínka": 22
+          }
+        },
+        {
+          "material": "měděná ruda",
+          "target": 27,
+          "placed": 27,
+          "shortfall": 0,
+          "byLevel": {
+            "L0 semínka": 27
+          }
+        },
+        {
+          "material": "písek",
+          "target": 53,
+          "placed": 53,
+          "shortfall": 0,
+          "byLevel": {
+            "L0 semínka": 53
+          }
+        },
+        {
+          "material": "ložiskový jíl",
+          "target": 223,
+          "placed": 223,
+          "shortfall": 0,
+          "byLevel": {
+            "L0 semínka": 98,
+            "L1 další semínka": 125
+          }
+        },
+        {
+          "material": "jíl",
+          "target": 290,
+          "placed": 290,
+          "shortfall": 0,
+          "byLevel": {
+            "L0 semínka": 216,
+            "L1 další semínka": 74
+          }
+        },
+        {
+          "material": "hlína",
+          "target": 440,
+          "placed": 440,
+          "shortfall": 0,
+          "byLevel": {
+            "L0 semínka": 146,
+            "L1 další semínka": 127,
+            "L2 dorůst tělesa": 167
+          }
+        },
+        {
+          "material": "jeskyně",
+          "target": 1260,
+          "placed": 1260,
+          "shortfall": 0,
+          "byLevel": {
+            "L0 semínka": 1260
+          }
+        },
+        {
+          "material": "žula",
+          "target": 2104,
+          "placed": 2104,
+          "shortfall": 0,
+          "byLevel": {
+            "L0 semínka": 1775,
+            "L1 další semínka": 329
+          }
+        },
+        {
+          "material": "čedič",
+          "target": 2774,
+          "placed": 2774,
+          "shortfall": 0,
+          "byLevel": {
+            "L0 semínka": 1818,
+            "L1 další semínka": 886,
+            "L2 dorůst tělesa": 70
+          }
+        },
+        {
+          "material": "vápenec",
+          "target": 2791,
+          "placed": 2791,
+          "shortfall": 0,
+          "byLevel": {
+            "L0 semínka": 1292,
+            "L1 další semínka": 754,
+            "L2 dorůst tělesa": 490,
+            "L3 celá výška": 59,
+            "L4 uvolněný hostitel": 196
+          }
+        }
+      ],
+      "water": {
+        "poured": 96,
+        "placed": 96.0,
+        "inPores": 4.389,
+        "freeInCaves": 91.611,
+        "pond": 0.0,
+        "runoff": 0.0,
+        "level": 27
+      },
+      "wvb1Header": {
+        "shortfall": {}
+      },
+      "validator": {
+        "ok": true,
+        "errorCount": 0,
+        "firstErrors": []
+      },
+      "final": {
+        "tráva": 206,
+        "hlína": 440,
+        "písek": 53,
+        "jíl": 290,
+        "vápenec": 2791,
+        "žula": 2104,
+        "čedič": 2774,
+        "měděná ruda": 27,
+        "železná ruda": 22,
+        "sníh": 8,
+        "ložiskový jíl": 223,
+        "jeskyně": 1260
+      },
+      "layering": {
+        "purity": 0.824636677527035,
+        "boundary": 0.0612182430364249,
+        "stoneSpecks": 13,
+        "dirtSpecks": 0,
+        "deepDirt": 0
+      },
+      "layeringPrototype": {
+        "purity": 0.944259686919733,
+        "boundary": 0.0275910859568447,
+        "stoneSpecks": 4,
+        "dirtSpecks": 4,
+        "deepDirt": 0
+      },
+      "sha256MaterialLayer": "ce25ef71a1bbc98765853bc6a502ac182478695fc3b37333e3aeadedbdb44439",
+      "sha256WaterLayer": "170defaf70b95d7aea77b31abca69fea9678c5b3b05cf0496ec8b09aad8355d8"
+    },
+    {
+      "id": "zatez_rudy_x5_louka101",
+      "recipe": "louka",
+      "seed": 101,
+      "in": {
+        "stack": [
+          {
+            "material": "ložiskový jíl",
+            "mat_id": 12,
+            "count": 43,
+            "shape": "layer",
+            "maxHeap": 120,
+            "lzMin": -10,
+            "lzMax": -3,
+            "pH_u16": 52428,
+            "pV_u16": 6553
+          },
+          {
+            "material": "vzduch (jeskyně)",
+            "mat_id": 0,
+            "count": 132,
+            "shape": "chamber",
+            "maxHeap": 60,
+            "lzMin": 3,
+            "lzMax": 44,
+            "pH_u16": 40632,
+            "pV_u16": 19660,
+            "roof": 2,
+            "margin": 1
+          },
+          {
+            "material": "měděná ruda",
+            "mat_id": 8,
+            "count": 155,
+            "shape": "vein",
+            "maxHeap": 18,
+            "lzMin": 8,
+            "lzMax": 40,
+            "inertia_permille": 700,
+            "branch_permille": 80
+          },
+          {
+            "material": "železná ruda",
+            "mat_id": 9,
+            "count": 165,
+            "shape": "pocket",
+            "maxHeap": 22,
+            "lzMin": 4,
+            "lzMax": 36
+          },
+          {
+            "material": "jíl",
+            "mat_id": 4,
+            "count": 181,
+            "shape": "layer",
+            "maxHeap": 80,
+            "lzMin": -7,
+            "lzMax": -2,
+            "pH_u16": 52428,
+            "pV_u16": 6553
+          },
+          {
+            "material": "písek",
+            "mat_id": 3,
+            "count": 267,
+            "shape": "layer",
+            "maxHeap": 80,
+            "lzMin": -6,
+            "lzMax": -1,
+            "pH_u16": 52428,
+            "pV_u16": 6553
+          },
+          {
+            "material": "hlína",
+            "mat_id": 2,
+            "count": 534,
+            "shape": "layer",
+            "maxHeap": 200,
+            "lzMin": -4,
+            "lzMax": -1,
+            "pH_u16": 58982,
+            "pV_u16": 3276
+          },
+          {
+            "material": "vápenec",
+            "mat_id": 5,
+            "count": 1077,
+            "shape": "layer",
+            "maxHeap": 400,
+            "lzMin": 20,
+            "lzMax": 46,
+            "pH_u16": 52428,
+            "pV_u16": 6553
+          },
+          {
+            "material": "žula",
+            "mat_id": 6,
+            "count": 2519,
+            "shape": "layer",
+            "maxHeap": 400,
+            "lzMin": 10,
+            "lzMax": 28,
+            "pH_u16": 52428,
+            "pV_u16": 6553
+          },
+          {
+            "material": "čedič",
+            "mat_id": 7,
+            "count": 2559,
+            "shape": "layer",
+            "maxHeap": 400,
+            "lzMin": 0,
+            "lzMax": 16,
+            "pH_u16": 52428,
+            "pV_u16": 6553
+          }
+        ],
+        "stackBytesHex": "0a000c002b00000002140078000000f6fffffffdffffffcccc000099190000000084000000041c003c000000030000002c000000b89e0000cc4c0000020000000100000008009b000000031400120000000800000028000000bc020000500000000900a5000000010c001600000004000000240000000400b500000002140050000000f9fffffffeffffffcccc00009919000003000b01000002140050000000faffffffffffffffcccc000099190000020016020000021400c8000000fcffffffffffffff66e60000cc0c000005003504000002140090010000140000002e000000cccc0000991900000600d7090000021400900100000a0000001c000000cccc0000991900000700ff090000021400900100000000000010000000cccc000099190000",
+        "stackHash": "e6ac1d6ea8ac9e072831af96295da8ee2a26d39586055bc2379ab6ed2114d5d8",
+        "water": 130
+      },
+      "issued": {
+        "voda": 130,
+        "ložiskový jíl": 43,
+        "jeskyně": 132,
+        "měděná ruda": 155,
+        "železná ruda": 165,
+        "jíl": 181,
+        "písek": 267,
+        "hlína": 534,
+        "vápenec": 1077,
+        "žula": 2519,
+        "čedič": 2559
+      },
+      "materials": [
+        {
+          "material": "ložiskový jíl",
+          "target": 43,
+          "placed": 43,
+          "shortfall": 0,
+          "byLevel": {
+            "L0 semínka": 43
+          }
+        },
+        {
+          "material": "jeskyně",
+          "target": 132,
+          "placed": 132,
+          "shortfall": 0,
+          "byLevel": {
+            "L0 semínka": 132
+          }
+        },
+        {
+          "material": "měděná ruda",
+          "target": 155,
+          "placed": 155,
+          "shortfall": 0,
+          "byLevel": {
+            "L0 semínka": 155
+          }
+        },
+        {
+          "material": "železná ruda",
+          "target": 165,
+          "placed": 165,
+          "shortfall": 0,
+          "byLevel": {
+            "L0 semínka": 165
+          }
+        },
+        {
+          "material": "jíl",
+          "target": 181,
+          "placed": 181,
+          "shortfall": 0,
+          "byLevel": {
+            "L1 další semínka": 181
+          }
+        },
+        {
+          "material": "písek",
+          "target": 267,
+          "placed": 267,
+          "shortfall": 0,
+          "byLevel": {
+            "L0 semínka": 55,
+            "L1 další semínka": 212
+          }
+        },
+        {
+          "material": "hlína",
+          "target": 534,
+          "placed": 534,
+          "shortfall": 0,
+          "byLevel": {
+            "L0 semínka": 183,
+            "L1 další semínka": 351
+          }
+        },
+        {
+          "material": "vápenec",
+          "target": 1077,
+          "placed": 1077,
+          "shortfall": 0,
+          "byLevel": {
+            "L0 semínka": 785,
+            "L1 další semínka": 292
+          }
+        },
+        {
+          "material": "žula",
+          "target": 2519,
+          "placed": 2519,
+          "shortfall": 0,
+          "byLevel": {
+            "L0 semínka": 1754,
+            "L1 další semínka": 765
+          }
+        },
+        {
+          "material": "čedič",
+          "target": 2559,
+          "placed": 2559,
+          "shortfall": 0,
+          "byLevel": {
+            "L0 semínka": 1965,
+            "L1 další semínka": 71,
+            "L2 dorůst tělesa": 179,
+            "L3 celá výška": 95,
+            "L4 uvolněný hostitel": 249
+          }
+        }
+      ],
+      "water": {
+        "poured": 130,
+        "placed": 130.0,
+        "inPores": 130.0,
+        "freeInCaves": 0.0,
+        "pond": 0.0,
+        "runoff": 0.0,
+        "level": 27
+      },
+      "wvb1Header": {
+        "shortfall": {}
+      },
+      "validator": {
+        "ok": true,
+        "errorCount": 0,
+        "firstErrors": []
+      },
+      "final": {
+        "tráva": 256,
+        "hlína": 534,
+        "písek": 267,
+        "jíl": 181,
+        "vápenec": 1077,
+        "žula": 2519,
+        "čedič": 2559,
+        "měděná ruda": 155,
+        "železná ruda": 165,
+        "ložiskový jíl": 43,
+        "jeskyně": 132
+      },
+      "layering": {
+        "purity": 0.827578016908069,
+        "boundary": 0.0675897249043542,
+        "stoneSpecks": 7,
+        "dirtSpecks": 0,
+        "deepDirt": 2
+      },
+      "layeringPrototype": {
+        "purity": 0.90798374555777,
+        "boundary": 0.0444983818770227,
+        "stoneSpecks": 3,
+        "dirtSpecks": 0,
+        "deepDirt": 0
+      },
+      "sha256MaterialLayer": "5a6c4e636c3cb065d2859be6b735901caa7b15822ae2bce972867702b06adc49",
+      "sha256WaterLayer": "430be12afeffe42a59b0624e87fb28ca7dbd2558bd1de9133bda2f1ea1e686bf"
+    },
+    {
+      "id": "zatez_voda_x5_kopec303",
+      "recipe": "kopec",
+      "seed": 303,
+      "in": {
+        "stack": [
+          {
+            "material": "měděná ruda",
+            "mat_id": 8,
+            "count": 31,
+            "shape": "vein",
+            "maxHeap": 18,
+            "lzMin": 8,
+            "lzMax": 40,
+            "inertia_permille": 700,
+            "branch_permille": 80
+          },
+          {
+            "material": "železná ruda",
+            "mat_id": 9,
+            "count": 32,
+            "shape": "pocket",
+            "maxHeap": 22,
+            "lzMin": 4,
+            "lzMax": 36
+          },
+          {
+            "material": "ložiskový jíl",
+            "mat_id": 12,
+            "count": 118,
+            "shape": "layer",
+            "maxHeap": 120,
+            "lzMin": -10,
+            "lzMax": -3,
+            "pH_u16": 52428,
+            "pV_u16": 6553
+          },
+          {
+            "material": "písek",
+            "mat_id": 3,
+            "count": 152,
+            "shape": "layer",
+            "maxHeap": 80,
+            "lzMin": -6,
+            "lzMax": -1,
+            "pH_u16": 52428,
+            "pV_u16": 6553
+          },
+          {
+            "material": "vzduch (jeskyně)",
+            "mat_id": 0,
+            "count": 254,
+            "shape": "chamber",
+            "maxHeap": 60,
+            "lzMin": 3,
+            "lzMax": 44,
+            "pH_u16": 40632,
+            "pV_u16": 19660,
+            "roof": 2,
+            "margin": 1
+          },
+          {
+            "material": "jíl",
+            "mat_id": 4,
+            "count": 304,
+            "shape": "layer",
+            "maxHeap": 80,
+            "lzMin": -7,
+            "lzMax": -2,
+            "pH_u16": 52428,
+            "pV_u16": 6553
+          },
+          {
+            "material": "hlína",
+            "mat_id": 2,
+            "count": 534,
+            "shape": "layer",
+            "maxHeap": 200,
+            "lzMin": -4,
+            "lzMax": -1,
+            "pH_u16": 58982,
+            "pV_u16": 3276
+          },
+          {
+            "material": "vápenec",
+            "mat_id": 5,
+            "count": 1468,
+            "shape": "layer",
+            "maxHeap": 400,
+            "lzMin": 20,
+            "lzMax": 46,
+            "pH_u16": 52428,
+            "pV_u16": 6553
+          },
+          {
+            "material": "žula",
+            "mat_id": 6,
+            "count": 2464,
+            "shape": "layer",
+            "maxHeap": 400,
+            "lzMin": 10,
+            "lzMax": 28,
+            "pH_u16": 52428,
+            "pV_u16": 6553
+          },
+          {
+            "material": "čedič",
+            "mat_id": 7,
+            "count": 2800,
+            "shape": "layer",
+            "maxHeap": 400,
+            "lzMin": 0,
+            "lzMax": 16,
+            "pH_u16": 52428,
+            "pV_u16": 6553
+          }
+        ],
+        "stackBytesHex": "0a0008001f000000031400120000000800000028000000bc02000050000000090020000000010c001600000004000000240000000c007600000002140078000000f6fffffffdffffffcccc00009919000003009800000002140050000000faffffffffffffffcccc0000991900000000fe000000041c003c000000030000002c000000b89e0000cc4c0000020000000100000004003001000002140050000000f9fffffffeffffffcccc000099190000020016020000021400c8000000fcffffffffffffff66e60000cc0c00000500bc05000002140090010000140000002e000000cccc0000991900000600a0090000021400900100000a0000001c000000cccc0000991900000700f00a0000021400900100000000000010000000cccc000099190000",
+        "stackHash": "8c4edb81ca9c0e88e02b43eff43ba3f53f75ed52d7cb1872f680a4df28100be6",
+        "water": 470
+      },
+      "issued": {
+        "voda": 470,
+        "měděná ruda": 31,
+        "železná ruda": 32,
+        "ložiskový jíl": 118,
+        "písek": 152,
+        "jeskyně": 254,
+        "jíl": 304,
+        "hlína": 534,
+        "vápenec": 1468,
+        "žula": 2464,
+        "čedič": 2800
+      },
+      "materials": [
+        {
+          "material": "měděná ruda",
+          "target": 31,
+          "placed": 31,
+          "shortfall": 0,
+          "byLevel": {
+            "L0 semínka": 31
+          }
+        },
+        {
+          "material": "železná ruda",
+          "target": 32,
+          "placed": 32,
+          "shortfall": 0,
+          "byLevel": {
+            "L0 semínka": 32
+          }
+        },
+        {
+          "material": "ložiskový jíl",
+          "target": 118,
+          "placed": 118,
+          "shortfall": 0,
+          "byLevel": {
+            "L1 další semínka": 118
+          }
+        },
+        {
+          "material": "písek",
+          "target": 152,
+          "placed": 152,
+          "shortfall": 0,
+          "byLevel": {
+            "L1 další semínka": 152
+          }
+        },
+        {
+          "material": "jeskyně",
+          "target": 254,
+          "placed": 254,
+          "shortfall": 0,
+          "byLevel": {
+            "L0 semínka": 254
+          }
+        },
+        {
+          "material": "jíl",
+          "target": 304,
+          "placed": 304,
+          "shortfall": 0,
+          "byLevel": {
+            "L0 semínka": 80,
+            "L1 další semínka": 224
+          }
+        },
+        {
+          "material": "hlína",
+          "target": 534,
+          "placed": 534,
+          "shortfall": 0,
+          "byLevel": {
+            "L1 další semínka": 529,
+            "L2 dorůst tělesa": 5
+          }
+        },
+        {
+          "material": "vápenec",
+          "target": 1468,
+          "placed": 1468,
+          "shortfall": 0,
+          "byLevel": {
+            "L0 semínka": 1056,
+            "L1 další semínka": 412
+          }
+        },
+        {
+          "material": "žula",
+          "target": 2464,
+          "placed": 2464,
+          "shortfall": 0,
+          "byLevel": {
+            "L0 semínka": 2123,
+            "L1 další semínka": 341
+          }
+        },
+        {
+          "material": "čedič",
+          "target": 2800,
+          "placed": 2800,
+          "shortfall": 0,
+          "byLevel": {
+            "L0 semínka": 1886,
+            "L1 další semínka": 297,
+            "L2 dorůst tělesa": 197,
+            "L3 celá výška": 79,
+            "L4 uvolněný hostitel": 341
+          }
+        }
+      ],
+      "water": {
+        "poured": 470,
+        "placed": 158.389,
+        "inPores": 158.389,
+        "freeInCaves": 0.0,
+        "pond": 0.0,
+        "runoff": 311.611,
+        "level": 29
+      },
+      "wvb1Header": {
+        "shortfall": {
+          "water_units": 1276358
+        }
+      },
+      "validator": {
+        "ok": true,
+        "errorCount": 0,
+        "firstErrors": []
+      },
+      "final": {
+        "tráva": 256,
+        "hlína": 534,
+        "písek": 152,
+        "jíl": 304,
+        "vápenec": 1468,
+        "žula": 2464,
+        "čedič": 2800,
+        "měděná ruda": 31,
+        "železná ruda": 32,
+        "ložiskový jíl": 118,
+        "jeskyně": 254
+      },
+      "layering": {
+        "purity": 0.79794775959999,
+        "boundary": 0.0755861616658469,
+        "stoneSpecks": 7,
+        "dirtSpecks": 0,
+        "deepDirt": 1
+      },
+      "layeringPrototype": {
+        "purity": 0.930863192404518,
+        "boundary": 0.0334287004969131,
+        "stoneSpecks": 1,
+        "dirtSpecks": 1,
+        "deepDirt": 0
+      },
+      "sha256MaterialLayer": "28c385727c61d84e715f112904dca0299c3eacb344d8bf3767a184420fb349f4",
+      "sha256WaterLayer": "b8421834c5a3b5f8842a0a673a372b65d022e077c986957cbbdd5e045e52b69f"
+    },
+    {
+      "id": "zatez_voda_x20_louka404",
+      "recipe": "louka",
+      "seed": 404,
+      "in": {
+        "stack": [
+          {
+            "material": "měděná ruda",
+            "mat_id": 8,
+            "count": 30,
+            "shape": "vein",
+            "maxHeap": 18,
+            "lzMin": 8,
+            "lzMax": 40,
+            "inertia_permille": 700,
+            "branch_permille": 80
+          },
+          {
+            "material": "železná ruda",
+            "mat_id": 9,
+            "count": 33,
+            "shape": "pocket",
+            "maxHeap": 22,
+            "lzMin": 4,
+            "lzMax": 36
+          },
+          {
+            "material": "ložiskový jíl",
+            "mat_id": 12,
+            "count": 80,
+            "shape": "layer",
+            "maxHeap": 120,
+            "lzMin": -10,
+            "lzMax": -3,
+            "pH_u16": 52428,
+            "pV_u16": 6553
+          },
+          {
+            "material": "písek",
+            "mat_id": 3,
+            "count": 191,
+            "shape": "layer",
+            "maxHeap": 80,
+            "lzMin": -6,
+            "lzMax": -1,
+            "pH_u16": 52428,
+            "pV_u16": 6553
+          },
+          {
+            "material": "vzduch (jeskyně)",
+            "mat_id": 0,
+            "count": 208,
+            "shape": "chamber",
+            "maxHeap": 60,
+            "lzMin": 3,
+            "lzMax": 44,
+            "pH_u16": 40632,
+            "pV_u16": 19660,
+            "roof": 2,
+            "margin": 1
+          },
+          {
+            "material": "jíl",
+            "mat_id": 4,
+            "count": 263,
+            "shape": "layer",
+            "maxHeap": 80,
+            "lzMin": -7,
+            "lzMax": -2,
+            "pH_u16": 52428,
+            "pV_u16": 6553
+          },
+          {
+            "material": "hlína",
+            "mat_id": 2,
+            "count": 541,
+            "shape": "layer",
+            "maxHeap": 200,
+            "lzMin": -4,
+            "lzMax": -1,
+            "pH_u16": 58982,
+            "pV_u16": 3276
+          },
+          {
+            "material": "vápenec",
+            "mat_id": 5,
+            "count": 1017,
+            "shape": "layer",
+            "maxHeap": 400,
+            "lzMin": 20,
+            "lzMax": 46,
+            "pH_u16": 52428,
+            "pV_u16": 6553
+          },
+          {
+            "material": "žula",
+            "mat_id": 6,
+            "count": 2370,
+            "shape": "layer",
+            "maxHeap": 400,
+            "lzMin": 10,
+            "lzMax": 28,
+            "pH_u16": 52428,
+            "pV_u16": 6553
+          },
+          {
+            "material": "čedič",
+            "mat_id": 7,
+            "count": 2978,
+            "shape": "layer",
+            "maxHeap": 400,
+            "lzMin": 0,
+            "lzMax": 16,
+            "pH_u16": 52428,
+            "pV_u16": 6553
+          }
+        ],
+        "stackBytesHex": "0a0008001e000000031400120000000800000028000000bc02000050000000090021000000010c001600000004000000240000000c005000000002140078000000f6fffffffdffffffcccc0000991900000300bf00000002140050000000faffffffffffffffcccc0000991900000000d0000000041c003c000000030000002c000000b89e0000cc4c0000020000000100000004000701000002140050000000f9fffffffeffffffcccc00009919000002001d020000021400c8000000fcffffffffffffff66e60000cc0c00000500f903000002140090010000140000002e000000cccc000099190000060042090000021400900100000a0000001c000000cccc0000991900000700a20b0000021400900100000000000010000000cccc000099190000",
+        "stackHash": "994f0def2abb2134800d3f98e7a485781b95e522942017c01cfd069ef2a36e4e",
+        "water": 2520
+      },
+      "issued": {
+        "voda": 2520,
+        "měděná ruda": 30,
+        "železná ruda": 33,
+        "ložiskový jíl": 80,
+        "písek": 191,
+        "jeskyně": 208,
+        "jíl": 263,
+        "hlína": 541,
+        "vápenec": 1017,
+        "žula": 2370,
+        "čedič": 2978
+      },
+      "materials": [
+        {
+          "material": "měděná ruda",
+          "target": 30,
+          "placed": 30,
+          "shortfall": 0,
+          "byLevel": {
+            "L0 semínka": 30
+          }
+        },
+        {
+          "material": "železná ruda",
+          "target": 33,
+          "placed": 33,
+          "shortfall": 0,
+          "byLevel": {
+            "L0 semínka": 33
+          }
+        },
+        {
+          "material": "ložiskový jíl",
+          "target": 80,
+          "placed": 80,
+          "shortfall": 0,
+          "byLevel": {
+            "L0 semínka": 80
+          }
+        },
+        {
+          "material": "písek",
+          "target": 191,
+          "placed": 191,
+          "shortfall": 0,
+          "byLevel": {
+            "L0 semínka": 129,
+            "L1 další semínka": 62
+          }
+        },
+        {
+          "material": "jeskyně",
+          "target": 208,
+          "placed": 208,
+          "shortfall": 0,
+          "byLevel": {
+            "L0 semínka": 208
+          }
+        },
+        {
+          "material": "jíl",
+          "target": 263,
+          "placed": 263,
+          "shortfall": 0,
+          "byLevel": {
+            "L0 semínka": 139,
+            "L1 další semínka": 124
+          }
+        },
+        {
+          "material": "hlína",
+          "target": 541,
+          "placed": 541,
+          "shortfall": 0,
+          "byLevel": {
+            "L0 semínka": 207,
+            "L1 další semínka": 334
+          }
+        },
+        {
+          "material": "vápenec",
+          "target": 1017,
+          "placed": 1017,
+          "shortfall": 0,
+          "byLevel": {
+            "L0 semínka": 721,
+            "L1 další semínka": 296
+          }
+        },
+        {
+          "material": "žula",
+          "target": 2370,
+          "placed": 2370,
+          "shortfall": 0,
+          "byLevel": {
+            "L0 semínka": 2130,
+            "L1 další semínka": 240
+          }
+        },
+        {
+          "material": "čedič",
+          "target": 2978,
+          "placed": 2978,
+          "shortfall": 0,
+          "byLevel": {
+            "L0 semínka": 2038,
+            "L1 další semínka": 378,
+            "L2 dorůst tělesa": 249,
+            "L3 celá výška": 117,
+            "L4 uvolněný hostitel": 196
+          }
+        }
+      ],
+      "water": {
+        "poured": 2520,
+        "placed": 284.815,
+        "inPores": 284.815,
+        "freeInCaves": 0.0,
+        "pond": 0.0,
+        "runoff": 2235.185,
+        "level": 29
+      },
+      "wvb1Header": {
+        "shortfall": {
+          "water_units": 9155316
+        }
+      },
+      "validator": {
+        "ok": true,
+        "errorCount": 0,
+        "firstErrors": []
+      },
+      "final": {
+        "tráva": 256,
+        "hlína": 541,
+        "písek": 191,
+        "jíl": 263,
+        "vápenec": 1017,
+        "žula": 2370,
+        "čedič": 2978,
+        "měděná ruda": 30,
+        "železná ruda": 33,
+        "ložiskový jíl": 80,
+        "jeskyně": 208
+      },
+      "layering": {
+        "purity": 0.754902862160846,
+        "boundary": 0.0819070904645477,
+        "stoneSpecks": 5,
+        "dirtSpecks": 0,
+        "deepDirt": 0
+      },
+      "layeringPrototype": {
+        "purity": 0.919708641840883,
+        "boundary": 0.0337512054001929,
+        "stoneSpecks": 0,
+        "dirtSpecks": 0,
+        "deepDirt": 0
+      },
+      "sha256MaterialLayer": "8fed20210c20809dba98609d1a4a6f91b840a92a74bd07353e7b123f4e8baf28",
+      "sha256WaterLayer": "dfa0284e0bcafafb4925c293a424874b94ff518ce95af2084d3f95ee65413476"
+    }
+  ]
+}

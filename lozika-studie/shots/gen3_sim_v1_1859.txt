@@ -1,0 +1,31 @@
+A) parametry voda-studie beze změny (vápenec perm 0,10 / pórovitost 0,15)
+A gen-v3 + simulace voda-studie (400 tiků, odpar 0, strany bloku zavřené): stabilita vsáknuté vody
+blok | voda | posun objemu | odtok | přesunuto (½Σ|Δw|) | max |Δw| buňky | voda ve vápenci po | validátor | ms/tik
+louka 101 | 130.00 | +0.000009 | 0.000000 | 68.7938 | 0.4000 | 50.016 | OK | 4.4
+kopec 303 | 94.00 | +0.000001 | 0.000000 | 30.7111 | 0.6659 | 21.831 | OK | 4.3
+hora 1000 | 0.80 | +0.000000 | 0.000000 | 0.0000 | 0.0000 | 0.000 | OK | 3.0
+piscina 4504 | 161.00 | +0.000005 | 0.000000 | 37.1009 | 0.1699 | 37.101 | OK | 4.1
+louka 404 voda ×20 | 239.04 | +0.000014 | 0.000000 | 72.4358 | 0.4000 | 66.654 | OK | 4.4
+hora 202 voda ×5 | 21.19 | +0.000001 | 0.000000 | 18.9382 | 0.6887 | 17.679 | OK | 3.7
+
+B) totéž, ale vápenec nepropustný (perm_limestone = 0) – jak předpokládá gen-v3
+B gen-v3 + simulace voda-studie (400 tiků, odpar 0, strany bloku zavřené): stabilita vsáknuté vody
+blok | voda | posun objemu | odtok | přesunuto (½Σ|Δw|) | max |Δw| buňky | voda ve vápenci po | validátor | ms/tik
+louka 101 | 130.00 | +0.000000 | 0.000000 | 0.0225 | 0.0011 | 0.000 | OK | 3.5
+kopec 303 | 94.00 | +0.000000 | 0.000000 | 0.0101 | 0.0010 | 0.000 | OK | 3.4
+hora 1000 | 0.80 | +0.000000 | 0.000000 | 0.0000 | 0.0000 | 0.000 | OK | 3.0
+piscina 4504 | 161.00 | -0.000000 | 0.000000 | 0.0338 | 0.0003 | 0.000 | OK | 3.7
+louka 404 voda ×20 | 239.04 | +0.000000 | 0.000000 | 0.0241 | 0.0009 | 0.000 | OK | 3.7
+hora 202 voda ×5 | 21.19 | +0.000000 | 0.000000 | 0.0001 | 0.0001 | 0.000 | OK | 3.1
+
+Negativní test validátoru (louka 101):
+  1 buňka žuly → hlína → odmítnuto (2) [{ "code": "world.summary_mismatch", "mat": "žula", "want": 2651, "got": 2650 }, { "code": "world.summary_mismatch", "mat": "hlína (zbytek)", "want": 470, "got": 471 }]
+  voda 1/4 buňky přesunuta do žuly → odmítnuto (2) [{ "code": "world.water_unstable", "reason": "water_in_impermeable", "cell": 9 }, { "code": "world.water_unstable", "reason": "not_saturated_below_level", "cell": 26, "top": 28 }]
+  voda 1 buňky přidána navíc nahoru (nad hladinu) → odmítnuto (2) [{ "code": "world.water_mismatch", "want": 532480, "got": 534118 }, { "code": "world.water_unstable", "reason": "not_saturated_below_level", "cell": 28, "top": 29 }]
+Neplatný zásobník (world.stack_invalid):
+  neznámý tvar 9 → { "code": "world.stack_invalid", "reason": "unknown_shape", "item": 0 }
+  params_len 8 místo 20 → { "code": "world.stack_invalid", "reason": "params_len", "item": 0 }
+  useknuté bajty → { "code": "world.stack_invalid", "reason": "truncated", "item": 8 }
+  bajt navíc → { "code": "world.stack_invalid", "reason": "trailing_bytes", "item": -1 }
+  lzMin > lzMax → { "code": "world.stack_invalid", "reason": "lz_band", "item": 0 }
+  materiál hlína → { "code": "world.stack_invalid", "reason": "material", "item": 0 }

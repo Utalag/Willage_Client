@@ -1,0 +1,3 @@
+mikro (hora 202, 8 běhů): discovery 0.22 ms; síť bez skrytí 53.1 ms, se skrytím 59.5 ms
+skrytí vypnuto: vložení kopce 5151 na (2,0) 449 ms (z toho síť 89.0 ms), kopání střed 172 ms, hrana 316 ms
+skrytí zapnuto: vložení kopce 5151 na (-1,0) 424 ms (z toho síť 53.7 ms), kopání střed 138 ms, hrana 267 ms

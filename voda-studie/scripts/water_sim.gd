@@ -28,6 +28,7 @@ var w: PackedFloat32Array
 var cap: PackedFloat32Array
 var kp: PackedFloat32Array
 var res: PackedFloat32Array
+var ret: PackedFloat32Array          # zadržená (nepohyblivá) voda v pórech, ret_* ze sdílené tabulky (Jan 19:19)
 var open_sides := 0              # 1 = -x (západ), 2 = +x (východ), 4 = -y (sever), 8 = +y (jih)
 var rain := 0.0
 var rain_ticks := -1
@@ -52,7 +53,7 @@ var flux: PackedFloat32Array           # objem, který buňka za poslední tik p
 func _init(nx: int, ny: int, nz: int, params: Dictionary) -> void:
 	NX = nx; NY = ny; NZ = nz; A = nx * ny; P = params
 	var n := A * nz
-	mat.resize(n); w.resize(n); flux.resize(n); cap.resize(n); kp.resize(n); res.resize(n); _d.resize(n)
+	mat.resize(n); w.resize(n); flux.resize(n); cap.resize(n); kp.resize(n); res.resize(n); ret.resize(n); _d.resize(n)
 	out_by_x.resize(nx); out_surf_by_x.resize(nx); first_out_by_x.resize(nx); first_out_by_x.fill(-1); first_surf_by_x.resize(nx); first_surf_by_x.fill(-1)
 	for i in n:
 		_props(i)
@@ -63,6 +64,7 @@ func idx(x: int, y: int, z: int) -> int:
 func _props(i: int) -> void:
 	var p: Vector3 = M.props(mat[i], P)
 	kp[i] = p.x; cap[i] = p.y; res[i] = p.z
+	ret[i] = 0.0 if mat[i] == M.AIR else minf(float(P.get("ret_" + M.KEYS[mat[i]], 0.0)), cap[i])
 
 func set_mat(x: int, y: int, z: int, m: int) -> void:
 	var i := idx(x, y, z)
@@ -166,7 +168,8 @@ func step() -> void:
 	for c in A:
 		for z in range(NZ - 1, 0, -1):
 			var i := c + z * A
-			if w[i] <= EPS:
+			var mob := w[i] - ret[i]         # zadržená voda (ret) nepadá
+			if mob <= EPS:
 				continue
 			var j := i - A
 			var k := minf(kp[i], kp[j])
@@ -175,7 +178,7 @@ func step() -> void:
 			var room := cap[j] - w[j]
 			if room <= EPS:
 				continue
-			var amt := minf(w[i], room)
+			var amt := minf(mob, room)
 			if mat[i] != M.AIR or mat[j] != M.AIR:
 				amt = minf(amt, k * infil)   # vsakování / prosak: nejvýš propustnost × infil za tik
 			w[i] -= amt
@@ -194,7 +197,8 @@ func step() -> void:
 	var tgt := [0, 0, 0, 0]
 	for i in w.size():
 		var wi := w[i]
-		if wi <= EPS or cap[i] <= 0.0:
+		var avail := wi - ret[i]             # do stran teče jen pohyblivá voda nad ret
+		if avail <= EPS or cap[i] <= 0.0:
 			continue
 		var air := mat[i] == M.AIR
 		var z := i / A
@@ -238,7 +242,7 @@ func step() -> void:
 			tot += amts[d]
 		if tot <= EPS:
 			continue
-		var sc := 1.0 if tot <= wi else wi / tot
+		var sc := 1.0 if tot <= avail else avail / tot
 		for d in 4:
 			if amts[d] <= 0.0:
 				continue

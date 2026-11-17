@@ -1,0 +1,22 @@
+gen-v3 + simulace voda-studie, sdílená tabulka v2 (vápenec perm 0.00)
+gen-v3 + simulace voda-studie (400 tiků, odpar 0, strany bloku zavřené): stabilita vsáknuté vody
+blok | voda | posun objemu | odtok | přesunuto (½Σ|Δw|) | max |Δw| buňky | voda ve vápenci po | validátor | ms/tik
+louka 101 | 130.00 | +0.000000 | 0.000000 | 0.0222 | 0.0004 | 0.000 | OK | 3.6
+kopec 303 | 94.00 | +0.000000 | 0.000000 | 0.0190 | 0.0006 | 0.000 | OK | 3.3
+hora 1000 | 106.00 | -0.000000 | 0.000000 | 0.0164 | 0.0006 | 0.000 | OK | 3.3
+piscina 4504 | 161.00 | -0.000000 | 0.000000 | 0.0328 | 0.0004 | 0.000 | OK | 3.6
+louka 404 voda ×20 | 284.82 | +0.000000 | 0.000000 | 0.0322 | 0.0004 | 0.000 | OK | 4.2
+hora 202 voda ×5 | 50.39 | +0.000000 | 0.000000 | 0.0072 | 0.0003 | 0.000 | OK | 3.1
+
+Negativní test validátoru (louka 101):
+  1 buňka žuly → hlína → odmítnuto (2) [{ "code": "world.summary_mismatch", "mat": "hlína", "want": 534, "got": 535 }, { "code": "world.summary_mismatch", "mat": "žula", "want": 2624, "got": 2623 }]
+  voda 1/4 buňky přesunuta do žuly → odmítnuto (2) [{ "code": "world.water_unstable", "reason": "water_in_impermeable", "cell": 10 }, { "code": "world.water_unstable", "reason": "not_saturated_below_level", "cell": 474, "top": 27 }]
+  voda 1 buňky přidána navíc nahoru (nad hladinu) → odmítnuto (2) [{ "code": "world.water_mismatch", "want": 532480, "got": 534118 }, { "code": "world.water_unstable", "reason": "not_saturated_below_level", "cell": 27, "top": 28 }]
+Neplatný zásobník (world.stack_invalid):
+  neznámý tvar 9 → { "code": "world.stack_invalid", "reason": "unknown_shape", "item": 0 }
+  params_len 8 místo 20 → { "code": "world.stack_invalid", "reason": "params_len", "item": 0 }
+  useknuté bajty → { "code": "world.stack_invalid", "reason": "truncated", "item": 9 }
+  bajt navíc → { "code": "world.stack_invalid", "reason": "trailing_bytes", "item": -1 }
+  lzMin > lzMax → { "code": "world.stack_invalid", "reason": "lz_band", "item": 0 }
+  materiál mlha (vnitřní UNSET) → { "code": "world.stack_invalid", "reason": "material", "item": 0 }
+  počet +1 (Σ ≠ V) → { "code": "world.stack_invalid", "reason": "volume_mismatch", "item": -1, "want": 7632, "got": 7633 }

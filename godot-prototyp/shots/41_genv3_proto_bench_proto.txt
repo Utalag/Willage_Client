@@ -1,0 +1,5 @@
+generátor: proto (proto-v2.2 STRATA)
+generování bloku (průměr z 10 seedů, bez sousedů): louka 15.2 ms, kopec 17.1 ms, hora 19.5 ms, písčina 15.9 ms
+determinismus: 40/40 bloků stejně při dvou bězích (buňky i voda)
+vložení do ostrova: kopec 2302 457 ms (generování 21.1, síť 57.3), piscina 4504 566 ms (generování 14.9, síť 38.5), hora 1000 396 ms (generování 18.1, síť 57.4), louka 1777 405 ms (generování 15.5, síť 77.5)
+kopání + položení (průměr 4): střed bloku 137.4 ms, hrana bloku 275.6 ms

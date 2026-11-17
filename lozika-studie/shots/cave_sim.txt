@@ -1,0 +1,18 @@
+Kontrola stability: simulace voda-studie (kopie water_sim.gd, výchozí parametry, odpar 0, všechny strany bloku odtékají), 400 tiků
+blok | voda (buňky) | posun objemu | odtok z bloku | voda v pórech | přesunuto (½Σ|Δw|) | validátor | ms/tik
+louka 7000 | 24.000 | +0.000000 | 0.000000 | 0.000000 | 0.000737 | OK | 3.2
+kopec 7031 | 38.000 | -0.000000 | 0.000000 | 0.000000 | 0.000508 | OK | 3.3
+hora 7062 | 69.000 | +0.000000 | 0.000000 | 0.000000 | 0.000438 | OK | 3.1
+piscina 7093 | 19.000 | +0.000000 | 0.000000 | 0.000000 | 0.000465 | OK | 3.1
+louka 7124 | 25.000 | -0.000000 | 0.000000 | 0.000000 | 0.000377 | OK | 3.0
+kopec 7155 | 18.000 | +0.000000 | 0.000000 | 0.000000 | 0.000267 | OK | 2.9
+hora 7186 | 39.000 | -0.000000 | 0.000000 | 0.000000 | 0.000438 | OK | 3.0
+piscina 7217 | 0.000 | +0.000000 | 0.000000 | 0.000000 | 0.000000 | OK | 3.2
+hora 202 vše vápenec (utěsněno 272 buněk) | 160.000 | +0.000000 | 0.000000 | 0.000000 | 0.001066 | OK | 3.2
+NEGATIVNÍ: všechny pánve plné až po strop | 352.000 | -65.802597 | 65.802590 | 78.211986 | 111.113285 | validátor 176 chyb | 5.0
+hora 1000 s odparem voda-studie (0,0005/tik a sloupec) | 21.000 | +0.000000 (odpar 0.0000) | 0.000000 | | | | 3.0
+
+Kopání do rezervoáru (chodba 2 buňky vysoká, až 8 buněk do strany), 400 tiků:
+hora 1000: pod hladinou (vrstva 10, 16 buněk) → voda v chodbě 15.59 buněk, validátor po prokopání 1 chyb, odtok 0.0000 | nad hladinou (vrstva 14): voda v chodbě 0.0000
+kopec 303: pod hladinou (vrstva 10, 11 buněk) → voda v chodbě 5.98 buněk, validátor po prokopání 1 chyb, odtok 0.0000 | nad hladinou (vrstva -): voda v chodbě 0.0000
+hora 202: pod hladinou (vrstva 3, 16 buněk) → voda v chodbě 7.09 buněk, validátor po prokopání 1 chyb, odtok 0.0000 | nad hladinou (vrstva -): voda v chodbě 0.0000

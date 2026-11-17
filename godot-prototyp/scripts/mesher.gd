@@ -25,9 +25,28 @@ static func _pidx(x: int, z: int, y: int) -> int:
 ## cells: buňky bloku; nbs: Array[4] buněk sousedů (S, V, J, Z) nebo null; slice_z: -1 = bez řezu
 ## dual_mask (volitelně, 17 × 17 z ShoreFields.cell_mask()): duální dlaždice ti, tj ∈ −1..15, které kreslí
 ## DualGridMesher; horní stěny (po čtvrtinách) a boční stěny (po polovinách) uvnitř nich se vynechají.
-static func build(cells: PackedByteArray, nbs: Array, slice_z: int, tint := Color(1, 1, 1), dual_mask := PackedByteArray()) -> ArrayMesh:
+## discovered (volitelně, 16 × 16 × 64): 1 = ukaž skutečný materiál. Prázdné pole = nic neskrývat (x-ray / vypnuté skrytí).
+## Neutrální barva a textura (hlína nebo skála) platí pro neodkryté buňky; s hloubkou se stěna mírně ztmaví.
+## gen-v3 (20:14): neodkrytý vzduch pod povrchem (jeskyně, discovered != 2) se při skrytí kreslí jako plná neutrální buňka;
+## wet (volitelně, voda v buňce 0..4096 z Block.water): mokrá půda pod povrchem se ztmaví, jen když je vidět skutečný materiál.
+## Ložiskový jíl (12) má barvu svou, texturu jílu.
+const WET_COL := Color(0.36, 0.40, 0.58)
+static func build(cells: PackedByteArray, nbs: Array, slice_z: int, tint := Color(1, 1, 1), dual_mask := PackedByteArray(), discovered := PackedByteArray(), neutral_mat := 2, neutral_col := Color(0.66, 0.50, 0.40), darken := 0.25, wet := PackedInt32Array()) -> ArrayMesh:
 	var use_mask := dual_mask.size() == 17 * 17
+	var use_hide := discovered.size() == BS * BS * BH
+	var use_wet := wet.size() == BS * BS * BH
 	var top_y := BH if slice_z < 0 else mini(slice_z, BH)
+	var col_hm := PackedInt32Array()
+	if use_hide or use_wet:
+		col_hm.resize(BS * BS)
+		for x in BS:
+			for z in BS:
+				var src := (x * BS + z) * BH
+				var h := 0
+				for y in BH:
+					if cells[src + y] != 0:
+						h = y + 1
+				col_hm[x * BS + z] = h
 	var pad := PackedByteArray()
 	pad.resize(P * P * PY)
 	for x in BS:
@@ -35,7 +54,10 @@ static func build(cells: PackedByteArray, nbs: Array, slice_z: int, tint := Colo
 			var src := (x * BS + z) * BH
 			var dst := _pidx(x, z, 0)
 			for y in top_y:
-				pad[dst + y] = cells[src + y]
+				var v := cells[src + y]
+				if use_hide and v == Mat.AIR and y < col_hm[x * BS + z] and discovered[src + y] != 2:
+					v = neutral_mat   # skrytá jeskyně: plná neutrální buňka (discovered = 0 → neutrální vzhled)
+				pad[dst + y] = v
 	# okraje sousedů: S (-z), V (+x), J (+z), Z (-x)
 	for si in 4:
 		var nc = nbs[si]
@@ -66,7 +88,22 @@ static func build(cells: PackedByteArray, nbs: Array, slice_z: int, tint := Colo
 				var m: int = pad[_pidx(x, z, y)]
 				if m == Mat.AIR:
 					continue
+				var draw_m := m
 				var base: Color = Mat.COLORS[m]
+				if use_hide and m != Mat.FOG and discovered[(x * BS + z) * BH + y] == 0:
+					draw_m = neutral_mat
+					base = neutral_col
+					var depth := maxi(0, col_hm[x * BS + z] - 1 - y)
+					var dt := clampf(float(depth) / 24.0, 0.0, 1.0)
+					var fogc := Color(0.55, 0.58, 0.62)
+					base = base.lerp(fogc, dt * darken * 0.5)
+					var kd := 1.0 - darken * dt
+					base = Color(base.r * kd, base.g * kd, base.b * kd)
+				elif use_wet and m != Mat.AIR:
+					var wi := wet[(x * BS + z) * BH + y]
+					if wi > 0 and y < col_hm[x * BS + z] - 1:
+						base = base.lerp(WET_COL, 0.38 * clampf(wi / 1638.0, 0.0, 1.0))
+				var tex_m := Mat.CLAY if draw_m == Mat.CLAY_DEPOSIT else draw_m
 				var r := float(absi((x * 73856093) ^ (y * 19349663) ^ (z * 83492791)) % 1000) / 1000.0
 				var k0 := 0.95 + r * 0.07
 				var c := Color(base.r * k0 * tint.r, base.g * k0 * tint.g, base.b * k0 * tint.b)
@@ -127,7 +164,7 @@ static func build(cells: PackedByteArray, nbs: Array, slice_z: int, tint := Colo
 							verts.append(Vector3(x + cv.x, (y + cv.y) * CELL_H, z + cv.z))
 							norms.append(Vector3(n))
 							cols.append(Color(c.r * k, c.g * k, c.b * k))
-							uv2s.append(Vector2(m, k * k0))
+							uv2s.append(Vector2(tex_m, k * k0))
 						if flip:
 							inds.append_array([start, start + 1, start + 2, start, start + 2, start + 3])
 						else:

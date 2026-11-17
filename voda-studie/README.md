@@ -37,15 +37,24 @@ Tik má 5 kroků v pevném pořadí [4][14]:
 **Bilance** se počítá každý tik: `přiteklo`, `odteklo`, `odpar` a chyba `|celkem − předchozí − in + out + odpar|`. Ve všech scénářích je max. chyba ≤ 1,6·10⁻⁶ buňky na tik (zaokrouhlení float32).
 **Determinismus:** dva běhy od nuly dají bitově stejný stav (kontrolní součet v benchi = OK ve všech 6 scénářích).
 
-### Výchozí tabulka materiálů (vše v `params.gd`, laditelné)
+### Výchozí tabulka materiálů (od 19:18 ze SDÍLENÉ tabulky `../sdilene/materialy_voda.json`, laditelné z CLI)
+Jan 19:18: jedna tabulka pro voda-studii i generátor gen-v3 (`lozika-studie`), **vápenec nepropustný**. `params.gd` hodnoty materiálů už nemá,
+načte je `apply_shared_table()` před `parse_cli()` (CLI dál přepíše, např. `-- --perm_limestone=0.10 --por_limestone=0.15` = stará porézní hráz).
+Bez souboru běh hlásí chybu. Stará verze snímků a `stats.txt` je v `shots/pred_1918/` (`stats_1925_vapenec0_bez_ret.txt` = jen vápenec 0).
+
+**Zadržená voda `ret_*` (Jan 19:19, tabulka v3):** voda v pórech až do `ret` (× objem buňky) je nepohyblivá: nepadá a neteče do stran (polní kapacita).
+Hlína a tráva 0,15, písek 0,05, ostatní 0. Kód: `water_sim.gd` (`ret`, kroky 2 a 3). Dopad na scénáře je malý: scénář 1 v tiku 160 drží v zemi 21,7 místo 19,1
+a odteče 70,2 místo 73,7; scénář 2 odvede zemí pod loukou 5,1 místo 6,5 (písek beze změny 25,6); scénář 4 a 6 se liší do 0,5 objemu; bilance dál ≤ 1,2·10⁻⁶ na tik.
+
 | materiál (ID z mat.gd) | propustnost `perm_` | pórovitost `por_` | odpor povrchu `res_` | význam (Jan) |
 |---|---|---|---|---|
+| (zadržená voda `ret_`, od 19:19) | hlína, tráva 0,15 · písek 0,05 · ostatní 0 | | | |
 | vzduch (0) | 1 | 1 | 0 | volná voda |
 | tráva / louka (1) | 0,25 | 0,40 | **0,85** | hodně zpomalí |
 | hlína (2) | 0,30 | 0,40 | 0,40 | |
 | písek (3) | **0,80** | 0,35 | 0,25 | neudrží, trochu zpomalí |
 | jíl (4) | **0** | 0,45 | 0,10 | zadrží |
-| vápenec = porézní skála (5) | **0,10** | 0,15 | 0,10 | mírný průsak |
+| vápenec (5) | **0** (do 19:18: 0,10) | **0** (do 19:18: 0,15) | 0,10 | nepropustný (Jan 19:18) |
 | žula = pevná skála (6) | 0 | 0 | 0,05 | zadrží |
 | čedič (7) | 0 | 0 | 0,05 | zadrží |
 
@@ -68,7 +77,7 @@ Každý list má sloupce = tiky (0 / N / 2N / 4N, u 5 a 6 i mezifáze po kopán�
 |---|---|---|---|---|
 | 1 | `35_voda_1_jilova_misa.png` | 10×10×4 | prší 60 tiků na písek nad jílovou mísou | rybník 4 × 4 vznikne do tiku 40 a po dešti zůstane (16 neprůchozích buněk i v tiku 160); voda nad valem odteče stranami (73,7 z 120) |
 | 2 | `35_voda_2_svah_trava_pisek.png` | **11×12×6** (2 pruhy + hřbet, výška na svah) | stejný přítok 0,25/tik na louku a na písek, půda mokrá 95 % | louka drží vodu na povrchu a čelo postupuje pomalu (řada 8 → 9 z 12 v tiku 240), písek rychleji (9 → 11) a odvede 4× víc vody zemí (25,6 vs 6,5) |
-| 3 | `35_voda_3_hraz_porezni.png` | 10×10×4 | nádrž za vápencovou hrází | hráz prosakuje pomalu: pod hrází je do tiku 200 mělká vrstva v korytě, k okraji dosáhne až po tiku 200, do tiku 400 odteče 1,1 (přítok 80) |
+| 3 | `35_voda_3_hraz_porezni.png` | 10×10×4 | nádrž za vápencovou hrází | **od 19:18 (vápenec 0) hráz drží:** v zemi 0, odtok 0, do tiku 400 je v nádrži 73,7 (přítok 80, odpar 6,3). Do 19:18 (vápenec 0,10) hráz prosakovala: do tiku 400 v zemi 1,6 a odtok 1,1. Starý průsak: `./run.sh shots -- --scen=3 --perm_limestone=0.10 --por_limestone=0.15` |
 | 4 | `35_voda_4_skalni_panev.png` | 10×10×4 | žulová pánev s přelivem | pánev plná v tiku ~50, pak přeteče zářezem, potok po písku k východnímu okraji (odtok 6,5 do tiku 200) |
 | 5 | `35_voda_5_kopani_u_vody.png` | 10×10×4 | tik 30 příkop do břehu, tik 60 průkop jílem pod rybníkem | příkop se zaplaví (neprůchozí 40 → 46), po průkopu rybník vyteče do chodby (neprůchozí 46 → 0, zbude bláto / mělká voda 46 buněk) |
 | 6 | `35_voda_6_prameny.png` + `_detail.png` | **10×10×5** (kopec potřebuje vrstvu navíc) | přítok shora, pramen ve svahu, podzemní kapsa (ze seedu 77); tik 60 šachta ke kapse | přítok shora se rozlévá po horní plošině (tráva ho brzdí), pramen ve svahu vytéká na dolní terasu; po prokopání kapsa vyvěrá šachtou a vznikne tůň (neprůchozí 2 → 6) |

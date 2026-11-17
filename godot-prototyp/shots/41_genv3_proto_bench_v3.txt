@@ -1,0 +1,9 @@
+generátor: v3 (gen-v3-study-4 + prototyp (SOIL_COLS))
+generování bloku (průměr z 10 seedů, bez sousedů): louka 43.8 ms, kopec 43.7 ms, hora 47.5 ms, písčina 52.3 ms
+determinismus: 40/40 bloků stejně při dvou bězích (buňky i voda)
+v3 rozpad: zástupce serveru 2.3 ms, generátor (rozmístění + voda) 26.7 ms, validátor 4.6 ms na blok
+v3: validátor OK 40/40, přesné počty (schodek jen voda nebo nic) 40/40
+vložení do ostrova: kopec 2302 592 ms (generování 77.9, síť 63.7), piscina 4504 617 ms (generování 52.4, síť 42.5), hora 1000 455 ms (generování 44.0, síť 66.4), louka 1777 461 ms (generování 41.1, síť 78.8)
+kopání + položení (průměr 4): střed bloku 169.5 ms, hrana bloku 326.6 ms
+validátor při vložení (s dorovnáním stran k sousedům): (0, 0) louka OK, (1, 0) hora OK, (0, 1) kopec OK, (1, 1) louka OK, (2, 0) kopec OK, (2, 1) piscina OK, (-1, 0) hora OK, (0, 2) louka OK
+validátor vektorů (s SOIL_COLS i bez): 7/7

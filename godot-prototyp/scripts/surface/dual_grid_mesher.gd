@@ -113,12 +113,46 @@ static func _skirts(f, ti: int, tj: int, S: int, verts: PackedVector3Array, norm
 
 ## vodní hladina bloku (jeden čtverec přes buňky bloku; shader zahodí místa nad hladinou podle pole výšek)
 ## + boční stěny vody na okraji ostrova (strana bez souseda)
+## gen-v3 (20:14): u bloku s vrstvou vody v datech (Block.water) se hladina water_lz nekreslí nad „vnitřní souší“ = sloupec,
+## který měl při vygenerování (hm_gen) i všech 8 sousedů v bloku povrch na úrovni hladiny nebo výš. Vykopaná jáma nebo šachta
+## v souši se tak vizuálně nezaplaví (v datech tam voda není); jáma u břehu (do 1 sloupce od vody) zaplavená zůstává.
 static func build_water(f, island_blocks: Dictionary) -> ArrayMesh:
 	var y: float = f.wl
-	var verts := PackedVector3Array([Vector3(0, y, 0), Vector3(BS, y, 0), Vector3(BS, y, BS), Vector3(0, y, BS)])
-	var norms := PackedVector3Array([Vector3.UP, Vector3.UP, Vector3.UP, Vector3.UP])
-	var uv2 := PackedVector2Array([Vector2(1, 0), Vector2(1, 0), Vector2(1, 0), Vector2(1, 0)])
-	var inds := PackedInt32Array([0, 1, 2, 0, 2, 3])
+	var verts := PackedVector3Array()
+	var norms := PackedVector3Array()
+	var uv2 := PackedVector2Array()
+	var inds := PackedInt32Array()
+	var blk = island_blocks.get(f.slot)
+	var dry := PackedByteArray()
+	if blk != null and blk.water.size() > 0 and blk.hm_gen.size() == BS * BS:
+		dry.resize(BS * BS)
+		var wlz: float = y / 0.5   # buňka 0,5 m
+		for x in BS:
+			for z in BS:
+				var ok := true
+				for dx in [-1, 0, 1]:
+					for dz in [-1, 0, 1]:
+						var nx: int = x + dx; var nz: int = z + dz
+						if nx < 0 or nz < 0 or nx >= BS or nz >= BS:
+							continue
+						if blk.hm_gen[nx * BS + nz] < wlz:
+							ok = false
+				dry[x * BS + z] = 1 if ok else 0
+	if dry.is_empty():
+		verts.append_array([Vector3(0, y, 0), Vector3(BS, y, 0), Vector3(BS, y, BS), Vector3(0, y, BS)])
+		for i in 4:
+			norms.append(Vector3.UP); uv2.append(Vector2(1, 0))
+		inds.append_array([0, 1, 2, 0, 2, 3])
+	else:
+		for x in BS:
+			for z in BS:
+				if dry[x * BS + z] == 1:
+					continue
+				var s0 := verts.size()
+				verts.append_array([Vector3(x, y, z), Vector3(x + 1, y, z), Vector3(x + 1, y, z + 1), Vector3(x, y, z + 1)])
+				for i in 4:
+					norms.append(Vector3.UP); uv2.append(Vector2(1, 0))
+				inds.append_array([s0, s0 + 1, s0 + 2, s0, s0 + 2, s0 + 3])
 	var pad: int = f.pad
 	var dirs := [Vector2i(0, -1), Vector2i(1, 0), Vector2i(0, 1), Vector2i(-1, 0)]
 	for si in 4:
@@ -142,6 +176,8 @@ static func build_water(f, island_blocks: Dictionary) -> ArrayMesh:
 				verts.append(v); norms.append(Vector3(d.x, 0, d.y)); uv2.append(Vector2(0, 0))
 			inds.append_array([s0, s0 + 1, s0 + 2, s0, s0 + 2, s0 + 3])
 	var am := ArrayMesh.new()
+	if verts.is_empty():
+		return am
 	var arr := []
 	arr.resize(Mesh.ARRAY_MAX)
 	arr[Mesh.ARRAY_VERTEX] = verts

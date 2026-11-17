@@ -37,13 +37,7 @@ static var P := {
 	"draw_min": 0.02,        # tenčí voda se nekreslí
 	# --- materiály: propustnost (0 nepropustí – 1 jako vzduch), pórovitost (kolik vody buňka pojme, × objem),
 	# --- odpor povrchu (0 hladký – 1 voda po něm skoro neteče) ------------------------------
-	"perm_grass": 0.25, "por_grass": 0.40, "res_grass": 0.85,       # louka: půda prokořeněná trávou
-	"perm_dirt": 0.30, "por_dirt": 0.40, "res_dirt": 0.40,          # hlína bez trávy
-	"perm_sand": 0.80, "por_sand": 0.35, "res_sand": 0.25,          # písek: nezadrží, trochu zpomalí
-	"perm_clay": 0.0, "por_clay": 0.45, "res_clay": 0.10,           # jíl: zadrží
-	"perm_limestone": 0.10, "por_limestone": 0.15, "res_limestone": 0.10,  # porézní skála (vápenec): mírný průsak
-	"perm_granite": 0.0, "por_granite": 0.0, "res_granite": 0.05,   # pevná skála (žula): zadrží
-	"perm_basalt": 0.0, "por_basalt": 0.0, "res_basalt": 0.05,
+	# perm_*, por_*, res_* NEJSOU tady: načtou se ze sdílené tabulky ../sdilene/materialy_voda.json (apply_shared_table)
 	# --- průchodnost (backend: hledání cest a kopání) -------------------------------------
 	"walk_slow_m": 0.05,     # od této hloubky vody (m) se jde pomaleji
 	"walk_deep_m": 0.30,     # od této hloubky je buňka neprůchozí (plná vrstva vody = 0,5 m)
@@ -54,6 +48,7 @@ static var P := {
 }
 
 static func parse_cli() -> void:
+	apply_shared_table()
 	for a in OS.get_cmdline_user_args():
 		if a.begins_with("--") and a.contains("="):
 			var kv := a.substr(2).split("=", true, 1)
@@ -68,3 +63,35 @@ static func g(k: String) -> float:
 
 static func i(k: String) -> int:
 	return int(P[k])
+
+## ---------- vodní vlastnosti materiálů ze SDÍLENÉ tabulky (Jan 19:18: jedna tabulka pro gen-v3 i voda-studie)
+## zdroj: willage-ideas/sdilene/materialy_voda.json (vedle složky projektu); bez ní běh skončí chybou (žádná druhá kopie hodnot).
+const SHARED_TABLE := "../sdilene/materialy_voda.json"
+
+static func shared_table_path() -> String:
+	return ProjectSettings.globalize_path("res://").path_join(SHARED_TABLE).simplify_path()
+
+static func load_shared_table() -> Dictionary:
+	var path := shared_table_path()
+	var f := FileAccess.open(path, FileAccess.READ)
+	if f == null:
+		push_error("chybí sdílená tabulka materiálů: " + path)
+		return {}
+	var d = JSON.parse_string(f.get_as_text())
+	if not (d is Dictionary) or not d.has("materials"):
+		push_error("neplatná sdílená tabulka materiálů: " + path)
+		return {}
+	return d
+
+## doplní perm_*, por_*, res_*, ret_* do P (volá se před parse_cli, takže CLI dál může hodnoty přepsat)
+static func apply_shared_table() -> bool:
+	var d := load_shared_table()
+	if d.is_empty():
+		return false
+	for k in d.materials:
+		var m: Dictionary = d.materials[k]
+		P["perm_" + k] = float(m.perm); P["por_" + k] = float(m.por); P["res_" + k] = float(m.res)
+		P["ret_" + k] = float(m.get("ret", 0.0))
+	P["perm_leak"] = float(d.get("perm_leak", 0.05))
+	P["table_version"] = int(d.get("version", 0))
+	return true

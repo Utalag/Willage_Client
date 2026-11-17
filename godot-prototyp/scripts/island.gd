@@ -5,6 +5,8 @@ const Mat = preload("res://scripts/mat.gd")
 const Block = preload("res://scripts/block.gd")
 const BlockGen = preload("res://scripts/block_gen.gd")
 const Mesher = preload("res://scripts/mesher.gd")
+const Discovery = preload("res://scripts/discovery.gd")
+const SurfaceParamsS = preload("res://scripts/surface/surface_params.gd")
 const VegRender = preload("res://scripts/veg_render.gd")
 const SurfaceRendererS = preload("res://scripts/surface/surface_renderer.gd")
 const BS := 16
@@ -16,6 +18,8 @@ const RADIUS := 2.6
 var slots: Array[Vector2i] = []   # všechna místa ostrova (blok nebo mlha)
 var blocks := {}                  # Vector2i -> Block
 var meshes := {}                  # Vector2i -> MeshInstance3D
+var wmeshes := {}                 # Vector2i -> MeshInstance3D: volná voda z dat bloku (gen-v3: jeskyně, jezírka)
+var data_water_mat: StandardMaterial3D
 var fogs := {}                    # Vector2i -> Node3D
 var frames := {}                  # Vector2i -> MeshInstance3D (platné sloty)
 var slice_z := -1
@@ -111,10 +115,88 @@ func refresh_after_edit(sl: Vector2i, lx: int, ly: int) -> void:
 			var okz: bool = dz == 0 or (dz < 0 and ly < pad) or (dz > 0 and ly >= BS - pad)
 			if okx and okz and blocks.has(sl + Vector2i(dx, dz)):
 				list.append(sl + Vector2i(dx, dz))
+	for s in list:
+		refresh_discovered(s)
 	refresh_blocks(list, false)
 
 func rebuild_all_surfaces() -> void:
 	refresh_blocks(blocks.keys(), false)
+
+## jen kostkové sítě (skrytí podzemí, x-ray, neutrální textura) – pole povrchu se nemění
+func rebuild_cube_meshes() -> void:
+	for s in blocks:
+		_remesh(s)
+	if preview_block:
+		show_preview(preview_block)
+
+## přepočet odkrytých buněk bloku (po vložení, kopání, nebo když soused přibyl / změnil výšku)
+func refresh_discovered(s: Vector2i) -> void:
+	if not blocks.has(s):
+		return
+	if not _hide_on():
+		blocks[s].discovered = PackedByteArray()  # přepočet až při zapnutém skrytí
+		return
+	blocks[s].discovered = Discovery.compute(blocks[s].cells, neighbor_cells(s), neighbor_hms(s), blocks[s].hm)
+
+func _hide_on() -> bool:
+	var p = surface.p if surface else SurfaceParamsS.inst()
+	return p.hide_undiscovered and not p.xray
+
+func _block_mesh(cells: PackedByteArray, nbs: Array, mask: PackedByteArray, discovered: PackedByteArray, water := PackedInt32Array()) -> ArrayMesh:
+	var p = surface.p if surface else SurfaceParamsS.inst()
+	var disc := discovered if _hide_on() else PackedByteArray()
+	var nmat: int = Mat.DIRT if p.undiscovered_look == 0 else Mat.GRANITE
+	var wet := water if p.wet_tint else PackedInt32Array()
+	return Mesher.build(cells, nbs, slice_z, Color(1, 1, 1), mask, disc, nmat, p.col_undiscovered, p.undiscovered_darken, wet)
+
+## gen-v3: volná voda z vrstvy vody bloku = buňky vzduchu s vodou (jeskyně pod hladinou, jezírko). Výška hladiny v buňce
+## = voda / 4096. Při skrytí podzemí jen voda v odkrytém vzduchu (discovered 2) nebo nad povrchem. Vodní hladina
+## prototypu (water_lz 30, jen vzhled, surface_renderer) se tím nemění.
+func _data_water_mesh(b: Block) -> ArrayMesh:
+	var am := ArrayMesh.new()
+	var p = surface.p if surface else SurfaceParamsS.inst()
+	if not p.data_water or b.water.size() != BS * BS * 64:
+		return am
+	var hide := _hide_on() and b.discovered.size() == BS * BS * 64
+	var top := 64 if slice_z < 0 else mini(slice_z, 64)
+	var st := SurfaceTool.new()
+	st.begin(Mesh.PRIMITIVE_TRIANGLES)
+	var n := 0
+	for x in BS:
+		for z in BS:
+			var h: int = b.hm[x * BS + z]
+			for y in top:
+				var i := (x * BS + z) * 64 + y
+				var w: int = b.water[i]
+				if w <= 0 or b.cells[i] != Mat.AIR:
+					continue
+				if hide and y < h and b.discovered[i] != 2:
+					continue
+				var fy := clampf(w / 4096.0, 0.05, 1.0)
+				var full_above := y + 1 < 64 and b.cells[i + 1] == Mat.AIR and b.water[i + 1] > 0
+				var y0 := y * CELL_H
+				var y1 := (y + (1.0 if full_above else fy)) * CELL_H
+				_box(st, Vector3(x, y0, z), Vector3(x + 1, y1, z + 1), not full_above)
+				n += 1
+	if n == 0:
+		return am
+	st.generate_normals()
+	return st.commit()
+
+static func _box(st: SurfaceTool, a: Vector3, b: Vector3, with_top: bool) -> void:
+	var q := [
+		[Vector3(a.x, b.y, a.z), Vector3(b.x, b.y, a.z), Vector3(b.x, b.y, b.z), Vector3(a.x, b.y, b.z)],
+		[Vector3(a.x, a.y, a.z), Vector3(a.x, b.y, a.z), Vector3(b.x, b.y, a.z), Vector3(b.x, a.y, a.z)],
+		[Vector3(b.x, a.y, b.z), Vector3(b.x, b.y, b.z), Vector3(a.x, b.y, b.z), Vector3(a.x, a.y, b.z)],
+		[Vector3(a.x, a.y, b.z), Vector3(a.x, b.y, b.z), Vector3(a.x, b.y, a.z), Vector3(a.x, a.y, a.z)],
+		[Vector3(b.x, a.y, a.z), Vector3(b.x, b.y, a.z), Vector3(b.x, b.y, b.z), Vector3(b.x, a.y, b.z)],
+	]
+	for k in q.size():
+		if k == 0 and not with_top:
+			continue
+		var f: Array = q[k]
+		for t in [0, 1, 2, 0, 2, 3]:
+			st.add_vertex(f[t])
 
 ## paprsek -> globální sloupec povrchu (pochod po výškové mapě), nebo null
 func cell_at_ray(origin: Vector3, dir: Vector3):
@@ -147,6 +229,11 @@ func setup() -> void:
 	flat_mat.roughness = 1.0
 	flat_mat.specular_mode = BaseMaterial3D.SPECULAR_DISABLED
 	flat_mat.diffuse_mode = BaseMaterial3D.DIFFUSE_LAMBERT
+	data_water_mat = StandardMaterial3D.new()
+	data_water_mat.albedo_color = Color(0.35, 0.62, 0.95, 0.62)
+	data_water_mat.transparency = BaseMaterial3D.TRANSPARENCY_ALPHA
+	data_water_mat.shading_mode = BaseMaterial3D.SHADING_MODE_UNSHADED
+	data_water_mat.cull_mode = BaseMaterial3D.CULL_DISABLED
 	toon_mat = ShaderMaterial.new()
 	toon_mat.shader = load("res://terrain_toon.gdshader")
 	var imgs: Array[Image] = []
@@ -230,6 +317,8 @@ func place(b: Block) -> void:
 	var area := area_of(b.slot)
 	for s in area:
 		surface.build_fields(s)
+	for s in area:
+		refresh_discovered(s)
 	for s in area:   # sousedé: data beze změny, jen skrytí stěn na společné hraně a navázání povrchu
 		_remesh(s)
 		surface.build_meshes(s)
@@ -243,10 +332,30 @@ func place(b: Block) -> void:
 			refresh_veg(s)
 	refresh_frames()
 
+## jen síť volné vody z dat (náhled běžícího toku po kopání, levné na snímek)
+func remesh_water(s: Vector2i) -> void:
+	if wmeshes.has(s) and blocks.has(s):
+		wmeshes[s].mesh = _data_water_mesh(blocks[s])
+
 func _remesh(s: Vector2i) -> void:
 	var t := Time.get_ticks_usec()
 	var mk: PackedByteArray = surface.mask(s) if surface and slice_z < 0 else PackedByteArray()
-	meshes[s].mesh = Mesher.build(blocks[s].cells, neighbor_cells(s), slice_z, Color(1, 1, 1), mk)
+	var b: Block = blocks[s]
+	if _hide_on() and b.discovered.size() != BS * BS * 64:
+		refresh_discovered(s)
+	meshes[s].mesh = _block_mesh(b.cells, neighbor_cells(s), mk, b.discovered, b.water)
+	if b.water.size() > 0:
+		if not wmeshes.has(s):
+			var wm := MeshInstance3D.new()
+			wm.material_override = data_water_mat
+			wm.position = slot_origin(s)
+			wm.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
+			add_child(wm)
+			wmeshes[s] = wm
+		wmeshes[s].mesh = _data_water_mesh(b)
+	elif wmeshes.has(s):
+		wmeshes[s].queue_free()
+		wmeshes.erase(s)
 	blocks[s].mesh_ms = (Time.get_ticks_usec() - t) / 1000.0
 
 ## přepnutí vzhledu: kawaii (toon + obrysy) / původní plochý
@@ -333,7 +442,8 @@ func _update_frame_colors() -> void:
 func show_preview(b: Block) -> void:
 	preview_block = b
 	var t := Time.get_ticks_usec()
-	preview_mi.mesh = Mesher.build(b.cells, neighbor_cells(b.slot), slice_z)
+	var disc := Discovery.compute(b.cells, neighbor_cells(b.slot), neighbor_hms(b.slot), b.hm)
+	preview_mi.mesh = _block_mesh(b.cells, neighbor_cells(b.slot), PackedByteArray(), disc)
 	b.mesh_ms = (Time.get_ticks_usec() - t) / 1000.0
 	preview_mi.position = slot_origin(b.slot)
 	preview_mi.visible = true

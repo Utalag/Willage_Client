@@ -8,6 +8,7 @@ const Mat = preload("res://scripts/mat.gd")
 const Block = preload("res://scripts/block.gd")
 const H = preload("res://scripts/stable_hash.gd")
 const Veg = preload("res://scripts/veg.gd")
+const Gen3 = preload("res://scripts/gen3/gen3_proto.gd")
 const BS := 16
 const BH := 64
 const GENERATOR_VERSION := 2
@@ -64,6 +65,22 @@ static func base_heightmap(kind: String, seed: int) -> PackedInt32Array:
 					h = 30.0 + 1.2 * n.get_noise_2d(lx * 0.7, ly * 0.7) + 2.0 * maxf(n2.get_noise_2d(lx * 0.5, ly), 0.0)
 			hm[lx * BS + ly] = clampi(int(round(h)), 1, BH - 1)
 	return hm
+
+## Generátor podzemí: "v3" = gen-v3 (zásobník ze serveru, Jan 20:14, výchozí), "proto" = původní STRATA se šumovými rudami.
+## CLI: -- --gen=proto|v3. Tvar povrchu, dorovnání stran a slupka jsou v obou stejné.
+static var gen_version := "v3":
+	set(v):
+		gen_version = v
+		Mat.rarity_gen = v   # prahy rarity-v2 podle generátoru (Mat.thresholds)
+
+static func apply_cli() -> void:
+	for a in OS.get_cmdline_user_args():
+		if a.begins_with("--gen="):
+			var v := a.substr(6)
+			if v in ["proto", "v3"]:
+				gen_version = v
+			else:
+				push_warning("neznámý generátor --gen=%s (proto | v3)" % v)
 
 ## Verze tvaru kopce a hory: "v2.2" (profil nad makro-šumem, výchozí) nebo "v2.1" (eliptické vrcholy, jen pro srovnání)
 static var relief_version := "v2.2"
@@ -262,6 +279,7 @@ static func build(b: Block, neighbors: Array) -> void:
 				var w := float(cells_n - dd) / float(cells_n)
 				hm[lx * BS + ly] = clampi(int(round(hm[lx * BS + ly] + diff * w)), 1, BH - 1)
 	b.hm = hm
+	b.hm_gen = hm.duplicate()
 	_fill(b)
 	b.recount()
 	b.veg = Veg.generate(b)
@@ -271,7 +289,7 @@ static func build(b: Block, neighbors: Array) -> void:
 	b.gen_ms = (Time.get_ticks_usec() - t0) / 1000.0
 
 ## kámen podle zdrojové výšky zl (= lz - posun; může být záporná = dogenerováno ze seedu)
-static func _stone(nb: Dictionary, x: int, ly: int, zl: int, ore: float) -> int:
+static func _stone(nb: Dictionary, x: int, ly: int, zl: int, ore: float, with_ore := true) -> int:
 	# FastNoiseLite 3D: (x, y, z) = (lx, lz, ly)
 	var v: float = zl + 5.0 * nb.s0.get_noise_2d(x, ly) + 2.0 * nb.s2.get_noise_3d(x, zl, ly)
 	var m := Mat.BASALT
@@ -281,6 +299,8 @@ static func _stone(nb: Dictionary, x: int, ly: int, zl: int, ore: float) -> int:
 			m = Mat.GRANITE
 	elif v >= 11.0 + 2.0 * nb.s1.get_noise_2d(ly, x):
 		m = Mat.GRANITE
+	if not with_ore:
+		return m   # gen-v3: rudy rozmístí zásobník, základ je bez šumových rud
 	if m != Mat.BASALT and nb.cu.get_noise_3d(x, zl * 1.6, ly) > 0.55 - ore:
 		m = Mat.COPPER
 	elif m != Mat.LIMESTONE and nb.fe.get_noise_3d(x * 1.3, zl, ly * 1.3) > 0.55 - ore:
@@ -301,6 +321,7 @@ static func _fill(b: Block) -> void:
 	cells.resize(BS * BS * BH)
 	var hm := b.hm
 	var terraced := relief_version == "v2.2" and (b.kind == "kopec" or b.kind == "hora")
+	var v3 := gen_version == "v3"
 	for lx in BS:
 		for ly in BS:
 			var src := to_src(lx, ly, b.mirror, b.rot)
@@ -340,6 +361,12 @@ static func _fill(b: Block) -> void:
 					m = sub_m
 				else:
 					# posun nahoru dogeneruje spodní řady ze seedu (zl < 0), posun dolů spodní řady odebere
-					m = _stone(nb, sx, sy, lz - b.shift, b.ore_bonus)
+					m = _stone(nb, sx, sy, lz - b.shift, b.ore_bonus, not v3)
 				cells[(lx * BS + ly) * BH + lz] = m
+	b.gen = gen_version
+	if v3:
+		Gen3.apply(b, cells)
+		return
 	b.cells = cells
+	b.water = PackedInt32Array()
+	b.gen3 = {}

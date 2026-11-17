@@ -1,0 +1,27 @@
+scen 1 tik    0  voda 0.000 volna 0.000 zem 0.000  pocatek 0.000 in 0.000 out 0.000 odpar 0.000  bilance(max chyba/tik) 0  pruchozi/pomale/neprujezdne 100/0/0
+scen 1 tik   40  voda 55.341 volna 23.122 zem 32.218  pocatek 0.000 in 80.000 out 22.813 odpar 1.846  bilance(max chyba/tik) 1.2325438094665242e-06  pruchozi/pomale/neprujezdne 84/0/16
+scen 1 tik   80  voda 57.928 volna 29.789 zem 28.139  pocatek 0.000 in 120.000 out 58.228 odpar 3.844  bilance(max chyba/tik) 1.2325438094665242e-06  pruchozi/pomale/neprujezdne 84/0/16
+scen 1 tik  160  voda 38.489 volna 19.369 zem 19.120  pocatek 0.000 in 120.000 out 73.667 odpar 7.844  bilance(max chyba/tik) 1.2325438094665242e-06  pruchozi/pomale/neprujezdne 84/0/16
+scen 2 tik    0  voda 131.242 volna 0.000 zem 131.242  pocatek 131.242 in 0.000 out 0.000 odpar 0.000  bilance(max chyba/tik) 0  pruchozi/pomale/neprujezdne 132/0/0  celo vody louka 0 pisek 0  povrchovy odtok louka 0.000 (od tiku -1) pisek 0.000 (od tiku -1)  odtok zemi louka 0.000 pisek 0.000
+scen 2 tik   60  voda 149.419 volna 22.480 zem 126.939  pocatek 131.242 in 30.000 out 8.224 odpar 3.600  bilance(max chyba/tik) 6.765121649612849e-07  pruchozi/pomale/neprujezdne 71/52/9  celo vody louka 8 pisek 9  povrchovy odtok louka 0.000 (od tiku -1) pisek 0.000 (od tiku -1)  odtok zemi louka 2.731 pisek 5.493
+scen 2 tik  120  voda 169.277 volna 40.532 zem 128.744  pocatek 131.242 in 60.000 out 14.694 odpar 7.272  bilance(max chyba/tik) 6.765121649612849e-07  pruchozi/pomale/neprujezdne 55/50/27  celo vody louka 8 pisek 10  povrchovy odtok louka 0.000 (od tiku -1) pisek 0.000 (od tiku -1)  odtok zemi louka 4.114 pisek 10.580
+scen 2 tik  240  voda 204.379 volna 73.395 zem 130.984  pocatek 131.242 in 120.000 out 32.070 odpar 14.794  bilance(max chyba/tik) 7.020198072443806e-07  pruchozi/pomale/neprujezdne 36/36/60  celo vody louka 9 pisek 11  povrchovy odtok louka 0.000 (od tiku -1) pisek 0.000 (od tiku -1)  odtok zemi louka 6.494 pisek 25.576
+scen 3 tik    0  voda 0.000 volna 0.000 zem 0.000  pocatek 0.000 in 0.000 out 0.000 odpar 0.000  bilance(max chyba/tik) 0  pruchozi/pomale/neprujezdne 100/0/0
+scen 3 tik  100  voda 18.347 volna 18.011 zem 0.336  pocatek 0.000 in 20.000 out 0.000 odpar 1.653  bilance(max chyba/tik) 6.397888064370305e-07  pruchozi/pomale/neprujezdne 68/22/10
+scen 3 tik  200  voda 36.305 volna 35.493 zem 0.812  pocatek 0.000 in 40.000 out 0.000 odpar 3.694  bilance(max chyba/tik) 9.623542427984744e-07  pruchozi/pomale/neprujezdne 68/0/32
+scen 3 tik  400  voda 69.997 volna 68.384 zem 1.613  pocatek 0.000 in 80.000 out 1.120 odpar 8.883  bilance(max chyba/tik) 9.623542427984744e-07  pruchozi/pomale/neprujezdne 64/4/32
+scen 4 tik    0  voda 0.000 volna 0.000 zem 0.000  pocatek 0.000 in 0.000 out 0.000 odpar 0.000  bilance(max chyba/tik) 0  pruchozi/pomale/neprujezdne 100/0/0
+scen 4 tik   50  voda 17.112 volna 17.112 zem 0.000  pocatek 0.000 in 17.500 out 0.000 odpar 0.388  bilance(max chyba/tik) 4.990100860337299e-07  pruchozi/pomale/neprujezdne 84/0/16
+scen 4 tik  100  voda 33.540 volna 32.622 zem 0.918  pocatek 0.000 in 35.000 out 0.167 odpar 1.293  bilance(max chyba/tik) 6.602035709166176e-07  pruchozi/pomale/neprujezdne 83/1/16
+scen 4 tik  200  voda 57.338 volna 42.755 zem 14.583  pocatek 0.000 in 70.000 out 6.524 odpar 6.138  bilance(max chyba/tik) 6.602035709166176e-07  pruchozi/pomale/neprujezdne 55/28/17
+scen 5 tik    0  voda 43.560 volna 36.000 zem 7.560  pocatek 43.560 in 0.000 out 0.000 odpar 0.000  bilance(max chyba/tik) 0  pruchozi/pomale/neprujezdne 60/0/40
+scen 5 tik   30  voda 42.840 volna 35.380 zem 7.460  pocatek 43.560 in 0.000 out 0.000 odpar 0.720  bilance(max chyba/tik) 1.5983581542790282e-06  pruchozi/pomale/neprujezdne 60/0/40
+scen 5 tik   45  voda 42.450 volna 37.753 zem 4.697  pocatek 43.560 in 0.000 out 0.000 odpar 1.110  bilance(max chyba/tik) 1.5983581542790282e-06  pruchozi/pomale/neprujezdne 54/0/46
+scen 5 tik   60  voda 42.060 volna 37.342 zem 4.718  pocatek 43.560 in 0.000 out 0.000 odpar 1.500  bilance(max chyba/tik) 1.5983581542790282e-06  pruchozi/pomale/neprujezdne 54/0/46
+scen 5 tik   75  voda 41.670 volna 37.024 zem 4.646  pocatek 43.560 in 0.000 out 0.000 odpar 1.890  bilance(max chyba/tik) 1.5983581542790282e-06  pruchozi/pomale/neprujezdne 54/10/36
+scen 5 tik  120  voda 40.500 volna 37.006 zem 3.494  pocatek 43.560 in 0.000 out 0.000 odpar 3.060  bilance(max chyba/tik) 1.5983581542790282e-06  pruchozi/pomale/neprujezdne 54/46/0
+scen 6 tik    0  voda 4.000 volna 4.000 zem 0.000  pocatek 4.000 in 0.000 out 0.000 odpar 0.000  bilance(max chyba/tik) 0  pruchozi/pomale/neprujezdne 100/0/0
+scen 6 tik   30  voda 13.162 volna 7.434 zem 5.728  pocatek 4.000 in 9.600 out 0.000 odpar 0.438  bilance(max chyba/tik) 2.1401884442093233e-07  pruchozi/pomale/neprujezdne 95/3/2
+scen 6 tik   60  voda 21.973 volna 8.462 zem 13.512  pocatek 4.000 in 19.200 out 0.000 odpar 1.227  bilance(max chyba/tik) 2.1401884442093233e-07  pruchozi/pomale/neprujezdne 95/3/2
+scen 6 tik   75  voda 28.076 volna 9.583 zem 18.493  pocatek 4.000 in 25.800 out 0.000 odpar 1.724  bilance(max chyba/tik) 3.0206910745650406e-07  pruchozi/pomale/neprujezdne 92/5/3
+scen 6 tik  120  voda 45.459 volna 14.358 zem 31.100  pocatek 4.000 in 45.600 out 0.570 odpar 3.571  bilance(max chyba/tik) 3.1649890294693783e-07  pruchozi/pomale/neprujezdne 82/12/6

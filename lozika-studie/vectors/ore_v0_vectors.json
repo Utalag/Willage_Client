@@ -1,0 +1,2574 @@
+{
+  "oreVersion": "ore-v0.2-target",
+  "generatorVersion": "proto-v2.2 bez šumových rud (legacy_ore = false)",
+  "primaryCheck": "pro každou rudu placed == target a zároveň rozdíl počtu buněk v objemu == placed; jinak shortfall > 0 výslovně",
+  "hashes": "sha256MaterialLayer / fnv1a64MaterialLayer jen pro opakovatelnost v Godotu (bitová shoda s C# už není požadavek, Jan 18:24)",
+  "levels": [
+    "L0 semínka",
+    "L1 další semínka",
+    "L2 dorůst tělesa",
+    "L3 celá výška",
+    "L4 uvolněný hostitel",
+    "L5 schodek"
+  ],
+  "rng": "SplitMix64: stav = mix(seed,'ORE',specIndex); next = splitmix64(stav), stav += 0x9E3779B97F4A7C15; u16 = next>>>48; range(a,b) = a + (next>>>33) % (b-a+1)",
+  "probabilities": {
+    "pocket": 36044,
+    "layerH": 52428,
+    "layerV": 6553,
+    "veinKeep": 45875,
+    "rule": "přijmout když u16 < P, P = floor(p*65536)"
+  },
+  "serverTargetStandIn": "server_target(seed, bonus%): r = SplitMix64(mix(seed,'ORE_TARGET',i)); n = range(seeds); base = Σ range(supply); target = base + base*bonus/100",
+  "cell_index": "(lx*16+ly)*64+lz",
+  "specs": [
+    {
+      "name": "clay",
+      "material": "ložiskový jíl",
+      "host": [
+        "hlína",
+        "písek"
+      ],
+      "seeds": [
+        0,
+        2
+      ],
+      "supply": [
+        40,
+        120
+      ],
+      "lz": [
+        24,
+        44
+      ],
+      "shape": "layer",
+      "relax": [
+        [
+          "jíl",
+          "vápenec"
+        ],
+        [
+          "žula",
+          "čedič"
+        ]
+      ]
+    },
+    {
+      "name": "copper",
+      "material": "měděná ruda",
+      "host": [
+        "žula",
+        "vápenec"
+      ],
+      "seeds": [
+        1,
+        2
+      ],
+      "supply": [
+        8,
+        18
+      ],
+      "lz": [
+        8,
+        40
+      ],
+      "shape": "vein",
+      "branch": 5243,
+      "dirW": {
+        "horiz": 2,
+        "vert": 3
+      },
+      "relax": [
+        [
+          "čedič"
+        ],
+        [
+          "hlína",
+          "písek"
+        ]
+      ]
+    },
+    {
+      "name": "iron",
+      "material": "železná ruda",
+      "host": [
+        "žula",
+        "čedič"
+      ],
+      "seeds": [
+        1,
+        2
+      ],
+      "supply": [
+        12,
+        22
+      ],
+      "lz": [
+        4,
+        36
+      ],
+      "shape": "pocket",
+      "relax": [
+        [
+          "vápenec"
+        ],
+        [
+          "hlína",
+          "písek"
+        ]
+      ]
+    }
+  ],
+  "cases": [
+    {
+      "id": "louka_101_bonus0",
+      "recipe": "louka",
+      "seed": 101,
+      "note": "golden: cíl ze server_target(seed, bonus), pořadí receptu",
+      "transform": {},
+      "wvb1Header": {
+        "shortfall": {},
+        "shortfallNames": {},
+        "serverAccepts": true
+      },
+      "oreSpecs": [
+        "clay",
+        "copper",
+        "iron"
+      ],
+      "target": {
+        "ložiskový jíl": 43,
+        "měděná ruda": 31,
+        "železná ruda": 33
+      },
+      "placed": {
+        "ložiskový jíl": 43,
+        "měděná ruda": 31,
+        "železná ruda": 33
+      },
+      "shortfall": {},
+      "allExact": true,
+      "ores": [
+        {
+          "ore": "ložiskový jíl",
+          "materialId": 12,
+          "target": 43,
+          "placed": 43,
+          "volumeDelta": 43,
+          "shortfall": 0,
+          "exact": true,
+          "byLevel": {
+            "L0 semínka": 43
+          },
+          "seeds": {
+            "planned": 1,
+            "placed": 1,
+            "dropped": 0,
+            "extra": 0
+          }
+        },
+        {
+          "ore": "měděná ruda",
+          "materialId": 8,
+          "target": 31,
+          "placed": 31,
+          "volumeDelta": 31,
+          "shortfall": 0,
+          "exact": true,
+          "byLevel": {
+            "L0 semínka": 31
+          },
+          "seeds": {
+            "planned": 2,
+            "placed": 2,
+            "dropped": 0,
+            "extra": 0
+          }
+        },
+        {
+          "ore": "železná ruda",
+          "materialId": 9,
+          "target": 33,
+          "placed": 33,
+          "volumeDelta": 33,
+          "shortfall": 0,
+          "exact": true,
+          "byLevel": {
+            "L0 semínka": 33
+          },
+          "seeds": {
+            "planned": 2,
+            "placed": 2,
+            "dropped": 0,
+            "extra": 0
+          }
+        }
+      ],
+      "materialSummaryBefore": {
+        "vzduch": 8496,
+        "tráva": 256,
+        "hlína": 534,
+        "písek": 267,
+        "jíl": 181,
+        "vápenec": 1164,
+        "žula": 2722,
+        "čedič": 2764
+      },
+      "materialSummaryAfter": {
+        "vzduch": 8496,
+        "tráva": 256,
+        "hlína": 491,
+        "písek": 267,
+        "jíl": 181,
+        "vápenec": 1153,
+        "žula": 2687,
+        "čedič": 2746,
+        "měděná ruda": 31,
+        "železná ruda": 33,
+        "ložiskový jíl": 43
+      },
+      "rarityV2After": {
+        "score": 21.1067,
+        "class": 2
+      },
+      "sha256MaterialLayer": "a9d4c6dc1821b366a2a1dca445fbb103904f7d2fbd1b2b6e1c50d555430e4c84",
+      "fnv1a64MaterialLayer": "4db6310f453ca1a6"
+    },
+    {
+      "id": "louka_101_bonus25",
+      "recipe": "louka",
+      "seed": 101,
+      "note": "golden: cíl ze server_target(seed, bonus), pořadí receptu",
+      "transform": {},
+      "wvb1Header": {
+        "shortfall": {},
+        "shortfallNames": {},
+        "serverAccepts": true
+      },
+      "oreSpecs": [
+        "clay",
+        "copper",
+        "iron"
+      ],
+      "target": {
+        "ložiskový jíl": 53,
+        "měděná ruda": 38,
+        "železná ruda": 41
+      },
+      "placed": {
+        "ložiskový jíl": 53,
+        "měděná ruda": 38,
+        "železná ruda": 41
+      },
+      "shortfall": {},
+      "allExact": true,
+      "ores": [
+        {
+          "ore": "ložiskový jíl",
+          "materialId": 12,
+          "target": 53,
+          "placed": 53,
+          "volumeDelta": 53,
+          "shortfall": 0,
+          "exact": true,
+          "byLevel": {
+            "L0 semínka": 53
+          },
+          "seeds": {
+            "planned": 1,
+            "placed": 1,
+            "dropped": 0,
+            "extra": 0
+          }
+        },
+        {
+          "ore": "měděná ruda",
+          "materialId": 8,
+          "target": 38,
+          "placed": 38,
+          "volumeDelta": 38,
+          "shortfall": 0,
+          "exact": true,
+          "byLevel": {
+            "L0 semínka": 38
+          },
+          "seeds": {
+            "planned": 3,
+            "placed": 3,
+            "dropped": 0,
+            "extra": 0
+          }
+        },
+        {
+          "ore": "železná ruda",
+          "materialId": 9,
+          "target": 41,
+          "placed": 41,
+          "volumeDelta": 41,
+          "shortfall": 0,
+          "exact": true,
+          "byLevel": {
+            "L0 semínka": 41
+          },
+          "seeds": {
+            "planned": 2,
+            "placed": 2,
+            "dropped": 0,
+            "extra": 0
+          }
+        }
+      ],
+      "materialSummaryBefore": {
+        "vzduch": 8496,
+        "tráva": 256,
+        "hlína": 534,
+        "písek": 267,
+        "jíl": 181,
+        "vápenec": 1164,
+        "žula": 2722,
+        "čedič": 2764
+      },
+      "materialSummaryAfter": {
+        "vzduch": 8496,
+        "tráva": 256,
+        "hlína": 482,
+        "písek": 266,
+        "jíl": 181,
+        "vápenec": 1151,
+        "žula": 2667,
+        "čedič": 2753,
+        "měděná ruda": 38,
+        "železná ruda": 41,
+        "ložiskový jíl": 53
+      },
+      "rarityV2After": {
+        "score": 22.7453,
+        "class": 2
+      },
+      "sha256MaterialLayer": "ee7c90508136b163d0b51abf37b640b843c5097e54fe7352c2ca94300bb730dd",
+      "fnv1a64MaterialLayer": "2a8166f9a59fc3ac"
+    },
+    {
+      "id": "louka_404_bonus0",
+      "recipe": "louka",
+      "seed": 404,
+      "note": "golden: cíl ze server_target(seed, bonus), pořadí receptu",
+      "transform": {},
+      "wvb1Header": {
+        "shortfall": {},
+        "shortfallNames": {},
+        "serverAccepts": true
+      },
+      "oreSpecs": [
+        "clay",
+        "copper",
+        "iron"
+      ],
+      "target": {
+        "ložiskový jíl": 80,
+        "měděná ruda": 30,
+        "železná ruda": 33
+      },
+      "placed": {
+        "ložiskový jíl": 80,
+        "měděná ruda": 30,
+        "železná ruda": 33
+      },
+      "shortfall": {},
+      "allExact": true,
+      "ores": [
+        {
+          "ore": "ložiskový jíl",
+          "materialId": 12,
+          "target": 80,
+          "placed": 80,
+          "volumeDelta": 80,
+          "shortfall": 0,
+          "exact": true,
+          "byLevel": {
+            "L0 semínka": 80
+          },
+          "seeds": {
+            "planned": 1,
+            "placed": 1,
+            "dropped": 0,
+            "extra": 0
+          }
+        },
+        {
+          "ore": "měděná ruda",
+          "materialId": 8,
+          "target": 30,
+          "placed": 30,
+          "volumeDelta": 30,
+          "shortfall": 0,
+          "exact": true,
+          "byLevel": {
+            "L0 semínka": 30
+          },
+          "seeds": {
+            "planned": 2,
+            "placed": 2,
+            "dropped": 0,
+            "extra": 0
+          }
+        },
+        {
+          "ore": "železná ruda",
+          "materialId": 9,
+          "target": 33,
+          "placed": 33,
+          "volumeDelta": 33,
+          "shortfall": 0,
+          "exact": true,
+          "byLevel": {
+            "L0 semínka": 33
+          },
+          "seeds": {
+            "planned": 2,
+            "placed": 2,
+            "dropped": 0,
+            "extra": 0
+          }
+        }
+      ],
+      "materialSummaryBefore": {
+        "vzduch": 8417,
+        "tráva": 256,
+        "hlína": 541,
+        "písek": 191,
+        "jíl": 263,
+        "vápenec": 1074,
+        "žula": 2501,
+        "čedič": 3141
+      },
+      "materialSummaryAfter": {
+        "vzduch": 8417,
+        "tráva": 256,
+        "hlína": 463,
+        "písek": 189,
+        "jíl": 263,
+        "vápenec": 1065,
+        "žula": 2447,
+        "čedič": 3141,
+        "měděná ruda": 30,
+        "železná ruda": 33,
+        "ložiskový jíl": 80
+      },
+      "rarityV2After": {
+        "score": 20.6783,
+        "class": 2
+      },
+      "sha256MaterialLayer": "d2921417692081b3d889ad29e1a7d36d4c0081c34cf5e5c082777faef7240c43",
+      "fnv1a64MaterialLayer": "62e92842e757f203"
+    },
+    {
+      "id": "louka_404_bonus25",
+      "recipe": "louka",
+      "seed": 404,
+      "note": "golden: cíl ze server_target(seed, bonus), pořadí receptu",
+      "transform": {},
+      "wvb1Header": {
+        "shortfall": {},
+        "shortfallNames": {},
+        "serverAccepts": true
+      },
+      "oreSpecs": [
+        "clay",
+        "copper",
+        "iron"
+      ],
+      "target": {
+        "ložiskový jíl": 100,
+        "měděná ruda": 37,
+        "železná ruda": 41
+      },
+      "placed": {
+        "ložiskový jíl": 100,
+        "měděná ruda": 37,
+        "železná ruda": 41
+      },
+      "shortfall": {},
+      "allExact": true,
+      "ores": [
+        {
+          "ore": "ložiskový jíl",
+          "materialId": 12,
+          "target": 100,
+          "placed": 100,
+          "volumeDelta": 100,
+          "shortfall": 0,
+          "exact": true,
+          "byLevel": {
+            "L0 semínka": 100
+          },
+          "seeds": {
+            "planned": 1,
+            "placed": 1,
+            "dropped": 0,
+            "extra": 0
+          }
+        },
+        {
+          "ore": "měděná ruda",
+          "materialId": 8,
+          "target": 37,
+          "placed": 37,
+          "volumeDelta": 37,
+          "shortfall": 0,
+          "exact": true,
+          "byLevel": {
+            "L0 semínka": 37
+          },
+          "seeds": {
+            "planned": 3,
+            "placed": 3,
+            "dropped": 0,
+            "extra": 0
+          }
+        },
+        {
+          "ore": "železná ruda",
+          "materialId": 9,
+          "target": 41,
+          "placed": 41,
+          "volumeDelta": 41,
+          "shortfall": 0,
+          "exact": true,
+          "byLevel": {
+            "L0 semínka": 41
+          },
+          "seeds": {
+            "planned": 2,
+            "placed": 2,
+            "dropped": 0,
+            "extra": 0
+          }
+        }
+      ],
+      "materialSummaryBefore": {
+        "vzduch": 8417,
+        "tráva": 256,
+        "hlína": 541,
+        "písek": 191,
+        "jíl": 263,
+        "vápenec": 1074,
+        "žula": 2501,
+        "čedič": 3141
+      },
+      "materialSummaryAfter": {
+        "vzduch": 8417,
+        "tráva": 256,
+        "hlína": 444,
+        "písek": 188,
+        "jíl": 263,
+        "vápenec": 1058,
+        "žula": 2459,
+        "čedič": 3121,
+        "měděná ruda": 37,
+        "železná ruda": 41,
+        "ložiskový jíl": 100
+      },
+      "rarityV2After": {
+        "score": 22.3612,
+        "class": 2
+      },
+      "sha256MaterialLayer": "8353abb88c472298782b8e9126b897c9cf8aa345bdc9df3569f606621c4c964b",
+      "fnv1a64MaterialLayer": "c84780008292272d"
+    },
+    {
+      "id": "kopec_303_bonus0",
+      "recipe": "kopec",
+      "seed": 303,
+      "note": "golden: cíl ze server_target(seed, bonus), pořadí receptu",
+      "transform": {},
+      "wvb1Header": {
+        "shortfall": {},
+        "shortfallNames": {},
+        "serverAccepts": true
+      },
+      "oreSpecs": [
+        "clay",
+        "copper",
+        "iron"
+      ],
+      "target": {
+        "ložiskový jíl": 118,
+        "měděná ruda": 31,
+        "železná ruda": 32
+      },
+      "placed": {
+        "ložiskový jíl": 118,
+        "měděná ruda": 31,
+        "železná ruda": 32
+      },
+      "shortfall": {},
+      "allExact": true,
+      "ores": [
+        {
+          "ore": "ložiskový jíl",
+          "materialId": 12,
+          "target": 118,
+          "placed": 118,
+          "volumeDelta": 118,
+          "shortfall": 0,
+          "exact": true,
+          "byLevel": {
+            "L0 semínka": 37,
+            "L1 další semínka": 81
+          },
+          "seeds": {
+            "planned": 2,
+            "placed": 1,
+            "dropped": 1,
+            "extra": 1
+          }
+        },
+        {
+          "ore": "měděná ruda",
+          "materialId": 8,
+          "target": 31,
+          "placed": 31,
+          "volumeDelta": 31,
+          "shortfall": 0,
+          "exact": true,
+          "byLevel": {
+            "L0 semínka": 31
+          },
+          "seeds": {
+            "planned": 2,
+            "placed": 2,
+            "dropped": 0,
+            "extra": 0
+          }
+        },
+        {
+          "ore": "železná ruda",
+          "materialId": 9,
+          "target": 32,
+          "placed": 32,
+          "volumeDelta": 32,
+          "shortfall": 0,
+          "exact": true,
+          "byLevel": {
+            "L0 semínka": 32
+          },
+          "seeds": {
+            "planned": 2,
+            "placed": 2,
+            "dropped": 0,
+            "extra": 0
+          }
+        }
+      ],
+      "materialSummaryBefore": {
+        "vzduch": 7971,
+        "tráva": 256,
+        "hlína": 534,
+        "písek": 152,
+        "jíl": 304,
+        "vápenec": 1563,
+        "žula": 2624,
+        "čedič": 2980
+      },
+      "materialSummaryAfter": {
+        "vzduch": 7971,
+        "tráva": 256,
+        "hlína": 416,
+        "písek": 152,
+        "jíl": 304,
+        "vápenec": 1549,
+        "žula": 2607,
+        "čedič": 2948,
+        "měděná ruda": 31,
+        "železná ruda": 32,
+        "ložiskový jíl": 118
+      },
+      "rarityV2After": {
+        "score": 20.631,
+        "class": 2
+      },
+      "sha256MaterialLayer": "6cf0608b96fb8bbe67bd5d1a366f69df036bc8da66b5714def62b9dd93a0e3bd",
+      "fnv1a64MaterialLayer": "1c60d2de3fcbd608"
+    },
+    {
+      "id": "kopec_303_bonus25",
+      "recipe": "kopec",
+      "seed": 303,
+      "note": "golden: cíl ze server_target(seed, bonus), pořadí receptu",
+      "transform": {},
+      "wvb1Header": {
+        "shortfall": {},
+        "shortfallNames": {},
+        "serverAccepts": true
+      },
+      "oreSpecs": [
+        "clay",
+        "copper",
+        "iron"
+      ],
+      "target": {
+        "ložiskový jíl": 147,
+        "měděná ruda": 38,
+        "železná ruda": 40
+      },
+      "placed": {
+        "ložiskový jíl": 147,
+        "měděná ruda": 38,
+        "železná ruda": 40
+      },
+      "shortfall": {},
+      "allExact": true,
+      "ores": [
+        {
+          "ore": "ložiskový jíl",
+          "materialId": 12,
+          "target": 147,
+          "placed": 147,
+          "volumeDelta": 147,
+          "shortfall": 0,
+          "exact": true,
+          "byLevel": {
+            "L0 semínka": 147
+          },
+          "seeds": {
+            "planned": 2,
+            "placed": 2,
+            "dropped": 0,
+            "extra": 0
+          }
+        },
+        {
+          "ore": "měděná ruda",
+          "materialId": 8,
+          "target": 38,
+          "placed": 38,
+          "volumeDelta": 38,
+          "shortfall": 0,
+          "exact": true,
+          "byLevel": {
+            "L0 semínka": 31,
+            "L1 další semínka": 7
+          },
+          "seeds": {
+            "planned": 3,
+            "placed": 3,
+            "dropped": 0,
+            "extra": 1
+          }
+        },
+        {
+          "ore": "železná ruda",
+          "materialId": 9,
+          "target": 40,
+          "placed": 40,
+          "volumeDelta": 40,
+          "shortfall": 0,
+          "exact": true,
+          "byLevel": {
+            "L0 semínka": 40
+          },
+          "seeds": {
+            "planned": 2,
+            "placed": 2,
+            "dropped": 0,
+            "extra": 0
+          }
+        }
+      ],
+      "materialSummaryBefore": {
+        "vzduch": 7971,
+        "tráva": 256,
+        "hlína": 534,
+        "písek": 152,
+        "jíl": 304,
+        "vápenec": 1563,
+        "žula": 2624,
+        "čedič": 2980
+      },
+      "materialSummaryAfter": {
+        "vzduch": 7971,
+        "tráva": 256,
+        "hlína": 397,
+        "písek": 142,
+        "jíl": 304,
+        "vápenec": 1536,
+        "žula": 2613,
+        "čedič": 2940,
+        "měděná ruda": 38,
+        "železná ruda": 40,
+        "ložiskový jíl": 147
+      },
+      "rarityV2After": {
+        "score": 22.2807,
+        "class": 2
+      },
+      "sha256MaterialLayer": "7b22e2301dae0b3caddb889d59b223646c588689337c8e442afa356982d7ab7b",
+      "fnv1a64MaterialLayer": "975666859c5db011"
+    },
+    {
+      "id": "kopec_2302_bonus0",
+      "recipe": "kopec",
+      "seed": 2302,
+      "note": "golden: cíl ze server_target(seed, bonus), pořadí receptu",
+      "transform": {},
+      "wvb1Header": {
+        "shortfall": {},
+        "shortfallNames": {},
+        "serverAccepts": true
+      },
+      "oreSpecs": [
+        "clay",
+        "copper",
+        "iron"
+      ],
+      "target": {
+        "ložiskový jíl": 0,
+        "měděná ruda": 21,
+        "železná ruda": 12
+      },
+      "placed": {
+        "ložiskový jíl": 0,
+        "měděná ruda": 21,
+        "železná ruda": 12
+      },
+      "shortfall": {},
+      "allExact": true,
+      "ores": [
+        {
+          "ore": "ložiskový jíl",
+          "materialId": 12,
+          "target": 0,
+          "placed": 0,
+          "volumeDelta": 0,
+          "shortfall": 0,
+          "exact": true,
+          "byLevel": {},
+          "seeds": {
+            "planned": 0,
+            "placed": 0,
+            "dropped": 0,
+            "extra": 0
+          }
+        },
+        {
+          "ore": "měděná ruda",
+          "materialId": 8,
+          "target": 21,
+          "placed": 21,
+          "volumeDelta": 21,
+          "shortfall": 0,
+          "exact": true,
+          "byLevel": {
+            "L0 semínka": 21
+          },
+          "seeds": {
+            "planned": 2,
+            "placed": 2,
+            "dropped": 0,
+            "extra": 0
+          }
+        },
+        {
+          "ore": "železná ruda",
+          "materialId": 9,
+          "target": 12,
+          "placed": 12,
+          "volumeDelta": 12,
+          "shortfall": 0,
+          "exact": true,
+          "byLevel": {
+            "L0 semínka": 12
+          },
+          "seeds": {
+            "planned": 2,
+            "placed": 2,
+            "dropped": 0,
+            "extra": 0
+          }
+        }
+      ],
+      "materialSummaryBefore": {
+        "vzduch": 7260,
+        "tráva": 256,
+        "hlína": 549,
+        "písek": 199,
+        "jíl": 273,
+        "vápenec": 2333,
+        "žula": 2497,
+        "čedič": 3017
+      },
+      "materialSummaryAfter": {
+        "vzduch": 7260,
+        "tráva": 256,
+        "hlína": 549,
+        "písek": 199,
+        "jíl": 273,
+        "vápenec": 2322,
+        "žula": 2480,
+        "čedič": 3012,
+        "měděná ruda": 21,
+        "železná ruda": 12
+      },
+      "rarityV2After": {
+        "score": 16.6602,
+        "class": 1
+      },
+      "sha256MaterialLayer": "5674a6fd67f3ad72142b4558e48d36d697b235fd0f3ac4fe05f09f75c3ebcfaa",
+      "fnv1a64MaterialLayer": "1619ed7d4401ec40"
+    },
+    {
+      "id": "kopec_2302_bonus25",
+      "recipe": "kopec",
+      "seed": 2302,
+      "note": "golden: cíl ze server_target(seed, bonus), pořadí receptu",
+      "transform": {},
+      "wvb1Header": {
+        "shortfall": {},
+        "shortfallNames": {},
+        "serverAccepts": true
+      },
+      "oreSpecs": [
+        "clay",
+        "copper",
+        "iron"
+      ],
+      "target": {
+        "ložiskový jíl": 0,
+        "měděná ruda": 26,
+        "železná ruda": 15
+      },
+      "placed": {
+        "ložiskový jíl": 0,
+        "měděná ruda": 26,
+        "železná ruda": 15
+      },
+      "shortfall": {},
+      "allExact": true,
+      "ores": [
+        {
+          "ore": "ložiskový jíl",
+          "materialId": 12,
+          "target": 0,
+          "placed": 0,
+          "volumeDelta": 0,
+          "shortfall": 0,
+          "exact": true,
+          "byLevel": {},
+          "seeds": {
+            "planned": 0,
+            "placed": 0,
+            "dropped": 0,
+            "extra": 0
+          }
+        },
+        {
+          "ore": "měděná ruda",
+          "materialId": 8,
+          "target": 26,
+          "placed": 26,
+          "volumeDelta": 26,
+          "shortfall": 0,
+          "exact": true,
+          "byLevel": {
+            "L0 semínka": 26
+          },
+          "seeds": {
+            "planned": 2,
+            "placed": 2,
+            "dropped": 0,
+            "extra": 0
+          }
+        },
+        {
+          "ore": "železná ruda",
+          "materialId": 9,
+          "target": 15,
+          "placed": 15,
+          "volumeDelta": 15,
+          "shortfall": 0,
+          "exact": true,
+          "byLevel": {
+            "L0 semínka": 15
+          },
+          "seeds": {
+            "planned": 2,
+            "placed": 2,
+            "dropped": 0,
+            "extra": 0
+          }
+        }
+      ],
+      "materialSummaryBefore": {
+        "vzduch": 7260,
+        "tráva": 256,
+        "hlína": 549,
+        "písek": 199,
+        "jíl": 273,
+        "vápenec": 2333,
+        "žula": 2497,
+        "čedič": 3017
+      },
+      "materialSummaryAfter": {
+        "vzduch": 7260,
+        "tráva": 256,
+        "hlína": 549,
+        "písek": 199,
+        "jíl": 273,
+        "vápenec": 2329,
+        "žula": 2466,
+        "čedič": 3011,
+        "měděná ruda": 26,
+        "železná ruda": 15
+      },
+      "rarityV2After": {
+        "score": 18.4809,
+        "class": 1
+      },
+      "sha256MaterialLayer": "b56b2596b3936addbf937ff2d63f64a95aef49e64b8821568ec11a7e3e0babf9",
+      "fnv1a64MaterialLayer": "b575b17688bbd3d3"
+    },
+    {
+      "id": "hora_202_bonus0",
+      "recipe": "hora",
+      "seed": 202,
+      "note": "golden: cíl ze server_target(seed, bonus), pořadí receptu",
+      "transform": {},
+      "wvb1Header": {
+        "shortfall": {},
+        "shortfallNames": {},
+        "serverAccepts": true
+      },
+      "oreSpecs": [
+        "clay",
+        "copper",
+        "iron"
+      ],
+      "target": {
+        "ložiskový jíl": 223,
+        "měděná ruda": 27,
+        "železná ruda": 22
+      },
+      "placed": {
+        "ložiskový jíl": 223,
+        "měděná ruda": 27,
+        "železná ruda": 22
+      },
+      "shortfall": {},
+      "allExact": true,
+      "ores": [
+        {
+          "ore": "ložiskový jíl",
+          "materialId": 12,
+          "target": 223,
+          "placed": 223,
+          "volumeDelta": 223,
+          "shortfall": 0,
+          "exact": true,
+          "byLevel": {
+            "L1 další semínka": 223
+          },
+          "seeds": {
+            "planned": 2,
+            "placed": 0,
+            "dropped": 2,
+            "extra": 15
+          }
+        },
+        {
+          "ore": "měděná ruda",
+          "materialId": 8,
+          "target": 27,
+          "placed": 27,
+          "volumeDelta": 27,
+          "shortfall": 0,
+          "exact": true,
+          "byLevel": {
+            "L0 semínka": 27
+          },
+          "seeds": {
+            "planned": 2,
+            "placed": 2,
+            "dropped": 0,
+            "extra": 0
+          }
+        },
+        {
+          "ore": "železná ruda",
+          "materialId": 9,
+          "target": 22,
+          "placed": 22,
+          "volumeDelta": 22,
+          "shortfall": 0,
+          "exact": true,
+          "byLevel": {
+            "L0 semínka": 22
+          },
+          "seeds": {
+            "planned": 2,
+            "placed": 2,
+            "dropped": 0,
+            "extra": 0
+          }
+        }
+      ],
+      "materialSummaryBefore": {
+        "vzduch": 6186,
+        "tráva": 206,
+        "hlína": 440,
+        "písek": 53,
+        "jíl": 290,
+        "vápenec": 3349,
+        "žula": 2525,
+        "čedič": 3327,
+        "sníh": 8
+      },
+      "materialSummaryAfter": {
+        "vzduch": 6186,
+        "tráva": 206,
+        "hlína": 234,
+        "písek": 36,
+        "jíl": 290,
+        "vápenec": 3337,
+        "žula": 2510,
+        "čedič": 3305,
+        "měděná ruda": 27,
+        "železná ruda": 22,
+        "sníh": 8,
+        "ložiskový jíl": 223
+      },
+      "rarityV2After": {
+        "score": 18.0102,
+        "class": 1
+      },
+      "sha256MaterialLayer": "fa5298b5402e86e60374d3b90644c9a87d74039ae7181f18ccd36a49f009a578",
+      "fnv1a64MaterialLayer": "d4367cbb50b8c779"
+    },
+    {
+      "id": "hora_202_bonus25",
+      "recipe": "hora",
+      "seed": 202,
+      "note": "golden: cíl ze server_target(seed, bonus), pořadí receptu",
+      "transform": {},
+      "wvb1Header": {
+        "shortfall": {},
+        "shortfallNames": {},
+        "serverAccepts": true
+      },
+      "oreSpecs": [
+        "clay",
+        "copper",
+        "iron"
+      ],
+      "target": {
+        "ložiskový jíl": 278,
+        "měděná ruda": 33,
+        "železná ruda": 27
+      },
+      "placed": {
+        "ložiskový jíl": 278,
+        "měděná ruda": 33,
+        "železná ruda": 27
+      },
+      "shortfall": {},
+      "allExact": true,
+      "ores": [
+        {
+          "ore": "ložiskový jíl",
+          "materialId": 12,
+          "target": 278,
+          "placed": 278,
+          "volumeDelta": 278,
+          "shortfall": 0,
+          "exact": true,
+          "byLevel": {
+            "L0 semínka": 20,
+            "L1 další semínka": 235,
+            "L2 dorůst tělesa": 23
+          },
+          "seeds": {
+            "planned": 3,
+            "placed": 1,
+            "dropped": 2,
+            "extra": 16
+          }
+        },
+        {
+          "ore": "měděná ruda",
+          "materialId": 8,
+          "target": 33,
+          "placed": 33,
+          "volumeDelta": 33,
+          "shortfall": 0,
+          "exact": true,
+          "byLevel": {
+            "L0 semínka": 33
+          },
+          "seeds": {
+            "planned": 2,
+            "placed": 2,
+            "dropped": 0,
+            "extra": 0
+          }
+        },
+        {
+          "ore": "železná ruda",
+          "materialId": 9,
+          "target": 27,
+          "placed": 27,
+          "volumeDelta": 27,
+          "shortfall": 0,
+          "exact": true,
+          "byLevel": {
+            "L0 semínka": 27
+          },
+          "seeds": {
+            "planned": 2,
+            "placed": 2,
+            "dropped": 0,
+            "extra": 0
+          }
+        }
+      ],
+      "materialSummaryBefore": {
+        "vzduch": 6186,
+        "tráva": 206,
+        "hlína": 440,
+        "písek": 53,
+        "jíl": 290,
+        "vápenec": 3349,
+        "žula": 2525,
+        "čedič": 3327,
+        "sníh": 8
+      },
+      "materialSummaryAfter": {
+        "vzduch": 6186,
+        "tráva": 206,
+        "hlína": 189,
+        "písek": 26,
+        "jíl": 290,
+        "vápenec": 3316,
+        "žula": 2509,
+        "čedič": 3316,
+        "měděná ruda": 33,
+        "železná ruda": 27,
+        "sníh": 8,
+        "ložiskový jíl": 278
+      },
+      "rarityV2After": {
+        "score": 19.6737,
+        "class": 2
+      },
+      "sha256MaterialLayer": "26910187e33fbf5137a853f80b3fc588a17c48478083f28c16fae5f3a8b08f93",
+      "fnv1a64MaterialLayer": "7d3aecab442fccc2"
+    },
+    {
+      "id": "hora_1000_bonus0",
+      "recipe": "hora",
+      "seed": 1000,
+      "note": "golden: cíl ze server_target(seed, bonus), pořadí receptu",
+      "transform": {},
+      "wvb1Header": {
+        "shortfall": {},
+        "shortfallNames": {},
+        "serverAccepts": true
+      },
+      "oreSpecs": [
+        "clay",
+        "copper",
+        "iron"
+      ],
+      "target": {
+        "ložiskový jíl": 78,
+        "měděná ruda": 13,
+        "železná ruda": 13
+      },
+      "placed": {
+        "ložiskový jíl": 78,
+        "měděná ruda": 13,
+        "železná ruda": 13
+      },
+      "shortfall": {},
+      "allExact": true,
+      "ores": [
+        {
+          "ore": "ložiskový jíl",
+          "materialId": 12,
+          "target": 78,
+          "placed": 78,
+          "volumeDelta": 78,
+          "shortfall": 0,
+          "exact": true,
+          "byLevel": {
+            "L0 semínka": 15,
+            "L1 další semínka": 63
+          },
+          "seeds": {
+            "planned": 1,
+            "placed": 1,
+            "dropped": 0,
+            "extra": 1
+          }
+        },
+        {
+          "ore": "měděná ruda",
+          "materialId": 8,
+          "target": 13,
+          "placed": 13,
+          "volumeDelta": 13,
+          "shortfall": 0,
+          "exact": true,
+          "byLevel": {
+            "L0 semínka": 13
+          },
+          "seeds": {
+            "planned": 1,
+            "placed": 1,
+            "dropped": 0,
+            "extra": 0
+          }
+        },
+        {
+          "ore": "železná ruda",
+          "materialId": 9,
+          "target": 13,
+          "placed": 13,
+          "volumeDelta": 13,
+          "shortfall": 0,
+          "exact": true,
+          "byLevel": {
+            "L0 semínka": 13
+          },
+          "seeds": {
+            "planned": 2,
+            "placed": 2,
+            "dropped": 0,
+            "extra": 0
+          }
+        }
+      ],
+      "materialSummaryBefore": {
+        "vzduch": 7236,
+        "tráva": 229,
+        "hlína": 474,
+        "písek": 151,
+        "jíl": 237,
+        "vápenec": 2555,
+        "žula": 2503,
+        "čedič": 2997,
+        "sníh": 2
+      },
+      "materialSummaryAfter": {
+        "vzduch": 7236,
+        "tráva": 229,
+        "hlína": 408,
+        "písek": 139,
+        "jíl": 237,
+        "vápenec": 2542,
+        "žula": 2497,
+        "čedič": 2990,
+        "měděná ruda": 13,
+        "železná ruda": 13,
+        "sníh": 2,
+        "ložiskový jíl": 78
+      },
+      "rarityV2After": {
+        "score": 13.3048,
+        "class": 0
+      },
+      "sha256MaterialLayer": "f7b9d027a3c3d1588d8402d60e4463d19b437e6d1845ec5853b76714e17b209f",
+      "fnv1a64MaterialLayer": "f8e49b4d790a0104"
+    },
+    {
+      "id": "hora_1000_bonus25",
+      "recipe": "hora",
+      "seed": 1000,
+      "note": "golden: cíl ze server_target(seed, bonus), pořadí receptu",
+      "transform": {},
+      "wvb1Header": {
+        "shortfall": {},
+        "shortfallNames": {},
+        "serverAccepts": true
+      },
+      "oreSpecs": [
+        "clay",
+        "copper",
+        "iron"
+      ],
+      "target": {
+        "ložiskový jíl": 97,
+        "měděná ruda": 16,
+        "železná ruda": 16
+      },
+      "placed": {
+        "ložiskový jíl": 97,
+        "měděná ruda": 16,
+        "železná ruda": 16
+      },
+      "shortfall": {},
+      "allExact": true,
+      "ores": [
+        {
+          "ore": "ložiskový jíl",
+          "materialId": 12,
+          "target": 97,
+          "placed": 97,
+          "volumeDelta": 97,
+          "shortfall": 0,
+          "exact": true,
+          "byLevel": {
+            "L0 semínka": 15,
+            "L1 další semínka": 82
+          },
+          "seeds": {
+            "planned": 1,
+            "placed": 1,
+            "dropped": 0,
+            "extra": 1
+          }
+        },
+        {
+          "ore": "měděná ruda",
+          "materialId": 8,
+          "target": 16,
+          "placed": 16,
+          "volumeDelta": 16,
+          "shortfall": 0,
+          "exact": true,
+          "byLevel": {
+            "L0 semínka": 16
+          },
+          "seeds": {
+            "planned": 1,
+            "placed": 1,
+            "dropped": 0,
+            "extra": 0
+          }
+        },
+        {
+          "ore": "železná ruda",
+          "materialId": 9,
+          "target": 16,
+          "placed": 16,
+          "volumeDelta": 16,
+          "shortfall": 0,
+          "exact": true,
+          "byLevel": {
+            "L0 semínka": 16
+          },
+          "seeds": {
+            "planned": 2,
+            "placed": 2,
+            "dropped": 0,
+            "extra": 0
+          }
+        }
+      ],
+      "materialSummaryBefore": {
+        "vzduch": 7236,
+        "tráva": 229,
+        "hlína": 474,
+        "písek": 151,
+        "jíl": 237,
+        "vápenec": 2555,
+        "žula": 2503,
+        "čedič": 2997,
+        "sníh": 2
+      },
+      "materialSummaryAfter": {
+        "vzduch": 7236,
+        "tráva": 229,
+        "hlína": 390,
+        "písek": 138,
+        "jíl": 237,
+        "vápenec": 2539,
+        "žula": 2487,
+        "čedič": 2997,
+        "měděná ruda": 16,
+        "železná ruda": 16,
+        "sníh": 2,
+        "ložiskový jíl": 97
+      },
+      "rarityV2After": {
+        "score": 14.8418,
+        "class": 0
+      },
+      "sha256MaterialLayer": "681bba018d5570c2014cef28a626dbc432bfbae126db2543b12847d136eac423",
+      "fnv1a64MaterialLayer": "0c4ff13e3aa8a8a8"
+    },
+    {
+      "id": "tvar_clay_hora202",
+      "recipe": "hora",
+      "seed": 202,
+      "note": "jen clay (layer), cíl 150",
+      "transform": {},
+      "wvb1Header": {
+        "shortfall": {},
+        "shortfallNames": {},
+        "serverAccepts": true
+      },
+      "oreSpecs": [
+        "clay"
+      ],
+      "target": {
+        "ložiskový jíl": 150
+      },
+      "placed": {
+        "ložiskový jíl": 150
+      },
+      "shortfall": {},
+      "allExact": true,
+      "ores": [
+        {
+          "ore": "ložiskový jíl",
+          "materialId": 12,
+          "target": 150,
+          "placed": 150,
+          "volumeDelta": 150,
+          "shortfall": 0,
+          "exact": true,
+          "byLevel": {
+            "L1 další semínka": 150
+          },
+          "seeds": {
+            "planned": 2,
+            "placed": 0,
+            "dropped": 2,
+            "extra": 11
+          }
+        }
+      ],
+      "materialSummaryBefore": {
+        "vzduch": 6186,
+        "tráva": 206,
+        "hlína": 440,
+        "písek": 53,
+        "jíl": 290,
+        "vápenec": 3349,
+        "žula": 2525,
+        "čedič": 3327,
+        "sníh": 8
+      },
+      "materialSummaryAfter": {
+        "vzduch": 6186,
+        "tráva": 206,
+        "hlína": 297,
+        "písek": 46,
+        "jíl": 290,
+        "vápenec": 3349,
+        "žula": 2525,
+        "čedič": 3327,
+        "sníh": 8,
+        "ložiskový jíl": 150
+      },
+      "rarityV2After": {
+        "score": 2.8005,
+        "class": 0
+      },
+      "sha256MaterialLayer": "50570e5c64091dc9424580fc6eb9bb0ba7d07da27bd8debc8fb0dacd7c870149",
+      "fnv1a64MaterialLayer": "81f3085413663b67"
+    },
+    {
+      "id": "tvar_copper_hora202",
+      "recipe": "hora",
+      "seed": 202,
+      "note": "jen copper (vein), cíl 150",
+      "transform": {},
+      "wvb1Header": {
+        "shortfall": {},
+        "shortfallNames": {},
+        "serverAccepts": true
+      },
+      "oreSpecs": [
+        "copper"
+      ],
+      "target": {
+        "měděná ruda": 150
+      },
+      "placed": {
+        "měděná ruda": 150
+      },
+      "shortfall": {},
+      "allExact": true,
+      "ores": [
+        {
+          "ore": "měděná ruda",
+          "materialId": 8,
+          "target": 150,
+          "placed": 150,
+          "volumeDelta": 150,
+          "shortfall": 0,
+          "exact": true,
+          "byLevel": {
+            "L0 semínka": 150
+          },
+          "seeds": {
+            "planned": 9,
+            "placed": 9,
+            "dropped": 0,
+            "extra": 0
+          }
+        }
+      ],
+      "materialSummaryBefore": {
+        "vzduch": 6186,
+        "tráva": 206,
+        "hlína": 440,
+        "písek": 53,
+        "jíl": 290,
+        "vápenec": 3349,
+        "žula": 2525,
+        "čedič": 3327,
+        "sníh": 8
+      },
+      "materialSummaryAfter": {
+        "vzduch": 6186,
+        "tráva": 206,
+        "hlína": 440,
+        "písek": 53,
+        "jíl": 290,
+        "vápenec": 3234,
+        "žula": 2490,
+        "čedič": 3327,
+        "měděná ruda": 150,
+        "sníh": 8
+      },
+      "rarityV2After": {
+        "score": 31.8145,
+        "class": 4
+      },
+      "sha256MaterialLayer": "15dbd6b58349d2a6be5e48551147044f209592606441601f4c61955d654f9012",
+      "fnv1a64MaterialLayer": "ab4a5f47883c5e5f"
+    },
+    {
+      "id": "tvar_iron_hora202",
+      "recipe": "hora",
+      "seed": 202,
+      "note": "jen iron (pocket), cíl 150",
+      "transform": {},
+      "wvb1Header": {
+        "shortfall": {},
+        "shortfallNames": {},
+        "serverAccepts": true
+      },
+      "oreSpecs": [
+        "iron"
+      ],
+      "target": {
+        "železná ruda": 150
+      },
+      "placed": {
+        "železná ruda": 150
+      },
+      "shortfall": {},
+      "allExact": true,
+      "ores": [
+        {
+          "ore": "železná ruda",
+          "materialId": 9,
+          "target": 150,
+          "placed": 150,
+          "volumeDelta": 150,
+          "shortfall": 0,
+          "exact": true,
+          "byLevel": {
+            "L0 semínka": 150
+          },
+          "seeds": {
+            "planned": 7,
+            "placed": 7,
+            "dropped": 0,
+            "extra": 0
+          }
+        }
+      ],
+      "materialSummaryBefore": {
+        "vzduch": 6186,
+        "tráva": 206,
+        "hlína": 440,
+        "písek": 53,
+        "jíl": 290,
+        "vápenec": 3349,
+        "žula": 2525,
+        "čedič": 3327,
+        "sníh": 8
+      },
+      "materialSummaryAfter": {
+        "vzduch": 6186,
+        "tráva": 206,
+        "hlína": 440,
+        "písek": 53,
+        "jíl": 290,
+        "vápenec": 3349,
+        "žula": 2414,
+        "čedič": 3288,
+        "železná ruda": 150,
+        "sníh": 8
+      },
+      "rarityV2After": {
+        "score": 15.7347,
+        "class": 0
+      },
+      "sha256MaterialLayer": "7b93ec050508279d410a1c09015c3bf9e88f031be6d35548b0b946a6dde3b22e",
+      "fnv1a64MaterialLayer": "85b2627d9a7d18eb"
+    },
+    {
+      "id": "tvar_vein_solid",
+      "recipe": "solid",
+      "seed": 7,
+      "note": "čistá žula, žíla 150",
+      "transform": {},
+      "wvb1Header": {
+        "shortfall": {},
+        "shortfallNames": {},
+        "serverAccepts": true
+      },
+      "oreSpecs": [
+        "copper"
+      ],
+      "target": {
+        "měděná ruda": 150
+      },
+      "placed": {
+        "měděná ruda": 150
+      },
+      "shortfall": {},
+      "allExact": true,
+      "ores": [
+        {
+          "ore": "měděná ruda",
+          "materialId": 8,
+          "target": 150,
+          "placed": 150,
+          "volumeDelta": 150,
+          "shortfall": 0,
+          "exact": true,
+          "byLevel": {
+            "L0 semínka": 150
+          },
+          "seeds": {
+            "planned": 9,
+            "placed": 9,
+            "dropped": 0,
+            "extra": 0
+          }
+        }
+      ],
+      "materialSummaryBefore": {
+        "vzduch": 4096,
+        "žula": 12288
+      },
+      "materialSummaryAfter": {
+        "vzduch": 4096,
+        "žula": 12138,
+        "měděná ruda": 150
+      },
+      "rarityV2After": {
+        "score": 28.4265,
+        "class": 3
+      },
+      "sha256MaterialLayer": "5c26d4bb89d5f85098f52b2f80c93f2c0c684e7caf900c73d9a8f8fca1cb1ef0",
+      "fnv1a64MaterialLayer": "cb8089af05047745"
+    },
+    {
+      "id": "tvar_pocket_solid",
+      "recipe": "solid",
+      "seed": 7,
+      "note": "čistá žula, čočka 150",
+      "transform": {},
+      "wvb1Header": {
+        "shortfall": {},
+        "shortfallNames": {},
+        "serverAccepts": true
+      },
+      "oreSpecs": [
+        "iron"
+      ],
+      "target": {
+        "železná ruda": 150
+      },
+      "placed": {
+        "železná ruda": 150
+      },
+      "shortfall": {},
+      "allExact": true,
+      "ores": [
+        {
+          "ore": "železná ruda",
+          "materialId": 9,
+          "target": 150,
+          "placed": 150,
+          "volumeDelta": 150,
+          "shortfall": 0,
+          "exact": true,
+          "byLevel": {
+            "L0 semínka": 150
+          },
+          "seeds": {
+            "planned": 7,
+            "placed": 7,
+            "dropped": 0,
+            "extra": 0
+          }
+        }
+      ],
+      "materialSummaryBefore": {
+        "vzduch": 4096,
+        "žula": 12288
+      },
+      "materialSummaryAfter": {
+        "vzduch": 4096,
+        "žula": 12138,
+        "železná ruda": 150
+      },
+      "rarityV2After": {
+        "score": 13.1605,
+        "class": 0
+      },
+      "sha256MaterialLayer": "f52ba89a9f5e0d3de11946445dd387d0132fe0e0a727a78952ab946bd0900b0a",
+      "fnv1a64MaterialLayer": "966ea053ca895571"
+    },
+    {
+      "id": "tvar_layer_solid",
+      "recipe": "solid",
+      "seed": 7,
+      "note": "čistá hlína, sloj 150",
+      "transform": {},
+      "wvb1Header": {
+        "shortfall": {},
+        "shortfallNames": {},
+        "serverAccepts": true
+      },
+      "oreSpecs": [
+        "clay"
+      ],
+      "target": {
+        "ložiskový jíl": 150
+      },
+      "placed": {
+        "ložiskový jíl": 150
+      },
+      "shortfall": {},
+      "allExact": true,
+      "ores": [
+        {
+          "ore": "ložiskový jíl",
+          "materialId": 12,
+          "target": 150,
+          "placed": 150,
+          "volumeDelta": 150,
+          "shortfall": 0,
+          "exact": true,
+          "byLevel": {
+            "L0 semínka": 150
+          },
+          "seeds": {
+            "planned": 2,
+            "placed": 2,
+            "dropped": 0,
+            "extra": 0
+          }
+        }
+      ],
+      "materialSummaryBefore": {
+        "vzduch": 4096,
+        "hlína": 12288
+      },
+      "materialSummaryAfter": {
+        "vzduch": 4096,
+        "hlína": 12138,
+        "ložiskový jíl": 150
+      },
+      "rarityV2After": {
+        "score": 1.0471,
+        "class": 0
+      },
+      "sha256MaterialLayer": "89204dee500b291df85ee9390b27b0d6c2d92c1f583a82595d770c083335a589",
+      "fnv1a64MaterialLayer": "22727f73f0d94265"
+    },
+    {
+      "id": "zatez_velky_cil_louka",
+      "recipe": "louka",
+      "seed": 101,
+      "note": "obří cíle",
+      "transform": {},
+      "wvb1Header": {
+        "shortfall": {},
+        "shortfallNames": {},
+        "serverAccepts": true
+      },
+      "oreSpecs": [
+        "clay",
+        "copper",
+        "iron"
+      ],
+      "target": {
+        "měděná ruda": 3000,
+        "železná ruda": 3000,
+        "ložiskový jíl": 1500
+      },
+      "placed": {
+        "ložiskový jíl": 1500,
+        "měděná ruda": 3000,
+        "železná ruda": 3000
+      },
+      "shortfall": {},
+      "allExact": true,
+      "ores": [
+        {
+          "ore": "ložiskový jíl",
+          "materialId": 12,
+          "target": 1500,
+          "placed": 1500,
+          "volumeDelta": 1500,
+          "shortfall": 0,
+          "exact": true,
+          "byLevel": {
+            "L0 semínka": 552,
+            "L1 další semínka": 146,
+            "L2 dorůst tělesa": 103,
+            "L4 uvolněný hostitel": 699
+          },
+          "seeds": {
+            "planned": 13,
+            "placed": 8,
+            "dropped": 5,
+            "extra": 16
+          }
+        },
+        {
+          "ore": "měděná ruda",
+          "materialId": 8,
+          "target": 3000,
+          "placed": 3000,
+          "volumeDelta": 3000,
+          "shortfall": 0,
+          "exact": true,
+          "byLevel": {
+            "L0 semínka": 1849,
+            "L1 další semínka": 208,
+            "L2 dorůst tělesa": 943
+          },
+          "seeds": {
+            "planned": 64,
+            "placed": 58,
+            "dropped": 6,
+            "extra": 16
+          }
+        },
+        {
+          "ore": "železná ruda",
+          "materialId": 9,
+          "target": 3000,
+          "placed": 3000,
+          "volumeDelta": 3000,
+          "shortfall": 0,
+          "exact": true,
+          "byLevel": {
+            "L0 semínka": 1562,
+            "L1 další semínka": 856,
+            "L2 dorůst tělesa": 542,
+            "L3 celá výška": 18,
+            "L4 uvolněný hostitel": 22
+          },
+          "seeds": {
+            "planned": 64,
+            "placed": 50,
+            "dropped": 14,
+            "extra": 32
+          }
+        }
+      ],
+      "materialSummaryBefore": {
+        "vzduch": 8496,
+        "tráva": 256,
+        "hlína": 534,
+        "písek": 267,
+        "jíl": 181,
+        "vápenec": 1164,
+        "žula": 2722,
+        "čedič": 2764
+      },
+      "materialSummaryAfter": {
+        "vzduch": 8496,
+        "tráva": 256,
+        "vápenec": 103,
+        "žula": 29,
+        "měděná ruda": 3000,
+        "železná ruda": 3000,
+        "ložiskový jíl": 1500
+      },
+      "rarityV2After": {
+        "score": 35.7515,
+        "class": 4
+      },
+      "sha256MaterialLayer": "5bc174bdf61a629ea47e6e35be429874b045e0b629714ed7cb547b5645643e30",
+      "fnv1a64MaterialLayer": "fd24c2d5a9552684"
+    },
+    {
+      "id": "zatez_velky_cil_hora",
+      "recipe": "hora",
+      "seed": 202,
+      "note": "obří cíle",
+      "transform": {},
+      "wvb1Header": {
+        "shortfall": {},
+        "shortfallNames": {},
+        "serverAccepts": true
+      },
+      "oreSpecs": [
+        "clay",
+        "copper",
+        "iron"
+      ],
+      "target": {
+        "měděná ruda": 3000,
+        "železná ruda": 3000,
+        "ložiskový jíl": 1500
+      },
+      "placed": {
+        "ložiskový jíl": 1500,
+        "měděná ruda": 3000,
+        "železná ruda": 3000
+      },
+      "shortfall": {},
+      "allExact": true,
+      "ores": [
+        {
+          "ore": "ložiskový jíl",
+          "materialId": 12,
+          "target": 1500,
+          "placed": 1500,
+          "volumeDelta": 1500,
+          "shortfall": 0,
+          "exact": true,
+          "byLevel": {
+            "L0 semínka": 153,
+            "L1 další semínka": 148,
+            "L2 dorůst tělesa": 158,
+            "L3 celá výška": 16,
+            "L4 uvolněný hostitel": 1025
+          },
+          "seeds": {
+            "planned": 13,
+            "placed": 9,
+            "dropped": 4,
+            "extra": 32
+          }
+        },
+        {
+          "ore": "měděná ruda",
+          "materialId": 8,
+          "target": 3000,
+          "placed": 3000,
+          "volumeDelta": 3000,
+          "shortfall": 0,
+          "exact": true,
+          "byLevel": {
+            "L0 semínka": 2218,
+            "L1 další semínka": 583,
+            "L2 dorůst tělesa": 199
+          },
+          "seeds": {
+            "planned": 64,
+            "placed": 64,
+            "dropped": 0,
+            "extra": 16
+          }
+        },
+        {
+          "ore": "železná ruda",
+          "materialId": 9,
+          "target": 3000,
+          "placed": 3000,
+          "volumeDelta": 3000,
+          "shortfall": 0,
+          "exact": true,
+          "byLevel": {
+            "L0 semínka": 1919,
+            "L1 další semínka": 841,
+            "L2 dorůst tělesa": 240
+          },
+          "seeds": {
+            "planned": 64,
+            "placed": 56,
+            "dropped": 8,
+            "extra": 16
+          }
+        }
+      ],
+      "materialSummaryBefore": {
+        "vzduch": 6186,
+        "tráva": 206,
+        "hlína": 440,
+        "písek": 53,
+        "jíl": 290,
+        "vápenec": 3349,
+        "žula": 2525,
+        "čedič": 3327,
+        "sníh": 8
+      },
+      "materialSummaryAfter": {
+        "vzduch": 6186,
+        "tráva": 206,
+        "hlína": 9,
+        "jíl": 11,
+        "vápenec": 1256,
+        "žula": 353,
+        "čedič": 855,
+        "měděná ruda": 3000,
+        "železná ruda": 3000,
+        "sníh": 8,
+        "ložiskový jíl": 1500
+      },
+      "rarityV2After": {
+        "score": 35.6742,
+        "class": 4
+      },
+      "sha256MaterialLayer": "a5b4f581b081fbd42fe44a23ab821091d72f20cc5bdbc1dbb4bb9e37d55dafce",
+      "fnv1a64MaterialLayer": "9cf3ce9610e38594"
+    },
+    {
+      "id": "zatez_maly_hostitel",
+      "recipe": "louka",
+      "seed": 101,
+      "note": "jen 27 buněk žuly, zbytek čedič",
+      "transform": {},
+      "wvb1Header": {
+        "shortfall": {},
+        "shortfallNames": {},
+        "serverAccepts": true
+      },
+      "oreSpecs": [
+        "clay",
+        "copper",
+        "iron"
+      ],
+      "target": {
+        "měděná ruda": 200,
+        "železná ruda": 60
+      },
+      "placed": {
+        "ložiskový jíl": 0,
+        "měděná ruda": 200,
+        "železná ruda": 60
+      },
+      "shortfall": {},
+      "allExact": true,
+      "ores": [
+        {
+          "ore": "ložiskový jíl",
+          "materialId": 12,
+          "target": 0,
+          "placed": 0,
+          "volumeDelta": 0,
+          "shortfall": 0,
+          "exact": true,
+          "byLevel": {},
+          "seeds": {
+            "planned": 0,
+            "placed": 0,
+            "dropped": 0,
+            "extra": 0
+          }
+        },
+        {
+          "ore": "měděná ruda",
+          "materialId": 8,
+          "target": 200,
+          "placed": 200,
+          "volumeDelta": 200,
+          "shortfall": 0,
+          "exact": true,
+          "byLevel": {
+            "L1 další semínka": 27,
+            "L4 uvolněný hostitel": 173
+          },
+          "seeds": {
+            "planned": 12,
+            "placed": 0,
+            "dropped": 12,
+            "extra": 3
+          }
+        },
+        {
+          "ore": "železná ruda",
+          "materialId": 9,
+          "target": 60,
+          "placed": 60,
+          "volumeDelta": 60,
+          "shortfall": 0,
+          "exact": true,
+          "byLevel": {
+            "L0 semínka": 60
+          },
+          "seeds": {
+            "planned": 3,
+            "placed": 3,
+            "dropped": 0,
+            "extra": 0
+          }
+        }
+      ],
+      "materialSummaryBefore": {
+        "vzduch": 8496,
+        "tráva": 256,
+        "hlína": 534,
+        "písek": 267,
+        "jíl": 181,
+        "žula": 27,
+        "čedič": 6623
+      },
+      "materialSummaryAfter": {
+        "vzduch": 8496,
+        "tráva": 256,
+        "hlína": 534,
+        "písek": 267,
+        "jíl": 181,
+        "čedič": 6390,
+        "měděná ruda": 200,
+        "železná ruda": 60
+      },
+      "rarityV2After": {
+        "score": 33.3549,
+        "class": 4
+      },
+      "sha256MaterialLayer": "e62a550c55ea93195d097d4f408279f16a15e2ab309df72758b44aa4d1a07c94",
+      "fnv1a64MaterialLayer": "182d932b8f48ff20"
+    },
+    {
+      "id": "zatez_nad_kapacitu",
+      "recipe": "louka",
+      "seed": 101,
+      "note": "cíl větší než celý objem → schodek",
+      "transform": {},
+      "wvb1Header": {
+        "shortfall": {
+          "8": 12549
+        },
+        "shortfallNames": {
+          "měděná ruda": 12549
+        },
+        "serverAccepts": false
+      },
+      "oreSpecs": [
+        "clay",
+        "copper",
+        "iron"
+      ],
+      "target": {
+        "měděná ruda": 20000
+      },
+      "placed": {
+        "ložiskový jíl": 0,
+        "měděná ruda": 7451,
+        "železná ruda": 0
+      },
+      "shortfall": {
+        "měděná ruda": 12549
+      },
+      "allExact": false,
+      "ores": [
+        {
+          "ore": "ložiskový jíl",
+          "materialId": 12,
+          "target": 0,
+          "placed": 0,
+          "volumeDelta": 0,
+          "shortfall": 0,
+          "exact": true,
+          "byLevel": {},
+          "seeds": {
+            "planned": 0,
+            "placed": 0,
+            "dropped": 0,
+            "extra": 0
+          }
+        },
+        {
+          "ore": "měděná ruda",
+          "materialId": 8,
+          "target": 20000,
+          "placed": 7451,
+          "volumeDelta": 7451,
+          "shortfall": 12549,
+          "exact": false,
+          "byLevel": {
+            "L0 semínka": 2887,
+            "L1 další semínka": 117,
+            "L2 dorůst tělesa": 882,
+            "L4 uvolněný hostitel": 3565,
+            "L5 schodek": 12549
+          },
+          "seeds": {
+            "planned": 64,
+            "placed": 53,
+            "dropped": 11,
+            "extra": 16
+          }
+        },
+        {
+          "ore": "železná ruda",
+          "materialId": 9,
+          "target": 0,
+          "placed": 0,
+          "volumeDelta": 0,
+          "shortfall": 0,
+          "exact": true,
+          "byLevel": {},
+          "seeds": {
+            "planned": 0,
+            "placed": 0,
+            "dropped": 0,
+            "extra": 0
+          }
+        }
+      ],
+      "materialSummaryBefore": {
+        "vzduch": 8496,
+        "tráva": 256,
+        "hlína": 534,
+        "písek": 267,
+        "jíl": 181,
+        "vápenec": 1164,
+        "žula": 2722,
+        "čedič": 2764
+      },
+      "materialSummaryAfter": {
+        "vzduch": 8496,
+        "tráva": 256,
+        "jíl": 181,
+        "měděná ruda": 7451
+      },
+      "rarityV2After": {
+        "score": 39.9969,
+        "class": 4
+      },
+      "sha256MaterialLayer": "abcd4fd08f8a378c1094f78fcb5f30096c3f001f86405d459dc784759923af49",
+      "fnv1a64MaterialLayer": "38438097105c1a81"
+    },
+    {
+      "id": "nulovy_cil",
+      "recipe": "louka",
+      "seed": 101,
+      "note": "prázdný cíl = beze změny",
+      "transform": {},
+      "wvb1Header": {
+        "shortfall": {},
+        "shortfallNames": {},
+        "serverAccepts": true
+      },
+      "oreSpecs": [
+        "clay",
+        "copper",
+        "iron"
+      ],
+      "target": {},
+      "placed": {
+        "ložiskový jíl": 0,
+        "měděná ruda": 0,
+        "železná ruda": 0
+      },
+      "shortfall": {},
+      "allExact": true,
+      "ores": [
+        {
+          "ore": "ložiskový jíl",
+          "materialId": 12,
+          "target": 0,
+          "placed": 0,
+          "volumeDelta": 0,
+          "shortfall": 0,
+          "exact": true,
+          "byLevel": {},
+          "seeds": {
+            "planned": 0,
+            "placed": 0,
+            "dropped": 0,
+            "extra": 0
+          }
+        },
+        {
+          "ore": "měděná ruda",
+          "materialId": 8,
+          "target": 0,
+          "placed": 0,
+          "volumeDelta": 0,
+          "shortfall": 0,
+          "exact": true,
+          "byLevel": {},
+          "seeds": {
+            "planned": 0,
+            "placed": 0,
+            "dropped": 0,
+            "extra": 0
+          }
+        },
+        {
+          "ore": "železná ruda",
+          "materialId": 9,
+          "target": 0,
+          "placed": 0,
+          "volumeDelta": 0,
+          "shortfall": 0,
+          "exact": true,
+          "byLevel": {},
+          "seeds": {
+            "planned": 0,
+            "placed": 0,
+            "dropped": 0,
+            "extra": 0
+          }
+        }
+      ],
+      "materialSummaryBefore": {
+        "vzduch": 8496,
+        "tráva": 256,
+        "hlína": 534,
+        "písek": 267,
+        "jíl": 181,
+        "vápenec": 1164,
+        "žula": 2722,
+        "čedič": 2764
+      },
+      "materialSummaryAfter": {
+        "vzduch": 8496,
+        "tráva": 256,
+        "hlína": 534,
+        "písek": 267,
+        "jíl": 181,
+        "vápenec": 1164,
+        "žula": 2722,
+        "čedič": 2764
+      },
+      "rarityV2After": {
+        "score": 2.86,
+        "class": 0
+      },
+      "sha256MaterialLayer": "c8cfb168236acbd5d63da8fa526cc197546fef5b43e76bffca2fb807128e53b0",
+      "fnv1a64MaterialLayer": "8e2ad52030ee2424"
+    },
+    {
+      "id": "transform_hora_202",
+      "recipe": "hora",
+      "seed": 202,
+      "note": "zrcadlení + rotace 90° + posun +2",
+      "transform": {
+        "mirror": true,
+        "rotation": 90,
+        "heightShift": 2
+      },
+      "wvb1Header": {
+        "shortfall": {},
+        "shortfallNames": {},
+        "serverAccepts": true
+      },
+      "oreSpecs": [
+        "clay",
+        "copper",
+        "iron"
+      ],
+      "target": {
+        "ložiskový jíl": 223,
+        "měděná ruda": 27,
+        "železná ruda": 22
+      },
+      "placed": {
+        "ložiskový jíl": 223,
+        "měděná ruda": 27,
+        "železná ruda": 22
+      },
+      "shortfall": {},
+      "allExact": true,
+      "ores": [
+        {
+          "ore": "ložiskový jíl",
+          "materialId": 12,
+          "target": 223,
+          "placed": 223,
+          "volumeDelta": 223,
+          "shortfall": 0,
+          "exact": true,
+          "byLevel": {
+            "L0 semínka": 14,
+            "L1 další semínka": 172,
+            "L2 dorůst tělesa": 37
+          },
+          "seeds": {
+            "planned": 2,
+            "placed": 1,
+            "dropped": 1,
+            "extra": 16
+          }
+        },
+        {
+          "ore": "měděná ruda",
+          "materialId": 8,
+          "target": 27,
+          "placed": 27,
+          "volumeDelta": 27,
+          "shortfall": 0,
+          "exact": true,
+          "byLevel": {
+            "L0 semínka": 27
+          },
+          "seeds": {
+            "planned": 2,
+            "placed": 2,
+            "dropped": 0,
+            "extra": 0
+          }
+        },
+        {
+          "ore": "železná ruda",
+          "materialId": 9,
+          "target": 22,
+          "placed": 22,
+          "volumeDelta": 22,
+          "shortfall": 0,
+          "exact": true,
+          "byLevel": {
+            "L0 semínka": 22
+          },
+          "seeds": {
+            "planned": 2,
+            "placed": 2,
+            "dropped": 0,
+            "extra": 0
+          }
+        }
+      ],
+      "materialSummaryBefore": {
+        "vzduch": 5674,
+        "tráva": 192,
+        "hlína": 411,
+        "písek": 41,
+        "jíl": 277,
+        "vápenec": 3377,
+        "žula": 2525,
+        "čedič": 3839,
+        "sníh": 48
+      },
+      "materialSummaryAfter": {
+        "vzduch": 5674,
+        "tráva": 192,
+        "hlína": 206,
+        "písek": 23,
+        "jíl": 277,
+        "vápenec": 3365,
+        "žula": 2510,
+        "čedič": 3817,
+        "měděná ruda": 27,
+        "železná ruda": 22,
+        "sníh": 48,
+        "ložiskový jíl": 223
+      },
+      "rarityV2After": {
+        "score": 17.2986,
+        "class": 1
+      },
+      "sha256MaterialLayer": "ac767b39d2789dbdb022a37851a2b6e9d64ea21483a957b8e5057a3087cb698b",
+      "fnv1a64MaterialLayer": "c4a659169fb89612"
+    }
+  ]
+}

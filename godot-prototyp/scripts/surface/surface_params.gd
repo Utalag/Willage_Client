@@ -14,6 +14,15 @@ static func inst():
 		_inst.apply_cli("surface")
 	return _inst
 
+@export_group("Skrytí podzemí")
+@export var hide_undiscovered := true                 ## boky a řezy pod povrchem jednou neutrální texturou
+@export var xray := false                             ## vývoj: ukaž skutečné materiály (vypne skrytí)
+@export_range(0, 1, 1) var undiscovered_look := 0     ## 0 hlína, 1 skála (textura skryté stěny)
+@export var col_undiscovered := Color(0.66, 0.50, 0.40) ## barva skryté stěny (výchozí hlína)
+@export_range(0.0, 0.8, 0.05) var undiscovered_darken := 0.25  ## ztmavení / mlha s hloubkou
+@export var wet_tint := true                          ## gen-v3: mokrá půda pod povrchem tmavší (jen viditelný materiál)
+@export var data_water := true                        ## gen-v3: kreslit volnou vodu z vrstvy vody bloku (jeskyně, jezírka)
+
 @export_group("Duální mřížka")
 @export var dual_enabled := true                       ## duální mřížka pro povrch louky, písku a vody
 @export_range(1, 8, 1) var dual_sub := 4               ## dělení dlaždice (svah mezi středy buněk)
@@ -95,6 +104,10 @@ func water_y() -> float:
 
 func labels() -> Dictionary:
 	return {
+		"hide_undiscovered": "Skrýt podzemí", "xray": "X-ray (skutečné materiály)",
+		"undiscovered_look": "Textura skryté stěny (0 hlína, 1 skála)",
+		"col_undiscovered": "Barva skryté stěny", "undiscovered_darken": "Ztmavení s hloubkou",
+		"wet_tint": "Mokrá půda (gen-v3)", "data_water": "Voda z dat bloku (gen-v3)",
 		"dual_enabled": "Duální mřížka zapnuta", "dual_sub": "Dělení dlaždice", "dual_ease": "Vyhlazení svahu",
 		"dual_noise": "Zvlnění hranice", "dual_soft": "Měkkost hranice", "slope_max_layers": "Max. svah (vrstev)",
 		"field_px": "Rozlišení polí (px/buňka)", "field_pad": "Dosah polí (buněk)",

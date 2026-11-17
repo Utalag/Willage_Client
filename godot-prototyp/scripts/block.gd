@@ -22,12 +22,17 @@ var edge_profiles := [null, null, null, null]  # při vložení: výšky hrany s
 
 var slot := Vector2i.ZERO
 var hm := PackedInt32Array()     # výška povrchu (počet plných buněk) po všech úpravách
+var hm_gen := PackedInt32Array() # výška povrchu při vygenerování (kopání ji nemění); gen-v3: kde se kreslí hladina water_lz
 var cells := PackedByteArray()   # (x * BS + z) * BH + y
+var discovered := PackedByteArray()  # 16 × 16 × 64, 1 = stěna u vzduchu spojeného s povrchem (jinak neutrální textura)
 var summary := PackedInt32Array()       # aktuální počty buněk podle materiálu
 var summary_orig := PackedInt32Array()  # stav při vložení (původní rarita)
 var veg: Array = []                         # vegetace (samostatná vrstva), viz veg.gd
 var veg_summary := PackedInt32Array()
 var veg_summary_orig := PackedInt32Array()
+var water := PackedInt32Array()        # gen-v3: voda v buňce, 4096 = plná buňka (v půdě nejvýš pórovitost); prázdné = bez dat vody
+var gen := "proto"                     # který generátor blok vytvořil (BlockGen.gen_version)
+var gen3 := {}                         # gen-v3: zásobník (hex, hash), voda (nalito / přidělení), schodek, validátor
 var gen_ms := 0.0
 var mesh_ms := 0.0
 

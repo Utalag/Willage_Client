@@ -1,0 +1,623 @@
+{
+  "cases": [
+    {
+      "deterministic": true,
+      "material_rarity": {
+        "class": 3,
+        "formula": "rarity-v2",
+        "score": 21.3149
+      },
+      "material_summary": {
+        "hlína": 534,
+        "jíl": 181,
+        "ložiskový jíl": 43,
+        "měděná ruda": 31,
+        "písek": 267,
+        "tráva": 256,
+        "vzduch": 8628,
+        "vápenec": 1133,
+        "čedič": 2659,
+        "železná ruda": 33,
+        "žula": 2619
+      },
+      "oreBonus": 0.0,
+      "recipe": "louka",
+      "seed": 101,
+      "serverStackCheck": [],
+      "sha256MaterialLayer": "e43162716e9113a3628e1d11df9835622c3dee4b6898efac0fa112f5fa176a2d",
+      "sha256WaterLayer": "ea13b5b2caab66b65cb55f9f1a6e21bedb88bf65c327ec53e551f3da15bec7e9",
+      "stackBytesHex": "0a000c002b00000002140078000000f6fffffffdffffffcccc000099190000000084000000041c003c000000030000002c000000b89e0000cc4c000002000000010000000400b500000002140050000000f9fffffffeffffffcccc00009919000003000b01000002140050000000faffffffffffffffcccc000099190000020016020000021400c8000000fcffffffffffffff66e60000cc0c00000700840a0000050800190000000600000006005a0a00000508001e0000000500000005006d040000050800140000000700000008001f000000031800120000000800000028000000bc020000500000000600000009002100000001100016000000040000002400000007000000",
+      "stackHash": "feb39c4cfc610142671a3768baebcf9b4e69873c99bbc0a430c52c728dd1d152",
+      "studyCrossCheck": {
+        "materialLayer": true,
+        "stackHash": true,
+        "waterLayer": true
+      },
+      "transform": {
+        "heightShift": 0,
+        "mirror": false,
+        "rotation": 0
+      },
+      "validator": {
+        "errorCount": 0,
+        "firstErrors": [],
+        "ok": true
+      },
+      "volume_fnv1a64": "83e2ee620da860ed",
+      "water": {
+        "allotmentByRim": 285,
+        "issued": 130,
+        "pouredByRecipe": 130,
+        "retained": 17.145,
+        "runoffUnits": 0
+      },
+      "wvb1Header": {
+        "shortfall": {
+          "water_units": 0
+        }
+      }
+    },
+    {
+      "deterministic": true,
+      "material_rarity": {
+        "class": 3,
+        "formula": "rarity-v2",
+        "score": 21.0106
+      },
+      "material_summary": {
+        "hlína": 541,
+        "jíl": 263,
+        "ložiskový jíl": 80,
+        "měděná ruda": 30,
+        "písek": 191,
+        "tráva": 256,
+        "vzduch": 8625,
+        "vápenec": 1027,
+        "čedič": 2975,
+        "železná ruda": 33,
+        "žula": 2363
+      },
+      "oreBonus": 0.0,
+      "recipe": "louka",
+      "seed": 404,
+      "serverStackCheck": [],
+      "sha256MaterialLayer": "d313fab689bd016f6ffe1b9f488d6e5337b103d92622d7cbaea6451800291ffb",
+      "sha256WaterLayer": "192d83e4b17df9c7a8340fe48ba62fcaa9fe3edfabbdf275df0d6dfb623c222e",
+      "stackBytesHex": "0a000c005000000002140078000000f6fffffffdffffffcccc0000991900000300bf00000002140050000000faffffffffffffffcccc0000991900000000d0000000041c003c000000030000002c000000b89e0000cc4c0000020000000100000004000701000002140050000000f9fffffffeffffffcccc00009919000002001d020000021400c8000000fcffffffffffffff66e60000cc0c00000700c00b000005080019000000060000000600590900000508001e00000005000000050003040000050800140000000700000008001e000000031800120000000800000028000000bc020000500000000600000009002100000001100016000000040000002400000007000000",
+      "stackHash": "c171648023210cd60132d3598e4fb90ba647e29ba97417dbcc92bb1ab8ea1259",
+      "studyCrossCheck": {
+        "materialLayer": true,
+        "stackHash": true,
+        "waterLayer": true
+      },
+      "transform": {
+        "heightShift": 0,
+        "mirror": false,
+        "rotation": 0
+      },
+      "validator": {
+        "errorCount": 0,
+        "firstErrors": [],
+        "ok": true
+      },
+      "volume_fnv1a64": "d5f371ecb6d5d05d",
+      "water": {
+        "allotmentByRim": 244,
+        "issued": 126,
+        "pouredByRecipe": 126,
+        "retained": 23.79,
+        "runoffUnits": 0
+      },
+      "wvb1Header": {
+        "shortfall": {
+          "water_units": 0
+        }
+      }
+    },
+    {
+      "deterministic": true,
+      "material_rarity": {
+        "class": 3,
+        "formula": "rarity-v2",
+        "score": 21.0369
+      },
+      "material_summary": {
+        "hlína": 534,
+        "jíl": 304,
+        "ložiskový jíl": 118,
+        "měděná ruda": 31,
+        "písek": 152,
+        "tráva": 256,
+        "vzduch": 8225,
+        "vápenec": 1481,
+        "čedič": 2795,
+        "železná ruda": 32,
+        "žula": 2456
+      },
+      "oreBonus": 0.0,
+      "recipe": "kopec",
+      "seed": 303,
+      "serverStackCheck": [],
+      "sha256MaterialLayer": "fae2f3bf031fa7d7744c9e7de53e1abe1b744e2f1006373fed9e994506a6e9c7",
+      "sha256WaterLayer": "11707d5d33a522e2730dd88718ff392ffdd610a817ea1868c18ca2ca8be8ed22",
+      "stackBytesHex": "0a000c007600000002140078000000f6fffffffdffffffcccc00009919000003009800000002140050000000faffffffffffffffcccc0000991900000000fe000000041c003c000000030000002c000000b89e0000cc4c0000020000000100000004003001000002140050000000f9fffffffeffffffcccc000099190000020016020000021400c8000000fcffffffffffffff66e60000cc0c000007000b0b000005080019000000060000000600b70900000508001e000000050000000500c9050000050800140000000700000008001f000000031800120000000800000028000000bc020000500000000600000009002000000001100016000000040000002400000007000000",
+      "stackHash": "4f234ed9064967a3a22b67131d3c2d7d9a0b68aa0ccc8f8e6db546905c9bd7ab",
+      "studyCrossCheck": {
+        "materialLayer": true,
+        "stackHash": true,
+        "waterLayer": true
+      },
+      "transform": {
+        "heightShift": 0,
+        "mirror": false,
+        "rotation": 0
+      },
+      "validator": {
+        "errorCount": 0,
+        "firstErrors": [],
+        "ok": true
+      },
+      "volume_fnv1a64": "7d300505dbf3c7e1",
+      "water": {
+        "allotmentByRim": 171,
+        "issued": 94,
+        "pouredByRecipe": 94,
+        "retained": 12.545,
+        "runoffUnits": 0
+      },
+      "wvb1Header": {
+        "shortfall": {
+          "water_units": 0
+        }
+      }
+    },
+    {
+      "deterministic": true,
+      "material_rarity": {
+        "class": 0,
+        "formula": "rarity-v2",
+        "score": 16.7816
+      },
+      "material_summary": {
+        "hlína": 549,
+        "jíl": 273,
+        "měděná ruda": 21,
+        "písek": 199,
+        "tráva": 256,
+        "vzduch": 7372,
+        "vápenec": 2299,
+        "čedič": 2963,
+        "železná ruda": 12,
+        "žula": 2440
+      },
+      "oreBonus": 0.0,
+      "recipe": "kopec",
+      "seed": 2302,
+      "serverStackCheck": [],
+      "sha256MaterialLayer": "29770e30cc180485c36b0fbb452a1d657d77cb4730a4c051d3b41568d6dc7e19",
+      "sha256WaterLayer": "a3a48873be8ee0258ddb3777d0070cedcc9a431fc8a5bf03505ae5740edc86b3",
+      "stackBytesHex": "0900000070000000041c003c000000030000002c000000b89e0000cc4c000002000000010000000300c700000002140050000000faffffffffffffffcccc00009919000004001101000002140050000000f9fffffffeffffffcccc000099190000020025020000021400c8000000fcffffffffffffff66e60000cc0c000007009f0b0000050800190000000600000006009d0900000508001e000000050000000500fb080000050800140000000700000009000c00000001100016000000040000002400000007000000080015000000031800120000000800000028000000bc0200005000000006000000",
+      "stackHash": "a82d32f53104d36563eab5c069765b6515cecdb3033c3716d7705091a9f6439d",
+      "studyCrossCheck": {
+        "materialLayer": true,
+        "stackHash": true,
+        "waterLayer": true
+      },
+      "transform": {
+        "heightShift": 0,
+        "mirror": false,
+        "rotation": 0
+      },
+      "validator": {
+        "errorCount": 0,
+        "firstErrors": [],
+        "ok": true
+      },
+      "volume_fnv1a64": "16a22a4729915646",
+      "water": {
+        "allotmentByRim": 61,
+        "issued": 61,
+        "pouredByRecipe": 106,
+        "retained": 35.988,
+        "runoffUnits": 0
+      },
+      "wvb1Header": {
+        "shortfall": {
+          "water_units": 0
+        }
+      }
+    },
+    {
+      "deterministic": true,
+      "material_rarity": {
+        "class": 1,
+        "formula": "rarity-v2",
+        "score": 18.407
+      },
+      "material_summary": {
+        "hlína": 440,
+        "jíl": 290,
+        "ložiskový jíl": 223,
+        "měděná ruda": 27,
+        "písek": 53,
+        "sníh": 8,
+        "tráva": 206,
+        "vzduch": 6438,
+        "vápenec": 3176,
+        "čedič": 3134,
+        "železná ruda": 22,
+        "žula": 2367
+      },
+      "oreBonus": 0.0,
+      "recipe": "hora",
+      "seed": 202,
+      "serverStackCheck": [],
+      "sha256MaterialLayer": "32d3f19b1f8ed62985722dd92ba9f5f8d28d8a327a0a38073c75c66cb34015b0",
+      "sha256WaterLayer": "e4b6e4815f8a9e78d31beac3ac7700997f9a78d5c00e7448cadb99ba61e2544d",
+      "stackBytesHex": "0a0003003500000002140050000000faffffffffffffffcccc0000991900000c00df00000002140078000000f6fffffffdffffffcccc0000991900000000fc000000041c003c000000030000002c000000b89e0000cc4c0000020000000100000004002201000002140050000000f9fffffffeffffffcccc0000991900000200b8010000021400c8000000fcffffffffffffff66e60000cc0c00000700540c0000050800190000000600000006005a0900000508001e000000050000000500680c000005080014000000070000000900160000000110001600000004000000240000000700000008001b000000031800120000000800000028000000bc0200005000000006000000",
+      "stackHash": "f99bed2951f7a42c28dada328c5d20fca73c8cc2451716e0a6f4bc9012eb3e8b",
+      "studyCrossCheck": {
+        "materialLayer": true,
+        "stackHash": true,
+        "waterLayer": true
+      },
+      "transform": {
+        "heightShift": 0,
+        "mirror": false,
+        "rotation": 0
+      },
+      "validator": {
+        "errorCount": 0,
+        "firstErrors": [],
+        "ok": true
+      },
+      "volume_fnv1a64": "2a6376797e396ffc",
+      "water": {
+        "allotmentByRim": 59,
+        "issued": 59,
+        "pouredByRecipe": 96,
+        "retained": 24.835,
+        "runoffUnits": 0
+      },
+      "wvb1Header": {
+        "shortfall": {
+          "water_units": 0
+        }
+      }
+    },
+    {
+      "deterministic": true,
+      "material_rarity": {
+        "class": 0,
+        "formula": "rarity-v2",
+        "score": 13.5418
+      },
+      "material_summary": {
+        "hlína": 474,
+        "jíl": 237,
+        "ložiskový jíl": 78,
+        "měděná ruda": 13,
+        "písek": 151,
+        "sníh": 2,
+        "tráva": 229,
+        "vzduch": 7436,
+        "vápenec": 2466,
+        "čedič": 2882,
+        "železná ruda": 13,
+        "žula": 2403
+      },
+      "oreBonus": 0.0,
+      "recipe": "hora",
+      "seed": 1000,
+      "serverStackCheck": [],
+      "sha256MaterialLayer": "be7aa168e5f6bfca2505556b0ca7d2c0bf19c205f371fb91b51ccb85dec5d9ad",
+      "sha256WaterLayer": "4652a6394a6dd0a15750fff58fb4728aae84fa3816af106e0e52cb19ff622bf2",
+      "stackBytesHex": "0a000c004e00000002140078000000f6fffffffdffffffcccc00009919000003009700000002140050000000faffffffffffffffcccc0000991900000000c8000000041c003c000000030000002c000000b89e0000cc4c000002000000010000000400ed00000002140050000000f9fffffffeffffffcccc0000991900000200da010000021400c8000000fcffffffffffffff66e60000cc0c000007004f0b000005080019000000060000000600700900000508001e000000050000000500a2090000050800140000000700000008000d000000031800120000000800000028000000bc020000500000000600000009000d00000001100016000000040000002400000007000000",
+      "stackHash": "7f606b0aaf6b07ad52796dac63ea9eb4af6d502fc1174557b574a685a7bac8f3",
+      "studyCrossCheck": {
+        "materialLayer": true,
+        "stackHash": true,
+        "waterLayer": true
+      },
+      "transform": {
+        "heightShift": 0,
+        "mirror": false,
+        "rotation": 0
+      },
+      "validator": {
+        "errorCount": 0,
+        "firstErrors": [],
+        "ok": true
+      },
+      "volume_fnv1a64": "e5b998a9b5e4c16c",
+      "water": {
+        "allotmentByRim": 149,
+        "issued": 106,
+        "pouredByRecipe": 106,
+        "retained": 15.897,
+        "runoffUnits": 0
+      },
+      "wvb1Header": {
+        "shortfall": {
+          "water_units": 0
+        }
+      }
+    },
+    {
+      "deterministic": true,
+      "material_rarity": {
+        "class": 0,
+        "formula": "rarity-v2",
+        "score": 14.4493
+      },
+      "material_summary": {
+        "jíl": 12,
+        "ložiskový jíl": 124,
+        "měděná ruda": 10,
+        "písek": 1497,
+        "vzduch": 8753,
+        "vápenec": 706,
+        "čedič": 2829,
+        "železná ruda": 33,
+        "žula": 2420
+      },
+      "oreBonus": 0.0,
+      "recipe": "piscina",
+      "seed": 4504,
+      "serverStackCheck": [],
+      "sha256MaterialLayer": "bea427785e44e60a7f97a3b60f6bc1b05f5de447e216f9bb455118a188782c33",
+      "sha256WaterLayer": "a1a3ba239e3dbcdca222bf1011aa93da2cf04a046f8425e0cb322c7d4f15869a",
+      "stackBytesHex": "090004000c00000002140050000000f9fffffffeffffffcccc0000991900000c007c00000002140078000000f6fffffffdffffffcccc000099190000000092000000041c003c000000030000002c000000b89e0000cc4c000002000000010000000300d905000002140050000000faffffffffffffffcccc00009919000007002e0b0000050800190000000600000006007e0900000508001e000000050000000500c2020000050800140000000700000008000a000000031800120000000800000028000000bc020000500000000600000009002100000001100016000000040000002400000007000000",
+      "stackHash": "b16f36fb091cad45549bb889305e3fab4eae6585808a0d0d0c938ec9322eac56",
+      "studyCrossCheck": {
+        "materialLayer": true,
+        "stackHash": true,
+        "waterLayer": true
+      },
+      "transform": {
+        "heightShift": 0,
+        "mirror": false,
+        "rotation": 0
+      },
+      "validator": {
+        "errorCount": 0,
+        "firstErrors": [],
+        "ok": true
+      },
+      "volume_fnv1a64": "5a478923343bdfd0",
+      "water": {
+        "allotmentByRim": 337,
+        "issued": 161,
+        "pouredByRecipe": 161,
+        "retained": 54.803,
+        "runoffUnits": 0
+      },
+      "wvb1Header": {
+        "shortfall": {
+          "water_units": 0
+        }
+      }
+    },
+    {
+      "deterministic": true,
+      "material_rarity": {
+        "class": 1,
+        "formula": "rarity-v2",
+        "score": 17.6599
+      },
+      "material_summary": {
+        "hlína": 411,
+        "jíl": 277,
+        "ložiskový jíl": 223,
+        "měděná ruda": 27,
+        "písek": 41,
+        "sníh": 48,
+        "tráva": 192,
+        "vzduch": 5926,
+        "vápenec": 3212,
+        "čedič": 3631,
+        "železná ruda": 22,
+        "žula": 2374
+      },
+      "oreBonus": 0.0,
+      "recipe": "hora",
+      "seed": 202,
+      "serverStackCheck": [],
+      "sha256MaterialLayer": "51e9352c2d49ab5b1448a9f092215172b953b5609889bd866babff7ae4a6bd6d",
+      "sha256WaterLayer": "ed1e2872fae6ea8e9f9c4b3e62e0c0b437a2e29bc50c0229757db16abfe7dcb9",
+      "stackBytesHex": "0a0003002900000002140050000000faffffffffffffffcccc0000991900000c00df00000002140078000000f6fffffffdffffffcccc0000991900000000fc000000041c003c000000030000002c000000b89e0000cc4c0000020000000100000004001501000002140050000000f9fffffffeffffffcccc00009919000002009b010000021400c8000000fcffffffffffffff66e60000cc0c00000700450e000005080019000000060000000600610900000508001e0000000500000005008c0c000005080014000000070000000900160000000110001600000004000000240000000700000008001b000000031800120000000800000028000000bc0200005000000006000000",
+      "stackHash": "347149d0e1c570d09f241d74a67b79398f889f3d198bc41c8f60c1f4bf5cb639",
+      "transform": {
+        "heightShift": 2,
+        "mirror": true,
+        "rotation": 90
+      },
+      "validator": {
+        "errorCount": 0,
+        "firstErrors": [],
+        "ok": true
+      },
+      "volume_fnv1a64": "0a8dd7a32a123e37",
+      "water": {
+        "allotmentByRim": 57,
+        "issued": 57,
+        "pouredByRecipe": 96,
+        "retained": 22.139,
+        "runoffUnits": 0
+      },
+      "wvb1Header": {
+        "shortfall": {
+          "water_units": 0
+        }
+      }
+    },
+    {
+      "deterministic": true,
+      "material_rarity": {
+        "class": 3,
+        "formula": "rarity-v2",
+        "score": 22.3879
+      },
+      "material_summary": {
+        "hlína": 534,
+        "jíl": 181,
+        "ložiskový jíl": 43,
+        "měděná ruda": 31,
+        "písek": 267,
+        "tráva": 256,
+        "vzduch": 9396,
+        "vápenec": 1129,
+        "čedič": 1904,
+        "železná ruda": 33,
+        "žula": 2610
+      },
+      "oreBonus": 0.0,
+      "recipe": "louka",
+      "seed": 101,
+      "serverStackCheck": [],
+      "sha256MaterialLayer": "cead6018e5471a829df43c268baacd2072d0da6857899ee221158f095ccde17c",
+      "sha256WaterLayer": "cb3640de7ceebaf1c85338e747605e539051e1a2ebcd31c386c1c0475c18c13d",
+      "stackBytesHex": "0a000c002b00000002140078000000f6fffffffdffffffcccc000099190000000084000000041c003c000000030000002c000000b89e0000cc4c000002000000010000000400b500000002140050000000f9fffffffeffffffcccc00009919000003000b01000002140050000000faffffffffffffffcccc000099190000020016020000021400c8000000fcffffffffffffff66e60000cc0c000007009107000005080019000000060000000600510a00000508001e00000005000000050069040000050800140000000700000008001f000000031800120000000800000028000000bc020000500000000600000009002100000001100016000000040000002400000007000000",
+      "stackHash": "d86f96e5d49541072a3f8d6f7819c3ed99177d0eaea5653cb70e6e4a066a40df",
+      "transform": {
+        "heightShift": -3,
+        "mirror": false,
+        "rotation": 270
+      },
+      "validator": {
+        "errorCount": 0,
+        "firstErrors": [],
+        "ok": true
+      },
+      "volume_fnv1a64": "096e5b93608d96c2",
+      "water": {
+        "allotmentByRim": 285,
+        "issued": 130,
+        "pouredByRecipe": 130,
+        "retained": 13.452,
+        "runoffUnits": 0
+      },
+      "wvb1Header": {
+        "shortfall": {
+          "water_units": 0
+        }
+      }
+    },
+    {
+      "deterministic": true,
+      "material_rarity": {
+        "class": 4,
+        "formula": "rarity-v2",
+        "score": 23.9337
+      },
+      "material_summary": {
+        "hlína": 471,
+        "jíl": 187,
+        "měděná ruda": 51,
+        "písek": 210,
+        "tráva": 223,
+        "vzduch": 6809,
+        "vápenec": 3033,
+        "čedič": 3006,
+        "železná ruda": 18,
+        "žula": 2376
+      },
+      "oreBonus": 0.12,
+      "recipe": "hora",
+      "seed": 7777,
+      "serverStackCheck": [],
+      "sha256MaterialLayer": "673c68be395c40d12892af8bf32ce11cb4c99814c452a4be60b6971379ced364",
+      "sha256WaterLayer": "d15f7cb224ce15470cdf4cc56d6888ffa704ff239fa80a79bba299209d573fe5",
+      "stackBytesHex": "09000400bb00000002140050000000f9fffffffeffffffcccc0000991900000300d200000002140050000000faffffffffffffffcccc0000991900000000ae010000041c003c000000030000002c000000b89e0000cc4c000002000000010000000200d7010000021400c8000000fcffffffffffffff66e60000cc0c00000700d00b0000050800190000000600000006007b0900000508001e000000050000000500d90b0000050800140000000700000009001200000001100016000000040000002400000007000000080033000000031800120000000800000028000000bc0200005000000006000000",
+      "stackHash": "1cd32187c78d2e5e581cac71816374952222c9d3bb69c87e99012232cc448576",
+      "transform": {
+        "heightShift": 0,
+        "mirror": false,
+        "rotation": 0
+      },
+      "validator": {
+        "errorCount": 0,
+        "firstErrors": [],
+        "ok": true
+      },
+      "volume_fnv1a64": "b7d17e162fc791cf",
+      "water": {
+        "allotmentByRim": 46,
+        "issued": 46,
+        "pouredByRecipe": 48,
+        "retained": 24.295,
+        "runoffUnits": 0
+      },
+      "wvb1Header": {
+        "shortfall": {
+          "water_units": 0
+        }
+      }
+    }
+  ],
+  "cell_index": "(lx * 16 + ly) * 64 + lz; 1 bajt = MaterialId; vrstva vody 2 bajty LE na buňku",
+  "engine": "Godot 4.7.2-stable (official)",
+  "genVersion": "gen-v3-study-4 + prototyp (SOIL_COLS)",
+  "note": "gen-v3 v prototypu: tvar povrchu a slupka z proto-v2.2, podzemí ze zásobníku zástupce serveru (lozika-studie). SOIL_COLS: položky s lzMin < 0 jen ve sloupcích, kde má prototyp nahoře trávu, hlínu nebo písek.",
+  "rarityThresholdsV3": [
+    0.0,
+    16.9,
+    18.7,
+    19.0,
+    22.7
+  ],
+  "shapes": {
+    "1": {
+      "name": "pocket",
+      "params": [
+        "maxHeap",
+        "lzMin",
+        "lzMax",
+        "host"
+      ]
+    },
+    "2": {
+      "name": "layer",
+      "params": [
+        "maxHeap",
+        "lzMin",
+        "lzMax",
+        "pH_u16",
+        "pV_u16"
+      ]
+    },
+    "3": {
+      "name": "vein",
+      "params": [
+        "maxHeap",
+        "lzMin",
+        "lzMax",
+        "inertia_permille",
+        "branch_permille",
+        "host"
+      ]
+    },
+    "4": {
+      "name": "chamber",
+      "params": [
+        "maxHeap",
+        "lzMin",
+        "lzMax",
+        "pH_u16",
+        "pV_u16",
+        "roof",
+        "margin"
+      ]
+    },
+    "5": {
+      "name": "stratum",
+      "params": [
+        "amp_tenths",
+        "scale"
+      ]
+    }
+  },
+  "sharedTable": "../sdilene/materialy_voda.json",
+  "sharedTableCopyInSync": true,
+  "waterUnit": "u16, 4096 = plná buňka objemu"
+}

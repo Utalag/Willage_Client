@@ -1,0 +1,1519 @@
+{
+  "caveVersion": "cave-v0-study-1",
+  "order": "terén → horniny → jeskyně → voda → rudy",
+  "waterLayer": "u16 na buňku, 4096 = plná buňka (= jednotka water_total ve WVB1, 1/4096)",
+  "permeable": "propustnost z voda-studie > 0.05 (písek 0,80, hlína 0,30, tráva 0,25, vápenec 0,10 propustné; jíl, žula, čedič, rudy ne)",
+  "roof": 2,
+  "margin": 1,
+  "reservoirHeadroomPct": 125,
+  "cases": [
+    {
+      "id": "louka_101",
+      "recipe": "louka",
+      "seed": 101,
+      "note": "běžný cíl",
+      "caveTarget": {
+        "cave_air": 132,
+        "water": 18
+      },
+      "caveAirPlaced": 132,
+      "shapes": [
+        {
+          "shape": "reservoir",
+          "target": 23,
+          "placed": 23,
+          "shortfall": 0,
+          "byLevel": {
+            "L0 semínka": 23
+          }
+        },
+        {
+          "shape": "chamber",
+          "target": 62,
+          "placed": 62,
+          "shortfall": 0,
+          "byLevel": {
+            "L0 semínka": 26,
+            "L1 další semínka": 36
+          }
+        },
+        {
+          "shape": "tunnel",
+          "target": 41,
+          "placed": 41,
+          "shortfall": 0,
+          "byLevel": {
+            "L0 semínka": 41
+          }
+        },
+        {
+          "shape": "shaft",
+          "target": 6,
+          "placed": 6,
+          "shortfall": 0,
+          "byLevel": {
+            "L0 semínka": 2,
+            "L1 další semínka": 4
+          }
+        }
+      ],
+      "water": {
+        "target": 18,
+        "placed": 18.0,
+        "shortfall": 0,
+        "sealedCells": 0,
+        "sealRounds": 0,
+        "basinsUsed": 1
+      },
+      "ores": [
+        {
+          "ore": "ložiskový jíl",
+          "materialId": 12,
+          "target": 43,
+          "placed": 43,
+          "shortfall": 0,
+          "byLevel": {
+            "L0 semínka": 43
+          }
+        },
+        {
+          "ore": "měděná ruda",
+          "materialId": 8,
+          "target": 31,
+          "placed": 31,
+          "shortfall": 0,
+          "byLevel": {
+            "L0 semínka": 31
+          }
+        },
+        {
+          "ore": "železná ruda",
+          "materialId": 9,
+          "target": 33,
+          "placed": 33,
+          "shortfall": 0,
+          "byLevel": {
+            "L0 semínka": 33
+          }
+        }
+      ],
+      "oresKeptCaves": true,
+      "wvb1Header": {
+        "shortfall": {},
+        "serverAcceptsOres": true
+      },
+      "validator": {
+        "ok": true,
+        "errorCount": 0,
+        "firstErrors": []
+      },
+      "summary": {
+        "tráva": 256,
+        "hlína": 491,
+        "písek": 267,
+        "jíl": 181,
+        "vápenec": 1070,
+        "žula": 2665,
+        "čedič": 2719,
+        "měděná ruda": 31,
+        "železná ruda": 33,
+        "ložiskový jíl": 43,
+        "vzduch (jeskyně)": 132,
+        "voda (objem, buňky)": 18.0
+      },
+      "sha256MaterialLayer": "200ee19c9d1ec2c32ac74f8a95cbaa80ab14da296f64b0f772e99786173fff9c",
+      "sha256WaterLayer": "f6277087f972f490ed8404555d67beae9f0277392ef59536ec40c7670a0694f6"
+    },
+    {
+      "id": "louka_404",
+      "recipe": "louka",
+      "seed": 404,
+      "note": "běžný cíl",
+      "caveTarget": {
+        "cave_air": 208,
+        "water": 34
+      },
+      "caveAirPlaced": 208,
+      "shapes": [
+        {
+          "shape": "reservoir",
+          "target": 43,
+          "placed": 43,
+          "shortfall": 0,
+          "byLevel": {
+            "L0 semínka": 43
+          }
+        },
+        {
+          "shape": "chamber",
+          "target": 94,
+          "placed": 94,
+          "shortfall": 0,
+          "byLevel": {
+            "L0 semínka": 59,
+            "L1 další semínka": 35
+          }
+        },
+        {
+          "shape": "tunnel",
+          "target": 63,
+          "placed": 63,
+          "shortfall": 0,
+          "byLevel": {
+            "L0 semínka": 49,
+            "L1 další semínka": 14
+          }
+        },
+        {
+          "shape": "shaft",
+          "target": 8,
+          "placed": 8,
+          "shortfall": 0,
+          "byLevel": {
+            "L0 semínka": 8
+          }
+        }
+      ],
+      "water": {
+        "target": 34,
+        "placed": 34.0,
+        "shortfall": 0,
+        "sealedCells": 0,
+        "sealRounds": 0,
+        "basinsUsed": 1
+      },
+      "ores": [
+        {
+          "ore": "ložiskový jíl",
+          "materialId": 12,
+          "target": 80,
+          "placed": 80,
+          "shortfall": 0,
+          "byLevel": {
+            "L0 semínka": 80
+          }
+        },
+        {
+          "ore": "měděná ruda",
+          "materialId": 8,
+          "target": 30,
+          "placed": 30,
+          "shortfall": 0,
+          "byLevel": {
+            "L0 semínka": 30
+          }
+        },
+        {
+          "ore": "železná ruda",
+          "materialId": 9,
+          "target": 33,
+          "placed": 33,
+          "shortfall": 0,
+          "byLevel": {
+            "L0 semínka": 33
+          }
+        }
+      ],
+      "oresKeptCaves": true,
+      "wvb1Header": {
+        "shortfall": {},
+        "serverAcceptsOres": true
+      },
+      "validator": {
+        "ok": true,
+        "errorCount": 0,
+        "firstErrors": []
+      },
+      "summary": {
+        "tráva": 256,
+        "hlína": 463,
+        "písek": 189,
+        "jíl": 263,
+        "vápenec": 969,
+        "žula": 2339,
+        "čedič": 3137,
+        "měděná ruda": 30,
+        "železná ruda": 33,
+        "ložiskový jíl": 80,
+        "vzduch (jeskyně)": 208,
+        "voda (objem, buňky)": 34.0
+      },
+      "sha256MaterialLayer": "42acfd560de4b51c97a70832afcb0fd24d86096dd915ed52632f8b937fff40e1",
+      "sha256WaterLayer": "b79cabbe8a80750719cb0321e082d014c9bfcf7fd6c8a33684780159cdee9247"
+    },
+    {
+      "id": "kopec_303",
+      "recipe": "kopec",
+      "seed": 303,
+      "note": "běžný cíl",
+      "caveTarget": {
+        "cave_air": 254,
+        "water": 56
+      },
+      "caveAirPlaced": 254,
+      "shapes": [
+        {
+          "shape": "reservoir",
+          "target": 70,
+          "placed": 70,
+          "shortfall": 0,
+          "byLevel": {
+            "L0 semínka": 70
+          }
+        },
+        {
+          "shape": "chamber",
+          "target": 105,
+          "placed": 105,
+          "shortfall": 0,
+          "byLevel": {
+            "L0 semínka": 49,
+            "L1 další semínka": 56
+          }
+        },
+        {
+          "shape": "tunnel",
+          "target": 70,
+          "placed": 70,
+          "shortfall": 0,
+          "byLevel": {
+            "L0 semínka": 70
+          }
+        },
+        {
+          "shape": "shaft",
+          "target": 9,
+          "placed": 9,
+          "shortfall": 0,
+          "byLevel": {
+            "L0 semínka": 9
+          }
+        }
+      ],
+      "water": {
+        "target": 56,
+        "placed": 56.0,
+        "shortfall": 0,
+        "sealedCells": 0,
+        "sealRounds": 0,
+        "basinsUsed": 1
+      },
+      "ores": [
+        {
+          "ore": "ložiskový jíl",
+          "materialId": 12,
+          "target": 118,
+          "placed": 118,
+          "shortfall": 0,
+          "byLevel": {
+            "L0 semínka": 37,
+            "L1 další semínka": 81
+          }
+        },
+        {
+          "ore": "měděná ruda",
+          "materialId": 8,
+          "target": 31,
+          "placed": 31,
+          "shortfall": 0,
+          "byLevel": {
+            "L0 semínka": 31
+          }
+        },
+        {
+          "ore": "železná ruda",
+          "materialId": 9,
+          "target": 32,
+          "placed": 32,
+          "shortfall": 0,
+          "byLevel": {
+            "L0 semínka": 32
+          }
+        }
+      ],
+      "oresKeptCaves": true,
+      "wvb1Header": {
+        "shortfall": {},
+        "serverAcceptsOres": true
+      },
+      "validator": {
+        "ok": true,
+        "errorCount": 0,
+        "firstErrors": []
+      },
+      "summary": {
+        "tráva": 256,
+        "hlína": 416,
+        "písek": 152,
+        "jíl": 304,
+        "vápenec": 1443,
+        "žula": 2529,
+        "čedič": 2878,
+        "měděná ruda": 31,
+        "železná ruda": 32,
+        "ložiskový jíl": 118,
+        "vzduch (jeskyně)": 254,
+        "voda (objem, buňky)": 56.0
+      },
+      "sha256MaterialLayer": "4615cd168dc9d769b93fa790278da9ce28a1351a3b58590cff5c173ea012208d",
+      "sha256WaterLayer": "498a72bdf0d0dee3954512f423bcc01fc063c8ba67dd824368485ff6af681dc8"
+    },
+    {
+      "id": "kopec_2302",
+      "recipe": "kopec",
+      "seed": 2302,
+      "note": "běžný cíl",
+      "caveTarget": {
+        "cave_air": 112,
+        "water": 23
+      },
+      "caveAirPlaced": 112,
+      "shapes": [
+        {
+          "shape": "reservoir",
+          "target": 29,
+          "placed": 29,
+          "shortfall": 0,
+          "byLevel": {
+            "L0 semínka": 29
+          }
+        },
+        {
+          "shape": "chamber",
+          "target": 47,
+          "placed": 47,
+          "shortfall": 0,
+          "byLevel": {
+            "L0 semínka": 47
+          }
+        },
+        {
+          "shape": "tunnel",
+          "target": 31,
+          "placed": 31,
+          "shortfall": 0,
+          "byLevel": {
+            "L0 semínka": 31
+          }
+        },
+        {
+          "shape": "shaft",
+          "target": 5,
+          "placed": 5,
+          "shortfall": 0,
+          "byLevel": {
+            "L0 semínka": 5
+          }
+        }
+      ],
+      "water": {
+        "target": 23,
+        "placed": 23.0,
+        "shortfall": 0,
+        "sealedCells": 0,
+        "sealRounds": 0,
+        "basinsUsed": 1
+      },
+      "ores": [
+        {
+          "ore": "ložiskový jíl",
+          "materialId": 12,
+          "target": 0,
+          "placed": 0,
+          "shortfall": 0,
+          "byLevel": {}
+        },
+        {
+          "ore": "měděná ruda",
+          "materialId": 8,
+          "target": 21,
+          "placed": 21,
+          "shortfall": 0,
+          "byLevel": {
+            "L0 semínka": 21
+          }
+        },
+        {
+          "ore": "železná ruda",
+          "materialId": 9,
+          "target": 12,
+          "placed": 12,
+          "shortfall": 0,
+          "byLevel": {
+            "L0 semínka": 12
+          }
+        }
+      ],
+      "oresKeptCaves": true,
+      "wvb1Header": {
+        "shortfall": {},
+        "serverAcceptsOres": true
+      },
+      "validator": {
+        "ok": true,
+        "errorCount": 0,
+        "firstErrors": []
+      },
+      "summary": {
+        "tráva": 256,
+        "hlína": 549,
+        "písek": 199,
+        "jíl": 273,
+        "vápenec": 2239,
+        "žula": 2451,
+        "čedič": 3012,
+        "měděná ruda": 21,
+        "železná ruda": 12,
+        "vzduch (jeskyně)": 112,
+        "voda (objem, buňky)": 23.0
+      },
+      "sha256MaterialLayer": "3951b0ead988cc6c814b6cf3838a110948b63a47c74f6208e2537aae6313075d",
+      "sha256WaterLayer": "89e34314bd61a611670f815e637ceebbd8d64e6ddb71e404b7dd1ecd1aa85996"
+    },
+    {
+      "id": "hora_202",
+      "recipe": "hora",
+      "seed": 202,
+      "note": "běžný cíl",
+      "caveTarget": {
+        "cave_air": 252,
+        "water": 80
+      },
+      "caveAirPlaced": 252,
+      "shapes": [
+        {
+          "shape": "reservoir",
+          "target": 100,
+          "placed": 100,
+          "shortfall": 0,
+          "byLevel": {
+            "L0 semínka": 100
+          }
+        },
+        {
+          "shape": "chamber",
+          "target": 87,
+          "placed": 87,
+          "shortfall": 0,
+          "byLevel": {
+            "L0 semínka": 87
+          }
+        },
+        {
+          "shape": "tunnel",
+          "target": 58,
+          "placed": 58,
+          "shortfall": 0,
+          "byLevel": {
+            "L0 semínka": 58
+          }
+        },
+        {
+          "shape": "shaft",
+          "target": 7,
+          "placed": 7,
+          "shortfall": 0,
+          "byLevel": {
+            "L0 semínka": 6,
+            "L1 další semínka": 1
+          }
+        }
+      ],
+      "water": {
+        "target": 80,
+        "placed": 80.0,
+        "shortfall": 0,
+        "sealedCells": 0,
+        "sealRounds": 0,
+        "basinsUsed": 1
+      },
+      "ores": [
+        {
+          "ore": "ložiskový jíl",
+          "materialId": 12,
+          "target": 223,
+          "placed": 223,
+          "shortfall": 0,
+          "byLevel": {
+            "L1 další semínka": 223
+          }
+        },
+        {
+          "ore": "měděná ruda",
+          "materialId": 8,
+          "target": 27,
+          "placed": 27,
+          "shortfall": 0,
+          "byLevel": {
+            "L0 semínka": 27
+          }
+        },
+        {
+          "ore": "železná ruda",
+          "materialId": 9,
+          "target": 22,
+          "placed": 22,
+          "shortfall": 0,
+          "byLevel": {
+            "L0 semínka": 22
+          }
+        }
+      ],
+      "oresKeptCaves": true,
+      "wvb1Header": {
+        "shortfall": {},
+        "serverAcceptsOres": true
+      },
+      "validator": {
+        "ok": true,
+        "errorCount": 0,
+        "firstErrors": []
+      },
+      "summary": {
+        "tráva": 206,
+        "hlína": 234,
+        "písek": 36,
+        "jíl": 290,
+        "vápenec": 3224,
+        "žula": 2397,
+        "čedič": 3279,
+        "měděná ruda": 27,
+        "železná ruda": 22,
+        "sníh": 8,
+        "ložiskový jíl": 223,
+        "vzduch (jeskyně)": 252,
+        "voda (objem, buňky)": 80.0
+      },
+      "sha256MaterialLayer": "b63f9a1f246c346fa121f13b350ea3fd85b1be30e3772c307db287b2f07f73dc",
+      "sha256WaterLayer": "58d95eb00874fab08ae5ec24dcfd86c64afa34e7e568abb560bc6c15e0940b7a"
+    },
+    {
+      "id": "hora_1000",
+      "recipe": "hora",
+      "seed": 1000,
+      "note": "běžný cíl",
+      "caveTarget": {
+        "cave_air": 200,
+        "water": 21
+      },
+      "caveAirPlaced": 200,
+      "shapes": [
+        {
+          "shape": "reservoir",
+          "target": 27,
+          "placed": 27,
+          "shortfall": 0,
+          "byLevel": {
+            "L0 semínka": 27
+          }
+        },
+        {
+          "shape": "chamber",
+          "target": 99,
+          "placed": 99,
+          "shortfall": 0,
+          "byLevel": {
+            "L0 semínka": 99
+          }
+        },
+        {
+          "shape": "tunnel",
+          "target": 66,
+          "placed": 66,
+          "shortfall": 0,
+          "byLevel": {
+            "L0 semínka": 21,
+            "L1 další semínka": 45
+          }
+        },
+        {
+          "shape": "shaft",
+          "target": 8,
+          "placed": 8,
+          "shortfall": 0,
+          "byLevel": {
+            "L0 semínka": 8
+          }
+        }
+      ],
+      "water": {
+        "target": 21,
+        "placed": 21.0,
+        "shortfall": 0,
+        "sealedCells": 0,
+        "sealRounds": 0,
+        "basinsUsed": 1
+      },
+      "ores": [
+        {
+          "ore": "ložiskový jíl",
+          "materialId": 12,
+          "target": 78,
+          "placed": 78,
+          "shortfall": 0,
+          "byLevel": {
+            "L0 semínka": 15,
+            "L1 další semínka": 63
+          }
+        },
+        {
+          "ore": "měděná ruda",
+          "materialId": 8,
+          "target": 13,
+          "placed": 13,
+          "shortfall": 0,
+          "byLevel": {
+            "L0 semínka": 13
+          }
+        },
+        {
+          "ore": "železná ruda",
+          "materialId": 9,
+          "target": 13,
+          "placed": 13,
+          "shortfall": 0,
+          "byLevel": {
+            "L0 semínka": 13
+          }
+        }
+      ],
+      "oresKeptCaves": true,
+      "wvb1Header": {
+        "shortfall": {},
+        "serverAcceptsOres": true
+      },
+      "validator": {
+        "ok": true,
+        "errorCount": 0,
+        "firstErrors": []
+      },
+      "summary": {
+        "tráva": 229,
+        "hlína": 408,
+        "písek": 139,
+        "jíl": 237,
+        "vápenec": 2431,
+        "žula": 2413,
+        "čedič": 2985,
+        "měděná ruda": 13,
+        "železná ruda": 13,
+        "sníh": 2,
+        "ložiskový jíl": 78,
+        "vzduch (jeskyně)": 200,
+        "voda (objem, buňky)": 21.0
+      },
+      "sha256MaterialLayer": "6c9fc9fef3492558706b648bf79e5b69ec63d30d4d3d55f93cb32dec3abe3952",
+      "sha256WaterLayer": "981be72d8802e3a9ebef7aa9d16ac888010b8b00c31421dd7a51fa94cf241ef9"
+    },
+    {
+      "id": "piscina_4504",
+      "recipe": "piscina",
+      "seed": 4504,
+      "note": "běžný cíl",
+      "caveTarget": {
+        "cave_air": 146,
+        "water": 22
+      },
+      "caveAirPlaced": 146,
+      "shapes": [
+        {
+          "shape": "reservoir",
+          "target": 28,
+          "placed": 28,
+          "shortfall": 0,
+          "byLevel": {
+            "L0 semínka": 28
+          }
+        },
+        {
+          "shape": "chamber",
+          "target": 67,
+          "placed": 67,
+          "shortfall": 0,
+          "byLevel": {
+            "L0 semínka": 4,
+            "L1 další semínka": 63
+          }
+        },
+        {
+          "shape": "tunnel",
+          "target": 45,
+          "placed": 45,
+          "shortfall": 0,
+          "byLevel": {
+            "L1 další semínka": 45
+          }
+        },
+        {
+          "shape": "shaft",
+          "target": 6,
+          "placed": 6,
+          "shortfall": 0,
+          "byLevel": {
+            "L0 semínka": 6
+          }
+        }
+      ],
+      "water": {
+        "target": 22,
+        "placed": 22.0,
+        "shortfall": 0,
+        "sealedCells": 0,
+        "sealRounds": 0,
+        "basinsUsed": 1
+      },
+      "ores": [
+        {
+          "ore": "ložiskový jíl",
+          "materialId": 12,
+          "target": 124,
+          "placed": 124,
+          "shortfall": 0,
+          "byLevel": {
+            "L0 semínka": 124
+          }
+        },
+        {
+          "ore": "měděná ruda",
+          "materialId": 8,
+          "target": 10,
+          "placed": 10,
+          "shortfall": 0,
+          "byLevel": {
+            "L0 semínka": 10
+          }
+        },
+        {
+          "ore": "železná ruda",
+          "materialId": 9,
+          "target": 33,
+          "placed": 33,
+          "shortfall": 0,
+          "byLevel": {
+            "L0 semínka": 33
+          }
+        }
+      ],
+      "oresKeptCaves": true,
+      "wvb1Header": {
+        "shortfall": {},
+        "serverAcceptsOres": true
+      },
+      "validator": {
+        "ok": true,
+        "errorCount": 0,
+        "firstErrors": []
+      },
+      "summary": {
+        "písek": 1373,
+        "jíl": 12,
+        "vápenec": 649,
+        "žula": 2467,
+        "čedič": 2963,
+        "měděná ruda": 10,
+        "železná ruda": 33,
+        "ložiskový jíl": 124,
+        "vzduch (jeskyně)": 146,
+        "voda (objem, buňky)": 22.0
+      },
+      "sha256MaterialLayer": "7a5c7a808a77e0c4996958e2af25229669ca7b8939d22195d80009ebf005327c",
+      "sha256WaterLayer": "09479da29b7ac5e6763ea013045d98f6c63f37d6cc0ff519d0a09f5f54d605d1"
+    },
+    {
+      "id": "zatez_jeskyne_x5_hora202",
+      "recipe": "hora",
+      "seed": 202,
+      "note": "jeskyně ×5",
+      "caveTarget": {
+        "cave_air": 860,
+        "water": 80
+      },
+      "caveAirPlaced": 860,
+      "shapes": [
+        {
+          "shape": "reservoir",
+          "target": 100,
+          "placed": 100,
+          "shortfall": 0,
+          "byLevel": {
+            "L0 semínka": 100
+          }
+        },
+        {
+          "shape": "chamber",
+          "target": 435,
+          "placed": 435,
+          "shortfall": 0,
+          "byLevel": {
+            "L0 semínka": 321,
+            "L1 další semínka": 114
+          }
+        },
+        {
+          "shape": "tunnel",
+          "target": 290,
+          "placed": 290,
+          "shortfall": 0,
+          "byLevel": {
+            "L0 semínka": 235,
+            "L1 další semínka": 55
+          }
+        },
+        {
+          "shape": "shaft",
+          "target": 35,
+          "placed": 35,
+          "shortfall": 0,
+          "byLevel": {
+            "L0 semínka": 10,
+            "L1 další semínka": 25
+          }
+        }
+      ],
+      "water": {
+        "target": 80,
+        "placed": 80.0,
+        "shortfall": 0,
+        "sealedCells": 0,
+        "sealRounds": 0,
+        "basinsUsed": 1
+      },
+      "ores": [
+        {
+          "ore": "ložiskový jíl",
+          "materialId": 12,
+          "target": 223,
+          "placed": 223,
+          "shortfall": 0,
+          "byLevel": {
+            "L1 další semínka": 223
+          }
+        },
+        {
+          "ore": "měděná ruda",
+          "materialId": 8,
+          "target": 27,
+          "placed": 27,
+          "shortfall": 0,
+          "byLevel": {
+            "L0 semínka": 27
+          }
+        },
+        {
+          "ore": "železná ruda",
+          "materialId": 9,
+          "target": 22,
+          "placed": 22,
+          "shortfall": 0,
+          "byLevel": {
+            "L0 semínka": 22
+          }
+        }
+      ],
+      "oresKeptCaves": true,
+      "wvb1Header": {
+        "shortfall": {},
+        "serverAcceptsOres": true
+      },
+      "validator": {
+        "ok": true,
+        "errorCount": 0,
+        "firstErrors": []
+      },
+      "summary": {
+        "tráva": 206,
+        "hlína": 234,
+        "písek": 36,
+        "jíl": 290,
+        "vápenec": 2809,
+        "žula": 2223,
+        "čedič": 3260,
+        "měděná ruda": 27,
+        "železná ruda": 22,
+        "sníh": 8,
+        "ložiskový jíl": 223,
+        "vzduch (jeskyně)": 860,
+        "voda (objem, buňky)": 80.0
+      },
+      "sha256MaterialLayer": "5996ede18d029c0000ad27360df8c20951d5af368c9d0c248e3f808b0b096adc",
+      "sha256WaterLayer": "f30c03e90d99b51617bb861ff9512d973336b396f2acf79cb197f4c9350f835f"
+    },
+    {
+      "id": "zatez_jeskyne_x10_louka101",
+      "recipe": "louka",
+      "seed": 101,
+      "note": "jeskyně ×10",
+      "caveTarget": {
+        "cave_air": 1113,
+        "water": 18
+      },
+      "caveAirPlaced": 1113,
+      "shapes": [
+        {
+          "shape": "reservoir",
+          "target": 23,
+          "placed": 23,
+          "shortfall": 0,
+          "byLevel": {
+            "L0 semínka": 23
+          }
+        },
+        {
+          "shape": "chamber",
+          "target": 624,
+          "placed": 624,
+          "shortfall": 0,
+          "byLevel": {
+            "L0 semínka": 177,
+            "L1 další semínka": 336,
+            "L2 dorůst tělesa": 111
+          }
+        },
+        {
+          "shape": "tunnel",
+          "target": 416,
+          "placed": 416,
+          "shortfall": 0,
+          "byLevel": {
+            "L0 semínka": 252,
+            "L1 další semínka": 164
+          }
+        },
+        {
+          "shape": "shaft",
+          "target": 50,
+          "placed": 50,
+          "shortfall": 0,
+          "byLevel": {
+            "L0 semínka": 16,
+            "L1 další semínka": 34
+          }
+        }
+      ],
+      "water": {
+        "target": 18,
+        "placed": 18.0,
+        "shortfall": 0,
+        "sealedCells": 0,
+        "sealRounds": 0,
+        "basinsUsed": 1
+      },
+      "ores": [
+        {
+          "ore": "ložiskový jíl",
+          "materialId": 12,
+          "target": 43,
+          "placed": 43,
+          "shortfall": 0,
+          "byLevel": {
+            "L0 semínka": 43
+          }
+        },
+        {
+          "ore": "měděná ruda",
+          "materialId": 8,
+          "target": 31,
+          "placed": 31,
+          "shortfall": 0,
+          "byLevel": {
+            "L0 semínka": 31
+          }
+        },
+        {
+          "ore": "železná ruda",
+          "materialId": 9,
+          "target": 33,
+          "placed": 33,
+          "shortfall": 0,
+          "byLevel": {
+            "L0 semínka": 33
+          }
+        }
+      ],
+      "oresKeptCaves": true,
+      "wvb1Header": {
+        "shortfall": {},
+        "serverAcceptsOres": true
+      },
+      "validator": {
+        "ok": true,
+        "errorCount": 0,
+        "firstErrors": []
+      },
+      "summary": {
+        "tráva": 256,
+        "hlína": 491,
+        "písek": 267,
+        "jíl": 181,
+        "vápenec": 525,
+        "žula": 2242,
+        "čedič": 2706,
+        "měděná ruda": 31,
+        "železná ruda": 33,
+        "ložiskový jíl": 43,
+        "vzduch (jeskyně)": 1113,
+        "voda (objem, buňky)": 18.0
+      },
+      "sha256MaterialLayer": "98b8230743a50b980ab610a5d085b0800ccad597638c7f2b23d1d271b9aebc1e",
+      "sha256WaterLayer": "fbfbd3b89d638cc0691ee159dcc53f9314a3b9a227b21f7d7d271c0f0a191c69"
+    },
+    {
+      "id": "zatez_voda_x5_hora1000",
+      "recipe": "hora",
+      "seed": 1000,
+      "note": "voda ×5 (rezervoár roste s ní)",
+      "caveTarget": {
+        "cave_air": 305,
+        "water": 105
+      },
+      "caveAirPlaced": 305,
+      "shapes": [
+        {
+          "shape": "reservoir",
+          "target": 132,
+          "placed": 132,
+          "shortfall": 0,
+          "byLevel": {
+            "L0 semínka": 132
+          }
+        },
+        {
+          "shape": "chamber",
+          "target": 99,
+          "placed": 99,
+          "shortfall": 0,
+          "byLevel": {
+            "L0 semínka": 99
+          }
+        },
+        {
+          "shape": "tunnel",
+          "target": 66,
+          "placed": 66,
+          "shortfall": 0,
+          "byLevel": {
+            "L0 semínka": 21,
+            "L1 další semínka": 45
+          }
+        },
+        {
+          "shape": "shaft",
+          "target": 8,
+          "placed": 8,
+          "shortfall": 0,
+          "byLevel": {
+            "L0 semínka": 8
+          }
+        }
+      ],
+      "water": {
+        "target": 105,
+        "placed": 105.0,
+        "shortfall": 0,
+        "sealedCells": 0,
+        "sealRounds": 0,
+        "basinsUsed": 2
+      },
+      "ores": [
+        {
+          "ore": "ložiskový jíl",
+          "materialId": 12,
+          "target": 78,
+          "placed": 78,
+          "shortfall": 0,
+          "byLevel": {
+            "L0 semínka": 15,
+            "L1 další semínka": 63
+          }
+        },
+        {
+          "ore": "měděná ruda",
+          "materialId": 8,
+          "target": 13,
+          "placed": 13,
+          "shortfall": 0,
+          "byLevel": {
+            "L0 semínka": 13
+          }
+        },
+        {
+          "ore": "železná ruda",
+          "materialId": 9,
+          "target": 13,
+          "placed": 13,
+          "shortfall": 0,
+          "byLevel": {
+            "L0 semínka": 13
+          }
+        }
+      ],
+      "oresKeptCaves": true,
+      "wvb1Header": {
+        "shortfall": {},
+        "serverAcceptsOres": true
+      },
+      "validator": {
+        "ok": true,
+        "errorCount": 0,
+        "firstErrors": []
+      },
+      "summary": {
+        "tráva": 229,
+        "hlína": 408,
+        "písek": 139,
+        "jíl": 237,
+        "vápenec": 2431,
+        "žula": 2440,
+        "čedič": 2853,
+        "měděná ruda": 13,
+        "železná ruda": 13,
+        "sníh": 2,
+        "ložiskový jíl": 78,
+        "vzduch (jeskyně)": 305,
+        "voda (objem, buňky)": 105.0
+      },
+      "sha256MaterialLayer": "fb7480dd8cae1e4aa5840d9fa4a1d551f9320f7e91a49e970118311d765a4f7c",
+      "sha256WaterLayer": "49f1488d553a9456f869fad608f9af0e240f96f0ddbffaf4cc3552e5ea0e477b"
+    },
+    {
+      "id": "zatez_vse_vapenec_hora202",
+      "recipe": "hora",
+      "seed": 202,
+      "note": "všechny horniny = vápenec (propustný 0,10 > 0,05): rezervoár musí utěsnit",
+      "caveTarget": {
+        "cave_air": 352,
+        "water": 160
+      },
+      "caveAirPlaced": 352,
+      "shapes": [
+        {
+          "shape": "reservoir",
+          "target": 200,
+          "placed": 200,
+          "shortfall": 0,
+          "byLevel": {
+            "L4 uvolněný hostitel": 200
+          }
+        },
+        {
+          "shape": "chamber",
+          "target": 87,
+          "placed": 87,
+          "shortfall": 0,
+          "byLevel": {
+            "L0 semínka": 87
+          }
+        },
+        {
+          "shape": "tunnel",
+          "target": 58,
+          "placed": 58,
+          "shortfall": 0,
+          "byLevel": {
+            "L0 semínka": 58
+          }
+        },
+        {
+          "shape": "shaft",
+          "target": 7,
+          "placed": 7,
+          "shortfall": 0,
+          "byLevel": {
+            "L0 semínka": 7
+          }
+        }
+      ],
+      "water": {
+        "target": 160,
+        "placed": 160.0,
+        "shortfall": 0,
+        "sealedCells": 0,
+        "sealRounds": 0,
+        "basinsUsed": 2
+      },
+      "ores": [
+        {
+          "ore": "ložiskový jíl",
+          "materialId": 12,
+          "target": 223,
+          "placed": 223,
+          "shortfall": 0,
+          "byLevel": {
+            "L1 další semínka": 223
+          }
+        },
+        {
+          "ore": "měděná ruda",
+          "materialId": 8,
+          "target": 27,
+          "placed": 27,
+          "shortfall": 0,
+          "byLevel": {
+            "L0 semínka": 27
+          }
+        },
+        {
+          "ore": "železná ruda",
+          "materialId": 9,
+          "target": 22,
+          "placed": 22,
+          "shortfall": 0,
+          "byLevel": {
+            "L4 uvolněný hostitel": 22
+          }
+        }
+      ],
+      "oresKeptCaves": true,
+      "wvb1Header": {
+        "shortfall": {},
+        "serverAcceptsOres": true
+      },
+      "validator": {
+        "ok": true,
+        "errorCount": 0,
+        "firstErrors": []
+      },
+      "summary": {
+        "tráva": 206,
+        "hlína": 234,
+        "písek": 36,
+        "jíl": 290,
+        "vápenec": 8800,
+        "měděná ruda": 27,
+        "železná ruda": 22,
+        "sníh": 8,
+        "ložiskový jíl": 223,
+        "vzduch (jeskyně)": 352,
+        "voda (objem, buňky)": 160.0
+      },
+      "sha256MaterialLayer": "3072ae910c068f5f952b8f7e024891c9f81cd363d4ec32f34832bc57e7f21332",
+      "sha256WaterLayer": "b5d77c7ed9a251307ccfa7fd3714aa41ea63252bc061ea971dbfad115639da95"
+    },
+    {
+      "id": "zatez_vse_pisek_louka101",
+      "recipe": "louka",
+      "seed": 101,
+      "note": "všechny horniny = písek (0,80): těsnění jílem",
+      "caveTarget": {
+        "cave_air": 154,
+        "water": 36
+      },
+      "caveAirPlaced": 154,
+      "shapes": [
+        {
+          "shape": "reservoir",
+          "target": 45,
+          "placed": 45,
+          "shortfall": 0,
+          "byLevel": {
+            "L4 uvolněný hostitel": 45
+          }
+        },
+        {
+          "shape": "chamber",
+          "target": 62,
+          "placed": 62,
+          "shortfall": 0,
+          "byLevel": {
+            "L4 uvolněný hostitel": 62
+          }
+        },
+        {
+          "shape": "tunnel",
+          "target": 41,
+          "placed": 41,
+          "shortfall": 0,
+          "byLevel": {
+            "L4 uvolněný hostitel": 41
+          }
+        },
+        {
+          "shape": "shaft",
+          "target": 6,
+          "placed": 6,
+          "shortfall": 0,
+          "byLevel": {
+            "L4 uvolněný hostitel": 6
+          }
+        }
+      ],
+      "water": {
+        "target": 36,
+        "placed": 36.0,
+        "shortfall": 0,
+        "sealedCells": 117,
+        "sealRounds": 3,
+        "basinsUsed": 1
+      },
+      "ores": [
+        {
+          "ore": "ložiskový jíl",
+          "materialId": 12,
+          "target": 43,
+          "placed": 43,
+          "shortfall": 0,
+          "byLevel": {
+            "L0 semínka": 43
+          }
+        },
+        {
+          "ore": "měděná ruda",
+          "materialId": 8,
+          "target": 31,
+          "placed": 31,
+          "shortfall": 0,
+          "byLevel": {
+            "L4 uvolněný hostitel": 31
+          }
+        },
+        {
+          "ore": "železná ruda",
+          "materialId": 9,
+          "target": 33,
+          "placed": 33,
+          "shortfall": 0,
+          "byLevel": {
+            "L4 uvolněný hostitel": 33
+          }
+        }
+      ],
+      "oresKeptCaves": true,
+      "wvb1Header": {
+        "shortfall": {},
+        "serverAcceptsOres": true
+      },
+      "validator": {
+        "ok": true,
+        "errorCount": 0,
+        "firstErrors": []
+      },
+      "summary": {
+        "tráva": 256,
+        "hlína": 529,
+        "písek": 6685,
+        "jíl": 157,
+        "měděná ruda": 31,
+        "železná ruda": 33,
+        "ložiskový jíl": 43,
+        "vzduch (jeskyně)": 154,
+        "voda (objem, buňky)": 36.0
+      },
+      "sha256MaterialLayer": "af1ffd01e0c9882b69fefdc7f9aa5b2ebcfb46e69a38c8f293a12203f553555c",
+      "sha256WaterLayer": "cd4aa1804647293bf90115a67c98a668be98fe8515ecd5effdce9e5fe3daecb8"
+    },
+    {
+      "id": "zatez_vse_zula_louka101",
+      "recipe": "louka",
+      "seed": 101,
+      "note": "všechny horniny = žula: bez úniku",
+      "caveTarget": {
+        "cave_air": 263,
+        "water": 36
+      },
+      "caveAirPlaced": 263,
+      "shapes": [
+        {
+          "shape": "reservoir",
+          "target": 45,
+          "placed": 45,
+          "shortfall": 0,
+          "byLevel": {
+            "L0 semínka": 45
+          }
+        },
+        {
+          "shape": "chamber",
+          "target": 124,
+          "placed": 124,
+          "shortfall": 0,
+          "byLevel": {
+            "L4 uvolněný hostitel": 124
+          }
+        },
+        {
+          "shape": "tunnel",
+          "target": 83,
+          "placed": 83,
+          "shortfall": 0,
+          "byLevel": {
+            "L0 semínka": 83
+          }
+        },
+        {
+          "shape": "shaft",
+          "target": 11,
+          "placed": 11,
+          "shortfall": 0,
+          "byLevel": {
+            "L0 semínka": 2,
+            "L1 další semínka": 9
+          }
+        }
+      ],
+      "water": {
+        "target": 36,
+        "placed": 36.0,
+        "shortfall": 0,
+        "sealedCells": 0,
+        "sealRounds": 0,
+        "basinsUsed": 1
+      },
+      "ores": [
+        {
+          "ore": "ložiskový jíl",
+          "materialId": 12,
+          "target": 43,
+          "placed": 43,
+          "shortfall": 0,
+          "byLevel": {
+            "L0 semínka": 43
+          }
+        },
+        {
+          "ore": "měděná ruda",
+          "materialId": 8,
+          "target": 31,
+          "placed": 31,
+          "shortfall": 0,
+          "byLevel": {
+            "L0 semínka": 31
+          }
+        },
+        {
+          "ore": "železná ruda",
+          "materialId": 9,
+          "target": 33,
+          "placed": 33,
+          "shortfall": 0,
+          "byLevel": {
+            "L0 semínka": 33
+          }
+        }
+      ],
+      "oresKeptCaves": true,
+      "wvb1Header": {
+        "shortfall": {},
+        "serverAcceptsOres": true
+      },
+      "validator": {
+        "ok": true,
+        "errorCount": 0,
+        "firstErrors": []
+      },
+      "summary": {
+        "tráva": 256,
+        "hlína": 491,
+        "písek": 267,
+        "jíl": 175,
+        "žula": 6329,
+        "měděná ruda": 31,
+        "železná ruda": 33,
+        "ložiskový jíl": 43,
+        "vzduch (jeskyně)": 263,
+        "voda (objem, buňky)": 36.0
+      },
+      "sha256MaterialLayer": "a3a9f732d6628fe842dedd6c956d9faaa9b5cce8dfe473ec7434f2ef9dc458f7",
+      "sha256WaterLayer": "2ac68078aa9b343e5254ae1a4e61a11558527c5231bafce80f2d6e5e0135a556"
+    }
+  ]
+}

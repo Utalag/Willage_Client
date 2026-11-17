@@ -78,9 +78,87 @@ Skupiny: 1 Prototyp a buildy · 2 Terén a tvar · 3 Rozlišení bloku · 4 Ská
 
 ### 🧪 Voda jako data v buňkách: propustnost materiálů, toky, rybníky, zdroje a kopání u vody (2026-11-17 16:05 · `voda-studie/`, shots `35_voda_*`)
 - **Směr:** Jan 15:47: „Budeme muset materiálu přidat propustnost …“, voda musí být skutečná data (ne jen obraz – v prototypu se dalo chodit po vodě a kopat pod ní), 15:51: každá buňka má svůj objem, zdroje vody jako entity bloku. Hmotový buněčný automat na datových buňkách [4][14]: v každé buňce objem vody (vzduch pojme 1, materiál svou pórovitost), tik = zdroje → pád a vsak → do stran z kopie stavu → přetlak nahoru → odpar. Materiál má 3 čísla: propustnost, pórovitost, odpor povrchu [5][6][7][8]. Zdroje `top_flow`, `hillside_spring`, `underground_pocket` ze seedu bloku [11][12]. Průchodnost podle hloubky vody (0,05 m pomalé, 0,30 m neprůchozí) a bláta [1]. 6 scénářů (10 × 10 × 4, svah 11 × 12 × 6, prameny 10 × 10 × 5).
-- **Zlepšení:** rybník nad jílem pod pískem, přeliv skalní pánve, pomalý průsak vápencovou hrází, louka brzdí odtok (čelo vody řada 9 vs. 11 u písku v tiku 240, písek odvede zemí 4× víc). Kopání: příkop do břehu se zaplaví, průkop jílu pod rybníkem ho vypustí do chodby (neprůchozí 46 → 0). Prokopnutá kapsa vyvěrá šachtou. Deterministické (2 běhy = stejný kontrolní součet), bilance vody se měří každý tik (chyba ≤ 1,6·10⁻⁶).
+- **Zlepšení:** rybník nad jílem pod pískem, přeliv skalní pánve, pomalý průsak vápencovou hrází (od 19:18 je vápenec nepropustný a hráz drží, viz jedna tabulka níže), louka brzdí odtok (čelo vody řada 9 vs. 11 u písku v tiku 240, písek odvede zemí 4× víc). Kopání: příkop do břehu se zaplaví, průkop jílu pod rybníkem ho vypustí do chodby (neprůchozí 46 → 0). Prokopnutá kapsa vyvěrá šachtou. Deterministické (2 běhy = stejný kontrolní součet), bilance vody se měří každý tik (chyba ≤ 1,6·10⁻⁶).
 - **Komplikace:** přetlak jen o 1 buňku za tik (žádné spojené nádoby, U-trubice) [2]; voda tenčí než `film` zůstane jako kaluž; potoky nemají setrvačnost; výchozí rychlosti jsou odhad (průsak vápencem je hodně pomalý – voda pod hrází až po ~200 tikách). Blok 16 × 16 × 64 stojí 4,6–4,8 ms na tik v GDScriptu.
 - **Další krok:** Jan posoudí 35_*. Otevřené: voda jako vrstva na buňku v datech backendu (návrh v README), trvalost rybníků (odpar), zdroj deště, výměna vody mezi bloky. Nic z toho zatím není v `godot-prototyp`.
+
+### ✅ Výnos kopání: vždy 1 blok materiálu + šance na nález (2026-11-17 17:53, rozhodnutí Jana)
+- **Směr:** vykopaná buňka dá vždy jeden blok svého materiálu a navíc s určitou pravděpodobností minerál, poklad apod. (tabulka nálezů podle materiálu).
+- **Další krok:** tabulky nálezů podle materiálu, šance podle hloubky a blízkosti ložiska, nález ze seedu buňky (aby se nedal „přehazovat“).
+
+### 🧪 Ložiska a žíly ore-v0 s přesným cílovým souhrnem ze serveru (2026-11-17 18:33 · `lozika-studie/`, shots `37_lozika_*`) – nahrazuje gen-v3
+- **Směr:** Jan 18:22: „Vytvoříme tedy simulaci ložisek a žil.“ Algoritmus ore-v0 od Willage-backend (semínka se zásobou, tvary čočka / sloj / žíla). Jan 18:24–18:25: server při vydání bloku určí souhrn rud (základ + bonus v %), klient rozmístí **přesně** tolik buněk každé rudy. Bitová shoda C# a GDScript už není potřeba. Když semínka nestačí, běží záložní stupně: další semínka → dorůst tělesa → celá výška → uvolněný hostitel → výslovný schodek.
+- **Zlepšení:** ore-v0.2 (zásoby snížené na úroveň prototypu, strop serveru 5×, pořadí od nejvzácnějšího hostitele, ložiskový jíl vlastní ID 12): Cu 17,6 a Fe 24,2 buněk na blok (prototyp 16–23 a 25), rarita jako v prototypu. Naplnění 100 % do 5× běžného cíle. Stojí 0,8–0,9 ms na blok. Tvary čitelné: měď žíly, železo shluky, jíl sloje [1][2][3][6].
+- **Komplikace:** žíla jako náhodná procházka působí jako trubková mříž. Kód růstu a záložních stupňů je teď základ gen-v3.
+- **Další krok:** žádný samostatný, nahrazuje ho gen-v3 (Jan 18:45).
+
+### 🧪 Jeskyně a vodní rezervoáry cave-v0 (2026-11-17 18:33–18:46 · `lozika-studie/`, shots `38_jeskyne_*`) – nahrazuje gen-v3
+- **Směr:** Jan 18:33: „Přidej do generování země i vzduch jako jeskyně a vodní rezervoáry. Seznam zemin bude obsahovat i vodu a vzduch. Voda však musí splňovat podmínky, aby neodtekla.“ Jeskyně (sál, chodba, šachta, rezervoár) s přesným počtem buněk vzduchu, voda jako vrstva u16 v pánvích pod nejnižším únikem.
+- **Zlepšení:** 13 vektorů přesně, zátěž 100 % (420 bloků), simulace voda-studie 400 tiků: drift 0, odtok 0. Kopání do rezervoáru vodu správně pustí do chodby.
+- **Komplikace:** vápenec má ve voda-studii propustnost 0,10, takže rezervoár ve vápenci prosakuje (řešeno žulou/čedičem a pečetěním jílem). WVB1 má dvě různé jednotky vody (0..65535 a 1/4096).
+- **Další krok:** žádný samostatný, maska jeskyní a kontrola vody jsou použité v gen-v3.
+
+### 🧪 Generování bloku gen-v3: zásobník materiálů ze serveru + vsakování vody (2026-11-17 18:45–20:05 · `lozika-studie/`, shots `39_genv3_*_v3`)
+- **Směr:** Jan 18:45–18:59: server vydá seřazený zásobník (materiál, počet, tvar a parametry; binární kódování a SHA-256 dohodnuté s Willage-backend), klient položky zpracuje v daném pořadí a sám neřadí. Rudy jsou položky (fáze B zrušena 18:56). Od 19:18 varianta 2 (níže): objem pod povrchem je neurčený, hlína je vrstva u povrchu a kámen zbytek. Od 19:19 body (a)–(e) níže. Tabulky tvarů a pravidla jsou v README studie.
+- **Zlepšení (v3, 20:02):** 11 vektorů a 360 zátěžových bloků přesně, validátor OK, dva běhy stejné. Čistota vrstev kamene 0,93–0,96 (prototyp STRATA 0,91–0,96; v1 0,80–0,86, v2 0,80–0,83). Tečky kamene 1–10 na blok. Rozmístění 17–29 ms (prototyp 17–21 ms, v1 36–64, v2 75–104), vsakování 3,5–8,7 ms, kontrola 4,4–6,4 ms. Vsáknutá voda je v simulaci voda-studie stabilní (přesun ≤ 0,065 objemu, odtok 0). Odmítne se 3 × poškozený blok, 7 × neplatný zásobník a 4 chyby kontroly serveru.
+- **Komplikace:** při L4 dosazení (kvůli přesnému počtu bez masky) může hlína skončit hluboko (louka 404: 83 buněk > 4 pod povrchem, jinak 0–17). Odhad vody podle okraje je konzervativní a u kopce a hory přesto občas něco odteče (27–73 objemů na 15 bloků). Jednotka vody ve WVB1 (65535 vs 4096) otevřená.
+- **Další krok:** backend převezme změny smlouvy (host u pocket/vein, tvar stratum, hloubka lz po sloupcích, pravidlo objemu, přidělení vody, zadržená voda). L4 v rozšiřujících se pásmech hloubky. Přeneseno do prototypu 20:14 (položka níže).
+
+### ✅ Jedna tabulka vlastností vody pro gen-v3 i voda-studii, vápenec nepropustný (2026-11-17 19:18 rozhodnutí Jana · `sdilene/materialy_voda.json`)
+- **Směr:** jediný soubor (perm, por, res, ret, `perm_leak`, `perched_depth`) čtou gen-v3, cave-v0 i voda-studie; bez něj běh hlásí chybu. Vápenec perm 0, por 0.
+- **Zlepšení:** v gen-v3 nic neprosakuje do vápence (dřív simulace přesunula 19–72 objemů do vápence); cave-v0 nemusí pečetit rezervoáry ve vápenci (zátěž hora 202: 272 → 0 pečetících buněk); scénář 3 voda-studie: hráz drží (v nádrži 73,7 v tiku 400, průsak 0).
+- **Komplikace:** pomalý průsak vápencovou hrází zmizel; jde vrátit přepínačem na příkazové řádce. Krasové jeskyně se dělají tvarem chamber.
+
+### ✅ gen-v3 varianta 2: kámen dostane zbytek, hlína jen vrstva u povrchu (2026-11-17 19:18 rozhodnutí Jana)
+- **Směr:** pod povrchem je neurčený objem; hlína je položka `layer` v hloubce 1–4 pod vlastním povrchem sloupce; server dá kamenům zbytek, takže Σ položek bez hostitele = V − slupka přesně (`volume_mismatch`).
+- **Zlepšení (v2, 19:30, 360 bloků):** žádné tečky hlíny v kameni (≤ 1,3 na blok, v1 0–6 % hlíny jako tečky); voda se lépe vsákne na horách, protože hlína je souvislá slupka (hora 1000: 0,8 → 106 objemů).
+- **Komplikace:** kámen přes BFS hromady byl pomalý (75–104 ms) a vrstvy nečisté (0,80–0,83); vyřešeno vrstvami stratum (e).
+
+### 🧪 gen-v3 (a): voda podle nejnižšího okraje bloku, tok mezi bloky až v simulaci (2026-11-17 19:19 rozhodnutí Jana, varianta C)
+- **Směr:** server dá `W = min(voda z receptu, přidělení)`, přidělení = ⌊buňky v hloubce 2..D pod nejnižším okrajem × 0,40 × podíl hlíny a písku × 0,4⌋. Každý blok je stabilní sám o sobě. Tok mezi bloky není implementovaný (jen popsaný v README): až v simulaci voda-studie po načtení sousedů.
+- **Zlepšení (ablace 21 bloků):** odtok při vodě ×5 z 418,6 na 1,1 objemu na blok, při ×1 z 5,6 na 0. Vektory ×5 a ×20 bez odtoku.
+- **Komplikace:** bezpečnost 0,8 odhad přestřelila (louka 404: 489 proti ~288 kapacity), proto 0,4; u kopce a hory zbývá malý odtok. Přesné by bylo spočítat kapacitu na serveru stejně jako klient (4–9 ms).
+
+### 🧪 gen-v3 (b): zadržená voda nad jílem a v písku nad hladinou (2026-11-17 19:19)
+- **Směr:** sloupec `ret` v tabulce (hlína a tráva 0,15, písek 0,05). Písek nad hladinou drží `ret`; hlína drží `ret`, je-li do 2 buněk pod ní jíl. Simulace voda-studie: voda ≤ `ret` se nehýbe.
+- **Zlepšení:** 8–55 (průměr 25) objemů na blok zůstane nad hladinou, jak je u polní kapacity běžné; odtok ×1 1,5 → 0. V simulaci stabilní; bez `ret` v simulaci by stekla (louka 101: 14,8 objemu, piscina 4504: 52,4).
+- **Komplikace:** voda-studie se tím mírně změnila (scénář 1: v zemi 21,7 místo 19,1, odtok 70,2 místo 73,7). Vsakování +1,6 ms, kontrola +1,2 ms.
+
+### 🧪 gen-v3 (c): rudy i uvnitř kamene (2026-11-17 19:19)
+- **Směr:** parametr `host` u pocket a vein: měď roste jen v žule, železo jen v čediči a přepíše je; hostitel musí být v zásobníku dřív, jeho výsledný počet = vydáno − rudy.
+- **Zlepšení:** rudy v kameni 47 % → 63 % buněk (aspoň 4 ze 6 sousedů kámen); odtok ×1 5,3 → 0, protože rudy už neubírají propustný objem u povrchu; čistota vrstev beze změny (0,946).
+- **Komplikace:** smlouva se mění (pocket má 4 parametry, vein 6) a server musí hlídat rudy ≤ hostitel.
+
+### 🧪 gen-v3 (d): kontrola Σ počtů na serveru při vydání (2026-11-17 19:19)
+- **Směr:** `check_stack` vrátí `world.summary_over_volume` (Σ > V − slupka), `summary_under_volume`, `summary_host_overflow`, `water_over_rim_allotment`.
+- **Zlepšení:** všechny 4 negativní testy odmítnuty se správným kódem, platné zásobníky ve vektorech i zátěži bez chyby.
+
+### 🧪 gen-v3 (e): rychlost: velké kameny po sloupcích, vsakování jen propustnou oblastí, kontrola v jednom průchodu (2026-11-17 19:19)
+- **Směr:** tvar stratum (výška vrstvy ze šumu, přesný počet přes seřazení podle klíče), oblast vsakování = propustné buňky spojené s povrchem, kontrola jedna smyčka + BFS jen z mokrých buněk.
+- **Zlepšení:** rozmístění 93,2 → 22,3 ms (ablace), čistota 0,809 → 0,946, tečky 4,4 → 2,6; vsakování 13–47 → 3,5–8,7 ms; kontrola 17–22 → 4,4–6,4 ms (zátěž v2 vs. v3).
+
+### 🧪 gen-v3 v hlavním prototypu, výchozí generátor podzemí (2026-11-17 20:14–20:30 · `godot-prototyp/scripts/gen3/`, shots `41_genv3_proto_*`)
+- **Směr:** Jan 20:14: „Aplikuje to na prototip.“ Tvar povrchu, napojení stran, posun výšky a slupka zůstávají z prototypu; prototyp vyplní sloupce bez šumových rud, zástupce serveru z toho spočítá souhrn, vydá seřazený zásobník (bajty + SHA-256) a vodu podle nejnižšího okraje, klient gen-v3-study-4 rozmístí vrstvy, jeskyně, kameny stratum, rudy v hostiteli a vodu se zadržením. Sdílená tabulka `sdilene/materialy_voda.json` (kopie v `data/` pro export). Nový materiál ložiskový jíl 12. Starý generátor zůstává `--gen=proto`. Proti studii jediný rozdíl `SOIL_COLS`: hlína, písek a jíl jen ve sloupcích, kde má prototyp nahoře půdu (holý kámen a sníh hory zůstanou bez hlíny). Volná voda z dat (jeskyně, jezírko) se kreslí průhlednými kvádry, mokrá půda tmavší; neodkrytá jeskyně se kreslí jako plná neutrální buňka a odkryje se prokopáním (povrch sloupce klesne na dno jeskyně, `Discovery` projde vzduch od oblohy). Hladina prototypu ve vrstvě 30 se u bloků gen-v3 nekreslí nad vnitřní souší, takže jáma v louce se už vizuálně nezaplaví.
+- **Zlepšení:** bez filtru `SOIL_COLS` je 7/7 bloků bit po bitu stejných jako vektory studie (zásobník, materiály i voda). Validátor 40/40 samostatných bloků, 8/8 bloků ostrova (s dorovnáním stran) a 10/10 vektorů; determinismus 40/40 a dva exporty `gen_v3_vectors.json` stejné. `vectors.json` (proto) beze změny objemů, jen o materiál delší pole skóre a vah. Vložení bloku 423–596 ms proti 396–566 ms u proto (většinu stojí povrch a tráva), kopání stejně (střed 141 / 137 ms, hrana 271 / 276 ms). Snímky `41_genv3_proto_{ostrov,rez,rez_xray,jama,jeskyne_odkryta,jeskyne_odkryta_rez}.png`, srovnání `*_gen_proto.png`.
+- **Komplikace:** generování bloku 42–48 ms proti 15–20 ms (navíc generátor 25,6 ms, validátor 4,5 ms, zástupce serveru 2,1 ms; povrch, vyplnění a vegetace jako dřív). Jezírko na ostrově nevzniklo (přidělení podle okraje nechá vsáknout všechno), takže snímek jezírka není. Voda se nesimuluje: po prokopání zůstane voda v otevřené jeskyni, kde byla, i když jeskyni otevře jáma z boku. Rarita se počítá z jiných počtů rud (prahy kalibrované na proto). Výpočet odkrytí 0,2 → 0,55 ms (hledání otevřených jeskyní).
+- **Rozhodnutí (Jan 20:39):** voda v otevřené jeskyni vyteče simulací voda-studie (položka níže), validátor poběží vždy, rarita-v2 se překalibruje na gen-v3 (níže) a starý generátor zůstává, jak je – gen-v3 ho nejspíš nahradí („Nech to, tohle asi nahradí starý generátor“).
+
+### 🧪 Tok vody po kopání: simulace voda-studie jen ve výřezu kolem prokopu, do ustálení (2026-11-17 20:39–21:10 · `godot-prototyp/scripts/gen3/water_flow.gd`, shots `42_tok_*`)
+- **Směr:** Jan 20:39: „Ano“ – když kopání otevře jeskyni, voda vyteče simulací z voda-studie, událostně a jen místně. Kopnutí spustí tok, jen když vykopaná buňka nebo její 6 sousedů má pohyblivou vodu (nad zadržením `ret`, nebo volnou ve vzduchu). Výřez = BFS z vykopané buňky přes vzduch jeskyní a prohlubní (jáma: pod povrchem sousedního sloupce) a buňky s pohyblivou vodou, nejvýš ±7 sloupců a ±16 vrstev, + okraj 2, nahoru po nejvyšší povrch + 1. V něm běží `voda_sim.gd` beze změny (kopie z lozika-studie, parametry ze sdílené tabulky, výchozí rychlosti voda-studie, bez odparu, strany zavřené), nepropustné buňky mají kapacitu 0 jako v gen-v3. Ustálení: největší změna buňky < 5·10⁻⁵ za tik 5 tiků po sobě (strop 1 500). Zápis zpět do `Block.water` v celých jednotkách 1/4096 se zachováním součtu (zbytky podle desetinné části, při shodě nižší index). Ve hře se tok krokuje v `_process` po 6 ms na snímek a překresluje se jen voda; další kopnutí rozběhnutý tok nejdřív dopočítá, takže výsledek nezávisí na snímcích. Delta kopání nese `flow` (výřez, tiky, přesunuté jednotky, seznam změn vody `[buňka, staré, nové]`). Kontrola jako delta: součet vody bloku po toku = před tokem (vykopaná voda zvlášť v `water_old`), mimo výřez beze změny, voda jen ve vzduchu a propustných buňkách do kapacity, a dalších 30 tiků z výsledku pohne buňkou nejvýš o 0,015 (půl filmu).
+- **Zlepšení:** časová řada `42_tok_{0_jama_pred,1_otevreno,2_tik06,3_tik20,4_ustaleno}{,_rez}.png`: jáma 3 × 3 vedle jeskyně s 4,05 buňky vody (kopec 404), stěna prokopaná shora až po hladinu, voda přeteče do jámy (3,87 buňky, ustáleno po 460 tikách). Výřez 9 × 10 × 18 = 1 620 buněk, simulace 278 ms (0,60 ms/tik), kopnutí + tok + kontrola 832 ms synchronně; ve hře 39 snímků (≈ 0,7 s). Kontrola delty OK 25/25 toků na 15 místech (4 recepty × 6 seedů) + 4/4 v písčině, determinismus 15/15 a stejný hash synchronně 2× i po 1, 3 a 7 tikách na snímek. Kopání v suchu (spouštěč nic nenajde) stojí jako dřív (136 ms).
+- **Komplikace:** tok mezi bloky zatím ne (výřez končí na hraně bloku, strany zavřené). Výřez s nasyceným pískem je velký (medián 3 120, max 5 040 buněk, tok 136–349 ms, písčina 8 kopnutí dolů 2,4 s synchronně); poslední snímek toku ve hře trvá ~85 ms (konečný zápis, kontrola 30 tiků a překreslení kostek). Voda tenčí než film 0,03 zůstane ležet jako kaluž (vlastnost simulace). Položení bloku do vody vodu v buňce smaže (zapsáno v `water_old`), nevytlačí ji. Simulace je float32 v GDScriptu – backend by musel buď přijmout seznam změn z delty, nebo mít bit po bitu stejnou simulaci.
+- **Další krok:** Jan posoudí 42_*; rozhodnout tok přes hranu bloku, vytlačení vody položeným blokem a zda backend tok počítá sám, nebo přebírá změny z delty.
+
+### ✅ Validátor gen-v3 při každém vložení bloku (2026-11-17 20:39 rozhodnutí Jana)
+- **Směr:** Jan 20:39: „vždy, 4,5 ms není mnoho“. Přepínač `gen3_proto.validate_on_build` zrušen, validátor běží po každém vygenerování / vložení a výsledek je v `b.gen3.valid`.
+- **Zlepšení:** 8/8 bloků ostrova a 40/40 samostatných bloků OK; vektory 7/7 (s `SOIL_COLS` i bez).
+- **Komplikace:** 4,1–6,0 ms navíc na vložení (z 400–600 ms).
+
+### 🧪 Prahy rarity-v2 pro gen-v3 (2026-11-17 20:39 · `tools/rarity_calib_v3.gd`)
+- **Směr:** Jan 20:39 „můžeš“. Stejný vzorek jako původní kalibrace (4 recepty × bonus {0; 0,12} × 30 seedů = 240 bloků), prahy pro gen-v3 tak, aby podíl tříd odpovídal gen proto s dosavadními prahy rarity-v2 (práh v polovině mezi sousedními skóre, na 0,1). Prahy jdou s generátorem (`Mat.thresholds()`, `--gen=proto` dál používá staré).
+- **Zlepšení:** nové prahy `[0; 16,9; 18,7; 19,0; 22,7]` (dosud `[0; 15,9; 19,4; 26,1; 29,9]`), třídy 55/55/11/88/31 proti 54/58/9/88/31 u proto. Se starými prahy by gen-v3 neměl žádný epický ani legendární blok (37/93/110/0/0) – skóre gen-v3 je jen 13,0–25,7 (proto až přes 30). `vectors.json` beze změny, `gen_v3_vectors.json` má nově `material_rarity` a `rarityThresholdsV3`.
+- **Komplikace:** pásmo „vzácná“ je úzké (18,7–19,0). Bonus 50 % u gen-v3 třídy nerozděluje tolik jako u proto: proto dává bonusovým blokům epickou nebo legendární v 119/120, gen-v3 jen v 72 % (86/120) a 28 % bloků bez bonusu (33/120) vyjde epických.
+- **Další krok:** rozhodnout, jestli má raritu dál určovat podíl tříd, nebo spíš bonus (pak větší bonus rud v zásobníku, nebo raritu počítat ze souhrnu zásobníku na serveru).
 
 ## 3 Rozlišení bloku
 
@@ -174,6 +252,33 @@ Godot .NET (nebo GDExtension) a stavba chunků ve vlákně, napojení bloků na 
 - **Komplikace:** softwarově +1–2 ms v celku, +5–7 ms při zemi přes celou obrazovku, sladění trsů dalších 1–4 ms (šum ve vertex shaderu). Varianta 2 je na celý ostrov moc kontrastní.
 - **Další krok:** Jan vybere variantu, pak přenést `meadow_proc` do terénního shaderu prototypu (trávu i písek jednou sadou).
 
+### ✅ Pec: sloty, recepty, poznámkový blok a minihra (2026-11-17 17:37–17:49, rozhodnutí Jana)
+- **Směr:** pec je daná stavba se sloty pro materiál, palivo a příměsi a s nastavením teploty. Výsledek se počítá z vlastností materiálů, takže se dá experimentovat se slitinami. Kdo experimentovat nechce, recept najde nebo koupí a recept vyplní sloty. Data o tavení a slitinách se doplní z veřejných zdrojů (Wikipedie) do ZDROJE.md.
+- **Poznámkový blok (17:37):** u pece je blok na recepty. Hráč si zapisuje, co a jak zkusil, a z poznámek si sestaví vlastní recept.
+- **Minihra (17:39):** tavení v peci je zároveň minihra.
+- **Ochrana receptů (17:49):** každý hráč má ideální bod (např. přesnou teplotu nebo čas přidání) posunutý jinam uvnitř povoleného rozsahu, odvozený ze seedu hráče. Recepty se tak nedají jednoduše opsat.
+
+### 🧪 Skrytí podzemí na bocích a řezech bloku (2026-11-17 20:05 · `godot-prototyp/`, shots `40_skryti_*`)
+- **Směr:** Jan (19:50, přes Willage-backend): při pohledu na blok jsou na bocích a řezech vidět vrstvy zeminy. Pod povrchem se boky a řezy kreslí jednou neutrální texturou (výchozí hlína, volitelně skála), skutečný materiál až když hráč buňku odkope a stěna sousedí se vzduchem spojeným s povrchem (obloha nebo jáma). Chybějící soused (mlha, okraj ostrova) buňku neodkryje. Řez (PageDown) materiál neodkryje. Data buněk zůstávají stejná, mění se jen vykreslování. Přepínače `hide_undiscovered`, `xray`, `undiscovered_look`, `col_undiscovered` a `undiscovered_darken` jsou v `SurfaceParams` (CLI `--surface.xray=1`, ladicí okno).
+- **Zlepšení:** bok ostrova a řez už neukazují ložiska ani vrstvy kamenů; ve vykopané jámě je skutečný materiál vidět (`shots/40_skryti_{bok,rez,jama,xray}.png`). Výpočet odkrytí 0,2 ms. Stavba sítě 53 ms bez skrytí a 60 ms se skrytím, vložení bloku 449 / 424 ms, kopání uprostřed 172 / 138 ms a u hrany 316 / 267 ms (rozdíl je v šumu a v sousedech slotu, skrytí samo o sobě nezpomaluje).
+- **Komplikace:** klient má v paměti celé pole, upravený klient by mohl vidět do země – teď se to neřeší. Přirozené srázy otevřené k obloze ukazují skutečný materiál té buňky. Od 20:14 (gen-v3 v prototypu) má prototyp jeskyně: neodkrytá se kreslí jako plná neutrální buňka, prokopaná se odkryje průchodem vzduchem od oblohy (výpočet odkrytí 0,2 → 0,55 ms).
+- **Další krok:** Jan vybere texturu skryté stěny (hlína / skála) a sílu ztmavení s hloubkou.
+
+### 🧪 2D tileset s duální mřížkou a rohovou rampou (2026-11-17 21:10 · `tileset2d-studie/`, shots `43_tileset2d_*`)
+- **Směr:** Jan 20:42: ukázat malý vzorek buněk ve 2D přes tilesety, tři materiály, dvojitá mřížka; listy vygenerovat z assetů v knihovně. Materiály jsou tráva, písek a hlína. Přístup je vrstvená duální mřížka (16 rohových dlaždic na materiál, priorita hlína < písek < tráva) [1][4][10], ne 81 kombinací. Izometrie 2:1 s horní plochou a sukní, pastel podle Janova Gemini renderu [8] (pixely z něj použité, JPEG alfa vyčištěná) vedle texturované varianty z Gemini v2 [7]. Jan 21:05–21:07: rohová rampa ze skici [11] – buňka se rozdělí na podmřížku 4 × 4, hladiny 1–4 jako skládané vrstvy stejných 16 dlaždic (ne 4⁴ = 256). Počet hladin je parametr (`levels`). Tvar hladiny je `shaped` nebo `full` (`shape=`): varianta „všechny tvarované“ proti „1 a 3 plné desky, 2 a 4 rampa“.
+- **Zlepšení:** přechody tří materiálů v duální mřížce, srovnání stylů, náznak výšek sukní. Rampa ukazuje sestup 4 → 1 v jedné buňce (schody po 0,125 m), mírnější svah přes 3 buňky, srovnání se schody po celých buňkách (0,5 m) a srovnání tvaru hladin.
+- **Komplikace:** čtvrtinová hladina je jen vykreslení – data buňky zůstávají 1 × 1 × 0,5 m. Na ostrově 8 × 8 bloků by naivní 4 × 4 ve všech buňkách dala asi 1 milion zemních dlaždic; zjemňovat se mají jen svažité buňky. Plné liché hladiny neurazí počet vrstev, jen lomení okraje.
+- **Další krok:** Jan vybere iso vs. pohled shora, velikost dlaždice, vodu / výšku, a která varianta tvaru hladin je čitelnější.
+
+
+### 🧪 2D tileset gemini2 z nových Gemini assetů (2026-11-17 21:48 · `tileset2d-studie/`, shots `43_tileset2d_*_gemini2.png`)
+- **Směr:** Jan 21:28: třetí vzhled `gemini2` z `gemini/tileset2d/` [12]. Horní plochy se stáhnou na velikost dlaždice a promítnou na kosočtverec; sukně je z `bok-hlina` po ořezu oblohy a vodorovném zacyklení. Snímky s gemini2 jako hlavním vzhledem a trojité srovnání pastel / textura / gemini2.
+- **Zlepšení:** švy horních ploch i boku po offset-blendu klesly na max. rozdíl zhruba 2–7 (předtím desítky až 180). Obrys a ret trávy jen na hranici materiálu nebo výšky — souvislá hlína už není v mřížce. Rovné přední stěny a vnější stěny rampy berou pruh z bok-hlina; mezery ve stupních rampy jsou menší.
+- **Komplikace:** tráva má periodu 256 px (na mapě každé 2 dlaždice) a opakování trsů je pořád vidět; na hlíně a písku méně. Na lomeném pobřeží sukně ještě zuby (spojovací stěna jen na úplné odhalené hraně, ať netrčí do prázdna). Na trávě zůstává slabší mřížka z navazování dlaždic.
+- **Další krok:** Jan posoudí, jestli je opakování trávy a zuby na pobřeží přijatelné, nebo chce jiný zdroj / větší rozmanitost.
+
+
+
 ## 7 Výkon
 
 ### 🧪 Úroveň detailu trávy podle přiblížení (2026-11-17 13:40 · `godot-prototyp/scripts/grass.gd`)
@@ -196,6 +301,7 @@ Godot .NET (nebo GDExtension) a stavba chunků ve vlákně, napojení bloků na 
 
 ## 1 Prototyp a buildy
 - **Jeden Windows zip jako příloha:** přes 25 MB, nahrazeno 7z ve dvou částech.
+- **Editor staveb s pohyblivými díly (vodní kolo, hřídele, převody), 2026-11-17 17:40:** Jan: příliš složitá mechanika, zamítnuto. Stavby budou předem dané.
 
 ## 2 Terén a tvar
 - **Hybrid s kvádry, posun izočáry a plošina se zkosením pro samostatné buňky (napojeni-studie, 14:41, zamítnuto Janem 14:55):** zůstává současná duální mřížka (`dual_shape=0`); samostatné buňky se slijí do flíčků a břehy jsou svahy. Varianty zůstávají ve studii jako volba.
@@ -205,6 +311,9 @@ Godot .NET (nebo GDExtension) a stavba chunků ve vlákně, napojení bloků na 
 - **Posun izočáry jako řešení samostatných buněk (napojeni-studie, 14:41):** osamělá buňka je větší, ale pořád plochá a bez výšky. Rovné hrany louky se posunou do písku. Nahrazeno hybridem.
 - **Plošina + zkosení jako výchozí tvar duální mřížky (14:41):** drží výšku, ale celý terén je zase hranatý jako mřížka. Síť má 2,2× víc trojúhelníků. Zůstává jako `dual_shape=2` pro případ, že Jan chce méně oblé přechody všude.
 - **Louka u vody bez úprav břehu (14:41):** světlý proužek dna a plná pěna vypadají jako pláž. Nahrazeno travnatým břehem s bahnem a slabší pěnou.
+- **gen-v3 v1: hlína jako zbytek pod povrchem (18:59, nahrazeno variantou 2 Jan 19:18):** zbytek hlíny zůstal jako tečky v kameni (0–6 %) a vrstvy nečisté (0,80–0,86).
+- **gen-v3: fáze B „rudy do kamene“ (18:46, zrušeno Janem 18:56):** nahrazeno rudami jako položkami, později parametrem `host` (c).
+- **gen-v3: kámen odspodu přes BFS hromady (19:30):** pořadí kamenů odspodu s BFS vrstvami dalo čistotu 0,778 proti 0,814 výchozího pořadí a 75–104 ms; nahrazeno tvarem stratum (0,946, 22 ms).
 - **Pěna z hloubkového bufferu (rešerše):** u izometrické kamery a malých vod dává nerovnoměrný pás [14][15]. Nahrazeno vzdálenostním polem.
 
 ## 3 Rozlišení bloku
@@ -257,6 +366,18 @@ Nevyzkoušené nápady na zrychlení. Stav: 💡 návrh · 🔬 ověřuje se · 
 
 - 💡 **Voda: skutečný tlak jen pro uzavřené nádrže (16:05, `voda-studie/`):** spojené nádoby a artéské prameny řešit hledáním hladiny souvislého tělesa vody (flood fill při změně), ne po buňkách každý tik [2].
 - 💡 **Voda: „virtual pipes“ pro povrchové potoky:** tok mezi sloupci se setrvačností dá hladší potoky na výškové mapě [15]; buňkový model nechat jen pro vodu v zemi a dutiny.
+- 💡 **Ložiska: seznam hostitelských buněk místo skenu (18:33, `lozika-studie/`):** semínka v L1/L3 hledají hostitele skenem celého objemu (až 16 384 buněk na semínko). Předpočítat jednou seznam buněk podle materiálu a vybírat z něj, při obřích cílech odhadem 2–3× rychlejší (teď 34 ms na blok).
+- 💡 **Ložiska: jedno pole značek s čítačem místo nového pole na každé semínko:** šíření alokuje 16 KB na semínko; pole s číslem běhu ušetří alokace (při 50 semíncích na rudu znatelné).
+- 💡 **Ložiska: dorůstání (L2/L4) jen z okraje tělesa:** teď BFS startuje ze všech buněk rudy, stačí okrajové buňky z předchozího běhu.
+- (vrstvy kamene po sloupcích, vsakování jen v propustné oblasti a kontrola v jednom průchodu vyzkoušeny 19:19, přesunuto do A, gen-v3 (e))
+- 💡 **gen-v3: L4 a `_fill_holes` / `_swap_specks` po sloupcích (20:05):** zbytek rozmístění (L4 dosazení, díry, tečky) stojí většinu z 17–29 ms; jedna fronta pro všechny vrstvové položky by ušetřila opakované skeny.
+- 💡 **gen-v3: kapacita vody na serveru přesně jako klient (20:05):** místo odhadu přidělení se 0,4 spočítat oblast vsakování ze tvaru (4–9 ms v GDScriptu, v C# méně); pak nulový odtok bez rezervy.
+- (validátor jen v testech: Jan 20:39 rozhodl, že validátor poběží vždy – viz A/2; zbývá souhrn brát hotový ze serveru místo zástupce, 2,1 ms)
+- 💡 **Tok vody po kopání v C# nebo ve vlákně (21:05, `water_flow.gd`):** simulace stojí 0,6 ms/tik na 1 620 buněk v GDScriptu; v C# odhadem 10×, pak by šel celý tok v jednom snímku.
+- 💡 **Tok vody: menší výřez v nasyceném písku:** BFS přes pohyblivou vodu bere celý nasycený pás (až 5 040 buněk); stačí buňky, jejichž hladina je nad vykopanou buňkou.
+- 💡 **Tok vody: kontrola ustálení levněji:** 30 tiků ověření stojí ~18 ms na konci toku; ve hře ji pouštět jen v ladění a ponechat zachování součtu.
+- 💡 **gen-v3 v C# ve vlákně:** generátor je čistá funkce (bajty zásobníku → bajty bloku), dá se pustit mimo hlavní smyčku a bez úprav otestovat proti `gen_v3_vectors.json`.
+- 💡 **Ložiska v C# nebo ve vlákně:** běžný blok stojí 1,4 ms, jen zátěžové cíle (34–74 ms) by zasekly snímek; spouštět mimo hlavní smyčku spolu s generátorem.
 
 ## 3 Rozlišení bloku
 - 💡 **Jemnější rozlišení jen u povrchu:** 32 × 32 stojí asi 4× generování a 3× síť. Hloubku nechat hrubou a jemné buňky držet jen v horních vrstvách.

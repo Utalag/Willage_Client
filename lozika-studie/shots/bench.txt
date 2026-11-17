@@ -1,0 +1,6 @@
+louka  generátor bez rud 13.9 ms | ore-v0 (bonus 25 %) 0.92 ms | generátor prototypu se šumovými rudami 17.1 ms  (průměr z 30 bloků)
+kopec  generátor bez rud 13.4 ms | ore-v0 (bonus 25 %) 0.81 ms | generátor prototypu se šumovými rudami 17.3 ms  (průměr z 30 bloků)
+hora   generátor bez rud 16.4 ms | ore-v0 (bonus 25 %) 0.93 ms | generátor prototypu se šumovými rudami 20.9 ms  (průměr z 30 bloků)
+hora 202 obří cíle (Cu 3000, Fe 3000, jíl 1500): 43.6 ms/blok
+louka 101 cíl nad kapacitu (Cu 20000 → schodek): 103.9 ms
+Godot 4.7.2-stable (official), GDScript, headless, box CPU

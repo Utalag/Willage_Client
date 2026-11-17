@@ -9,8 +9,13 @@ a nastavit napojení každé strany. Starý test `../godot-3d-test/` zůstal bez
 G=/workspace/tools/Godot_v4.7.2-stable_linux.x86_64
 $G --path /workspace/willage-ideas/godot-prototyp            # interaktivně (s oknem)
 ./shoot.sh                                                     # demo bez okna -> shots/*.png (1280 × 800)
-$G --headless --path . -- --export-vectors                     # testovací vektory -> vectors/vectors.json
+$G --path . -- --gen=proto                                     # původní generátor podzemí (STRATA), výchozí je --gen=v3
+$G --headless --path . -- --export-vectors                     # vektory -> vectors/vectors.json (proto), veg_vectors.json, gen_v3_vectors.json
+$G --headless --path . -- --genv3-bench --gen=v3 --tag=v3       # měření gen-v3 / proto -> shots/41_genv3_proto_bench_<tag>.txt
+$G --headless --path . -- --flow-bench                         # tok vody po kopání: měření, kontrola delty, determinismus -> shots/42_tok_bench.txt
+xvfb-run -a -s "-screen 0 1280x800x24" $G --rendering-driver opengl3 --path . -- --flow-shots   # časová řada toku -> shots/42_tok_*.png
 $G --headless --path . -s res://tools/rarity_stats.gd          # statistika skóre rarity (kalibrace prahů)
+$G --headless --path . -s res://tools/rarity_calib_v3.gd       # kalibrace prahů rarity-v2 pro gen-v3 (podíly tříd jako gen proto)
 $G --headless --path . --export-release "Linux" ../build/linux/WillagePrototyp.x86_64          # export (šablony 4.7.2)
 $G --headless --path . --export-release "Windows Desktop" ../build/win/WillagePrototyp.exe
 # video: dočasně override.cfg s viewport 1280×720, pak
@@ -45,7 +50,10 @@ Strany: **S** = sever (−z), **V** = východ (+x), **J** = jih (+z), **Z** = z�
 
 ## Co je hotové
 - **Generátor** typ + seed (FastNoiseLite): louka, kopec, hora, písčina. Stejný typ s jiným seedem je podobný, ne stejný.
-- **Vrstvy (DF)**: tráva → hlína 1–3 → jíl/písek 1–3 → vápenec (s žulovými intruzemi) → žula → čedič; žíly mědi a železa; sníh nad buňkou 49; strmé svahy holý kámen (u kopce a hory v2.2 místo toho holý kámen od výšky 46, police travnaté až k útesu).
+- **Podzemí gen-v3 (výchozí od 20:14, Jan: „Aplikuje to na prototip“)**: tvar povrchu, napojení stran a slupka (tráva, sníh, holý kámen) jsou z prototypu,
+  podzemí rozmístí gen-v3 ze zásobníku zástupce serveru (viz „gen-v3 v prototypu“ níže): vrstvy hlíny, písku a jílu u povrchu, ložiskový jíl,
+  jeskyně, kameny po sloupcích (stratum), měď v žule a železo v čediči, voda podle nejnižšího okraje bloku se zadržením. `--gen=proto` = původní vrstvy níže.
+- **Vrstvy (DF, `--gen=proto`)**: tráva → hlína 1–3 → jíl/písek 1–3 → vápenec (s žulovými intruzemi) → žula → čedič; žíly mědi a železa; sníh nad buňkou 49; strmé svahy holý kámen (u kopce a hory v2.2 místo toho holý kámen od výšky 46, police travnaté až k útesu).
 - **Ostrov**: 24 slotů v přibližném kruhu (poloměr 2,6 slotu kolem středu 2 × 2), 4 startovní bloky, zbytek mlha (materiál `FOG` = 11, nehratelná; vykreslená vrstvami `fog.gdshader`).
 - **Platná místa**: jen mlha sousedící **hranou** s ostrovem; zvýrazněná žlutým rámečkem, místo pod myší růžově.
 - **Vkládání** v pořadí zrcadlení → rotace → posun výšky → strany; vždy jen jeden blok; po uložení slot opustí mlhu,
@@ -55,7 +63,7 @@ Strany: **S** = sever (−z), **V** = východ (+x), **J** = jih (+z), **Z** = z�
 - **Posun výšky ±1–4**: nahoru = spodní řady se dogenerují ze seedu (hlubší vrstvy), dolů = spodní řady se odeberou. Výška bloku zůstává 64.
 - **Katalog** v liště: běžné (seed), pevný („Hora Prvního dne“, seed 1000, modrý okraj), unikátní („★ Grrrrův štít“, pojmenovaný seed, zlatý okraj, bohatší žíly).
 - **Souhrn materiálů** a **rarita** (původní / aktuální; teď stejné, protože se ještě nekope). Skóre buňky v `scripts/mat.gd`
-  (rudy 25–40, sníh 8, kámen 2–3, půda 1–2), rarita = **rarity-v2** (Jan 2026-11-17): vážený průměr `R = Σ(n·w·s) / Σ(n·w)`, váha `WEIGHT` = s² (laditelná, vzduch a mlha se nepočítají), prahy `RARITY_THRESHOLDS` [0; 15,9; 19,4; 26,1; 29,9] z `tools/rarity_calib.gd` (stejné podíly tříd jako dřívější prostý průměr na 240 blocích, zatímní). Vegetace stejně (váha s², prahy [0; 4,37; 4,90; 5,39; 6,48]).
+  (rudy 25–40, sníh 8, kámen 2–3, půda 1–2), rarita = **rarity-v2** (Jan 2026-11-17): vážený průměr `R = Σ(n·w·s) / Σ(n·w)`, váha `WEIGHT` = s² (laditelná, vzduch a mlha se nepočítají), prahy podle generátoru (`Mat.thresholds()`): gen-v3 `RARITY_THRESHOLDS_V3` [0; 16,9; 18,7; 19,0; 22,7] z `tools/rarity_calib_v3.gd` (Jan 20:39: stejné podíly tříd jako gen proto na týchž 240 blocích, zatímní), gen proto `RARITY_THRESHOLDS_PROTO` [0; 15,9; 19,4; 26,1; 29,9] z `tools/rarity_calib.gd` (stejné podíly tříd jako dřívější prostý průměr, zatímní). Vegetace stejně (váha s², prahy [0; 4,37; 4,90; 5,39; 6,48]).
 - **Pastelová paleta** (kawaii směr), AO ve vrcholech, měkké stíny. Nosnost materiálů je zatím jen v tabulce (`LOAD`).
 - **Domky z Blenderu** (`blender/domek.py` → `assets/domek.glb`, načtené za běhu přes `GLTFDocument`, ztlumené materiály).
   Půdorys 3 × 3 sloupce, dveře na +z; v demu 3 domky (místo hledá `_find_site`: rovný půdorys, dosažitelné dveře).
@@ -95,7 +103,7 @@ Strany: **S** = sever (−z), **V** = východ (+x), **J** = jih (+z), **Z** = z�
 - **Demo** (`-- --demo`): screenshoty a na konci simulovaná myš (najetí, klik, R, Enter) s výpisem `SELFTEST`.
 
 ## Co hotové není
-Kopání do strany / tunely (jen vrchní buňka sloupce), výběr materiálu k položení (bere se první dostupný), ukládání delty na server, sázení vegetace hráčem, fyzika, ukládání na server,
+Simulace vody v ostrově (gen-v3 vodu rozmístí, po kopání teče jen místně uvnitř bloku; tok mezi bloky, déšť a odpar ne), kopání do strany / tunely (jen vrchní buňka sloupce), výběr materiálu k položení (bere se první dostupný), ukládání delty na server, sázení vegetace hráčem, fyzika, ukládání na server,
 kombinované typy bloků, dorovnání přes rohy (diagonální sousedé), animace, stavění domků hráčem (zatím jen demo rozmístění),
 mosty, skutečně zaoblená geometrie kostek (teď jen stínovací trik), vyhlazení (merge) obrysů mezi sousedními objekty.
 
@@ -105,7 +113,14 @@ mosty, skutečně zaoblená geometrie kostek (teď jen stínovací trik), vyhlaz
 | `scripts/main.gd` | scéna, kamera, vstup, výběr kandidáta a vkládání, demo, `--export-vectors` |
 | `scripts/island.gd` | sloty, bloky, mlha, rámečky platných míst, náhled, řez, objekty na povrchu |
 | `scripts/block.gd` | data bloku (typ, seed, volby, výšky, buňky, souhrn materiálů) |
-| `scripts/block_gen.gd` | generátor v2: výšky, transformace, napojení stran, vrstvy |
+| `scripts/block_gen.gd` | generátor v2: výšky, transformace, napojení stran, vrstvy; `gen_version` (`--gen=proto\|v3`) |
+| `scripts/gen3/gen3_proto.gd` | gen-v3 v prototypu: zástupce serveru (souhrn, zásobník, přidělení vody, kontrola), volání generátoru, validátor |
+| `scripts/gen3/gen_v3.gd`, `gen3_stack.gd`, `gen3_server.gd`, `ore_v0.gd`, `cave_v0.gd` | kopie z `../lozika-studie/scripts/` (gen-v3-study-4), změny jen cesty a `SOIL_COLS` |
+| `scripts/gen3/water_table.gd`, `data/materialy_voda.json` | načtení sdílené tabulky `../sdilene/materialy_voda.json` (kopie v `data/` pro export, `tools/sync_shared_table.sh`) |
+| `scripts/discovery.gd` | odkryté buňky (skrytí podzemí); od gen-v3 i jeskyně otevřené kopáním |
+| `scripts/genv3_demo.gd` | `--genv3-shots` (snímky 41) a `--genv3-bench` |
+| `scripts/gen3/water_flow.gd`, `voda_sim.gd`, `voda_mat.gd` | tok vody po kopání: výřez, simulace (kopie z voda-studie přes lozika-studie, změněna jen cesta), zápis se zachováním součtu, kontrola delty |
+| `scripts/flow_demo.gd` | `--flow-shots` (snímky 42) a `--flow-bench` |
 | `scripts/mesher.gd` | kostkový mesh s obalem okrajů sousedů (bez děr a z-fightingu na hranách), AO, výška buňky 0,5 |
 | `scripts/mat.gd` | materiály: ID, názvy, barvy, skóre, nosnost, rarita |
 | `scripts/stable_hash.gd` | SplitMix64, FNV-1a 64, `mix(seed, purpose, layer)`, pojmenované seedy |
@@ -114,6 +129,7 @@ mosty, skutečně zaoblená geometrie kostek (teď jen stínovací trik), vyhlaz
 | `fog.gdshader`, `highlight.gdshader` | mlha, rámeček platného slotu |
 | `blender/domek.py` | skript pro Blender 5.3 (bpy) vytvářející domek |
 | `tools/rarity_stats.gd` | skóre rarity přes typy a seedy |
+| `tools/rarity_calib.gd`, `tools/rarity_calib_v3.gd` | kalibrace prahů rarity-v2 (proto podle v1, gen-v3 podle proto) |
 | `scripts/veg.gd`, `scripts/veg_render.gd`, `veg_wind.gdshader` | generátor vegetace, vykreslení (MultiMesh), vítr |
 | `scripts/grass.gd`, `scripts/grass_params.gd`, `scripts/grass_trail.gd`, `grass_tuft.gdshader`, `grass_common.gdshaderinc` | tráva C: stavba trsů na blok, parametry, stopa rozhrnutí, shader (vítr, ohyb, stopa) |
 | `scripts/grass_demo.gd` | `--grass-shots` (snímky 28) a `--grass-bench` (měření), testovací postavička |
@@ -132,9 +148,57 @@ mosty, skutečně zaoblená geometrie kostek (teď jen stínovací trik), vyhlaz
 | `scripts/napojeni_demo.gd` | `--napojeni-shots` (snímky 34) a `--napojeni-bench` (měření) |
 | `addons/dev_tuning/` | ladicí okno (samostatný doplněk, do exportu nejde) |
 
+## gen-v3 v prototypu (Jan 20:14, `scripts/gen3/`)
+- **Volba:** `BlockGen.gen_version` = `"v3"` (výchozí) nebo `"proto"`, CLI `-- --gen=proto|v3`. Tvar povrchu, transformace, dorovnání stran,
+  slupka a vegetace jsou v obou stejné; liší se jen buňky pod povrchem a vrstva vody.
+- **Tok (`gen3_proto.apply`):** prototyp vyplní sloupce jako dřív, ale **bez šumových rud** → zástupce serveru z toho spočítá souhrn
+  (hlína / písek / jíl = počty prototypu, rudy ore-v0.2, jeskyně cave-v0, kámen = zbytek objemu rozdělený poměrem kamenů STRATA),
+  sestaví seřazený zásobník (`gen3_server.build_stack`), přidělí vodu `W = min(voda receptu, přidělení podle nejnižšího okraje)`
+  a zásobník zkontroluje (`check_stack`). Klient `gen_v3.generate_bytes` z bajtů zásobníku rozmístí materiály a vsákne vodu.
+  Unikátní blok (`ore_bonus > 0`) = bonus 50 % na rudy, jeskyně a vodu. Podrobnosti formátu a pravidel: `../lozika-studie/README.md`.
+- **Rozdíl proti studii (`SOIL_COLS`):** položky u povrchu (`lzMin < 0`: hlína, písek, jíl, ložiskový jíl) se šíří jen ve sloupcích,
+  kde má prototyp nahoře trávu, hlínu nebo písek, takže holý kámen a sníh hory zůstanou bez hlíny. Kvůli přesnému počtu může L4 položku
+  výjimečně dosadit i jinam. Bez filtru (`gen3_proto.soil_filter = false`) vychází bloky **bit po bitu stejně jako vektory studie** (ověřeno v `gen_v3_vectors.json`, `studyCrossCheck`).
+- **Data bloku:** `Block.water` (PackedInt32Array 16 384, 4096 = plná buňka, v půdě nejvýš pórovitost), `Block.gen3`
+  (zásobník hex + SHA-256, voda nalito / přidělení / vydáno, schodek, kontrola serveru, výsledek validátoru, časy), `Block.hm_gen` (výška při vygenerování).
+- **Validátor** (`gen_v3.validate`, jako na serveru) běží **vždy** po každém vygenerování / vložení (Jan 20:39, ≈ 4,5 ms, přepínač zrušen), výsledek v `b.gen3.valid`.
+  Po kopání už přesné počty neplatí (kopání je delta).
+- **Sdílená tabulka:** `../sdilene/materialy_voda.json` je jediný zdroj pravdy; když chybí (export), načte se kopie `data/materialy_voda.json`
+  (`water_table.source()`, ve vektorech `sharedTable` a `sharedTableCopyInSync`). Kopii obnoví `tools/sync_shared_table.sh`.
+- **Nový materiál:** `CLAY_DEPOSIT` = 12 ložiskový jíl (`Mat.COUNT` 13; skóre 2, váha 4, barva sytější než jíl, textura jílu). `vectors.json` se tím změnil jen v polích `materialScore`, `materialWeight` a názvech.
+- **Vykreslení vody:** hladina prototypu ve vrstvě `water_lz` 30 (surface_renderer, jen vzhled) zůstává pro vodu, která v terénu už je.
+  Volná voda z dat (vzduch s vodou: jeskyně, jezírko) se kreslí průhlednými kvádry podle výšky vody v buňce (`island._data_water_mesh`, `--surface.data_water=0` vypne).
+  Mokrá půda pod povrchem je tmavší a modřejší (`--surface.wet_tint=0` vypne), jen když je vidět skutečný materiál. U bloků gen-v3 se hladina 30 nekreslí
+  nad „vnitřní souší“ (sloupec i 8 sousedů měli při vygenerování povrch ≥ hladina), takže vykopaná jáma v souši se vizuálně nezaplaví; jáma u břehu ano.
+- **Skrytí podzemí a jeskyně:** neodkrytá jeskyně se kreslí jako plná neutrální buňka (není vidět ani v řezu), voda v ní také ne. Prokopáním do jeskyně
+  (kopání: povrch sloupce klesne na dno jeskyně) se jeskyně spojí s oblohou, `Discovery` ji odkryje (vzduch = 2, stěny = 1) a ukáže se i voda. X-ray ukáže vše.
+- **Kopání:** voda v pórech vykopané buňky zmizí (delta má `water_old`); položený blok je suchý (voda v buňce zmizí, také `water_old`). Pak tok vody níže.
+- **Tok vody po kopání (Jan 20:39, `scripts/gen3/water_flow.gd`):** událostně a místně. Spustí se, jen když vykopaná buňka nebo její 6 sousedů
+  má pohyblivou vodu (nad zadržením `ret`, nebo volnou ve vzduchu). Výřez: BFS z vykopané buňky přes vzduch jeskyní a prohlubní (pod povrchem
+  sousedního sloupce) a buňky s pohyblivou vodou (±7 sloupců, ±16 vrstev) + okraj 2, nahoru po nejvyšší povrch + 1; strany výřezu i bloku zavřené.
+  Ve výřezu běží `scripts/gen3/voda_sim.gd` (kopie z voda-studie / lozika-studie beze změny; materiály ze sdílené tabulky, rychlosti výchozí
+  z voda-studie, bez odparu; rudy, mlha a sníh jako žula, ložiskový jíl jako jíl; nepropustné buňky kapacita 0 jako v gen-v3) do ustálení
+  (změna < 5·10⁻⁵ buňky za tik 5 tiků po sobě, strop 1 500 tiků). Výsledek se zapíše do `Block.water` v celých jednotkách se **zachováním součtu**.
+  Ve hře `main._process` krokuje tok po 6 ms na snímek a překresluje jen vodu (`island.remesh_water`); další kopnutí rozběhnutý tok nejdřív
+  dopočítá, takže výsledek nezávisí na snímcích (ověřeno: synchronně = po 1, 3, 7 tikách). Headless / testy: `main.flow_sync = true`.
+- **Kontrola toku jako delta (`water_flow.validate`):** Σ vody bloku po toku = před tokem (vykopaná voda zvlášť v `water_old`), mimo výřez beze změny,
+  voda jen ve vzduchu a propustných buňkách do kapacity, a 30 dalších tiků z výsledku pohne buňkou nejvýš o 0,015 buňky. Výsledek v `main.last_flow`.
+  Delta kopání nese `flow`: `{box: [x, y, z, nx, ny, nz], ticks, moved_units, water: [[index buňky, staré, nové], …]}`.
+- **Ukázka toku:** `-- --flow-shots` → `shots/42_tok_{0_jama_pred,1_otevreno,2_tik06,3_tik20,4_ustaleno}{,_rez}.png`: jáma 3 × 3 vedle jeskyně
+  s vodou (kopec 404 na místě (2, 0)), stěna prokopaná shora až po hladinu, voda přetéká do jámy; `_rez` = řez nad hladinou.
+- **Měření toku (21:00, `42_tok_bench.txt`):** jáma ze strany: výřez 1 620 buněk, 460 tiků, simulace 278 ms (0,60 ms/tik), kopnutí + tok + kontrola
+  832 ms; ve hře 39 snímků (nejdelší ~85 ms, poslední snímek se zápisem, kontrolou a překreslením). Průzkum 4 recepty × 6 seedů: 25 toků,
+  kontrola delty 25/25, determinismus 15/15, medián 89 tiků / 136 ms, max 285 tiků / 349 ms, výřez medián 3 120, max 5 040 buněk.
+  Kopání v suchu beze změny (136 ms, spouštěč nic nenajde).
+- **Ukázka:** `xvfb-run -a -s "-screen 0 1280x800x24" $G --rendering-driver opengl3 --path . -- --genv3-shots` → `shots/41_genv3_proto_{ostrov,rez,rez_xray,jama,jeskyne_odkryta,jeskyne_odkryta_rez}.png`
+  (s `--gen=proto --tag=gen_proto` totéž pro původní generátor).
+- **Měření (20:25, llvmpipe, GDScript, `41_genv3_proto_bench_{proto,v3}.txt`):** generování bloku bez sousedů proto 15–20 ms, v3 42–48 ms
+  (navíc zástupce serveru 2,1 + generátor 25,6 + validátor 4,5 ms); vložení do ostrova proto 396–566 ms, v3 423–596 ms
+  (většinu stojí povrch a tráva); kopání + položení střed 137 / 141 ms, hrana 276 / 271 ms. Determinismus 40/40, validátor 40/40 i 8/8 bloků ostrova.
+
 ## Specifikace generátoru (pro sladění s backendem)
 - **Osy:** `lx`, `ly` vodorovně 0–15, `lz` výška 0–63. V Godotu `lx → x`, `ly → z`, `lz → y` (svět: y = lz · 0,5).
-- **Index:** `(lx * 16 + ly) * 64 + lz`, smyčky vždy `lx, ly, lz`; 1 bajt = `MaterialId` (0 vzduch … 10 sníh, 11 mlha – v generátoru se mlha nevyskytuje).
+- **Index:** `(lx * 16 + ly) * 64 + lz`, smyčky vždy `lx, ly, lz`; 1 bajt = `MaterialId` (0 vzduch … 10 sníh, 11 mlha – v generátoru se mlha nevyskytuje, 12 ložiskový jíl jen v gen-v3).
 - **Seedy vrstev:** `noise_seed = mix(seed, purpose, layer) & 0x7FFFFFFF`,
   `mix = splitmix64(splitmix64(splitmix64(seed) ^ fnv1a64(purpose)) ^ layer)` (64bitově, přetečení mod 2^64; ověřeno proti Pythonu).
   Účely a vrstvy: `HEIGHT` 0 (tvar, f 0,07) a 1 (detail, f 0,18); `STRATA` 0–3 (vlnění, hranice, 3D zkroucení, intruze);
@@ -174,7 +238,9 @@ mosty, skutečně zaoblená geometrie kostek (teď jen stínovací trik), vyhlaz
 - **Pojmenovaný seed:** `fnv1a64(UTF-8 jméno) & 0x7FFF…FFFF`.
 - **Transformace:** zrcadlení X (`lx → 15 − lx`), rotace k × 90°, dopředně `(lx, ly) → (15 − ly, lx)`, posun výšky ±4, strany S/V/J/Z.
   Kámen se počítá ze zdrojové výšky `lz − posun`, takže posun nahoru dogeneruje spodní řady ze seedu.
-- **Vektory:** `vectors/vectors.json`: 3 recepty × 2 seedy (louka 101/404, kopec 303/2302, hora 202/1000) + 2 případy s transformací;
+- **Vektory gen-v3:** `vectors/gen_v3_vectors.json` (10 případů: 7 jako ve studii, 2 s transformací, 1 unikátní hora 7777): bajty a hash zásobníku, voda,
+  kontrola serveru, schodek, validátor, souhrn, `material_rarity` (prahy `rarityThresholdsV3`), FNV-1a 64 a SHA-256 vrstvy materiálu i vody (2 B LE na buňku), `deterministic`, `studyCrossCheck`.
+- **Vektory:** `vectors/vectors.json` (vždy `--gen=proto`, smlouva proto-v2.2): 3 recepty × 2 seedy (louka 101/404, kopec 303/2302, hora 202/1000) + 2 případy s transformací;
   pro každý FNV-1a 64 objemu (16 384 B) a povrchu (256 B), souhrn materiálů, 20 kontrolních buněk (10 u povrchu, 10 kdekoli).
   - nejvyšší úroveň: `generatorVersion` = `"proto-v2.2"`, `volumeHashAlgo` (přesný popis hashe), `transformFormat` (popis transformací);
     původní klíče (`generator_version`, `volume_hash`, …) zůstaly.
@@ -254,7 +320,7 @@ Studie `../napojeni-studie/` a `../trava-studie/` zůstávají samostatně, kód
   na 30 · 0,5 − 0,15 = **14,85 m**. Poměr odpovídá studii (hladina 0,85 m = 0,35 nad dnem a 0,15 pod souší). Přírodní bloky mají povrch 30–32,
   takže voda je jen v blocích posunutých dolů a ve vykopaných jamách. Data, vektory, rarita ani delta se nemění (`vectors/` beze změny).
 - **Parametry** (Resource s `@export`, české popisky): `SurfaceParams` (`scripts/surface/surface_params.gd`, CLI `-- --surface.klic=hodnota`,
-  např. `--surface.water_lz=31 --surface.dual_soft=0.1 --surface.dual_enabled=0`), `GrassParams` (`--grass.klic=`). Barvy shaderů jdou z parametrů.
+  např. `--surface.water_lz=31 --surface.dual_soft=0.1 --surface.dual_enabled=0 --surface.xray=1`), `GrassParams` (`--grass.klic=`). Barvy shaderů jdou z parametrů.
   Parametry označené ⟳ potřebují přestavbu: sítě se přestaví 0,4 s po poslední změně, ostatní se projeví hned (uniformy).
 - **Ukázka a měření:** `xvfb-run -a -s "-screen 0 1280x800x24" $G --rendering-driver opengl3 --path . --resolution 1280x800 -- --napojeni-shots`
   → `shots/34_napojeni_{ostrov,plaz_detail,louka_u_vody_detail,sev_bloku,louka_procedural_detail,kopec_utesy}.png`
@@ -263,6 +329,9 @@ Studie `../napojeni-studie/` a `../trava-studie/` zůstávají samostatně, kód
   Ukázka přidá 3 bloky posunuté dolů (písčina 4504 −1, louka 1201 −1, louka 5000 −2), aby vznikla jezírka.
 - **Omezení:** v řezu (PageDown) je duální povrch vypnutý (jen kostky). Náhled kandidáta je jen z kostek.
   Prošlapání země a stín postavičky z `meadow_ground` studie zatím nejsou. Louka si drží světlou paletu prototypu, takže procedurální tón je jemnější než ve studii.
+- **Skrytí podzemí (jen vykreslení):** boky a řezy bloku pod povrchem mají jednu neutrální texturu (výchozí hlína, `--surface.undiscovered_look=1` = skála), s mírným ztmavením do hloubky. Skutečný materiál se ukáže, až hráč buňku odkope a stěna sousedí se vzduchem u povrchu (obloha nebo jáma). Okraj ostrova / mlha buňku neodkryje. Data buněk se nemění. Vypnout: `--surface.hide_undiscovered=0`. Vývojové `xray` (`--surface.xray=1`, ladicí okno) ukáže skutečné vrstvy. **Omezení na později:** klient má v paměti celé pole, upravený klient by mohl vidět do země – teď se to neřeší.
+- **Ukázka skrytí:** `xvfb-run -a -s "-screen 0 1280x800x24" $G --rendering-driver opengl3 --path . --resolution 1280x800 -- --skryti-shots`
+  → `shots/40_skryti_{bok,rez,jama,jama_nahled,xray,xray_rez}.png`; `-- --skryti-bench` → `shots/40_skryti_bench.txt`.
 
 Výkon (llvmpipe, bez GPU, 1280 × 800, stejný skript `napojeni_demo.gd`; „před“ = checkpoint cp14):
 

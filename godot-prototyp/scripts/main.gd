@@ -8,6 +8,7 @@ const Block = preload("res://scripts/block.gd")
 const BlockGen = preload("res://scripts/block_gen.gd")
 const H = preload("res://scripts/stable_hash.gd")
 const Vectors = preload("res://scripts/vectors.gd")
+const WaterFlow = preload("res://scripts/gen3/water_flow.gd")
 const IslandScript = preload("res://scripts/island.gd")
 const UIScript = preload("res://scripts/ui.gd")
 const Roads = preload("res://scripts/roads.gd")
@@ -44,6 +45,10 @@ var last_road: Array = []
 var dig_mode := false
 var inventory := PackedInt32Array()
 var deltas := {}                 # slot -> [{i, lx, ly, lz, old, new}] v pořadí operací
+var flows: Array = []            # rozběhnuté toky vody [{slot, flow, delta, w_old}] (water_flow.gd)
+var flow_sync := false           # true = tok se dopočítá hned při kopání (headless, testy)
+var last_flow := {}              # poslední dokončený tok (box, tiky, ms, kontrola)
+const FLOW_BUDGET_MS := 6.0
 var build_sel := -1              # vybraná stavba v liště (−1 = žádná)
 var build_rot := 0
 var build_ghost: Node3D
@@ -83,6 +88,7 @@ func _random_candidate() -> Block:
 	return _make_block(k, rng.randi_range(1000, 99999), nm)
 
 func _ready() -> void:
+	BlockGen.apply_cli()   # -- --gen=proto|v3 (výchozí v3)
 	if "--res-test" in OS.get_cmdline_user_args():
 		# EXPERIMENT: srovnání rozlišení bloku (scripts/res_test.gd); hra se nespustí
 		get_tree().root.add_child.call_deferred(load("res://scripts/res_test.gd").new())
@@ -92,6 +98,7 @@ func _ready() -> void:
 	if "--export-vectors" in OS.get_cmdline_user_args():
 		Vectors.export_to(ProjectSettings.globalize_path("res://vectors/vectors.json"))
 		Vectors.export_veg(ProjectSettings.globalize_path("res://vectors/veg_vectors.json"))
+		Vectors.export_gen3(ProjectSettings.globalize_path("res://vectors/gen_v3_vectors.json"))
 		get_tree().quit()
 		return
 	rng.seed = 2026
@@ -132,7 +139,13 @@ func _ready() -> void:
 	ParamRegistry_.register_stat("Instance vegetace (kreslené)", self, &"_veg_instances")
 	ParamRegistry_.register_stat("Bloků", self, &"_block_count")
 	ParamRegistry_.load_dev_addons(self)   # jen s -- --dev a jen když doplněk existuje (v exportu není)
-	if "--napojeni-shots" in OS.get_cmdline_user_args() or "--napojeni-bench" in OS.get_cmdline_user_args():
+	if "--genv3-shots" in OS.get_cmdline_user_args() or "--genv3-bench" in OS.get_cmdline_user_args():
+		add_child(load("res://scripts/genv3_demo.gd").new())   # gen-v3 v prototypu: screenshoty 41_* / měření
+	elif "--flow-shots" in OS.get_cmdline_user_args() or "--flow-bench" in OS.get_cmdline_user_args():
+		add_child(load("res://scripts/flow_demo.gd").new())    # tok vody po kopání: screenshoty 42_* / měření
+	elif "--skryti-shots" in OS.get_cmdline_user_args() or "--skryti-bench" in OS.get_cmdline_user_args():
+		add_child(load("res://scripts/skryti_demo.gd").new())   # skrytí podzemí na bocích a řezech
+	elif "--napojeni-shots" in OS.get_cmdline_user_args() or "--napojeni-bench" in OS.get_cmdline_user_args():
 		add_child(load("res://scripts/napojeni_demo.gd").new())   # povrch louka/písek/voda: screenshoty / měření
 	elif "--grass-shots" in OS.get_cmdline_user_args() or "--grass-bench" in OS.get_cmdline_user_args():
 		add_child(load("res://scripts/grass_demo.gd").new())   # tráva C: screenshoty / měření
@@ -329,6 +342,7 @@ func _edit(f: Callable) -> void:
 	_rebuild_preview()
 
 func _process(dt: float) -> void:
+	_flow_tick()
 	Grass.tick(dt)   # tráva C: čas větru a stopy (postavičky volají Grass.touch)
 	var v := Vector2.ZERO
 	if Input.is_key_pressed(KEY_W) or Input.is_key_pressed(KEY_UP): v.y -= 1
@@ -538,6 +552,7 @@ func _dig(g: Vector2i, place := false, mat := -1) -> String:
 	if island.occupied.has(g):
 		return "pod stavbou nebo cestou: nelze"
 	var b: Block = island.blocks[sl]
+	_flow_finish_all()   # rozběhnutý tok se před další změnou dokončí (výsledek nezávisí na snímcích)
 	var lx := g.x - sl.x * BS
 	var ly := g.y - sl.y * BS
 	var h: int = b.hm[lx * BS + ly]
@@ -564,12 +579,27 @@ func _dig(g: Vector2i, place := false, mat := -1) -> String:
 		if old == Mat.FOG or old == Mat.AIR:
 			return "nelze"
 		inventory[old] += 1
-		b.hm[lx * BS + ly] = h - 1
+		# gen-v3: pod vykopanou buňkou může být jeskyně – povrch sloupce klesne na její dno (jeskyně se tím odkryje)
+		var nh := h - 1
+		while nh > 0 and b.cells[(lx * BS + ly) * 64 + nh - 1] == Mat.AIR:
+			nh -= 1
+		b.hm[lx * BS + ly] = nh
 	var idx := (lx * BS + ly) * 64 + lz
 	b.cells[idx] = nw
+	var w_old := 0
+	if b.water.size() == b.cells.size():
+		w_old = b.water[idx]; b.water[idx] = 0   # voda v pórech odejde s materiálem (bez simulace; položená buňka je suchá)
 	if not deltas.has(sl): deltas[sl] = []
-	deltas[sl].append({"i": idx, "lx": lx, "ly": ly, "lz": lz, "old": old, "new": nw})
+	var dl := {"i": idx, "lx": lx, "ly": ly, "lz": lz, "old": old, "new": nw}
+	if w_old > 0: dl["water_old"] = w_old
+	deltas[sl].append(dl)
 	b.recount()
+	if not place:
+		var f = WaterFlow.start(b, lx, ly, lz)   # Jan 20:39: místní tok vody po otevření (jeskyně, nasycená půda)
+		if f != null:
+			flows.append({"slot": sl, "flow": f, "delta": dl, "w_old": w_old, "sync": flow_sync})
+			if flow_sync:
+				_flow_finish_all()
 	var kept := []
 	for r in b.veg:   # rostlina na změněném sloupci zmizí
 		if not (r.lx == lx and r.ly == ly): kept.append(r)
@@ -579,6 +609,38 @@ func _dig(g: Vector2i, place := false, mat := -1) -> String:
 	_show_block_at(g)
 	_refresh_inv()
 	return "%s %s (lz %d)" % ["položeno" if place else "vykopáno", Mat.NAMES[nw if place else old], lz]
+
+## ---------- tok vody po kopání (scripts/gen3/water_flow.gd) ----------
+## ve hře: _process posouvá tok po FLOW_BUDGET_MS za snímek a překresluje jen vodu; headless (flow_sync) se dopočítá hned
+func _flow_tick() -> void:
+	if flows.is_empty():
+		return
+	var t0 := Time.get_ticks_usec()
+	var e: Dictionary = flows[0]
+	while not e.flow.done and (Time.get_ticks_usec() - t0) < FLOW_BUDGET_MS * 1000:
+		e.flow.step_n(4)
+	if e.flow.done:
+		_flow_finish(e)
+		flows.pop_front()
+	else:
+		e.flow.write_preview()
+		island.remesh_water(e.slot)
+
+func _flow_finish_all() -> void:
+	while not flows.is_empty():
+		_flow_finish(flows.pop_front())
+
+## konečný zápis (zachování součtu), kontrola jako delta, záznam do delty kopání
+func _flow_finish(e: Dictionary) -> void:
+	var f = e.flow
+	f.finish()
+	var v: Dictionary = WaterFlow.validate(f)
+	last_flow = {"slot": e.slot, "box": f.box(), "ticks": f.ticks, "ms": f.ms, "cells": f.box_cells(), "valid": v}
+	if not v.ok:
+		push_warning("tok vody: kontrola delty selhala %s" % str(v.errors))
+	e.delta["flow"] = {"box": f.box(), "ticks": f.ticks, "moved_units": v.moved_units, "water": f.changes()}
+	if not e.get("sync", false):
+		island._remesh(e.slot)   # mokrá půda a voda z dat (při synchronním toku překreslí kopání samo)
 
 ## ukázka formátu delty pro backend -> vectors/delta_sample.json
 func _export_deltas(path: String) -> void:

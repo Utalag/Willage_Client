@@ -1,0 +1,12 @@
+tok vody po kopání (water_flow.gd: simulace voda-studie ve výřezu, CALM_EPS 0.00005/tik × 5 tiků, ověření 30 tiků ≤ 0.015 buňky)
+vložení (validátor vždy): kopec 404 445 ms (validátor 4.6 ms OK), kopec 4504 563 ms (validátor 4.5 ms OK), hora 1000 406 ms (validátor 4.1 ms OK), piscina 4504 442 ms (validátor 5.1 ms OK)
+validátor při vložení na všech 8 blocích ostrova: 8 OK
+kopání v suchu (spouštěč nic nenašel): 136.1 ms na buňku, toků 0
+jáma ze strany do jeskyně (blok (2, 0), hladina lz 28): kopání + tok do ustálení 832 ms, z toho simulace 278 ms (460 tiků, 0.60 ms/tik), výřez [0, 6, 23, 9, 10, 18] = 1620 buněk
+  delta: přesunuto 15847 jednotek (3.87 buňky), změněných buněk vody 21, součet vody bloku před 431103 − vykopáno 0 = po 431103 (sedí); kontrola delty OK, ověření max 0.0028
+  voda v jámě po ustálení 3.87 buňky
+  determinismus: synchronně 2× a po snímcích (po 1, 3, 7 tikách) shodné (fda6a144f9417293, fda6a144f9417293, fda6a144f9417293, fda6a144f9417293, fda6a144f9417293)
+  ve hře (rozpočet 6 ms/snímek + náhled vody): 39 snímků (≈ 0.7 s při 60 fps), nejdelší snímek 85.3 ms, výsledek shodný
+písčina 4504, sloupec (8, 8) kopaný 8 buněk dolů: 2388 ms celkem, toků 4 (kontrola delty OK 4), tiků 411, simulace 821 ms, povrch sloupce lz 23
+průzkum (bloky bez ostrova, 4 recepty × 6 seedů, sloupec vedle jeskyně s vodou do otevření): míst 15, toků 25, kontrola delty OK 25/25, determinismus 15/15
+  tiků do ustálení: medián 89, max 285; simulace: medián 136 ms, max 349 ms; výřez: medián 3120, max 5040 buněk
