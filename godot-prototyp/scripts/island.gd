@@ -6,6 +6,7 @@ const Block = preload("res://scripts/block.gd")
 const BlockGen = preload("res://scripts/block_gen.gd")
 const Mesher = preload("res://scripts/mesher.gd")
 const VegRender = preload("res://scripts/veg_render.gd")
+const SurfaceRendererS = preload("res://scripts/surface/surface_renderer.gd")
 const BS := 16
 const CELL_H := 0.5
 const SURF_Y := 32 * CELL_H       # výchozí povrch (střed výšky)
@@ -45,6 +46,7 @@ var preview_veg: Node3D
 var props: Array[Node3D] = []   # objekty na povrchu (domky)
 var occupied := {}              # globální sloupec (Vector2i) -> true: stavba nebo cesta, vegetace tu neroste
 var roads: Array[Node3D] = []
+var surface   # SurfaceRenderer: duální povrch louka/písek/voda (scripts/surface/)
 
 ## vegetace bloku bez rostlin na zabraných sloupcích (stavby, cesty)
 func veg_filtered(b: Block) -> Array:
@@ -66,11 +68,53 @@ func refresh_veg(s: Vector2i) -> void:
 	if not vegs.has(s):
 		return
 	vegs[s].queue_free()
-	var vn := VegRender.build(veg_filtered(blocks[s]), blocks[s], occ_fn(blocks[s]))
+	var vn := VegRender.build(veg_filtered(blocks[s]), blocks[s], occ_fn(blocks[s]), surface.field(s) if surface else null)
 	vn.position = slot_origin(s)
 	vn.visible = slice_z < 0
 	add_child(vn)
 	vegs[s] = vn
+
+## blok a jeho existující sousedé (i úhlopříční) – duální dlaždice a pole sahají přes hranici
+func area_of(s: Vector2i) -> Array:
+	var out := []
+	for dz in [-1, 0, 1]:
+		for dx in [-1, 0, 1]:
+			var n := s + Vector2i(dx, dz)
+			if blocks.has(n):
+				out.append(n)
+	return out
+
+## přestavba povrchu, kostkové sítě a vegetace dotčených bloků (po kopání, stavbě, cestě, vložení)
+func refresh_blocks(slots: Array, with_area := true) -> void:
+	var todo := {}
+	for s in slots:
+		for n in (area_of(s) if with_area else [s]):
+			todo[n] = true
+	for s in todo:
+		surface.build_fields(s)
+	for s in todo:
+		_remesh(s)
+		surface.build_meshes(s)
+	for s in todo:
+		if vegs.has(s):
+			refresh_veg(s)
+
+## po změně sloupce (lx, ly) bloku sl: sousedé jen pokud sloupec leží v jejich okně polí
+func refresh_after_edit(sl: Vector2i, lx: int, ly: int) -> void:
+	var pad: int = surface.p.field_pad + 1
+	var list := [sl]
+	for dz in [-1, 0, 1]:
+		for dx in [-1, 0, 1]:
+			if dx == 0 and dz == 0:
+				continue
+			var okx: bool = dx == 0 or (dx < 0 and lx < pad) or (dx > 0 and lx >= BS - pad)
+			var okz: bool = dz == 0 or (dz < 0 and ly < pad) or (dz > 0 and ly >= BS - pad)
+			if okx and okz and blocks.has(sl + Vector2i(dx, dz)):
+				list.append(sl + Vector2i(dx, dz))
+	refresh_blocks(list, false)
+
+func rebuild_all_surfaces() -> void:
+	refresh_blocks(blocks.keys(), false)
 
 ## paprsek -> globální sloupec povrchu (pochod po výškové mapě), nebo null
 func cell_at_ray(origin: Vector3, dir: Vector3):
@@ -121,6 +165,8 @@ func setup() -> void:
 		toon_mat.set_shader_parameter("tex_arr", ta)
 		has_textures = true
 	terrain_mat = toon_mat if kawaii else flat_mat
+	surface = SurfaceRendererS.new(self)
+	surface.apply_shared(toon_mat)
 	fog_shader = load("res://fog.gdshader")
 	frame_shader = load("res://highlight.gdshader")
 	for s in slots:
@@ -180,20 +226,27 @@ func place(b: Block) -> void:
 	mi.position = slot_origin(b.slot)
 	add_child(mi)
 	meshes[b.slot] = mi
-	_remesh(b.slot)
-	var vn := VegRender.build(veg_filtered(b), b, occ_fn(b))
+	# povrch: okno dat bloku i sousedů (včetně úhlopříčných) se změnilo → pole, maska, duální síť, voda
+	var area := area_of(b.slot)
+	for s in area:
+		surface.build_fields(s)
+	for s in area:   # sousedé: data beze změny, jen skrytí stěn na společné hraně a navázání povrchu
+		_remesh(s)
+		surface.build_meshes(s)
+	var vn := VegRender.build(veg_filtered(b), b, occ_fn(b), surface.field(b.slot))
 	vn.position = slot_origin(b.slot)
 	vn.visible = slice_z < 0
 	add_child(vn)
 	vegs[b.slot] = vn
-	for d in BlockGen.DIRS:  # sousedé: data beze změny, jen skrytí stěn na společné hraně
-		if blocks.has(b.slot + d):
-			_remesh(b.slot + d)
+	for s in area:
+		if s != b.slot:
+			refresh_veg(s)
 	refresh_frames()
 
 func _remesh(s: Vector2i) -> void:
 	var t := Time.get_ticks_usec()
-	meshes[s].mesh = Mesher.build(blocks[s].cells, neighbor_cells(s), slice_z)
+	var mk: PackedByteArray = surface.mask(s) if surface and slice_z < 0 else PackedByteArray()
+	meshes[s].mesh = Mesher.build(blocks[s].cells, neighbor_cells(s), slice_z, Color(1, 1, 1), mk)
 	blocks[s].mesh_ms = (Time.get_ticks_usec() - t) / 1000.0
 
 ## přepnutí vzhledu: kawaii (toon + obrysy) / původní plochý
@@ -206,6 +259,7 @@ func set_kawaii(on: bool) -> void:
 
 func set_slice(z: int) -> void:
 	slice_z = z
+	surface.set_enabled(z < 0)   # v řezu jen kostky (duální povrch by zakryl řez)
 	for s in blocks:
 		_remesh(s)
 	for s in fogs:

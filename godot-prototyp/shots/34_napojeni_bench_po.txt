@@ -1,0 +1,10 @@
+po vložení bloku (gen + kostky + povrch sousedů + vegetace): 434, 543, 502 ms
+po 7 bloků celek: 173.0 ms/snímek, 356979 trojúhelníků/snímek, 7 bloků
+po detail pláže: 128.7 ms/snímek, 292443 trojúhelníků/snímek, 7 bloků
+po doplnění 17 bloků: 9783 ms (575 ms/blok)
+po plný ostrov celek: 300.6 ms/snímek, 1183671 trojúhelníků/snímek, 24 bloků
+po plný ostrov detail pláže: 175.7 ms/snímek, 677371 trojúhelníků/snímek, 24 bloků
+po kopání (průměr kop + položení): uprostřed bloku 123 ms, u hrany 253 ms
+po kostková síť bloku: 32.3 ms průměr
+po povrch bloku: pole 37.9 ms + duální síť a voda 11.4 ms průměr (24 bloků)
+po renderer: llvmpipe (LLVM 19.1.7, 256 bits)

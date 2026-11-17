@@ -14,6 +14,7 @@ const Veg = preload("res://scripts/veg.gd")
 const Mat = preload("res://scripts/mat.gd")
 const H = preload("res://scripts/stable_hash.gd")
 const Toon = preload("res://scripts/toon.gd")
+const SurfPar = preload("res://scripts/surface/surface_params.gd")
 const BS := 16
 const CELL_H := 0.5
 const FLOWER_COLORS := [Color(1.0, 0.62, 0.78), Color(1.0, 0.92, 0.45), Color(0.98, 0.98, 1.0), Color(0.75, 0.62, 1.0)]
@@ -32,7 +33,7 @@ static var _lod_mms: Array = []  # WeakRef na MultiMesh trsů (kvůli úrovni de
 
 static func enabled() -> bool:
 	Par.parse_cli()
-	return Par.P.enabled != 0
+	return Par.inst().enabled != 0
 
 static func material() -> ShaderMaterial:
 	if _mat == null:
@@ -45,7 +46,7 @@ static func material() -> ShaderMaterial:
 		apply_params()
 	return _mat
 
-## přenese parametry do shaderu (po změně Par.P za běhu)
+## přenese parametry do shaderu (po změně parametrů za běhu)
 static func apply_params() -> void:
 	var m := material()
 	var cell := Par.g("cell_edge")
@@ -62,7 +63,7 @@ static func apply_params() -> void:
 	m.set_shader_parameter("t_bend", Par.g("trample_bend"))
 
 static func set_param(k: String, v) -> void:
-	Par.P[k] = v
+	Par.inst().set(k, v)
 	apply_params()
 
 ## úroveň detailu podle velikosti záběru ortho kamery; instance trsů jsou v bufferu po osminách
@@ -163,7 +164,7 @@ static func mesh(kind: int) -> ArrayMesh:
 
 ## vysoká tráva na sloupcích bloku (PackedByteArray 256, index lx * BS + ly): hodnotový šum ve zdrojovém rámci
 static func tall_map(b) -> PackedByteArray:
-	var share := Par.g("tall_" + b.kind) if Par.P.has("tall_" + b.kind) else 0.4
+	var share := Par.g("tall_" + b.kind) if Par.has("tall_" + b.kind) else 0.4
 	var p := maxf(Par.g("tall_patch"), 1.0)
 	var gn := int(ceil(BS / p)) + 2
 	var out := PackedByteArray()
@@ -185,8 +186,12 @@ static func _gv(seed: int, x: int, y: int, gn: int) -> float:
 	return float(H.mix(seed, "GRASS", x * gn + y) & 0xFFFFFF) / 16777216.0
 
 ## Uzly trávy bloku (lokální souřadnice bloku). veg = už odfiltrované rostliny, occ(lx, ly) -> bool = sloupec zabraný.
-static func build(b, veg: Array, occ: Callable) -> Array:
+## surf (volitelně ShoreFields bloku, duální povrch 2026-11-17): trs stojí na výšce povrchu, roste jen kde má
+## povrch trávu (hranice podle duální mřížky, i kus do sousední písečné buňky), pod hladinou neroste,
+## k okraji louky řídne (méně, nižší a sušší trsy, kvítky jen uvnitř) a v pásu před loukou jsou řídké nízké trsy v písku.
+static func build(b, veg: Array, occ: Callable, surf = null) -> Array:
 	var cell := Par.g("cell_edge")
+	var sp = SurfPar.inst()
 	var tall := tall_map(b)
 	var tall_h := Par.g("tuft_tall_h") * cell
 	var short_h := Par.g("tuft_short_h") * cell
@@ -206,29 +211,76 @@ static func build(b, veg: Array, occ: Callable) -> Array:
 			var hc: int = b.hm[lx * BS + ly]
 			if hc <= 0:
 				continue
-			if b.cells[(lx * BS + ly) * 64 + hc - 1] != Mat.GRASS or occ.call(lx, ly):
+			var top: int = b.cells[(lx * BS + ly) * 64 + hc - 1]
+			if occ.call(lx, ly):
 				continue
-			hmin = mini(hmin, hc); hmax = maxi(hmax, hc)
+			if top != Mat.GRASS and not (surf and top == Mat.SAND):
+				continue
+			hmin = mini(hmin, hc - 2); hmax = maxi(hmax, hc)
 			var s := Veg._to_src(lx, ly, b.mirror, b.rot)
 			rng.seed = H.mix(b.seed, "GRASS_I", s.x * BS + s.y)
 			var is_tall := tall[lx * BS + ly] == 1
 			var y := hc * CELL_H
+			var sand := top == Mat.SAND
 			var base := Par.g("tufts_tall") if is_tall else Par.g("tufts_short")
+			if sand:
+				base = Par.g("tufts_short")   # tráva přesahující do písku / pás trávy v písku: nízké trsy
 			var dry := Par.g("tuft_dry")
+			var simple_y: float = surf.simple_col(lx, ly, sp.thin_w) if surf else -1.0
 			for kind in 3:
-				var cnt := (Par.g("flowers_tall") if is_tall else 0.0) if kind == FLOWER else base * (dry if kind == DRY else 1.0 - dry)
+				var cnt := (Par.g("flowers_tall") if is_tall and not sand else 0.0) if kind == FLOWER else base * (dry if kind == DRY else 1.0 - dry)
 				var c := int(floor(cnt)) + (1 if rng.randf() < cnt - floor(cnt) else 0)
 				for j in c:
-					var hh := (tall_h if is_tall else short_h) * rng.randf_range(0.7, 1.15)
+					var hh := (tall_h if is_tall and not sand else short_h) * rng.randf_range(0.7, 1.15)
 					if kind == FLOWER:
 						hh = tall_h * rng.randf_range(0.9, 1.15)
-					var wr := Par.g("tuft_w_tall") if is_tall else Par.g("tuft_w_short")
+					var wr := Par.g("tuft_w_tall") if is_tall and not sand else Par.g("tuft_w_short")
 					var col: Color = FLOWER_COLORS[rng.randi() % 4] if kind == FLOWER else Color(1, 1, 1)
-					var dst: PackedFloat32Array = buf[kind]
-					if kind != FLOWER:
-						dst = lb[kind][lc[kind] % LOD_BUCKETS]
-						lc[kind] += 1
-					_put(dst, rng, Vector3((lx + rng.randf()) * cell, y, (ly + rng.randf()) * cell), hh, hh * wr * rng.randf_range(0.85, 1.2), col)
+					var px := lx + rng.randf()
+					var pz := ly + rng.randf()
+					var ww := rng.randf_range(0.85, 1.2)
+					var kd := kind
+					var py := y
+					if surf:
+						var r_keep := rng.randf()
+						var r_dry := rng.randf()
+						if simple_y >= 0.0:
+							py = simple_y
+							var dst0: PackedFloat32Array = buf[kd]
+							if kd != FLOWER:
+								dst0 = lb[kd][lc[kd] % LOD_BUCKETS]
+								lc[kd] += 1
+							_put(dst0, rng, Vector3(px * cell, py, pz * cell), hh, hh * wr * ww, col)
+							continue
+						py = surf.height_local(px, pz)
+						if py < surf.wl + 0.02:
+							continue
+						var k := 1.0
+						if surf.grass_local(px, pz) >= 0.5:
+							k = smoothstep(0.0, sp.thin_w, surf.ged_local(px, pz))
+							if kind == FLOWER and k < 0.75:
+								continue
+							if kind != FLOWER and r_keep > lerpf(sp.thin_min, 1.0, k):
+								continue
+							if kind == GREEN and r_dry < 0.3 * (1.0 - k):
+								kd = DRY
+						else:
+							# pás „tráva v písku“ před loukou: řídké nízké trsy
+							if kind == FLOWER:
+								continue
+							var mixk := 1.0 - smoothstep(0.0, sp.band_grass, surf.dtg_local(px, pz))
+							if r_keep > sp.mix_tufts * mixk:
+								continue
+							k = 0.35 + 0.4 * mixk
+						if kind != FLOWER:
+							hh *= lerpf(0.5, 1.0, k)
+					elif sand:
+						continue
+					var dst: PackedFloat32Array = buf[kd]
+					if kd != FLOWER:
+						dst = lb[kd][lc[kd] % LOD_BUCKETS]
+						lc[kd] += 1
+					_put(dst, rng, Vector3(px * cell, py, pz * cell), hh, hh * wr * ww, col)
 	# rostliny z dat vegetace, které teď kreslí tráva (sdílí vítr a stopu)
 	for v in veg:
 		if v.s == Veg.FLOWERS or v.s == Veg.DRY_GRASS:
@@ -237,7 +289,12 @@ static func build(b, veg: Array, occ: Callable) -> Array:
 			var hh: float = (Par.g("flower_h") if kind == FLOWER else Par.g("dry_h")) * v.scale
 			var col: Color = FLOWER_COLORS[int(v.yaw) % FLOWER_COLORS.size()] if kind == FLOWER else Color(1, 1, 1)
 			hmin = mini(hmin, v.lz); hmax = maxi(hmax, v.lz)
-			_put(buf[kind], rng, Vector3(v.lx + 0.5 + v.ox, v.lz * CELL_H, v.ly + 0.5 + v.oy), hh, hh * (1.3 if kind == DRY else 1.0), col, deg_to_rad(v.yaw))
+			var vp := Vector3(v.lx + 0.5 + v.ox, v.lz * CELL_H, v.ly + 0.5 + v.oy)
+			if surf:
+				if surf.wet_local(vp.x, vp.z):
+					continue
+				vp.y = surf.height_local(vp.x, vp.z)
+			_put(buf[kind], rng, vp, hh, hh * (1.3 if kind == DRY else 1.0), col, deg_to_rad(v.yaw))
 	# trsy z rostlin (suchá tráva) jdou do první osminy (kreslí se vždy), pak osminy za sebou
 	var ends := [PackedInt32Array(), PackedInt32Array()]
 	for k in 2:

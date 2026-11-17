@@ -22,6 +22,11 @@ Skupiny: 1 Prototyp a buildy · 2 Terén a tvar · 3 Rozlišení bloku · 4 Ská
 - **Zlepšení:** Jan si může prototyp pustit sám.
 - **Komplikace:** Windows zip měl přes 25 MB, proto byl poslán jako 7z ve dvou částech; Windows build se na boxu nedá otestovat.
 
+### ✅ Ladicí okno s posuvníky jako samostatný doplněk, na žádost Jana (2026-11-17 15:30 · `godot-prototyp/addons/dev_tuning/`, shot `34_ladici_okno.png`)
+- **Směr:** Jan: „Připrav ladící okno pro ladění. S posuvníky.“ a „samostatný modul, který nepůjde do finální hry“. Parametry jsou Resource s `@export` (`TunableParams`). Hra je jen zapíše do registru `ParamRegistry` a o okně neví. Doplněk se načte jen s `-- --dev`, a jen když složka existuje.
+- **Zlepšení:** F1 otevře okno se záložkami Povrch a Tráva a sbalitelnými sekcemi. Posuvníky mají české popisky. Uniformy se mění hned, parametry s přestavbou (⟳) se přestaví 0,4 s po poslední změně nebo tlačítkem Aplikovat. Má Reset na výchozí, Uložit a Načíst předvolbu (`user://presety/*.tres`). Ukazuje FPS, ms snímku, instance vegetace a trojúhelníky. Export složku vylučuje. Hra bez složky běží beze změny (ověřeno).
+- **Komplikace:** objekty a lambdy uložené v `Engine` meta nebo ve statickém slovníku shazovaly Godot při ukončení. Registr proto drží jen slabé odkazy a v meta je jen cesta ke skriptu.
+
 ## 2 Terén a tvar
 
 ### ✅ Relief v2.2: terasy (2026-11-17, noc)
@@ -58,6 +63,18 @@ Skupiny: 1 Prototyp a buildy · 2 Terén a tvar · 3 Rozlišení bloku · 4 Ská
 - **Směr:** Jan 14:34: louka u vody bez písku. Nové vzorky: nízká louka (plochý břeh 0,15 m), louka o 1 a 2 vrstvy výš, travnatý jazyk a ostrůvek z jedné buňky ve vodě, v obou mřížkách.
 - **Zlepšení:** dno nad hladinou u louky je travnaté a strmý svah hliněný místo písku. U vody leží skvrnitý pás bahna. Rákos roste v trsech jen u louky a pěna má 30 % síly pláže. Bez úprav vypadala louka u vody jako pláž. Cena: 6–13 ms stavby, 77–91 instancí na 4 vzorky, snímek v rámci šumu.
 - **Komplikace:** břeh o 2 vrstvy je v duální mřížce svah, ne stěna (tu dá hybrid). Ostrůvek z 1 buňky se bez hybridu smrskne.
+
+### ✅ Napojení louky, písku a vody zapojené do hlavního prototypu (2026-11-17 15:30 · `godot-prototyp/scripts/surface/`, záloha `cp14-pred-napojeni-1456.tgz`, shots `34_napojeni_*`)
+- **Směr:** Jan: „Připrav implementaci všech změn do hlavního prototypu“. Studie `napojeni-studie/` a `trava-studie/` zůstávají samostatné. Duální mřížka [1][4] kreslí jen měkký povrch (louka, písek, dno). Rozdíl do 2 vrstev je svah, víc je stěna z kostek. Skála, útesy, kopání, stavby a cesty zůstávají na kostkách. Písek má vzhled 1 a detail 2 s pásy 0,75 / 1,1 a `mix_tufts` 0,18. Louka u vody má břeh, bahno a pěnu 0,3. Procedurální louka je ve variantě 3. Vzdálenostní pole [15] se počítají v okně bloku + 4 sloupce od sousedů, takže na hranicích bloků nejsou švy. Parametry jsou v `SurfaceParams` (`--surface.klic=`).
+- **Zlepšení:** pobřeží jezírek je plynulé a přes hranice bloků bez švu. Kostková síť bloku je dokonce o něco rychlejší (40,5 → 32,3 ms). Data, vektory, rarita i delta jsou beze změny (`vectors/` ověřeno bajt po bajtu).
+- **Komplikace:**
+  - Prototyp neměl vodu. Přibyla jen vykreslovací hladina: měkký sloupec pod vrstvou 30 je dno a hladina leží na 14,85 m (poměr jako 0,85 m ve studii). Voda je tak jen v blocích posunutých dolů a ve vykopaných jamách. Kopání do louky pod 30 udělá jezírko.
+  - Vložení bloku trvá 434–543 ms místo 81–114 ms (přestaví se i 8 sousedů). Kopání uprostřed bloku trvá 123 ms místo 41 ms. Celek plného ostrova trvá 301 ms místo 264 ms na snímek (softwarově).
+  - V řezu je duální povrch vypnutý a náhled kandidáta je jen z kostek.
+  - Louka drží světlou paletu prototypu, takže procedurální tón je jemnější než ve studii.
+  - Prošlapání země a stín postavičky z `meadow_ground` přeneseny nejsou.
+  - Rákos zatím není (bude samostatná entita vegetace).
+- **Další krok:** Jan a backend potvrdí hladinu (vrstva 30, nebo jiná / vlastní materiál vody). Pak zrychlit vkládání (viz C2, C5).
 
 ## 3 Rozlišení bloku
 
@@ -158,6 +175,11 @@ Godot .NET (nebo GDExtension) a stavba chunků ve vlákně, napojení bloků na 
 - **Zlepšení:** plný ostrov celkem 588 → 240 ms na snímek (softwarově), startovní ostrov 189 → 120 ms. Z dálky rozdíl vidět není, nic se nepřepočítává.
 - **Komplikace:** v detailu nepomáhá, tam se kreslí vše včetně bloků v zákrytu.
 
+### 🧪 Rychlá cesta pro rovnou louku a jednotné dlaždice (2026-11-17 15:30 · `godot-prototyp/scripts/surface/shore_fields.gd`, `grass.gd`)
+- **Směr:** sloupec, kolem kterého je 3 × 3 rovné louky daleko od okraje, vezme výšku přímo ze schodu, bez vzorkování polí po trsech. Dlaždice se 4 stejnými rohy vrací váhy bez šumu (výsledek je stejný).
+- **Zlepšení:** kopání 312 → 123 ms, vložení bloku 907 → 575 ms na blok, pole bloku 56 → 38 ms.
+- **Komplikace:** žádná viditelná, platí jen pro vnitřek louky.
+
 ### 🧪 Horká smyčka v C# (2026-11-17 12:40 · `skala-studie/csharp_bench/`)
 - **Zlepšení:** celý blok 65–120 ms, 1 chunk 2,8 ms, stejný výsledek jako GDScript.
 - **Komplikace:** na boxu není Godot .NET, takže C# zatím neběží uvnitř hry.
@@ -223,6 +245,9 @@ Nevyzkoušené nápady na zrychlení. Stav: 💡 návrh · 🔬 ověřuje se · 
 - 💡 **Hybrid a plošina: méně dělení na plochých místech:** síť má nerovnoměrné čáry kolem každé hrany (29 840 trojúhelníků). Na rovině by stačily 2 trojúhelníky na dlaždici, odhadem 2–3× méně.
 - 💡 **Hybrid: hledání malých prvků a výšky podkladu v C# nebo předpočítat při změně buněk:** splat hybridu teď 1,2 s na 4 vzorky v GDScriptu. Výsledek (`pair_bevel` na hranu) cachovat po hranách.
 - 💡 **Vzdálenostní pole k vodě jen pro okrajové bloky:** pole stojí asi 105 ms, bloky bez vody ho nepotřebují.
+- 💡 **Při vložení bloku přestavět u sousedů jen pruh u hranice (prototyp, 15:30):** teď se sousedům přepočítá celé okno polí, síť i tráva (575 ms na blok). Stačí pruh široký 5 sloupců a jen trsy v něm.
+- 💡 **Vzdálenostní pole na grafice nebo v C#:** chamfer 4 polí po 96 × 96 texelech stojí v GDScriptu kolem 38 ms na blok. Jump flooding v shaderu, nebo C# ve vlákně.
+- 💡 **Kostkový mesher bez dělení ploch na čtvrtiny:** kvůli duální masce se horní plochy dělí na čtvrtiny a boky na poloviny. Dělit jen buňky na rozhraní duální oblasti.
 
 ## 3 Rozlišení bloku
 - 💡 **Jemnější rozlišení jen u povrchu:** 32 × 32 stojí asi 4× generování a 3× síť. Hloubku nechat hrubou a jemné buňky držet jen v horních vrstvách.
@@ -236,6 +261,7 @@ Nevyzkoušené nápady na zrychlení. Stav: 💡 návrh · 🔬 ověřuje se · 
 - 💡 **Ořez bloků schovaných za jinými (occlusion culling):** v přiblížení se kreslí i bloky zakryté jinými, takže řídnutí podle zoomu tam nepomáhá (detail louky 154 ms místo 66 ms).
 - 💡 **Řídnutí trávy i podle vzdálenosti od středu obrazu**, nejen podle zoomu.
 - 💡 **Stopa pro víc postaviček:** jedna stopová textura na blok místo jednoho okna 32 × 32 kolem první postavičky.
+- 💡 **Tráva u břehu: pole předvzorkovat na mřížku sloupce (15:30):** trsy u vody a písku teď vzorkují výšku, váhy a pole po jednom (vegetace bloku 49 ms místo asi 16 ms). Stačí mřížka 4 × 4 na sloupec a z ní interpolovat.
 
 ## 6 Vzhled a textury
 - 💡 **Texturový atlas nebo pole textur** pro materiály, aby šel celý blok jedním draw callem.
@@ -244,4 +270,5 @@ Nevyzkoušené nápady na zrychlení. Stav: 💡 návrh · 🔬 ověřuje se · 
 ## 7 Výkon
 - 💡 **Měření na skutečné grafice:** všechna čísla jsou zatím ze softwarového vykreslování (llvmpipe). Udělat build a změřit na Janově GPU.
 - 💡 **Profilovací přepínač v buildu:** výpis času na snímek a počtu instancí, ať se dá měřit přímo u Jana.
+  Částečně splněno ladicím oknem (`--dev`, FPS, ms, instance), to ale do release exportu nejde. Pro měření u Jana udělat build s doplňkem.
 

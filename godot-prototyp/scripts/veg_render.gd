@@ -115,12 +115,19 @@ static func mesh_for(s: int) -> Mesh:
 ## Uzel s vegetací bloku (v lokálních souřadnicích bloku). S blokem b se přidá tráva C (grass.gd):
 ## louka z trsů na travnatých sloupcích, květiny a suchá tráva sdílí její shader (vítr, rozhrnování).
 ## occ(lx, ly) -> bool: sloupec zabraný stavbou nebo cestou (tráva tu neroste).
-static func build(veg: Array, b = null, occ := Callable()) -> Node3D:
+## surf (volitelně ShoreFields bloku): rostliny stojí na výšce duálního povrchu, pod hladinou se nekreslí.
+static func build(veg: Array, b = null, occ := Callable(), surf = null) -> Node3D:
 	var root := Node3D.new()
 	var grass_on := b != null and Grass.enabled()
 	if grass_on:
-		for n in Grass.build(b, veg, occ if occ.is_valid() else func(_x, _y): return false):
+		for n in Grass.build(b, veg, occ if occ.is_valid() else func(_x, _y): return false, surf):
 			root.add_child(n)
+	if surf:
+		var kept := []
+		for v in veg:
+			if not surf.wet_local(v.lx + 0.5 + v.ox, v.ly + 0.5 + v.oy):
+				kept.append(v)
+		veg = kept
 	var by := {}
 	for v in veg:
 		if grass_on and v.s in [Veg.TUFT, Veg.FLOWERS, Veg.DRY_GRASS]:
@@ -142,6 +149,8 @@ static func build(veg: Array, b = null, occ := Callable()) -> Node3D:
 			var sc: float = v.scale * RENDER_SCALE.get(s, 1.0)
 			var basis := Basis(Vector3.UP, deg_to_rad(v.yaw)).scaled(Vector3(sc, sc, sc))
 			var pos := Vector3(v.lx + 0.5 + v.ox, v.lz * CELL_H, v.ly + 0.5 + v.oy)
+			if surf:
+				pos.y = surf.height_local(pos.x, pos.z)
 			mm.set_instance_transform(i, Transform3D(basis, pos))
 			if mm.use_colors:
 				mm.set_instance_color(i, FLOWER_COLORS[int(v.yaw) % FLOWER_COLORS.size()])

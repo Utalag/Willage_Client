@@ -13,6 +13,7 @@ const UIScript = preload("res://scripts/ui.gd")
 const Roads = preload("res://scripts/roads.gd")
 const Toon = preload("res://scripts/toon.gd")
 const Grass = preload("res://scripts/grass.gd")
+const ParamRegistry_ = preload("res://scripts/param_registry.gd")
 const BS := 16
 
 # startovní ostrov: slot, typ, seed (pořadí = pořadí vkládání)
@@ -128,12 +129,28 @@ func _ready() -> void:
 	ui.set_candidates(candidates)
 	_setup_camera()
 	_update_hint()
-	if "--grass-shots" in OS.get_cmdline_user_args() or "--grass-bench" in OS.get_cmdline_user_args():
+	ParamRegistry_.register_stat("Instance vegetace (kreslené)", self, &"_veg_instances")
+	ParamRegistry_.register_stat("Bloků", self, &"_block_count")
+	ParamRegistry_.load_dev_addons(self)   # jen s -- --dev a jen když doplněk existuje (v exportu není)
+	if "--napojeni-shots" in OS.get_cmdline_user_args() or "--napojeni-bench" in OS.get_cmdline_user_args():
+		add_child(load("res://scripts/napojeni_demo.gd").new())   # povrch louka/písek/voda: screenshoty / měření
+	elif "--grass-shots" in OS.get_cmdline_user_args() or "--grass-bench" in OS.get_cmdline_user_args():
 		add_child(load("res://scripts/grass_demo.gd").new())   # tráva C: screenshoty / měření
 	elif "--demo" in OS.get_cmdline_user_args():
 		_demo()
 	elif "--video" in OS.get_cmdline_user_args():
 		_video()
+
+func _block_count() -> int:
+	return island.blocks.size()
+
+func _veg_instances() -> int:
+	var n := 0
+	for v in island.vegs.values():
+		for c in v.get_children():
+			if c is MultiMeshInstance3D and c.multimesh:
+				n += c.multimesh.instance_count if c.multimesh.visible_instance_count < 0 else c.multimesh.visible_instance_count
+	return n
 
 func _log_block(b: Block) -> void:
 	gen_times.append(b.gen_ms)
@@ -436,8 +453,7 @@ func _add_building(c: Vector2i, t: int, rot: int) -> void:
 	island.props.append(node)
 	houses.append(c)
 	bdata[c] = {"t": t, "rot": rot}
-	for s in _slots_of(_fp_of(c, t)):
-		island.refresh_veg(s)
+	island.refresh_blocks(_slots_of(_fp_of(c, t)))   # povrch pod stavbou je na buňkách
 
 ## místo pro stavbu: půdorys v ostrově, volný, rozdíl výšek ≤ 1, dveře volné a nejvýš o 1 buňku jinde
 func _site_ok(c: Vector2i, t: int, rot: int) -> bool:
@@ -497,8 +513,7 @@ func _build_road(pts: Array) -> bool:
 	island.roads.append(layer)
 	for g in path:
 		island.occupied[g] = true
-	for s in _slots_of(path):
-		island.refresh_veg(s)
+	island.refresh_blocks(_slots_of(path))   # povrch pod cestou je na buňkách
 	return true
 
 func _snap_to_door(g: Vector2i) -> Vector2i:
@@ -560,12 +575,7 @@ func _dig(g: Vector2i, place := false, mat := -1) -> String:
 		if not (r.lx == lx and r.ly == ly): kept.append(r)
 	b.veg = kept
 	b.veg_summary = VegG.summary(b.veg)
-	island._remesh(sl)
-	for d in [Vector2i(1, 0), Vector2i(-1, 0), Vector2i(0, 1), Vector2i(0, -1)]:
-		var ln: Vector2i = Vector2i(lx, ly) + d
-		if (ln.x < 0 or ln.x >= BS or ln.y < 0 or ln.y >= BS) and island.blocks.has(sl + d):
-			island._remesh(sl + d)
-	island.refresh_veg(sl)
+	island.refresh_after_edit(sl, lx, ly)   # kostky, duální povrch a vegetace bloku (a sousedů u hrany)
 	_show_block_at(g)
 	_refresh_inv()
 	return "%s %s (lz %d)" % ["položeno" if place else "vykopáno", Mat.NAMES[nw if place else old], lz]

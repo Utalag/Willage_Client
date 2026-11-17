@@ -1,6 +1,12 @@
 shader_type spatial;
 render_mode specular_disabled;
 // Kawaii vzhled terénu: barva z vrcholů, měkký dvoustupňový toon ramp, obrysy na hranách srázů (z CUSTOM0)
+// + vzhled povrchu sdílený s duální mřížkou (surface_look): šedobéžový písek se zrnem, procedurální louka na horních
+//   stěnách trávy (kostková část povrchu vypadá stejně jako duální). surface_look_on = false → původní barvy.
+#include "res://shaders/surface_common.gdshaderinc"
+#include "res://shaders/meadow_proc.gdshaderinc"
+#include "res://shaders/surface_look.gdshaderinc"
+uniform bool surface_look_on = true;
 uniform float ramp_soft = 0.12;      // šířka přechodu světlo/stín
 uniform float shadow_level = 0.35;   // kolik přímého světla zůstane ve stínu
 uniform float outline_w = 0.075;     // šířka obrysu (v buňce, 0..0,5)
@@ -19,13 +25,24 @@ uniform float tex_hue = 0.2;          // kolik odstínu převzít z textury (zby
 varying vec4 edges;
 varying vec3 lpos;
 varying vec3 lnrm;
+varying vec3 wpos;
 void vertex() {
+	wpos = (MODEL_MATRIX * vec4(VERTEX, 1.0)).xyz;
 	edges = CUSTOM0;
 	lpos = VERTEX;
 	lnrm = NORMAL;
 }
 void fragment() {
 	vec3 c = mix(COLOR.rgb / 12.92, pow((COLOR.rgb + 0.055) / 1.055, vec3(2.4)), step(0.04045, COLOR.rgb));
+	if (surface_look_on) {
+		int mid = int(UV2.x + 0.5);
+		if (mid == 3) {   // písek: šedobéžový (stínění vrcholu v UV2.y), na horní stěně zrno a čeřiny
+			if (sand_look == 1) c = lin(col_sand2 * UV2.y);
+			if (lnrm.y > 0.5) c *= sand_mod(wpos.xz);
+		} else if (mid == 1 && lnrm.y > 0.5) {
+			c = meadow_ground(c, wpos.xz);
+		}
+	}
 	if (use_tex && UV2.x > 0.5) {
 		vec2 tc = abs(lnrm.y) > 0.5 ? lpos.xz : (abs(lnrm.x) > 0.5 ? lpos.zy : lpos.xy);
 		int li = clamp(int(UV2.x + 0.5) - 1, 0, 9);

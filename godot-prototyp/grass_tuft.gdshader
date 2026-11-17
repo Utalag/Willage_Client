@@ -3,6 +3,8 @@ render_mode unshaded, cull_disabled, world_vertex_coords, specular_disabled;
 // Tráva C (ze studie trava-studie/shaders/grass_tuft.gdshader). Trsy trávy z prototypu (veg-v2) jako instance MultiMesh. Ohyb celého trsu stejně jako stéblo v B:
 // náklon θ z větru + rozhrnutí ze stopy, oblouk se zachovanou výškou; barva z vrcholů modelu (× barva instance u kvítků).
 #include "res://grass_common.gdshaderinc"
+#include "res://shaders/meadow_proc.gdshaderinc"
+uniform float ground_match = 0.0;   // 0 = trsy beze změny, 1 = tón trsu z procedurální louky pod ním (varianta 3 „sladěná“)
 uniform vec3 col_pressed : source_color = vec3(0.86, 0.93, 0.62);
 uniform float tint = 1.0;   // celkový jas
 varying float vt;
@@ -10,6 +12,7 @@ varying float vr;
 varying float vtr;
 varying vec2 vxz;
 varying vec3 vcol;
+varying vec4 vfield;
 void vertex() {
 	vec3 root = MODEL_MATRIX[3].xyz;
 	float t = UV.y;
@@ -29,6 +32,7 @@ void vertex() {
 	vr = INSTANCE_CUSTOM.g;
 	vtr = tz;
 	vxz = root.xz;
+	vfield = ground_match > 0.0 ? meadow_field(root.xz) : vec4(0.0);
 	vec3 c = COLOR.rgb;
 	vcol = mix(c / 12.92, pow((c + 0.055) / 1.055, vec3(2.4)), step(0.04045, c));
 }
@@ -37,6 +41,7 @@ void fragment() {
 	c *= 0.86 + 0.26 * vr;
 	c = mix(c, col_pressed, vtr * 0.5 * vt);
 	c *= mix(0.62, 1.0, vt);
+	if (ground_match > 0.0) c = meadow_tint(c, vfield, mp_strength * ground_match);
 	c *= char_shadow(vxz);
 	ALBEDO = to_pastel(c) * tint * sun_tint;
 }

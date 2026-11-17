@@ -39,6 +39,7 @@ Renderer **Compatibility (OpenGL 3)**. `shoot.sh` potřebuje `xvfb-run`.
 | kopání | M zapne režim; klik = vykopat vrchní buňku sloupce (do inventáře), Shift+klik = položit materiál z inventáře na vrch, 1–9 = výběr materiálu, Esc konec |
 | stavby | záložka „Stavby“ v liště dole: Domek, Studna, Větrný mlýn, Políčko; najetí = zelený/červený náhled, klik = postavit, R otočit, Esc zrušit |
 | cesty | C zapne režim; klik = bod (klik na domek = jeho dveře), první = start, poslední = cíl, mezi nimi průjezdní body; Enter postaví, Esc zruší |
+| ladicí okno (jen vývoj) | F1 zap / vyp; spuštění s `-- --dev` (a `--dev-panel` = otevřít hned); jen když existuje `addons/dev_tuning/` |
 
 Strany: **S** = sever (−z), **V** = východ (+x), **J** = jih (+z), **Z** = západ (−x). V náhledu jsou popisky stran přímo u bloku.
 
@@ -125,6 +126,11 @@ mosty, skutečně zaoblená geometrie kostek (teď jen stínovací trik), vyhlaz
 | `tools/veg_stats.gd` | statistika skóre vegetace (kalibrace prahů) |
 | `tools/textury_kontrola.py`, `tools/textury_pripravit.py` | kontrola švů textur, příprava dlaždic |
 | `tools/kawaii_srovnani.py` | skládá `14_kawaii_pred_po.png` |
+| `scripts/tunable_params.gd`, `scripts/param_registry.gd` | základ laděných parametrů (Resource, CLI `--prefix.klic=`), registr, přes který je najde ladicí okno |
+| `scripts/surface/surface_params.gd`, `shore_fields.gd`, `dual_grid_mesher.gd`, `surface_renderer.gd` | povrch louka/písek/voda: parametry, okno tříd a vzdálenostních polí, duální síť a voda, materiály a přestavby |
+| `terrain_surface.gdshader`, `water_surface.gdshader`, `surface_common.gdshaderinc`, `surface_look.gdshaderinc`, `meadow_proc.gdshaderinc` | shadery povrchu, vody, písku a procedurální louky (sdílí je i `terrain_toon` a `grass_tuft`) |
+| `scripts/napojeni_demo.gd` | `--napojeni-shots` (snímky 34) a `--napojeni-bench` (měření) |
+| `addons/dev_tuning/` | ladicí okno (samostatný doplněk, do exportu nejde) |
 
 ## Specifikace generátoru (pro sladění s backendem)
 - **Osy:** `lx`, `ly` vodorovně 0–15, `lz` výška 0–63. V Godotu `lx → x`, `ly → z`, `lz → y` (svět: y = lz · 0,5).
@@ -231,6 +237,58 @@ Výkon (llvmpipe, bez GPU, 1280 × 800; „před“ = checkpoint `cp13-pred-trav
 | plný ostrov, detail louky | 66 ms | 154 ms |
 | stavba vegetace 1 bloku | 0,3 ms | 14–17 ms |
 
+## Povrch louka / písek / voda (napojení ze studie `../napojeni-studie/`)
+Studie `../napojeni-studie/` a `../trava-studie/` zůstávají samostatně, kód je do prototypu zkopírovaný a upravený.
+- **Duální mřížka jen pro měkký povrch.** Rohy dlaždic leží ve středech buněk. Dlaždice je duální, když jsou všechny 4 rohy louka, písek
+  nebo dno, nic na nich nestojí a rozdíl výšek je nejvýš `slope_max_layers` = 2 vrstvy (svah). Větší rozdíl = stěna z kostek.
+  Kámen, útesy, kopání, stavby a cesty zůstávají na kostkách (`mesher.gd` vynechá čtvrtiny horních ploch a poloviny boků v duálních dlaždicích,
+  na rozhraní dlaždic doplní „sukně“ `DualGridMesher`). Tvar: vyhlazený bilineár (ve studii `dual_shape` 0, zde `dual_ease` 1), měkkost `dual_soft` 0,06, bez hybridních bloků, bez iso posunu.
+- **Bez švů mezi bloky.** `ShoreFields` čte okno (16 + 2·4)² sloupců z ostrova včetně úhlopříčných sousedů. Z něj počítá třídy, výšky
+  a vzdálenostní pole (vzdálenost k vodě, od okraje louky, k louce; 4 texely na buňku, dvouprůchodový chamfer). Vložení bloku přestaví i 8 sousedů,
+  kopání jen sousedy, k jejichž okraji má sloupec blíž než 5.
+- **Písek:** šedobéžový (`sand_look` 1), procedurální zrno a vlnky (`sand_detail` 2). Pásy: mokrý utužený písek u vody `band_water` 0,75,
+  písek s řídkou trávou před loukou `band_grass` 1,1, podíl trsů `mix_tufts` 0,18. Pěna, vlny a ztenčení trávy jdou z polí.
+- **Louka přímo u vody:** travnatý břeh, pás bláta (`mud_w`), slabší pěna (`foam_bank` 0,3). **Rákos v terénu není,** bude samostatná entita vegetace (TODO).
+- **Procedurální louka, varianta 3 „sladěná“:** stejný šum `pg_*` barví zem (`terrain_toon` / `terrain_surface`) i trsy (`grass_tuft`, `ground_match`).
+- **Hladina vody (jen vykreslení, nová věc):** prototyp vodu neměl. Měkký sloupec pod vrstvou `water_lz` = 30 se kreslí jako dno a hladina leží
+  na 30 · 0,5 − 0,15 = **14,85 m**. Poměr odpovídá studii (hladina 0,85 m = 0,35 nad dnem a 0,15 pod souší). Přírodní bloky mají povrch 30–32,
+  takže voda je jen v blocích posunutých dolů a ve vykopaných jamách. Data, vektory, rarita ani delta se nemění (`vectors/` beze změny).
+- **Parametry** (Resource s `@export`, české popisky): `SurfaceParams` (`scripts/surface/surface_params.gd`, CLI `-- --surface.klic=hodnota`,
+  např. `--surface.water_lz=31 --surface.dual_soft=0.1 --surface.dual_enabled=0`), `GrassParams` (`--grass.klic=`). Barvy shaderů jdou z parametrů.
+  Parametry označené ⟳ potřebují přestavbu: sítě se přestaví 0,4 s po poslední změně, ostatní se projeví hned (uniformy).
+- **Ukázka a měření:** `xvfb-run -a -s "-screen 0 1280x800x24" $G --rendering-driver opengl3 --path . --resolution 1280x800 -- --napojeni-shots`
+  → `shots/34_napojeni_{ostrov,plaz_detail,louka_u_vody_detail,sev_bloku,louka_procedural_detail,kopec_utesy}.png`
+  (`--only=…` výběr, `--tag=x` přípona, `--only=paramtest --dev` vyzkouší živou změnu a předvolby); `-- --napojeni-bench --tag=po`
+  → `shots/34_napojeni_bench_po.txt`. Srovnání s checkpointem `cp14-pred-napojeni-1456.tgz`: `shots/34_napojeni_pred_po.png`.
+  Ukázka přidá 3 bloky posunuté dolů (písčina 4504 −1, louka 1201 −1, louka 5000 −2), aby vznikla jezírka.
+- **Omezení:** v řezu (PageDown) je duální povrch vypnutý (jen kostky). Náhled kandidáta je jen z kostek.
+  Prošlapání země a stín postavičky z `meadow_ground` studie zatím nejsou. Louka si drží světlou paletu prototypu, takže procedurální tón je jemnější než ve studii.
+
+Výkon (llvmpipe, bez GPU, 1280 × 800, stejný skript `napojeni_demo.gd`; „před“ = checkpoint cp14):
+
+| Měření | před | po |
+|---|---|---|
+| 7 bloků, celek | 155 ms/snímek, 310 k trojúhelníků | 173 ms, 357 k |
+| 7 bloků, detail pláže | 123 ms | 129 ms |
+| plný ostrov (24 bloků), celek | 264 ms, 913 k | 301 ms, 1 184 k |
+| plný ostrov, detail pláže | 154 ms | 176 ms |
+| vložení bloku (gen + sítě + sousedé + vegetace) | 81–114 ms | 434–543 ms |
+| doplnění 17 bloků | 116 ms/blok | 575 ms/blok |
+| kopání uprostřed / u hrany bloku | 41 / 59 ms | 123 / 253 ms |
+| kostková síť bloku | 40,5 ms | 32,3 ms |
+| povrch bloku (pole + duální síť a voda) | – | 37,9 + 11,4 ms |
+
+Vložení je dražší hlavně proto, že se přestaví i 8 sousedů (pole, sítě, tráva). Návrhy zrychlení jsou v `../DENIK.md`, blok C.
+
+## Ladicí okno (`addons/dev_tuning/`, jen pro vývoj)
+- Samostatný doplněk. Hra o něm neví: `ParamRegistry` jen sbírá parametry (`register`) a statistiky (`register_stat`).
+  S `-- --dev` hra načte `res://addons/*/dev_runtime.gd`, jen pokud existuje. Bez složky hra běží stejně (ověřeno).
+  Export obě předvolby vylučují (`exclude_filter` … `addons/dev_tuning/*`).
+- **Ovládání:** F1 zap / vyp, `-- --dev --dev-panel` = otevřené hned. Záložky Povrch a Tráva, sbalitelné sekce podle `@export_group`, posuvník
+  s hodnotou, zaškrtávátko, výběr barvy; ⟳ = přestavba (zpožděná, nebo hned tlačítkem **Aplikovat**). **Reset na výchozí**, **Uložit předvolbu**
+  (`user://presety/<záložka>_<název>.tres`), **Načíst předvolbu** (pro aktuální záložku). Nahoře FPS, ms snímku, instance vegetace, bloky, trojúhelníky.
+- Snímek: `shots/34_ladici_okno.png` (`-- --napojeni-shots --only=panel --dev --dev-panel`).
+
 ## Delta bloku (návrh formátu, `vectors/delta_sample.json`)
 ```
 { "deltaFormat": "delta-v0", "generatorVersion": "proto-v2.2",
@@ -255,7 +313,7 @@ mezi blokem a inventářem. Vegetace a stavby/cesty v deltě zatím nejsou. (Doh
 `13_vegetace` (louka/kopec/hora/písčina), `14a_plochy` + `14_kawaii_pred_po` (skládá `tools/kawaii_srovnani.py`), `15_cesty` (3 domky, 2 trasy),
 `16_textury`, `16b_textury_detail`, `17_schody_detail` (schody a rampy na terasy), `18_kawaii_objekty` (z `18a`/`18b`),
 `19_hrany` (z `19a`/`19b`), `20_hero` (celý ostrov bez UI), `20b_hero_hrany` (totéž se zaoblenými hranami),
-`21_kopani` (z `21a`/`21b`: jáma 3 × 3 × 6, 3 buňky zpět, inventář a rarita před → po), `22_stavby` (studna, mlýn, políčko, zelený náhled domku, záložka Stavby). Tráva C (`-- --grass-shots`): `28_trava_C_prehled`, `28_trava_C_detail`, `28_trava_C_pruchod` (postavička ve vysoké trávě), `28_trava_C_pruchod_po_1_5s`, `28_trava_C_pruchod_obnova`, `28_trava_C_pruchod_nizka`. Demo vypisuje také `SELFTEST cesty picking` a `SELFTEST cesty útes` (sloupec za útesem > 4 buňky: A* cestu nenajde) a cestu na terasu hory (počet schodů).
+`21_kopani` (z `21a`/`21b`: jáma 3 × 3 × 6, 3 buňky zpět, inventář a rarita před → po), `22_stavby` (studna, mlýn, políčko, zelený náhled domku, záložka Stavby). Tráva C (`-- --grass-shots`): `28_trava_C_prehled`, `28_trava_C_detail`, `28_trava_C_pruchod` (postavička ve vysoké trávě), `28_trava_C_pruchod_po_1_5s`, `28_trava_C_pruchod_obnova`, `28_trava_C_pruchod_nizka`. Napojení (`-- --napojeni-shots`): `34_napojeni_*`, `34_napojeni_pred_po`, `34_ladici_okno`. Demo vypisuje také `SELFTEST cesty picking` a `SELFTEST cesty útes` (sloupec za útesem > 4 buňky: A* cestu nenajde) a cestu na terasu hory (počet schodů).
 
 ## Výkon (box bez GPU, llvmpipe, GDScript)
 Generování bloku včetně vegetace průměr ≈ 18 ms, mesh bloku (s obrysovými daty) průměr ≈ 37–41 ms, A* dvou tras ≈ 4–5 ms. Náhled se přepočítá při každé změně volby, odezva je okamžitá.
