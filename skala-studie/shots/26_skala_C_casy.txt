@@ -1,0 +1,9 @@
+data hora 7777 32×32×64: generování 76 ms
+buněk celkem 65536, plných 39773, povrchových (plná se vzduchem vedle) 6049 = 15.2 % plných
+DŘÍV nets_mesher (celá mřížka): 7021 ms, trojúhelníků 93044
+TEĎ řídký výpočet: příprava 2 ms, stavba 981 ms (celkem 983 ms), chunků 16, trojúhelníků 93270
+  smíšené bloky (okolí povrchu) 7828, kandidátní krychle 89253, vzorků se šumem 57344 z 623691
+  profil (ms): kandidati 28, hustota 432, vrcholy 226, quady 188, mesh 4, vrcholy_celkem 760
+  znovu se zaplněnou mezipamětí hustoty: 541 ms
+LOD 1 vzorek/buňku: 274 ms, trojúhelníků 22762
+KOPÁNÍ 27 buněk: průměr 167 ms/úprava, max 219 ms, průměrně 3.3 chunků na úpravu (chunk 16³)

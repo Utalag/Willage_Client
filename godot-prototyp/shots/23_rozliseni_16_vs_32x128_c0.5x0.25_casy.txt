@@ -1,0 +1,2 @@
+RES hora 7777 | mřížka 16×16×64, buňka 1.0×1.0×0.5, blok 16.0×16.0×32.0 | generování 21.1 ms, mesh 57.3 ms, vrcholů 14240, trojúhelníků 7120, buněk 16384
+RES hora 7777 | mřížka 32×32×128, buňka 0.5×0.5×0.25, blok 16.0×16.0×32.0 | generování 155.8 ms, mesh 326.6 ms, vrcholů 57304, trojúhelníků 28652, buněk 131072

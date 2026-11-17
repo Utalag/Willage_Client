@@ -1,0 +1,17 @@
+data (4 vzorky, dorovnání stran): 0.7 ms
+klasická mřížka (pro srovnání): splat 645 ms, pole 134 ms, mesh 5 ms (1736 trojúhelníků), voda 3 ms, tráva 41 ms (3387 instancí s řídnutím)
+duální · současná: splat 465 ms, pole 141 ms, mesh 244 ms (13440 trojúhelníků), voda 3 ms, tráva 46 ms (3073 instancí s řídnutím)
+duální · posun izočáry: splat 481 ms, pole 128 ms, mesh 253 ms (13440 trojúhelníků), voda 3 ms, tráva 48 ms (3229 instancí s řídnutím)
+duální · plošina + zkosení: splat 920 ms, pole 144 ms, mesh 117 ms (29760 trojúhelníků), voda 6 ms, tráva 68 ms (3069 instancí s řídnutím)
+duální · hybrid (malé prvky a schody jako kvádry): splat 1235 ms, pole 128 ms, mesh 128 ms (29840 trojúhelníků), voda 8 ms, tráva 73 ms (3079 instancí s řídnutím)
+stavba celkem 5484 ms (GDScript, splat 16 px/buňku)
+klasická mřížka (pro srovnání) celek: 36.6 ms/snímek
+klasická mřížka (pro srovnání) detail: 40.1 ms/snímek
+duální · současná celek: 37.8 ms/snímek
+duální · současná detail: 41.3 ms/snímek
+duální · posun izočáry celek: 39.6 ms/snímek
+duální · posun izočáry detail: 46.3 ms/snímek
+duální · plošina + zkosení celek: 66.3 ms/snímek
+duální · plošina + zkosení detail: 58.5 ms/snímek
+duální · hybrid (malé prvky a schody jako kvádry) celek: 61.9 ms/snímek
+duální · hybrid (malé prvky a schody jako kvádry) detail: 63.6 ms/snímek

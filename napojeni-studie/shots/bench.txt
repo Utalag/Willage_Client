@@ -1,0 +1,13 @@
+data (4 vzorky, dorovnání stran): 0.6 ms
+přístup 1: splat 601 ms, pole 128 ms, mesh 5 ms (1736 trojúhelníků), voda 2 ms, tráva 38 ms (3387 instancí s řídnutím)
+přístup 2: splat 428 ms, pole 128 ms, mesh 233 ms (13440 trojúhelníků), voda 3 ms, tráva 46 ms (3073 instancí s řídnutím)
+stavba celkem 1628 ms (GDScript, splat 16 px/buňku)
+přístup 1 bez doplňků celek: 26.2 ms/snímek
+přístup 1 bez doplňků detail: 32.4 ms/snímek
+přístup 1 s doplňky celek: 26.2 ms/snímek
+přístup 1 s doplňky detail: 34.7 ms/snímek
+přístup 2 bez doplňků celek: 44.0 ms/snímek
+přístup 2 bez doplňků detail: 38.0 ms/snímek
+přístup 2 s doplňky celek: 39.2 ms/snímek
+přístup 2 s doplňky detail: 41.6 ms/snímek
+renderer: llvmpipe (LLVM 19.1.7, 256 bits)

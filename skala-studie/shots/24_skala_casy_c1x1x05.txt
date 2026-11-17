@@ -1,0 +1,4 @@
+SKALA A_c1x1x05: stavba 4.8 ms, trojúhelníků 660 
+SKALA B_c1x1x05: stavba 10.6 ms, trojúhelníků 2112 
+SKALA C_c1x1x05: stavba 123.9 ms, trojúhelníků 2316 
+SKALA D_c1x1x05: stavba 111.2 ms, trojúhelníků 2114 (2 kamenů, 4 balvanů, 1 souvislých skal)

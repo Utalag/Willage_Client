@@ -1,0 +1,5 @@
+SCALE data 32×32×64: 7 ms, plných buněk 20373
+SCALE A 32×32×64: stavba 129 ms, trojúhelníků 18528 
+SCALE B 32×32×64: stavba 397 ms, trojúhelníků 69688 
+SCALE C 32×32×64: stavba 7322 ms, trojúhelníků 103386 
+SCALE D 32×32×64: stavba 7161 ms, trojúhelníků 103204 (4 kamenů, 5 balvanů, 1 souvislých skal)

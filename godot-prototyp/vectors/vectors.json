@@ -1,0 +1,1481 @@
+{
+  "generatorVersion": "proto-v2.2",
+  "volumeHashAlgo": "FNV-1a 64 (offset 0xcbf29ce484222325, prime 0x100000001b3, mod 2^64) over the 16384 material bytes (1 byte = MaterialId) in index order (lx*16+ly)*64+lz, lx,ly in 0..15, lz in 0..63; lowercase 16-digit hex",
+  "transformFormat": "mirror: bool (lx -> 15-lx, applied first); rotation: degrees 0/90/180/270, each 90 deg step (lx,ly) -> (15-ly,lx), applied after mirror; heightShift: -4..4 cells; sides: N(-ly) E(+lx) S(+ly) W(-lx) = auto | blend1..blend4 | keep (no neighbours in vectors, so sides have no effect)",
+  "generator_version": 2,
+  "engine": "Godot 4.7.2-stable (official) FastNoiseLite",
+  "dims": {
+    "lx": 16,
+    "ly": 16,
+    "lz": 64
+  },
+  "rarityFormula": "rarity-v2: R = sum(n_i*w_i*s_i)/sum(n_i*w_i) over materials (air, fog excluded); s = catalog score, w = catalog weight (default s^2); thresholds class0..4 = [0.0, 15.9, 19.4, 26.1, 29.9]",
+  "materialScore": [
+    0.0,
+    1.0,
+    1.0,
+    1.5,
+    2.0,
+    2.0,
+    3.0,
+    3.0,
+    40.0,
+    25.0,
+    8.0,
+    0.0
+  ],
+  "materialWeight": [
+    0.0,
+    1.0,
+    1.0,
+    2.25,
+    4.0,
+    4.0,
+    9.0,
+    9.0,
+    1600.0,
+    625.0,
+    64.0,
+    0.0
+  ],
+  "cell_index": "(lx * 16 + ly) * 64 + lz; smyčky lx, ly, lz; 1 bajt = MaterialId",
+  "volume_hash": "FNV-1a 64 přes 16384 bajtů v pořadí indexu",
+  "surface_hash": "FNV-1a 64 přes 256 bajtů výšky povrchu (lx * 16 + ly)",
+  "noise_seed": "mix(seed, purpose, layer) & 0x7FFFFFFF; mix = splitmix64(splitmix64(splitmix64(seed) ^ fnv1a64(purpose)) ^ layer)",
+  "spot_cells_rule": "r = mix(seed, 'SPOT', i); lx = r & 15; ly = (r >>> 4) & 15; i < 10: lz = surface - 1 - ((r >>> 8) & 3), jinak lz = (r >>> 8) & 63",
+  "materials": [
+    "vzduch",
+    "tráva",
+    "hlína",
+    "písek",
+    "jíl",
+    "vápenec",
+    "žula",
+    "čedič",
+    "měděná ruda",
+    "železná ruda",
+    "sníh",
+    "mlha"
+  ],
+  "cases": [
+    {
+      "recipe": "louka",
+      "seed": 101,
+      "transform": {
+        "mirror": false,
+        "rotation": 0,
+        "heightShift": 0,
+        "sides": {
+          "N": "auto",
+          "E": "auto",
+          "S": "auto",
+          "W": "auto"
+        }
+      },
+      "volume_fnv1a64": "6f720288b31ca6ff",
+      "surface_fnv1a64": "ad79294ef2f9aa15",
+      "material_summary": {
+        "vzduch": 8496,
+        "tráva": 256,
+        "hlína": 534,
+        "písek": 267,
+        "jíl": 181,
+        "vápenec": 1162,
+        "žula": 2707,
+        "čedič": 2746,
+        "měděná ruda": 8,
+        "železná ruda": 27
+      },
+      "material_rarity": {
+        "formula": "rarity-v2",
+        "score": 12.7877,
+        "class": 0,
+        "name": "běžná"
+      },
+      "spot_cells": [
+        {
+          "lx": 4,
+          "ly": 12,
+          "lz": 29,
+          "material": 2,
+          "name": "hlína"
+        },
+        {
+          "lx": 2,
+          "ly": 0,
+          "lz": 29,
+          "material": 2,
+          "name": "hlína"
+        },
+        {
+          "lx": 1,
+          "ly": 8,
+          "lz": 29,
+          "material": 1,
+          "name": "tráva"
+        },
+        {
+          "lx": 4,
+          "ly": 0,
+          "lz": 28,
+          "material": 2,
+          "name": "hlína"
+        },
+        {
+          "lx": 8,
+          "ly": 13,
+          "lz": 27,
+          "material": 2,
+          "name": "hlína"
+        },
+        {
+          "lx": 4,
+          "ly": 7,
+          "lz": 30,
+          "material": 1,
+          "name": "tráva"
+        },
+        {
+          "lx": 3,
+          "ly": 4,
+          "lz": 27,
+          "material": 3,
+          "name": "písek"
+        },
+        {
+          "lx": 2,
+          "ly": 0,
+          "lz": 30,
+          "material": 1,
+          "name": "tráva"
+        },
+        {
+          "lx": 7,
+          "ly": 14,
+          "lz": 29,
+          "material": 2,
+          "name": "hlína"
+        },
+        {
+          "lx": 13,
+          "ly": 10,
+          "lz": 26,
+          "material": 3,
+          "name": "písek"
+        },
+        {
+          "lx": 0,
+          "ly": 15,
+          "lz": 37,
+          "material": 0,
+          "name": "vzduch"
+        },
+        {
+          "lx": 7,
+          "ly": 5,
+          "lz": 23,
+          "material": 5,
+          "name": "vápenec"
+        },
+        {
+          "lx": 15,
+          "ly": 6,
+          "lz": 8,
+          "material": 7,
+          "name": "čedič"
+        },
+        {
+          "lx": 7,
+          "ly": 11,
+          "lz": 46,
+          "material": 0,
+          "name": "vzduch"
+        },
+        {
+          "lx": 5,
+          "ly": 6,
+          "lz": 52,
+          "material": 0,
+          "name": "vzduch"
+        },
+        {
+          "lx": 5,
+          "ly": 6,
+          "lz": 1,
+          "material": 7,
+          "name": "čedič"
+        },
+        {
+          "lx": 6,
+          "ly": 11,
+          "lz": 56,
+          "material": 0,
+          "name": "vzduch"
+        },
+        {
+          "lx": 10,
+          "ly": 4,
+          "lz": 6,
+          "material": 7,
+          "name": "čedič"
+        },
+        {
+          "lx": 14,
+          "ly": 0,
+          "lz": 44,
+          "material": 0,
+          "name": "vzduch"
+        },
+        {
+          "lx": 13,
+          "ly": 5,
+          "lz": 58,
+          "material": 0,
+          "name": "vzduch"
+        }
+      ]
+    },
+    {
+      "recipe": "louka",
+      "seed": 404,
+      "transform": {
+        "mirror": false,
+        "rotation": 0,
+        "heightShift": 0,
+        "sides": {
+          "N": "auto",
+          "E": "auto",
+          "S": "auto",
+          "W": "auto"
+        }
+      },
+      "volume_fnv1a64": "b3f74b75c291d505",
+      "surface_fnv1a64": "9d41c0b790f2207e",
+      "material_summary": {
+        "vzduch": 8417,
+        "tráva": 256,
+        "hlína": 541,
+        "písek": 191,
+        "jíl": 263,
+        "vápenec": 1071,
+        "žula": 2480,
+        "čedič": 3123,
+        "měděná ruda": 7,
+        "železná ruda": 35
+      },
+      "material_rarity": {
+        "formula": "rarity-v2",
+        "score": 12.8604,
+        "class": 0,
+        "name": "běžná"
+      },
+      "spot_cells": [
+        {
+          "lx": 2,
+          "ly": 4,
+          "lz": 28,
+          "material": 3,
+          "name": "písek"
+        },
+        {
+          "lx": 10,
+          "ly": 1,
+          "lz": 29,
+          "material": 2,
+          "name": "hlína"
+        },
+        {
+          "lx": 5,
+          "ly": 15,
+          "lz": 28,
+          "material": 2,
+          "name": "hlína"
+        },
+        {
+          "lx": 8,
+          "ly": 14,
+          "lz": 29,
+          "material": 2,
+          "name": "hlína"
+        },
+        {
+          "lx": 1,
+          "ly": 8,
+          "lz": 30,
+          "material": 1,
+          "name": "tráva"
+        },
+        {
+          "lx": 10,
+          "ly": 6,
+          "lz": 30,
+          "material": 2,
+          "name": "hlína"
+        },
+        {
+          "lx": 7,
+          "ly": 8,
+          "lz": 30,
+          "material": 1,
+          "name": "tráva"
+        },
+        {
+          "lx": 11,
+          "ly": 14,
+          "lz": 29,
+          "material": 2,
+          "name": "hlína"
+        },
+        {
+          "lx": 15,
+          "ly": 0,
+          "lz": 29,
+          "material": 2,
+          "name": "hlína"
+        },
+        {
+          "lx": 6,
+          "ly": 2,
+          "lz": 29,
+          "material": 2,
+          "name": "hlína"
+        },
+        {
+          "lx": 14,
+          "ly": 3,
+          "lz": 39,
+          "material": 0,
+          "name": "vzduch"
+        },
+        {
+          "lx": 5,
+          "ly": 10,
+          "lz": 43,
+          "material": 0,
+          "name": "vzduch"
+        },
+        {
+          "lx": 4,
+          "ly": 5,
+          "lz": 60,
+          "material": 0,
+          "name": "vzduch"
+        },
+        {
+          "lx": 2,
+          "ly": 8,
+          "lz": 5,
+          "material": 7,
+          "name": "čedič"
+        },
+        {
+          "lx": 4,
+          "ly": 4,
+          "lz": 52,
+          "material": 0,
+          "name": "vzduch"
+        },
+        {
+          "lx": 4,
+          "ly": 12,
+          "lz": 47,
+          "material": 0,
+          "name": "vzduch"
+        },
+        {
+          "lx": 10,
+          "ly": 12,
+          "lz": 24,
+          "material": 5,
+          "name": "vápenec"
+        },
+        {
+          "lx": 9,
+          "ly": 6,
+          "lz": 19,
+          "material": 6,
+          "name": "žula"
+        },
+        {
+          "lx": 12,
+          "ly": 10,
+          "lz": 12,
+          "material": 6,
+          "name": "žula"
+        },
+        {
+          "lx": 1,
+          "ly": 3,
+          "lz": 18,
+          "material": 6,
+          "name": "žula"
+        }
+      ]
+    },
+    {
+      "recipe": "kopec",
+      "seed": 303,
+      "transform": {
+        "mirror": false,
+        "rotation": 0,
+        "heightShift": 0,
+        "sides": {
+          "N": "auto",
+          "E": "auto",
+          "S": "auto",
+          "W": "auto"
+        }
+      },
+      "volume_fnv1a64": "8617c3f49a54ea5e",
+      "surface_fnv1a64": "cf4a16a9d5cbf08a",
+      "material_summary": {
+        "vzduch": 7971,
+        "tráva": 256,
+        "hlína": 534,
+        "písek": 152,
+        "jíl": 304,
+        "vápenec": 1555,
+        "žula": 2606,
+        "čedič": 2969,
+        "měděná ruda": 16,
+        "železná ruda": 21
+      },
+      "material_rarity": {
+        "formula": "rarity-v2",
+        "score": 15.5828,
+        "class": 0,
+        "name": "běžná"
+      },
+      "spot_cells": [
+        {
+          "lx": 13,
+          "ly": 11,
+          "lz": 26,
+          "material": 4,
+          "name": "jíl"
+        },
+        {
+          "lx": 1,
+          "ly": 6,
+          "lz": 32,
+          "material": 2,
+          "name": "hlína"
+        },
+        {
+          "lx": 14,
+          "ly": 4,
+          "lz": 26,
+          "material": 3,
+          "name": "písek"
+        },
+        {
+          "lx": 11,
+          "ly": 4,
+          "lz": 26,
+          "material": 3,
+          "name": "písek"
+        },
+        {
+          "lx": 8,
+          "ly": 0,
+          "lz": 28,
+          "material": 2,
+          "name": "hlína"
+        },
+        {
+          "lx": 8,
+          "ly": 13,
+          "lz": 32,
+          "material": 2,
+          "name": "hlína"
+        },
+        {
+          "lx": 3,
+          "ly": 1,
+          "lz": 27,
+          "material": 2,
+          "name": "hlína"
+        },
+        {
+          "lx": 7,
+          "ly": 1,
+          "lz": 28,
+          "material": 2,
+          "name": "hlína"
+        },
+        {
+          "lx": 11,
+          "ly": 2,
+          "lz": 26,
+          "material": 5,
+          "name": "vápenec"
+        },
+        {
+          "lx": 0,
+          "ly": 11,
+          "lz": 30,
+          "material": 4,
+          "name": "jíl"
+        },
+        {
+          "lx": 14,
+          "ly": 6,
+          "lz": 35,
+          "material": 0,
+          "name": "vzduch"
+        },
+        {
+          "lx": 1,
+          "ly": 15,
+          "lz": 36,
+          "material": 2,
+          "name": "hlína"
+        },
+        {
+          "lx": 14,
+          "ly": 5,
+          "lz": 57,
+          "material": 0,
+          "name": "vzduch"
+        },
+        {
+          "lx": 9,
+          "ly": 13,
+          "lz": 39,
+          "material": 0,
+          "name": "vzduch"
+        },
+        {
+          "lx": 0,
+          "ly": 3,
+          "lz": 8,
+          "material": 7,
+          "name": "čedič"
+        },
+        {
+          "lx": 13,
+          "ly": 6,
+          "lz": 28,
+          "material": 2,
+          "name": "hlína"
+        },
+        {
+          "lx": 11,
+          "ly": 5,
+          "lz": 54,
+          "material": 0,
+          "name": "vzduch"
+        },
+        {
+          "lx": 8,
+          "ly": 1,
+          "lz": 26,
+          "material": 3,
+          "name": "písek"
+        },
+        {
+          "lx": 14,
+          "ly": 14,
+          "lz": 26,
+          "material": 4,
+          "name": "jíl"
+        },
+        {
+          "lx": 4,
+          "ly": 9,
+          "lz": 54,
+          "material": 0,
+          "name": "vzduch"
+        }
+      ]
+    },
+    {
+      "recipe": "kopec",
+      "seed": 2302,
+      "transform": {
+        "mirror": false,
+        "rotation": 0,
+        "heightShift": 0,
+        "sides": {
+          "N": "auto",
+          "E": "auto",
+          "S": "auto",
+          "W": "auto"
+        }
+      },
+      "volume_fnv1a64": "a0c8efa8519be670",
+      "surface_fnv1a64": "472acc48bbcc3fe7",
+      "material_summary": {
+        "vzduch": 7260,
+        "tráva": 256,
+        "hlína": 549,
+        "písek": 199,
+        "jíl": 273,
+        "vápenec": 2325,
+        "žula": 2477,
+        "čedič": 2996,
+        "měděná ruda": 18,
+        "železná ruda": 31
+      },
+      "material_rarity": {
+        "formula": "rarity-v2",
+        "score": 16.5609,
+        "class": 1,
+        "name": "neobvyklá"
+      },
+      "spot_cells": [
+        {
+          "lx": 2,
+          "ly": 7,
+          "lz": 38,
+          "material": 1,
+          "name": "tráva"
+        },
+        {
+          "lx": 2,
+          "ly": 4,
+          "lz": 37,
+          "material": 2,
+          "name": "hlína"
+        },
+        {
+          "lx": 5,
+          "ly": 8,
+          "lz": 36,
+          "material": 2,
+          "name": "hlína"
+        },
+        {
+          "lx": 10,
+          "ly": 1,
+          "lz": 27,
+          "material": 2,
+          "name": "hlína"
+        },
+        {
+          "lx": 7,
+          "ly": 6,
+          "lz": 35,
+          "material": 4,
+          "name": "jíl"
+        },
+        {
+          "lx": 13,
+          "ly": 0,
+          "lz": 29,
+          "material": 1,
+          "name": "tráva"
+        },
+        {
+          "lx": 4,
+          "ly": 12,
+          "lz": 36,
+          "material": 2,
+          "name": "hlína"
+        },
+        {
+          "lx": 12,
+          "ly": 0,
+          "lz": 27,
+          "material": 2,
+          "name": "hlína"
+        },
+        {
+          "lx": 9,
+          "ly": 1,
+          "lz": 27,
+          "material": 2,
+          "name": "hlína"
+        },
+        {
+          "lx": 14,
+          "ly": 9,
+          "lz": 35,
+          "material": 4,
+          "name": "jíl"
+        },
+        {
+          "lx": 4,
+          "ly": 1,
+          "lz": 45,
+          "material": 0,
+          "name": "vzduch"
+        },
+        {
+          "lx": 8,
+          "ly": 3,
+          "lz": 11,
+          "material": 7,
+          "name": "čedič"
+        },
+        {
+          "lx": 6,
+          "ly": 0,
+          "lz": 26,
+          "material": 3,
+          "name": "písek"
+        },
+        {
+          "lx": 15,
+          "ly": 3,
+          "lz": 41,
+          "material": 0,
+          "name": "vzduch"
+        },
+        {
+          "lx": 2,
+          "ly": 3,
+          "lz": 7,
+          "material": 7,
+          "name": "čedič"
+        },
+        {
+          "lx": 9,
+          "ly": 2,
+          "lz": 1,
+          "material": 7,
+          "name": "čedič"
+        },
+        {
+          "lx": 15,
+          "ly": 10,
+          "lz": 15,
+          "material": 6,
+          "name": "žula"
+        },
+        {
+          "lx": 14,
+          "ly": 10,
+          "lz": 56,
+          "material": 0,
+          "name": "vzduch"
+        },
+        {
+          "lx": 15,
+          "ly": 4,
+          "lz": 25,
+          "material": 5,
+          "name": "vápenec"
+        },
+        {
+          "lx": 15,
+          "ly": 10,
+          "lz": 61,
+          "material": 0,
+          "name": "vzduch"
+        }
+      ]
+    },
+    {
+      "recipe": "hora",
+      "seed": 202,
+      "transform": {
+        "mirror": false,
+        "rotation": 0,
+        "heightShift": 0,
+        "sides": {
+          "N": "auto",
+          "E": "auto",
+          "S": "auto",
+          "W": "auto"
+        }
+      },
+      "volume_fnv1a64": "d0a684b5b37b6c56",
+      "surface_fnv1a64": "716ba287da222fc1",
+      "material_summary": {
+        "vzduch": 6186,
+        "tráva": 206,
+        "hlína": 440,
+        "písek": 53,
+        "jíl": 290,
+        "vápenec": 3338,
+        "žula": 2503,
+        "čedič": 3319,
+        "měděná ruda": 20,
+        "železná ruda": 21,
+        "sníh": 8
+      },
+      "material_rarity": {
+        "formula": "rarity-v2",
+        "score": 15.8788,
+        "class": 0,
+        "name": "běžná"
+      },
+      "spot_cells": [
+        {
+          "lx": 14,
+          "ly": 8,
+          "lz": 35,
+          "material": 2,
+          "name": "hlína"
+        },
+        {
+          "lx": 8,
+          "ly": 3,
+          "lz": 36,
+          "material": 1,
+          "name": "tráva"
+        },
+        {
+          "lx": 3,
+          "ly": 15,
+          "lz": 40,
+          "material": 4,
+          "name": "jíl"
+        },
+        {
+          "lx": 3,
+          "ly": 8,
+          "lz": 44,
+          "material": 5,
+          "name": "vápenec"
+        },
+        {
+          "lx": 15,
+          "ly": 3,
+          "lz": 29,
+          "material": 2,
+          "name": "hlína"
+        },
+        {
+          "lx": 9,
+          "ly": 5,
+          "lz": 35,
+          "material": 2,
+          "name": "hlína"
+        },
+        {
+          "lx": 2,
+          "ly": 9,
+          "lz": 40,
+          "material": 2,
+          "name": "hlína"
+        },
+        {
+          "lx": 3,
+          "ly": 8,
+          "lz": 42,
+          "material": 5,
+          "name": "vápenec"
+        },
+        {
+          "lx": 1,
+          "ly": 13,
+          "lz": 36,
+          "material": 1,
+          "name": "tráva"
+        },
+        {
+          "lx": 8,
+          "ly": 1,
+          "lz": 36,
+          "material": 1,
+          "name": "tráva"
+        },
+        {
+          "lx": 15,
+          "ly": 7,
+          "lz": 61,
+          "material": 0,
+          "name": "vzduch"
+        },
+        {
+          "lx": 5,
+          "ly": 6,
+          "lz": 46,
+          "material": 0,
+          "name": "vzduch"
+        },
+        {
+          "lx": 2,
+          "ly": 11,
+          "lz": 35,
+          "material": 2,
+          "name": "hlína"
+        },
+        {
+          "lx": 1,
+          "ly": 0,
+          "lz": 58,
+          "material": 0,
+          "name": "vzduch"
+        },
+        {
+          "lx": 5,
+          "ly": 6,
+          "lz": 61,
+          "material": 0,
+          "name": "vzduch"
+        },
+        {
+          "lx": 10,
+          "ly": 0,
+          "lz": 14,
+          "material": 6,
+          "name": "žula"
+        },
+        {
+          "lx": 1,
+          "ly": 1,
+          "lz": 40,
+          "material": 0,
+          "name": "vzduch"
+        },
+        {
+          "lx": 0,
+          "ly": 8,
+          "lz": 55,
+          "material": 0,
+          "name": "vzduch"
+        },
+        {
+          "lx": 10,
+          "ly": 8,
+          "lz": 63,
+          "material": 0,
+          "name": "vzduch"
+        },
+        {
+          "lx": 13,
+          "ly": 9,
+          "lz": 7,
+          "material": 7,
+          "name": "čedič"
+        }
+      ]
+    },
+    {
+      "recipe": "hora",
+      "seed": 1000,
+      "transform": {
+        "mirror": false,
+        "rotation": 0,
+        "heightShift": 0,
+        "sides": {
+          "N": "auto",
+          "E": "auto",
+          "S": "auto",
+          "W": "auto"
+        }
+      },
+      "volume_fnv1a64": "7745dcf7c935150c",
+      "surface_fnv1a64": "f81842902d3e4303",
+      "material_summary": {
+        "vzduch": 7236,
+        "tráva": 229,
+        "hlína": 474,
+        "písek": 151,
+        "jíl": 237,
+        "vápenec": 2541,
+        "žula": 2494,
+        "čedič": 2987,
+        "měděná ruda": 18,
+        "železná ruda": 15,
+        "sníh": 2
+      },
+      "material_rarity": {
+        "formula": "rarity-v2",
+        "score": 15.6215,
+        "class": 0,
+        "name": "běžná"
+      },
+      "spot_cells": [
+        {
+          "lx": 2,
+          "ly": 6,
+          "lz": 30,
+          "material": 1,
+          "name": "tráva"
+        },
+        {
+          "lx": 3,
+          "ly": 3,
+          "lz": 30,
+          "material": 1,
+          "name": "tráva"
+        },
+        {
+          "lx": 14,
+          "ly": 3,
+          "lz": 27,
+          "material": 3,
+          "name": "písek"
+        },
+        {
+          "lx": 6,
+          "ly": 2,
+          "lz": 28,
+          "material": 2,
+          "name": "hlína"
+        },
+        {
+          "lx": 10,
+          "ly": 1,
+          "lz": 27,
+          "material": 2,
+          "name": "hlína"
+        },
+        {
+          "lx": 1,
+          "ly": 10,
+          "lz": 29,
+          "material": 2,
+          "name": "hlína"
+        },
+        {
+          "lx": 7,
+          "ly": 14,
+          "lz": 43,
+          "material": 1,
+          "name": "tráva"
+        },
+        {
+          "lx": 2,
+          "ly": 12,
+          "lz": 27,
+          "material": 2,
+          "name": "hlína"
+        },
+        {
+          "lx": 15,
+          "ly": 9,
+          "lz": 29,
+          "material": 2,
+          "name": "hlína"
+        },
+        {
+          "lx": 14,
+          "ly": 15,
+          "lz": 28,
+          "material": 4,
+          "name": "jíl"
+        },
+        {
+          "lx": 12,
+          "ly": 2,
+          "lz": 49,
+          "material": 0,
+          "name": "vzduch"
+        },
+        {
+          "lx": 15,
+          "ly": 4,
+          "lz": 29,
+          "material": 2,
+          "name": "hlína"
+        },
+        {
+          "lx": 12,
+          "ly": 2,
+          "lz": 21,
+          "material": 5,
+          "name": "vápenec"
+        },
+        {
+          "lx": 14,
+          "ly": 6,
+          "lz": 30,
+          "material": 1,
+          "name": "tráva"
+        },
+        {
+          "lx": 15,
+          "ly": 2,
+          "lz": 12,
+          "material": 6,
+          "name": "žula"
+        },
+        {
+          "lx": 13,
+          "ly": 8,
+          "lz": 28,
+          "material": 3,
+          "name": "písek"
+        },
+        {
+          "lx": 12,
+          "ly": 15,
+          "lz": 18,
+          "material": 6,
+          "name": "žula"
+        },
+        {
+          "lx": 7,
+          "ly": 2,
+          "lz": 0,
+          "material": 7,
+          "name": "čedič"
+        },
+        {
+          "lx": 10,
+          "ly": 9,
+          "lz": 4,
+          "material": 7,
+          "name": "čedič"
+        },
+        {
+          "lx": 1,
+          "ly": 2,
+          "lz": 28,
+          "material": 2,
+          "name": "hlína"
+        }
+      ]
+    },
+    {
+      "recipe": "hora",
+      "seed": 202,
+      "transform": {
+        "mirror": true,
+        "rotation": 90,
+        "heightShift": 2,
+        "sides": {
+          "N": "auto",
+          "E": "auto",
+          "S": "auto",
+          "W": "auto"
+        }
+      },
+      "volume_fnv1a64": "8ae7d3a9ac9a26e2",
+      "surface_fnv1a64": "db16fa25e677b111",
+      "material_summary": {
+        "vzduch": 5674,
+        "tráva": 192,
+        "hlína": 411,
+        "písek": 41,
+        "jíl": 277,
+        "vápenec": 3366,
+        "žula": 2503,
+        "čedič": 3831,
+        "měděná ruda": 20,
+        "železná ruda": 21,
+        "sníh": 48
+      },
+      "material_rarity": {
+        "formula": "rarity-v2",
+        "score": 15.2204,
+        "class": 0,
+        "name": "běžná"
+      },
+      "spot_cells": [
+        {
+          "lx": 14,
+          "ly": 8,
+          "lz": 37,
+          "material": 2,
+          "name": "hlína"
+        },
+        {
+          "lx": 8,
+          "ly": 3,
+          "lz": 44,
+          "material": 1,
+          "name": "tráva"
+        },
+        {
+          "lx": 3,
+          "ly": 15,
+          "lz": 29,
+          "material": 2,
+          "name": "hlína"
+        },
+        {
+          "lx": 3,
+          "ly": 8,
+          "lz": 48,
+          "material": 5,
+          "name": "vápenec"
+        },
+        {
+          "lx": 15,
+          "ly": 3,
+          "lz": 37,
+          "material": 2,
+          "name": "hlína"
+        },
+        {
+          "lx": 9,
+          "ly": 5,
+          "lz": 41,
+          "material": 2,
+          "name": "hlína"
+        },
+        {
+          "lx": 2,
+          "ly": 9,
+          "lz": 46,
+          "material": 5,
+          "name": "vápenec"
+        },
+        {
+          "lx": 3,
+          "ly": 8,
+          "lz": 46,
+          "material": 5,
+          "name": "vápenec"
+        },
+        {
+          "lx": 1,
+          "ly": 13,
+          "lz": 44,
+          "material": 1,
+          "name": "tráva"
+        },
+        {
+          "lx": 8,
+          "ly": 1,
+          "lz": 38,
+          "material": 1,
+          "name": "tráva"
+        },
+        {
+          "lx": 15,
+          "ly": 7,
+          "lz": 61,
+          "material": 0,
+          "name": "vzduch"
+        },
+        {
+          "lx": 5,
+          "ly": 6,
+          "lz": 46,
+          "material": 5,
+          "name": "vápenec"
+        },
+        {
+          "lx": 2,
+          "ly": 11,
+          "lz": 35,
+          "material": 5,
+          "name": "vápenec"
+        },
+        {
+          "lx": 1,
+          "ly": 0,
+          "lz": 58,
+          "material": 0,
+          "name": "vzduch"
+        },
+        {
+          "lx": 5,
+          "ly": 6,
+          "lz": 61,
+          "material": 0,
+          "name": "vzduch"
+        },
+        {
+          "lx": 10,
+          "ly": 0,
+          "lz": 14,
+          "material": 6,
+          "name": "žula"
+        },
+        {
+          "lx": 1,
+          "ly": 1,
+          "lz": 40,
+          "material": 0,
+          "name": "vzduch"
+        },
+        {
+          "lx": 0,
+          "ly": 8,
+          "lz": 55,
+          "material": 0,
+          "name": "vzduch"
+        },
+        {
+          "lx": 10,
+          "ly": 8,
+          "lz": 63,
+          "material": 0,
+          "name": "vzduch"
+        },
+        {
+          "lx": 13,
+          "ly": 9,
+          "lz": 7,
+          "material": 7,
+          "name": "čedič"
+        }
+      ]
+    },
+    {
+      "recipe": "louka",
+      "seed": 101,
+      "transform": {
+        "mirror": false,
+        "rotation": 270,
+        "heightShift": -3,
+        "sides": {
+          "N": "auto",
+          "E": "auto",
+          "S": "auto",
+          "W": "auto"
+        }
+      },
+      "volume_fnv1a64": "9ca6e8201b566781",
+      "surface_fnv1a64": "7568ed16bf3aec31",
+      "material_summary": {
+        "vzduch": 9264,
+        "tráva": 256,
+        "hlína": 534,
+        "písek": 267,
+        "jíl": 181,
+        "vápenec": 1162,
+        "žula": 2707,
+        "čedič": 1985,
+        "měděná ruda": 8,
+        "železná ruda": 20
+      },
+      "material_rarity": {
+        "formula": "rarity-v2",
+        "score": 12.9709,
+        "class": 0,
+        "name": "běžná"
+      },
+      "spot_cells": [
+        {
+          "lx": 4,
+          "ly": 12,
+          "lz": 26,
+          "material": 2,
+          "name": "hlína"
+        },
+        {
+          "lx": 2,
+          "ly": 0,
+          "lz": 26,
+          "material": 2,
+          "name": "hlína"
+        },
+        {
+          "lx": 1,
+          "ly": 8,
+          "lz": 28,
+          "material": 1,
+          "name": "tráva"
+        },
+        {
+          "lx": 4,
+          "ly": 0,
+          "lz": 25,
+          "material": 4,
+          "name": "jíl"
+        },
+        {
+          "lx": 8,
+          "ly": 13,
+          "lz": 25,
+          "material": 2,
+          "name": "hlína"
+        },
+        {
+          "lx": 4,
+          "ly": 7,
+          "lz": 28,
+          "material": 1,
+          "name": "tráva"
+        },
+        {
+          "lx": 3,
+          "ly": 4,
+          "lz": 24,
+          "material": 2,
+          "name": "hlína"
+        },
+        {
+          "lx": 2,
+          "ly": 0,
+          "lz": 27,
+          "material": 1,
+          "name": "tráva"
+        },
+        {
+          "lx": 7,
+          "ly": 14,
+          "lz": 25,
+          "material": 2,
+          "name": "hlína"
+        },
+        {
+          "lx": 13,
+          "ly": 10,
+          "lz": 24,
+          "material": 3,
+          "name": "písek"
+        },
+        {
+          "lx": 0,
+          "ly": 15,
+          "lz": 37,
+          "material": 0,
+          "name": "vzduch"
+        },
+        {
+          "lx": 7,
+          "ly": 5,
+          "lz": 23,
+          "material": 4,
+          "name": "jíl"
+        },
+        {
+          "lx": 15,
+          "ly": 6,
+          "lz": 8,
+          "material": 6,
+          "name": "žula"
+        },
+        {
+          "lx": 7,
+          "ly": 11,
+          "lz": 46,
+          "material": 0,
+          "name": "vzduch"
+        },
+        {
+          "lx": 5,
+          "ly": 6,
+          "lz": 52,
+          "material": 0,
+          "name": "vzduch"
+        },
+        {
+          "lx": 5,
+          "ly": 6,
+          "lz": 1,
+          "material": 7,
+          "name": "čedič"
+        },
+        {
+          "lx": 6,
+          "ly": 11,
+          "lz": 56,
+          "material": 0,
+          "name": "vzduch"
+        },
+        {
+          "lx": 10,
+          "ly": 4,
+          "lz": 6,
+          "material": 7,
+          "name": "čedič"
+        },
+        {
+          "lx": 14,
+          "ly": 0,
+          "lz": 44,
+          "material": 0,
+          "name": "vzduch"
+        },
+        {
+          "lx": 13,
+          "ly": 5,
+          "lz": 58,
+          "material": 0,
+          "name": "vzduch"
+        }
+      ]
+    }
+  ]
+}

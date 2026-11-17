@@ -1,0 +1,649 @@
+{
+  "deltaFormat": "delta-v0",
+  "generatorVersion": "proto-v2.2",
+  "cellIndex": "i = (lx*16+ly)*64+lz; materials: 0 air .. 10 snow, 11 fog",
+  "semantics": "Baseline = volume right after placement: regenerate from recipe+seed, apply transform (mirror, rotation, heightShift), then side blending using sides + neighborEdgeProfiles stored at placement time (later changes to neighbours do not affect it). placedVolumeHash = FNV-1a 64 of the 16384 bytes of that baseline (check). ops apply in order; old must match current cell, else reject. resultVolumeHash = after all ops.",
+  "edgeProfileOrder": "neighborEdgeProfiles keys N,E,S,W (DIRS (0,-1),(1,0),(0,1),(-1,0)); 16 surface heights of the neighbour cells touching the shared edge, index t along the edge (t = lx for N/S edges, t = ly for E/W edges, in the new block's coordinates); null = no neighbour",
+  "sidesValues": "auto | blend1..blend4 | keep",
+  "islandInventory": {
+    "tráva": 9,
+    "hlína": 14,
+    "písek": 18,
+    "vápenec": 10
+  },
+  "blocks": [
+    {
+      "slot": [
+        1,
+        1
+      ],
+      "recipe": "louka",
+      "seed": 404,
+      "transform": {
+        "mirror": false,
+        "rotation": 0,
+        "heightShift": 0
+      },
+      "sides": {
+        "N": "auto",
+        "E": "auto",
+        "S": "auto",
+        "W": "auto"
+      },
+      "neighborEdgeProfiles": {
+        "N": [
+          43,
+          43,
+          43,
+          44,
+          44,
+          43,
+          43,
+          43,
+          43,
+          43,
+          39,
+          37,
+          31,
+          31,
+          31,
+          31
+        ],
+        "E": null,
+        "S": null,
+        "W": [
+          31,
+          31,
+          30,
+          30,
+          30,
+          30,
+          30,
+          30,
+          30,
+          30,
+          30,
+          30,
+          30,
+          30,
+          30,
+          30
+        ]
+      },
+      "placedVolumeHash": "04c869f45f1f538e",
+      "resultVolumeHash": "b5488198f6870b91",
+      "ops": [
+        {
+          "i": 2206,
+          "lx": 2,
+          "ly": 2,
+          "lz": 30,
+          "old": 1,
+          "new": 0,
+          "oldName": "tráva",
+          "newName": "vzduch"
+        },
+        {
+          "i": 2270,
+          "lx": 2,
+          "ly": 3,
+          "lz": 30,
+          "old": 1,
+          "new": 0,
+          "oldName": "tráva",
+          "newName": "vzduch"
+        },
+        {
+          "i": 2334,
+          "lx": 2,
+          "ly": 4,
+          "lz": 30,
+          "old": 1,
+          "new": 0,
+          "oldName": "tráva",
+          "newName": "vzduch"
+        },
+        {
+          "i": 3230,
+          "lx": 3,
+          "ly": 2,
+          "lz": 30,
+          "old": 1,
+          "new": 0,
+          "oldName": "tráva",
+          "newName": "vzduch"
+        },
+        {
+          "i": 3294,
+          "lx": 3,
+          "ly": 3,
+          "lz": 30,
+          "old": 1,
+          "new": 0,
+          "oldName": "tráva",
+          "newName": "vzduch"
+        },
+        {
+          "i": 3358,
+          "lx": 3,
+          "ly": 4,
+          "lz": 30,
+          "old": 1,
+          "new": 0,
+          "oldName": "tráva",
+          "newName": "vzduch"
+        },
+        {
+          "i": 4254,
+          "lx": 4,
+          "ly": 2,
+          "lz": 30,
+          "old": 1,
+          "new": 0,
+          "oldName": "tráva",
+          "newName": "vzduch"
+        },
+        {
+          "i": 4318,
+          "lx": 4,
+          "ly": 3,
+          "lz": 30,
+          "old": 1,
+          "new": 0,
+          "oldName": "tráva",
+          "newName": "vzduch"
+        },
+        {
+          "i": 4382,
+          "lx": 4,
+          "ly": 4,
+          "lz": 30,
+          "old": 1,
+          "new": 0,
+          "oldName": "tráva",
+          "newName": "vzduch"
+        },
+        {
+          "i": 2205,
+          "lx": 2,
+          "ly": 2,
+          "lz": 29,
+          "old": 2,
+          "new": 0,
+          "oldName": "hlína",
+          "newName": "vzduch"
+        },
+        {
+          "i": 2269,
+          "lx": 2,
+          "ly": 3,
+          "lz": 29,
+          "old": 2,
+          "new": 0,
+          "oldName": "hlína",
+          "newName": "vzduch"
+        },
+        {
+          "i": 2333,
+          "lx": 2,
+          "ly": 4,
+          "lz": 29,
+          "old": 2,
+          "new": 0,
+          "oldName": "hlína",
+          "newName": "vzduch"
+        },
+        {
+          "i": 3229,
+          "lx": 3,
+          "ly": 2,
+          "lz": 29,
+          "old": 2,
+          "new": 0,
+          "oldName": "hlína",
+          "newName": "vzduch"
+        },
+        {
+          "i": 3293,
+          "lx": 3,
+          "ly": 3,
+          "lz": 29,
+          "old": 2,
+          "new": 0,
+          "oldName": "hlína",
+          "newName": "vzduch"
+        },
+        {
+          "i": 3357,
+          "lx": 3,
+          "ly": 4,
+          "lz": 29,
+          "old": 2,
+          "new": 0,
+          "oldName": "hlína",
+          "newName": "vzduch"
+        },
+        {
+          "i": 4253,
+          "lx": 4,
+          "ly": 2,
+          "lz": 29,
+          "old": 2,
+          "new": 0,
+          "oldName": "hlína",
+          "newName": "vzduch"
+        },
+        {
+          "i": 4317,
+          "lx": 4,
+          "ly": 3,
+          "lz": 29,
+          "old": 2,
+          "new": 0,
+          "oldName": "hlína",
+          "newName": "vzduch"
+        },
+        {
+          "i": 4381,
+          "lx": 4,
+          "ly": 4,
+          "lz": 29,
+          "old": 2,
+          "new": 0,
+          "oldName": "hlína",
+          "newName": "vzduch"
+        },
+        {
+          "i": 2204,
+          "lx": 2,
+          "ly": 2,
+          "lz": 28,
+          "old": 3,
+          "new": 0,
+          "oldName": "písek",
+          "newName": "vzduch"
+        },
+        {
+          "i": 2268,
+          "lx": 2,
+          "ly": 3,
+          "lz": 28,
+          "old": 2,
+          "new": 0,
+          "oldName": "hlína",
+          "newName": "vzduch"
+        },
+        {
+          "i": 2332,
+          "lx": 2,
+          "ly": 4,
+          "lz": 28,
+          "old": 3,
+          "new": 0,
+          "oldName": "písek",
+          "newName": "vzduch"
+        },
+        {
+          "i": 3228,
+          "lx": 3,
+          "ly": 2,
+          "lz": 28,
+          "old": 3,
+          "new": 0,
+          "oldName": "písek",
+          "newName": "vzduch"
+        },
+        {
+          "i": 3292,
+          "lx": 3,
+          "ly": 3,
+          "lz": 28,
+          "old": 2,
+          "new": 0,
+          "oldName": "hlína",
+          "newName": "vzduch"
+        },
+        {
+          "i": 3356,
+          "lx": 3,
+          "ly": 4,
+          "lz": 28,
+          "old": 2,
+          "new": 0,
+          "oldName": "hlína",
+          "newName": "vzduch"
+        },
+        {
+          "i": 4252,
+          "lx": 4,
+          "ly": 2,
+          "lz": 28,
+          "old": 3,
+          "new": 0,
+          "oldName": "písek",
+          "newName": "vzduch"
+        },
+        {
+          "i": 4316,
+          "lx": 4,
+          "ly": 3,
+          "lz": 28,
+          "old": 2,
+          "new": 0,
+          "oldName": "hlína",
+          "newName": "vzduch"
+        },
+        {
+          "i": 4380,
+          "lx": 4,
+          "ly": 4,
+          "lz": 28,
+          "old": 2,
+          "new": 0,
+          "oldName": "hlína",
+          "newName": "vzduch"
+        },
+        {
+          "i": 2203,
+          "lx": 2,
+          "ly": 2,
+          "lz": 27,
+          "old": 3,
+          "new": 0,
+          "oldName": "písek",
+          "newName": "vzduch"
+        },
+        {
+          "i": 2267,
+          "lx": 2,
+          "ly": 3,
+          "lz": 27,
+          "old": 3,
+          "new": 0,
+          "oldName": "písek",
+          "newName": "vzduch"
+        },
+        {
+          "i": 2331,
+          "lx": 2,
+          "ly": 4,
+          "lz": 27,
+          "old": 3,
+          "new": 0,
+          "oldName": "písek",
+          "newName": "vzduch"
+        },
+        {
+          "i": 3227,
+          "lx": 3,
+          "ly": 2,
+          "lz": 27,
+          "old": 3,
+          "new": 0,
+          "oldName": "písek",
+          "newName": "vzduch"
+        },
+        {
+          "i": 3291,
+          "lx": 3,
+          "ly": 3,
+          "lz": 27,
+          "old": 3,
+          "new": 0,
+          "oldName": "písek",
+          "newName": "vzduch"
+        },
+        {
+          "i": 3355,
+          "lx": 3,
+          "ly": 4,
+          "lz": 27,
+          "old": 3,
+          "new": 0,
+          "oldName": "písek",
+          "newName": "vzduch"
+        },
+        {
+          "i": 4251,
+          "lx": 4,
+          "ly": 2,
+          "lz": 27,
+          "old": 3,
+          "new": 0,
+          "oldName": "písek",
+          "newName": "vzduch"
+        },
+        {
+          "i": 4315,
+          "lx": 4,
+          "ly": 3,
+          "lz": 27,
+          "old": 3,
+          "new": 0,
+          "oldName": "písek",
+          "newName": "vzduch"
+        },
+        {
+          "i": 4379,
+          "lx": 4,
+          "ly": 4,
+          "lz": 27,
+          "old": 3,
+          "new": 0,
+          "oldName": "písek",
+          "newName": "vzduch"
+        },
+        {
+          "i": 2202,
+          "lx": 2,
+          "ly": 2,
+          "lz": 26,
+          "old": 5,
+          "new": 0,
+          "oldName": "vápenec",
+          "newName": "vzduch"
+        },
+        {
+          "i": 2266,
+          "lx": 2,
+          "ly": 3,
+          "lz": 26,
+          "old": 3,
+          "new": 0,
+          "oldName": "písek",
+          "newName": "vzduch"
+        },
+        {
+          "i": 2330,
+          "lx": 2,
+          "ly": 4,
+          "lz": 26,
+          "old": 5,
+          "new": 0,
+          "oldName": "vápenec",
+          "newName": "vzduch"
+        },
+        {
+          "i": 3226,
+          "lx": 3,
+          "ly": 2,
+          "lz": 26,
+          "old": 5,
+          "new": 0,
+          "oldName": "vápenec",
+          "newName": "vzduch"
+        },
+        {
+          "i": 3290,
+          "lx": 3,
+          "ly": 3,
+          "lz": 26,
+          "old": 3,
+          "new": 0,
+          "oldName": "písek",
+          "newName": "vzduch"
+        },
+        {
+          "i": 3354,
+          "lx": 3,
+          "ly": 4,
+          "lz": 26,
+          "old": 3,
+          "new": 0,
+          "oldName": "písek",
+          "newName": "vzduch"
+        },
+        {
+          "i": 4250,
+          "lx": 4,
+          "ly": 2,
+          "lz": 26,
+          "old": 5,
+          "new": 0,
+          "oldName": "vápenec",
+          "newName": "vzduch"
+        },
+        {
+          "i": 4314,
+          "lx": 4,
+          "ly": 3,
+          "lz": 26,
+          "old": 3,
+          "new": 0,
+          "oldName": "písek",
+          "newName": "vzduch"
+        },
+        {
+          "i": 4378,
+          "lx": 4,
+          "ly": 4,
+          "lz": 26,
+          "old": 3,
+          "new": 0,
+          "oldName": "písek",
+          "newName": "vzduch"
+        },
+        {
+          "i": 2201,
+          "lx": 2,
+          "ly": 2,
+          "lz": 25,
+          "old": 5,
+          "new": 0,
+          "oldName": "vápenec",
+          "newName": "vzduch"
+        },
+        {
+          "i": 2265,
+          "lx": 2,
+          "ly": 3,
+          "lz": 25,
+          "old": 5,
+          "new": 0,
+          "oldName": "vápenec",
+          "newName": "vzduch"
+        },
+        {
+          "i": 2329,
+          "lx": 2,
+          "ly": 4,
+          "lz": 25,
+          "old": 5,
+          "new": 0,
+          "oldName": "vápenec",
+          "newName": "vzduch"
+        },
+        {
+          "i": 3225,
+          "lx": 3,
+          "ly": 2,
+          "lz": 25,
+          "old": 5,
+          "new": 0,
+          "oldName": "vápenec",
+          "newName": "vzduch"
+        },
+        {
+          "i": 3289,
+          "lx": 3,
+          "ly": 3,
+          "lz": 25,
+          "old": 5,
+          "new": 0,
+          "oldName": "vápenec",
+          "newName": "vzduch"
+        },
+        {
+          "i": 3353,
+          "lx": 3,
+          "ly": 4,
+          "lz": 25,
+          "old": 5,
+          "new": 0,
+          "oldName": "vápenec",
+          "newName": "vzduch"
+        },
+        {
+          "i": 4249,
+          "lx": 4,
+          "ly": 2,
+          "lz": 25,
+          "old": 5,
+          "new": 0,
+          "oldName": "vápenec",
+          "newName": "vzduch"
+        },
+        {
+          "i": 4313,
+          "lx": 4,
+          "ly": 3,
+          "lz": 25,
+          "old": 5,
+          "new": 0,
+          "oldName": "vápenec",
+          "newName": "vzduch"
+        },
+        {
+          "i": 4377,
+          "lx": 4,
+          "ly": 4,
+          "lz": 25,
+          "old": 5,
+          "new": 0,
+          "oldName": "vápenec",
+          "newName": "vzduch"
+        },
+        {
+          "i": 2201,
+          "lx": 2,
+          "ly": 2,
+          "lz": 25,
+          "old": 0,
+          "new": 5,
+          "oldName": "vzduch",
+          "newName": "vápenec"
+        },
+        {
+          "i": 2265,
+          "lx": 2,
+          "ly": 3,
+          "lz": 25,
+          "old": 0,
+          "new": 5,
+          "oldName": "vzduch",
+          "newName": "vápenec"
+        },
+        {
+          "i": 2329,
+          "lx": 2,
+          "ly": 4,
+          "lz": 25,
+          "old": 0,
+          "new": 5,
+          "oldName": "vzduch",
+          "newName": "vápenec"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,7 @@
+po start (4 bloky) celek: 119.8 ms/snímek, 228048 trojúhelníků/snímek, 38033 instancí vegetace (kreslených 14500, 26 MultiMesh), 4 bloků
+po start detail louky: 98.4 ms/snímek, 305857 trojúhelníků/snímek, 38033 instancí vegetace (kreslených 38033, 26 MultiMesh), 4 bloků
+po doplnění 20 bloků (generování + mesh + vegetace): 1995 ms
+po plný ostrov celek: 239.8 ms/snímek, 953583 trojúhelníků/snímek, 202765 instancí vegetace (kreslených 52514, 139 MultiMesh), 24 bloků
+po plný ostrov detail louky: 153.7 ms/snímek, 580250 trojúhelníků/snímek, 202765 instancí vegetace (kreslených 202765, 139 MultiMesh), 24 bloků
+po stavba vegetace bloku: 17.0 ms průměr (24 bloků)
+po renderer: llvmpipe (LLVM 19.1.7, 256 bits)

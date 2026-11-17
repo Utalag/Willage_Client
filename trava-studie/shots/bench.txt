@@ -1,0 +1,11 @@
+A celek: 39.7 ms/snímek, stopa (CPU) 0.62 ms
+A detail: 227.3 ms/snímek, stopa (CPU) 0.72 ms
+A2 celek: 39.6 ms/snímek, stopa (CPU) 0.44 ms
+A2 detail: 220.9 ms/snímek, stopa (CPU) 0.53 ms
+B celek: 130.0 ms/snímek, stopa (CPU) 0.57 ms
+B detail: 114.0 ms/snímek, stopa (CPU) 0.54 ms
+C celek: 32.2 ms/snímek, stopa (CPU) 0.41 ms
+C detail: 29.9 ms/snímek, stopa (CPU) 0.20 ms
+A+A2+B+C celek: 148.2 ms/snímek, stopa (CPU) 0.57 ms
+A+A2+B+C detail: 270.6 ms/snímek, stopa (CPU) 0.60 ms
+instance: B stébla 72500 (x5 trojúhelníků), C trsy+kvítky 3738 (22653 trojúhelníků); A/A2 24 vrstev (48 trojúhelníků); renderer llvmpipe (LLVM 19.1.7, 256 bits)

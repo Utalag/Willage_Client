@@ -1,0 +1,8 @@
+.godot/
+*.mp4
+build/
+_zaloha/
+*.tgz
+mono_crash.*
+bin/
+obj/

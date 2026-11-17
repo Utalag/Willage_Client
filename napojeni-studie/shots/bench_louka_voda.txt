@@ -1,0 +1,10 @@
+data (4 vzorky, dorovnání stran): 0.8 ms
+1 · klasická mřížka (přechod na hranách buněk): splat 668 ms, pole 132 ms, mesh 4 ms (1244 trojúhelníků), voda 3 ms, tráva 55 ms (4901 instancí s řídnutím)
+2 · duální mřížka (dlaždice z rohů): splat 460 ms, pole 137 ms, mesh 252 ms (13440 trojúhelníků), voda 4 ms, tráva 70 ms (4863 instancí s řídnutím)
+stavba celkem 1803 ms (GDScript, splat 16 px/buňku)
+1 · klasická mřížka (přechod na hranách buněk): břeh a rákos 6 ms, 77 instancí
+1 · klasická mřížka (přechod na hranách buněk) bez úprav: 27.4 ms/snímek
+1 · klasická mřížka (přechod na hranách buněk) s břehem a rákosem: 29.5 ms/snímek
+2 · duální mřížka (dlaždice z rohů): břeh a rákos 10 ms, 91 instancí
+2 · duální mřížka (dlaždice z rohů) bez úprav: 37.4 ms/snímek
+2 · duální mřížka (dlaždice z rohů) s břehem a rákosem: 38.6 ms/snímek

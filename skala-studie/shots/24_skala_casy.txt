@@ -1,0 +1,4 @@
+SKALA A: stavba 4.8 ms, trojúhelníků 660 
+SKALA B: stavba 10.7 ms, trojúhelníků 2112 
+SKALA C: stavba 121.0 ms, trojúhelníků 2230 
+SKALA D: stavba 112.3 ms, trojúhelníků 2048 (2 kamenů, 4 balvanů, 1 souvislých skal)
