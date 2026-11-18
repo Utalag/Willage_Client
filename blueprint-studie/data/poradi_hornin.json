@@ -1,0 +1,1686 @@
+{
+ "_popis": "Pořadí hornin 0–63 podle Gemini pro Jana (inspirace/gemini-kura-64.md, ZDROJE [10]). Je to POŘADÍ možných hornin, kdyby byly všechny; v daném místě se objeví jen podmnožina (freq = podíl plochy, kde horninu regionální pole zapne). idx = pořadí (≈ typická výška buňky), zone = zóna, kind: layer = vrstva (tloušťka thick je relativní váha uvnitř zóny), seam = sloj (vznikne vtisknutím minerálu), pipe/vein/dome/contact = zvláštní tělesa (body), mountain = horniny hor podle typu blueprintu (types) a relativní výšky rel = (z − 40) / 21, soil/snow/air. id = MaterialId (u8; existující gen-v3 materiály 0–12 znovu použité, nové 20+). Voda nových materiálů: ../sdilene/horniny_voda.json. Buňka = 0,5 m, takže velehory jsou jen symbolické.",
+ "version": 1,
+ "zones": {
+  "plast": [
+   0,
+   12
+  ],
+  "krystalinikum": [
+   13,
+   25
+  ],
+  "sedimenty": [
+   26,
+   39
+  ],
+  "povrch": [
+   40,
+   40
+  ],
+  "hory": [
+   41,
+   61
+  ],
+  "vzduch": [
+   62,
+   63
+  ]
+ },
+ "rocks": [
+  {
+   "idx": 0,
+   "key": "peridotite",
+   "name": "Peridotit / dunit",
+   "zone": "plast",
+   "kind": "layer",
+   "id": 20,
+   "active": true,
+   "freq": 1.0,
+   "depth": [
+    0,
+    2
+   ],
+   "thick": [
+    2,
+    5
+   ],
+   "color": "#53593a",
+   "load": 200,
+   "cantilever": 8,
+   "hosts_minerals": []
+  },
+  {
+   "idx": 1,
+   "key": "kimberlite",
+   "name": "Kimberlit (komíny)",
+   "zone": "plast",
+   "kind": "pipe",
+   "id": 21,
+   "active": true,
+   "freq": 0.35,
+   "depth": [
+    0,
+    3
+   ],
+   "thick": [
+    2,
+    5
+   ],
+   "color": "#1f6f5c",
+   "body": {
+    "grid": 40,
+    "r0": 1.4,
+    "r1": 2.8,
+    "top_above_crystalline": 7
+   },
+   "load": 80,
+   "cantilever": 2,
+   "hosts_minerals": [
+    "diamond"
+   ]
+  },
+  {
+   "idx": 2,
+   "key": "lherzolite",
+   "name": "Lherzolit, olivín",
+   "zone": "plast",
+   "kind": "layer",
+   "id": 22,
+   "active": false,
+   "freq": 0.5,
+   "depth": [
+    0,
+    4
+   ],
+   "thick": [
+    2,
+    5
+   ],
+   "color": "#55752d",
+   "load": 200,
+   "cantilever": 8,
+   "hosts_minerals": []
+  },
+  {
+   "idx": 3,
+   "key": "eclogite",
+   "name": "Eklogit",
+   "zone": "plast",
+   "kind": "layer",
+   "id": 23,
+   "active": false,
+   "freq": 0.3,
+   "depth": [
+    1,
+    5
+   ],
+   "thick": [
+    2,
+    5
+   ],
+   "color": "#93cc69",
+   "load": 200,
+   "cantilever": 8,
+   "hosts_minerals": [
+    "garnet"
+   ]
+  },
+  {
+   "idx": 4,
+   "key": "pyroxenite",
+   "name": "Pyroxenit",
+   "zone": "plast",
+   "kind": "layer",
+   "id": 24,
+   "active": false,
+   "freq": 0.4,
+   "depth": [
+    2,
+    6
+   ],
+   "thick": [
+    2,
+    5
+   ],
+   "color": "#6e925f",
+   "load": 200,
+   "cantilever": 8,
+   "hosts_minerals": []
+  },
+  {
+   "idx": 5,
+   "key": "serpentinite",
+   "name": "Serpentinit (hadec)",
+   "zone": "plast",
+   "kind": "layer",
+   "id": 25,
+   "active": false,
+   "freq": 0.4,
+   "depth": [
+    3,
+    7
+   ],
+   "thick": [
+    2,
+    5
+   ],
+   "color": "#225916",
+   "load": 100,
+   "cantilever": 3,
+   "hosts_minerals": []
+  },
+  {
+   "idx": 6,
+   "key": "gabbro",
+   "name": "Gabro",
+   "zone": "plast",
+   "kind": "layer",
+   "id": 26,
+   "active": true,
+   "freq": 0.6,
+   "depth": [
+    4,
+    8
+   ],
+   "thick": [
+    2,
+    5
+   ],
+   "color": "#48af43",
+   "load": 200,
+   "cantilever": 8,
+   "hosts_minerals": [
+    "fe_ti"
+   ]
+  },
+  {
+   "idx": 7,
+   "key": "norite",
+   "name": "Norit / anortozit",
+   "zone": "plast",
+   "kind": "layer",
+   "id": 27,
+   "active": false,
+   "freq": 0.4,
+   "depth": [
+    5,
+    9
+   ],
+   "thick": [
+    2,
+    5
+   ],
+   "color": "#3c7541",
+   "load": 200,
+   "cantilever": 8,
+   "hosts_minerals": [
+    "fe_ti"
+   ]
+  },
+  {
+   "idx": 8,
+   "key": "fe_ti_zone",
+   "name": "Fe-Ti rudní zóna (magnetit)",
+   "zone": "plast",
+   "kind": "layer",
+   "id": 28,
+   "active": true,
+   "freq": 0.3,
+   "depth": [
+    6,
+    10
+   ],
+   "thick": [
+    2,
+    5
+   ],
+   "color": "#84cc92",
+   "load": 200,
+   "cantilever": 8,
+   "hosts_minerals": [
+    "fe_ti"
+   ]
+  },
+  {
+   "idx": 9,
+   "key": "diabase",
+   "name": "Diabaz (= čedič gen-v3)",
+   "zone": "plast",
+   "kind": "layer",
+   "id": 7,
+   "active": true,
+   "freq": 0.7,
+   "depth": [
+    7,
+    11
+   ],
+   "thick": [
+    2,
+    5
+   ],
+   "color": "#249248",
+   "load": 200,
+   "cantilever": 8,
+   "hosts_minerals": [
+    "iron"
+   ]
+  },
+  {
+   "idx": 10,
+   "key": "granulite",
+   "name": "Granulit",
+   "zone": "plast",
+   "kind": "layer",
+   "id": 29,
+   "active": false,
+   "freq": 0.5,
+   "depth": [
+    8,
+    12
+   ],
+   "thick": [
+    2,
+    5
+   ],
+   "color": "#22593a",
+   "load": 200,
+   "cantilever": 8,
+   "hosts_minerals": []
+  },
+  {
+   "idx": 11,
+   "key": "amphibolite",
+   "name": "Amfibolit",
+   "zone": "plast",
+   "kind": "layer",
+   "id": 30,
+   "active": true,
+   "freq": 0.6,
+   "depth": [
+    9,
+    12
+   ],
+   "thick": [
+    2,
+    5
+   ],
+   "color": "#5aaf8b",
+   "load": 200,
+   "cantilever": 8,
+   "hosts_minerals": []
+  },
+  {
+   "idx": 12,
+   "key": "lower_gneiss",
+   "name": "Spodní přechodová břidlice / rula",
+   "zone": "plast",
+   "kind": "layer",
+   "id": 31,
+   "active": false,
+   "freq": 0.6,
+   "depth": [
+    10,
+    12
+   ],
+   "thick": [
+    2,
+    5
+   ],
+   "color": "#4c7569",
+   "load": 200,
+   "cantilever": 8,
+   "hosts_minerals": []
+  },
+  {
+   "idx": 13,
+   "key": "migmatite",
+   "name": "Migmatit",
+   "zone": "krystalinikum",
+   "kind": "layer",
+   "id": 32,
+   "active": false,
+   "freq": 0.5,
+   "depth": [
+    13,
+    15
+   ],
+   "thick": [
+    1,
+    4
+   ],
+   "color": "#7c5b8c",
+   "load": 200,
+   "cantilever": 8,
+   "hosts_minerals": []
+  },
+  {
+   "idx": 14,
+   "key": "orthogneiss",
+   "name": "Ortorula",
+   "zone": "krystalinikum",
+   "kind": "layer",
+   "id": 33,
+   "active": true,
+   "freq": 0.8,
+   "depth": [
+    13,
+    16
+   ],
+   "thick": [
+    1,
+    4
+   ],
+   "color": "#a22fbf",
+   "load": 200,
+   "cantilever": 8,
+   "hosts_minerals": []
+  },
+  {
+   "idx": 15,
+   "key": "biotite_gneiss",
+   "name": "Biotitická rula",
+   "zone": "krystalinikum",
+   "kind": "layer",
+   "id": 34,
+   "active": false,
+   "freq": 0.6,
+   "depth": [
+    13,
+    17
+   ],
+   "thick": [
+    1,
+    4
+   ],
+   "color": "#e65cf2",
+   "load": 200,
+   "cantilever": 8,
+   "hosts_minerals": []
+  },
+  {
+   "idx": 16,
+   "key": "two_mica_gneiss",
+   "name": "Dvojslídná rula",
+   "zone": "krystalinikum",
+   "kind": "layer",
+   "id": 35,
+   "active": false,
+   "freq": 0.5,
+   "depth": [
+    14,
+    18
+   ],
+   "thick": [
+    1,
+    4
+   ],
+   "color": "#a555a2",
+   "load": 200,
+   "cantilever": 8,
+   "hosts_minerals": []
+  },
+  {
+   "idx": 17,
+   "key": "granodiorite",
+   "name": "Granodiorit",
+   "zone": "krystalinikum",
+   "kind": "layer",
+   "id": 36,
+   "active": true,
+   "freq": 0.5,
+   "depth": [
+    15,
+    19
+   ],
+   "thick": [
+    1,
+    4
+   ],
+   "color": "#d88ccc",
+   "load": 200,
+   "cantilever": 8,
+   "hosts_minerals": [
+    "copper"
+   ]
+  },
+  {
+   "idx": 18,
+   "key": "granite",
+   "name": "Masivní žula (= žula gen-v3)",
+   "zone": "krystalinikum",
+   "kind": "layer",
+   "id": 6,
+   "active": true,
+   "freq": 0.8,
+   "depth": [
+    16,
+    20
+   ],
+   "thick": [
+    1,
+    4
+   ],
+   "color": "#8c236e",
+   "load": 200,
+   "cantilever": 8,
+   "hosts_minerals": [
+    "copper"
+   ]
+  },
+  {
+   "idx": 19,
+   "key": "leucogranite",
+   "name": "Světlá granitoidní žula",
+   "zone": "krystalinikum",
+   "kind": "layer",
+   "id": 37,
+   "active": false,
+   "freq": 0.4,
+   "depth": [
+    17,
+    21
+   ],
+   "thick": [
+    1,
+    4
+   ],
+   "color": "#bf4990",
+   "load": 200,
+   "cantilever": 8,
+   "hosts_minerals": []
+  },
+  {
+   "idx": 20,
+   "key": "pegmatite",
+   "name": "Pegmatitové žíly",
+   "zone": "krystalinikum",
+   "kind": "vein",
+   "id": 38,
+   "active": true,
+   "freq": 0.5,
+   "depth": [
+    18,
+    22
+   ],
+   "thick": [
+    1,
+    4
+   ],
+   "color": "#ff8fd0",
+   "body": {
+    "grid": 24,
+    "planes": 2,
+    "half": 0.55,
+    "extent": 9.0
+   },
+   "load": 150,
+   "cantilever": 5,
+   "hosts_minerals": [
+    "gem",
+    "rare_metal",
+    "gold"
+   ]
+  },
+  {
+   "idx": 21,
+   "key": "quartzite",
+   "name": "Krystalický kvarcit",
+   "zone": "krystalinikum",
+   "kind": "layer",
+   "id": 39,
+   "active": false,
+   "freq": 0.4,
+   "depth": [
+    19,
+    23
+   ],
+   "thick": [
+    1,
+    4
+   ],
+   "color": "#a56b80",
+   "load": 200,
+   "cantilever": 8,
+   "hosts_minerals": [
+    "gold"
+   ]
+  },
+  {
+   "idx": 22,
+   "key": "mica_schist",
+   "name": "Svor (granáty, slídy)",
+   "zone": "krystalinikum",
+   "kind": "layer",
+   "id": 40,
+   "active": true,
+   "freq": 0.5,
+   "depth": [
+    20,
+    24
+   ],
+   "thick": [
+    1,
+    4
+   ],
+   "color": "#d8365d",
+   "load": 120,
+   "cantilever": 4,
+   "hosts_minerals": [
+    "garnet",
+    "gold"
+   ]
+  },
+  {
+   "idx": 23,
+   "key": "phyllite",
+   "name": "Fylit",
+   "zone": "krystalinikum",
+   "kind": "layer",
+   "id": 41,
+   "active": false,
+   "freq": 0.5,
+   "depth": [
+    21,
+    25
+   ],
+   "thick": [
+    1,
+    4
+   ],
+   "color": "#8c3540",
+   "load": 80,
+   "cantilever": 3,
+   "hosts_minerals": []
+  },
+  {
+   "idx": 24,
+   "key": "skarn",
+   "name": "Skarn (kontakt)",
+   "zone": "krystalinikum",
+   "kind": "contact",
+   "id": 42,
+   "active": true,
+   "freq": 1.0,
+   "depth": [
+    22,
+    25
+   ],
+   "thick": [
+    1,
+    4
+   ],
+   "color": "#7d3fa0",
+   "body": {
+    "width": 2,
+    "around": [
+     "granodiorite",
+     "granite",
+     "leucogranite"
+    ],
+    "in": [
+     "deep_limestone",
+     "dolomite",
+     "cave_limestone",
+     "limestone_outcrop"
+    ]
+   },
+   "load": 120,
+   "cantilever": 4,
+   "hosts_minerals": [
+    "copper",
+    "iron",
+    "garnet"
+   ]
+  },
+  {
+   "idx": 25,
+   "key": "crystalline_transition",
+   "name": "Přechodová zóna krystalinika",
+   "zone": "krystalinikum",
+   "kind": "layer",
+   "id": 43,
+   "active": false,
+   "freq": 0.5,
+   "depth": [
+    23,
+    25
+   ],
+   "thick": [
+    1,
+    4
+   ],
+   "color": "#f2a79d",
+   "load": 200,
+   "cantilever": 8,
+   "hosts_minerals": []
+  },
+  {
+   "idx": 26,
+   "key": "deep_limestone",
+   "name": "Hlubinný vápenec / křída",
+   "zone": "sedimenty",
+   "kind": "layer",
+   "id": 44,
+   "active": true,
+   "freq": 0.5,
+   "depth": [
+    26,
+    28
+   ],
+   "thick": [
+    1,
+    4
+   ],
+   "color": "#8c6c5b",
+   "load": 100,
+   "cantilever": 5,
+   "hosts_minerals": []
+  },
+  {
+   "idx": 27,
+   "key": "siltstone",
+   "name": "Prachovec",
+   "zone": "sedimenty",
+   "kind": "layer",
+   "id": 45,
+   "active": false,
+   "freq": 0.5,
+   "depth": [
+    26,
+    29
+   ],
+   "thick": [
+    1,
+    4
+   ],
+   "color": "#bf6a2f",
+   "load": 40,
+   "cantilever": 2,
+   "hosts_minerals": [
+    "coal"
+   ]
+  },
+  {
+   "idx": 28,
+   "key": "conglomerate",
+   "name": "Slepenec",
+   "zone": "sedimenty",
+   "kind": "layer",
+   "id": 46,
+   "active": false,
+   "freq": 0.4,
+   "depth": [
+    26,
+    30
+   ],
+   "thick": [
+    1,
+    4
+   ],
+   "color": "#f2a15c",
+   "load": 40,
+   "cantilever": 2,
+   "hosts_minerals": []
+  },
+  {
+   "idx": 29,
+   "key": "rock_salt",
+   "name": "Kamenná sůl (dómy)",
+   "zone": "sedimenty",
+   "kind": "dome",
+   "id": 47,
+   "active": true,
+   "freq": 0.3,
+   "depth": [
+    27,
+    31
+   ],
+   "thick": [
+    1,
+    4
+   ],
+   "color": "#f7f2ee",
+   "body": {
+    "grid": 48,
+    "r_stem": 2.0,
+    "r_cap": 4.5,
+    "top": 37
+   },
+   "load": 60,
+   "cantilever": 2,
+   "hosts_minerals": []
+  },
+  {
+   "idx": 30,
+   "key": "gypsum",
+   "name": "Sádrovec, anhydrit",
+   "zone": "sedimenty",
+   "kind": "layer",
+   "id": 48,
+   "active": false,
+   "freq": 0.3,
+   "depth": [
+    28,
+    32
+   ],
+   "thick": [
+    1,
+    4
+   ],
+   "color": "#d8b78c",
+   "load": 40,
+   "cantilever": 2,
+   "hosts_minerals": []
+  },
+  {
+   "idx": 31,
+   "key": "dolomite",
+   "name": "Dolomit",
+   "zone": "sedimenty",
+   "kind": "layer",
+   "id": 49,
+   "active": true,
+   "freq": 0.4,
+   "depth": [
+    29,
+    33
+   ],
+   "thick": [
+    1,
+    4
+   ],
+   "color": "#8c6323",
+   "load": 120,
+   "cantilever": 5,
+   "hosts_minerals": []
+  },
+  {
+   "idx": 32,
+   "key": "cave_limestone",
+   "name": "Masivní jeskynní vápenec (= vápenec gen-v3)",
+   "zone": "sedimenty",
+   "kind": "layer",
+   "id": 5,
+   "active": true,
+   "freq": 0.6,
+   "depth": [
+    30,
+    34
+   ],
+   "thick": [
+    1,
+    4
+   ],
+   "color": "#bf9749",
+   "load": 80,
+   "cantilever": 4,
+   "hosts_minerals": [
+    "iron"
+   ]
+  },
+  {
+   "idx": 33,
+   "key": "black_coal",
+   "name": "Černé uhlí (sloj)",
+   "zone": "sedimenty",
+   "kind": "seam",
+   "id": 50,
+   "active": true,
+   "freq": 0.5,
+   "depth": [
+    31,
+    35
+   ],
+   "thick": [
+    1,
+    2
+   ],
+   "color": "#f2d07d",
+   "load": 150,
+   "cantilever": 5,
+   "hosts_minerals": []
+  },
+  {
+   "idx": 34,
+   "key": "shale",
+   "name": "Jílová břidlice",
+   "zone": "sedimenty",
+   "kind": "layer",
+   "id": 51,
+   "active": true,
+   "freq": 0.7,
+   "depth": [
+    32,
+    36
+   ],
+   "thick": [
+    1,
+    4
+   ],
+   "color": "#a5986b",
+   "load": 30,
+   "cantilever": 1,
+   "hosts_minerals": [
+    "coal",
+    "lignite"
+   ]
+  },
+  {
+   "idx": 35,
+   "key": "quartz_sandstone",
+   "name": "Křemenný pískovec",
+   "zone": "sedimenty",
+   "kind": "layer",
+   "id": 52,
+   "active": true,
+   "freq": 0.6,
+   "depth": [
+    33,
+    37
+   ],
+   "thick": [
+    1,
+    4
+   ],
+   "color": "#d8ba36",
+   "load": 60,
+   "cantilever": 3,
+   "hosts_minerals": [
+    "coal"
+   ]
+  },
+  {
+   "idx": 36,
+   "key": "lignite",
+   "name": "Hnědé uhlí / lignit",
+   "zone": "sedimenty",
+   "kind": "seam",
+   "id": 53,
+   "active": true,
+   "freq": 0.5,
+   "depth": [
+    34,
+    38
+   ],
+   "thick": [
+    1,
+    2
+   ],
+   "color": "#8c8035",
+   "load": 15,
+   "cantilever": 1,
+   "hosts_minerals": []
+  },
+  {
+   "idx": 37,
+   "key": "weathered_clay",
+   "name": "Zvětralá břidlice a jíly (= jíl gen-v3)",
+   "zone": "sedimenty",
+   "kind": "layer",
+   "id": 4,
+   "active": true,
+   "freq": 0.7,
+   "depth": [
+    35,
+    39
+   ],
+   "thick": [
+    1,
+    4
+   ],
+   "color": "#bfb762",
+   "load": 12,
+   "cantilever": 1,
+   "hosts_minerals": [
+    "clay_deposit",
+    "lignite"
+   ]
+  },
+  {
+   "idx": 38,
+   "key": "gravel_sand",
+   "name": "Štěrk, hlinitopísčité sedimenty (= písek gen-v3)",
+   "zone": "sedimenty",
+   "kind": "layer",
+   "id": 3,
+   "active": true,
+   "freq": 0.5,
+   "depth": [
+    36,
+    39
+   ],
+   "thick": [
+    1,
+    4
+   ],
+   "color": "#f2ef9d",
+   "load": 3,
+   "cantilever": 0,
+   "hosts_minerals": []
+  },
+  {
+   "idx": 39,
+   "key": "loess",
+   "name": "Spraš a zvětraliny",
+   "zone": "sedimenty",
+   "kind": "layer",
+   "id": 54,
+   "active": true,
+   "freq": 0.6,
+   "depth": [
+    37,
+    39
+   ],
+   "thick": [
+    1,
+    4
+   ],
+   "color": "#a3a529",
+   "load": 6,
+   "cantilever": 0,
+   "hosts_minerals": [
+    "lignite"
+   ]
+  },
+  {
+   "idx": 40,
+   "key": "topsoil",
+   "name": "Ornice, humus (= hlína gen-v3, tráva navrchu)",
+   "zone": "povrch",
+   "kind": "soil",
+   "id": 2,
+   "active": true,
+   "freq": 1.0,
+   "depth": [
+    40,
+    40
+   ],
+   "thick": [
+    1,
+    4
+   ],
+   "color": "#a8805f",
+   "load": 4,
+   "cantilever": 0,
+   "hosts_minerals": []
+  },
+  {
+   "idx": 41,
+   "key": "hill_sand",
+   "name": "Písčité podloží pahorků",
+   "zone": "hory",
+   "kind": "mountain",
+   "id": 55,
+   "active": true,
+   "freq": 1.0,
+   "depth": [
+    41,
+    43
+   ],
+   "thick": [
+    1,
+    4
+   ],
+   "color": "#6b6562",
+   "types": [
+    "kopec",
+    "svah"
+   ],
+   "rel": [
+    0.0,
+    0.25
+   ],
+   "load": 6,
+   "cantilever": 0,
+   "hosts_minerals": []
+  },
+  {
+   "idx": 42,
+   "key": "limestone_outcrop",
+   "name": "Vápencové výchozy",
+   "zone": "hory",
+   "kind": "mountain",
+   "id": 56,
+   "active": true,
+   "freq": 0.6,
+   "depth": [
+    41,
+    44
+   ],
+   "thick": [
+    1,
+    4
+   ],
+   "color": "#826a5b",
+   "types": [
+    "kopec",
+    "svah"
+   ],
+   "rel": [
+    0.25,
+    0.45
+   ],
+   "load": 80,
+   "cantilever": 4,
+   "hosts_minerals": []
+  },
+  {
+   "idx": 43,
+   "key": "weathered_volcanic",
+   "name": "Zvětralé vyvřeliny",
+   "zone": "hory",
+   "kind": "mountain",
+   "id": 57,
+   "active": true,
+   "freq": 1.0,
+   "depth": [
+    41,
+    45
+   ],
+   "thick": [
+    1,
+    4
+   ],
+   "color": "#5b4744",
+   "types": [
+    "sopka"
+   ],
+   "rel": [
+    -1.0,
+    2.0
+   ],
+   "load": 20,
+   "cantilever": 1,
+   "hosts_minerals": []
+  },
+  {
+   "idx": 44,
+   "key": "flysch",
+   "name": "Lesní půdy, flyš",
+   "zone": "hory",
+   "kind": "mountain",
+   "id": 58,
+   "active": true,
+   "freq": 1.0,
+   "depth": [
+    42,
+    46
+   ],
+   "thick": [
+    1,
+    4
+   ],
+   "color": "#afa094",
+   "types": [
+    "kopec",
+    "svah"
+   ],
+   "rel": [
+    0.45,
+    0.7
+   ],
+   "load": 40,
+   "cantilever": 2,
+   "hosts_minerals": []
+  },
+  {
+   "idx": 45,
+   "key": "sandstone_towers",
+   "name": "Pískovcové věže a stěny",
+   "zone": "hory",
+   "kind": "mountain",
+   "id": 59,
+   "active": false,
+   "freq": 0.5,
+   "depth": [
+    43,
+    47
+   ],
+   "thick": [
+    1,
+    4
+   ],
+   "color": "#c6beb6",
+   "types": [
+    "kopec"
+   ],
+   "rel": [
+    0.5,
+    0.8
+   ],
+   "load": 60,
+   "cantilever": 3,
+   "hosts_minerals": []
+  },
+  {
+   "idx": 46,
+   "key": "weathered_granite",
+   "name": "Zvětralá žula vysočin",
+   "zone": "hory",
+   "kind": "mountain",
+   "id": 60,
+   "active": true,
+   "freq": 1.0,
+   "depth": [
+    44,
+    48
+   ],
+   "thick": [
+    1,
+    4
+   ],
+   "color": "#ddbb9b",
+   "types": [
+    "kopec",
+    "svah",
+    "hora"
+   ],
+   "rel": [
+    0.7,
+    1.0
+   ],
+   "load": 40,
+   "cantilever": 2,
+   "hosts_minerals": []
+  },
+  {
+   "idx": 47,
+   "key": "mountain_ridge",
+   "name": "Horské hřebeny (Šumava/Krkonoše)",
+   "zone": "hory",
+   "kind": "mountain",
+   "id": 61,
+   "active": false,
+   "freq": 0.6,
+   "depth": [
+    45,
+    49
+   ],
+   "thick": [
+    1,
+    4
+   ],
+   "color": "#6b5f52",
+   "types": [
+    "hora"
+   ],
+   "rel": [
+    0.3,
+    0.45
+   ],
+   "load": 150,
+   "cantilever": 6,
+   "hosts_minerals": []
+  },
+  {
+   "idx": 48,
+   "key": "slope_schist",
+   "name": "Krystalické břidlice svahů",
+   "zone": "hory",
+   "kind": "mountain",
+   "id": 62,
+   "active": false,
+   "freq": 0.6,
+   "depth": [
+    46,
+    50
+   ],
+   "thick": [
+    1,
+    4
+   ],
+   "color": "#82786e",
+   "types": [
+    "hora"
+   ],
+   "rel": [
+    0.0,
+    0.3
+   ],
+   "load": 150,
+   "cantilever": 6,
+   "hosts_minerals": []
+  },
+  {
+   "idx": 49,
+   "key": "granite_massif",
+   "name": "Žulové masivy hřbetů",
+   "zone": "hory",
+   "kind": "mountain",
+   "id": 63,
+   "active": true,
+   "freq": 1.0,
+   "depth": [
+    47,
+    51
+   ],
+   "thick": [
+    1,
+    4
+   ],
+   "color": "#99938c",
+   "types": [
+    "hora"
+   ],
+   "rel": [
+    0.0,
+    0.35
+   ],
+   "load": 150,
+   "cantilever": 6,
+   "hosts_minerals": []
+  },
+  {
+   "idx": 50,
+   "key": "rock_wall",
+   "name": "Strmé skalní stěny",
+   "zone": "hory",
+   "kind": "mountain",
+   "id": 64,
+   "active": true,
+   "freq": 1.0,
+   "depth": [
+    48,
+    52
+   ],
+   "thick": [
+    1,
+    4
+   ],
+   "color": "#af997b",
+   "types": [
+    "hora"
+   ],
+   "rel": [
+    0.35,
+    0.55
+   ],
+   "load": 150,
+   "cantilever": 6,
+   "hosts_minerals": []
+  },
+  {
+   "idx": 51,
+   "key": "alpine_crystalline",
+   "name": "Vysokohorské krystalinikum",
+   "zone": "hory",
+   "kind": "mountain",
+   "id": 65,
+   "active": false,
+   "freq": 0.6,
+   "depth": [
+    49,
+    53
+   ],
+   "thick": [
+    1,
+    4
+   ],
+   "color": "#c6b499",
+   "types": [
+    "hora"
+   ],
+   "rel": [
+    0.45,
+    0.6
+   ],
+   "load": 150,
+   "cantilever": 6,
+   "hosts_minerals": []
+  },
+  {
+   "idx": 52,
+   "key": "subalpine_scree",
+   "name": "Subalpínské pásmo (skály, sutě)",
+   "zone": "hory",
+   "kind": "mountain",
+   "id": 66,
+   "active": true,
+   "freq": 1.0,
+   "depth": [
+    50,
+    54
+   ],
+   "thick": [
+    1,
+    4
+   ],
+   "color": "#ddd1bb",
+   "types": [
+    "hora"
+   ],
+   "rel": [
+    0.55,
+    0.7
+   ],
+   "load": 4,
+   "cantilever": 0,
+   "hosts_minerals": []
+  },
+  {
+   "idx": 53,
+   "key": "alpine_belt",
+   "name": "Alpínský stupeň",
+   "zone": "hory",
+   "kind": "mountain",
+   "id": 67,
+   "active": false,
+   "freq": 0.6,
+   "depth": [
+    51,
+    55
+   ],
+   "thick": [
+    1,
+    4
+   ],
+   "color": "#6b6862",
+   "types": [
+    "hora"
+   ],
+   "rel": [
+    0.6,
+    0.7
+   ],
+   "load": 150,
+   "cantilever": 6,
+   "hosts_minerals": []
+  },
+  {
+   "idx": 54,
+   "key": "alpine_granite",
+   "name": "Vysokohorský granit",
+   "zone": "hory",
+   "kind": "mountain",
+   "id": 68,
+   "active": true,
+   "freq": 1.0,
+   "depth": [
+    52,
+    56
+   ],
+   "thick": [
+    1,
+    4
+   ],
+   "color": "#82755b",
+   "types": [
+    "hora"
+   ],
+   "rel": [
+    0.7,
+    0.82
+   ],
+   "load": 150,
+   "cantilever": 6,
+   "hosts_minerals": []
+  },
+  {
+   "idx": 55,
+   "key": "alpine_quartzite",
+   "name": "Vysokohorské kvarcity a břidlice",
+   "zone": "hory",
+   "kind": "mountain",
+   "id": 69,
+   "active": false,
+   "freq": 0.6,
+   "depth": [
+    53,
+    57
+   ],
+   "thick": [
+    1,
+    4
+   ],
+   "color": "#998e76",
+   "types": [
+    "hora"
+   ],
+   "rel": [
+    0.75,
+    0.85
+   ],
+   "load": 150,
+   "cantilever": 6,
+   "hosts_minerals": []
+  },
+  {
+   "idx": 56,
+   "key": "extreme_ridge",
+   "name": "Extrémní hřebeny",
+   "zone": "hory",
+   "kind": "mountain",
+   "id": 70,
+   "active": true,
+   "freq": 1.0,
+   "depth": [
+    54,
+    58
+   ],
+   "thick": [
+    1,
+    4
+   ],
+   "color": "#afa894",
+   "types": [
+    "hora"
+   ],
+   "rel": [
+    0.82,
+    1.01
+   ],
+   "load": 150,
+   "cantilever": 6,
+   "hosts_minerals": []
+  },
+  {
+   "idx": 57,
+   "key": "eternal_snow",
+   "name": "Věčný sníh a led (= sníh gen-v3)",
+   "zone": "hory",
+   "kind": "snow",
+   "id": 10,
+   "active": true,
+   "freq": 1.0,
+   "depth": [
+    55,
+    59
+   ],
+   "thick": [
+    1,
+    4
+   ],
+   "color": "#f4f8ff",
+   "load": 4,
+   "cantilever": 0,
+   "hosts_minerals": []
+  },
+  {
+   "idx": 58,
+   "key": "high_massif",
+   "name": "Velehorský masiv",
+   "zone": "hory",
+   "kind": "mountain",
+   "id": 71,
+   "active": false,
+   "freq": 0.6,
+   "depth": [
+    56,
+    60
+   ],
+   "thick": [
+    1,
+    4
+   ],
+   "color": "#ddce9b",
+   "types": [
+    "hora"
+   ],
+   "rel": [
+    0.85,
+    0.95
+   ],
+   "load": 150,
+   "cantilever": 6,
+   "hosts_minerals": []
+  },
+  {
+   "idx": 59,
+   "key": "rock_spire",
+   "name": "Skalní věže",
+   "zone": "hory",
+   "kind": "mountain",
+   "id": 72,
+   "active": false,
+   "freq": 0.5,
+   "depth": [
+    57,
+    61
+   ],
+   "thick": [
+    1,
+    4
+   ],
+   "color": "#6b6652",
+   "types": [
+    "hora"
+   ],
+   "rel": [
+    0.9,
+    1.0
+   ],
+   "load": 150,
+   "cantilever": 6,
+   "hosts_minerals": []
+  },
+  {
+   "idx": 60,
+   "key": "summit_pyramid",
+   "name": "Vrcholové pyramidy",
+   "zone": "hory",
+   "kind": "mountain",
+   "id": 73,
+   "active": false,
+   "freq": 0.5,
+   "depth": [
+    58,
+    61
+   ],
+   "thick": [
+    1,
+    4
+   ],
+   "color": "#827e6e",
+   "types": [
+    "hora"
+   ],
+   "rel": [
+    0.93,
+    1.0
+   ],
+   "load": 150,
+   "cantilever": 6,
+   "hosts_minerals": []
+  },
+  {
+   "idx": 61,
+   "key": "highest_point",
+   "name": "Nejvyšší bod (skála, led)",
+   "zone": "hory",
+   "kind": "mountain",
+   "id": 74,
+   "active": false,
+   "freq": 0.5,
+   "depth": [
+    59,
+    61
+   ],
+   "thick": [
+    1,
+    4
+   ],
+   "color": "#99978c",
+   "types": [
+    "hora"
+   ],
+   "rel": [
+    0.97,
+    1.01
+   ],
+   "load": 150,
+   "cantilever": 6,
+   "hosts_minerals": []
+  },
+  {
+   "idx": 62,
+   "key": "cloud_line",
+   "name": "Hranice mraků (vzduch)",
+   "zone": "vzduch",
+   "kind": "air",
+   "id": 0,
+   "active": true,
+   "freq": 1.0,
+   "depth": [
+    62,
+    63
+   ],
+   "thick": [
+    1,
+    4
+   ],
+   "color": "#5b7d8c",
+   "load": 150,
+   "cantilever": 5,
+   "hosts_minerals": []
+  },
+  {
+   "idx": 63,
+   "key": "map_ceiling",
+   "name": "Strop mapy, vzduch",
+   "zone": "vzduch",
+   "kind": "air",
+   "id": 0,
+   "active": true,
+   "freq": 1.0,
+   "depth": [
+    62,
+    63
+   ],
+   "thick": [
+    1,
+    4
+   ],
+   "color": "#2f8bbf",
+   "load": 150,
+   "cantilever": 5,
+   "hosts_minerals": []
+  },
+  {
+   "idx": 64,
+   "key": "volcanic_conduit",
+   "name": "Sopouch (vulkanický kanál)",
+   "zone": "telesa",
+   "kind": "vent",
+   "id": 75,
+   "active": true,
+   "freq": 1.0,
+   "depth": [
+    62,
+    63
+   ],
+   "thick": [
+    1,
+    4
+   ],
+   "color": "#d8401c",
+   "body": {
+    "r": 1.6,
+    "r_top": 2.4
+   },
+   "load": 100,
+   "cantilever": 4,
+   "hosts_minerals": []
+  }
+ ]
+}

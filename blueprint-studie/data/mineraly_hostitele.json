@@ -1,0 +1,194 @@
+{
+ "_popis": "blueprint-studie: kde smí který minerál nebo kov vzniknout (Jan 2026-11-18 16:02: každý minerál jen v určitých hostitelských horninách; 16:26 rozšířeno o horniny z data/poradi_hornin.json). Tvar a parametry růstu jako katalog gen-v3, hostitelé = klíče hornin z data/poradi_hornin.json (staré klíče gen-v3 granite/limestone/basalt/clay platí jako aliasy). Když blok nemá dost hostitele, zbytek je SCHODEK (nehledá se jinde). lz = absolutní výška buněk, score = body rarity za buňku.",
+ "version": 2,
+ "minerals": {
+  "copper": {
+   "id": 8,
+   "shape": "vein",
+   "hosts": [
+    "granite",
+    "granodiorite",
+    "skarn"
+   ],
+   "maxHeap": 8,
+   "lz": [
+    4,
+    50
+   ],
+   "inertia_permille": 700,
+   "branch_permille": 80,
+   "score": 40,
+   "name": "měděná ruda"
+  },
+  "iron": {
+   "id": 9,
+   "shape": "pocket",
+   "hosts": [
+    "diabase",
+    "cave_limestone",
+    "skarn"
+   ],
+   "maxHeap": 4,
+   "lz": [
+    1,
+    40
+   ],
+   "score": 25,
+   "name": "železná ruda"
+  },
+  "clay_deposit": {
+   "id": 12,
+   "shape": "layer",
+   "hosts": [
+    "weathered_clay"
+   ],
+   "maxHeap": 120,
+   "lz": [
+    1,
+    60
+   ],
+   "pH_u16": 52428,
+   "pV_u16": 6553,
+   "score": 2,
+   "name": "ložiskový jíl"
+  },
+  "diamond": {
+   "id": 100,
+   "shape": "pocket",
+   "hosts": [
+    "kimberlite"
+   ],
+   "maxHeap": 2,
+   "lz": [
+    0,
+    40
+   ],
+   "score": 400,
+   "name": "diamanty",
+   "color": "#f4fbff"
+  },
+  "gem": {
+   "id": 101,
+   "shape": "pocket",
+   "hosts": [
+    "pegmatite"
+   ],
+   "maxHeap": 3,
+   "lz": [
+    0,
+    50
+   ],
+   "score": 150,
+   "name": "drahokamy",
+   "color": "#3fe0c8"
+  },
+  "rare_metal": {
+   "id": 102,
+   "shape": "vein",
+   "hosts": [
+    "pegmatite"
+   ],
+   "maxHeap": 5,
+   "lz": [
+    0,
+    50
+   ],
+   "inertia_permille": 800,
+   "branch_permille": 50,
+   "score": 90,
+   "name": "vzácné kovy (Li, Sn, Ta)",
+   "color": "#c8d0ff"
+  },
+  "fe_ti": {
+   "id": 103,
+   "shape": "pocket",
+   "hosts": [
+    "gabbro",
+    "fe_ti_zone",
+    "norite"
+   ],
+   "maxHeap": 6,
+   "lz": [
+    0,
+    20
+   ],
+   "score": 30,
+   "name": "titanomagnetit (Fe-Ti)",
+   "color": "#3b3b48"
+  },
+  "coal": {
+   "id": 104,
+   "shape": "layer",
+   "hosts": [
+    "shale",
+    "siltstone",
+    "quartz_sandstone"
+   ],
+   "maxHeap": 80,
+   "lz": [
+    24,
+    40
+   ],
+   "pH_u16": 60000,
+   "pV_u16": 2000,
+   "score": 12,
+   "name": "černé uhlí",
+   "color": "#141414"
+  },
+  "lignite": {
+   "id": 105,
+   "shape": "layer",
+   "hosts": [
+    "weathered_clay",
+    "shale",
+    "loess"
+   ],
+   "maxHeap": 60,
+   "lz": [
+    28,
+    45
+   ],
+   "pH_u16": 60000,
+   "pV_u16": 2000,
+   "score": 6,
+   "name": "hnědé uhlí",
+   "color": "#4a3a2a"
+  },
+  "garnet": {
+   "id": 106,
+   "shape": "pocket",
+   "hosts": [
+    "mica_schist",
+    "eclogite",
+    "skarn"
+   ],
+   "maxHeap": 3,
+   "lz": [
+    0,
+    50
+   ],
+   "score": 60,
+   "name": "granáty",
+   "color": "#b01c3c"
+  },
+  "gold": {
+   "id": 107,
+   "shape": "vein",
+   "hosts": [
+    "quartzite",
+    "pegmatite",
+    "mica_schist"
+   ],
+   "maxHeap": 3,
+   "lz": [
+    0,
+    50
+   ],
+   "inertia_permille": 800,
+   "branch_permille": 40,
+   "score": 250,
+   "name": "zlato",
+   "color": "#ffd23a"
+  }
+ }
+}

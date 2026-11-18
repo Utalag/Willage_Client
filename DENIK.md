@@ -27,6 +27,13 @@ Skupiny: 1 Prototyp a buildy · 2 Terén a tvar · 3 Rozlišení bloku · 4 Ská
 - **Zlepšení:** F1 otevře okno se záložkami Povrch a Tráva a sbalitelnými sekcemi. Posuvníky mají české popisky. Uniformy se mění hned, parametry s přestavbou (⟳) se přestaví 0,4 s po poslední změně nebo tlačítkem Aplikovat. Má Reset na výchozí, Uložit a Načíst předvolbu (`user://presety/*.tres`). Ukazuje FPS, ms snímku, instance vegetace a trojúhelníky. Export složku vylučuje. Hra bez složky běží beze změny (ověřeno).
 - **Komplikace:** objekty a lambdy uložené v `Engine` meta nebo ve statickém slovníku shazovaly Godot při ukončení. Registr proto drží jen slabé odkazy a v meta je jen cesta ke skriptu.
 
+### 🧪 Prototyp rozdělený na uzly scény místo monolitu `main.gd`, na žádost Jana (2026-11-18 01:00 · `godot-prototyp/`, větev `refaktor-uzly`, shot `44_editor_uzly.png`)
+- **Směr:** Jan: „vše vidím jen v kódu, ale nejsou tu žádné uzly“ a „hrozný monolit“. `main.tscn` má teď skutečné uzly, každý s vlastním skriptem: World (WorldEnvironment + Sun), Island (`@tool`), CameraRig (+ Camera3D), Placement, Buildings, Roads, Digging, WaterFlow, UI, DevPanel. Logika se jen přesunula, nepřepisovala. Uzly se propojují přes exportované `NodePath` a signály `hint_changed` a `cell_inspected`. Dema a měření jsou ve scéně `demo.tscn` (`scripts/demo/`). Přepínače `--demo`, `--*-shots`, `--*-bench`, `--res-test` a `--export-vectors` fungují dál, protože `main.tscn` na `demo.tscn` sám přesměruje.
+- **Zlepšení:** `main.gd` se zmenšil z 1 326 řádků a 66 funkcí na 170 řádků a 8 funkcí, ostatní skripty uzlů mají 12–238 řádků. Island se v editoru vykreslí ve 3D pohledu (4 bloky za ~1,7 s). V Inspectoru jde zvolit generátor, startovní sloty, typy a seedy, náhled vypnout a přegenerovat. Kamera hry se dá zobrazit přes Preview.
+- **Ověření:** demo s `--fixed-fps 30` vyšlo před i po refaktoru stejně: 9 z 27 snímků je pixelově shodných a u zbylých 18 se liší jen popisek časů „generování … ms · mesh … ms“ v panelu (nejvýš 0,04 % pixelů). Vektory včetně `delta_sample.json` jsou bajtově shodné. Výpisy demo, SELFTEST, validátorů a determinismu jsou stejné až na ms. Headless editor s čistou `.godot` proběhl bez chyb.
+- **Komplikace:** aby šel ostrov generovat v editoru, mají knihovní skripty generátoru a vykreslení (`block*`, `mesher`, `mat`, `veg*`, `grass*`, `gen3/*`, `surface/*` …) nahoře `@tool`. U kopií z lozika-studie je to jediný rozdíl. Spuštění přes přesměrování (`-- --demo` bez scény) přidá pár snímků, takže animované shadery (mlha, vítr, voda) jsou v jiné fázi. Proto `shoot.sh` volá `res://demo.tscn` přímo.
+- **Další krok:** Jan otestuje v editoru a rozhodne o sloučení větve `refaktor-uzly` do main.
+
 ## 2 Terén a tvar
 
 ### ✅ Relief v2.2: terasy (2026-11-17, noc)
@@ -160,6 +167,49 @@ Skupiny: 1 Prototyp a buildy · 2 Terén a tvar · 3 Rozlišení bloku · 4 Ská
 - **Komplikace:** pásmo „vzácná“ je úzké (18,7–19,0). Bonus 50 % u gen-v3 třídy nerozděluje tolik jako u proto: proto dává bonusovým blokům epickou nebo legendární v 119/120, gen-v3 jen v 72 % (86/120) a 28 % bloků bez bonusu (33/120) vyjde epických.
 - **Další krok:** rozhodnout, jestli má raritu dál určovat podíl tříd, nebo spíš bonus (pak větší bonus rud v zásobníku, nebo raritu počítat ze souhrnu zásobníku na serveru).
 
+### 🧪 Blueprint: tvar povrchu + seed + minerály, vrstvy jako pokračování sousedů (2026-11-18 16:11 · `blueprint-studie/`, shots `45_blueprint_*`)
+- **Směr:** Jan 2026-11-18: divák vloží blueprint (louka, kopec, svah, prohlubeň + seed + počty minerálů a kovů, rarita jen z nich). V náhledu se okraje povrchu dorovnají v pásu 4 buněk (harmonická korekce [1][2]). Při potvrzení se hranice vrstev čediče, žuly, vápence, jílu a písku protáhnou ze sousedů (Laplace, Dirichlet ze sousedů, Neumann na volných stranách [3][7]) nad regionální deskou ve světových souřadnicích (fBm s domain warpem [4]). Minerály se vtisknou přesně a jen do povolených hostitelů (`data/mineraly_hostitele.json`, Jan 16:02 [8][9]). Vodu dopočítá vsakování gen-v3. Volitelně eroze kapkami [5].
+- **Zlepšení:** skok vrstev na švu 0,07 buňky (nezávislé gen-v3 2,65, uvnitř bloku 0,26). U mezery mezi starými bloky gen-v3 klesne z 1,74 na 0,47. Povrch na švu z 3,86 na 0. Minerály 12/12 přesně, validátor OK. Při nedostatku hostitele se schodek nahlásí. Hash je 2× stejný a po snímcích stejný jako naráz. Vložení trvá 21–95 ms, s erozí +43–103 ms. Scéna je z uzlů s ukazatelem průběhu.
+- **Komplikace:** se společnou regionální deskou navazují švy skoro samy (bez Laplace 0,17), takže Laplace je hlavně pro bloky mimo desku. Písek z gen-v3 sousedů nenavazuje (1,53), protože je to vrstva u povrchu. Okraj povrchu je přesně ve výšce souseda, takže šev může působit „vyrovnaně“. Výpočet v float64 zatím není ověřený v C#.
+- **Další krok:** Jan rozhodne o otevřených otázkách v `blueprint-studie/PROP.md` (nedostatek hostitele, šev povrchu, volné strany, seed desky, odebrání bloku, aritmetika na serveru).
+
+### 🧪 Blueprint v2: tabulka pořadí 64 hornin a vrstvy podle terénu (hora, kopec, prohlubeň, sopka) (2026-11-18 16:45 · `blueprint-studie/`, shots `46_horniny_*`)
+- **Směr:** Jan 16:26–16:38: horniny podle pořadí kůry od Gemini [10] (`data/poradi_hornin.json`, 65 hornin, aktivní podmnožina 17), minerály jen v hostitelích (diamanty v kimberlitu, drahokamy v pegmatitu, Fe-Ti v gabru, uhlí v sedimentech). Vrstvy se ohýbají podle skici [11] a představy řezu [12]: hora je antiklinála s jádrem z krystalinika a sněhem, kopec vrstvy ohne, prohlubeň je prohne, sopka (nový typ) má vrstvy sbíhavé ke kráteru a sopouch. Tělesa: kimberlitový komín, solný dóm, pegmatit, skarn.
+- **Zlepšení:** jádro hory je 40 % krystalinikum a jen 6 % sedimenty (bez deformace 85 % horské kůže). Šev vrstev C 0,38 (A 1,91, B 1,18), povrch 0. Minerály 22/24 přesně, 2 schodky (pegmatit v hoře chybí), validátor OK. Hash 2× stejný. 7 bloků 1,6 s, nejpomalejší blok 386 ms.
+- **Komplikace:** tenké vrstvy (1–3 buňky) zhoršují šev oproti v1 (0,08). Horská kůže je pořád 39 % hory. Skarn nepřechází přes šev. Nová id jsou v novém `sdilene/horniny_voda.json`, hlavní tabulka zůstala beze změny.
+- **Další krok:** Jan rozhodne o otázkách v2 v `blueprint-studie/PROP.md` (podmnožina pro region nebo blok, vynucení pegmatitu, kůže hory, četnost těles, sloučení tabulek).
+
+### 🧪 Blueprint v2.1: vrstvy jako funkce nezávislé na rozlišení, sousedé jako výchozí bod, klíny, dutiny (2026-11-18 17:20 · `blueprint-studie/scripts/bp/geo_fn.gd`, shots `46_horniny_klin`, `_rozliseni`, `_rezervoar_jeskyne`, `_rez_hora_*`)
+- **Směr:** Jan 16:40–17:01: buňky jsou jen vzorky funkcí v metrech [18]. Hranice začínají u sousedů (Dirichlet, jinak regionální základ) a do 3 m přejdou v tvar blueprintu. Navazuje se v mocnostech, takže vrstva, kterou blok nemá, vnikne klínem nebo se vyklíní [16][17]. Dva typy hor (vyzdvižená, zvrásněná). VODA a VZDUCH v seznamu materiálů = rezervoár v nepropustné hornině a jeskyně pod nosným stropem [19]. Pevnost load/cantilever jen jako data v tabulkách.
+- **Zlepšení:** 16 vs. 32 shoda 94,9 % (pevné/vzduch 99,7 %), počty přesně × 8. Šev vrstev 0,08, skok mocnosti na švu 0, náhlé objevení vrstvy na švu 0 (bez navázání 12, u klínu 40). Klín ze skici sedí. Jeskyně 90/90, rezervoár 60/60, validátor OK.
+- **Komplikace:** uvnitř bloků jsou strmé přechody přítomnosti vrstev, skarn je jen svislý, voda se vzorkuje jen při 16. `sdilene/materialy_voda.json` má nová pole `load`/`cantilever`, takže kopie v `godot-prototyp/data` není shodná (obnoví `tools/sync_shared_table.sh`).
+- **Další krok:** Jan rozhodne o otázkách v2.1 v `blueprint-studie/PROP.md` (délka klínu, regionální základ, pevnost, tvary dutin).
+
+### 🧪 Blueprint v2.2: volná strana podle blueprintu, nejvýš jedna dutina na blok (2026-11-18 18:15 · `blueprint-studie/`, shot `46_horniny_rezervoar_jeskyne`)
+- **Směr:** Jan 17:38: strana bez souseda má vrstvy z blueprintu (tak jak je to teď). V bloku je buď nic, nebo jeden rezervoár, nebo jedna jeskyně, tvar je jedno. Délku klínu necháváme.
+- **Zlepšení:** `BP.validate` odmítne VODU + VZDUCH (`blueprint.cavity_conflict`) a generátor pak dutinu nevytvoří. Dutina roste jako jedna souvislá komponenta (předtím jeskyně měla 2 kusy). Test pravidla OK, jeskyně 90/90 ve svahu (1,1), rezervoár 60/60 v kopci (2,2). Determinismus, po snímcích = naráz i v1 test OK.
+- **Komplikace:** žádná nová. Kopie sdílené tabulky v `godot-prototyp/data` je pořád neshodná (pole pevnosti), prototyp jsem neměnil.
+- **Další krok:** Jan rozhodne, jestli obnovit kopii tabulky v prototypu (`tools/sync_shared_table.sh`) a jestli doladit délku klínu.
+
+### 💡 Nápad (hypotéza, ne rozhodnutí): ostrov jako základna, dva režimy úprava terénu a prokopání (2026-11-18 17:11–17:20, Jan; 17:20 Jan: „byl to nápad“, studie s vrstvami pokračuje)
+- Povrch ostrova zůstává plně upravitelný (blueprint tvaru, kopce, voda, vegetace, cesty), podzemí ostrova je jen pár obecných vrstev bez vzácných surovin.
+- Režim úprava terénu: mění povrch, vrstvy pod ním nechává být.
+- Režim prokopání: dlaždice se vymění za dlaždici výkopu = vstup do podzemí; těžba probíhá v podzemí / na mapách výprav s plnou geologií (blueprint vrstvy, minerály, rezervoáry, jeskyně).
+- Upřesnění 17:17 (Jan): blueprinty na ostrově zůstávají, ale jen tvar a vzhled povrchu, žádné vrstvy hornin. Nížiny = hlína + tráva navrchu; hory = skála + sníh, nebo kámen, nebo tráva.
+- Upřesnění 17:18 (Jan): hráč může terén ostrova odebírat i vracet, a to jakýmkoli materiálem, který si natěžil jinde (podzemí, výpravy). Odebraný materiál se vrací do inventáře celý (Jan 17:20).
+- Zvažováno: vstup jako budova do mělkého výkopu (může být pozdější vylepšení výkopu – výtah, zpevněná šachta).
+
+### 💡 Nápad: zdroj blueprintů – kopie výřezu mapy z výpravy (2026-11-18 17:23, Jan)
+- Na výpravě si hráč označí kus mapy a zkopíruje ho; doma ho vloží do vesnice jako blueprint (tvar povrchu + seed + seznam materiálů/minerálů/vody/vzduchu → rarita).
+- Upřesnění 17:24 (Jan): nic se nevyřezává. Mapa výpravy u výřezu předgeneruje jen procentuální data, co by mohlo být v podzemí; blueprint nese tvar povrchu + tato procenta, podzemí se vygeneruje až při vložení doma (napojení na sousedy). Výprava zůstává nedotčená.
+- Upřesnění 17:25 (Jan): 2 hráči se stejným výřezem můžou mít jiné složení země – procenta jsou pravděpodobnost, seed podzemí je vlastní pro každou kopii/hráče.
+
+### 💡 Nápad: kombinace hrubé simulace světa (jako DF) a blueprint geologie po dlaždicích (2026-11-18 18:03, Jan)
+- Jednou nahrubo vygenerovat svět: terén, biomy, počasí, eroze, řeky.
+- Rozřezat na dlaždice; podle biomu a výšky přiřadit typ blueprintu a podmnožinu hornin.
+- Podrobnou geologii (vrstvy-funkce, klíny, minerály, dutiny) dopočítat až při potřebě: první dlaždice a od ní rozšiřování s navazováním na sousedy.
+- Další krok: malý test 8 × 8 bloků (po GIFech vrstev a běhu toků/eroze).
+
 ## 3 Rozlišení bloku
 
 ### 🧪 Nastavitelné rozlišení, test 32 × 32 × 64 s buňkou 0,5³ (2026-11-17 11:50 · `--res-test`)
@@ -278,6 +328,21 @@ Godot .NET (nebo GDExtension) a stavba chunků ve vlákně, napojení bloků na 
 - **Další krok:** Jan posoudí, jestli je opakování trávy a zuby na pobřeží přijatelné, nebo chce jiný zdroj / větší rozmanitost.
 
 
+### 🧪 2D tileset s popisky místo textur (2026-11-18 12:59 · `tileset2d-studie/`, shots `43_tileset2d_*_text.png`)
+- **Směr:** Jan 18. 11.: jeden set, kde materiály budou jen text na textuře. Nový vzhled `text` (`--style=text`, v play klávesa X): na každé ploše české jméno materiálu (tráva / písek / hlína) na neutrálním, odlišném podkladu. Stejné 16dílné rohové sady, priorita hlína < písek < tráva, sukně i rampa jako u ostatních vzhledů.
+- **Zlepšení:** popisky jsou vodorovné v rastru dlaždice (ne zkosené v UV), na plné desce velké středové slovo a menší u vrcholů, ať i rohové kusy nesou jméno. Podmřížka 32 × 16 se kreslí nativně (4× zmenšení by písmo znečitelnilo). Snímky se stejnou sadou pohledů jako gemini2, přípona `_text`, srovnání pastel / gemini2 / text.
+- **Komplikace:** na nejmenších jednorohových úlomcích se slovo někdy ořízne. Na vnějších stěnách rampy spojovací kvádry z `bok.png` často ukážou jen část slova „hlína“ (úzké UV okno). Sukně na lomeném pobřeží má pořád zuby. Snímek listů je vysoký pruh — čitelnější je `assets/tilesets/text/listy.png`.
+- **Další krok:** Jan ověří, jestli jsou popisky na vzorku a ve styku dost čitelné.
+
+
+### 🧪 Klasická izometrie a Janovy 4×4 dual-grid listy (2026-11-18 13:40 · `tileset2d-studie/`, shots `43_tileset2d_*_klasik.png`, `43_tileset2d_*_jan.png`)
+- **Směr:** Jan po vysvětlení duální mřížky (proč popisky nejsou plné kostky): „Udělej klasickou isometrickou mřížku a klasický tilsety.“ Režim `--grid=classic` (klávesa C): 1 buňka = 1 plná kostka 128 × 64 + souvislá levá/pravá sukně, bez rohových přechodů, výšky jako skládané kvádry. Rampy zůstávají v duální mřížce. Nejdřív vzhled `text`, levně i pastel a gemini2. Jan pak poslal tři listy 4 × 4 × 64 px [13] a upřesnil, že jsou pro dual grid, ne pro klasiku. Vzhled `jan` je tedy jen v duální mřížce: bitmaska z rohů, bílá → průhledná, pohled shora nativně a iso 2:1 s sukní na zemi.
+- **Zlepšení:** opravená pravá sukně (parametr stěny šel dřív od horního vrcholu místo od pravého, pravý bok chyběl). V classic režimu na sebe stěny navazují po hraně ostrova. Snímky `_klasik` (vzorek, spoj, výšky, listy, srovnání dual/classic u textu) a `_jan` (vzorek, spoj, listy, shora).
+- **Komplikace:** na sukni vzhledu `text` v klasice je „hlína“ vodorovně přes obě stěny a někde se řeže. Duální pobřeží u pastelu/textu má pořád zuby na nepravidelné hraně (u `jan` jsou stěny z plných kosočtverců souvislejší). Rampy v classic nejsou. Snímek listů se v 1280 × 720 vejde jen jako náhled — čitelnější jsou `assets/tilesets/text-klasik/listy.png` a `assets/tilesets/jan/listy.png`.
+- **Další krok:** Jan na telefonu ověří plné kostky v `_klasik` a jestli jeho listy v `_jan` / `_shora_jan` sedí v rozích.
+
+
+
 
 ## 7 Výkon
 
@@ -378,6 +443,14 @@ Nevyzkoušené nápady na zrychlení. Stav: 💡 návrh · 🔬 ověřuje se · 
 - 💡 **Tok vody: kontrola ustálení levněji:** 30 tiků ověření stojí ~18 ms na konci toku; ve hře ji pouštět jen v ladění a ponechat zachování součtu.
 - 💡 **gen-v3 v C# ve vlákně:** generátor je čistá funkce (bajty zásobníku → bajty bloku), dá se pustit mimo hlavní smyčku a bez úprav otestovat proti `gen_v3_vectors.json`.
 - 💡 **Ložiska v C# nebo ve vlákně:** běžný blok stojí 1,4 ms, jen zátěžové cíle (34–74 ms) by zasekly snímek; spouštět mimo hlavní smyčku spolu s generátorem.
+
+- 💡 **Blueprint: jedno skalární pole na sérii místo Laplace na každou vrstvu (17:06, `blueprint-studie/RESERSE.md`):** vědecké implicitní modely (GemPy, LoopStructural) počítají souhlasné vrstvy jako izoplochy jednoho pole, mocnost ≥ 0, vyklínění v nule [18][21][23]. Ušetří opakované SOR (ve v2 až 17×, nejpomalejší blok 386 ms) a vrstvy se nemůžou křížit; tvar zůstane stejný v jemnějším rozlišení.
+- 💡 **Blueprint: relace onlap / erode mezi sériemi (17:06):** GeoModeller/GemPy mají vedle vyklínění i vztah sérií: *erode* řeže starší vrstvy (vyzdvižená hora, sopouch, komín, dóm), *onlap* se o ně zastaví (sedimenty na úpatí, výplň pánve) [17][20]. Formalizuje Janovy typy hor a těles bez nového řešiče.
+- 💡 **Blueprint: vrása jako deformace souřadnic pole (17:06):** antiklinála podle Laurenta a LoopStructural (fold frame, zakřivení slábne s hloubkou), ne jako samostatná výška každé vrstvy [21][24].
+- 💡 **Blueprint: podmnožina hornin podle provincie nebo vesnice (17:06):** Vintage Story a Dwarf Fortress volí sady a mocnosti podle provincie/biotopu, ne po dlaždici [37][38][39]. Švy mezi bloky zůstanou čitelnější (otevřená otázka v2 č. 1).
+- 💡 **Blueprint: tělesa jako implicitní primitiva / SDF (17:06):** sopouch, kimberlit, solný dóm a žíla jako 3D primitiva s relací *erode* (Paris 2019, *Arches*) [34][44]; stejný tvar v jemnějším rozlišení, na každou vrstvu plné 3D pole netřeba.
+- 💡 **Blueprint: rezervoár a jeskyně jako vložený materiál + místní hladina (17:06):** vzduch/voda v zásobníku sloupce pod nepropustným stropem (*Arches*) a lokální hladina se bariérou jako Minecraft aquifer 1.18 [34][36]. Přesné objemy z receptu zůstanou.
+- 💡 **Blueprint: stream-power eroze a kompetence až se povolí fyzika (17:06):** Cordonnier 2016/2018 — \(\partial h/\partial t = u - k A^m S^n\), \(k\) podle pevnosti vrstvy [31][32]. Teď nepočítat (Jan 16:5x); vzorec je připravený. Plné Badlands/Landlab/GOLEM při uložení bloku přeskočit.
 
 ## 3 Rozlišení bloku
 - 💡 **Jemnější rozlišení jen u povrchu:** 32 × 32 stojí asi 4× generování a 3× síť. Hloubku nechat hrubou a jemné buňky držet jen v horních vrstvách.

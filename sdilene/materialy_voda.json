@@ -8,85 +8,110 @@
       "perm": 1.0,
       "por": 1.0,
       "res": 0.0,
-      "ret": 0.0
+      "ret": 0.0,
+      "load": 0,
+      "cantilever": 0
     },
     "grass": {
       "id": 1,
       "perm": 0.25,
       "por": 0.4,
       "res": 0.85,
-      "ret": 0.15
+      "ret": 0.15,
+      "load": 3,
+      "cantilever": 0
     },
     "dirt": {
       "id": 2,
       "perm": 0.3,
       "por": 0.4,
       "res": 0.4,
-      "ret": 0.15
+      "ret": 0.15,
+      "load": 4,
+      "cantilever": 0
     },
     "sand": {
       "id": 3,
       "perm": 0.8,
       "por": 0.35,
       "res": 0.25,
-      "ret": 0.05
+      "ret": 0.05,
+      "load": 3,
+      "cantilever": 0
     },
     "clay": {
       "id": 4,
       "perm": 0.0,
       "por": 0.45,
       "res": 0.1,
-      "ret": 0.0
+      "ret": 0.0,
+      "load": 12,
+      "cantilever": 1
     },
     "limestone": {
       "id": 5,
       "perm": 0.0,
       "por": 0.0,
       "res": 0.1,
-      "ret": 0.0
+      "ret": 0.0,
+      "load": 80,
+      "cantilever": 4
     },
     "granite": {
       "id": 6,
       "perm": 0.0,
       "por": 0.0,
       "res": 0.05,
-      "ret": 0.0
+      "ret": 0.0,
+      "load": 200,
+      "cantilever": 8
     },
     "basalt": {
       "id": 7,
       "perm": 0.0,
       "por": 0.0,
       "res": 0.05,
-      "ret": 0.0
+      "ret": 0.0,
+      "load": 200,
+      "cantilever": 7
     },
     "copper": {
       "id": 8,
       "perm": 0.0,
       "por": 0.0,
       "res": 0.05,
-      "ret": 0.0
+      "ret": 0.0,
+      "load": 60,
+      "cantilever": 3
     },
     "iron": {
       "id": 9,
       "perm": 0.0,
       "por": 0.0,
       "res": 0.05,
-      "ret": 0.0
+      "ret": 0.0,
+      "load": 80,
+      "cantilever": 3
     },
     "snow": {
       "id": 10,
       "perm": 0.0,
       "por": 0.0,
       "res": 0.3,
-      "ret": 0.0
+      "ret": 0.0,
+      "load": 4,
+      "cantilever": 0
     },
     "clay_deposit": {
       "id": 12,
       "perm": 0.0,
       "por": 0.45,
       "res": 0.1,
-      "ret": 0.0
+      "ret": 0.0,
+      "load": 12,
+      "cantilever": 1
     }
   },
-  "perched_depth": 2
+  "perched_depth": 2,
+  "_pevnost": "Rozšíření 2026-11-18 (Jan 16:58, blueprint-studie), zpětně kompatibilní: load = kolik buněk (0,5 m) nad sebou materiál unese jako strop dutiny, cantilever = kolik buněk převisne bez podpory. Vzduch a voda 0. Staré čtenáře nová pole nezajímají."
 }
