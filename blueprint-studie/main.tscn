@@ -1,4 +1,4 @@
-[gd_scene load_steps=13 format=3]
+[gd_scene load_steps=18 format=3]
 
 [ext_resource type="Script" path="res://scripts/uzly/main.gd" id="1"]
 [ext_resource type="Script" path="res://scripts/uzly/svet.gd" id="2"]
@@ -10,6 +10,11 @@
 [ext_resource type="Script" path="res://scripts/uzly/scenario.gd" id="8"]
 [ext_resource type="Script" path="res://scripts/uzly/legend.gd" id="9"]
 [ext_resource type="Script" path="res://scripts/uzly/scenario_horniny.gd" id="10"]
+[ext_resource type="Script" path="res://scripts/uzly/scenario_voda.gd" id="11"]
+[ext_resource type="Script" path="res://scripts/uzly/scenario_svet8.gd" id="12"]
+[ext_resource type="Script" path="res://scripts/uzly/scenario_voda_b.gd" id="13"]
+[ext_resource type="Script" path="res://scripts/uzly/scenario_podzemi.gd" id="14"]
+[ext_resource type="Script" path="res://scripts/uzly/scenario_svet64.gd" id="15"]
 
 [sub_resource type="Environment" id="env"]
 background_mode = 1
@@ -130,6 +135,22 @@ ui = NodePath("../UI")
 rig = NodePath("../CameraRig")
 legend = NodePath("../UI/Legenda")
 
+[node name="ScenarioVoda" type="Node" parent="."]
+script = ExtResource("11")
+svet = NodePath("../Svet")
+views = NodePath("../BlockViews")
+ui = NodePath("../UI")
+rig = NodePath("../CameraRig")
+legend = NodePath("../UI/Legenda")
+
+[node name="ScenarioSvet8" type="Node" parent="."]
+script = ExtResource("12")
+svet = NodePath("../Svet")
+views = NodePath("../BlockViews")
+ui = NodePath("../UI")
+rig = NodePath("../CameraRig")
+legend = NodePath("../UI/Legenda")
+
 [node name="Scenario" type="Node" parent="."]
 script = ExtResource("8")
 svet = NodePath("../Svet")
@@ -138,3 +159,26 @@ views = NodePath("../BlockViews")
 preview = NodePath("../Preview")
 ui = NodePath("../UI")
 rig = NodePath("../CameraRig")
+
+[node name="ScenarioVodaB" type="Node" parent="."]
+script = ExtResource("13")
+svet = NodePath("../Svet")
+views = NodePath("../BlockViews")
+ui = NodePath("../UI")
+rig = NodePath("../CameraRig")
+legend = NodePath("../UI/Legenda")
+
+[node name="ScenarioPodzemi" type="Node" parent="."]
+script = ExtResource("14")
+svet = NodePath("../Svet")
+views = NodePath("../BlockViews")
+ui = NodePath("../UI")
+rig = NodePath("../CameraRig")
+legend = NodePath("../UI/Legenda")
+
+[node name="ScenarioSvet64" type="Node" parent="."]
+script = ExtResource("15")
+views = NodePath("../BlockViews")
+ui = NodePath("../UI")
+rig = NodePath("../CameraRig")
+legend = NodePath("../UI/Legenda")

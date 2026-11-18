@@ -61,10 +61,16 @@ static func preview_steps_v2(ctx: Dictionary) -> Array:
 	s.append(["povrch: dorovnání okrajů na sousedy / regionální základ", func():
 		# Jan 16:44: okraj = přesně funkce souseda; chybí-li soused, výchozí hodnota = regionální základ (surf_ref)
 		var e: Array = ctx.world.edge_heights_f(ctx.slot)
+		var real := e.map(func(v): return v != null)
 		for d in 4:
 			if e[d] == null:
-				var r := PackedFloat64Array(); r.resize(16); r.fill(float(ctx.p.surf_ref)); e[d] = r
-		var a := SF.adapt(ctx.raw, e, ctx.p.band, ctx.p)
+				var r := PackedFloat64Array(); r.resize(16); r.fill(float(ctx.p.surf_ref))
+				# E49: když blueprint nese povrch z hrubého světa (base_hm), regionální základ povrchu = hrubý svět na vlastním okraji
+				if ctx.bp.has("base_hm"):
+					for t in 16:
+						var o := SD.own(d, t); r[t] = float(ctx.bp.base_hm[o.x * 16 + o.y])
+				e[d] = r
+		var a := SF.adapt(ctx.raw, e, ctx.p.band, ctx.p, real)
 		ctx.hm = a.hm; ctx.hm_f = a.hm_f; ctx.hm_raw = a.hm_raw; ctx.changed = a.changed
 		ctx.rep.surface_iters = a.iters])
 	return s

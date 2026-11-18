@@ -46,6 +46,8 @@ static func _ctl(wf: Dictionary, home: Vector2i, k: int, gx: int, gy: int) -> fl
 		s = home; r = _rec(wf, home)
 		gx = clampi(gx, home.x * 16, home.x * 16 + 15); gy = clampi(gy, home.y * 16, home.y * 16 + 15)
 	var i := (gx - s.x * 16) * 16 + (gy - s.y * 16)
+	if k == -2:   # povrch PŘED erozí (E47); bez eroze = hm_f
+		return r.hm_pre[i] if r.has("hm_pre") else r.hm_f[i]
 	return r.hm_f[i] if k < 0 else r.bs[k][i]
 
 static func _field(wf: Dictionary, home: Vector2i, k: int, X: float, Y: float) -> float:
@@ -80,7 +82,8 @@ static func block_info(wf: Dictionary, slot: Vector2i, bp: Dictionary, p: Dictio
 		"tk": 0 if kind == "nizina" else (1 if kind == "kopec" else 2),
 		"zone_of": zone_of, "mtn": HR.mountain(p).filter(func(e): return kind in e.types),
 		"mnoise": BG.noise(int(bp.seed), "BP_MTN_M", 0, 0.4, 2),   # 0,4 / m
-		"vent": HR.special("vent", p) if kind == "sopka" else {}}
+		"vent": HR.special("vent", p) if kind == "sopka" else {},
+		"dep": HR.id_of(str(p.get("ero_deposit", "gravel_sand")))}   # nános eroze (E47)
 	# tělesa: středy v metrech světa
 	var bodies := []
 	for kd in ["pipe", "dome", "vein", "contact"]:
@@ -114,7 +117,10 @@ static func column(wf: Dictionary, info: Dictionary, X: float, Y: float) -> Dict
 	var bs := PackedFloat64Array(); bs.resize(info.lay.size())
 	for k in bs.size():
 		bs[k] = boundary_m(wf, info.slot, k, X, Y)
-	return {"h": surface_m(wf, info.slot, X, Y), "bs": bs}
+	var col := {"h": surface_m(wf, info.slot, X, Y), "bs": bs}
+	var r = _rec(wf, info.slot)
+	col.h0 = _field(wf, info.slot, -2, X, Y) if r != null and r.has("hm_pre") else col.h
+	return col
 
 static func _mountain_rock(info: Dictionary, X: float, Y: float, Z: float) -> int:
 	var rel: float = (Z / U - float(info.p.surf_ref)) / 21.0 + 0.06 * info.mnoise.get_noise_3d(X, Y, Z)
@@ -132,6 +138,11 @@ static func material(info: Dictionary, col: Dictionary, X: float, Y: float, Z: f
 	var p: Dictionary = info.p
 	var kind: String = info.kind; var prof: String = info.prof
 	var d := h - Z
+	# E47 eroze po vrstvách: h0 = povrch před erozí. Nános (Z ≥ h0) = štěrk/písek pod drnem; v korytě se půda a kůže hor
+	# měří od PŮVODNÍHO povrchu, takže eroze půdu prořízne a odkryje horninu. Bez eroze h0 = h → beze změny.
+	var h0: float = col.get("h0", h)
+	var ds := h0 - Z if h0 > h else d
+	var dep := Z >= h0
 	var snow := (kind == "hora" or kind == "sopka") and h >= (float(p.snowline) + 1.0) * U
 	var grass := (not snow) and h < (float(p.treeline) + 1.0) * U
 	var soil := 0.0
@@ -141,11 +152,13 @@ static func material(info: Dictionary, col: Dictionary, X: float, Y: float, Z: f
 	var m := -1
 	if snow and d < 2.0 * U:
 		m = Mat.SNOW
-	elif grass and d < U:
+	elif dep:
+		m = Mat.GRASS if grass and d < U else int(info.dep)
+	elif grass and ds < U:
 		m = Mat.GRASS
-	elif grass and d < U + soil:
+	elif grass and ds < U + soil:
 		m = Mat.DIRT
-	elif prof != "hora_v" and d < (2.0 * U if snow else (U if grass else 0.0)) + soil + skin:
+	elif prof != "hora_v" and ds < (2.0 * U if snow else (U if grass else 0.0)) + soil + skin:
 		m = _mountain_rock(info, X, Y, Z)
 	else:
 		var bs: PackedFloat64Array = col.bs

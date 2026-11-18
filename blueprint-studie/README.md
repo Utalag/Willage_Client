@@ -25,13 +25,20 @@ Volitelně: hydraulická eroze kapkami na šabloně před dorovnáním (`--erosi
 ./run.sh test       # testy a měření bez okna -> shots/bench.txt
 ./run.sh play       # okno: sled 5 vložení s ukazatelem průběhu
 ./run.sh test --band=3 --strata_band=6 --free_face=zero --drape=0,0.1,0.3,0.5,0.6 --erosion=1 --droplets=5000
+./run.sh voda       # E47 eroze po vrstvách + déšť (voda_sim) → shots/bench_voda.txt, 47_voda_eroze_*.png
+./run.sh funkce     # E48 3D grafy funkcí vrstev → shots/48_funkce_*.gif
+./run.sh voda47d    # E47d podzemní voda po propustné vrstvě: testy čočka → tůň 4 × 4, dutina → podzemní jezero; svět; snímky 47d_*
+./run.sh voda47b    # E47b/c strže, ponory, vodopády; voda jen z pramenů, okraj ostrova, lokální přepočet, plnění tůní → shots/bench_voda_c.txt, bench_voda_b.txt, 47b_*.png, 47b_vodopad.gif
+./run.sh svet64     # E50 svět 8 × 8 po 64 × 64 × 256 buňkách: časy fází a bloků, paměť → shots/bench_svet64.txt, 50_svet64_faze.gif, 50_svet64_iso.png
+./run.sh svet8      # E49 svět 8 × 8 (hrubě → dlaždice → detail) → shots/bench_svet8.txt, 49_svet_8x8_faze.gif, 49_svet_8x8_*.png
 ```
 Všechny parametry jsou v `scripts/bp/params.gd`. Hlavní jdou ladit i v Inspectoru na uzlu `Svet`.
 
 ## Scéna (uzly, žádný monolit)
 `main.tscn`: `Main` → `World` (WorldEnvironment, Sun) · `CameraRig` (Camera3D) · `Svet` (stav světa a parametry) ·
 `Placer` (vkládání po snímcích, signály `progress` a `finished`) · `BlockViews` (kreslení bloků a řezů) · `Preview`
-(průhledný náhled) · `UI` (Hud a panel Prubeh s ProgressBar) · `Scenario` (ukázkový sled, režimy).
+(průhledný náhled) · `UI` (Hud a panel Prubeh s ProgressBar) · `Scenario` (ukázkový sled, režimy) · `ScenarioHorniny`
+(`--horniny`) · `ScenarioVoda` (`--voda`, 3D před/po erozi s vodou) · `ScenarioSvet8` (`--svet8`, 3D svět 8 × 8) · `ScenarioSvet64` (`--svet64`, izo E50 z uložených dat, render měřený zvlášť) · `ScenarioPodzemi` (`--voda47d`, rentgen propustné vrstvy, řez u výtoku, demo čočka a dutina) · `ScenarioVodaB` (`--voda47b`, 3D prameny, strže, vodopády, ponor/odtok tůně, okraj ostrova).
 
 | soubor | co dělá |
 |---|---|
@@ -46,6 +53,22 @@ Všechny parametry jsou v `scripts/bp/params.gd`. Hlavní jdou ladit i v Inspect
 | `scripts/bp/world.gd` | sloty, sousedé, SHA-256 světa |
 | `scripts/bp/metrics.gd`, `naive.gd`, `tests.gd` | metriky švů, srovnání s nezávislým gen-v3, testy |
 | `scripts/kopie/` | **kopie beze změny logiky** z `lozika-studie/scripts` (gen_v3, ore_v0, gen3_server, gen3_stack, mesher, block_gen, …), změněné jsou jen cesty `preload` |
+| `scripts/voda/eroze_mrizka.gd` | E47 kapková eroze na libovolné mřížce W × H (pravidla erosion.gd, `ero_*`) |
+| `scripts/voda/eroze_svet.gd` | E47 eroze PO vrstvách na hotovém světě: režimy `blok` / `okraj` (švy připnuté) / `svet`, převzorkování buněk, minerály zůstanou |
+| `scripts/voda/voda_svet.gd` | E47 déšť a tok vody přes celý svět (kopie voda_sim.gd, vlastnosti hornin ze sdílené tabulky, `voda_*`) |
+| `scripts/voda/tests_voda.gd`, `tools/test_voda.gd`, `tools/compose_voda.py` | E47 měření a snímky |
+| `scripts/voda/strze.gd` | E47b strže podle průtoku (stream power [23], cíl medián `strz_target_m`), ponory, vodopády a tůně pod nimi (`strz_*`, `ponor_*`, `vodopad_m`, `tun_*`) |
+| `scripts/voda/prameny.gd` | E47c prameny = jediný zdroj vody: sníh/vrchol, styk propustná/nepropustná, krasová vyvěračka (`pram_*`); uzavřený pramen neteče |
+| `scripts/voda/tok.gd` | E47c uložené koryto: plný výpočet, lokální přepočet po změně terénu, tůně s odtokem do podzemí (`pit_drain_q`) a událostmi plnění, odtok přes okraj ostrova |
+| `scripts/voda/tests_voda_b.gd`, `tools/test_voda_b.gd`, `tools/compose_voda_b.py`, `scripts/uzly/scenario_voda_b.gd` | E47b/c měření, mapy a 3D snímky |
+| `scripts/voda/podzemi.gd` | E47d podzemní tělesa ve 3D buňkách: propustná hornina / kras / dutina, plnění po vrstvách z, nejnižší výstup (svah, tůň, stěna ostrova), průsak (`ug_*`) |
+| `scripts/voda/tests_podzemi.gd`, `tools/test_podzemi.gd`, `scripts/uzly/scenario_podzemi.gd` | E47d testy (čočka → tůň 4 × 4, dutina → jezero, uzavřená čočka) a 3D snímky `47d_*` |
+| `scripts/voda/tests_tun.gd`, `tools/test_tun.gd` | test Janova příkladu plnění prohlubně (1/t, 2 × 2 × 2, odtok 0,5 → 16 t) → `shots/test_tun.txt` |
+| `tools/dump_funkce.gd`, `tools/gif_funkce.py` | E48 husté vzorky funkcí povrchu a hranic → 3D GIFy (matplotlib + ffmpeg, bez textu) |
+| `scripts/svet8/hruby_teren.gd`, `pocasi.gd`, `reky.gd`, `biomy.gd`, `dlazdice.gd`, `beh.gd` | E49 fáze hrubého světa, řez na dlaždice, detail od první dlaždice (`s8_*`) |
+| `scripts/svet64/beh64.gd`, `blok64.gd`, `voda64.gd`, `mereni.gd` | E50 svět 8 × 8 v jemných buňkách: běh a tabulka časů, jeden blok n × n × 4n (navázání, vrstvy, minerály, dutiny), voda na jemné mřížce (povrch + podzemí), čas a paměť (`s64_*`) |
+| `tools/test_svet64.gd`, `tools/gif_svet64.py`, `scripts/uzly/scenario_svet64.gd` | E50 měření, GIF po fázích, izo snímek z `shots/svet64/` |
+| `tools/test_svet8.gd`, `tools/gif_svet8.py` | E49 měření a GIF po fázích |
 | `data/mineraly_hostitele.json` | minerál → povolení hostitelé, tvar a parametry růstu (názvy materiálů ze `sdilene/materialy_voda.json`) |
 
 ## Determinismus (server)
@@ -132,3 +155,36 @@ do `taper_m` ztenčí na 0. Když ji naopak nemá soused, vrstva se k té stran�
 Snímky: `46_horniny_klin.png` (skica, profil mocností a 3D řez), `46_horniny_rozliseni.png` (16 vs. 32 a neshoda),
 `46_horniny_rezervoar_jeskyne.png`, `46_horniny_rez_hora_vyzdvizena.png`, `46_horniny_rez_hora_zvrasnena.png`.
 `./run.sh horniny` po snímcích spustí `tools/compose_shots.py`, které použije `shots/bench_horniny.txt` z `./run.sh horniny-test`.
+
+## v3: eroze po vrstvách, voda, grafy funkcí, svět 8 × 8 (Jan 17:47–18:05, výsledky v PROP.md E47–E49)
+**Eroze po vrstvách (E47):** eroze mění jen funkci povrchu `hm_f`. Původní povrch se uloží jako `hm_pre`, hranice vrstev `bs`
+se nemění. `geo_fn.material` pak: nad `hm_pre` je nános (`ero_deposit`, výchozí štěrk/písek) pod drnem. V korytě se půda
+a kůže hor měří od původního povrchu, takže eroze prořízne půdu a odkryje horninu. Bez eroze se chová stejně jako dřív.
+Režim `okraj` násobí změnu smoothstepem od švu (pás `taper_m`), takže okraj zůstane přesně hodnota souseda. Jen tenhle
+režim je nezávislý na pořadí vkládání. `svet` je pro svět generovaný celý naráz.
+Voda: `voda_sim` (beze změny pravidel) na výřezu celého světa, okraje světa otevřené, chybějící blok = nepropustná stěna.
+
+**Voda E47b/c (Jan 19:14–19:48):** déšť je jen vizuální. Voda teče jen z **pramenů** (zvláštní buňka, stálý průtok l/s; zasypaný neteče,
+odkopaný teče znovu). Tok je **uložené koryto** (priority-flood + D8 + ztráty) a strže se z něj zahloubí, medián ~2 m. Když se nic nemění,
+nic se nepočítá. Po změně terénu u vody se přepočítá jen okno a cesta po proudu, dokud se průtok mění. **Prohlubeň** má odtok
+D = Σ perm · `pit_drain_q`. Plní se rychlostí přítok − D a časy vrstev jsou předpočítané události. Plná pošle D podzemím
+k vyvěračce ve stěně ostrova a zbytek přeteče. D ≥ přítok → ponor. **Okraj mapy = okraj plovoucího ostrova:** voda tam přepadá
+do mlhy a dál se nesimuluje. Chybějící slot je stěna. Varianta `voda_zdroj=plocha` je srovnání s vodou z plochy (E47b).
+
+**Podzemí E47d (Jan 20:00):** odtok tůně vstoupí do nejbližšího propustného tělesa pod ní (propustná hornina, kras nebo
+dutina, 6-sousedé ve 3D buňkách). Voda **sleduje vrstvu**: těleso se plní po vrstvách z jako tůň (dutina celá buňka,
+hornina pórovitost) do nejnižšího výstupu. Výstup je pramen ve svahu nebo stěně, výtok do tůně (např. 4 × 4) nebo stěna
+ostrova (do mlhy). Výtok na povrchu se stane novým zdrojem koryta a povrch s podzemím se iterují do ustálení. Zaplněná
+dutina = podzemní jezero. Uzavřené těleso bez výstupu se naplní a dál nic nepřijímá.
+
+**Grafy funkcí (E48):** `FN.surface_m` a `FN.boundary_m` vzorkované 25 × 25 na blok. Vrstva se nekreslí, kde má mocnost
+< 3 cm (vyklínění) nebo leží nad povrchem. Jádro hory, sopouch a tělesa nejsou hranice, takže v grafech nejsou.
+
+**Svět 8 × 8 (E49):** blueprint může nést `base_hm` (povrch z hrubého světa, 16 × 16 v buňkách), `base_off` a `base_seed`.
+Šablona tvaru se pak nepoužije, typ (`shape`) řídí jen geologii a jemný šum je ve světových souřadnicích. **Volná strana povrchu**
+takového blueprintu = hrubý svět na vlastním okraji (regionální základ). Vrstvy na volné straně dál podle podmnožiny blueprintu
+(Jan 17:38). **Roh povrchu:** skutečný soused má přednost před regionálním základem (`surface.gd adapt(..., real)`, jako
+u mocností). Sled 46 i v1 dávají stejný hash jako dřív. Typ hory se volí po souvislých masivech (`s8_massif`).
+Barvy typů v `49_svet_8x8_dlazdice.png`: světle zelená louka, olivová kopec, béžová svah, modrá prohlubeň, cihlová
+hora vyzdvižená, fialová hora zvrásněná, červená sopka. Biomy: modrá jezero/řeka, světle zelená niva, tyrkys mokřad,
+zelená louka, tmavě zelená les, písková step, šedá skály, bílá sníh.

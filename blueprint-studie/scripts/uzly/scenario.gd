@@ -32,6 +32,21 @@ func run() -> void:
 	if "--horniny" in args or "--horniny-test" in args:
 		await get_node("../ScenarioHorniny").run()
 		get_tree().quit(); return
+	if "--svet64" in args:
+		await get_node("../ScenarioSvet64").run()
+		get_tree().quit(); return
+	if "--svet8" in args:
+		await get_node("../ScenarioSvet8").run()
+		get_tree().quit(); return
+	if "--voda47d" in args:
+		await get_node("../ScenarioPodzemi").run()
+		get_tree().quit(); return
+	if "--voda47b" in args:
+		await get_node("../ScenarioVodaB").run()
+		get_tree().quit(); return
+	if "--voda" in args:
+		await get_node("../ScenarioVoda").run()
+		get_tree().quit(); return
 	if "--shots" in args:
 		await shots()
 		get_tree().quit(); return

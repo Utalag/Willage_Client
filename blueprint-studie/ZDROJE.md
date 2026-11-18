@@ -50,3 +50,11 @@
 | 17 | https://en.wikipedia.org/wiki/Pinch_out (a https://en.wikipedia.org/wiki/Stratigraphic_trap) | vyklínění vrstvy (pinch-out): mocnost klesá k nule, vrstva končí klínem → mocnost jako funkce s nulou na okraji |
 | 18 | https://en.wikipedia.org/wiki/Bilinear_interpolation | buňky jako vzorky: funkce mezi řídicími body (rozteč 0,5 m) bilineárně, i přes šev bloků → stejný tvar při jemnějším rozlišení |
 | 19 | https://en.wikipedia.org/wiki/Aquifer a https://en.wikipedia.org/wiki/Karst | rezervoár = voda uzavřená nepropustnou horninou (dno a stěny); jeskyně přednostně v karbonátech (kras) pod pevným stropem |
+| 20 | https://arxiv.org/abs/1511.04463 (Barnes, Lehman, Mulla 2014, *Priority-Flood*) | vyplnění bezodtokých míst haldou od okraje (E49 `svet8/reky.gd`): jezera = vyplněno, směr toku po vyplněném povrchu |
+| 21 | https://en.wikipedia.org/wiki/Biome#Whittaker_(1962,_1970,_1975)_biome-types | Whittakerovo rozdělení biomů podle teploty a srážek (E49 `svet8/biomy.gd`, zjednodušeno + řeky a jezera) |
+| 22 | https://en.wikipedia.org/wiki/Orographic_lift | návětrné srážky a srážkový stín za horami (E49 `svet8/pocasi.gd`: vlhkost ubývá s výstupem terénu) |
+| 23 | https://en.wikipedia.org/wiki/Stream_power_law | zahloubení koryta E = K · A^m · S^n (E47b `voda/strze.gd`: A = průtok, K kalibrované na medián 2 m, k_mat podle horniny) |
+| 24 | https://en.wikipedia.org/wiki/Plunge_pool | tůň pod vodopádem vymletá dopadající vodou (E47b: prohloubení min(0,5 · spád, 1 m) pod vodopádem) |
+| 25 | https://en.wikipedia.org/wiki/Ponor a https://en.wikipedia.org/wiki/Losing_stream | ponor = otvor, kudy povrchová voda odchází do podzemí (kras); ztrácející se tok v propustném dně (E47b/c ponory, odtok tůně) |
+| 26 | https://en.wikipedia.org/wiki/Spring_(hydrology) a https://en.wikipedia.org/wiki/Spring_horizon | pramen = výstup podzemní vody; kontaktní prameny na styku propustné nad nepropustnou (E47c `voda/prameny.gd` druh „kontakt“) |
+| 27 | https://en.wikipedia.org/wiki/Aquifer (oddíl *Confined versus unconfined*), https://en.wikipedia.org/wiki/Porosity, https://en.wikipedia.org/wiki/Subterranean_river | podzemní voda v propustné vrstvě sevřené nepropustnou; objem pórů = pórovitost × objem; podzemní tok a jezera (E47d `voda/podzemi.gd`) |

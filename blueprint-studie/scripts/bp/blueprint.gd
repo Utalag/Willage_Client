@@ -37,6 +37,15 @@ static func rarity_points(bp: Dictionary) -> float:
 static func raw_height(bp: Dictionary, shift := 0.0) -> PackedFloat64Array:
 	var o := PackedFloat64Array(); o.resize(256)
 	var seed: int = bp.seed
+	# E49: povrch z hrubého světa (base_hm, 16 × 16 v buňkách) + jemný šum; typ (shape) pak řídí jen geologii
+	if bp.has("base_hm"):
+		# šum v souřadnicích světa se společným seedem → spojitý přes švy (base_off = počátek dlaždice v řídicích bodech)
+		var n := BG.noise(int(bp.get("base_seed", seed)), "BP_BASE", 0, 0.2, 2)
+		var off: Array = bp.get("base_off", [0, 0])
+		for x in 16:
+			for y in 16:
+				o[x * 16 + y] = minf(float(bp.base_hm[x * 16 + y]) + float(bp.get("detail", 0.6)) * n.get_noise_2d(int(off[0]) + x, int(off[1]) + y), 61.0)
+		return o
 	match bp.shape:
 		"louka", "kopec", "hora", "hora_vyzdvizena", "hora_zvrasnena":
 			var hm := BG.base_heightmap("hora" if bp.shape.begins_with("hora") else bp.shape, seed)

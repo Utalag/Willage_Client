@@ -1,0 +1,5 @@
+# Test plnění prohlubně s propustností (Jan 19:48)
+odtok 0.50/t (perm 0,5 · 0.25 · 4 buňky): objem 8.008, vrstvy 1 @ 8.000 t, 2 @ 16.016 t → plná za 16.016 t | přepad přes okraj 0.50, podzemí 0.50 (vyvěračka ve stěně 1) | očekáváno: plná za 16 t, přepad 0.5, podzemí 0.5 → OK
+odtok 1.00/t (perm 0,5 · 0.50 · 4 buňky): objem 8.008, vrstvy 1 @ -1.000 t, 2 @ -1.000 t → NENAPLNÍ SE (ponor) | přepad přes okraj 0.00, podzemí 1.00 (vyvěračka ve stěně 1) | očekáváno: plná za nikdy, přepad 0.0, podzemí 1.0 → OK
+odtok 0.00/t (perm 0,5 · 0.00 · 4 buňky): objem 8.008, vrstvy 1 @ 4.000 t, 2 @ 8.008 t → plná za 8.008 t | přepad přes okraj 1.00, podzemí 0.00 (vyvěračka ve stěně 0) | očekáváno: plná za 8 t, přepad 1.0, podzemí 0.0 → OK
+výsledek: VŠE OK

@@ -44,6 +44,32 @@ static func defaults() -> Dictionary:
 		# volitelná hydraulická eroze povrchu (před dorovnáním okrajů)
 		"erosion": false,
 		"droplets": 3000,
+		# E47 eroze po vrstvách a voda (scripts/voda): kapky na blok, pravidla jako erosion.gd, nános, déšť voda_sim
+		"ero_droplets": 800, "ero_inertia": 0.05, "ero_cap": 1.0, "ero_erode": 0.1, "ero_deposit_rate": 0.1, "ero_steps": 30,
+		"ero_deposit": "gravel_sand",
+		# E47b strže (stream power), ponory, vodopády (scripts/voda/strze.gd)
+		"strz_thr": 8.0, "strz_target_m": 2.0, "strz_max_k": 2.0, "strz_gamma": 0.5, "strz_mono": false, "strz_m": 0.5, "strz_n": 1.0, "strz_bank": 0.35,
+		"ponor_perm": 0.3, "ponor_cap": 40.0, "ponor_inf": 0.5, "strz_min_s": 0.02,
+		# E47c voda jen z pramenů (l/s), okraj ostrova = odtok, lokální přepočet koryta (scripts/voda/prameny.gd, tok.gd)
+		"voda_zdroj": "prameny", "ostrov_okraj": true, "strz_thr_q": 0.3, "ponor_cap_q": 3.0, "ponor_inf_q": 0.02,
+		"pram_q_snih": 4.0, "pram_q_kontakt": 1.5, "pram_q_kras": 5.0, "pram_peak_q": 0.97, "pram_slope": 0.5, "pram_dist": 8.0, "pram_max": 10, "pram_max_druh": 4,
+		# Jan 19:48: odtok prohlubně do podzemí = Σ perm · pit_drain_q (l/s na sloupec); tok_margin = okraj okna lokálního přepočtu
+		"tok_margin": 6, "pit_drain_q": 0.01,
+		# E47d podzemí po propustné vrstvě (scripts/voda/podzemi.gd): zapnuto, hloubka hledání vstupu (buňky), průsak do slabě propustného okolí (l/s na stěnu · perm)
+		"podzemi_vrstva": true, "ug_hloubka": 12, "ug_leak_q": 0.0005, "ponor_rate": 0.2, "vodopad_m": 1.5, "tun_k": 0.5, "tun_max_m": 1.0,
+		# E49 malý svět (scripts/svet8): dlaždic na stranu, bodů hrubé mřížky na dlaždici, terén, počasí, eroze, řeky, typy
+		"s8_tiles": 8, "s8_px": 8, "s8_base_amp": 4.0, "s8_mtn_amp": 20.0, "s8_mtn_bias": 0.0, "s8_lake_amp": 6.0, "s8_volcano": 1,
+		"s8_rain_base": 0.12, "s8_rain_oro": 0.25, "s8_rain_use": 0.6, "s8_rain_recharge": 0.02,
+		"s8_droplets": 2.0, "s8_ero_cap": 1.0, "s8_ero_erode": 0.1, "s8_ero_dep": 0.1, "s8_frames": 8,
+		"s8_river": 18.0, "s8_force_mtn": "", "s8_massif": true, "s8_lake": 0.3, "s8_lake_frac": 0.15, "s8_mtn_mean": 47.0, "s8_mtn_max": 53.0, "s8_hill_relief": 6.0, "s8_slope": 0.6,
+		"s8_first": [3, 4],
+		# E50 svět 8 × 8 v jemných buňkách (scripts/svet64): buněk na stranu bloku (výška 4n), vodní mřížka na blok (dělitel s64_n),
+		# podzemí ve 3D, kolik bloků (0 = všechny), determinismus na prvních N blocích, srovnání s E49, uložit data pro GIF a izo
+		"s64_n": 64, "s64_voda_n": 64, "s64_podzemi": true, "s64_bloky": 0, "s64_det_bloky": 3, "s64_e49": true, "s64_data": true, "s64_out": "bench_svet64",
+		# E50 dutiny: E49 dlaždice dutiny nemají; jedna dutina (vzduch = jeskyně / voda = rezervoár) o s64_dutina_n základních buňkách v typech
+		"s64_dutina": "vzduch", "s64_dutina_n": 40, "s64_dutina_typy": "kopec,svah,hora_vyzdvizena,hora_zvrasnena",
+		"voda_cell_m": 0.5,
+		"voda_rain": 0.02, "voda_rain_ticks": 60, "voda_ticks": 400, "voda_depth": 6, "voda_infil": 0.10,
 		# běh po snímcích
 		"budget_ms": 6.0,
 	}

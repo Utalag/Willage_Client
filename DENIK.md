@@ -191,6 +191,47 @@ Skupiny: 1 Prototyp a buildy · 2 Terén a tvar · 3 Rozlišení bloku · 4 Ská
 - **Komplikace:** žádná nová. Kopie sdílené tabulky v `godot-prototyp/data` je pořád neshodná (pole pevnosti), prototyp jsem neměnil.
 - **Další krok:** Jan rozhodne, jestli obnovit kopii tabulky v prototypu (`tools/sync_shared_table.sh`) a jestli doladit délku klínu.
 
+### 🧪 Blueprint v3 / E47: eroze po vrstvách a tok vody na blocích v2 (2026-11-18 18:40 · `blueprint-studie/scripts/voda/`, shots `47_voda_eroze_*`)
+- **Směr:** Jan 17:47–18:05: pustit vodu a erozi na nové bloky v2 a ukázat, co eroze udělá s vrstvami a se švy.
+- **Zlepšení:** eroze mění jen funkci povrchu, hranice vrstev zůstávají. Koryta prořízly půdu a horniny na svazích hor a sopky, nános štěrku a písku je v prohlubni. Režim s připnutým okrajem má šev povrchu 0,00 a šev vrstev 0,09 jako před erozí. Voda (voda_sim přes celý svět): jezírko v prohlubni a stružky na svazích. Bilance vody sedí na 1e-5, eroze je deterministická.
+- **Komplikace:** původní konstanty eroze jsou na v2 moc silné (vrchol hory −8,6 m), proto slabší výchozí. Eroze tok vody nesoustředila do koryt (nejsilnějších 5 % sloupců nese 42 → 37 % toku). Blok erodovaný sám rozbije šev jen při silné erozi.
+- **Další krok:** Jan rozhodne, jestli erozi dělat po blocích s připnutým okrajem, nebo jen na hrubém světě (E49).
+
+### 🧪 Blueprint v3 / E48: 3D grafy funkcí vrstev jako GIF (2026-11-18 18:45 · `blueprint-studie/tools/gif_funkce.py`, shots `48_funkce_*.gif`)
+- **Směr:** Jan: hranice vrstev a povrch jako spojité funkce v krychli bloku, bez textu, vrstvy přibývají zdola nahoru, pomalá rotace.
+- **Zlepšení:** 6 GIFů (nížina, hora vyzdvižená, hora zvrásněná, sopka, jezero, klín) po 88 snímcích, 1,9–2,7 MB. Vzorkování 25 × 25 na blok, hustší než řídicí mřížka. Vyklíněné vrstvy jsou vidět jako díry v ploše.
+- **Komplikace:** jádro hory, sopouch a tělesa nejsou hranice vrstev, takže v grafech chybí. matplotlib občas prostrčí kus nižší plochy.
+- **Další krok:** případně přidat jádro a sopouch jako vlastní plochy.
+
+### 🧪 Blueprint v3 / E49: malý svět 8 × 8 – hrubě celý svět, dlaždice, detail od první (2026-11-18 18:55 · `blueprint-studie/scripts/svet8/`, shots `49_svet_8x8_faze.gif`, `49_svet_8x8_*.png`)
+- **Směr:** Janův spojený nápad: hrubý svět naráz (terén, déšť, eroze a řeky, biomy) → řez na dlaždice s typem a podmnožinou hornin → detail dlaždic od první s navázáním na sousedy.
+- **Zlepšení:** celý svět 8 × 8 za 15–17 s (hrubá fáze 0,6 s, 64 dlaždic po 0,25 s). Švy povrchu 0,00, skok mocnosti na švu 0, validátor 64/64, deterministické. Volná strana povrchu bere hrubý svět. V rohu má skutečný soused přednost (sled 46 i v1 beze změny hashe).
+- **Komplikace:** švy vrstev 0,48 s typem hory po dlaždicích. Příčina je pravidlo jádra vyzdvižené hory, které přes šev nenavazuje. Typ hory po masivech to snížil na 0,16 (všechny hory zvrásněné 0,03).
+- **Další krok:** Jan rozhodne, jestli jádro vyzdvižené hory udělat jako navazovanou funkci, nebo typ hory určovat jen pro celý masiv.
+
+### 🧪 Blueprint v3 / E47b+c: strže ~2 m, ponory, vodopády; voda jen z pramenů, okraj ostrova, lokální přepočet, plnění tůní (2026-11-18 19:51 · `blueprint-studie/scripts/voda/strze.gd`, `prameny.gd`, `tok.gd`, shots `47b_*`)
+- **Směr:** Jan (19:14–19:48): strže ~2 m s proměnnou hloubkou, ponory, vodopády. Déšť jen vizuální, voda jen z pramenů. Nic se nemění → nic se nepočítá. Tůně se plní předpočítanými událostmi a mají odtok do podzemí. Okraj mapy = okraj plovoucího ostrova.
+- **Zlepšení:** strže medián 2,00 m (p90 3,8 m), 7 vodopádů ve strži (max 4,1 m) s tůní. Soustředění toku opraveno (42 % → 57 % toku v 5 % sloupců, varianta z plochy). Prameny: 7 (18 l/s). Okraj: 85 % vody přepadá po povrchu, 2,5 l/s vyvěračkami ve stěně.
+- **Zlepšení:** jezero 162 m³ je plné za 28,5 h (10 událostí). Lokální přepočet: změna u sucha 0 sloupců a 0,2 ms, hráz 585 sloupců a 20 ms, vždy shodné s plným přepočtem. Test Janova příkladu 1/t, 8, 0,5 → 16 t OK.
+- **Komplikace:** koryta jsou krátké úseky (malý svět, malá povodí). Krasová vyvěračka 0. Hráz na svahu tůň nevytvořila (potok ji obtekl). Podzemní tok vede zatím zjednodušeně k nejbližšímu okraji.
+- **Další krok:** Jan rozhodne, jak daleko vést podzemní tok (sledovat propustnou vrstvu?) a jestli má mít krasová vyvěračka vlastní pravidlo. Starší otevřené otázky (eroze po blocích vs hrubý svět, jádro hory přes šev, minerály z hrubého světa) zůstávají.
+
+### 🧪 Blueprint v3 / E47d: podzemní voda po propustné vrstvě (2026-11-18 20:15 · `blueprint-studie/scripts/voda/podzemi.gd`, shots `47d_*`)
+- **Směr:** Jan (20:00): odtok tůně nejde k nejbližšímu okraji, ale po propustné vrstvě. Dutinu zaplní (podzemní jezero). Uzavřená propustná čočka se naplní a přeteče nejnižším výstupem, např. do tůně 4 × 4 nebo pramenem ve svahu. Okraj ostrova = výtok do mlhy.
+- **Zlepšení:** 3D podzemní tělesa (propustná hornina, kras, dutina) se plní jako tůně po vrstvách z (události), do nejnižšího výstupu. Testy OK: čočka 38,4 → plná za 38,4 t, pak tůň 4 × 4 za 48 t. Dutina 27 buněk = jezero, pak po vrstvě ke stěně. Uzavřená čočka se naplní a dál nepřijímá.
+- **Zlepšení:** ve světě odtok jezera 2,47 l/s jde po vrstvě 54 buněk a vytéká ze stěny ostrova 2,06 l/s. Lokální přepočet je dál shodný s plným (16–18 ms pro pramen).
+- **Komplikace:** ve světě sledu 46 pod jezerem není dutina ani uzavřená čočka, proto demo bloky. Těleso u povrchu je obří (15 940 buněk) a plní se jako jedna nádrž (předpoklad spojitých pórů). Změna terénu se do 3D podzemí zatím nepromítá.
+- **Další krok:** krasová vyvěračka čeká na Jana. Případně promítat úpravy terénu do 3D buněk podzemí.
+
+### 💡 Nápad: voda z pramenů, uložené koryto, plnění tůní a okraj ostrova (2026-11-18 19:16–19:48, Jan)
+- Déšť je jen vizuální a vodu nedává. Voda teče jen z pramenů se stálým průtokem: sníh a vrcholy, styk propustné nad nepropustnou na svahu, krasová vyvěračka.
+- Voda teče vygenerovaným korytem. Simuluje se jen při změně terénu u vody, lokálně po proudu, až do ustálení. Pak se uloží nové koryto.
+- Plnění tůně: předpočítat objem a čas naplnění po vrstvách výšky (události), žádné periodické tiky.
+- Upřesnění 19:33: pramen je zvláštní buňka. Když je uzavřený v dutině, kam voda nemůže, neteče nic (žádný tlak ani prosakování). Po otevření teče znovu.
+- Upřesnění 19:48 (schváleno): prohlubeň má propustnost jako odtok za čas. Plní se rychlostí přítok − odtok. Plná posílá odtok podzemím k výstupu (např. vyvěračka ve stěně ostrova → vodopád do mlhy), zbytek přeteče nejnižším okrajem. Odtok ≥ přítok → nenaplní se (ponor). Příklad: 1/t, jáma 8, odtok 0,5 → plná za 16 t.
+- Ostrov je plovoucí: voda na okraji mapy přepadá jako vodopád do mlhy a dál se nesimuluje.
+- Upřesnění 20:00 (Jan): podzemní voda sleduje propustnou vrstvu. Narazí-li na díru, vytvoří podzemní jezero nebo nádrž. Propustná hornina obklopená nepropustnou se časem naplní a pak přetéká, např. do tůně 4 × 4.
+
 ### 💡 Nápad (hypotéza, ne rozhodnutí): ostrov jako základna, dva režimy úprava terénu a prokopání (2026-11-18 17:11–17:20, Jan; 17:20 Jan: „byl to nápad“, studie s vrstvami pokračuje)
 - Povrch ostrova zůstává plně upravitelný (blueprint tvaru, kopce, voda, vegetace, cesty), podzemí ostrova je jen pár obecných vrstev bez vzácných surovin.
 - Režim úprava terénu: mění povrch, vrstvy pod ním nechává být.
@@ -210,12 +251,32 @@ Skupiny: 1 Prototyp a buildy · 2 Terén a tvar · 3 Rozlišení bloku · 4 Ská
 - Podrobnou geologii (vrstvy-funkce, klíny, minerály, dutiny) dopočítat až při potřebě: první dlaždice a od ní rozšiřování s navazováním na sousedy.
 - Další krok: malý test 8 × 8 bloků (po GIFech vrstev a běhu toků/eroze).
 
+### 💡 Voda na ostrově: zdroje, koryta, simulace jen při změně, létající ostrov (2026-11-18 19:14–19:31, Jan)
+- Strže typicky ~2 m, hloubka proměnná; na některých materiálech se tok ztratí do podzemí (ponor); přes útes = vodopád.
+- Déšť je jen vizualizace, vodu nedává. Vodu dávají zdrojové buňky (prameny) se stálým průtokem, tečou vygenerovaným korytem.
+- Bez změny koryta se nic nepočítá; při zásahu hráče (odklonění, hráz, výkop) lokální simulace po proudu do ustálení, pak uložit nové koryto.
+- Plnění jezírka: předem spočítat objem po výškových vrstvách a časy naplnění z průtoku; aktualizace jen v těch časech (žádný pravidelný tick).
+- Pramen = speciální buňka; když je uzavřený v dutině, odkud se voda nemůže šířit, nikam neteče (žádný tlak ani prosakování); po otevření teče znovu (Jan 19:33).
+- Propustnost prohlubně (Jan 19:48 schváleno): odtok do podloží = propustnost za čas; plnění = přítok − odtok; čas vrstvy = objem / (přítok − odtok). Po naplnění část teče podzemím (např. k okraji mapy → vývěr ve stěně ostrova → vodopád), zbytek přetéká nejnižším okrajem. Příklad: zdroj 1/t, ďolík 2×2×2 = 8, odtok 0,5 → plný za 16 t, pak 0,5 podzemím + 0,5 přetéká. Odtok ≥ přítok → nenaplní se (ponor).
+- Ostrov je létající: voda u okraje mapy přepadne přes hranu jako vodopád do mlhy pod ostrovem, dál se nesimuluje (okraj = odtok).
+- Náchylnost k erozi (Jan 20:18): materiál dostane práh = kumulativní objem vody, který musí protéct buňkou nebo po ní, aby ji odplavil. Řešeno jako odpočet času z průtoku (událost, žádný tick); vykopání nebo položení buňky odpočet vynuluje.
+- Usazování (Jan 20:20): v tůních, kde voda neproudí, se materiál usazuje. Odplavení i usazení závisí na rychlosti proudění (práh rychlosti pro odplavení a pro usazení podle materiálu); časy předpočítané z průtoku jako události.
+
 ## 3 Rozlišení bloku
 
 ### 🧪 Nastavitelné rozlišení, test 32 × 32 × 64 s buňkou 0,5³ (2026-11-17 11:50 · `--res-test`)
 - **Směr:** generátor počítá ve fyzických jednotkách, rozlišení a velikost buňky jsou parametry (`--res-xy`, `--res-z`, `--cell-xy`, `--cell-z`).
 - **Zlepšení:** výrazně jemnější tvar se stejným reliéfem; dá se ladit jakákoli kombinace.
 - **Komplikace:** generování asi 4× pomalejší, mesh asi 3×, 2,3× víc trojúhelníků; vegetace v testu chybí; generátor a mesher jsou kopie, které se musí udržovat souběžně s originálem.
+
+### 💡 Nápad: proporční svět – výška ~3000 m (hora ~1000 m, podzemí ~2000 m), postava ~2 m (2026-11-18 18:35–18:53, Jan)
+- Úvaha 256 → 1024 buněk výšky; pak cíl: hora 1000 m = 2000 buněk (0,5 m), podzemí ~2000 m, postava 4 buňky.
+- Šířka se upraví taky: hora ~1000 m s „malou“ základnou ~2000 m (sklon ~45 °).
+- Návrh: vrstvy dál jako funkce v metrech; blok dělit na kousky (sekce) i do výšky i do šířky (např. 16³), počítat/ukládat jen kousky u povrchu, postavy a výkopů, jednolité kousky jako 1 číslo, zdálky jen hrubý povrch (LOD). Hora = víc bloků (např. 16 × 16 bloků po 128 m).
+- Návrh 18:57: blok vesnice 128 × 128 m (256 × 256 buněk), uvnitř kousky 32³; hora 1000 m ≈ 16 × 16 bloků (spíš na výpravy), ve vesnici kopce do ~100–200 m. Jan 18:58: líbí se, ale ještě se rozhodne.
+- Jan 18:59: tento algoritmus a princip (funkce + kousky na vyžádání) se použije pro svět výprav, dost velký pro víc hráčů najednou (stejné funkce = stejný terén pro všechny, ukládají se jen změny).
+- Otevřené: velikost bloku v metrech. Ověřit po testu 8 × 8 na vysokém sloupci.
+- Požadavek Jana 20:07: hra má běžet i na telefonech; Jan 20:09: generování zatím primárně na klientovi (i na telefonu), server ukládá a validuje, menší dosah detailu + LOD, jednodušší vzhled, voda jen animace podle časů, Godot Compatibility renderer; cíl střední telefon 30 FPS.
 
 ## 4 Skála
 

@@ -1,0 +1,42 @@
+# E50 svět 8 × 8 bloků po 64 × 64 × 256 buňkách (2026-11-18T20:45:45), buňka 0.125 m, svět 512 × 512 × 256 = 67.1 M buněk
+stroj: Intel(R) Xeon(R) Processor, 8 jader, Godot 4.7.2-stable (official), GDScript na 1 vlákně
+
+| fáze | čas | RSS po fázi |
+|---|---|---|
+| 1 hrubý terén | 3 ms | |
+| 2 počasí | 7 ms | |
+| 3 eroze + řeky | 539 ms | |
+| 4 biomy | 19 ms | |
+| 5 dlaždice | 10 ms | |
+| **hrubý svět celkem** | **578 ms** | 131 MB |
+| 6 blok: navázání | Σ 5.37 s (min 67 ms / med 80 ms / max 176 ms) | |
+| 6 blok: vrstvy | Σ 268.56 s (min 2.15 s / med 2.56 s / max 99.39 s) | |
+| 6 blok: minerály | Σ 52.37 s (min 220 ms / med 631 ms / max 1.80 s) | |
+| 6 blok: dutiny | Σ 102.16 s (min 0 ms / med 0 ms / max 4.66 s) | |
+| 6 blok: dutiny jen v 30 blocích s dutinou | min 2.47 s / med 3.33 s / max 4.66 s | |
+| **6 detail 64 bloků** | **428.74 s** (blok min 2.46 s / med 3.38 s / max 103.97 s) | 361 MB |
+| 7 voda: mřížka (+ 3D buňky podzemí) | 370 ms | |
+| 7 voda: prameny | 261 ms | |
+| 7 voda: povrch (koryto + strže) | 2.69 s | |
+| 7 voda: podzemí: povrch + podzemí | 19.37 s | |
+| 7 voda: podzemí: navíc proti povrchu | 16.68 s | |
+| **7 voda celkem** (mřížka 256 × 256, 32 na blok) | **22.69 s** | 678 MB |
+| **CELKEM generování** | **452.02 s** | peak 678 MB |
+
+paměť: start RSS 131 MB; po hrubém 131; po detailu 361; po mřížce vody 361; po podzemí 678; peak (VmHWM) 678 MB; Godot static 337 MB
+blok podle typu (medián): louka 3.05 s (24), hora_zvrasnena 9.08 s (12), svah 5.78 s (5), prohlubeň 2.87 s (9), kopec 6.54 s (6), sopka 3.82 s (1), hora_vyzdvizena 8.76 s (7)
+nejpomalejší blok (0, 6) hora_vyzdvizena: 103.97 s
+minerály: cíl 136448 buněk (× (n/16)³), schodek 1792; dutiny 76800 / 76800 buněk
+švy jemných buněk: povrch |Δ| 0.00 buňky (uvnitř 0.35, max 0); jiné buňky ve sloupci přes šev 2.79 % (uvnitř 2.58 %)
+voda: 10 pramenů 32.0 l/s; povrch: 687 mokrých sloupců, 449 zahloubených (medián 2.00 m, max 4.00 m), 5 vodopádů, okraj 8 × 29.49 l/s, tůně 32 (4423 sloupců)
+  podzemní těleso: 1212911 buněk, přítok 0.41 l/s, průsak 0.41, výstup okraj z 48, uzavřené false, plní se ne, objem do výstupu 3.5 m³, z 46–48
+  podzemní těleso: 13 buněk, přítok 1.49 l/s, průsak 0.00, výstup —, uzavřené true, plní se ano, objem do výstupu 0.2 m³, z 73–73
+  podzemní těleso: 863 buněk, přítok 0.01 l/s, průsak 0.01, výstup povrch z 77, uzavřené false, plní se ne, objem do výstupu 13.5 m³, z 77–77
+  podzemní těleso: 539 buněk, přítok 0.02 l/s, průsak 0.02, výstup povrch z 81, uzavřené false, plní se ne, objem do výstupu 8.4 m³, z 81–81
+  podzemní těleso: 1 buněk, přítok 0.04 l/s, průsak 0.00, výstup —, uzavřené true, plní se ano, objem do výstupu 0.0 m³, z 75–75
+  podzemní těleso: 7 buněk, přítok 0.02 l/s, průsak 0.00, výstup —, uzavřené true, plní se ano, objem do výstupu 0.1 m³, z 74–74
+  podzemní těleso: 5 buněk, přítok 0.00 l/s, průsak 0.00, výstup —, uzavřené true, plní se ano, objem do výstupu 0.1 m³, z 94–94
+  podzemní těleso: 3 buněk, přítok 0.01 l/s, průsak 0.00, výstup —, uzavřené true, plní se ano, objem do výstupu 0.0 m³, z 91–91
+  podzemní těleso: 7 buněk, přítok 0.03 l/s, průsak 0.00, výstup —, uzavřené true, plní se ano, objem do výstupu 0.1 m³, z 81–81
+voda s podzemím: okraj po povrchu 31.07 l/s, z podzemí 0 výtoků 0.00 l/s, těles 9 (1214349 buněk), ztráty 0.93 l/s, mokrých 706
+hash jemných buněk 0c4c96e0a1888ae8

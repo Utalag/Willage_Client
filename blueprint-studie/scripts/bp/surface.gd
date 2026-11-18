@@ -7,10 +7,13 @@ const HM = preload("res://scripts/bp/harmonic.gd")
 const SD = preload("res://scripts/bp/sides.gd")
 
 ## nb_edges[d] = PackedFloat64Array(16) výšek přiléhajících sloupců souseda na straně d, nebo null
-static func adapt(raw: PackedFloat64Array, nb_edges: Array, band: int, p: Dictionary) -> Dictionary:
+## real[d] (volitelné): strana d má skutečného souseda. V rohu skutečný soused přebije regionální základ (jako ST.continue_thick);
+## dva skuteční (nebo dva regionální) → průměr. Bez real = dřívější chování (vždy průměr).
+static func adapt(raw: PackedFloat64Array, nb_edges: Array, band: int, p: Dictionary, real: Array = []) -> Dictionary:
 	var g := HM.grid()
 	var val: PackedFloat64Array = g.val; var kind: PackedByteArray = g.kind
 	var any := false
+	var from := PackedByteArray(); from.resize(g.val.size())   # 0 nic, 1 regionální, 2 skutečný soused
 	for d in 4:
 		if nb_edges[d] == null or band <= 0:
 			continue
@@ -19,10 +22,14 @@ static func adapt(raw: PackedFloat64Array, nb_edges: Array, band: int, p: Dictio
 			var o := SD.own(d, t)
 			var q := HM.pidx(o.x, o.y)
 			var want: float = nb_edges[d][t] - raw[o.x * 16 + o.y]
+			var src := 1 if real.is_empty() else (2 if real[d] else 1)
 			if kind[q] == 1:
-				val[q] = (val[q] + want) * 0.5   # roh mezi dvěma sousedy: průměr
+				if real.is_empty() or src == from[q]:
+					val[q] = (val[q] + want) * 0.5   # roh mezi dvěma sousedy: průměr
+				elif src > from[q]:
+					val[q] = want; from[q] = src     # skutečný soused má v rohu přednost
 			else:
-				kind[q] = 1; val[q] = want
+				kind[q] = 1; val[q] = want; from[q] = src
 	var iters := 0
 	if any:
 		for x in 16:
