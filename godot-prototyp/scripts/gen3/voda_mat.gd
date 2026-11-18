@@ -1,3 +1,4 @@
+@tool
 extends RefCounted
 ## KOPIE z voda-studie/scripts/materials.gd (ID 0–7 shodná s mat.gd).
 ## Materiály studie vody. ID jsou STEJNÁ jako v godot-prototyp/scripts/mat.gd (backend je zná),

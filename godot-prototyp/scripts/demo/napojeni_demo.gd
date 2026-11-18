@@ -1,5 +1,5 @@
 extends Node
-## Ukázka a měření napojení povrchu louka / písek / voda v hlavním prototypu (přidá ji main.gd):
+## Ukázka a měření napojení povrchu louka / písek / voda v hlavním prototypu (přidá ji demo_runner.gd):
 ##   -- --napojeni-shots [--tag=X] [--only=a,b]  screenshoty shots/34_napojeni_*<_tag>.png
 ##   -- --napojeni-bench [--tag=X]                měření → shots/34_napojeni_bench<_tag>.txt
 ## Skript sahá jen na main/island (ne na povrch přímo), takže běží i ve starší verzi prototypu (srovnání před/po).
@@ -21,7 +21,7 @@ func _ready() -> void:
 			tag = a.substr(6)
 		if a.begins_with("--only="):
 			only = a.substr(7).split(",")
-	m.set_process(false)
+	m.set_game_process(false)
 	if "--napojeni-shots" in OS.get_cmdline_user_args():
 		_shots.call_deferred()
 	else:
@@ -29,7 +29,7 @@ func _ready() -> void:
 
 func _place(s: Vector2i, kind: String, seed: int, shift: int) -> float:
 	var t0 := Time.get_ticks_usec()
-	var b = m._make_block(kind, seed, "napojení")
+	var b = m.island.make_block(kind, seed, "napojení")
 	b.slot = s
 	b.shift = shift
 	BlockGen.build(b, m.island.neighbor_hms(s))
@@ -43,8 +43,8 @@ func _layout() -> Array:
 	return ts
 
 func _cam(c: Vector3, size: float, yaw := 45.0, pitch := -35.0) -> void:
-	m.center = c; m.cam.size = size; m.yaw = yaw; m.pitch = pitch
-	m._place_camera()
+	m.rig.center = c; m.cam.size = size; m.rig.yaw = yaw; m.rig.pitch = pitch
+	m.rig.place()
 
 func _tick(n := 10) -> void:
 	var G = load("res://scripts/grass.gd")
@@ -141,7 +141,7 @@ func _paramtest() -> void:
 	await m.get_tree().create_timer(0.8).timeout
 	await _snap("34_napojeni_test_hladina31.png")
 	var dev: Node = null
-	for c in m.get_children():
+	for c in m.dev_panel.get_children():
 		if c.get_script() and "dev_runtime" in c.get_script().resource_path:
 			dev = c
 	if dev:
@@ -206,8 +206,8 @@ func _bench() -> void:
 	var dig := []
 	for g in [Vector2i(24, 24), Vector2i(31, 24)]:
 		var t1 := Time.get_ticks_usec()
-		m._dig(g)
-		m._dig(g, true)
+		m.digging.dig(g)
+		m.digging.dig(g, true)
 		dig.append((Time.get_ticks_usec() - t1) / 2000.0)
 	out.append("%s kopání (průměr kop + položení): uprostřed bloku %.0f ms, u hrany %.0f ms" % [tag, dig[0], dig[1]])
 	print(out[-1])

@@ -1,3 +1,4 @@
+@tool
 extends RefCounted
 ## Data jednoho bloku 16 × 16 × 64 buněk (+ volby vložení). Server by ukládal jen typ, seed, volby a změny.
 

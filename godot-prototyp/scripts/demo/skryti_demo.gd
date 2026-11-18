@@ -1,5 +1,5 @@
 extends Node
-## Skrytí podzemí na bocích a řezech bloku (přidá ji main.gd):
+## Skrytí podzemí na bocích a řezech bloku (přidá ji demo_runner.gd):
 ##   -- --skryti-shots [--tag=X]   screenshoty shots/40_skryti_*<_tag>.png
 ##   -- --skryti-bench [--tag=X]   měření → shots/40_skryti_bench<_tag>.txt
 
@@ -20,7 +20,7 @@ func _ready() -> void:
 	for a in OS.get_cmdline_user_args():
 		if a.begins_with("--tag="):
 			tag = a.substr(6)
-	m.set_process(false)
+	m.set_game_process(false)
 	if "--skryti-shots" in OS.get_cmdline_user_args():
 		_shots.call_deferred()
 	else:
@@ -30,11 +30,11 @@ func _sfx(base: String, ext: String) -> String:
 	return "40_skryti_%s%s.%s" % [base, ("_" + tag) if tag != "" else "", ext]
 
 func _cam(c: Vector3, size: float, yaw := 45.0, pitch := -35.0) -> void:
-	m.center = c
+	m.rig.center = c
 	m.cam.size = size
-	m.yaw = yaw
-	m.pitch = pitch
-	m._place_camera()
+	m.rig.yaw = yaw
+	m.rig.pitch = pitch
+	m.rig.place()
 
 func _snap(name: String) -> void:
 	for i in 6:
@@ -67,7 +67,7 @@ func _face_h(sx: int, sz: int, edge: String) -> int:
 
 func _place(s: Vector2i, kind: String, seed: int) -> float:
 	var t0 := Time.get_ticks_usec()
-	var b = m._make_block(kind, seed, "skrytí")
+	var b = m.island.make_block(kind, seed, "skrytí")
 	b.slot = s
 	BlockGen.build(b, m.island.neighbor_hms(s))
 	m.island.place(b)
@@ -82,7 +82,7 @@ func _dig_pit() -> Vector2i:
 			for dz in range(0, 5):
 				var g := Vector2i(pit.x + dx, dz)
 				if _height(g) > 4:
-					msg = m._dig(g)
+					msg = m.digging.dig(g)
 	print("jáma u ", pit, ": ", msg)
 	return pit
 
@@ -144,8 +144,8 @@ func _micro(hide: bool) -> Dictionary:
 
 func _dig_pair(g: Vector2i) -> float:
 	var t0 := Time.get_ticks_usec()
-	var a = m._dig(g)
-	var b = m._dig(g, true)
+	var a = m.digging.dig(g)
+	var b = m.digging.dig(g, true)
 	print("  kop+položení ", g, ": ", a, " / ", b)
 	return (Time.get_ticks_usec() - t0) / 2000.0
 

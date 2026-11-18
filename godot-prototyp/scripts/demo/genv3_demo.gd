@@ -1,5 +1,5 @@
 extends Node
-## gen-v3 v prototypu (Jan 20:14), přidá ho main.gd:
+## gen-v3 v prototypu (Jan 20:14), přidá ho demo_runner.gd:
 ##   -- --genv3-shots [--gen=proto|v3] [--tag=X]   screenshoty shots/41_genv3_proto_*<_tag>.png
 ##   -- --genv3-bench [--gen=proto|v3] [--tag=X]   měření vložení a kopání + validátor a determinismus → shots/41_genv3_proto_bench<_tag>.txt
 
@@ -22,7 +22,7 @@ func _ready() -> void:
 	for a in OS.get_cmdline_user_args():
 		if a.begins_with("--tag="):
 			tag = a.substr(6)
-	m.set_process(false)
+	m.set_game_process(false)
 	if "--genv3-shots" in OS.get_cmdline_user_args():
 		_shots.call_deferred()
 	else:
@@ -32,8 +32,8 @@ func _sfx(base: String, ext: String) -> String:
 	return "41_genv3_proto_%s%s.%s" % [base, ("_" + tag) if tag != "" else "", ext]
 
 func _cam(c: Vector3, size: float, yaw := 45.0, pitch := -35.0) -> void:
-	m.center = c; m.cam.size = size; m.yaw = yaw; m.pitch = pitch
-	m._place_camera()
+	m.rig.center = c; m.cam.size = size; m.rig.yaw = yaw; m.rig.pitch = pitch
+	m.rig.place()
 
 func _snap(name: String) -> void:
 	for i in 6:
@@ -45,7 +45,7 @@ func _snap(name: String) -> void:
 
 func _place(s: Vector2i, kind: String, seed: int) -> float:
 	var t0 := Time.get_ticks_usec()
-	var b = m._make_block(kind, seed, "gen-v3")
+	var b = m.island.make_block(kind, seed, "gen-v3")
 	b.slot = s
 	BlockGen.build(b, m.island.neighbor_hms(s))
 	m.island.place(b)
@@ -146,7 +146,7 @@ func _shots() -> void:
 	for k in 7:
 		for dx in range(-2, 3):
 			for dz in range(-2, 3):
-				msg = m._dig(pit + Vector2i(dx, dz))
+				msg = m.digging.dig(pit + Vector2i(dx, dz))
 	print("jáma ", pit, ": ", msg)
 	lab.text = "%s: jáma 5 × 5 × 7 v louce 404 – stěny jámy odkryté (skutečné materiály, mokrá půda tmavší), okolí skryté" % gl
 	_cam(Vector3(pit.x + 0.5, 12.5, pit.y + 0.5), 14.0, 225.0, -50.0)
@@ -163,7 +163,7 @@ func _shots() -> void:
 		var opened := false
 		for k in 40:
 			for d in [Vector2i(0, 0), Vector2i(1, 0), Vector2i(0, 1), Vector2i(1, 1)]:
-				m._dig(g0 + d)
+				m.digging.dig(g0 + d)
 			var h: int = b.hm[cv[0] * BS + cv[1]]
 			if h <= cv[2] + 1:
 				opened = true
@@ -182,8 +182,8 @@ func _shots() -> void:
 
 func _dig_pair(g: Vector2i) -> float:
 	var t0 := Time.get_ticks_usec()
-	m._dig(g)
-	m._dig(g, true)
+	m.digging.dig(g)
+	m.digging.dig(g, true)
 	return (Time.get_ticks_usec() - t0) / 2000.0
 
 func _bench() -> void:

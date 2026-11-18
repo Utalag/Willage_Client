@@ -1,3 +1,4 @@
+@tool
 extends RefCounted
 ## gen-v3 v prototypu (Jan 20:14): napojení generátoru gen-v3-study-4 na BlockGen.
 ## Tvar povrchu, dorovnání stran, posun výšky a slupka (tráva, sníh) zůstávají z prototypu (block_gen.gd).

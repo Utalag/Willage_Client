@@ -1,3 +1,4 @@
+@tool
 ## KOPIE z lozika-studie/scripts/gen_v3.gd (gen-v3-study-4) pro prototyp; změny: cesty preload, SOIL_COLS v depth_mask.
 extends RefCounted
 ## gen-v3 „postupné vrstvení do hlíny“ (Jan 18:45, rozhodnutí 18:46–18:50; NÁVRH, viz willage-backend/generovani-bloku-v3.md).

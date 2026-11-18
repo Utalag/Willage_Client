@@ -1,3 +1,4 @@
+@tool
 class_name GrassParams
 extends "res://scripts/tunable_params.gd"
 ## Parametry trávy C (převzato ze studie trava-studie/scripts/params.gd, varianta C), teď jako Resource s @export

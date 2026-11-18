@@ -1,3 +1,4 @@
+@tool
 ## KOPIE z lozika-studie/scripts/ore_v0.gd (gen-v3-study-4) pro prototyp; změny jen cesty preload.
 extends RefCounted
 ## ore-v0 „semínko se zásobou“ (návrh Willage-backend, lozika-a-zily-v0.md) + cílový souhrn (Jan 18:24–18:25):

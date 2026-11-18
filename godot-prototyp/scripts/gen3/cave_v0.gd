@@ -1,3 +1,4 @@
+@tool
 ## KOPIE z lozika-studie/scripts/cave_v0.gd (gen-v3-study-4) pro prototyp; změny jen cesty preload.
 extends RefCounted
 ## cave-v0 (návrh Willage-backend, druhá část lozika-a-zily-v0.md; Jan 18:33 „Přidej do generování země i vzduch jako jeskyně

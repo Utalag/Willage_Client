@@ -1,3 +1,4 @@
+@tool
 class_name SurfaceParams
 extends "res://scripts/tunable_params.gd"
 ## Parametry povrchu louka / písek / voda (schváleno Janem 17. 11. 2026, převzato ze studií napojeni-studie a trava-studie).

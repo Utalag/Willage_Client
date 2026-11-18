@@ -27,6 +27,13 @@ Skupiny: 1 Prototyp a buildy · 2 Terén a tvar · 3 Rozlišení bloku · 4 Ská
 - **Zlepšení:** F1 otevře okno se záložkami Povrch a Tráva a sbalitelnými sekcemi. Posuvníky mají české popisky. Uniformy se mění hned, parametry s přestavbou (⟳) se přestaví 0,4 s po poslední změně nebo tlačítkem Aplikovat. Má Reset na výchozí, Uložit a Načíst předvolbu (`user://presety/*.tres`). Ukazuje FPS, ms snímku, instance vegetace a trojúhelníky. Export složku vylučuje. Hra bez složky běží beze změny (ověřeno).
 - **Komplikace:** objekty a lambdy uložené v `Engine` meta nebo ve statickém slovníku shazovaly Godot při ukončení. Registr proto drží jen slabé odkazy a v meta je jen cesta ke skriptu.
 
+### 🧪 Prototyp rozdělený na uzly scény místo monolitu `main.gd`, na žádost Jana (2026-11-18 01:00 · `godot-prototyp/`, větev `refaktor-uzly`, shot `44_editor_uzly.png`)
+- **Směr:** Jan: „vše vidím jen v kódu, ale nejsou tu žádné uzly“ a „hrozný monolit“. `main.tscn` má teď skutečné uzly, každý s vlastním skriptem: World (WorldEnvironment + Sun), Island (`@tool`), CameraRig (+ Camera3D), Placement, Buildings, Roads, Digging, WaterFlow, UI, DevPanel. Logika se jen přesunula, nepřepisovala. Uzly se propojují přes exportované `NodePath` a signály `hint_changed` a `cell_inspected`. Dema a měření jsou ve scéně `demo.tscn` (`scripts/demo/`). Přepínače `--demo`, `--*-shots`, `--*-bench`, `--res-test` a `--export-vectors` fungují dál, protože `main.tscn` na `demo.tscn` sám přesměruje.
+- **Zlepšení:** `main.gd` se zmenšil z 1 326 řádků a 66 funkcí na 170 řádků a 8 funkcí, ostatní skripty uzlů mají 12–238 řádků. Island se v editoru vykreslí ve 3D pohledu (4 bloky za ~1,7 s). V Inspectoru jde zvolit generátor, startovní sloty, typy a seedy, náhled vypnout a přegenerovat. Kamera hry se dá zobrazit přes Preview.
+- **Ověření:** demo s `--fixed-fps 30` vyšlo před i po refaktoru stejně: 9 z 27 snímků je pixelově shodných a u zbylých 18 se liší jen popisek časů „generování … ms · mesh … ms“ v panelu (nejvýš 0,04 % pixelů). Vektory včetně `delta_sample.json` jsou bajtově shodné. Výpisy demo, SELFTEST, validátorů a determinismu jsou stejné až na ms. Headless editor s čistou `.godot` proběhl bez chyb.
+- **Komplikace:** aby šel ostrov generovat v editoru, mají knihovní skripty generátoru a vykreslení (`block*`, `mesher`, `mat`, `veg*`, `grass*`, `gen3/*`, `surface/*` …) nahoře `@tool`. U kopií z lozika-studie je to jediný rozdíl. Spuštění přes přesměrování (`-- --demo` bez scény) přidá pár snímků, takže animované shadery (mlha, vítr, voda) jsou v jiné fázi. Proto `shoot.sh` volá `res://demo.tscn` přímo.
+- **Další krok:** Jan otestuje v editoru a rozhodne o sloučení větve `refaktor-uzly` do main.
+
 ## 2 Terén a tvar
 
 ### ✅ Relief v2.2: terasy (2026-11-17, noc)

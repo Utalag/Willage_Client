@@ -1,3 +1,4 @@
+@tool
 extends RefCounted
 ## Materiály buněk: ID, názvy, pastelové barvy, skóre pro raritu a nosnost (pro budoucí fyziku).
 

@@ -1,3 +1,4 @@
+@tool
 class_name TunableParams
 extends Resource
 ## Základ laditelných parametrů (Resource s @export → editovatelné v inspektoru Godotu, ukládatelné jako .tres předvolby).

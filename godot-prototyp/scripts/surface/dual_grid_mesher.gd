@@ -1,3 +1,4 @@
+@tool
 class_name DualGridMesher
 extends RefCounted
 ## Duální mřížka (Oskar Stålberg / Townscaper [1][2][4]): zobrazovací dlaždice posunuté o půl buňky, roh dlaždice

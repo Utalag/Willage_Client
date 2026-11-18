@@ -1,3 +1,4 @@
+@tool
 extends RefCounted
 ## Tok vody po kopání (Jan 20:39): UDÁLOSTNÍ a MÍSTNÍ simulace voda-studie (voda_sim.gd) jen v okolí vykopané buňky, běží do ustálení.
 ## - Spustí se, když kopání sáhne na pohyblivou vodu: vykopaná buňka nebo její 6 sousedů má vodu nad zadržením (ret) nebo volnou vodu.

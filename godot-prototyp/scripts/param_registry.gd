@@ -1,3 +1,4 @@
+@tool
 class_name ParamRegistry
 extends RefCounted
 ## Registr laditelných parametrů a ukazatelů pro vývojové nástroje. Hra sem jen zapisuje, nástroje (např. doplněk

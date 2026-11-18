@@ -107,20 +107,57 @@ Simulace vody v ostrově (gen-v3 vodu rozmístí, po kopání teče jen místně
 kombinované typy bloků, dorovnání přes rohy (diagonální sousedé), animace, stavění domků hráčem (zatím jen demo rozmístění),
 mosty, skutečně zaoblená geometrie kostek (teď jen stínovací trik), vyhlazení (merge) obrysů mezi sousedními objekty.
 
+## Scéna a uzly (refaktor z monolitu `main.gd`)
+Dřív měl `main.tscn` jediný uzel `Main` a všechno (kamera, světlo, ostrov, kopání, stavby, dema) se sestavovalo v kódu
+`main.gd` (1 326 řádků). Teď jsou části skutečné uzly scény, každý s vlastním krátkým skriptem:
+```
+Main (main.gd)                 propojení uzlů, vstup podle režimu, nápověda, panel „blok pod sloupcem“
+├─ World (game/world.gd)       ├─ Environment (WorldEnvironment)   └─ Sun (DirectionalLight3D se stíny)
+├─ Island (island.gd, @tool)   bloky a terén; startovní bloky, generátor a náhled v Inspectoru
+├─ CameraRig (game/camera_rig.gd, @tool)   └─ Camera (Camera3D, ortografická)
+├─ Placement (game/placement.gd)      vkládání bloků z lišty
+├─ Buildings (game/buildings.gd)      stavby
+├─ Roads (game/road_builder.gd)       cesty
+├─ Digging (game/digging.gd)          kopání a pokládání + delta
+├─ WaterFlow (game/water_flow_runner.gd)   tok vody po kopání
+├─ UI (ui.gd, CanvasLayer)            lišta, panel, nápověda (sestaví se za běhu)
+└─ DevPanel (game/dev_panel.gd)       ladicí okno jen s `-- --dev`
+```
+- **Propojení:** uzly na sebe odkazují exportovanými `NodePath` (Inspector, např. `Digging.water_path = ../WaterFlow`),
+  zpět k Main posílají signály `hint_changed` (přepsat nápovědu) a `cell_inspected(g)` (panel vpravo). Žádné globální proměnné.
+- **Otevření v editoru:** `$G --editor --path godot-prototyp` (nebo Godot → Import → `project.godot`), pak `main.tscn`.
+  Ve stromu scény jsou uzly výše, Island se díky `@tool` vygeneruje ve 3D pohledu (asi 1–2 s, 4 startovní bloky).
+  Záběr hry: vybrat `CameraRig/Camera` a zaškrtnout **Preview**. U uzlu Island: skupina *Startovní ostrov* (generátor v3 / proto,
+  sloty, typy, seedy) a *Náhled v editoru* (vypínač `editor_preview`, tlačítko „Přegenerovat náhled“). Uzly náhledu nemají
+  vlastníka, takže se do `main.tscn` neuloží. UI, kopání a stavby běží jen ve hře (F5). Snímek: `shots/44_editor_uzly.png`.
+- **Dema a měření** jsou mimo hlavní hru ve scéně `demo.tscn` (`scripts/demo/`). Přepínače se nezměnily: `main.tscn`
+  při `--demo`, `--video`, `--*-shots`, `--*-bench`, `--res-test` nebo `--export-vectors` sám přesměruje na `demo.tscn`.
+  Přímo: `$G --path . res://demo.tscn -- --demo`. Dema dostanou Main jako rodiče (`m.rig`, `m.island`, `m.digging`, `m.water` …).
+
 ## Struktura
 | Soubor | Obsah |
 |---|---|
-| `scripts/main.gd` | scéna, kamera, vstup, výběr kandidáta a vkládání, demo, `--export-vectors` |
-| `scripts/island.gd` | sloty, bloky, mlha, rámečky platných míst, náhled, řez, objekty na povrchu |
+| `main.tscn`, `scripts/main.gd` | hlavní scéna se skutečnými uzly (viz „Scéna a uzly“); Main jen propojí uzly a rozdělí vstup podle režimu |
+| `scripts/game/camera_rig.gd` | uzel CameraRig: kamera (yaw, pitch, střed), zoom, posun, otáčení Q/E |
+| `scripts/game/world.gd` | uzel World: WorldEnvironment a slunce (parametry v Inspectoru), čas větru trávy |
+| `scripts/game/placement.gd` | uzel Placement: kandidáti, náhled bloku v mlze, úpravy, vložení |
+| `scripts/game/buildings.gd` | uzel Buildings: stavby z lišty (glTF), půdorysy, dveře, náhled stavby, hledání místa |
+| `scripts/game/road_builder.gd` | uzel Roads: režim cest (body trasy, stavba cesty přes `scripts/roads.gd`) |
+| `scripts/game/digging.gd` | uzel Digging: kopání a pokládání, inventář, delta (`vectors/delta_sample.json`) |
+| `scripts/game/water_flow_runner.gd` | uzel WaterFlow: běh toku vody po kopání po snímcích (simulace `scripts/gen3/water_flow.gd`) |
+| `scripts/game/dev_panel.gd` | uzel DevPanel: ukazatele pro ladicí okno, s `-- --dev` načte `addons/*/dev_runtime.gd` |
+| `demo.tscn`, `scripts/demo/demo_runner.gd` | scéna pro dema, screenshoty, měření a nástroje (`--res-test`, `--export-vectors`) |
+| `scripts/demo/main_demo.gd` | `--demo` (snímky 01–22, SELFTEST) a `--video` |
+| `scripts/island.gd` | uzel Island (@tool): sloty, bloky, mlha, rámečky platných míst, náhled, řez, objekty na povrchu; startovní bloky a generátor v Inspectoru, náhled v editoru |
 | `scripts/block.gd` | data bloku (typ, seed, volby, výšky, buňky, souhrn materiálů) |
 | `scripts/block_gen.gd` | generátor v2: výšky, transformace, napojení stran, vrstvy; `gen_version` (`--gen=proto\|v3`) |
 | `scripts/gen3/gen3_proto.gd` | gen-v3 v prototypu: zástupce serveru (souhrn, zásobník, přidělení vody, kontrola), volání generátoru, validátor |
 | `scripts/gen3/gen_v3.gd`, `gen3_stack.gd`, `gen3_server.gd`, `ore_v0.gd`, `cave_v0.gd` | kopie z `../lozika-studie/scripts/` (gen-v3-study-4), změny jen cesty a `SOIL_COLS` |
 | `scripts/gen3/water_table.gd`, `data/materialy_voda.json` | načtení sdílené tabulky `../sdilene/materialy_voda.json` (kopie v `data/` pro export, `tools/sync_shared_table.sh`) |
 | `scripts/discovery.gd` | odkryté buňky (skrytí podzemí); od gen-v3 i jeskyně otevřené kopáním |
-| `scripts/genv3_demo.gd` | `--genv3-shots` (snímky 41) a `--genv3-bench` |
+| `scripts/demo/genv3_demo.gd` | `--genv3-shots` (snímky 41) a `--genv3-bench` |
 | `scripts/gen3/water_flow.gd`, `voda_sim.gd`, `voda_mat.gd` | tok vody po kopání: výřez, simulace (kopie z voda-studie přes lozika-studie, změněna jen cesta), zápis se zachováním součtu, kontrola delty |
-| `scripts/flow_demo.gd` | `--flow-shots` (snímky 42) a `--flow-bench` |
+| `scripts/demo/flow_demo.gd` | `--flow-shots` (snímky 42) a `--flow-bench` |
 | `scripts/mesher.gd` | kostkový mesh s obalem okrajů sousedů (bez děr a z-fightingu na hranách), AO, výška buňky 0,5 |
 | `scripts/mat.gd` | materiály: ID, názvy, barvy, skóre, nosnost, rarita |
 | `scripts/stable_hash.gd` | SplitMix64, FNV-1a 64, `mix(seed, purpose, layer)`, pojmenované seedy |
@@ -132,7 +169,7 @@ mosty, skutečně zaoblená geometrie kostek (teď jen stínovací trik), vyhlaz
 | `tools/rarity_calib.gd`, `tools/rarity_calib_v3.gd` | kalibrace prahů rarity-v2 (proto podle v1, gen-v3 podle proto) |
 | `scripts/veg.gd`, `scripts/veg_render.gd`, `veg_wind.gdshader` | generátor vegetace, vykreslení (MultiMesh), vítr |
 | `scripts/grass.gd`, `scripts/grass_params.gd`, `scripts/grass_trail.gd`, `grass_tuft.gdshader`, `grass_common.gdshaderinc` | tráva C: stavba trsů na blok, parametry, stopa rozhrnutí, shader (vítr, ohyb, stopa) |
-| `scripts/grass_demo.gd` | `--grass-shots` (snímky 28) a `--grass-bench` (měření), testovací postavička |
+| `scripts/demo/grass_demo.gd` | `--grass-shots` (snímky 28) a `--grass-bench` (měření), testovací postavička |
 | `scripts/roads.gd` | A* cesty, dosažitelnost, vrstva cesty (dlaždice, rampy, schody), půdorys a dveře domku |
 | `scripts/toon.gd`, `object_toon.gdshader`, `outline.gdshader` | kawaii materiály a obrysy objektů, společný přepínač |
 | `tools/objekty_srovnani.py` | skládá dvojice screenshotů (18, 19, 21) |
@@ -145,7 +182,7 @@ mosty, skutečně zaoblená geometrie kostek (teď jen stínovací trik), vyhlaz
 | `scripts/tunable_params.gd`, `scripts/param_registry.gd` | základ laděných parametrů (Resource, CLI `--prefix.klic=`), registr, přes který je najde ladicí okno |
 | `scripts/surface/surface_params.gd`, `shore_fields.gd`, `dual_grid_mesher.gd`, `surface_renderer.gd` | povrch louka/písek/voda: parametry, okno tříd a vzdálenostních polí, duální síť a voda, materiály a přestavby |
 | `terrain_surface.gdshader`, `water_surface.gdshader`, `surface_common.gdshaderinc`, `surface_look.gdshaderinc`, `meadow_proc.gdshaderinc` | shadery povrchu, vody, písku a procedurální louky (sdílí je i `terrain_toon` a `grass_tuft`) |
-| `scripts/napojeni_demo.gd` | `--napojeni-shots` (snímky 34) a `--napojeni-bench` (měření) |
+| `scripts/demo/napojeni_demo.gd` | `--napojeni-shots` (snímky 34) a `--napojeni-bench` (měření) |
 | `addons/dev_tuning/` | ladicí okno (samostatný doplněk, do exportu nejde) |
 
 ## gen-v3 v prototypu (Jan 20:14, `scripts/gen3/`)
@@ -388,7 +425,7 @@ mezi blokem a inventářem. Vegetace a stavby/cesty v deltě zatím nejsou. (Doh
 Generování bloku včetně vegetace průměr ≈ 18 ms, mesh bloku (s obrysovými daty) průměr ≈ 37–41 ms, A* dvou tras ≈ 4–5 ms. Náhled se přepočítá při každé změně volby, odezva je okamžitá.
 
 ## Experiment: rozlišení bloku (`-- --res-test`)
-Samostatný režim jen pro srovnávací render, hra a `--demo` zůstávají na 16 × 16 × 64 (buňka 1 × 1 × 0,5). Soubory: `scripts/res_gen.gd` (generátor), `scripts/res_mesher.gd` (kopie `mesher.gd` s proměnnou mřížkou), `scripts/res_test.gd` (scéna a snímky), `tools/res_combine.py` (spojí dvojice snímků s popisky). V `main.gd` je jen 5řádkový přepínač na začátku `_ready()`.
+Samostatný režim jen pro srovnávací render, hra a `--demo` zůstávají na 16 × 16 × 64 (buňka 1 × 1 × 0,5). Soubory: `scripts/res_gen.gd` (generátor), `scripts/res_mesher.gd` (kopie `mesher.gd` s proměnnou mřížkou), `scripts/res_test.gd` (scéna a snímky), `tools/res_combine.py` (spojí dvojice snímků s popisky). Přepínač je v `scripts/demo/demo_runner.gd`.
 
 Knoflíky (všechny volitelné):
 
