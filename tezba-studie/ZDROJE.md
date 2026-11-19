@@ -46,3 +46,21 @@ Značky [10], [38]–[41] v textu T01 odkazují na `../blueprint-studie/ZDROJE.m
 | 36 | https://en.wikipedia.org/wiki/Malachite | Malachit jako měděná ruda i zelený pigment; magnetit a ilmenit jako Fe / Fe-Ti rudy (viz Magnetite, Ilmenite) |
 | 37 | https://en.wikipedia.org/wiki/Gold_mining | Ryzí zlato v žilách je typicky v g/t, ne v procentech; 20 ‰ ve složení buňky je herní abstrakce koncentrátu |
 | 38 | https://en.wikipedia.org/wiki/Spodumene | Spodumen (Li), kasiterit (Sn) a kolumbit-tantalit (Nb-Ta) v pegmatitech; ve hře zatím jedna surovina `ruda_vzacne` |
+
+Čísla [39]–[53] přibyla v T03 (jednotky zpracování).
+
+| 39 | https://en.wikipedia.org/wiki/Stamp_mill | Vodní i ruční stoupa / drtič: pěchy drtí kámen a rudu na štěrk a písek |
+| 40 | https://en.wikipedia.org/wiki/Watermill | Mlýn (vodní, zvířecí, ruční) na jemné mletí křemene a pigmentů |
+| 41 | https://en.wikipedia.org/wiki/Lime_kiln | Vápenka / šachtová pec na kalcinaci vápence (doplňuje [13][14]) |
+| 42 | https://en.wikipedia.org/wiki/Trip_hammer | Vodní hamr na kování lupy z dýmačky |
+| 43 | https://en.wikipedia.org/wiki/Alembic | Alembik (kotlík, helma, chladič) pro destilaci par, i rtuti z rumělky |
+| 44 | https://en.wikipedia.org/wiki/Sluice_box | Ryžovací splav: proud vody oddělí těžké ryzí zlato od písku |
+| 45 | https://en.wikipedia.org/wiki/Leaching_(metallurgy) | Loužení kovů do roztoku (měď, zlato, později Li/Ta/Ti) |
+| 46 | https://en.wikipedia.org/wiki/Roasting_(metallurgy) | Pražení rud za přístupu vzduchu (sulfidy, rumělka) |
+| 47 | https://en.wikipedia.org/wiki/Open_pan_salt_making | Solivar: odpar solanky v pánvích nad ohněm, krystalizace čisté soli |
+| 48 | https://en.wikipedia.org/wiki/Crucible | Kelímek na tavení neželezných kovů a slévání bronzu |
+| 49 | https://en.wikipedia.org/wiki/Kiln | Hrnčířská pec: výpal keramiky, glazury a později porcelánu |
+| 50 | https://en.wikipedia.org/wiki/Forge | Kovárna a výheň: cementace železa na ocel, kalení |
+| 51 | https://en.wikipedia.org/wiki/Lapidary | Brusná dílna: broušení a leštění kamenů a drahokamů |
+| 52 | https://en.wikipedia.org/wiki/De_re_metallica | Agricola: historický popis stoup, měchů, dýmaček a úpraven rud |
+| 53 | https://en.wikipedia.org/wiki/Arrastra | Tažený mlýn (arrastra) jako primitivnější obdoba mletí rudy a kamene |

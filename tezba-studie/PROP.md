@@ -80,3 +80,24 @@ První záznam je přesunutý návrh z blueprint-studie E65.
 - **Úprava rozložení (2026-11-19 14:37, recenze Jana):** detaily (např. kovy) byly nečitelný chumel. Graphviz (`dot`) nejde nainstalovat. Rozložení je teď v matplotlib zleva doprava: jeden pruh na vstupní surovinu / rodinu, vrstvy podle nejdelší cesty, řazení barycentrem, výška pruhu podle počtu uzlů ve sloupci. Huby (struska, dřevěné uhlí, koks jako palivo, soda, na snímku mědi i cín) nejsou samostatné uzly, jen popisek hrany („+ dřevěné uhlí“). Rudy jsou rozdělené po kovech (měď+bronz, železo+ocel, cín, zlato, vzácné, uhlí, drahokamy); přeměněné a usazené mají zvlášť stavbu a oheň. Všechny snímky zkontrolované vizuálně. Počet křížení hran (pravý průnik úseček, bez sdíleného vrcholu): 0 na každém snímku, `krizeni_celkem=0`.
 - **Negativa / mezery:** typické složení je střed rozsahů, ne zákon. 20 ‰ zlata ve složení buňky je herní abstrakce (reálně g/t, [37]). `ruda_vzacne` míchá Li, Sn a Ta. Chybí ložiska olova a rumělky. Kaolin není oddělený od jílu. Soda a dřevěné uhlí jsou vnější vstupy. Výtěžky tavení jsou herní, ne stechiometrie. Hnědé uhlí nemá větev na koks. Pigmenty z malachitu / hematitu jsou v datech, na obrázku kovů nejsou hlavní větví.
 - **Otevřené pro Jana:** složení jako vrstva znalostí, nebo stačí výnosy; olovo a rumělka jako ložiska; rozdělení `ruda_vzacne`; abstrakce zlata 20 ‰ vs kusový nález.
+
+## T03 základní stroje, stavby a zařízení na zpracování (plán 2026-11-19 14:50; Jan 14:49 „Přidej i seznam základních strojů, staveb a zařízení na jejich zpracování“)
+
+- **Cíl:** přehled základních výrobních jednotek, které provádějí operace ze stromu T02. Každá operace / hrana ve `data/strom_rozkladu.json` musí mít aspoň jedno zařízení. Herní kód se nemění.
+- **U každé položky:** český název; typ (stroj / stavba / zařízení / nástroj); které operace ze stromu provádí; přijímané vstupy a výstupy; hrubý reálný popis (jak to funguje, zdroj energie: ruka / voda / zvíře / oheň / dřevěné uhlí); technický věk (primitivní → středověk → raně průmyslové); z čeho se to staví (materiály z katalogu, uzavření smyčky); která dovednost to obsluhuje; které parametry receptu jde ladit (teplota, čas, poměry).
+- **Příklady k pokrytí:** drtič / stoupa, mlýn, brusná dílna, vápenka, cihelna / milíř, sklářská pec, kelímek, dmýchací pec / výheň, hamr, kovárna, ryžovací splav, loužicí kádě, destilační přístroj / alembik, solivar, pražírna. Doplním jednotky z katalogu (hasicí jáma, mísírna, sádrová pec, hrnčířská pec, koksovna, cementářská pec) a pokrytí hran, které nejsou „ pec“ (těžba, složení, karbonatace).
+- **Výstupy:**
+  - `data/zarizeni.json` — seznam jednotek (operace, procesy, vstupy, výstupy, věk, energie, materiály, dovednost, ladění)
+  - `navrhy/zarizeni.md` — česky, podle věku, s odkazy na operace stromu
+  - `shots/T03_zarizeni.png` — jeden snímek čitelný na telefonu: zařízení podle věku a co vyrábějí
+  - `tools/zarizeni03.py` — sestaví data i obrázek a zkontroluje, že každá operace i každá hrana stromu má aspoň jedno zařízení a že odkazy (procesy, suroviny, dovednosti) existují
+- **Zdroje:** zpracování z T01 [13]–[28], kde stačí; nové zdroje jednotek doplním do `ZDROJE.md` od [39] výše.
+- **Mimo rozsah:** vysoká pec (ve stromu je dýmačka, ne blast furnace), moderní elektrické pece, herní kód a vyvážení času / kapacity.
+
+- **Výsledek (2026-11-19 14:55):** seznam jednotek, kontroly a snímek jsou hotové. Graphviz se nepoužívá, plakát je z matplotlib.
+  - 25 zařízení (10 primitivních, 13 středověkých, 2 raně průmyslové). Typy: 1 nástroj, 3 stroje, 12 staveb, 9 zařízení.
+  - Všech 20 operací a všech 550 hran stromu T02 má aspoň jedno zařízení; všech 46 procesů je přiřazených. Hamr kuje lupu z dýmačky, ve stromu T02 nemá vlastní operaci (`mimo_strom`).
+  - Soubory: `data/zarizeni.json`, `navrhy/zarizeni.md`, `tools/zarizeni03.py`, `shots/T03_zarizeni.png`.
+  - Nové zdroje jednotek [39]–[53]. Zpracování dál bere T01 [13]–[28] a T02 [36]–[38].
+- **Negativa / mezery:** kapacita, obsluha a herní čas jednotek nejsou. Solivar sdílí operaci `destilovat` v širším smyslu čištění. Výtěžky tavení zůstávají herní. Hnědé uhlí pořád nemá větev na koks. Rumělka a galenit jsou dál mezery.
+- **Otevřené pro Jana:** doplnit kování lupy do stromu; dýmačka s koksem vs pozdější vysoká pec; oddělit odpar soli od destilace; které jednotky jsou ve vesnici od začátku.

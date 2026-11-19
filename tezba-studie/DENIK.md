@@ -59,6 +59,13 @@ Skupiny: 1 Vlastnosti a těžba · 2 Zpracování, znalosti a recepty
 - **Komplikace:** výtěžky tavení jsou herní. Hnědé uhlí nemá větev na koks. Pigmenty jsou v datech, na obrázku kovů nejsou hlavní větví. Složení a výnosy kreslí sourozence v řadě (vypadá to jako řetězec, čitelnost ale zůstává).
 - **Další krok:** stejný jako u stromu v oddíle 1.
 
+### 🧪 Základní stroje, stavby a zařízení na zpracování (2026-11-19 14:49–14:55, T03, Jan 14:49)
+- **Směr:** ke každé operaci stromu T02 patří aspoň jedna reálná jednotka (nástroj, stroj, stavba, zařízení) s věkem, energií, materiály z katalogu, dovedností a laděním receptu (teplota, čas, poměry).
+- **Zlepšení:** 25 jednotek, 20/20 operací a 550/550 hran pokrytých, 46 procesů přiřazených. Snímek podle věku je čitelný na telefonu. Jednotky se staví z cihel, malty, železa a dřeva, které samy vyrábějí.
+- **Komplikace:** hamr kuje lupu, ale T02 nemá operaci kování. Solivar sdílí `destilovat` v širším smyslu. Kapacita a herní čas jednotek nejsou.
+- **Další krok:** Jan se podívá na seznam a otázky 19–22 v README.
+
+
 
 ---
 
