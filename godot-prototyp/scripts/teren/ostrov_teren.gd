@@ -43,6 +43,7 @@ const HRA := {
 	"voda_prikop_u": 0.0,                # dno příkopu (mlha kolem ostrova) v buňkách
 	"voda_prikop_sklon": 0.01,           # sklon příkopu k okraji mapy (buněk na sloupec)
 	"voda_r_kroku": 1,                   # kroků R podzemí na snímek
+	"voda_e67": false,                   # E67 (studie, jen větev e67): podzemí jako přetoky ve 3D + výstup ve stěně ostrova
 }
 
 static func params() -> Dictionary:
@@ -51,7 +52,10 @@ static func params() -> Dictionary:
 		if s.begins_with("--bp."): a.append("--" + s.substr(5))
 	var d := PR.defaults()
 	d.merge(HRA, true)
-	return PR.apply_args(d, a)
+	d = PR.apply_args(d, a)
+	if bool(d.get("voda_e67", false)):   # přepínač E67 = p67_okraj + p67_rezim pretok (jednotlivě jdou i --bp.p67_*)
+		d.p67_okraj = true; d.p67_rezim = "pretok"
+	return d
 
 static func reset(off := Vector2i(3, 3), size := 8) -> void:
 	OFF = off; SIZE = size

@@ -69,6 +69,8 @@ static func bands(info: Dictionary, col: Dictionary, X: float, Y: float) -> Arra
 static func _new(W: int, H: int, side: float, p: Dictionary) -> Dictionary:
 	var c := {"W": W, "H": H, "side": side, "A": side * side, "perm_min": float(p.ponor_perm), "depth_m": float(p.get("ug_hloubka_m", 6.0)),
 		"q_to_m3": float(p.get("ug_q_to_m3", 0.001)), "leak_m2": float(p.get("ug_leak_m2", 0.002)), "rezim": String(p.get("p52_rezim", "nadrz")), "perm_dno": float(p.get("p55_perm_dno", 0.05)),
+		"okraj67": bool(p.get("p67_okraj", false)), "kras67": bool(p.get("p67_kras", true)), "rezim67": String(p.get("p67_rezim", "")),
+		"film67": float(p.get("p67_film_m", 0.5)),
 		"cols": [], "h": PackedFloat64Array(), "wall": PackedByteArray(), "impl": SELF, "gen": 0, "NZ": 1,
 		"stats": {"solve_ms": 0.0, "solves": 0, "cells": 0, "build_ms": 0.0}}
 	c.h.resize(W * H); c.wall.resize(W * H); c.wall.fill(1)
@@ -91,7 +93,7 @@ static func _finish(c: Dictionary) -> void:
 			var pm := float(e[0])
 			lo.append(b[0]); hi.append(b[1]); mat.append(m); bcol.append(i)
 			var cav: bool = m == 0 or (b.size() > 3)
-			var isb: bool = cav or UG._soluble(m) or pm >= pmin
+			var isb: bool = cav or (UG._soluble(m) and bool(c.get("kras67", true))) or pm >= pmin   # E67 p67_kras=false: kras jen s perm ≥ ponor_perm
 			body.append(1 if isb else 0)
 			var pr := float(e[1]) if e.size() > 1 else 0.0
 			por.append(float(b[3]) if b.size() > 3 else (1.0 if m == 0 else (pr if pr > 0.0 else 0.05)))
@@ -268,7 +270,7 @@ static func _outs(c: Dictionary, b: int, excl: Dictionary) -> Array:
 	var cc: int = c.bcol[b]; var W: int = c.W; var H: int = c.H
 	var x := cc / H; var y := cc % H
 	var lo: float = c.lo[b]; var hi: float = c.hi[b]
-	if x == 0 or y == 0 or x == W - 1 or y == H - 1: out.append([lo, "okraj", cc])
+	if x == 0 or y == 0 or x == W - 1 or y == H - 1 or (bool(c.get("okraj67", false)) and wedge(c, cc)): out.append([lo, "okraj", cc])
 	if hi >= float(c.h[cc]) - E and not excl.has(cc): out.append([hi, "povrch", cc])
 	for d in 4:
 		var qx: int = x + [1, -1, 0, 0][d]; var qy: int = y + [0, 0, 1, -1][d]
@@ -277,6 +279,15 @@ static func _outs(c: Dictionary, b: int, excl: Dictionary) -> Array:
 		if c.wall[c2] == 1 or excl.has(c2): continue
 		if float(c.h[c2]) < hi - E: out.append([maxf(lo, float(c.h[c2])), "povrch", c2])
 	return out
+
+## E67 O: sloupec sousedí se zdí (mimo ostrov) → odkrytá stěna, pásma z ní můžou vytéct (výstup „okraj“ ve výšce dna pásma)
+static func wedge(c: Dictionary, cc: int) -> bool:
+	var W: int = c.W; var H: int = c.H; var x := cc / H; var y := cc % H
+	for d in 4:
+		var qx: int = x + [1, -1, 0, 0][d]; var qy: int = y + [0, 0, 1, -1][d]
+		if qx < 0 or qy < 0 or qx >= W or qy >= H: continue
+		if c.wall[qx * H + qy] == 1: return true
+	return false
 
 ## průsak pásma do slabě propustného okolí (l/s), jen část pod hladinou L
 static func _leak(c: Dictionary, b: int, L: float) -> float:
@@ -311,7 +322,8 @@ static func solve(c: Dictionary, entries: PackedInt32Array, q: float, excl := {}
 	c.gen = int(c.gen) + 1
 	var g: int = c.gen
 	var r: Dictionary
-	if String(c.rezim) == "auto": r = _solve_auto(c, entries, q, ex)
+	if String(c.get("rezim67", "")) == "pretok": r = load("res://scripts/voda/podzemi/ug67.gd").solve(c, entries, q, ex)   # E67 přetoky ve 3D
+	elif String(c.rezim) == "auto": r = _solve_auto(c, entries, q, ex)
 	else: r = _solve_preliv(c, entries, q, ex, g) if String(c.rezim) in ["preliv", "darcy"] else _solve_nadrz(c, entries, q, ex, g)
 	if String(c.rezim) == "darcy" and q > 0.0 and not r.closed: r.darcy = darcy(c, r.comp_ids, float(r.z_out), entries, q - float(r.leak), ex)
 	c.stats.solve_ms += (Time.get_ticks_usec() - t0) / 1000.0; c.stats.solves += 1; c.stats.cells += int(r.cells)
@@ -368,12 +380,13 @@ static func _solve_nadrz(c: Dictionary, entries: PackedInt32Array, q: float, ex:
 		if e >= 0 and lab[e] != g: lab[e] = g; dist[e] = 0; qu.append(e)
 	var k := 0; var best := []; var zmax := -INF; var leak := 0.0
 	var bz := INF; var bd := 1 << 30
+	var o67 := bool(c.get("okraj67", false))
 	while k < qu.size():
 		var b := qu[k]; k += 1
 		var bl := lo[b]; var bh := hi[b]; var cc := bcol[b]; var db := dist[b]
 		zmax = maxf(zmax, bh); leak += lf[b]
 		var x := cc / H; var y := cc % H
-		if (x == 0 or y == 0 or x == W - 1 or y == H - 1) and (bl < bz - E or (absf(bl - bz) <= E and db < bd)):
+		if (x == 0 or y == 0 or x == W - 1 or y == H - 1 or (o67 and wedge(c, cc))) and (bl < bz - E or (absf(bl - bz) <= E and db < bd)):
 			bz = bl; bd = db; best = [bl, db, b, "okraj", cc]
 		if bh >= hc[cc] - E and not ex.has(cc) and (bh < bz - E or (absf(bh - bz) <= E and db < bd)):
 			bz = bh; bd = db; best = [bh, db, b, "povrch", cc]

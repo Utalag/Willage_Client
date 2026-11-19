@@ -437,7 +437,13 @@ static func _apply_drains(st: Dictionary, dirty = null) -> PackedInt32Array:
 				for j in grp:
 					var x: Dictionary = ents[j][1]
 					if not r.closed: st.extra[x.outlet] = x.drain_lps; wr.append(x.outlet)   # uzavřené plné těleso nic nepřijímá → vše přeteče po povrchu
-				if not r.closed and r.out_q > 0.0:
+				if not r.closed and r.out_q > 0.0 and r.has("outs67"):   # E67 pretok: víc výstupů (prameny / okraj) s vlastním průtokem
+					for o in r.outs67:
+						var col67: int = o[2]
+						if float(o[3]) <= 0.0: continue
+						if o[1] == "povrch": st.src2[col67] += float(o[3]); wr.append(col67)
+						st.under.append({"from": ents[grp[0]][1].outlet, "exit": col67, "q": float(o[3]), "z": float(o[0]), "typ": o[1]})
+				elif not r.closed and r.out_q > 0.0:
 					var col: int = r.out[4]
 					if r.out[3] == "povrch": st.src2[col] += r.out_q; wr.append(col)
 					st.under.append({"from": ents[grp[0]][1].outlet, "exit": col, "q": r.out_q, "z": float(r.out[0]), "typ": r.out[3]})

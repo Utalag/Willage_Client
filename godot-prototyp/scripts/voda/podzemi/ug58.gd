@@ -313,7 +313,7 @@ static func _cands_b(c: Dictionary, b: int, nd: Dictionary) -> void:
 	var cc: int = c.bcol[b]; var W: int = c.W; var H: int = c.H
 	var x := cc / H; var y := cc % H
 	var bl: float = c.lo[b]; var bh: float = c.hi[b]
-	if x == 0 or y == 0 or x == W - 1 or y == H - 1: _cadd(nd, bl, b, 0, cc, -1, cc)
+	if x == 0 or y == 0 or x == W - 1 or y == H - 1 or (bool(c.get("okraj67", false)) and F.wedge(c, cc)): _cadd(nd, bl, b, 0, cc, -1, cc)
 	if bh >= float(c.h[cc]) - E: _cadd(nd, bh, b, 1, cc, cc, cc)
 	for d in 4:
 		var qx := x; var qy := y
@@ -675,6 +675,9 @@ static func solve_all(c: Dictionary, calls: Array, v: String, dz: float, stats: 
 
 static func _one(c: Dictionary, calls: Array, ci: int, useA: bool, useB: bool, useC: bool, dz: float, stats: Dictionary) -> Dictionary:
 	var call: Dictionary = calls[ci]
+	if String(c.get("rezim67", "")) == "pretok":   # E67 přetoky ve 3D: plný výpočet volání (bez B / C / K / I / P)
+		stats.exact += 1
+		return load("res://scripts/voda/podzemi/ug67.gd").solve(c, call.ents, call.q, ex_of(c, call.x))
 	_p1key = ci
 	if useB:
 		var r = node_solve(c, call, ci, useA, dz, stats)
@@ -700,6 +703,24 @@ static func edit(c: Dictionary, calls: Array, prev: Array, s: int, hv: float, v:
 	var old_h := float(c.h[cc])
 	c._useD = has_flag(v, "D")
 	var hit := F.touched(c, {}, PackedInt32Array([s]), PackedFloat64Array([hv]))
+	if String(c.get("rezim67", "")) == "pretok":   # E67: výkop = plný přepočet registrovaných volání (čistá funkce stavu)
+		# výsledek volání čte jen pásma ve stopě _fp67 a jejich 4 sousední sloupce (výstupy, sousedé, průsak) → přepočet,
+		# když výkop leží ve stopě nebo vedle ní; jinak je výsledek bitově stejný (čistá funkce stejných dat)
+		var W67: int = c.W; var H67: int = c.H; var x67 := cc / H67; var y67 := cc % H67
+		var near := [cc]
+		if x67 > 0: near.append(cc - H67)
+		if x67 < W67 - 1: near.append(cc + H67)
+		if y67 > 0: near.append(cc - 1)
+		if y67 < H67 - 1: near.append(cc + 1)
+		var o67 := []
+		for ci in calls.size():
+			var fp67: PackedByteArray = prev[ci].get("_fp67", PackedByteArray()) if ci < prev.size() else PackedByteArray()
+			var need := fp67.is_empty()
+			for n in near:
+				if not need and fp67[n] != 0: need = true
+			if need: o67.append(_one(c, calls, ci, useA, false, false, dz, stats))
+			else: o67.append(prev[ci]); stats.skipped += 1
+		return o67
 	if c.has("_p1st"):   # E63 I: sloupec cc je pro všechny uložené sestupy špinavý
 		for kst in c._p1st: c._p1st[kst].dirty[cc] = true
 	if not useB and not useC:   # base / A: jako tok.gd – zásah → všechna volání znovu, jinak nic
