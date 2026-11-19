@@ -293,6 +293,40 @@ Výchozí: 800 kapek na blok, `ero_cap` 1,0, `ero_erode` 0,1, `ero_deposit_rate`
 - **Hypotéza:** parita bit po bitu (kopie se mění jen v cestách). Vložení bloku bp ≈ 0,25–0,4 s jako E49 detail
   (+ povrch a tráva prototypu ~0,4 s), voda ostrova 7 bloků (≈ 112 × 112 sloupců) plně < 1 s, kopání u vody desítky ms.
 
+## E66b podzemní těleso, bok ostrova, řezy GIF (2026-11-19 15:45; Jan 15:20 „Proč je tam velké podzemní těleso? Skryj texturu na boku dlaždice.“, 15:26 GIF řezů)
+- **Proč jedno velké těleso (diagnostika `godot-prototyp/tools/teleso_e66.gd`, obrázek `shots/66b_teleso.png`):**
+  - Startovní ostrov (4 bloky, 1024 sloupců, 18886 pásem): 30 těles, z toho **jedno má 7690 pásem ve všech 1024 sloupcích**
+    (objem pórů 312 m³), ostatních 29 jsou zbytky po 2–5 pásmech.
+  - Těleso tvoří **souvislé propustné vrstvy z tabulky pořadí hornin**, které blueprint v2 navazuje přes švy (navázání mocností):
+    křemenný pískovec 52 (perm 0,333, por 0,20; samotný souvisle v 95 % sloupců), jeskynní vápenec 5 (kras, perm 0,246; 91 %),
+    hlubinný vápenec 44 (kras; 90 %), dál štěrk 3 (0,833), spraš 54 (0,333), dolomit 49 (kras). Shora je spojí **drn 1 (0,667)
+    a ornice 2 (0,595)** ve všech sloupcích (81 %). Práh `ponor_perm` 0,30, kras se počítá vždy (i sádrovec 48 s perm 0).
+  - **Není to artefakt prototypu:** studie svet64 (8 × 8 bloků) má totéž – „1375 těles“, ale jedno přes **16358 z 16384 sloupců**
+    (127916 pásem), zbytek jsou drobty; pásma drnu / ornice jsou tělesem ve 100 %. Plná id buněk a pásma funkcí sedí:
+    91 % buněk v pásmu tělesa je propustný materiál, 9 % jsou skarn 42 a minerály (funkce `bands()` tělesa pně / žíly vědomě
+    vynechává); propustné buňky mimo pásmo 0,2 %. Celočíselná výška, třídy hry, skrytí podzemí ani příkop v mlze tvar tělesa
+    neovlivňují (podzemí se staví z funkcí vrstev a plných id, mlha je v podzemí stěna).
+  - Pokusy se souvislostí (jen počítání): bez drnu a ornice dál 1 těleso přes 100 % sloupců (5830 pásem); bez sádrovce totéž;
+    **řez po švech bloků** → největší 2095 pásem / 256 sloupců (25 %).
+- **Možnosti (odhad dopadu na kopání ~0,45–0,95 s v podzemí):**
+  1. *Nechat fyziku, zrychlit adaptér:* výkop jen v drnu / ornici nad tělesem často výsledek nemění (neověřeno; 3 z 6 výkopů E66 byly v suchu
+     a povrch se nepřepočítal, podzemí ano) → rychlý test „výsledek se nezmění“ před `ug64.edit`, čištění registru volání (dnes jen roste). Odhad: běžný výkop
+     desítky ms, výkop do pískovce dál ~0,5 s. Bez změny studie.
+  2. *Rozdělit těleso po blocích s výměnou přes švy* (těleso bloku + tok přes hranu jako vstup / výstup): pásem na výpočet ~4× méně
+     → odhad 0,1–0,25 s. Nová logika v podzemí (studie), parita E61 by se musela přeměřit.
+  3. *Hrubší mřížka podzemí* (`p52_ug_n` 8 místo 16, studie to umí): 4× méně sloupců → odhad 4× rychleji, hrubší hladiny.
+  4. *Návrh vrstev:* pískovec a vápence s vyklíněním / čočkami místo souvislé vrstvy přes celý ostrov → víc menších těles
+     (i geologicky věrnější); mění terén a hashe studie.
+  5. Vyřadit drn a ornici z těles nepomůže (těleso dál přes celý ostrov); zvýšit `ponor_perm` nad 0,333 odstraní pískovec,
+     ale krasové vápence (91 %) zůstanou.
+- **Bok ostrova:** rozmazaný hnědý vzor na boku byl ze dvou věcí: (a) skutečné vrstvy (buňky boku jsou „odkryté“, sousedí se vzduchem)
+  a hlavně (b) 18 průsvitných vrstev mlhy ve slotech kolem ostrova (1,5–16,8 m) s okraji po slotech → kosočtverce přes bok
+  (ověřeno snímkem bez mlhy). Nové nastavení `side_plain` (výchozí zap.: bok jednou barvou `col_side` bez textury, horní buňka zůstává)
+  a `fog_side` (výchozí vyp.: mlha před bokem skrytá; zapnutím zpět původní mlha). Rentgen a řez beze změny. Snímek `shots/66b_bok.png`
+  (vlevo před, vpravo po). **Negativum:** s `fog_side` vyp. kolem ostrova není mlha vůbec (i horní příkrov dělal kosočtverce).
+- **Řezy GIF** (Jan 15:26): `godot-prototyp/tools/rez_gif.sh` – jeden příkaz, bez GPU (~3 s): data `tools/rez_data.gd`, obrázky
+  `tools/rez_gif.py` (Pillow). Příklady `godot-prototyp/shots/rez/ostrov.gif` (30 snímků) a `shots/rez/blok_0_0.gif` (blok s velkým tělesem, 21 snímků).
+
 ## E66 výsledky (2026-11-19 15:10)
 - **Git** (Jan 14:35 / 14:37): výchozí stav prototypu = commit `ca6afdf` v `Utalag/Willage_Client`, práce na větvi
   `e66-integrace-prototypu` po malých commitech (modul po modulu, testy, snímky). Záložní kopie se nedělají.

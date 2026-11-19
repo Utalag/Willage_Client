@@ -15,6 +15,10 @@ xvfb-run -a -s "-screen 0 1280x800x24" $G --rendering-driver opengl3 --path . --
 $G --headless --path . -s res://tools/parita_e66.gd -- --test=vse   # parita přenesených modulů se studií (6 hashů E61)
 $G --headless --path . -s res://tools/voda_e66.gd -- --vykopu=12   # voda ostrova bez scény: výkopy + kontrola -> shots/66_parita/voda_e66.json
 python3 tools/port_studie.py [--check]                         # znovu přenést moduly studie (nebo jen ověřit, že kopie sedí)
+tools/rez_gif.sh [--oblast=vse|x,y] [--krok=2] [--ms=600] [--out=shots/rez/x.gif] [--podzemi=1] [--bloky="0,0:louka:101;..."]
+                                                               # řezy po vrstvách → animovaný GIF (bez GPU, ~3 s): materiály, česká legenda, podzemní tělesa
+xvfb-run -a -s "-screen 0 1280x800x24" $G --rendering-driver opengl3 --path . -- --e66b-bok   # bok ostrova před / po -> ../blueprint-studie/shots/66b_bok.png
+$G --headless --path . -s res://tools/teleso_e66.gd && python3 tools/teleso_obrazek.py   # diagnostika podzemního tělesa -> 66b_teleso.png
 $G --headless --path . -- --export-vectors                     # vektory -> vectors/vectors.json (proto), veg_vectors.json, gen_v3_vectors.json
 $G --headless --path . -- --genv3-bench --gen=v3 --tag=v3       # měření gen-v3 / proto -> shots/41_genv3_proto_bench_<tag>.txt
 $G --headless --path . -- --flow-bench                         # tok vody po kopání: měření, kontrola delty, determinismus -> shots/42_tok_bench.txt
@@ -213,6 +217,12 @@ Plán a výsledky: `../blueprint-studie/PROP.md` (E66). Moduly studie jsou **kop
 - Kontrola: `--e66-bench` a `tools/voda_e66.gd` po každém kopání porovnají stav s čerstvým plným výpočtem (stejné výkopy
   přehrané do nového podzemí) – fill, průtok i směr odtoku musí sedět na 100 %.
 - Bez podpory v bp: otočení / zrcadlení bloku a režimy stran (`sides`), kalibrace prahů rarity pro bp.
+- **Bok ostrova** (E66b, Jan 15:20 „Skryj texturu na boku dlaždice“): `side_plain` (výchozí zapnuto) kreslí stěny bloku
+  směrem ven z ostrova pod povrchovou buňkou jednou barvou `col_side` bez textury (horní buňka s trávou zůstává);
+  `fog_side` (výchozí vypnuto) vrací vrstvy mlhy ve slotech kolem ostrova – ty dělaly na boku rozmazané kosočtverce.
+  V rentgenu a v řezu se kreslí skutečné materiály. Obojí je v ladicím okně (Povrch).
+- **Řezy jako GIF:** `tools/rez_gif.sh` (data `tools/rez_data.gd` headless, obrázky `tools/rez_gif.py` přes Pillow): vodorovné řezy
+  po `--krok` buňkách odspodu, barvy plných id ze sdílené tabulky, legenda česky, šrafa = pásmo podzemního tělesa.
 
 ## gen-v3 v prototypu (Jan 20:14, `scripts/gen3/`)
 - **Volba:** `BlockGen.gen_version` = `"v3"` (výchozí) nebo `"proto"`, CLI `-- --gen=proto|v3`. Tvar povrchu, transformace, dorovnání stran,
