@@ -5,7 +5,7 @@ Není to součást běhu vody v blueprint-studii. Herní kód se tu zatím nemě
 
 Číslování záznamů: **T01, T02, …**. První záznam je **T01 (dříve E65 v blueprint-studii)**.
 
-Stav: návrh T01, čeká na Jana. Zdroje jsou značky [n] v `ZDROJE.md`.
+Stav: návrh T01–T03, čeká na Jana. Zdroje jsou značky [n] v `ZDROJE.md`.
 
 ## Cíl
 
@@ -30,23 +30,32 @@ Navrhnout, jak se ve hře budou chovat horniny při těžbě a zpracování: jak
 
 ```
 python3 tools/horniny65.py
+python3 tools/strom02.py
+python3 tools/zarizeni03.py
 ```
 
-Přegeneruje `data/horniny_tezba_navrh.json` a `shots/65_horniny_tezba.png`. Sdílené vodní tabulky nesahá.
+`horniny65.py` přegeneruje `data/horniny_tezba_navrh.json` a `shots/65_horniny_tezba.png`.
+`strom02.py` sestaví `data/strom_rozkladu.json`, `navrhy/strom-hornin.md` a `shots/T02_strom_*.png` a zkontroluje konzistenci stromu.
+`zarizeni03.py` sestaví `data/zarizeni.json`, `navrhy/zarizeni.md` a `shots/T03_zarizeni.png` a zkontroluje, že každá operace i hrana stromu má zařízení.
+Sdílené vodní tabulky nesahá. Graphviz (`dot`) v prostředí není, obrázky kreslí matplotlib.
 
 ## Soubory
 
 | cesta | obsah |
 |---|---|
 | `README.md` | cíl, rozsah, otevřené otázky |
-| `PROP.md` | T01 (dříve E65) |
-| `DENIK.md` | A/B/C, přesunuté záznamy T01 |
-| `ZDROJE.md` | [1]–[28] |
+| `PROP.md` | T01 (dříve E65), T02 strom rozkladu, T03 zařízení |
+| `DENIK.md` | A/B/C, záznamy T01–T03 |
+| `ZDROJE.md` | [1]–[28] T01; [29]–[38] T02 složení; [39]–[53] T03 jednotky |
 | `data/horniny_tezba_navrh.json` | návrh tabulky (sem patří; není ve `sdilene/`) |
 | `tools/horniny65.py` | generátor tabulky a grafu |
 | `shots/65_horniny_tezba.png` | Mohs × UCS a pevnost podle nástroje |
 | `navrhy/horniny-vlastnosti-tezba.md` | návrh modelu těžby a zpracování |
 | `navrhy/katalog-materialu.md` | výrobky, jednotky, laditelné parametry, recepty |
+| `data/strom_rozkladu.json` | T02 strom: uzly a hrany (složení, výnosy, zpracování) |
+| `tools/strom02.py` | sestavení stromu, validace, mermaid, obrázky |
+| `navrhy/strom-hornin.md` | český strom po skupinách (mermaid) |
+| `shots/T02_strom_*.png` | přehled a detaily složení / výnosů / zpracování |
 
 ## Rozhodnutí a hypotézy v T01
 
@@ -79,3 +88,13 @@ Hypotézy:
 12. Recepty (13:39): odemknou se natrvalo? Optimum skrýt úplně, nebo ukázat rozmezí? Sdílet ve vesnici?
 13. Které výrobky jsou od začátku (vápno, malta, cihla, sklo, měď, železo) a které až později (cement, porcelán, ocel, koks)?
 14. Mají mít sklářství, hrnčířství, hutnictví a zednictví vlastní dovednosti, nebo stačí Kamenictví + Chemie + Kovářství?
+
+15. Má se typické minerální složení stát vlastní vrstvou znalostí (Mineralogie), nebo ve hře stačí výnos surovin z T01?
+16. Mají olovo (galenit) a rumělka dostat vlastní ložiska, nebo zůstanou jako mezera v katalogu?
+17. Má se `ruda_vzacne` rozdělit na Li / Sn / Ta?
+18. Je 20 ‰ ryzího zlata ve složení buňky přijatelná abstrakce, nebo má složení zůstat u křemene a pyritu a kov jen jako kusový nález?
+
+19. Má se kování lupy z dýmačky (hamr) doplnit do stromu jako vlastní operace, nebo stačí jako navazující krok tavení železa?
+20. Má dýmačka s koksem zůstat dýmačkou, nebo později přejít na vysokou pec?
+21. Má se odpar soli v solivaru oddělit od pravé destilace (alembik), nebo stačí sdílená operace `destilovat`?
+22. Které jednotky jsou ve vesnici od začátku (stoupa, milíř, vápenka, cihelna) a které až s receptem / věkem?

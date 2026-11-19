@@ -1,5 +1,7 @@
 # Katalog materiálů a výrobků (návrh)
 
+Strom, odkud suroviny berou (horniny → minerály → výrobky), je v [strom-hornin.md](strom-hornin.md) (T02). Seznam pecí, dílen a strojů, které ty operace provádějí, je v [zarizeni.md](zarizeni.md) (T03).
+
 Stav: **hypotéza** (Jan 19. 11. 2026 13:36 a 13:39), hrubý přehled. Bez herních čísel. Čeká na Jana.
 
 Datum: 19. 11. 2026, Europe/Berlin (CET). Navazuje na [vlastnosti a těžbu hornin](horniny-vlastnosti-tezba.md) a tabulku `data/horniny_tezba_navrh.json` (T01, dříve E65). Zdroje jsou značky [n] podle `ZDROJE.md` této studie.
@@ -253,7 +255,7 @@ Náčrt funkce kvality (bez herních čísel, laditelné):
 - Dovednost a lepší jednotka můžou zmenšit rozptyl (stejné nastavení vychází jistěji) nebo rozšířit dosah ladění. To je volitelné.
 - Horní strop nad průměrem má být výrazný, ať se ladění vyplatí. Spodní strop může výrobek zničit.
 
-Přehled jednotek je u jednotlivých materiálů v položce Jednotka. Stručně:
+Přehled jednotek je u jednotlivých materiálů v položce Jednotka a souhrnně v [zarizeni.md](zarizeni.md). Stručně:
 
 | jednotka | typické výrobky |
 |---|---|
