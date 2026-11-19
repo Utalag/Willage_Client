@@ -1,5 +1,5 @@
 #!/bin/sh
-# Blueprint-studie: navázání vrstev a povrchu na sousedy. Použití: ./run.sh shots | test | play | horniny | horniny-test | voda | voda47b | voda47d | funkce | svet8 | svet64 | eroze51 | podzemi52 | plosne53 | dohnani54 | podzemi55 | svah56 | alg58  [--klic=hodnota …]
+# Blueprint-studie: navázání vrstev a povrchu na sousedy. Použití: ./run.sh shots | test | play | horniny | horniny-test | voda | voda47b | voda47d | funkce | svet8 | svet64 | eroze51 | podzemi52 | plosne53 | dohnani54 | podzemi55 | svah56 | alg58 | e69  [--klic=hodnota …]
 cd "$(dirname "$0")"
 GODOT=${GODOT:-/workspace/tools/Godot_v4.7.2-stable_linux.x86_64}
 MODE=${1:-shots}; shift 2>/dev/null
@@ -17,6 +17,7 @@ case "$MODE" in
   podzemi52) sh tools/podzemi52.sh "$@" ;;
   alg58) sh tools/alg58.sh "$@" ;;
   alg60) sh tools/alg60.sh "$@" ;;
+  e69) timeout 600 "$GODOT" --headless --path . -s res://tools/e69.gd -- "$@" ;;
   podzemi55) timeout 900 "$GODOT" --headless --path . -s res://tools/test_podzemi55.gd -- "$@" && python3 tools/shots_podzemi55.py ;;
   svah56) timeout 1200 "$GODOT" --headless --path . -s res://tools/svah56.gd -- "$@" && python3 tools/shots_svah56.py ;;
   dohnani54) timeout 900 "$GODOT" --headless --path . -s res://tools/test_dohnani54.gd -- "$@" ;;
