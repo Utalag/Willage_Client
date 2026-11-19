@@ -293,6 +293,28 @@ Výchozí: 800 kapek na blok, `ero_cap` 1,0, `ero_erode` 0,1, `ero_deposit_rate`
 - **Hypotéza:** parita bit po bitu (kopie se mění jen v cestách). Vložení bloku bp ≈ 0,25–0,4 s jako E49 detail
   (+ povrch a tráva prototypu ~0,4 s), voda ostrova 7 bloků (≈ 112 × 112 sloupců) plně < 1 s, kopání u vody desítky ms.
 
+## E75 eroze v podzemí po tělesech – kras (plán, zapsáno před pokusem 2026-11-20 00:25; TODO Model světa, Jan 2026-11-19 20:53, hypotéza)
+- **Co už je:** E51 eroze jako události v haldě (odpočet, předpočítané časy, kopání / položení vynuluje odpočet sloupce);
+  tělesa a průtoky E58 (jedna nádrž, vstup → výstup) a E67 (mokrá pásma s průtokem `wetq67`, pasti); dutiny blueprintu
+  jsou buňky vzduchu, v podzemí pásma `ug_funkce` se z nich stane pásmo mat 0 s objemem; sdílená tabulka materiálů.
+- **Rozpustnost (sdílená tabulka, nové pole `rozp_kg_m3` = rozpuštěná hornina na m³ vody v rovnováze, `hustota_kg_m3`):**
+  vápence (5, 44, 56) 0,2 kg/m³ (krasová voda 50–300 mg/l CaCO₃), dolomit (49) 0,15 kg/m³, sádrovec (48)
+  2,5 kg/m³ (2,531 g/l při 20 °C), kamenná sůl (47) 360 kg/m³. Ostatní 0 (průsak pórovitou vrstvou zanedbatelný).
+  Kontrola řádu: Corbelův vzorec D = I · c / ρ dává pro vápenec desítky mm za 1000 let (sedí s měřeními 0,03–0,08 mm/rok).
+- **Model (`scripts/kras75/kras75.gd`, přepínač `p75_kras`, výchozí vyp):** voda vstupuje do tělesa nenasycená; podél hlavní
+  cesty tělesa (E58: nejkratší cesta pásem od vstupu k výstupu, E67: mokrá pásma s průtokem) se nasycuje exponenciálně
+  s délkou λ (`p75_delka_m`). Rozpustné pásmo b dostane rychlost r_b = Q · s · (e^(−d_in/λ) − e^(−d_out/λ)), s = rozp / hustota
+  (m³ horniny na m³ vody) → součet po cestě ≤ Q · s. Hodnota u tělesa: rozpuštěný objem po pásmech. Odpočet do prahu
+  (`p75_prah_m3` = jedna herní buňka 0,25³ m) jako událost v haldě (čas = zbytek / r_b, remíza podle pásma). Událost →
+  dutina v pásmu u hladiny (shora od min(vršek pásma, hladina), 4 buňky 0,25 m na vrstvu sloupce 0,5 m), roste po buňkách.
+  Zpětná vazba: pórovitost pásma + objem dutiny, propustnost dutiny 1 → přepočet vody (E68) a nové rychlosti. Kopání /
+  položení: postup se dopočítá do teď, odpočet pásem v prokopaném sloupci se vynuluje, buňky dutiny se materializují.
+- **Čas:** průtoky jsou v l/s herního času; 1 herní den = 10 min (`p71_cas` 144).
+- **Měření:** rychlosti rozpouštění po materiálech, čas do první dutiny (herní dny, reálný čas), cena výpočtu (stavba,
+  událost, přepočet), otisk stavu krasu (dvě pořadí výkopů, plný přepočet proti postupnému), ostrov E58 a E67.
+- **Otázky:** kde dutina vzniká (vstup / hlavní cesta / výstup / hladina) – volba λ; propojení pásem dutinou se nemodeluje.
+- Beze změny: `p71_cas` 144, `p72_prusak`, vzdálenost slučování.
+
 ## E73 nálezy E68: pramen ve vlastní tůni, přítok tůně jako součet, zrychlení smyčky, E67 „vše prosákne“ (plán, zapsáno před pokusem 2026-11-19 23:15; TODO Voda, Jan: nejdřív dodělat vodu)
 - **1. Pramen v prohlubni, kterou sám zavodní (`p73_vyver`):** cyklus ostrova s periodou 2 (E68) vzniká tím, že
   zavodněná prohlubeň se v dalším kole stane vstupem téhož tělesa a její buňky se vyloučí z výstupů (`excl`). Pravidlo:
