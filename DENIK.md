@@ -216,6 +216,12 @@ Skupiny: 1 Prototyp a buildy · 2 Terén a tvar · 3 Rozlišení bloku · 4 Ská
 - **Komplikace:** koryta jsou krátké úseky (malý svět, malá povodí). Krasová vyvěračka 0. Hráz na svahu tůň nevytvořila (potok ji obtekl). Podzemní tok vede zatím zjednodušeně k nejbližšímu okraji.
 - **Další krok:** Jan rozhodne, jak daleko vést podzemní tok (sledovat propustnou vrstvu?) a jestli má mít krasová vyvěračka vlastní pravidlo. Starší otevřené otázky (eroze po blocích vs hrubý svět, jádro hory přes šev, minerály z hrubého světa) zůstávají.
 
+### ⚖️ Blueprint v3 / E69: test symetrie a bilance podzemí, oprava remíz (2026-11-19 21:50 · `blueprint-studie/tools/e69.gd`, `scripts/podzemi52/ug67.gd` příznak `p69_remizy`, větev `e69-symetrie-test`)
+- **Směr:** úkol z TODO (Voda): zdroj 1 l/s, vrstvy 1,0 / 0,8 / 0,6 / 0,4 / 0,2, nepropustné podloží, symetrický terén → symetrický výsledek, voda se neztratí.
+- **Zlepšení:** bilance přesná všude (chyba ≤ 1e-12 l/s). Nesymetrie E67 z remíz podle id (slučování větví: kupole 0,5 l/s jedním směrem; past s výstupy ve stejné výšce: vše v jednom bodě) opravena dělením rovným dílem → symetrie 0 ve všech tvarech.
+- **Komplikace:** propustnosti vrstev se v E67 projeví jen do stran (dolů jde vždy vše), referenční „kapacitní“ profil nesplní. Na ostrově +13 % mokrých pásem (remízy tam nastávají). E58 má z konstrukce jeden výstup.
+- **Další krok:** Jan rozhodne o odškrtnutí v TODO a zda chce svislou kapacitu vrstev jako nový úkol.
+
 ### 🧱 Blueprint v3 / E64: sestup bez závislosti na pořadí, oprava se zárukou shody, kroky R, P z paměti (2026-11-19 13:50 · `blueprint-studie/scripts/alg64/`, shot `64_podzemi.png`)
 - **Směr:** Jan 12:36 „Jon určitě to zkus.“ Vychází z rešerše Gemini. K = halda (hodnota, id), ostrá zlepšení bez ε.
   I = oprava přes všechny hrany do S. R = kroky po počtu operací. M = test více hráčů. V = komprese sloupců.

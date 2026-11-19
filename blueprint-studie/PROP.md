@@ -293,6 +293,52 @@ Výchozí: 800 kapek na blok, `ero_cap` 1,0, `ero_erode` 0,1, `ero_deposit_rate`
 - **Hypotéza:** parita bit po bitu (kopie se mění jen v cestách). Vložení bloku bp ≈ 0,25–0,4 s jako E49 detail
   (+ povrch a tráva prototypu ~0,4 s), voda ostrova 7 bloků (≈ 112 × 112 sloupců) plně < 1 s, kopání u vody desítky ms.
 
+## E69 výsledky (2026-11-19 21:50, větev `e69-symetrie-test` z `e67-podzemi-okraje`, do main až po schválení Janem)
+- **Nástroj:** `tools/e69.gd` (`./run.sh e69 [--n=21 --t=1 --sklon=0.25 --q=1 --ponor=0.1 --remizy=1 …]`), výsledky
+  `shots/e69/vysledky_pred*.json` (před opravou) a `vysledky*.json` (po). Čtverec 21 × 21 v prstenci zdi, zdroj 1 l/s
+  do vrstvy 1,0 prostředního sloupce, 5 vrstev po 1 m, nepropustné podloží, sklon 0,25 m/m.
+- **Bilance (všechny tvary a řešiče, před i po):** vstup 1 l/s = výstupy + průsak, chyba ≤ 1e-12 l/s. **Voda se neztrácí**
+  (ani slučováním větví, ani v pastech). Se zkušebním `ponor=0,3` (vrstva 0,2 není těleso, jen průsak): pretok mísa
+  0,838 výstup + 0,162 průsak, E58 0,8236 + 0,1764, chyba 0.
+- **Symetrie před opravou (max rozdíl po sloupcích přes 7 transformací D4):**
+
+  | tvar | pretok + O (slučování 0,1) | pretok + O bez slučování | E58 A+B+C / base + O |
+  |---|---|---|---|
+  | plocha | výstup 1,0 l/s v 1 rohu (nesym.) | totéž | 1 výstup (roh −10,−10) |
+  | kupole | **tok 0,50 l/s, 97 nesym. položek; výstupy 0,127 l/s (8)** | **symetrické (0)**, 76 výstupů | 1 výstup (roh) |
+  | mísa | výstup 1,0 l/s v 1 bodě okraje mísy | totéž | 1 výstup (−10, 0) |
+
+  Hladiny (`wt`) a objemy symetrické všude (mísa 7,0355 m, 78,48 m³; E58 i E67 shodně).
+- **Příčiny (chyba = remízy rozhodované podle id pásma):**
+  1. `p67_prune`: slabé větve se přičtou do „nejsilnější“ – při stejné váze vyhraje první (nejmenší id) → celý tok šel
+     jedním směrem (kupole: 0,5 l/s na jedné straně, nic na druhé).
+  2. `_pit_fill`: past bere první výstup z haldy – při více výstupech ve stejné výšce (plochá vrstva, okraj mísy) vyteče
+     všechno v jednom (sloupec s nejmenším id).
+- **Oprava (`p69_remizy`, výchozí true, false = chování E67b; studie i prototyp přes `port_studie.py`):** (1) přebytek
+  sloučených větví se dělí rovným dílem mezi všechny větve se stejnou největší vahou; (2) past po prvním výstupu dobere
+  z haldy všechny výstupy ve stejné výšce (± 1e-6 m) a přetok dělí rovným dílem. Hmota se nemění.
+- **Po opravě:** pretok + O je symetrický ve všech tvarech (chyba 0, i bez slučování), plocha 80 výstupů po 1/80 l/s, mísa
+  4 výstupy po 0,25 l/s, kupole 8 výstupů (se slučováním) / 76 (bez). Ověřeno i n = 15 / sklon 0,1 a n = 31 / sklon 0,4 /
+  vrstvy 0,5 m (s `--remizy=0` kupole znovu nesym. 0,065 l/s). `--remizy=0` dá bitově stejné výsledky jako před opravou.
+- **Dopad na startovní ostrov (`tools/e67.gd`, pretok + O, zdroje 0,02 l/s v minimech, Σ 4,10 l/s beze změny):** mokrá pásma
+  700 → 791, pod hladinou 376 → 414, pasti s vodou 26 → 31, výstupy 80 → 86 (okraj 3,94 → 3,95, povrch 0,16 → 0,15 l/s),
+  objem 7,0 m³ beze změny; výkopy 0 neshod, obě pořadí stejný otisk (nový `beac247bf8881952`, dřív `f1d92535cd350dcb`).
+  Remízy na skutečném terénu tedy nastávají (kvantovaná geometrie); skoro celý rozdíl dělá (1), (2) přidá 1 výstup.
+  Prototyp (`voda_e66 --bp.voda_e67=true`, 12 výkopů): souhrn beze změny (5 pramenů, 5 vodopádů na okraji 9,65 l/s), 0 neshod.
+- **E58 A+B+C (main):** bilance přesná, hladina a objem symetrické; výstup je z konstrukce jeden (rozhraní `out`), takže
+  u symetrického terénu leží v jednom z rovnocenných bodů (nejmenší vzdálenost / id). To není chyba výpočtu, ale omezení
+  modelu „jedna hladina, jeden výstup“; neopravoval jsem (E67 už vrací všechny výstupy).
+- **Negativa a otevřené:**
+  - **Referenční profil vrstev 1,0 / 0,8 / 0,6 / 0,4 / 0,2 se neprojeví:** řešič nemá svislou kapacitu vrstvy, dolů jde
+    vždy celý průtok, dokud pod pásmem je těleso. Celý 1 l/s projde až do nejspodnější vrstvy a vyteče z ní (L5 okraj 1,0);
+    propustnosti mění jen dělení do stran mezi sousedními pásmy. „Kapacitní“ referenci (každá vrstva propustí dolů jen svou
+    kapacitu, zbytek do stran) E67 z konstrukce nesplní – návrh na samostatný úkol (svislá kapacita / Darcy dolů).
+  - Pretok nepočítá průsak z protékaných (mokrých) pásem nad polopropustnou vrstvou, jen z pastí: kupole s `ponor=0,3`
+    průsak 0 (E58 0,176 l/s). Bilance sedí, ale model průsak podhodnocuje.
+  - Oprava (1) nechá stejně silné slabé větve rozdělené (symetrie má přednost před sloučením) → na ostrově +13 % mokrých
+    pásem a +6 výstupů pod prahem 0,1 l/s; prahy kreslení (`p67_min_*_render`) je dál skryjí.
+  - Remízy prahů pasti (víc prahů ve stejné výšce) zatím berou první; v testech se neprojevily.
+
 ## E69 test symetrie a referenční test podzemí (plán, zapsáno před pokusem 2026-11-19 21:45; TODO Voda, Jan 21:3x „V ToDo máš úkoly půst se do nich, ověř je…“)
 - **Zadání (TODO):** zdroj 1 l/s nad sloupcem, propustné vrstvy 1,0 / 0,8 / 0,6 / 0,4 / 0,2, nepropustné podloží; symetrický
   terén musí dát symetrický výsledek a voda se nesmí ztratit. Na řešič E67 / E67b (`p67_rezim = "pretok"`, `ug67.gd`) a, pokud
