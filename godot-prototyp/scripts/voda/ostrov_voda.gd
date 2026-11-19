@@ -41,12 +41,12 @@ func slot_of(gi: int) -> Array:   # [slot ostrova, lx, ly]
 	var gx := gi / H; var gy := gi % H
 	return [T.islot(Vector2i(gx / BS, gy / BS)), gx % BS, gy % BS]
 
-func _mat_d(gi: int, d: int) -> int:
+func _mat_d(gi: int, d: int, gen := false) -> int:
 	if island[gi] == 0: return ROCK
 	var a := slot_of(gi)
 	var b = blocks[a[0]]
 	var i: int = a[1] * BS + a[2]
-	var z := clampi(int(b.hm[i]) - 1 - d, 0, 63)
+	var z := clampi(int(b.hm_gen[i] if gen and not b.hm_gen.is_empty() else b.hm[i]) - 1 - d, 0, 63)
 	return int(b.geo[i * 64 + z])
 
 ## uvolnit stav: výsledky podzemí drží Members.ctx = kontext → cyklus referencí; prázdný slovník ho rozbije
@@ -84,12 +84,13 @@ func build(bl: Dictionary) -> void:
 	var md := func(gi: int, d: int) -> int: return _mat_d(gi, d)
 	var wall_isl := PackedByteArray(); wall_isl.resize(n)   # prameny jen na ostrově (kvantil vrcholů bez příkopu)
 	for i in n: wall_isl[i] = 1 - island[i]
-	springs = PRM.find(hm, W, H, wall_isl, md, p)
+	springs = _springs76(wall_isl, md) if bool(p.get("p76_prameny", false)) else PRM.find(hm, W, H, wall_isl, md, p)
 	var src := PRM.src(springs, hm, n)
 	ms["prameny"] = (Time.get_ticks_usec() - t0) / 1000.0
 	var dd := int(round(float(p.strz_target_m) / float(p.voda_cell_m)))
 	var mats := PackedInt32Array(); mats.resize(n)
-	for i in n: mats[i] = _mat_d(i, dd)
+	var gen76 := bool(p.get("p76_prameny", false)) and bool(p.get("p76_mat_gen", true))   # E76: materiál pro ztráty podle povrchu při vygenerování (jako lokální přepočet po výkopu)
+	for i in n: mats[i] = _mat_d(i, dd, gen76)
 	st = TOK.make(hm.duplicate(), W, H, wall, mats, src, TOK.losses(p, true), true)
 	var t1 := Time.get_ticks_usec()
 	ug = {}
@@ -103,6 +104,71 @@ func build(bl: Dictionary) -> void:
 	ms["povrch + podzemí: plný výpočet"] = (Time.get_ticks_usec() - t1) / 1000.0
 	_falls()
 	ms["celkem"] = (Time.get_ticks_usec() - t0) / 1000.0
+
+## E76: prameny jako uložené zdroje bloků. Bloky bez uložených pramenů (první postavení, nově vygenerovaný blok) je dostanou
+## z hledání přes celý ostrov (stejně jako bez přepínače), ostatní (po výkopech, po načtení, výřez z průzkumného světa)
+## berou uložené → nové postavení nezmění prameny jinde. Pořadí: podle sloupce (deterministické).
+func _springs76(wall_isl: PackedByteArray, md: Callable) -> Array:
+	var need := false
+	for s in blocks:
+		if blocks[s].prameny76 == null: need = true
+	if need:
+		var found := PRM.find(hm, W, H, wall_isl, md, p)
+		var fresh := {}
+		for s in blocks:
+			if blocks[s].prameny76 == null: fresh[s] = true; blocks[s].prameny76 = []
+		for sp in found:
+			var a := slot_of(int(sp.gi))
+			if fresh.has(a[0]): blocks[a[0]].prameny76.append([a[1], a[2], int(sp.z), float(sp.q), String(sp.druh)])
+	var out := []
+	for s in blocks:
+		for e in blocks[s].prameny76:
+			out.append({"gi": gi_of(s, int(e[0]), int(e[1])), "z": int(e[2]), "q": float(e[3]), "druh": String(e[4]), "aktivni": true})
+	out.sort_custom(func(a, b): return int(a.gi) < int(b.gi))
+	return out
+
+## E76: vložení bloku (výřez z průzkumného světa nebo nový blok) LOKÁLNĚ: povrch sloupců bloku, prameny (uložené / hledání),
+## materiály, podzemí znovu z funkcí vrstev (pásma se mění) a přepočet hydro68.update jen kolem sloupců bloku a švu.
+## Blok už musí být ve světě studie (T.commit). Vrací časy.
+func place76(b) -> Dictionary:
+	var t0 := Time.get_ticks_usec()
+	blocks[b.slot] = b
+	var ch := PackedInt32Array(); var hh := PackedFloat64Array(); var seen := {}
+	for x in BS:
+		for y in BS:
+			var gi := gi_of(b.slot, x, y)
+			hm[gi] = float(b.hm[x * BS + y]); island[gi] = 1; st.hm[gi] = hm[gi]
+	for x in range(-1, BS + 1):   # sloupce bloku + prstenec švu (sousedé mohou téct jinam)
+		for y in range(-1, BS + 1):
+			var ws := T.wslot(b.slot); var gx := ws.x * BS + x; var gy := ws.y * BS + y
+			if gx < 0 or gy < 0 or gx >= W or gy >= H: continue
+			var gi := gx * H + gy
+			if not seen.has(gi): seen[gi] = true; ch.append(gi); hh.append(hm[gi])
+	var md := func(gi: int, d: int) -> int: return _mat_d(gi, d)
+	var wall_isl := PackedByteArray(); wall_isl.resize(W * H)
+	for i in W * H: wall_isl[i] = 1 - island[i]
+	springs = _springs76(wall_isl, md) if bool(p.get("p76_prameny", false)) else PRM.find(hm, W, H, wall_isl, md, p)
+	var src_new := PRM.src(springs, hm, W * H)
+	var dd := int(round(float(p.strz_target_m) / float(p.voda_cell_m)))
+	var gen76 := bool(p.get("p76_prameny", false)) and bool(p.get("p76_mat_gen", true))
+	for gi in ch: st.mats[gi] = _mat_d(gi, dd, gen76)
+	var t1 := Time.get_ticks_usec()
+	var ms_ug := 0.0
+	if bool(p.get("podzemi_vrstva", true)):
+		if not ug.is_empty(): ug.clear()
+		ug = UGO.make(T.world, T.fine(blocks), p, W, st.hm, wall, float(p.voda_cell_m))
+		_replay_digs(ug)
+		st.ug = ug
+		st.ug_cache = {}
+	ms_ug = (Time.get_ticks_usec() - t1) / 1000.0
+	var t2 := Time.get_ticks_usec()
+	_add_drains(ch, hh)
+	var r := _update(ch, hh, src_new)
+	_falls()
+	var out := {"podzemi_ms": ms_ug, "povrch_ms": (Time.get_ticks_usec() - t2) / 1000.0, "celkem_ms": (Time.get_ticks_usec() - t0) / 1000.0,
+		"zmenene_sloupce": ch.size(), "okno": r.get("window", 0)}
+	ms["E76 vložení lokálně"] = out.celkem_ms
+	return out
 
 ## E68: plný výpočet – p68_hydro = smyčka povrch ↔ podzemí do ustálení (nejvýš p68_kola, tolerance p68_tol), jinak tok.route
 func _route(s: Dictionary) -> void:

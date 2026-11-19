@@ -65,6 +65,22 @@ static func bands(info: Dictionary, col: Dictionary, X: float, Y: float) -> Arra
 		d0 += t
 	return out.filter(func(b): return b[1] > b[0] + E)
 
+## E76: výřez přenesený z jiného světa (t76 = {puvod: slot světa původu, dz: posun v buňkách}): pásma se vyhodnotí v souřadnicích
+## původu (šum hornin podle místa původu, výška − dz), pak se posunou o dz; pod původním dnem pokračuje spodní pásmo.
+## Pole vrstev (povrch, hranice) jsou už posunutá v záznamu a na švu se interpolují s novými sousedy.
+static func bands76(info: Dictionary, col: Dictionary, X: float, Y: float, s: Vector2i, t76: Dictionary) -> Array:
+	var o: Vector2i = t76.puvod
+	var dzm := float(t76.dz) * FN.U
+	var bs: PackedFloat64Array = col.bs.duplicate()
+	for k in bs.size(): bs[k] -= dzm
+	var c2 := {"h": float(col.h) - dzm, "bs": bs}
+	var out := []
+	for b in bands(info, c2, X + (o.x - s.x) * FN.BW, Y + (o.y - s.y) * FN.BW):
+		var lo: float = maxf(float(b[0]) + dzm, 0.0); var hi: float = float(b[1]) + dzm
+		if hi > lo + E: out.append([lo, hi, b[2]])
+	if not out.is_empty() and float(out[0][0]) > E: out[0][0] = 0.0
+	return out
+
 ## prázdný kontext; sloupce se plní add_col, pak finish
 static func _new(W: int, H: int, side: float, p: Dictionary) -> Dictionary:
 	var c := {"W": W, "H": H, "side": side, "A": side * side, "perm_min": float(p.ponor_perm), "depth_m": float(p.get("ug_hloubka_m", 6.0)),
@@ -161,7 +177,7 @@ static func from_world(world, fine: Dictionary, n: int, nu: int, p: Dictionary) 
 				var col := FN.column(wf, info, X, Y)
 				var gi: int = (s.x * 16 + x) * W + s.y * 16 + y
 				c.wall[gi] = 0; c.h[gi] = col.h
-				c.cols[gi] = bands(info, col, X, Y)
+				c.cols[gi] = bands(info, col, X, Y) if not r.has("t76") else bands76(info, col, X, Y, s, r.t76)
 	# dutiny (zvláštní případ): buňky vzduchu pod povrchem → pásmo s objemem z buněk
 	var ncav := 0
 	if nu > 0 and not fine.is_empty():

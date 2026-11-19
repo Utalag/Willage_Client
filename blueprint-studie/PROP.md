@@ -293,6 +293,82 @@ Výchozí: 800 kapek na blok, `ero_cap` 1,0, `ero_erode` 0,1, `ero_deposit_rate`
 - **Hypotéza:** parita bit po bitu (kopie se mění jen v cestách). Vložení bloku bp ≈ 0,25–0,4 s jako E49 detail
   (+ povrch a tráva prototypu ~0,4 s), voda ostrova 7 bloků (≈ 112 × 112 sloupců) plně < 1 s, kopání u vody desítky ms.
 
+## E76 voda po přenosu výřezu na ostrov (plán, zapsáno před pokusem 2026-11-20 00:36; TODO Přenos terénu „Voda se nepřenáší hotová“ + nález E74)
+- **Rozsah:** jen lokální studie klienta, žádná datová smlouva s backendem (`TerrainSource` atd. je pozdější blok).
+- **Co už je:** blok `bp` = blueprint (tvar, seed, minerály) + posun výšky, záznam ve světě studie (`bp_rec`: hm, hm_f, bs,
+  buňky) a navázání na sousedy při generování (klíny). Podzemí se staví z funkcí vrstev světa (`ug_funkce.from_world`),
+  šum hornin hor (`_mountain_rock`) bere souřadnice světa. Prameny `prameny.find` se hledají znovu pro CELÝ ostrov
+  (kvantil vrcholů, pořadí, rozestupy) → vložení bloku i nové postavení po výkopech mění prameny i jinde (nález E74).
+  Výkopy jsou v `Block.hm` proti `hm_gen` (překryv, `_replay_digs`). Události: E51 (`eroze/mech.gd`, odpočet v haldě),
+  plnění tůní (`hydro68.udalosti`). E74 (obsazení pramenů) a E75 (kras) v main nejsou (jen větve) → jen napojení.
+- **Výřez v paměti (`scripts/voda/prenos76.gd`):** {blueprint (tvar, seed, minerály), slot původu, svislý posun dz (buňky),
+  záznam bloku (hm_f, bs, hm, buňky), prameny výřezu v místních souřadnicích}. Geometrie a materiály se přenesou hotové,
+  stav vody ne. Otočení po 90° se nedělá (pole, šum i tělesa by se musela otáčet; není triviální).
+- **Vložení:** záznam se posune o dz (hm, hm_f, bs, buňky) a vloží na nový slot. Podzemí: sloupce výřezu se vyhodnotí
+  s posunem souřadnic (šum podle místa původu, výška − dz), aby materiály byly stejné jako v původním světě; pole
+  vrstev se na švu dál interpolují se sousedy (napojení).
+- **Prameny jako uložené zdroje (`p76_prameny`, výchozí vyp):** při prvním postavení se prameny najdou jako dnes a uloží
+  k blokům (místní souřadnice, z, q, druh). Další postavení (po výkopech, po načtení, po vložení výřezu) bere uložené;
+  výřez přinese své prameny z původu (z + dz). Hypotéza: nové postavení po výkopech = lokální přepočet (0 neshod).
+  Uložit je tedy potřeba: blueprint + seed + transformace (dz, slot), překryv výkopů (`hm` proti `hm_gen`) a prameny
+  (u E74 i obsazení pramenů).
+- **Přepočet po vložení:** plný (`build`) a lokální (nové podzemí + `hydro68.update` jen kolem sloupců výřezu a švu).
+- **Události z ustáleného stavu:** E51 (odpočty ve výřezu od plné hodnoty, jinde se dopočítají do teď a přeplánují jen
+  změněné sloupce), plnění tůní, příchod vody (čas toku od pramene po D8, Manning). Kras E75 jen jako napojení.
+- **Měření:** výřez vedle bloků ostrova a o jinou výšku (dz 0, +4, −4): čas plného přepočtu, lokální proti plnému
+  (neshody, otisk), bilance, změny proti původnímu světu (prameny, tůně, odtok přes okraj / vodopády), čas a počty
+  přeplánování; nález E74: výkopy → nové postavení / načtení bez a s `p76_prameny` (neshody, otisk).
+- Beze změny: `p71_cas` 144, `p72_prusak`, vzdálenost slučování.
+
+### E76 výsledky (2026-11-20 00:49, větev `e76-voda-po-prenosu`, prototyp `tools/prenos_e76.gd`, `scripts/voda/prenos76.gd`, shots `shots/e76/`)
+- **Nález E74 vyřešen uloženými prameny (`p76_prameny`).** Ostrov 4 bloky, 12 výkopů lokálně (otisk 63d7b89a91385a79),
+  pak nové postavení ze stejných bloků a „načtení“ (bloky znovu z typu + seedu + překryvu výkopů):
+  - bez `p76`: otisk c65671b2f1147f27, 371 neshod `eff`, 4 z 5 pramenů jinde (prameny se hledají znovu z vykopaného terénu);
+  - s `p76`: otisk 63d7b89a91385a79 = lokální, 0 neshod, prameny stejné, načtení také 0 neshod.
+  - Uložit stačí: typ, seed, slot, posun, překryv výkopů (sloupec → výška, jen změněné) a prameny bloku → 524 B pro
+    4 bloky a 12 výkopů. Postavení trvá ~1,8 s. Materiál ztrát z povrchu při vygenerování (`p76_mat_gen`) na tomto
+    testu nic nezměnil (prameny stačily), je tam kvůli shodě s lokálním přepočtem, který materiál po výkopu nemění.
+  - **Negativ:** první pokus měnil materiál ztrát v lokálním přepočtu po výkopu → lokální stav se lišil od `check_full`
+    (101 neshod `eff`). Zamítnuto, místo toho plné postavení bere povrch při vygenerování.
+- **Výřez z průzkumného světa** (kopec seed 707, v původu slot (0, 1) mezi horou, loukou, písčinou a loukou) vložený na
+  ostrov vedle hory (slot 2, 0) a pod louku (0, −1), posun dz 0, +4, −4 buňky (6 běhů, `p76` zap):
+
+| slot | dz | lokálně | z toho podzemí | plný | otisk lokálně = plný | neshod | chyba bilance | Σ okraj ostrova l/s |
+|---|---|---|---|---|---|---|---|---|
+| 2,0 | 0 | 1,7 s | 0,34 s | 2,5 s | ano | 0 | 0 | 9,80 → 12,71 |
+| 2,0 | +4 | 1,4 s | 0,31 s | 2,4 s | ano | 0 | 0 | 9,80 → 12,68 |
+| 2,0 | −4 | 1,6 s | 0,30 s | 2,1 s | ano | 0 | 0 | 9,80 → 12,75 |
+| 0,−1 | 0 | 2,4 s | 0,30 s | 2,7 s | ano | 0 | 0 | 9,80 → 12,80 |
+| 0,−1 | +4 | 2,3 s | 0,30 s | 2,2 s | ano | 0 | 0 | 9,80 → 12,80 |
+| 0,−1 | −4 | 1,6 s | 0,30 s | 2,0 s | ano | 0 | 0 | 9,80 → 12,80 |
+
+  - Materiály a geometrie: povrch 256/256 sloupců stejný, pásma podzemí 100 % stejná jako v původu (i dz ±4, šum hornin
+    v souřadnicích původu, porovnáno nad oříznutým dnem). Bez posunu souřadnic by se horniny hor na novém místě lišily.
+  - Voda výřezu: původ 2 prameny (3 l/s), 111 sloupců tůní, 5 koryta, 2 vodopády + 2 přes okraj (2,39 l/s). Na ostrově
+    2 prameny, 99 tůní, 6–12 koryta. Slot 2,0 dz 0: okraj 2,90 l/s. dz +4: 1,5 l/s teče do souseda (hory), přes okraj
+    1,40 l/s, 3 vodopády. dz −4: 1,5 l/s přitéká ze souseda, přes okraj 4,35 l/s a nový výstup podzemí 0,26 l/s.
+    Voda se v novém okolí opravdu počítá znovu (tůně, odtoky, vodopády jiné), zdroje zůstanou.
+  - Události z ustáleného stavu: plnění tůní 13 → 16 (první za 90 s), příchod vody 268 → 315–367 sloupců (nejdál
+    172–179 s), E51 eroze / nános 23 → 8–27 aktivních (první za 200 000 s). Přeplánování 61–104 ms (tůně ~50 ms, E51
+    ~13 ms, příchod < 1 ms). Přeplánováno jen 377–384 z 1280 sloupců (výřez, prstenec e51_s_len + 1, změněná voda
+    a celé dotčené tůně) → plán shodný s úplným přeplánováním (0 neshod z 8–27 položek). Odpočty E51 ve výřezu
+    začínají od plné hodnoty, jinde se zachovají.
+  - **Negativ:** první výběr sloupců k přeplánování (jen změněná voda) dal 13 neshod: nános v tůni bere přítok celé
+    tůně a sklon bere 4 sloupce po proudu → přidány celé tůně a prstenec.
+- **Bez `p76` (prameny znovu přes celý ostrov):** vložení výřezu přesune prameny i jinde (Σ okraj 9,80 → 9,73 l/s, výřez
+  jen 1 pramen), lokální vložení se liší od plného (155–158 neshod `eff`) a bilance lokálně chybí 1,5–3 l/s. Lokální
+  vložení bez uložených pramenů je chybné. **Negativ.**
+- **Co nefunguje / chybí:** lokální vložení je jen o 10–40 % rychlejší než plné (podzemí se staví znovu celé ~0,3 s,
+  okno `hydro68.update` je velké, u slotu 0,−1 skoro jako plný). Otočení po 90° se nedělá. Kras E75 a obsazení
+  pramenů E74 nejsou v main → jen napojení (prameny se ukládají stejně, obsazení by se uložilo vedle). Odpočty E51
+  přenášet nejde (stav vody se nepřenáší); čas měření je 0, posun času se neověřoval. Výřez je jen v paměti
+  (žádná smlouva s backendem); po načtení se výřez neumí vygenerovat znovu (potřeboval by sousedy z původu), drží
+  se záznam bloku.
+- **Výchozí hra beze změny:** `voda_e66` otisky d7aedf3a6d9d10e8 / 63d7b89a91385a79, 0 neshod (i s `p76_prameny`);
+  test smyčky `tools/e68.gd` stejné otisky jako main.
+- **Rozhodnutí:** `p76_prameny` zůstává vypnutý; měřeně správný a první postavení se nemění, ale mění chování po
+  vložení bloku (prameny jinde zůstanou) → rozhodne Jan.
+
 ## E73 nálezy E68: pramen ve vlastní tůni, přítok tůně jako součet, zrychlení smyčky, E67 „vše prosákne“ (plán, zapsáno před pokusem 2026-11-19 23:15; TODO Voda, Jan: nejdřív dodělat vodu)
 - **1. Pramen v prohlubni, kterou sám zavodní (`p73_vyver`):** cyklus ostrova s periodou 2 (E68) vzniká tím, že
   zavodněná prohlubeň se v dalším kole stane vstupem téhož tělesa a její buňky se vyloučí z výstupů (`excl`). Pravidlo:
