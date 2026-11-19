@@ -43,9 +43,14 @@ static func _pond_dict_soft(st: Dictionary, comp: PackedInt32Array, old: Diction
 		q = maxf(q, a); lo = minf(lo, hm[i]); hi = maxf(hi, fill[i])
 		if a > amax: amax = a; outlet = i
 	var dr: float = old.drain_lps
+	var vy := []
+	if bool(st.L.get("q73", false)):   # E73 p73_pritok: přítok = součet výtokových buněk (jako tok._pond_dict)
+		var r73 := T._vyt73(st, comp); q = r73[0]; outlet = r73[1]; vy = r73[2]
 	var um := float(st.L.get("u_m", 0.5))
-	return {"cells": comp, "q_lps": q, "drain_lps": dr, "hloubka_m": (hi - lo) * um, "objem_m3": 0.0, "udalosti": [], "suchá": q <= 0.0,
+	var d := {"cells": comp, "q_lps": q, "drain_lps": dr, "hloubka_m": (hi - lo) * um, "objem_m3": 0.0, "udalosti": [], "suchá": q <= 0.0,
 		"nenaplni_se": q > 0.0 and dr >= q, "podzemi_lps": minf(dr, q), "preliv_lps": maxf(q - dr, 0.0), "outlet": outlet, "dno": lo}
+	if not vy.is_empty(): d.vyt = vy
+	return d
 
 static var FAST_FLOOD := true   # E60: flood okna s haldou v packed polích (pořadí (fill, index) stejné jako reky.gd → stejný výsledek)
 
@@ -422,6 +427,7 @@ static func _apply_drains(st: Dictionary, dirty = null) -> PackedInt32Array:
 	var oldv := {}
 	for i in prev:
 		oldv[i] = [st.extra[i], st.src2[i]]; st.extra[i] = 0.0; st.src2[i] = 0.0
+	var prev_under: Array = st.get("under", [])   # E73 p73_vyver: výstupy minulého kola
 	st.under = []; st.ug_bodies = []; st.lost_deep = 0.0
 	var wr := PackedInt32Array()   # zapsané indexy
 	if float(st.L.get("pit_q", 0.0)) > 0.0:
@@ -432,7 +438,7 @@ static func _apply_drains(st: Dictionary, dirty = null) -> PackedInt32Array:
 		PR.pc = float(PR.get("pc", 0.0)) + (Time.get_ticks_usec() - t_a) / 1000.0; PR.np = wetp.size()
 		if st.get("ug") == null:   # E47c: podzemím k nejbližšímu okraji
 			for x in wetp:
-				st.extra[x.outlet] = x.drain_lps; wr.append(x.outlet)
+				T._set_drain(st, x, wr)
 				var o: int = x.outlet; var best := -1; var bd := 1e9
 				if not st.has("_bl"):   # okrajové sloupce vzestupně (stejné pořadí jako průchod celou mřížkou)
 					var bl := PackedInt32Array()
@@ -449,6 +455,7 @@ static func _apply_drains(st: Dictionary, dirty = null) -> PackedInt32Array:
 				st.under.append({"from": o, "exit": best, "q": x.podzemi_lps, "z": x.dno - 4.0, "typ": "okraj"})
 		else:   # E47d: po propustné vrstvě (podzemi.gd)
 			var ents := []   # [v, pond]
+			var fed: Dictionary = T._fed_map(st, prev_under, wetp) if bool(st.L.get("v73", false)) else {}
 			for x in wetp:
 				var cols := Array(x.cells); cols.sort_custom(func(a, b): return st.hm[a] < st.hm[b])
 				var v := -1
@@ -456,7 +463,7 @@ static func _apply_drains(st: Dictionary, dirty = null) -> PackedInt32Array:
 					v = _ugi(st).entry(st.ug, c)
 					if v >= 0: break
 				if v < 0:
-					st.extra[x.outlet] = x.drain_lps; wr.append(x.outlet); st.lost_deep += x.podzemi_lps   # pod tůní není propustné těleso → do hloubky (nemodeluje se)
+					T._set_drain(st, x, wr); st.lost_deep += x.podzemi_lps   # pod tůní není propustné těleso → do hloubky (nemodeluje se)
 				else: ents.append([v, x])
 			var done := {}
 			for k in ents.size():
@@ -471,23 +478,24 @@ static func _apply_drains(st: Dictionary, dirty = null) -> PackedInt32Array:
 				var vs := PackedInt32Array(); var q := 0.0; var excl := {}
 				for j in grp:
 					vs.append(ents[j][0]); q += ents[j][1].podzemi_lps
+					if T._fed73(st, ents[j][1], r0, fed): continue   # E73 p73_vyver: tůň zavodněná pramenem tohoto tělesa – pramen v ní smí zůstat
 					for c in ents[j][1].cells: excl[c] = true
 				var sk := "s%s|%.9f|%d" % [str(vs), q, excl.hash()]
 				if not st.ug_cache.has(sk): st.ug_cache[sk] = _ugi(st).solve(st.ug, vs, q, excl)
 				var r: Dictionary = st.ug_cache[sk].duplicate()
 				for j in grp:
 					var x: Dictionary = ents[j][1]
-					if not r.closed: st.extra[x.outlet] = x.drain_lps; wr.append(x.outlet)   # uzavřené plné těleso nic nepřijímá → vše přeteče po povrchu
+					if not r.closed: T._set_drain(st, x, wr)   # uzavřené plné těleso nic nepřijímá → vše přeteče po povrchu
 				if not r.closed and r.out_q > 0.0 and r.has("outs67"):   # E67 pretok: víc výstupů (prameny / okraj) s vlastním průtokem
 					for o in r.outs67:
 						var col67: int = o[2]
 						if float(o[3]) <= 0.0: continue
 						if o[1] == "povrch": st.src2[col67] += float(o[3]); wr.append(col67)
-						st.under.append({"from": ents[grp[0]][1].outlet, "exit": col67, "q": float(o[3]), "z": float(o[0]), "typ": o[1]})
+						st.under.append({"v0": ents[grp[0]][0], "from": ents[grp[0]][1].outlet, "exit": col67, "q": float(o[3]), "z": float(o[0]), "typ": o[1]})
 				elif not r.closed and r.out_q > 0.0:
 					var col: int = r.out[4]
 					if r.out[3] == "povrch": st.src2[col] += r.out_q; wr.append(col)
-					st.under.append({"from": ents[grp[0]][1].outlet, "exit": col, "q": r.out_q, "z": float(r.out[0]), "typ": r.out[3]})
+					st.under.append({"v0": ents[grp[0]][0], "from": ents[grp[0]][1].outlet, "exit": col, "q": r.out_q, "z": float(r.out[0]), "typ": r.out[3]})
 				r.erase("members"); r.entries = vs; r.cache_key = sk
 				st.ug_bodies.append(r)
 	var chg := PackedInt32Array()
