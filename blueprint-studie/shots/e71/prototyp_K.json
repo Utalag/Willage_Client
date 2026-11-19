@@ -1,0 +1,194 @@
+{
+ "bloky_ms": [
+  201.159,
+  228.885,
+  230.796,
+  196.79
+ ],
+ "neshod_celkem": 0,
+ "podzemi_vystupy": [
+  [
+   "okraj",
+   18.09,
+   0.0808
+  ],
+  [
+   "okraj",
+   12.53,
+   0.0787
+  ],
+  [
+   "okraj",
+   12.54,
+   0.002
+  ],
+  [
+   "okraj",
+   12.59,
+   0.0
+  ]
+ ],
+ "souhrn": {
+  "koryto_sloupcu": 26,
+  "okraj_lps": 9.65191,
+  "podzemni_telesa": 1,
+  "prameny": 5,
+  "tun_sloupcu": 160,
+  "vodopady": 8,
+  "vodopady_okraj": 5,
+  "volani_podzemi": 9,
+  "vyvery": 0
+ },
+ "souhrn_po": {
+  "koryto_sloupcu": 26,
+  "okraj_lps": 9.65191,
+  "podzemni_telesa": 1,
+  "prameny": 5,
+  "tun_sloupcu": 160,
+  "vodopady": 8,
+  "vodopady_okraj": 5,
+  "volani_podzemi": 9,
+  "vyvery": 0
+ },
+ "ug_stats": {
+  "builds": 0,
+  "deltas": 0,
+  "exact": 36,
+  "fallback": 0,
+  "floods": 0,
+  "gone": 0,
+  "reach": 0,
+  "rebuilds": 0,
+  "results": 0,
+  "skipped": 39,
+  "splits": 0
+ },
+ "voda_ms": {
+  "celkem": 681.74,
+  "podzemí: pásma": 233.792,
+  "povrch + podzemí: plný výpočet": 436.404,
+  "prameny": 8.112
+ },
+ "vykopy": [
+  {
+   "gi": 7751,
+   "ms": 24.974,
+   "okno": 169,
+   "r_step_max_ms": 0.0,
+   "r_steps": 0,
+   "sucho": false,
+   "surf_ms": 24.432,
+   "ug_ms": 0.145
+  },
+  {
+   "gi": 6450,
+   "ms": 0.558,
+   "okno": 0,
+   "r_step_max_ms": 0.0,
+   "r_steps": 0,
+   "sucho": true,
+   "surf_ms": 0.027,
+   "ug_ms": 0.13
+  },
+  {
+   "gi": 7611,
+   "ms": 61.09,
+   "okno": 169,
+   "r_step_max_ms": 0.0,
+   "r_steps": 0,
+   "sucho": false,
+   "surf_ms": 60.602,
+   "ug_ms": 0.099
+  },
+  {
+   "gi": 8910,
+   "ms": 82.129,
+   "okno": 0,
+   "r_step_max_ms": 0.0,
+   "r_steps": 0,
+   "sucho": true,
+   "surf_ms": 0.044,
+   "ug_ms": 81.651
+  },
+  {
+   "gi": 8385,
+   "ms": 83.353,
+   "okno": 0,
+   "r_step_max_ms": 0.0,
+   "r_steps": 0,
+   "sucho": true,
+   "surf_ms": 0.043,
+   "ug_ms": 82.841
+  },
+  {
+   "gi": 7612,
+   "ms": 61.328,
+   "okno": 169,
+   "r_step_max_ms": 0.0,
+   "r_steps": 0,
+   "sucho": false,
+   "surf_ms": 1.054,
+   "ug_ms": 59.841
+  },
+  {
+   "gi": 8002,
+   "ms": 82.432,
+   "okno": 0,
+   "r_step_max_ms": 0.0,
+   "r_steps": 0,
+   "sucho": true,
+   "surf_ms": 0.036,
+   "ug_ms": 82.005
+  },
+  {
+   "gi": 7752,
+   "ms": 84.259,
+   "okno": 169,
+   "r_step_max_ms": 0.0,
+   "r_steps": 0,
+   "sucho": false,
+   "surf_ms": 0.982,
+   "ug_ms": 82.877
+  },
+  {
+   "gi": 8387,
+   "ms": 82.062,
+   "okno": 0,
+   "r_step_max_ms": 0.0,
+   "r_steps": 0,
+   "sucho": true,
+   "surf_ms": 0.043,
+   "ug_ms": 81.596
+  },
+  {
+   "gi": 9407,
+   "ms": 50.285,
+   "okno": 169,
+   "r_step_max_ms": 0.0,
+   "r_steps": 0,
+   "sucho": false,
+   "surf_ms": 49.728,
+   "ug_ms": 0.145
+  },
+  {
+   "gi": 7484,
+   "ms": 99.832,
+   "okno": 169,
+   "r_step_max_ms": 0.0,
+   "r_steps": 0,
+   "sucho": false,
+   "surf_ms": 1.15,
+   "ug_ms": 98.289
+  },
+  {
+   "gi": 6337,
+   "ms": 39.298,
+   "okno": 1892,
+   "r_step_max_ms": 0.0,
+   "r_steps": 0,
+   "sucho": false,
+   "surf_ms": 38.207,
+   "ug_ms": 0.636
+  }
+ ]
+}
