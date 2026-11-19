@@ -216,6 +216,12 @@ Skupiny: 1 Prototyp a buildy · 2 Terén a tvar · 3 Rozlišení bloku · 4 Ská
 - **Komplikace:** koryta jsou krátké úseky (malý svět, malá povodí). Krasová vyvěračka 0. Hráz na svahu tůň nevytvořila (potok ji obtekl). Podzemní tok vede zatím zjednodušeně k nejbližšímu okraji.
 - **Další krok:** Jan rozhodne, jak daleko vést podzemní tok (sledovat propustnou vrstvu?) a jestli má mít krasová vyvěračka vlastní pravidlo. Starší otevřené otázky (eroze po blocích vs hrubý svět, jádro hory přes šev, minerály z hrubého světa) zůstávají.
 
+### 🔄 Blueprint v3 / E75: kras – rozpouštění v podzemí po tělesech (2026-11-20 00:40 · `blueprint-studie/scripts/kras75/kras75.gd`, prototyp `scripts/voda/podzemi/kras75.gd`, `ostrov_voda.gd`, `sdilene/materialy_voda.json`, příznak `p75_kras`, větev `e75-kras`)
+- **Směr:** TODO Model světa (Jan 2026-11-19 20:53): rozpouštění z průtoku tělesem jako hodnota u tělesa, dutina po prahu, buňky až při prokopání. Rozpustnost ve sdílené tabulce (vápenec 0,2 kg/m³, dolomit 0,15, sádrovec 2,5, sůl 360).
+- **Zlepšení:** události jako E51 (odpočet do prahu jedné buňky), dutina u hladiny, zpětná vazba do vody (pórovitost, propustnost) s lokálním přepočtem E68. Test: vápenec první buňka za 331 herních dní (55 h hraní), sádrovec 22 dní (3,8 h), sůl 0,15 dne (1,5 min); 0 neshod, stejný otisk v obou pořadích výkopů. Výchozí hra beze změny.
+- **Komplikace:** na ostrově voda k rozpustné hornině nedojde (hladina v půdě a písku) → 0 rozpouštění. S krycí vrstvou v tělese dá lokální přepočet jiné bity (≤ 9e-17). Propojení těles dutinou chybí.
+- **Další krok:** Jan rozhodne o zrychlení (`p75_zrychleni`) a jestli má ostrov mít vápenec u hladiny (kras ve generátoru).
+
 ### 🔄 Blueprint v3 / E73: opravy nálezů E68 (2026-11-19 23:45 · `blueprint-studie/scripts/voda/tok.gd`, `alg60/tok60.gd`, `hydro68/hydro68.gd`, `podzemi52/ug67.gd`, příznaky `p73_vyver`, `p73_pritok`, `p73_zrychleni`, `p73_prusak_tok`, větev `e73-nalezy-e68`)
 - **Směr:** TODO Voda: pramen ve vlastní tůni, přítok tůně jako součet, zrychlení pomalé smyčky, E67 „vše prosákne“ ≠ uzavřené.
 - **Zlepšení:** ostrov bez cyklu, bilance přesně 0 (dřív −0,02 l/s), 3 kola místo 4, výkop ⌀ 1,1 → 0,76 s, 0 neshod, stejný otisk v obou pořadích. Test smyčky 68 → 17 kol, pretok = auto. Opravena chyba plného výpočtu (chyběly prameny E67). Výchozí zapnuto.
