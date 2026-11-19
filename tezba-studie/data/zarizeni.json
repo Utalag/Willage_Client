@@ -1,0 +1,1420 @@
+{
+  "_popis": "T03 základní stroje, stavby a zařízení na zpracování (operace stromu T02).",
+  "version": 1,
+  "status": "navrh",
+  "datum": "2026-11-19",
+  "studie": "tezba-studie",
+  "zaznam": "T03",
+  "zdroje": [
+    7,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    17,
+    18,
+    19,
+    20,
+    21,
+    22,
+    24,
+    25,
+    26,
+    27,
+    28,
+    36,
+    37,
+    38,
+    39,
+    40,
+    41,
+    42,
+    43,
+    44,
+    45,
+    46,
+    47,
+    48,
+    49,
+    50,
+    51,
+    52,
+    53
+  ],
+  "veky": {
+    "primitivni": {
+      "nazev": "Primitivní",
+      "popis": "Pravěk až starověk: ruka, oheň, jednoduchá jáma nebo pec z hlíny a kamene."
+    },
+    "stredovek": {
+      "nazev": "Středověk",
+      "popis": "Voda, měchy, vodní kolo, hamr, sklářská pec, alembik, kovárna."
+    },
+    "rane_prumyslove": {
+      "nazev": "Raně průmyslové",
+      "popis": "Koks, mechanický drtič, cementářská pec, průmyslové loužení. Ne vysoká pec."
+    }
+  },
+  "typy": {
+    "nastroj": "nástroj",
+    "stroj": "stroj",
+    "stavba": "stavba",
+    "zarizeni": "zařízení"
+  },
+  "energie": {
+    "ruka": "ruka",
+    "voda": "voda",
+    "zvire": "zvíře",
+    "ohen": "oheň",
+    "drevene_uhli": "dřevěné uhlí"
+  },
+  "zarizeni": [
+    {
+      "id": "nastroj_tezba",
+      "nazev": "Těžební nářadí",
+      "typ": "nastroj",
+      "operace": [
+        "tezba"
+      ],
+      "procesy": [],
+      "vstupy": [
+        "typ:hornina"
+      ],
+      "vystupy": [
+        "surovina:blok_horniny",
+        "surovina:sterk",
+        "surovina:pisek",
+        "surovina:jil",
+        "surovina:hlina",
+        "surovina:uhli",
+        "surovina:sul",
+        "surovina:jalovina"
+      ],
+      "energie": [
+        "ruka"
+      ],
+      "vek": "primitivni",
+      "vek_do": "rane_prumyslove",
+      "dovednost": null,
+      "stavi_se_z": [
+        "vnejsi:drevo",
+        "surovina:blok_horniny",
+        "vyrobek:med",
+        "vyrobek:bronz",
+        "vyrobek:zelezo",
+        "vyrobek:ocel"
+      ],
+      "ladici_parametry": [
+        "cas",
+        "volba_nastroje"
+      ],
+      "popis": "Rýč, špičák, kladivo a později kovový krumpáč, kterými se buňka horniny uvolní. Výchozí výnosy (operace tezba) vznikají tady, ne v peci: základ je vždy známý (kámen, štěrk, písek, jíl…), ruda a drahokamy potřebují Mineralogii k určení, ale z buňky padnou. Třída nástroje z T01 (ruka → kámen → bronz → železo → ocel) určuje, co vůbec jde kopat a jak dlouho. Energie je ruční práce; trhaviny v T01 jsou volitelná zkratka, ne nutná brána.",
+      "zdroje": [
+        10,
+        11,
+        12
+      ]
+    },
+    {
+      "id": "stul_mineralogie",
+      "nazev": "Zkušební stůl",
+      "typ": "zarizeni",
+      "operace": [
+        "slozeni",
+        "odpovida"
+      ],
+      "procesy": [
+        "med_na_prvek",
+        "zelezo_na_prvek",
+        "cin_na_prvek",
+        "koks_uhlik",
+        "kremen_kremik",
+        "vapno_vápnik"
+      ],
+      "vstupy": [
+        "typ:hornina",
+        "typ:mineral",
+        "typ:vyrobek",
+        "typ:surovina"
+      ],
+      "vystupy": [
+        "typ:mineral",
+        "typ:surovina",
+        "typ:prvek"
+      ],
+      "energie": [
+        "ruka"
+      ],
+      "vek": "primitivni",
+      "vek_do": "rane_prumyslove",
+      "dovednost": "mineralogie",
+      "stavi_se_z": [
+        "vnejsi:drevo",
+        "surovina:blok_horniny",
+        "vyrobek:sklo",
+        "vyrobek:keramika",
+        "vyrobek:med"
+      ],
+      "ladici_parametry": [
+        "cas",
+        "typ_zkousky"
+      ],
+      "popis": "Lupa, vryp, střep, eventualmente slabá kyselina a srovnávací vzorky. Tady se čte typické minerální složení horniny (operace slozeni) a přiřazuje se, který minerál po uvolnění odpovídá které surovině nebo který kov je který prvek (odpovida). Nic se tu netaví; je to poznání, ne pec. Bez tohoto kroku hráč vidí jen základní výnosy z T01.",
+      "zdroje": [
+        7,
+        36
+      ]
+    },
+    {
+      "id": "stoupa",
+      "nazev": "Drtič / stoupa",
+      "typ": "stroj",
+      "operace": [
+        "drtit"
+      ],
+      "procesy": [
+        "drtit_blok",
+        "drtit_blok_kremen",
+        "struska_sterk"
+      ],
+      "vstupy": [
+        "surovina:blok_horniny",
+        "vyrobek:struska"
+      ],
+      "vystupy": [
+        "surovina:sterk",
+        "surovina:prach",
+        "surovina:kremenny_pisek"
+      ],
+      "energie": [
+        "ruka",
+        "voda",
+        "zvire"
+      ],
+      "vek": "primitivni",
+      "vek_do": "rane_prumyslove",
+      "dovednost": "kamenictvi",
+      "stavi_se_z": [
+        "surovina:blok_horniny",
+        "vnejsi:drevo",
+        "vyrobek:zelezo"
+      ],
+      "ladici_parametry": [
+        "cas",
+        "velikost_zrna",
+        "pomer_vsazky"
+      ],
+      "popis": "Těžké pěchy, později vodní stoupa: kámen nebo železné baňky padají na kvádr nebo strusku a drtí je na štěrk, prach a z křemenných hornin i sklářský písek. Agricola popisuje stoupy u rudních úpraven už v 16. století; ruční palice je starší. Jemnější mletí nechává mlýn. Poměr frakcí a doba drcení se ladí; příliš jemný prach je na stavbu horší, na pigment naopak potřeba.",
+      "zdroje": [
+        39,
+        52
+      ]
+    },
+    {
+      "id": "mlyn",
+      "nazev": "Mlýn",
+      "typ": "stroj",
+      "operace": [
+        "drtit"
+      ],
+      "procesy": [
+        "drtit_kremen_min",
+        "pigment_okr",
+        "pigment_malachit"
+      ],
+      "vstupy": [
+        "mineral:kremen",
+        "mineral:hematit",
+        "mineral:malachit"
+      ],
+      "vystupy": [
+        "surovina:kremenny_pisek",
+        "vyrobek:pigment_okr",
+        "vyrobek:pigment_malachit"
+      ],
+      "energie": [
+        "ruka",
+        "voda",
+        "zvire"
+      ],
+      "vek": "stredovek",
+      "vek_do": "rane_prumyslove",
+      "dovednost": "kamenictvi",
+      "stavi_se_z": [
+        "surovina:blok_horniny",
+        "vnejsi:drevo",
+        "vyrobek:zelezo",
+        "vyrobek:cihla",
+        "vyrobek:malta"
+      ],
+      "ladici_parametry": [
+        "cas",
+        "jemnost",
+        "pomer_vsazky"
+      ],
+      "popis": "Mlýnské kameny, běhoun a ležák, poháněné vodou, zvířetem nebo rukou. Mele křemen na sklářský písek a železité nebo měděné minerály na pigment (okru, malachit). Stejný mlýn později mele i slínek na cement. Jemnost mletí rozhoduje o tavení skla i o krytí barvy; přemletí je ztráta času a prachu. Stoupa drtí hrubě, mlýn mele.",
+      "zdroje": [
+        24,
+        36,
+        40,
+        53
+      ]
+    },
+    {
+      "id": "brusna_dilna",
+      "nazev": "Brusná dílna",
+      "typ": "stavba",
+      "operace": [
+        "brousit"
+      ],
+      "procesy": [
+        "brousit_drahokamy",
+        "brousit_diamant",
+        "brousit_granat"
+      ],
+      "vstupy": [
+        "surovina:drahokamy",
+        "surovina:diamanty",
+        "surovina:granaty"
+      ],
+      "vystupy": [
+        "vyrobek:brouseny_kamen",
+        "vyrobek:brouseny_diamant",
+        "vyrobek:brouseny_granat"
+      ],
+      "energie": [
+        "ruka",
+        "voda"
+      ],
+      "vek": "stredovek",
+      "vek_do": "rane_prumyslove",
+      "dovednost": "kamenictvi",
+      "stavi_se_z": [
+        "vnejsi:drevo",
+        "surovina:blok_horniny",
+        "vyrobek:zelezo",
+        "vyrobek:brouseny_granat"
+      ],
+      "ladici_parametry": [
+        "cas",
+        "zrnitost_brusu",
+        "tlak"
+      ],
+      "popis": "Kotouče, pískovcové a později kovové disky se zrnem (sám granát slouží jako brusivo — smyčka katalogu). Brousí a leští drahokamy, diamant a granát; část hmoty padne jako odpad. Ruční práce, u větších kamenů vodní kolo. Čas, tlak a posloupnost zrnitosti ladí lesk a riziko praskliny.",
+      "zdroje": [
+        51
+      ]
+    },
+    {
+      "id": "vapenka",
+      "nazev": "Vápenka",
+      "typ": "stavba",
+      "operace": [
+        "palit"
+      ],
+      "procesy": [
+        "palit_vapno",
+        "palit_kalcit",
+        "palit_dolomit"
+      ],
+      "vstupy": [
+        "surovina:vapno",
+        "mineral:kalcit",
+        "mineral:dolomit_min"
+      ],
+      "vystupy": [
+        "vyrobek:palene_vapno"
+      ],
+      "energie": [
+        "ohen",
+        "drevene_uhli"
+      ],
+      "vek": "primitivni",
+      "vek_do": "rane_prumyslove",
+      "dovednost": "chemie",
+      "stavi_se_z": [
+        "surovina:blok_horniny",
+        "vyrobek:cihla",
+        "vyrobek:malta",
+        "surovina:jil"
+      ],
+      "ladici_parametry": [
+        "teplota",
+        "cas",
+        "palivo",
+        "velikost_kusu"
+      ],
+      "popis": "Šachtová nebo polní pec, ve které se vápenec nebo dolomit pálí na pálené vápno (CaCO₃ → CaO + CO₂). Historicky stačí žár zhruba 800–950 °C, tedy méně než na sklo. Palivo je dřevo, dřevěné uhlí nebo později uhlí — síra z uhlí ale vápno špiní. Nedopal nechá uhličitan, přepal zhorší hašení. Pec sama se staví z kamene a cihel spojených maltou, kterou tahle pec umožňuje.",
+      "zdroje": [
+        13,
+        14,
+        41
+      ]
+    },
+    {
+      "id": "pec_sadra",
+      "nazev": "Sádrová pec",
+      "typ": "zarizeni",
+      "operace": [
+        "palit"
+      ],
+      "procesy": [
+        "palit_sadru"
+      ],
+      "vstupy": [
+        "surovina:sadrovec"
+      ],
+      "vystupy": [
+        "vyrobek:sadra"
+      ],
+      "energie": [
+        "ohen"
+      ],
+      "vek": "stredovek",
+      "vek_do": "rane_prumyslove",
+      "dovednost": "chemie",
+      "stavi_se_z": [
+        "vyrobek:cihla",
+        "surovina:blok_horniny",
+        "vyrobek:zelezo",
+        "vyrobek:malta"
+      ],
+      "ladici_parametry": [
+        "teplota",
+        "cas"
+      ],
+      "popis": "Nízkoteplotní pec nebo kotel, ve kterém sádrovec ztratí část krystalové vody a stane se sádrou. Teplota je podstatně nižší než u vápna (řádově 150–180 °C). Přepal („mrtvá sádra“) už s vodou dobře netuhne, nedopal nechá surový kámen. Palivo stačí dřevo, není potřeba dřevěné uhlí.",
+      "zdroje": [
+        15
+      ]
+    },
+    {
+      "id": "hasici_jama",
+      "nazev": "Hasicí jáma",
+      "typ": "zarizeni",
+      "operace": [
+        "hasit"
+      ],
+      "procesy": [
+        "hasit_vapno"
+      ],
+      "vstupy": [
+        "vyrobek:palene_vapno"
+      ],
+      "vystupy": [
+        "vyrobek:hasene_vapno"
+      ],
+      "energie": [
+        "ruka"
+      ],
+      "vek": "primitivni",
+      "vek_do": "rane_prumyslove",
+      "dovednost": "zednictvi",
+      "stavi_se_z": [
+        "surovina:blok_horniny",
+        "vyrobek:cihla",
+        "vnejsi:drevo",
+        "surovina:pisek"
+      ],
+      "ladici_parametry": [
+        "pomer_vody",
+        "cas",
+        "teplota"
+      ],
+      "popis": "Jáma nebo kád, kde se pálené vápno hasí vodou na hašené vápno (CaO + H₂O → Ca(OH)₂). Reakce je silně exotermní — malá jáma z kamene a cihel to musí vydržet. Málo vody spálí kaši, moc vody ji zředí. Čas zrání (i dny až týdny u vápenné kaše) ladí plasticitu malty. Energie je jen lidská práce a teplo reakce, ne přidaný oheň.",
+      "zdroje": [
+        13,
+        14
+      ]
+    },
+    {
+      "id": "dilna_zednicka",
+      "nazev": "Zednická dílna / mísírna",
+      "typ": "stavba",
+      "operace": [
+        "michat"
+      ],
+      "procesy": [
+        "michat_maltu"
+      ],
+      "vstupy": [
+        "vyrobek:hasene_vapno",
+        "surovina:pisek"
+      ],
+      "vystupy": [
+        "vyrobek:malta"
+      ],
+      "energie": [
+        "ruka"
+      ],
+      "vek": "primitivni",
+      "vek_do": "rane_prumyslove",
+      "dovednost": "zednictvi",
+      "stavi_se_z": [
+        "vnejsi:drevo",
+        "surovina:blok_horniny",
+        "vyrobek:cihla",
+        "vyrobek:zelezo"
+      ],
+      "ladici_parametry": [
+        "pomer_vapno_pisek",
+        "pomer_vody",
+        "cas"
+      ],
+      "popis": "Koryto, později míchačka, kde se hašené vápno spojuje s pískem na maltu. Klasický poměr je zhruba jeden díl vápna na dva až tři díly písku; přesné optimum je ve hře skryté (hypotéza receptů 13:39). Špinavý nebo příliš jemný písek maltu zhorší. Práce je ruční. Malta odsud jde na stavbu, kde tvrdne karbonatací.",
+      "zdroje": [
+        13,
+        14
+      ]
+    },
+    {
+      "id": "stavba_vapenna",
+      "nazev": "Vápenná zeď a omítka",
+      "typ": "stavba",
+      "operace": [
+        "karbonatace"
+      ],
+      "procesy": [
+        "karbonatace_malt"
+      ],
+      "vstupy": [
+        "vyrobek:malta"
+      ],
+      "vystupy": [
+        "mineral:kalcit",
+        "surovina:pisek"
+      ],
+      "energie": [],
+      "vek": "primitivni",
+      "vek_do": "rane_prumyslove",
+      "dovednost": "zednictvi",
+      "stavi_se_z": [
+        "vyrobek:malta",
+        "vyrobek:cihla",
+        "surovina:blok_horniny",
+        "vyrobek:palene_vapno"
+      ],
+      "ladici_parametry": [
+        "cas",
+        "vlhkost",
+        "tloustka"
+      ],
+      "popis": "Hotová zeď, klenba nebo omítka z vápenné malty. Není to pec: malta na vzduchu přijímá CO₂ a vrací se na kalcit (vápenný cyklus, jediný schválený cyklus ve stromu T02). Tvrdnutí trvá týdny až roky, vlhko pomáhá, příliš rychlé vyschnutí škodí. Písek v maltě zůstává, kalcit se teoreticky dá z trosek znovu pálit ve vápence — uzavřená smyčka.",
+      "zdroje": [
+        13,
+        14
+      ]
+    },
+    {
+      "id": "cihelna",
+      "nazev": "Cihelna",
+      "typ": "stavba",
+      "operace": [
+        "palit_cihly"
+      ],
+      "procesy": [
+        "palit_cihly"
+      ],
+      "vstupy": [
+        "surovina:jil",
+        "surovina:pisek"
+      ],
+      "vystupy": [
+        "vyrobek:cihla"
+      ],
+      "energie": [
+        "ohen"
+      ],
+      "vek": "primitivni",
+      "vek_do": "rane_prumyslove",
+      "dovednost": "zednictvi",
+      "stavi_se_z": [
+        "surovina:jil",
+        "surovina:hlina",
+        "surovina:blok_horniny",
+        "vyrobek:cihla",
+        "vyrobek:malta"
+      ],
+      "ladici_parametry": [
+        "teplota",
+        "cas",
+        "pomer_jil_pisek",
+        "cas_suseni"
+      ],
+      "popis": "Formování jílu s trochou písku, sušení a výpal v polní peci nebo později v kroužcové peci. Cihly samy pak staví další pece, vápenky i tuto cihelnu — další smyčka katalogu. Teplota a rovnoměrnost žáru rozhodují o pevnosti a barvě; nedopal je měkký, přepal slinuje a křiví. Palivo je dřevo, později uhlí. Sušení před výpalem je stejně důležité jako sám žár.",
+      "zdroje": [
+        27
+      ]
+    },
+    {
+      "id": "milir",
+      "nazev": "Milíř",
+      "typ": "zarizeni",
+      "operace": [
+        "palit"
+      ],
+      "procesy": [
+        "uhli_drevene"
+      ],
+      "vstupy": [
+        "vnejsi:drevo"
+      ],
+      "vystupy": [
+        "vnejsi:drevene_uhli",
+        "vyrobek:pigment_saze"
+      ],
+      "energie": [
+        "ohen"
+      ],
+      "vek": "primitivni",
+      "vek_do": "stredovek",
+      "dovednost": "uhlistvi",
+      "stavi_se_z": [
+        "vnejsi:drevo",
+        "surovina:hlina",
+        "surovina:prach",
+        "surovina:jil"
+      ],
+      "ladici_parametry": [
+        "cas",
+        "tesnost",
+        "druh_dreva"
+      ],
+      "popis": "Hromada dřeva zasypaná hlínou a prachem, s řízeným přístupem vzduchu. Dřevo se suchou destilací mění na dřevěné uhlí, vedlejším produktem jsou saze. Uhlí je palivo i redukční činidlo dýmačky a kelímku — bez milíře stojí hutnictví. Příliš vzduchu spálí vsázku na popel, málo vzduchu nechá syrové dřevo. Pozdější retorta je čistší, ale milíř je základní jednotka.",
+      "zdroje": [
+        21
+      ]
+    },
+    {
+      "id": "pec_cement",
+      "nazev": "Cementářská pec",
+      "typ": "stavba",
+      "operace": [
+        "palit"
+      ],
+      "procesy": [
+        "palit_cement"
+      ],
+      "vstupy": [
+        "surovina:vapno",
+        "surovina:jil"
+      ],
+      "vystupy": [
+        "vyrobek:cement"
+      ],
+      "energie": [
+        "ohen",
+        "drevene_uhli"
+      ],
+      "vek": "rane_prumyslove",
+      "vek_do": "rane_prumyslove",
+      "dovednost": "chemie",
+      "stavi_se_z": [
+        "vyrobek:cihla",
+        "surovina:blok_horniny",
+        "vyrobek:zelezo",
+        "vyrobek:malta",
+        "vyrobek:ocel"
+      ],
+      "ladici_parametry": [
+        "teplota",
+        "cas",
+        "pomer_vapno_jil",
+        "jemnost_mleti"
+      ],
+      "popis": "Výpal směsi vápence a jílu na slínek a následné mletí (mlýn). Portlandský cement je podstatně mladší než vápenná malta a chce vyšší žár než vápenka. Ve stromu je to pozdější výrobek; poměry vsázky a teplota jsou hrubé, ne moderní rotační pec se všemi přísadami. Palivo je uhlí nebo koks.",
+      "zdroje": [
+        22
+      ]
+    },
+    {
+      "id": "pec_hrncirska",
+      "nazev": "Hrnčířská pec",
+      "typ": "stavba",
+      "operace": [
+        "palit_keramiku",
+        "tavit"
+      ],
+      "procesy": [
+        "palit_keramiku",
+        "porcelan",
+        "glazura"
+      ],
+      "vstupy": [
+        "surovina:jil",
+        "surovina:kremenny_pisek",
+        "mineral:zivec_k",
+        "vyrobek:palene_vapno",
+        "surovina:ruda_med"
+      ],
+      "vystupy": [
+        "vyrobek:keramika",
+        "vyrobek:porcelan",
+        "vyrobek:glazura"
+      ],
+      "energie": [
+        "ohen",
+        "drevene_uhli"
+      ],
+      "vek": "primitivni",
+      "vek_do": "rane_prumyslove",
+      "dovednost": "hrncirstvi",
+      "stavi_se_z": [
+        "surovina:jil",
+        "surovina:hlina",
+        "vyrobek:cihla",
+        "surovina:blok_horniny",
+        "vyrobek:malta"
+      ],
+      "ladici_parametry": [
+        "teplota",
+        "cas",
+        "pomer_vsazky",
+        "atmosfera"
+      ],
+      "popis": "Komorová nebo jámová pec na výpal nádob, kachlů a později porcelánu (jíl / kaolin, křemen, živec). Ve stejné dílně se taví i glazura (křemen, tavidlo, barvicí oxid třeba z mědi). Teplota, atmosféra (oxidační / redukční) a poměry vsázky ladí barvu, slinutí a praskliny. Porcelán je pozdější výrobek; kaolin ve stromu ještě není oddělený od jílu.",
+      "zdroje": [
+        16,
+        27,
+        49
+      ]
+    },
+    {
+      "id": "pec_sklarska",
+      "nazev": "Sklářská pec",
+      "typ": "stavba",
+      "operace": [
+        "tavit_sklo"
+      ],
+      "procesy": [
+        "tavit_sklo"
+      ],
+      "vstupy": [
+        "surovina:kremenny_pisek",
+        "vnejsi:soda",
+        "vyrobek:palene_vapno"
+      ],
+      "vystupy": [
+        "vyrobek:sklo"
+      ],
+      "energie": [
+        "ohen",
+        "drevene_uhli"
+      ],
+      "vek": "stredovek",
+      "vek_do": "rane_prumyslove",
+      "dovednost": "sklarstvi",
+      "stavi_se_z": [
+        "vyrobek:cihla",
+        "surovina:blok_horniny",
+        "surovina:jil",
+        "vyrobek:malta",
+        "vyrobek:zelezo"
+      ],
+      "ladici_parametry": [
+        "teplota",
+        "cas",
+        "pomer_vsazky",
+        "cas_chlazeni"
+      ],
+      "popis": "Pánvová pec na sodnovápenaté sklo: křemenný písek, soda nebo potaž z popela a vápno jako stabilizátor. Čistý křemen taje až kolem 1700 °C, tavidlo teplotu sníží. K peci patří chladicí pec — rychlé chlazení sklo roztrhne. Poměry vsázky, čistota písku a křivka chlazení jsou hlavní ladění kvality (čirost, bubliny, praskliny).",
+      "zdroje": [
+        16,
+        17
+      ]
+    },
+    {
+      "id": "kelimek",
+      "nazev": "Kelímek a slévárna",
+      "typ": "zarizeni",
+      "operace": [
+        "tavit",
+        "slevat"
+      ],
+      "procesy": [
+        "tavit_med",
+        "tavit_cin",
+        "slevat_bronz",
+        "olovo_chybi_ruda"
+      ],
+      "vstupy": [
+        "surovina:ruda_med",
+        "surovina:ruda_vzacne",
+        "vnejsi:drevene_uhli",
+        "vyrobek:med",
+        "vyrobek:cin",
+        "mezera:galenit"
+      ],
+      "vystupy": [
+        "vyrobek:med",
+        "vyrobek:cin",
+        "vyrobek:bronz",
+        "vyrobek:olovo",
+        "vyrobek:struska",
+        "vyrobek:lithium_konc"
+      ],
+      "energie": [
+        "ohen",
+        "drevene_uhli"
+      ],
+      "vek": "stredovek",
+      "vek_do": "rane_prumyslove",
+      "dovednost": "hutnictvi",
+      "stavi_se_z": [
+        "vyrobek:keramika",
+        "surovina:jil",
+        "surovina:blok_horniny",
+        "vyrobek:cihla",
+        "vyrobek:zelezo"
+      ],
+      "ladici_parametry": [
+        "teplota",
+        "cas",
+        "pomer_paliva",
+        "pomer_slitiny"
+      ],
+      "popis": "Žáruvzdorný kelímek v malé peci nebo výhni: tavení mědi (zhruba 1100–1200 °C) a cínu s dřevěným uhlím jako palivem i redukcí, pak slévání bronzu (typicky okolo 5–10 % cínu). Sem patří i olovo, až bude ve hře galenit (teď mezera). Železo se tu netaví — na to je dýmačka. Ladí se teplota, čas, podíl uhlí a poměr slitiny; výtěžek kovu ve stromu je herní, ne stechiometrie.",
+      "zdroje": [
+        18,
+        19,
+        48
+      ]
+    },
+    {
+      "id": "dymacka",
+      "nazev": "Dmýchací pec / výheň (dýmačka)",
+      "typ": "stavba",
+      "operace": [
+        "tavit"
+      ],
+      "procesy": [
+        "tavit_zelezo",
+        "tavit_zelezo_koks",
+        "tavit_fe_ti"
+      ],
+      "vstupy": [
+        "surovina:ruda_zelezo",
+        "surovina:ruda_fe_ti",
+        "vnejsi:drevene_uhli",
+        "vyrobek:koks"
+      ],
+      "vystupy": [
+        "vyrobek:zelezo",
+        "vyrobek:struska",
+        "vyrobek:titan_konc"
+      ],
+      "energie": [
+        "ruka",
+        "voda",
+        "drevene_uhli",
+        "ohen"
+      ],
+      "vek": "primitivni",
+      "vek_do": "rane_prumyslove",
+      "dovednost": "hutnictvi",
+      "stavi_se_z": [
+        "surovina:jil",
+        "surovina:hlina",
+        "surovina:blok_horniny",
+        "vyrobek:cihla",
+        "vyrobek:zelezo"
+      ],
+      "ladici_parametry": [
+        "teplota",
+        "cas",
+        "pomer_ruda_palivo",
+        "intenzita_dmechu"
+      ],
+      "popis": "Nízká šachtová pec (dýmačka): železná ruda a dřevěné uhlí, vzduch měchy (ruka nebo vodní kolo). Nevzniká tekuté surové železo jako ve vysoké peci, ale lupa kovu a struska, kterou je potřeba dokovat na hamru. Pozdější cesta dává koks místo uhlí (raně průmyslové), pořád ale ne blast furnace. Titanomagnetit nechá část titanu v koncentrátu. Ladí se dmych, poměr vsázky a čas.",
+      "zdroje": [
+        20,
+        21,
+        36,
+        52
+      ]
+    },
+    {
+      "id": "hamr",
+      "nazev": "Hamr",
+      "typ": "stroj",
+      "operace": [],
+      "procesy": [],
+      "vstupy": [
+        "vyrobek:zelezo"
+      ],
+      "vystupy": [
+        "vyrobek:zelezo"
+      ],
+      "energie": [
+        "voda",
+        "ruka"
+      ],
+      "vek": "stredovek",
+      "vek_do": "rane_prumyslove",
+      "dovednost": "kovarstvi",
+      "stavi_se_z": [
+        "vnejsi:drevo",
+        "vyrobek:zelezo",
+        "surovina:blok_horniny",
+        "vyrobek:cihla",
+        "vyrobek:malta"
+      ],
+      "ladici_parametry": [
+        "cas",
+        "teplota",
+        "intenzita_uderu"
+      ],
+      "mimo_strom": "Kování lupy z dýmačky na použitelnou tyč; ve stromu T02 není samostatná operace, navazuje na tavit železa.",
+      "popis": "Těžké vodní kladivo (hamr) nebo ruční perlík, kterým se z lupy dýmačky vykove struska a spojí zrna železa do tyče nebo prutu. Bez tohoto kroku není „železo (kov)“ ze stromu ještě použitelný výrobek. Hamr stojí u toku, pohání ho vodní kolo; výheň vedle drží žár. Ve stromu T02 není samostatná operace kování — proto je hamr v seznamu, ale validační skript ho nepočítá jako pokrytí žádné hrany.",
+      "zdroje": [
+        20,
+        42,
+        52
+      ]
+    },
+    {
+      "id": "kovarna",
+      "nazev": "Kovárna",
+      "typ": "stavba",
+      "operace": [
+        "cementovat"
+      ],
+      "procesy": [
+        "cementovat_ocel",
+        "cementovat_ocel_drevo"
+      ],
+      "vstupy": [
+        "vyrobek:zelezo",
+        "vyrobek:koks",
+        "vnejsi:drevene_uhli"
+      ],
+      "vystupy": [
+        "vyrobek:ocel"
+      ],
+      "energie": [
+        "ohen",
+        "drevene_uhli",
+        "ruka"
+      ],
+      "vek": "stredovek",
+      "vek_do": "rane_prumyslove",
+      "dovednost": "kovarstvi",
+      "stavi_se_z": [
+        "surovina:blok_horniny",
+        "vyrobek:cihla",
+        "vyrobek:malta",
+        "vyrobek:zelezo",
+        "vnejsi:drevo"
+      ],
+      "ladici_parametry": [
+        "teplota",
+        "cas",
+        "zdroj_uhliku",
+        "kaleni"
+      ],
+      "popis": "Výheň, kovadliny a cementační skříň: železo se dlouho žíhá v uhlíkaté sypké vsázce (dřevěné uhlí nebo koks) a povrch se nauhličí na ocel (cementace). Navazuje kalení a popouštění. Čas se měří ve dnech, ne v minutách; teplota a zdroj uhlíku ladí hloubku cementace a riziko zkřehnutí. Bez dýmačky a hamru nemá kovárna co zpracovat.",
+      "zdroje": [
+        28,
+        50
+      ]
+    },
+    {
+      "id": "splav",
+      "nazev": "Ryžovací splav",
+      "typ": "zarizeni",
+      "operace": [
+        "ryzovat"
+      ],
+      "procesy": [
+        "ryzovat_zlato"
+      ],
+      "vstupy": [
+        "surovina:ruda_zlato"
+      ],
+      "vystupy": [
+        "prvek:Au"
+      ],
+      "energie": [
+        "voda",
+        "ruka"
+      ],
+      "vek": "primitivni",
+      "vek_do": "rane_prumyslove",
+      "dovednost": "hutnictvi",
+      "stavi_se_z": [
+        "vnejsi:drevo",
+        "surovina:blok_horniny",
+        "vyrobek:zelezo"
+      ],
+      "ladici_parametry": [
+        "prutok_vody",
+        "cas",
+        "sklon",
+        "velikost_zrna"
+      ],
+      "popis": "Dřevěný žlab s příčkami, případně jen pánvička: proud vody oddělí těžké ryzí zlato od písku. Energie je voda a ruka, žádný oheň. Podíl kovu ve stromu je herní abstrakce; ve skutečnosti se zlato počítá v g/t. Ladí se sklon, průtok a zrnitost vsázky — moc vody odnese i zlato, málo vody nevyplaví jalovinu. Navazující loužení je jiná, pozdější cesta.",
+      "zdroje": [
+        37,
+        44
+      ]
+    },
+    {
+      "id": "louzici_kade",
+      "nazev": "Loužicí kádě",
+      "typ": "zarizeni",
+      "operace": [
+        "louzit"
+      ],
+      "procesy": [
+        "louzit_med",
+        "louzit_zlato",
+        "louzit_lithium",
+        "titan_na_prvek"
+      ],
+      "vstupy": [
+        "surovina:ruda_med",
+        "surovina:ruda_zlato",
+        "vyrobek:lithium_konc",
+        "vyrobek:titan_konc"
+      ],
+      "vystupy": [
+        "vyrobek:med",
+        "prvek:Au",
+        "prvek:Li",
+        "prvek:Ta",
+        "prvek:Ti",
+        "prvek:Fe"
+      ],
+      "energie": [
+        "ruka",
+        "ohen"
+      ],
+      "vek": "stredovek",
+      "vek_do": "rane_prumyslove",
+      "dovednost": "chemie",
+      "stavi_se_z": [
+        "vnejsi:drevo",
+        "vyrobek:keramika",
+        "vyrobek:sklo",
+        "vyrobek:med",
+        "vyrobek:cihla"
+      ],
+      "ladici_parametry": [
+        "cas",
+        "teplota",
+        "koncentrace",
+        "pomer_louzidla"
+      ],
+      "popis": "Kádě a koryta, ve kterých se kov louží do roztoku a pak sráží: oxidická měď, zlato (pozdější cesta vedle ryžování), lithium a tantal z pegmatitového koncentrátu i titan z titanomagnetitu. Středověká alchymie to zkouší v malém; průmyslové loužení je raně průmyslové. Luhidlo, čas, teplota a koncentrace jsou laditelné; špatný poměr nechá kov v jalovině nebo sežere kád.",
+      "zdroje": [
+        18,
+        37,
+        38,
+        45
+      ]
+    },
+    {
+      "id": "alembik",
+      "nazev": "Destilační přístroj / alembik",
+      "typ": "zarizeni",
+      "operace": [
+        "destilovat"
+      ],
+      "procesy": [],
+      "vstupy": [
+        "mezera:rumelka",
+        "surovina:sul"
+      ],
+      "vystupy": [
+        "vyrobek:rtut",
+        "prvek:Hg",
+        "vyrobek:sul_cista"
+      ],
+      "energie": [
+        "ohen"
+      ],
+      "vek": "stredovek",
+      "vek_do": "rane_prumyslove",
+      "dovednost": "chemie",
+      "stavi_se_z": [
+        "vyrobek:med",
+        "vyrobek:keramika",
+        "vyrobek:sklo",
+        "surovina:jil"
+      ],
+      "ladici_parametry": [
+        "teplota",
+        "cas"
+      ],
+      "popis": "Alembik: kotlík, helma a chladič. Slouží k destilaci par — u rumělky po pražení ke kondenzaci rtuti, obecně k čištění kapalin. Operace destilovat ve stromu je u soli použitá v širším smyslu (čištění); vlastní sůl vaří solivar, alembik ho jen zastřešuje jako laboratorní obdobu odparu. Staví se z keramiky, později z mědi a skla. Teplota a čas ladí, co přejde do jímky.",
+      "zdroje": [
+        25,
+        43
+      ]
+    },
+    {
+      "id": "solivar",
+      "nazev": "Solivar",
+      "typ": "stavba",
+      "operace": [
+        "destilovat"
+      ],
+      "procesy": [
+        "cistit_sul"
+      ],
+      "vstupy": [
+        "surovina:sul"
+      ],
+      "vystupy": [
+        "vyrobek:sul_cista"
+      ],
+      "energie": [
+        "ohen"
+      ],
+      "vek": "stredovek",
+      "vek_do": "rane_prumyslove",
+      "dovednost": "chemie",
+      "stavi_se_z": [
+        "vyrobek:cihla",
+        "vyrobek:zelezo",
+        "vnejsi:drevo",
+        "vyrobek:malta",
+        "surovina:blok_horniny"
+      ],
+      "ladici_parametry": [
+        "teplota",
+        "cas",
+        "krystalizace"
+      ],
+      "popis": "Varna solanky: kamenná sůl se rozpustí, nečistoty se usadí a voda se odpaří v pánvích nad ohněm (nebo na slunci v teplejším kraji). Ve stromu je to operace destilovat v širším smyslu čištění, ne pravá destilace par. Teplota, čas odparu a řízená krystalizace ladí čistotu. Palivo je dřevo; pánve jsou železné, dům z cihel a dřeva.",
+      "zdroje": [
+        26,
+        47
+      ]
+    },
+    {
+      "id": "prazirna",
+      "nazev": "Pražírna",
+      "typ": "stavba",
+      "operace": [
+        "prazit"
+      ],
+      "procesy": [
+        "rtut_chybi_rumelka"
+      ],
+      "vstupy": [
+        "mezera:rumelka"
+      ],
+      "vystupy": [
+        "vyrobek:rtut",
+        "prvek:Hg"
+      ],
+      "energie": [
+        "ohen"
+      ],
+      "vek": "stredovek",
+      "vek_do": "rane_prumyslove",
+      "dovednost": "chemie",
+      "stavi_se_z": [
+        "vyrobek:cihla",
+        "surovina:blok_horniny",
+        "vyrobek:malta",
+        "vyrobek:keramika"
+      ],
+      "ladici_parametry": [
+        "teplota",
+        "cas",
+        "pristup_vzduchu"
+      ],
+      "popis": "Pec na pražení rud za přístupu vzduchu. Ve stromu je konkrétně pražení rumělky (HgS) a jímání par rtuti — v tabulce hornin rumělka zatím chybí, jde o mezeru z T01. Historicky se stejně praží i sulfidy před tavením. Teplota, čas a vzduch rozhodují, jestli síra odejde a kov se neuteče. Jímání par patří k alembiku; obě jednotky se doplňují.",
+      "zdroje": [
+        25,
+        46
+      ]
+    },
+    {
+      "id": "koksovna",
+      "nazev": "Koksovna",
+      "typ": "stavba",
+      "operace": [
+        "koksovat"
+      ],
+      "procesy": [
+        "koksovat"
+      ],
+      "vstupy": [
+        "surovina:uhli"
+      ],
+      "vystupy": [
+        "vyrobek:koks",
+        "vyrobek:pigment_saze"
+      ],
+      "energie": [
+        "ohen"
+      ],
+      "vek": "rane_prumyslove",
+      "vek_do": "rane_prumyslove",
+      "dovednost": "hutnictvi",
+      "stavi_se_z": [
+        "vyrobek:cihla",
+        "surovina:blok_horniny",
+        "vyrobek:zelezo",
+        "vyrobek:malta",
+        "vyrobek:ocel"
+      ],
+      "ladici_parametry": [
+        "teplota",
+        "cas",
+        "tesnost"
+      ],
+      "popis": "Retorta nebo komora, ve které se černé uhlí zahřívá bez vzduchu na koks a saze. Analogie milíře, ale surovina je uhlí, ne dřevo, a jednotka je raně průmyslová. Koks pak živí pozdější cestu dýmačky a cementaci oceli. Hnědé uhlí ve stromu větev na koks nemá. Tesnost a čas ladí pevnost koksu; vzduch vsázku spálí.",
+      "zdroje": [
+        21
+      ]
+    }
+  ],
+  "pokryti": {
+    "zarizeni": 25,
+    "s_operaci": 24,
+    "mimo_strom": [
+      "hamr"
+    ],
+    "operace_pokryte": {
+      "slozeni": {
+        "hrany": 260,
+        "zarizeni": [
+          "stul_mineralogie"
+        ]
+      },
+      "tezba": {
+        "hrany": 181,
+        "zarizeni": [
+          "nastroj_tezba"
+        ]
+      },
+      "odpovida": {
+        "hrany": 27,
+        "zarizeni": [
+          "stul_mineralogie"
+        ]
+      },
+      "drtit": {
+        "hrany": 10,
+        "zarizeni": [
+          "stoupa",
+          "mlyn"
+        ]
+      },
+      "brousit": {
+        "hrany": 3,
+        "zarizeni": [
+          "brusna_dilna"
+        ]
+      },
+      "palit": {
+        "hrany": 8,
+        "zarizeni": [
+          "vapenka",
+          "pec_sadra",
+          "milir",
+          "pec_cement"
+        ]
+      },
+      "prazit": {
+        "hrany": 2,
+        "zarizeni": [
+          "prazirna"
+        ]
+      },
+      "hasit": {
+        "hrany": 1,
+        "zarizeni": [
+          "hasici_jama"
+        ]
+      },
+      "michat": {
+        "hrany": 2,
+        "zarizeni": [
+          "dilna_zednicka"
+        ]
+      },
+      "tavit": {
+        "hrany": 29,
+        "zarizeni": [
+          "pec_hrncirska",
+          "kelimek",
+          "dymacka"
+        ]
+      },
+      "tavit_sklo": {
+        "hrany": 3,
+        "zarizeni": [
+          "pec_sklarska"
+        ]
+      },
+      "palit_keramiku": {
+        "hrany": 4,
+        "zarizeni": [
+          "pec_hrncirska"
+        ]
+      },
+      "palit_cihly": {
+        "hrany": 2,
+        "zarizeni": [
+          "cihelna"
+        ]
+      },
+      "destilovat": {
+        "hrany": 1,
+        "zarizeni": [
+          "alembik",
+          "solivar"
+        ]
+      },
+      "louzit": {
+        "hrany": 6,
+        "zarizeni": [
+          "louzici_kade"
+        ]
+      },
+      "koksovat": {
+        "hrany": 2,
+        "zarizeni": [
+          "koksovna"
+        ]
+      },
+      "ryzovat": {
+        "hrany": 1,
+        "zarizeni": [
+          "splav"
+        ]
+      },
+      "slevat": {
+        "hrany": 2,
+        "zarizeni": [
+          "kelimek"
+        ]
+      },
+      "cementovat": {
+        "hrany": 4,
+        "zarizeni": [
+          "kovarna"
+        ]
+      },
+      "karbonatace": {
+        "hrany": 2,
+        "zarizeni": [
+          "stavba_vapenna"
+        ]
+      }
+    },
+    "hran_celkem": 550,
+    "hran_pokrytych": 550
+  },
+  "nazvy_uzlu": {
+    "mezera:galenit": "galenit (v tabulce hornin chybí)",
+    "mezera:rumelka": "rumělka (v tabulce hornin chybí)",
+    "mineral:amfibol": "amfibol",
+    "mineral:anhydrit": "anhydrit",
+    "mineral:beryl": "beryl",
+    "mineral:chlorit": "chlorit",
+    "mineral:dolomit_min": "dolomit",
+    "mineral:granat_min": "granát",
+    "mineral:halit": "halit",
+    "mineral:hematit": "hematit",
+    "mineral:horninove_ulomky": "horninové úlomky",
+    "mineral:ilmenit": "ilmenit",
+    "mineral:jil_min": "jílové minerály",
+    "mineral:kalcit": "kalcit",
+    "mineral:karbonat_min": "karbonát (v kimberlitu)",
+    "mineral:kassiterit": "kasiterit",
+    "mineral:kolumbit": "kolumbit-tantalit",
+    "mineral:korund": "korund",
+    "mineral:kremen": "křemen",
+    "mineral:led": "led / sníh",
+    "mineral:magnetit": "magnetit",
+    "mineral:malachit": "malachit",
+    "mineral:olivin": "olivín",
+    "mineral:organika": "organická příměs",
+    "mineral:plagioklas": "plagioklas",
+    "mineral:pyrit": "pyrit",
+    "mineral:pyroxen": "pyroxen",
+    "mineral:rutil": "rutil",
+    "mineral:sadrovec_min": "sádrovec",
+    "mineral:serpentin": "serpentin",
+    "mineral:slida": "slída",
+    "mineral:spinel": "spinel",
+    "mineral:spodumen": "spodumen",
+    "mineral:uhli_org": "organický uhlík",
+    "mineral:zivec_k": "draselný živec",
+    "mineral:zlato_nativni": "ryzí zlato",
+    "prvek:Au": "zlato (prvek)",
+    "prvek:C": "uhlík (prvek)",
+    "prvek:Ca": "vápník (prvek)",
+    "prvek:Cu": "měď (prvek)",
+    "prvek:Fe": "železo (prvek)",
+    "prvek:Hg": "rtuť (prvek)",
+    "prvek:Li": "lithium (prvek)",
+    "prvek:Pb": "olovo (prvek)",
+    "prvek:Si": "křemík (prvek)",
+    "prvek:Sn": "cín (prvek)",
+    "prvek:Ta": "tantal (prvek)",
+    "prvek:Ti": "titan (prvek)",
+    "surovina:blok_horniny": "stavební kámen / kvádr",
+    "surovina:diamanty": "diamanty",
+    "surovina:drahokamy": "drahokamy",
+    "surovina:granaty": "granáty",
+    "surovina:hlina": "hlína",
+    "surovina:jalovina": "jalovina",
+    "surovina:jil": "jíl",
+    "surovina:kremenny_pisek": "křemenný písek",
+    "surovina:lignit": "hnědé uhlí",
+    "surovina:pisek": "písek",
+    "surovina:prach": "prach / jemná suť (část nepoužitelná)",
+    "surovina:ruda_fe_ti": "titanomagnetit (Fe-Ti)",
+    "surovina:ruda_med": "měděná ruda",
+    "surovina:ruda_vzacne": "vzácné kovy (Li, Sn, Ta)",
+    "surovina:ruda_zelezo": "železná ruda",
+    "surovina:ruda_zlato": "zlatá ruda",
+    "surovina:sadrovec": "sádrovec",
+    "surovina:snih": "sníh / led",
+    "surovina:sterk": "štěrk / drcený kámen",
+    "surovina:sul": "sůl",
+    "surovina:uhli": "černé uhlí",
+    "surovina:vapno": "vápno / vápencová surovina",
+    "vnejsi:drevene_uhli": "dřevěné uhlí",
+    "vnejsi:drevo": "dřevo (vnější vstup)",
+    "vnejsi:soda": "soda / potaš (tavidlo)",
+    "vyrobek:bronz": "bronz",
+    "vyrobek:brouseny_diamant": "broušený diamant",
+    "vyrobek:brouseny_granat": "broušený granát",
+    "vyrobek:brouseny_kamen": "broušený kámen",
+    "vyrobek:cement": "cement",
+    "vyrobek:cihla": "cihla",
+    "vyrobek:cin": "cín (kov)",
+    "vyrobek:glazura": "glazura",
+    "vyrobek:hasene_vapno": "hašené vápno",
+    "vyrobek:keramika": "keramika",
+    "vyrobek:koks": "koks",
+    "vyrobek:lithium_konc": "lithný koncentrát",
+    "vyrobek:malta": "malta",
+    "vyrobek:med": "měď (kov)",
+    "vyrobek:ocel": "ocel",
+    "vyrobek:olovo": "olovo (kov)",
+    "vyrobek:palene_vapno": "pálené vápno",
+    "vyrobek:pigment_malachit": "malachitový pigment",
+    "vyrobek:pigment_okr": "okr (pigment)",
+    "vyrobek:pigment_saze": "saze / čerň",
+    "vyrobek:porcelan": "porcelán",
+    "vyrobek:rtut": "rtuť",
+    "vyrobek:sadra": "sádra",
+    "vyrobek:sklo": "sklo",
+    "vyrobek:struska": "struska",
+    "vyrobek:sul_cista": "čištěná sůl",
+    "vyrobek:titan_konc": "titanový koncentrát",
+    "vyrobek:zelezo": "železo (kov)"
+  }
+}
