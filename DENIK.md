@@ -216,6 +216,12 @@ Skupiny: 1 Prototyp a buildy · 2 Terén a tvar · 3 Rozlišení bloku · 4 Ská
 - **Komplikace:** koryta jsou krátké úseky (malý svět, malá povodí). Krasová vyvěračka 0. Hráz na svahu tůň nevytvořila (potok ji obtekl). Podzemní tok vede zatím zjednodušeně k nejbližšímu okraji.
 - **Další krok:** Jan rozhodne, jak daleko vést podzemní tok (sledovat propustnou vrstvu?) a jestli má mít krasová vyvěračka vlastní pravidlo. Starší otevřené otázky (eroze po blocích vs hrubý svět, jádro hory přes šev, minerály z hrubého světa) zůstávají.
 
+### 🔄 Blueprint v3 / E77: čas hry 1 herní den = 1 hodina (2026-11-20 00:57 · `blueprint-studie/scripts/voda/cas_hry.gd`, `p71_cas` 24, `sdilene/*_voda.json`, větev `e77-cas-hodina`)
+- **Směr:** rozhodnutí Jana 2026-11-19 22:19 po testech vody: faktor času 144 → 24, jedno místo pro převody.
+- **Zlepšení:** výchozí hra beze změny (stejný otisk, 0 neshod). E67 jen jiný objem v pasti a otisk. Události reálně 6× delší (eroze E51 23 → 139 min).
+- **Komplikace:** v E69 voda u E67 vyteče o vrstvu výš (kapacita dolů 6× menší). E75, E76 a studie těžby mají vlastní převod, upraví se při sloučení.
+- **Další krok:** sloučení; pak převést E75 a těžbu na `cas_hry.gd`.
+
 ### 🔄 Blueprint v3 / E73: opravy nálezů E68 (2026-11-19 23:45 · `blueprint-studie/scripts/voda/tok.gd`, `alg60/tok60.gd`, `hydro68/hydro68.gd`, `podzemi52/ug67.gd`, příznaky `p73_vyver`, `p73_pritok`, `p73_zrychleni`, `p73_prusak_tok`, větev `e73-nalezy-e68`)
 - **Směr:** TODO Voda: pramen ve vlastní tůni, přítok tůně jako součet, zrychlení pomalé smyčky, E67 „vše prosákne“ ≠ uzavřené.
 - **Zlepšení:** ostrov bez cyklu, bilance přesně 0 (dřív −0,02 l/s), 3 kola místo 4, výkop ⌀ 1,1 → 0,76 s, 0 neshod, stejný otisk v obou pořadích. Test smyčky 68 → 17 kol, pretok = auto. Opravena chyba plného výpočtu (chyběly prameny E67). Výchozí zapnuto.
