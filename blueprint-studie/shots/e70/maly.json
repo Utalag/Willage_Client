@@ -1,0 +1,96 @@
+{
+ "dz": 0.25,
+ "pripady": [
+  {
+   "harmonicky": {
+    "bilance_chyba": 0.0,
+    "vychod": 0.5,
+    "zapad": 0.5
+   },
+   "pomer": {
+    "bilance_chyba": 0.0,
+    "vychod": 0.5,
+    "zapad": 0.5
+   },
+   "stred": "pisek",
+   "vychod": "pisek",
+   "zapad": "pisek"
+  },
+  {
+   "harmonicky": {
+    "bilance_chyba": 0.0,
+    "vychod": 0.1017,
+    "zapad": 0.8983
+   },
+   "pomer": {
+    "bilance_chyba": 0.0,
+    "vychod": 0.0566,
+    "zapad": 0.9434
+   },
+   "stred": "pisek",
+   "vychod": "jil",
+   "zapad": "pisek"
+  },
+  {
+   "harmonicky": {
+    "bilance_chyba": 0.0,
+    "vychod": 0.3464,
+    "zapad": 0.6536
+   },
+   "pomer": {
+    "bilance_chyba": 0.0,
+    "vychod": 0.0566,
+    "zapad": 0.9434
+   },
+   "stred": "jil",
+   "vychod": "jil",
+   "zapad": "pisek"
+  },
+  {
+   "harmonicky": {
+    "bilance_chyba": 0.0,
+    "vychod": 0.6536,
+    "zapad": 0.3464
+   },
+   "pomer": {
+    "bilance_chyba": 0.0,
+    "vychod": 0.9434,
+    "zapad": 0.0566
+   },
+   "stred": "jil",
+   "vychod": "pisek",
+   "zapad": "jil"
+  },
+  {
+   "harmonicky": {
+    "bilance_chyba": 0.0,
+    "vychod": 0.3931,
+    "zapad": 0.6069
+   },
+   "pomer": {
+    "bilance_chyba": 0.0,
+    "vychod": 0.228,
+    "zapad": 0.772
+   },
+   "stred": "vapenec",
+   "vychod": "vapenec",
+   "zapad": "pisek"
+  },
+  {
+   "harmonicky": {
+    "bilance_chyba": 0.0,
+    "vychod": 0.3132,
+    "zapad": 0.6868
+   },
+   "pomer": {
+    "bilance_chyba": 0.0,
+    "vychod": 0.228,
+    "zapad": 0.772
+   },
+   "stred": "pisek",
+   "vychod": "vapenec",
+   "zapad": "pisek"
+  }
+ ],
+ "q": 1.0
+}
