@@ -1,0 +1,1795 @@
+{
+ "_popis": "E59 NÁVRH (Jan 03:47), nepřijato – Jan rozhodne. Nepřepisuje materialy_voda.json ani horniny_voda.json. K_ms = typická hydraulická vodivost m/s (Freeze & Cherry 1979 tab. 2.2, půdy Rawls 1982), n = pórovitost (F&C tab. 2.4), Sy = specifická vydatnost (Johnson 1967), ret_navrh = n − Sy omezené ≤ por, perm_navrh = (log10 K + 9) / 6 v [0, 1], ero_v / sed_v z Hjulströmova diagramu (řádově), skály herní odhad. t_1m = čas průsaku 1 m při spádu 1 (s herního času); 1 herní den = 10 min reálně (× 144).",
+ "zdroje": [
+  "ZDROJE [32]",
+  "ZDROJE [38]",
+  "ZDROJE [39]",
+  "ZDROJE [40]",
+  "ZDROJE [41]"
+ ],
+ "cas_hry_faktor": 144,
+ "materials": {
+  "grass": {
+   "zdroj_tabulky": "materialy_voda.json",
+   "skupina": "drn",
+   "popis_skupiny": "půda s drnem a kořeny",
+   "K_ms": 1e-05,
+   "K_rozsah_ms": [
+    1e-06,
+    0.0001
+   ],
+   "n": 0.45,
+   "Sy": 0.15,
+   "por_navrh": 0.45,
+   "ret_navrh": 0.3,
+   "perm_navrh": 0.667,
+   "ero_v_navrh": 1.5,
+   "sed_v_navrh": 0.003,
+   "t_1m_s": 15000.0,
+   "t_1m_herni_dny": 0.1736111111111111,
+   "t_1m_realne_min": 1.7361111111111112,
+   "soucasne": {
+    "perm": 0.25,
+    "por": 0.4,
+    "ret": 0.15,
+    "ero_v": 1.2,
+    "sed_v": 0.03
+   }
+  },
+  "dirt": {
+   "zdroj_tabulky": "materialy_voda.json",
+   "skupina": "hlina",
+   "popis_skupiny": "hlinitá půda (loam, Rawls 1982)",
+   "K_ms": 3.7e-06,
+   "K_rozsah_ms": [
+    1e-07,
+    1e-05
+   ],
+   "n": 0.43,
+   "Sy": 0.15,
+   "por_navrh": 0.43,
+   "ret_navrh": 0.28,
+   "perm_navrh": 0.595,
+   "ero_v_navrh": 0.4,
+   "sed_v_navrh": 0.003,
+   "t_1m_s": 40540.54054054054,
+   "t_1m_herni_dny": 0.4692192192192192,
+   "t_1m_realne_min": 4.692192192192192,
+   "soucasne": {
+    "perm": 0.3,
+    "por": 0.4,
+    "ret": 0.15,
+    "ero_v": 0.35,
+    "sed_v": 0.03
+   }
+  },
+  "sand": {
+   "zdroj_tabulky": "materialy_voda.json",
+   "skupina": "pisek",
+   "popis_skupiny": "čistý písek",
+   "K_ms": 0.0001,
+   "K_rozsah_ms": [
+    1e-06,
+    0.01
+   ],
+   "n": 0.35,
+   "Sy": 0.26,
+   "por_navrh": 0.35,
+   "ret_navrh": 0.09,
+   "perm_navrh": 0.833,
+   "ero_v_navrh": 0.25,
+   "sed_v_navrh": 0.03,
+   "t_1m_s": 2600.0,
+   "t_1m_herni_dny": 0.03009259259259259,
+   "t_1m_realne_min": 0.30092592592592593,
+   "soucasne": {
+    "perm": 0.8,
+    "por": 0.35,
+    "ret": 0.05,
+    "ero_v": 0.25,
+    "sed_v": 0.08
+   }
+  },
+  "clay": {
+   "zdroj_tabulky": "materialy_voda.json",
+   "skupina": "jil",
+   "popis_skupiny": "jíl",
+   "K_ms": 1e-10,
+   "K_rozsah_ms": [
+    1e-12,
+    1e-09
+   ],
+   "n": 0.5,
+   "Sy": 0.02,
+   "por_navrh": 0.5,
+   "ret_navrh": 0.48,
+   "perm_navrh": 0.0,
+   "ero_v_navrh": 1.2,
+   "sed_v_navrh": 0.0005,
+   "t_1m_s": 200000000.0,
+   "t_1m_herni_dny": 2314.814814814815,
+   "t_1m_realne_min": 23148.14814814815,
+   "soucasne": {
+    "perm": 0.0,
+    "por": 0.45,
+    "ret": 0.0,
+    "ero_v": 0.8,
+    "sed_v": 0.01
+   }
+  },
+  "limestone": {
+   "zdroj_tabulky": "materialy_voda.json",
+   "skupina": "vapenec",
+   "popis_skupiny": "vápenec, dolomit (nekrasový)",
+   "K_ms": 3e-08,
+   "K_rozsah_ms": [
+    1e-09,
+    1e-06
+   ],
+   "n": 0.05,
+   "Sy": 0.02,
+   "por_navrh": 0.05,
+   "ret_navrh": 0.03,
+   "perm_navrh": 0.246,
+   "ero_v_navrh": 4.0,
+   "sed_v_navrh": 0.0,
+   "t_1m_s": 666666.6666666667,
+   "t_1m_herni_dny": 7.71604938271605,
+   "t_1m_realne_min": 77.16049382716051,
+   "soucasne": {
+    "perm": 0.0,
+    "por": 0.0,
+    "ret": 0.0,
+    "ero_v": 4.0,
+    "sed_v": 0.0
+   }
+  },
+  "granite": {
+   "zdroj_tabulky": "materialy_voda.json",
+   "skupina": "krystal",
+   "popis_skupiny": "nerozpukané krystalinikum a vyvřeliny",
+   "K_ms": 1e-12,
+   "K_rozsah_ms": [
+    1e-14,
+    1e-10
+   ],
+   "n": 0.01,
+   "Sy": 0.005,
+   "por_navrh": 0.01,
+   "ret_navrh": 0.005,
+   "perm_navrh": 0.0,
+   "ero_v_navrh": 6.0,
+   "sed_v_navrh": 0.0,
+   "t_1m_s": 5000000000.0,
+   "t_1m_herni_dny": 57870.37037037037,
+   "t_1m_realne_min": 578703.7037037037,
+   "soucasne": {
+    "perm": 0.0,
+    "por": 0.0,
+    "ret": 0.0,
+    "ero_v": 6.0,
+    "sed_v": 0.0
+   }
+  },
+  "basalt": {
+   "zdroj_tabulky": "materialy_voda.json",
+   "skupina": "cedic",
+   "popis_skupiny": "hutný čedič",
+   "K_ms": 1e-09,
+   "K_rozsah_ms": [
+    1e-11,
+    1e-07
+   ],
+   "n": 0.05,
+   "Sy": 0.02,
+   "por_navrh": 0.05,
+   "ret_navrh": 0.03,
+   "perm_navrh": 0.0,
+   "ero_v_navrh": 6.0,
+   "sed_v_navrh": 0.0,
+   "t_1m_s": 20000000.0,
+   "t_1m_herni_dny": 231.4814814814815,
+   "t_1m_realne_min": 2314.814814814815,
+   "soucasne": {
+    "perm": 0.0,
+    "por": 0.0,
+    "ret": 0.0,
+    "ero_v": 6.0,
+    "sed_v": 0.0
+   }
+  },
+  "copper": {
+   "zdroj_tabulky": "materialy_voda.json",
+   "skupina": "krystal",
+   "popis_skupiny": "nerozpukané krystalinikum a vyvřeliny",
+   "K_ms": 1e-12,
+   "K_rozsah_ms": [
+    1e-14,
+    1e-10
+   ],
+   "n": 0.01,
+   "Sy": 0.005,
+   "por_navrh": 0.01,
+   "ret_navrh": 0.005,
+   "perm_navrh": 0.0,
+   "ero_v_navrh": 6.0,
+   "sed_v_navrh": 0.0,
+   "t_1m_s": 5000000000.0,
+   "t_1m_herni_dny": 57870.37037037037,
+   "t_1m_realne_min": 578703.7037037037,
+   "soucasne": {
+    "perm": 0.0,
+    "por": 0.0,
+    "ret": 0.0,
+    "ero_v": 5.0,
+    "sed_v": 0.0
+   }
+  },
+  "iron": {
+   "zdroj_tabulky": "materialy_voda.json",
+   "skupina": "krystal",
+   "popis_skupiny": "nerozpukané krystalinikum a vyvřeliny",
+   "K_ms": 1e-12,
+   "K_rozsah_ms": [
+    1e-14,
+    1e-10
+   ],
+   "n": 0.01,
+   "Sy": 0.005,
+   "por_navrh": 0.01,
+   "ret_navrh": 0.005,
+   "perm_navrh": 0.0,
+   "ero_v_navrh": 6.0,
+   "sed_v_navrh": 0.0,
+   "t_1m_s": 5000000000.0,
+   "t_1m_herni_dny": 57870.37037037037,
+   "t_1m_realne_min": 578703.7037037037,
+   "soucasne": {
+    "perm": 0.0,
+    "por": 0.0,
+    "ret": 0.0,
+    "ero_v": 5.0,
+    "sed_v": 0.0
+   }
+  },
+  "clay_deposit": {
+   "zdroj_tabulky": "materialy_voda.json",
+   "skupina": "jil",
+   "popis_skupiny": "jíl",
+   "K_ms": 1e-10,
+   "K_rozsah_ms": [
+    1e-12,
+    1e-09
+   ],
+   "n": 0.5,
+   "Sy": 0.02,
+   "por_navrh": 0.5,
+   "ret_navrh": 0.48,
+   "perm_navrh": 0.0,
+   "ero_v_navrh": 1.2,
+   "sed_v_navrh": 0.0005,
+   "t_1m_s": 200000000.0,
+   "t_1m_herni_dny": 2314.814814814815,
+   "t_1m_realne_min": 23148.14814814815,
+   "soucasne": {
+    "perm": 0.0,
+    "por": 0.45,
+    "ret": 0.0,
+    "ero_v": 0.8,
+    "sed_v": 0.01
+   }
+  },
+  "peridotite": {
+   "zdroj_tabulky": "horniny_voda.json",
+   "skupina": "krystal",
+   "popis_skupiny": "nerozpukané krystalinikum a vyvřeliny",
+   "K_ms": 1e-12,
+   "K_rozsah_ms": [
+    1e-14,
+    1e-10
+   ],
+   "n": 0.01,
+   "Sy": 0.005,
+   "por_navrh": 0.01,
+   "ret_navrh": 0.005,
+   "perm_navrh": 0.0,
+   "ero_v_navrh": 6.0,
+   "sed_v_navrh": 0.0,
+   "t_1m_s": 5000000000.0,
+   "t_1m_herni_dny": 57870.37037037037,
+   "t_1m_realne_min": 578703.7037037037,
+   "soucasne": {
+    "perm": 0.0,
+    "por": 0.0,
+    "ret": 0.0,
+    "ero_v": null,
+    "sed_v": null
+   }
+  },
+  "kimberlite": {
+   "zdroj_tabulky": "horniny_voda.json",
+   "skupina": "krystal",
+   "popis_skupiny": "nerozpukané krystalinikum a vyvřeliny",
+   "K_ms": 1e-12,
+   "K_rozsah_ms": [
+    1e-14,
+    1e-10
+   ],
+   "n": 0.01,
+   "Sy": 0.005,
+   "por_navrh": 0.01,
+   "ret_navrh": 0.005,
+   "perm_navrh": 0.0,
+   "ero_v_navrh": 6.0,
+   "sed_v_navrh": 0.0,
+   "t_1m_s": 5000000000.0,
+   "t_1m_herni_dny": 57870.37037037037,
+   "t_1m_realne_min": 578703.7037037037,
+   "soucasne": {
+    "perm": 0.0,
+    "por": 0.0,
+    "ret": 0.0,
+    "ero_v": null,
+    "sed_v": null
+   }
+  },
+  "lherzolite": {
+   "zdroj_tabulky": "horniny_voda.json",
+   "skupina": "krystal",
+   "popis_skupiny": "nerozpukané krystalinikum a vyvřeliny",
+   "K_ms": 1e-12,
+   "K_rozsah_ms": [
+    1e-14,
+    1e-10
+   ],
+   "n": 0.01,
+   "Sy": 0.005,
+   "por_navrh": 0.01,
+   "ret_navrh": 0.005,
+   "perm_navrh": 0.0,
+   "ero_v_navrh": 6.0,
+   "sed_v_navrh": 0.0,
+   "t_1m_s": 5000000000.0,
+   "t_1m_herni_dny": 57870.37037037037,
+   "t_1m_realne_min": 578703.7037037037,
+   "soucasne": {
+    "perm": 0.0,
+    "por": 0.0,
+    "ret": 0.0,
+    "ero_v": null,
+    "sed_v": null
+   }
+  },
+  "eclogite": {
+   "zdroj_tabulky": "horniny_voda.json",
+   "skupina": "krystal",
+   "popis_skupiny": "nerozpukané krystalinikum a vyvřeliny",
+   "K_ms": 1e-12,
+   "K_rozsah_ms": [
+    1e-14,
+    1e-10
+   ],
+   "n": 0.01,
+   "Sy": 0.005,
+   "por_navrh": 0.01,
+   "ret_navrh": 0.005,
+   "perm_navrh": 0.0,
+   "ero_v_navrh": 6.0,
+   "sed_v_navrh": 0.0,
+   "t_1m_s": 5000000000.0,
+   "t_1m_herni_dny": 57870.37037037037,
+   "t_1m_realne_min": 578703.7037037037,
+   "soucasne": {
+    "perm": 0.0,
+    "por": 0.0,
+    "ret": 0.0,
+    "ero_v": null,
+    "sed_v": null
+   }
+  },
+  "pyroxenite": {
+   "zdroj_tabulky": "horniny_voda.json",
+   "skupina": "krystal",
+   "popis_skupiny": "nerozpukané krystalinikum a vyvřeliny",
+   "K_ms": 1e-12,
+   "K_rozsah_ms": [
+    1e-14,
+    1e-10
+   ],
+   "n": 0.01,
+   "Sy": 0.005,
+   "por_navrh": 0.01,
+   "ret_navrh": 0.005,
+   "perm_navrh": 0.0,
+   "ero_v_navrh": 6.0,
+   "sed_v_navrh": 0.0,
+   "t_1m_s": 5000000000.0,
+   "t_1m_herni_dny": 57870.37037037037,
+   "t_1m_realne_min": 578703.7037037037,
+   "soucasne": {
+    "perm": 0.0,
+    "por": 0.0,
+    "ret": 0.0,
+    "ero_v": null,
+    "sed_v": null
+   }
+  },
+  "serpentinite": {
+   "zdroj_tabulky": "horniny_voda.json",
+   "skupina": "krystal",
+   "popis_skupiny": "nerozpukané krystalinikum a vyvřeliny",
+   "K_ms": 1e-12,
+   "K_rozsah_ms": [
+    1e-14,
+    1e-10
+   ],
+   "n": 0.01,
+   "Sy": 0.005,
+   "por_navrh": 0.01,
+   "ret_navrh": 0.005,
+   "perm_navrh": 0.0,
+   "ero_v_navrh": 6.0,
+   "sed_v_navrh": 0.0,
+   "t_1m_s": 5000000000.0,
+   "t_1m_herni_dny": 57870.37037037037,
+   "t_1m_realne_min": 578703.7037037037,
+   "soucasne": {
+    "perm": 0.0,
+    "por": 0.0,
+    "ret": 0.0,
+    "ero_v": null,
+    "sed_v": null
+   }
+  },
+  "gabbro": {
+   "zdroj_tabulky": "horniny_voda.json",
+   "skupina": "krystal",
+   "popis_skupiny": "nerozpukané krystalinikum a vyvřeliny",
+   "K_ms": 1e-12,
+   "K_rozsah_ms": [
+    1e-14,
+    1e-10
+   ],
+   "n": 0.01,
+   "Sy": 0.005,
+   "por_navrh": 0.01,
+   "ret_navrh": 0.005,
+   "perm_navrh": 0.0,
+   "ero_v_navrh": 6.0,
+   "sed_v_navrh": 0.0,
+   "t_1m_s": 5000000000.0,
+   "t_1m_herni_dny": 57870.37037037037,
+   "t_1m_realne_min": 578703.7037037037,
+   "soucasne": {
+    "perm": 0.0,
+    "por": 0.0,
+    "ret": 0.0,
+    "ero_v": null,
+    "sed_v": null
+   }
+  },
+  "norite": {
+   "zdroj_tabulky": "horniny_voda.json",
+   "skupina": "krystal",
+   "popis_skupiny": "nerozpukané krystalinikum a vyvřeliny",
+   "K_ms": 1e-12,
+   "K_rozsah_ms": [
+    1e-14,
+    1e-10
+   ],
+   "n": 0.01,
+   "Sy": 0.005,
+   "por_navrh": 0.01,
+   "ret_navrh": 0.005,
+   "perm_navrh": 0.0,
+   "ero_v_navrh": 6.0,
+   "sed_v_navrh": 0.0,
+   "t_1m_s": 5000000000.0,
+   "t_1m_herni_dny": 57870.37037037037,
+   "t_1m_realne_min": 578703.7037037037,
+   "soucasne": {
+    "perm": 0.0,
+    "por": 0.0,
+    "ret": 0.0,
+    "ero_v": null,
+    "sed_v": null
+   }
+  },
+  "fe_ti_zone": {
+   "zdroj_tabulky": "horniny_voda.json",
+   "skupina": "krystal",
+   "popis_skupiny": "nerozpukané krystalinikum a vyvřeliny",
+   "K_ms": 1e-12,
+   "K_rozsah_ms": [
+    1e-14,
+    1e-10
+   ],
+   "n": 0.01,
+   "Sy": 0.005,
+   "por_navrh": 0.01,
+   "ret_navrh": 0.005,
+   "perm_navrh": 0.0,
+   "ero_v_navrh": 6.0,
+   "sed_v_navrh": 0.0,
+   "t_1m_s": 5000000000.0,
+   "t_1m_herni_dny": 57870.37037037037,
+   "t_1m_realne_min": 578703.7037037037,
+   "soucasne": {
+    "perm": 0.0,
+    "por": 0.0,
+    "ret": 0.0,
+    "ero_v": null,
+    "sed_v": null
+   }
+  },
+  "granulite": {
+   "zdroj_tabulky": "horniny_voda.json",
+   "skupina": "krystal",
+   "popis_skupiny": "nerozpukané krystalinikum a vyvřeliny",
+   "K_ms": 1e-12,
+   "K_rozsah_ms": [
+    1e-14,
+    1e-10
+   ],
+   "n": 0.01,
+   "Sy": 0.005,
+   "por_navrh": 0.01,
+   "ret_navrh": 0.005,
+   "perm_navrh": 0.0,
+   "ero_v_navrh": 6.0,
+   "sed_v_navrh": 0.0,
+   "t_1m_s": 5000000000.0,
+   "t_1m_herni_dny": 57870.37037037037,
+   "t_1m_realne_min": 578703.7037037037,
+   "soucasne": {
+    "perm": 0.0,
+    "por": 0.0,
+    "ret": 0.0,
+    "ero_v": null,
+    "sed_v": null
+   }
+  },
+  "amphibolite": {
+   "zdroj_tabulky": "horniny_voda.json",
+   "skupina": "krystal",
+   "popis_skupiny": "nerozpukané krystalinikum a vyvřeliny",
+   "K_ms": 1e-12,
+   "K_rozsah_ms": [
+    1e-14,
+    1e-10
+   ],
+   "n": 0.01,
+   "Sy": 0.005,
+   "por_navrh": 0.01,
+   "ret_navrh": 0.005,
+   "perm_navrh": 0.0,
+   "ero_v_navrh": 6.0,
+   "sed_v_navrh": 0.0,
+   "t_1m_s": 5000000000.0,
+   "t_1m_herni_dny": 57870.37037037037,
+   "t_1m_realne_min": 578703.7037037037,
+   "soucasne": {
+    "perm": 0.0,
+    "por": 0.0,
+    "ret": 0.0,
+    "ero_v": null,
+    "sed_v": null
+   }
+  },
+  "lower_gneiss": {
+   "zdroj_tabulky": "horniny_voda.json",
+   "skupina": "krystal",
+   "popis_skupiny": "nerozpukané krystalinikum a vyvřeliny",
+   "K_ms": 1e-12,
+   "K_rozsah_ms": [
+    1e-14,
+    1e-10
+   ],
+   "n": 0.01,
+   "Sy": 0.005,
+   "por_navrh": 0.01,
+   "ret_navrh": 0.005,
+   "perm_navrh": 0.0,
+   "ero_v_navrh": 6.0,
+   "sed_v_navrh": 0.0,
+   "t_1m_s": 5000000000.0,
+   "t_1m_herni_dny": 57870.37037037037,
+   "t_1m_realne_min": 578703.7037037037,
+   "soucasne": {
+    "perm": 0.0,
+    "por": 0.0,
+    "ret": 0.0,
+    "ero_v": null,
+    "sed_v": null
+   }
+  },
+  "migmatite": {
+   "zdroj_tabulky": "horniny_voda.json",
+   "skupina": "krystal",
+   "popis_skupiny": "nerozpukané krystalinikum a vyvřeliny",
+   "K_ms": 1e-12,
+   "K_rozsah_ms": [
+    1e-14,
+    1e-10
+   ],
+   "n": 0.01,
+   "Sy": 0.005,
+   "por_navrh": 0.01,
+   "ret_navrh": 0.005,
+   "perm_navrh": 0.0,
+   "ero_v_navrh": 6.0,
+   "sed_v_navrh": 0.0,
+   "t_1m_s": 5000000000.0,
+   "t_1m_herni_dny": 57870.37037037037,
+   "t_1m_realne_min": 578703.7037037037,
+   "soucasne": {
+    "perm": 0.0,
+    "por": 0.0,
+    "ret": 0.0,
+    "ero_v": null,
+    "sed_v": null
+   }
+  },
+  "orthogneiss": {
+   "zdroj_tabulky": "horniny_voda.json",
+   "skupina": "krystal",
+   "popis_skupiny": "nerozpukané krystalinikum a vyvřeliny",
+   "K_ms": 1e-12,
+   "K_rozsah_ms": [
+    1e-14,
+    1e-10
+   ],
+   "n": 0.01,
+   "Sy": 0.005,
+   "por_navrh": 0.01,
+   "ret_navrh": 0.005,
+   "perm_navrh": 0.0,
+   "ero_v_navrh": 6.0,
+   "sed_v_navrh": 0.0,
+   "t_1m_s": 5000000000.0,
+   "t_1m_herni_dny": 57870.37037037037,
+   "t_1m_realne_min": 578703.7037037037,
+   "soucasne": {
+    "perm": 0.0,
+    "por": 0.0,
+    "ret": 0.0,
+    "ero_v": null,
+    "sed_v": null
+   }
+  },
+  "biotite_gneiss": {
+   "zdroj_tabulky": "horniny_voda.json",
+   "skupina": "krystal",
+   "popis_skupiny": "nerozpukané krystalinikum a vyvřeliny",
+   "K_ms": 1e-12,
+   "K_rozsah_ms": [
+    1e-14,
+    1e-10
+   ],
+   "n": 0.01,
+   "Sy": 0.005,
+   "por_navrh": 0.01,
+   "ret_navrh": 0.005,
+   "perm_navrh": 0.0,
+   "ero_v_navrh": 6.0,
+   "sed_v_navrh": 0.0,
+   "t_1m_s": 5000000000.0,
+   "t_1m_herni_dny": 57870.37037037037,
+   "t_1m_realne_min": 578703.7037037037,
+   "soucasne": {
+    "perm": 0.0,
+    "por": 0.0,
+    "ret": 0.0,
+    "ero_v": null,
+    "sed_v": null
+   }
+  },
+  "two_mica_gneiss": {
+   "zdroj_tabulky": "horniny_voda.json",
+   "skupina": "krystal",
+   "popis_skupiny": "nerozpukané krystalinikum a vyvřeliny",
+   "K_ms": 1e-12,
+   "K_rozsah_ms": [
+    1e-14,
+    1e-10
+   ],
+   "n": 0.01,
+   "Sy": 0.005,
+   "por_navrh": 0.01,
+   "ret_navrh": 0.005,
+   "perm_navrh": 0.0,
+   "ero_v_navrh": 6.0,
+   "sed_v_navrh": 0.0,
+   "t_1m_s": 5000000000.0,
+   "t_1m_herni_dny": 57870.37037037037,
+   "t_1m_realne_min": 578703.7037037037,
+   "soucasne": {
+    "perm": 0.0,
+    "por": 0.0,
+    "ret": 0.0,
+    "ero_v": null,
+    "sed_v": null
+   }
+  },
+  "granodiorite": {
+   "zdroj_tabulky": "horniny_voda.json",
+   "skupina": "krystal",
+   "popis_skupiny": "nerozpukané krystalinikum a vyvřeliny",
+   "K_ms": 1e-12,
+   "K_rozsah_ms": [
+    1e-14,
+    1e-10
+   ],
+   "n": 0.01,
+   "Sy": 0.005,
+   "por_navrh": 0.01,
+   "ret_navrh": 0.005,
+   "perm_navrh": 0.0,
+   "ero_v_navrh": 6.0,
+   "sed_v_navrh": 0.0,
+   "t_1m_s": 5000000000.0,
+   "t_1m_herni_dny": 57870.37037037037,
+   "t_1m_realne_min": 578703.7037037037,
+   "soucasne": {
+    "perm": 0.0,
+    "por": 0.0,
+    "ret": 0.0,
+    "ero_v": null,
+    "sed_v": null
+   }
+  },
+  "leucogranite": {
+   "zdroj_tabulky": "horniny_voda.json",
+   "skupina": "krystal",
+   "popis_skupiny": "nerozpukané krystalinikum a vyvřeliny",
+   "K_ms": 1e-12,
+   "K_rozsah_ms": [
+    1e-14,
+    1e-10
+   ],
+   "n": 0.01,
+   "Sy": 0.005,
+   "por_navrh": 0.01,
+   "ret_navrh": 0.005,
+   "perm_navrh": 0.0,
+   "ero_v_navrh": 6.0,
+   "sed_v_navrh": 0.0,
+   "t_1m_s": 5000000000.0,
+   "t_1m_herni_dny": 57870.37037037037,
+   "t_1m_realne_min": 578703.7037037037,
+   "soucasne": {
+    "perm": 0.0,
+    "por": 0.0,
+    "ret": 0.0,
+    "ero_v": null,
+    "sed_v": null
+   }
+  },
+  "pegmatite": {
+   "zdroj_tabulky": "horniny_voda.json",
+   "skupina": "krystal",
+   "popis_skupiny": "nerozpukané krystalinikum a vyvřeliny",
+   "K_ms": 1e-12,
+   "K_rozsah_ms": [
+    1e-14,
+    1e-10
+   ],
+   "n": 0.01,
+   "Sy": 0.005,
+   "por_navrh": 0.01,
+   "ret_navrh": 0.005,
+   "perm_navrh": 0.0,
+   "ero_v_navrh": 6.0,
+   "sed_v_navrh": 0.0,
+   "t_1m_s": 5000000000.0,
+   "t_1m_herni_dny": 57870.37037037037,
+   "t_1m_realne_min": 578703.7037037037,
+   "soucasne": {
+    "perm": 0.0,
+    "por": 0.0,
+    "ret": 0.0,
+    "ero_v": null,
+    "sed_v": null
+   }
+  },
+  "quartzite": {
+   "zdroj_tabulky": "horniny_voda.json",
+   "skupina": "krystal",
+   "popis_skupiny": "nerozpukané krystalinikum a vyvřeliny",
+   "K_ms": 1e-12,
+   "K_rozsah_ms": [
+    1e-14,
+    1e-10
+   ],
+   "n": 0.01,
+   "Sy": 0.005,
+   "por_navrh": 0.01,
+   "ret_navrh": 0.005,
+   "perm_navrh": 0.0,
+   "ero_v_navrh": 6.0,
+   "sed_v_navrh": 0.0,
+   "t_1m_s": 5000000000.0,
+   "t_1m_herni_dny": 57870.37037037037,
+   "t_1m_realne_min": 578703.7037037037,
+   "soucasne": {
+    "perm": 0.0,
+    "por": 0.0,
+    "ret": 0.0,
+    "ero_v": null,
+    "sed_v": null
+   }
+  },
+  "mica_schist": {
+   "zdroj_tabulky": "horniny_voda.json",
+   "skupina": "bridlice",
+   "popis_skupiny": "jílová břidlice, fylit, svor",
+   "K_ms": 1e-11,
+   "K_rozsah_ms": [
+    1e-13,
+    1e-09
+   ],
+   "n": 0.05,
+   "Sy": 0.01,
+   "por_navrh": 0.05,
+   "ret_navrh": 0.04,
+   "perm_navrh": 0.0,
+   "ero_v_navrh": 2.0,
+   "sed_v_navrh": 0.0,
+   "t_1m_s": 1000000000.0000001,
+   "t_1m_herni_dny": 11574.074074074075,
+   "t_1m_realne_min": 115740.74074074074,
+   "soucasne": {
+    "perm": 0.0,
+    "por": 0.0,
+    "ret": 0.0,
+    "ero_v": null,
+    "sed_v": null
+   }
+  },
+  "phyllite": {
+   "zdroj_tabulky": "horniny_voda.json",
+   "skupina": "bridlice",
+   "popis_skupiny": "jílová břidlice, fylit, svor",
+   "K_ms": 1e-11,
+   "K_rozsah_ms": [
+    1e-13,
+    1e-09
+   ],
+   "n": 0.05,
+   "Sy": 0.01,
+   "por_navrh": 0.05,
+   "ret_navrh": 0.04,
+   "perm_navrh": 0.0,
+   "ero_v_navrh": 2.0,
+   "sed_v_navrh": 0.0,
+   "t_1m_s": 1000000000.0000001,
+   "t_1m_herni_dny": 11574.074074074075,
+   "t_1m_realne_min": 115740.74074074074,
+   "soucasne": {
+    "perm": 0.0,
+    "por": 0.0,
+    "ret": 0.0,
+    "ero_v": null,
+    "sed_v": null
+   }
+  },
+  "skarn": {
+   "zdroj_tabulky": "horniny_voda.json",
+   "skupina": "krystal",
+   "popis_skupiny": "nerozpukané krystalinikum a vyvřeliny",
+   "K_ms": 1e-12,
+   "K_rozsah_ms": [
+    1e-14,
+    1e-10
+   ],
+   "n": 0.01,
+   "Sy": 0.005,
+   "por_navrh": 0.01,
+   "ret_navrh": 0.005,
+   "perm_navrh": 0.0,
+   "ero_v_navrh": 6.0,
+   "sed_v_navrh": 0.0,
+   "t_1m_s": 5000000000.0,
+   "t_1m_herni_dny": 57870.37037037037,
+   "t_1m_realne_min": 578703.7037037037,
+   "soucasne": {
+    "perm": 0.0,
+    "por": 0.0,
+    "ret": 0.0,
+    "ero_v": null,
+    "sed_v": null
+   }
+  },
+  "crystalline_transition": {
+   "zdroj_tabulky": "horniny_voda.json",
+   "skupina": "krystal",
+   "popis_skupiny": "nerozpukané krystalinikum a vyvřeliny",
+   "K_ms": 1e-12,
+   "K_rozsah_ms": [
+    1e-14,
+    1e-10
+   ],
+   "n": 0.01,
+   "Sy": 0.005,
+   "por_navrh": 0.01,
+   "ret_navrh": 0.005,
+   "perm_navrh": 0.0,
+   "ero_v_navrh": 6.0,
+   "sed_v_navrh": 0.0,
+   "t_1m_s": 5000000000.0,
+   "t_1m_herni_dny": 57870.37037037037,
+   "t_1m_realne_min": 578703.7037037037,
+   "soucasne": {
+    "perm": 0.0,
+    "por": 0.0,
+    "ret": 0.0,
+    "ero_v": null,
+    "sed_v": null
+   }
+  },
+  "deep_limestone": {
+   "zdroj_tabulky": "horniny_voda.json",
+   "skupina": "vapenec",
+   "popis_skupiny": "vápenec, dolomit (nekrasový)",
+   "K_ms": 3e-08,
+   "K_rozsah_ms": [
+    1e-09,
+    1e-06
+   ],
+   "n": 0.05,
+   "Sy": 0.02,
+   "por_navrh": 0.05,
+   "ret_navrh": 0.03,
+   "perm_navrh": 0.246,
+   "ero_v_navrh": 4.0,
+   "sed_v_navrh": 0.0,
+   "t_1m_s": 666666.6666666667,
+   "t_1m_herni_dny": 7.71604938271605,
+   "t_1m_realne_min": 77.16049382716051,
+   "soucasne": {
+    "perm": 0.0,
+    "por": 0.0,
+    "ret": 0.0,
+    "ero_v": null,
+    "sed_v": null
+   }
+  },
+  "siltstone": {
+   "zdroj_tabulky": "horniny_voda.json",
+   "skupina": "prachovec",
+   "popis_skupiny": "prachovec, flyš",
+   "K_ms": 1e-09,
+   "K_rozsah_ms": [
+    1e-11,
+    1e-07
+   ],
+   "n": 0.15,
+   "Sy": 0.03,
+   "por_navrh": 0.15,
+   "ret_navrh": 0.12,
+   "perm_navrh": 0.0,
+   "ero_v_navrh": 1.5,
+   "sed_v_navrh": 0.0,
+   "t_1m_s": 30000000.0,
+   "t_1m_herni_dny": 347.22222222222223,
+   "t_1m_realne_min": 3472.222222222222,
+   "soucasne": {
+    "perm": 0.1,
+    "por": 0.15,
+    "ret": 0.05,
+    "ero_v": null,
+    "sed_v": null
+   }
+  },
+  "conglomerate": {
+   "zdroj_tabulky": "horniny_voda.json",
+   "skupina": "slepenec",
+   "popis_skupiny": "slepenec",
+   "K_ms": 1e-06,
+   "K_rozsah_ms": [
+    1e-08,
+    0.0001
+   ],
+   "n": 0.2,
+   "Sy": 0.1,
+   "por_navrh": 0.2,
+   "ret_navrh": 0.1,
+   "perm_navrh": 0.5,
+   "ero_v_navrh": 2.0,
+   "sed_v_navrh": 0.0,
+   "t_1m_s": 100000.00000000001,
+   "t_1m_herni_dny": 1.1574074074074077,
+   "t_1m_realne_min": 11.574074074074076,
+   "soucasne": {
+    "perm": 0.4,
+    "por": 0.2,
+    "ret": 0.03,
+    "ero_v": null,
+    "sed_v": null
+   }
+  },
+  "rock_salt": {
+   "zdroj_tabulky": "horniny_voda.json",
+   "skupina": "evaporit",
+   "popis_skupiny": "sůl, sádrovec (rozpouští se zvlášť)",
+   "K_ms": 1e-13,
+   "K_rozsah_ms": [
+    1e-14,
+    1e-12
+   ],
+   "n": 0.01,
+   "Sy": 0.005,
+   "por_navrh": 0.01,
+   "ret_navrh": 0.005,
+   "perm_navrh": 0.0,
+   "ero_v_navrh": 1.0,
+   "sed_v_navrh": 0.0,
+   "t_1m_s": 50000000000.0,
+   "t_1m_herni_dny": 578703.7037037037,
+   "t_1m_realne_min": 5787037.037037036,
+   "soucasne": {
+    "perm": 0.0,
+    "por": 0.0,
+    "ret": 0.0,
+    "ero_v": null,
+    "sed_v": null
+   }
+  },
+  "gypsum": {
+   "zdroj_tabulky": "horniny_voda.json",
+   "skupina": "evaporit",
+   "popis_skupiny": "sůl, sádrovec (rozpouští se zvlášť)",
+   "K_ms": 1e-13,
+   "K_rozsah_ms": [
+    1e-14,
+    1e-12
+   ],
+   "n": 0.01,
+   "Sy": 0.005,
+   "por_navrh": 0.01,
+   "ret_navrh": 0.005,
+   "perm_navrh": 0.0,
+   "ero_v_navrh": 1.0,
+   "sed_v_navrh": 0.0,
+   "t_1m_s": 50000000000.0,
+   "t_1m_herni_dny": 578703.7037037037,
+   "t_1m_realne_min": 5787037.037037036,
+   "soucasne": {
+    "perm": 0.0,
+    "por": 0.0,
+    "ret": 0.0,
+    "ero_v": null,
+    "sed_v": null
+   }
+  },
+  "dolomite": {
+   "zdroj_tabulky": "horniny_voda.json",
+   "skupina": "vapenec",
+   "popis_skupiny": "vápenec, dolomit (nekrasový)",
+   "K_ms": 3e-08,
+   "K_rozsah_ms": [
+    1e-09,
+    1e-06
+   ],
+   "n": 0.05,
+   "Sy": 0.02,
+   "por_navrh": 0.05,
+   "ret_navrh": 0.03,
+   "perm_navrh": 0.246,
+   "ero_v_navrh": 4.0,
+   "sed_v_navrh": 0.0,
+   "t_1m_s": 666666.6666666667,
+   "t_1m_herni_dny": 7.71604938271605,
+   "t_1m_realne_min": 77.16049382716051,
+   "soucasne": {
+    "perm": 0.0,
+    "por": 0.0,
+    "ret": 0.0,
+    "ero_v": null,
+    "sed_v": null
+   }
+  },
+  "black_coal": {
+   "zdroj_tabulky": "horniny_voda.json",
+   "skupina": "uhli",
+   "popis_skupiny": "uhlí (puklinová propustnost)",
+   "K_ms": 1e-07,
+   "K_rozsah_ms": [
+    1e-09,
+    1e-05
+   ],
+   "n": 0.08,
+   "Sy": 0.03,
+   "por_navrh": 0.08,
+   "ret_navrh": 0.05,
+   "perm_navrh": 0.333,
+   "ero_v_navrh": 1.5,
+   "sed_v_navrh": 0.0,
+   "t_1m_s": 300000.0,
+   "t_1m_herni_dny": 3.4722222222222223,
+   "t_1m_realne_min": 34.72222222222222,
+   "soucasne": {
+    "perm": 0.02,
+    "por": 0.05,
+    "ret": 0.0,
+    "ero_v": null,
+    "sed_v": null
+   }
+  },
+  "shale": {
+   "zdroj_tabulky": "horniny_voda.json",
+   "skupina": "bridlice",
+   "popis_skupiny": "jílová břidlice, fylit, svor",
+   "K_ms": 1e-11,
+   "K_rozsah_ms": [
+    1e-13,
+    1e-09
+   ],
+   "n": 0.05,
+   "Sy": 0.01,
+   "por_navrh": 0.05,
+   "ret_navrh": 0.04,
+   "perm_navrh": 0.0,
+   "ero_v_navrh": 2.0,
+   "sed_v_navrh": 0.0,
+   "t_1m_s": 1000000000.0000001,
+   "t_1m_herni_dny": 11574.074074074075,
+   "t_1m_realne_min": 115740.74074074074,
+   "soucasne": {
+    "perm": 0.0,
+    "por": 0.0,
+    "ret": 0.0,
+    "ero_v": null,
+    "sed_v": null
+   }
+  },
+  "quartz_sandstone": {
+   "zdroj_tabulky": "horniny_voda.json",
+   "skupina": "piskovec",
+   "popis_skupiny": "pískovec",
+   "K_ms": 1e-07,
+   "K_rozsah_ms": [
+    1e-10,
+    1e-06
+   ],
+   "n": 0.2,
+   "Sy": 0.1,
+   "por_navrh": 0.2,
+   "ret_navrh": 0.1,
+   "perm_navrh": 0.333,
+   "ero_v_navrh": 2.0,
+   "sed_v_navrh": 0.0,
+   "t_1m_s": 1000000.0,
+   "t_1m_herni_dny": 11.574074074074074,
+   "t_1m_realne_min": 115.74074074074073,
+   "soucasne": {
+    "perm": 0.5,
+    "por": 0.2,
+    "ret": 0.05,
+    "ero_v": null,
+    "sed_v": null
+   }
+  },
+  "lignite": {
+   "zdroj_tabulky": "horniny_voda.json",
+   "skupina": "uhli",
+   "popis_skupiny": "uhlí (puklinová propustnost)",
+   "K_ms": 1e-07,
+   "K_rozsah_ms": [
+    1e-09,
+    1e-05
+   ],
+   "n": 0.08,
+   "Sy": 0.03,
+   "por_navrh": 0.08,
+   "ret_navrh": 0.05,
+   "perm_navrh": 0.333,
+   "ero_v_navrh": 1.5,
+   "sed_v_navrh": 0.0,
+   "t_1m_s": 300000.0,
+   "t_1m_herni_dny": 3.4722222222222223,
+   "t_1m_realne_min": 34.72222222222222,
+   "soucasne": {
+    "perm": 0.06,
+    "por": 0.2,
+    "ret": 0.0,
+    "ero_v": null,
+    "sed_v": null
+   }
+  },
+  "loess": {
+   "zdroj_tabulky": "horniny_voda.json",
+   "skupina": "spras",
+   "popis_skupiny": "spraš, prach",
+   "K_ms": 1e-07,
+   "K_rozsah_ms": [
+    1e-09,
+    1e-05
+   ],
+   "n": 0.45,
+   "Sy": 0.08,
+   "por_navrh": 0.45,
+   "ret_navrh": 0.37,
+   "perm_navrh": 0.333,
+   "ero_v_navrh": 0.3,
+   "sed_v_navrh": 0.002,
+   "t_1m_s": 800000.0000000001,
+   "t_1m_herni_dny": 9.259259259259261,
+   "t_1m_realne_min": 92.59259259259261,
+   "soucasne": {
+    "perm": 0.35,
+    "por": 0.4,
+    "ret": 0.15,
+    "ero_v": null,
+    "sed_v": null
+   }
+  },
+  "hill_sand": {
+   "zdroj_tabulky": "horniny_voda.json",
+   "skupina": "pisek",
+   "popis_skupiny": "čistý písek",
+   "K_ms": 0.0001,
+   "K_rozsah_ms": [
+    1e-06,
+    0.01
+   ],
+   "n": 0.35,
+   "Sy": 0.26,
+   "por_navrh": 0.35,
+   "ret_navrh": 0.09,
+   "perm_navrh": 0.833,
+   "ero_v_navrh": 0.25,
+   "sed_v_navrh": 0.03,
+   "t_1m_s": 2600.0,
+   "t_1m_herni_dny": 0.03009259259259259,
+   "t_1m_realne_min": 0.30092592592592593,
+   "soucasne": {
+    "perm": 0.7,
+    "por": 0.33,
+    "ret": 0.05,
+    "ero_v": null,
+    "sed_v": null
+   }
+  },
+  "limestone_outcrop": {
+   "zdroj_tabulky": "horniny_voda.json",
+   "skupina": "vapenec",
+   "popis_skupiny": "vápenec, dolomit (nekrasový)",
+   "K_ms": 3e-08,
+   "K_rozsah_ms": [
+    1e-09,
+    1e-06
+   ],
+   "n": 0.05,
+   "Sy": 0.02,
+   "por_navrh": 0.05,
+   "ret_navrh": 0.03,
+   "perm_navrh": 0.246,
+   "ero_v_navrh": 4.0,
+   "sed_v_navrh": 0.0,
+   "t_1m_s": 666666.6666666667,
+   "t_1m_herni_dny": 7.71604938271605,
+   "t_1m_realne_min": 77.16049382716051,
+   "soucasne": {
+    "perm": 0.0,
+    "por": 0.0,
+    "ret": 0.0,
+    "ero_v": null,
+    "sed_v": null
+   }
+  },
+  "weathered_volcanic": {
+   "zdroj_tabulky": "horniny_voda.json",
+   "skupina": "vulk_zvetr",
+   "popis_skupiny": "propustný / zvětralý vulkanit",
+   "K_ms": 1e-05,
+   "K_rozsah_ms": [
+    1e-07,
+    0.01
+   ],
+   "n": 0.25,
+   "Sy": 0.1,
+   "por_navrh": 0.25,
+   "ret_navrh": 0.15,
+   "perm_navrh": 0.667,
+   "ero_v_navrh": 2.0,
+   "sed_v_navrh": 0.0,
+   "t_1m_s": 10000.0,
+   "t_1m_herni_dny": 0.11574074074074074,
+   "t_1m_realne_min": 1.1574074074074074,
+   "soucasne": {
+    "perm": 0.15,
+    "por": 0.12,
+    "ret": 0.03,
+    "ero_v": null,
+    "sed_v": null
+   }
+  },
+  "flysch": {
+   "zdroj_tabulky": "horniny_voda.json",
+   "skupina": "prachovec",
+   "popis_skupiny": "prachovec, flyš",
+   "K_ms": 1e-09,
+   "K_rozsah_ms": [
+    1e-11,
+    1e-07
+   ],
+   "n": 0.15,
+   "Sy": 0.03,
+   "por_navrh": 0.15,
+   "ret_navrh": 0.12,
+   "perm_navrh": 0.0,
+   "ero_v_navrh": 1.5,
+   "sed_v_navrh": 0.0,
+   "t_1m_s": 30000000.0,
+   "t_1m_herni_dny": 347.22222222222223,
+   "t_1m_realne_min": 3472.222222222222,
+   "soucasne": {
+    "perm": 0.15,
+    "por": 0.15,
+    "ret": 0.05,
+    "ero_v": null,
+    "sed_v": null
+   }
+  },
+  "sandstone_towers": {
+   "zdroj_tabulky": "horniny_voda.json",
+   "skupina": "piskovec",
+   "popis_skupiny": "pískovec",
+   "K_ms": 1e-07,
+   "K_rozsah_ms": [
+    1e-10,
+    1e-06
+   ],
+   "n": 0.2,
+   "Sy": 0.1,
+   "por_navrh": 0.2,
+   "ret_navrh": 0.1,
+   "perm_navrh": 0.333,
+   "ero_v_navrh": 2.0,
+   "sed_v_navrh": 0.0,
+   "t_1m_s": 1000000.0,
+   "t_1m_herni_dny": 11.574074074074074,
+   "t_1m_realne_min": 115.74074074074073,
+   "soucasne": {
+    "perm": 0.5,
+    "por": 0.2,
+    "ret": 0.03,
+    "ero_v": null,
+    "sed_v": null
+   }
+  },
+  "weathered_granite": {
+   "zdroj_tabulky": "horniny_voda.json",
+   "skupina": "krystal_pukl",
+   "popis_skupiny": "rozpukané / zvětralé krystalinikum",
+   "K_ms": 1e-06,
+   "K_rozsah_ms": [
+    1e-08,
+    0.0001
+   ],
+   "n": 0.05,
+   "Sy": 0.02,
+   "por_navrh": 0.05,
+   "ret_navrh": 0.03,
+   "perm_navrh": 0.5,
+   "ero_v_navrh": 3.0,
+   "sed_v_navrh": 0.0,
+   "t_1m_s": 20000.0,
+   "t_1m_herni_dny": 0.23148148148148148,
+   "t_1m_realne_min": 2.314814814814815,
+   "soucasne": {
+    "perm": 0.2,
+    "por": 0.15,
+    "ret": 0.03,
+    "ero_v": null,
+    "sed_v": null
+   }
+  },
+  "mountain_ridge": {
+   "zdroj_tabulky": "horniny_voda.json",
+   "skupina": "krystal",
+   "popis_skupiny": "nerozpukané krystalinikum a vyvřeliny",
+   "K_ms": 1e-12,
+   "K_rozsah_ms": [
+    1e-14,
+    1e-10
+   ],
+   "n": 0.01,
+   "Sy": 0.005,
+   "por_navrh": 0.01,
+   "ret_navrh": 0.005,
+   "perm_navrh": 0.0,
+   "ero_v_navrh": 6.0,
+   "sed_v_navrh": 0.0,
+   "t_1m_s": 5000000000.0,
+   "t_1m_herni_dny": 57870.37037037037,
+   "t_1m_realne_min": 578703.7037037037,
+   "soucasne": {
+    "perm": 0.0,
+    "por": 0.0,
+    "ret": 0.0,
+    "ero_v": null,
+    "sed_v": null
+   }
+  },
+  "slope_schist": {
+   "zdroj_tabulky": "horniny_voda.json",
+   "skupina": "bridlice",
+   "popis_skupiny": "jílová břidlice, fylit, svor",
+   "K_ms": 1e-11,
+   "K_rozsah_ms": [
+    1e-13,
+    1e-09
+   ],
+   "n": 0.05,
+   "Sy": 0.01,
+   "por_navrh": 0.05,
+   "ret_navrh": 0.04,
+   "perm_navrh": 0.0,
+   "ero_v_navrh": 2.0,
+   "sed_v_navrh": 0.0,
+   "t_1m_s": 1000000000.0000001,
+   "t_1m_herni_dny": 11574.074074074075,
+   "t_1m_realne_min": 115740.74074074074,
+   "soucasne": {
+    "perm": 0.0,
+    "por": 0.0,
+    "ret": 0.0,
+    "ero_v": null,
+    "sed_v": null
+   }
+  },
+  "granite_massif": {
+   "zdroj_tabulky": "horniny_voda.json",
+   "skupina": "krystal",
+   "popis_skupiny": "nerozpukané krystalinikum a vyvřeliny",
+   "K_ms": 1e-12,
+   "K_rozsah_ms": [
+    1e-14,
+    1e-10
+   ],
+   "n": 0.01,
+   "Sy": 0.005,
+   "por_navrh": 0.01,
+   "ret_navrh": 0.005,
+   "perm_navrh": 0.0,
+   "ero_v_navrh": 6.0,
+   "sed_v_navrh": 0.0,
+   "t_1m_s": 5000000000.0,
+   "t_1m_herni_dny": 57870.37037037037,
+   "t_1m_realne_min": 578703.7037037037,
+   "soucasne": {
+    "perm": 0.0,
+    "por": 0.0,
+    "ret": 0.0,
+    "ero_v": null,
+    "sed_v": null
+   }
+  },
+  "rock_wall": {
+   "zdroj_tabulky": "horniny_voda.json",
+   "skupina": "krystal",
+   "popis_skupiny": "nerozpukané krystalinikum a vyvřeliny",
+   "K_ms": 1e-12,
+   "K_rozsah_ms": [
+    1e-14,
+    1e-10
+   ],
+   "n": 0.01,
+   "Sy": 0.005,
+   "por_navrh": 0.01,
+   "ret_navrh": 0.005,
+   "perm_navrh": 0.0,
+   "ero_v_navrh": 6.0,
+   "sed_v_navrh": 0.0,
+   "t_1m_s": 5000000000.0,
+   "t_1m_herni_dny": 57870.37037037037,
+   "t_1m_realne_min": 578703.7037037037,
+   "soucasne": {
+    "perm": 0.0,
+    "por": 0.0,
+    "ret": 0.0,
+    "ero_v": null,
+    "sed_v": null
+   }
+  },
+  "alpine_crystalline": {
+   "zdroj_tabulky": "horniny_voda.json",
+   "skupina": "krystal",
+   "popis_skupiny": "nerozpukané krystalinikum a vyvřeliny",
+   "K_ms": 1e-12,
+   "K_rozsah_ms": [
+    1e-14,
+    1e-10
+   ],
+   "n": 0.01,
+   "Sy": 0.005,
+   "por_navrh": 0.01,
+   "ret_navrh": 0.005,
+   "perm_navrh": 0.0,
+   "ero_v_navrh": 6.0,
+   "sed_v_navrh": 0.0,
+   "t_1m_s": 5000000000.0,
+   "t_1m_herni_dny": 57870.37037037037,
+   "t_1m_realne_min": 578703.7037037037,
+   "soucasne": {
+    "perm": 0.0,
+    "por": 0.0,
+    "ret": 0.0,
+    "ero_v": null,
+    "sed_v": null
+   }
+  },
+  "subalpine_scree": {
+   "zdroj_tabulky": "horniny_voda.json",
+   "skupina": "sterk",
+   "popis_skupiny": "štěrk, suť",
+   "K_ms": 0.01,
+   "K_rozsah_ms": [
+    0.001,
+    1.0
+   ],
+   "n": 0.3,
+   "Sy": 0.22,
+   "por_navrh": 0.3,
+   "ret_navrh": 0.08,
+   "perm_navrh": 1.0,
+   "ero_v_navrh": 1.2,
+   "sed_v_navrh": 0.4,
+   "t_1m_s": 22.0,
+   "t_1m_herni_dny": 0.0002546296296296296,
+   "t_1m_realne_min": 0.0025462962962962965,
+   "soucasne": {
+    "perm": 0.7,
+    "por": 0.3,
+    "ret": 0.02,
+    "ero_v": null,
+    "sed_v": null
+   }
+  },
+  "alpine_belt": {
+   "zdroj_tabulky": "horniny_voda.json",
+   "skupina": "krystal",
+   "popis_skupiny": "nerozpukané krystalinikum a vyvřeliny",
+   "K_ms": 1e-12,
+   "K_rozsah_ms": [
+    1e-14,
+    1e-10
+   ],
+   "n": 0.01,
+   "Sy": 0.005,
+   "por_navrh": 0.01,
+   "ret_navrh": 0.005,
+   "perm_navrh": 0.0,
+   "ero_v_navrh": 6.0,
+   "sed_v_navrh": 0.0,
+   "t_1m_s": 5000000000.0,
+   "t_1m_herni_dny": 57870.37037037037,
+   "t_1m_realne_min": 578703.7037037037,
+   "soucasne": {
+    "perm": 0.0,
+    "por": 0.0,
+    "ret": 0.0,
+    "ero_v": null,
+    "sed_v": null
+   }
+  },
+  "alpine_granite": {
+   "zdroj_tabulky": "horniny_voda.json",
+   "skupina": "krystal",
+   "popis_skupiny": "nerozpukané krystalinikum a vyvřeliny",
+   "K_ms": 1e-12,
+   "K_rozsah_ms": [
+    1e-14,
+    1e-10
+   ],
+   "n": 0.01,
+   "Sy": 0.005,
+   "por_navrh": 0.01,
+   "ret_navrh": 0.005,
+   "perm_navrh": 0.0,
+   "ero_v_navrh": 6.0,
+   "sed_v_navrh": 0.0,
+   "t_1m_s": 5000000000.0,
+   "t_1m_herni_dny": 57870.37037037037,
+   "t_1m_realne_min": 578703.7037037037,
+   "soucasne": {
+    "perm": 0.0,
+    "por": 0.0,
+    "ret": 0.0,
+    "ero_v": null,
+    "sed_v": null
+   }
+  },
+  "alpine_quartzite": {
+   "zdroj_tabulky": "horniny_voda.json",
+   "skupina": "krystal",
+   "popis_skupiny": "nerozpukané krystalinikum a vyvřeliny",
+   "K_ms": 1e-12,
+   "K_rozsah_ms": [
+    1e-14,
+    1e-10
+   ],
+   "n": 0.01,
+   "Sy": 0.005,
+   "por_navrh": 0.01,
+   "ret_navrh": 0.005,
+   "perm_navrh": 0.0,
+   "ero_v_navrh": 6.0,
+   "sed_v_navrh": 0.0,
+   "t_1m_s": 5000000000.0,
+   "t_1m_herni_dny": 57870.37037037037,
+   "t_1m_realne_min": 578703.7037037037,
+   "soucasne": {
+    "perm": 0.0,
+    "por": 0.0,
+    "ret": 0.0,
+    "ero_v": null,
+    "sed_v": null
+   }
+  },
+  "extreme_ridge": {
+   "zdroj_tabulky": "horniny_voda.json",
+   "skupina": "krystal",
+   "popis_skupiny": "nerozpukané krystalinikum a vyvřeliny",
+   "K_ms": 1e-12,
+   "K_rozsah_ms": [
+    1e-14,
+    1e-10
+   ],
+   "n": 0.01,
+   "Sy": 0.005,
+   "por_navrh": 0.01,
+   "ret_navrh": 0.005,
+   "perm_navrh": 0.0,
+   "ero_v_navrh": 6.0,
+   "sed_v_navrh": 0.0,
+   "t_1m_s": 5000000000.0,
+   "t_1m_herni_dny": 57870.37037037037,
+   "t_1m_realne_min": 578703.7037037037,
+   "soucasne": {
+    "perm": 0.0,
+    "por": 0.0,
+    "ret": 0.0,
+    "ero_v": null,
+    "sed_v": null
+   }
+  },
+  "high_massif": {
+   "zdroj_tabulky": "horniny_voda.json",
+   "skupina": "krystal",
+   "popis_skupiny": "nerozpukané krystalinikum a vyvřeliny",
+   "K_ms": 1e-12,
+   "K_rozsah_ms": [
+    1e-14,
+    1e-10
+   ],
+   "n": 0.01,
+   "Sy": 0.005,
+   "por_navrh": 0.01,
+   "ret_navrh": 0.005,
+   "perm_navrh": 0.0,
+   "ero_v_navrh": 6.0,
+   "sed_v_navrh": 0.0,
+   "t_1m_s": 5000000000.0,
+   "t_1m_herni_dny": 57870.37037037037,
+   "t_1m_realne_min": 578703.7037037037,
+   "soucasne": {
+    "perm": 0.0,
+    "por": 0.0,
+    "ret": 0.0,
+    "ero_v": null,
+    "sed_v": null
+   }
+  },
+  "rock_spire": {
+   "zdroj_tabulky": "horniny_voda.json",
+   "skupina": "krystal",
+   "popis_skupiny": "nerozpukané krystalinikum a vyvřeliny",
+   "K_ms": 1e-12,
+   "K_rozsah_ms": [
+    1e-14,
+    1e-10
+   ],
+   "n": 0.01,
+   "Sy": 0.005,
+   "por_navrh": 0.01,
+   "ret_navrh": 0.005,
+   "perm_navrh": 0.0,
+   "ero_v_navrh": 6.0,
+   "sed_v_navrh": 0.0,
+   "t_1m_s": 5000000000.0,
+   "t_1m_herni_dny": 57870.37037037037,
+   "t_1m_realne_min": 578703.7037037037,
+   "soucasne": {
+    "perm": 0.0,
+    "por": 0.0,
+    "ret": 0.0,
+    "ero_v": null,
+    "sed_v": null
+   }
+  },
+  "summit_pyramid": {
+   "zdroj_tabulky": "horniny_voda.json",
+   "skupina": "krystal",
+   "popis_skupiny": "nerozpukané krystalinikum a vyvřeliny",
+   "K_ms": 1e-12,
+   "K_rozsah_ms": [
+    1e-14,
+    1e-10
+   ],
+   "n": 0.01,
+   "Sy": 0.005,
+   "por_navrh": 0.01,
+   "ret_navrh": 0.005,
+   "perm_navrh": 0.0,
+   "ero_v_navrh": 6.0,
+   "sed_v_navrh": 0.0,
+   "t_1m_s": 5000000000.0,
+   "t_1m_herni_dny": 57870.37037037037,
+   "t_1m_realne_min": 578703.7037037037,
+   "soucasne": {
+    "perm": 0.0,
+    "por": 0.0,
+    "ret": 0.0,
+    "ero_v": null,
+    "sed_v": null
+   }
+  },
+  "highest_point": {
+   "zdroj_tabulky": "horniny_voda.json",
+   "skupina": "krystal",
+   "popis_skupiny": "nerozpukané krystalinikum a vyvřeliny",
+   "K_ms": 1e-12,
+   "K_rozsah_ms": [
+    1e-14,
+    1e-10
+   ],
+   "n": 0.01,
+   "Sy": 0.005,
+   "por_navrh": 0.01,
+   "ret_navrh": 0.005,
+   "perm_navrh": 0.0,
+   "ero_v_navrh": 6.0,
+   "sed_v_navrh": 0.0,
+   "t_1m_s": 5000000000.0,
+   "t_1m_herni_dny": 57870.37037037037,
+   "t_1m_realne_min": 578703.7037037037,
+   "soucasne": {
+    "perm": 0.0,
+    "por": 0.0,
+    "ret": 0.0,
+    "ero_v": null,
+    "sed_v": null
+   }
+  },
+  "volcanic_conduit": {
+   "zdroj_tabulky": "horniny_voda.json",
+   "skupina": "krystal",
+   "popis_skupiny": "nerozpukané krystalinikum a vyvřeliny",
+   "K_ms": 1e-12,
+   "K_rozsah_ms": [
+    1e-14,
+    1e-10
+   ],
+   "n": 0.01,
+   "Sy": 0.005,
+   "por_navrh": 0.01,
+   "ret_navrh": 0.005,
+   "perm_navrh": 0.0,
+   "ero_v_navrh": 6.0,
+   "sed_v_navrh": 0.0,
+   "t_1m_s": 5000000000.0,
+   "t_1m_herni_dny": 57870.37037037037,
+   "t_1m_realne_min": 578703.7037037037,
+   "soucasne": {
+    "perm": 0.0,
+    "por": 0.0,
+    "ret": 0.0,
+    "ero_v": null,
+    "sed_v": null
+   }
+  }
+ }
+}

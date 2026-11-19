@@ -216,6 +216,98 @@ Skupiny: 1 Prototyp a buildy · 2 Terén a tvar · 3 Rozlišení bloku · 4 Ská
 - **Komplikace:** koryta jsou krátké úseky (malý svět, malá povodí). Krasová vyvěračka 0. Hráz na svahu tůň nevytvořila (potok ji obtekl). Podzemní tok vede zatím zjednodušeně k nejbližšímu okraji.
 - **Další krok:** Jan rozhodne, jak daleko vést podzemní tok (sledovat propustnou vrstvu?) a jestli má mít krasová vyvěračka vlastní pravidlo. Starší otevřené otázky (eroze po blocích vs hrubý svět, jádro hory přes šev, minerály z hrubého světa) zůstávají.
 
+### 📚 Blueprint v3 / E59: skutečné vodní vlastnosti materiálů a čas průsaku ve hře, jen návrh (2026-11-19 04:05 · `blueprint-studie/tools/materialy59.py`, návrh `sdilene/materialy_voda_navrh.json`, tabulka `blueprint-studie/shots/materialy59.md`)
+- 66 materiálů (12 + 54 hornin, bez vzduchu, sněhu a minerálů) je zařazeno do 18 skupin s reálnými hodnotami:
+  - K: Freeze & Cherry, Rawls 1982
+  - Sy a zadržení: Johnson 1967
+  - eroze a usazování: Hjulström
+- Průsak 1 m při spádu 1, čas hry × 144:
+
+  | materiál | herní dny | reálně |
+  |---|---|---|
+  | písek | 0,03 | 18 s |
+  | drn | 0,17 | 2 min |
+  | hlína | 0,47 | 5 min |
+  | vápenec | 7,7 | 77 min |
+  | čedič | 231 | 39 h |
+  | jíl | 2 300 | 16 dní |
+  | žula | 58 000 | 402 dní |
+
+- Návrh je perm = (log10 K + 9) / 6. K tomu tři režimy podle reálného času:
+  - okamžitě: ustálený stav
+  - událost: halda E51
+  - nepropustné
+- Sdílené tabulky jsou beze změny. **Jan rozhodne.**
+- **Negativa:**
+  - Rozsahy K mají 3–6 řádů, Hjulström je odečtený řádově, zařazení hornin do skupin je moje.
+  - Návrh je v konfliktu s rozhodnutím „vápenec nepropustný“ (perm by byl 0,25).
+  - Ve hře jsem návrh nezkoušel.
+
+### 🧪 Blueprint v3 / E58: varianty A / B / C a kombinace pro podzemí i povrch (2026-11-19 04:00 · `blueprint-studie/scripts/alg58/`, shots `58_podzemi.png`, `58_povrch.png`, `58_server.png`, devlog `devlog/voda-algoritmy.md`)
+- **Směr:** Jan 03:30: spustit navržené varianty (A kbelíková fronta, B graf těles, C lokální přepočet s ranným zastavením) a všechny kombinace. Totéž zkusit na povrchu. Stránka do devlogu.
+- **Zlepšení:** podzemí A+B+C: výkop **0,9 ms místo 1704 ms** (max 8,8 ms), plné řešení 0,95 s místo 1,65 s, +14 MB. **0 neshod** s plným řešením při 16 / 32 / 64 i na 100 výkopech. Zátěž 50 hráčů × 20 úprav / min při 128²: 146 % → 4,4 % jádra. Povrch: A bit po bitu shodné, flood 1,3–1,4× rychlejší.
+- **Komplikace:** A ani C samy nepomáhají, B samo jen 1,7×. Graf pánví na povrchu je 9× rychlejší, ale nepřesný (chybí ε spád). Časy plnění se po deltě dopočítají až při dotazu.
+- **Další krok:** Jan rozhodne, jestli A+B+C nahradí přepočet podzemí v `tok.gd` a jestli zapnout A na povrchu (výchozí vypnuto).
+
+### 🧪 Blueprint v3 / E57: odhad zátěže serveru 10–50 hráčů (2026-11-19 03:05 · `blueprint-studie/PROP.md` E57, jen přepočet)
+- **Směr:** Jan 02:52 (nepovinné): kolik serveru stojí 10–50 hráčů, z měření E54 / E55.
+- **Zlepšení:** povrchová voda stojí 0,2–12,5 % jádra i při 50 hráčích × 20 úprav / min.
+- **Komplikace:** přestavba podzemí 1,3 s na úpravu. Při 5 % úprav v podzemí a 50 hráčích × 20 / min je to 108 % jádra. Četnosti jsou můj odhad.
+- **Další krok:** Jan rozhodne: lokální přepočet jen dotčeného tělesa podzemí, nebo dávkování úprav.
+
+### 🧪 Blueprint v3 / E56: mírnější výškové přechody (2026-11-19 03:05 · `blueprint-studie/scripts/svah56/`, shots `56_profil.png`, `56_mapa.png`)
+- **Směr:** Jan 21:12: parametr největšího sklonu, měkčí reliéf, širší paty hor; před / po s postavou 2 m.
+- **Zlepšení:** sklon ≤ 0,6: nad 45° 21 % → 2,4 % buněk, p95 63° → 42°, schod 7 → 3 buňky. Pata hory 12 → 16–17 m. Švy 0,00, validátor 64/64, výchozí hash beze změny.
+- **Komplikace:** se sklonem 1,0 zůstává nad 45° 16 %, protože šum jemného povrchu omezovač hrubé mapy obchází. Medián sklonu roste, údolí se zvedla o 1,5–2 m, louky 24 → 8–10 dlaždic. Při 0,6 je vidět mřížka bloků.
+- **Další krok:** Jan zvolí strop sklonu a jestli smí měnit typy dlaždic. Pak případně omezit i jemný povrch.
+
+### 🧪 Blueprint v3 / E55: podzemí podle dna tělesa (2026-11-19 03:00 · `blueprint-studie/scripts/podzemi52/ug_funkce.gd`, shot `55_prameny_prusak.png`)
+- **Směr:** Jan 02:52: režim pro každé těleso podle materiálu pod ním (nepropustné → preliv, propustné → nadrz, smíšené → poměrem plochy).
+- **Zlepšení:** průsak 0,377 l/s, výtok 2,485 l/s místo 2,86 / 0 z E52. Výsledek stejný pro 16 / 32 / 64 (0,3 %), bilance 2e-15, 287 MB, řešení 1,2–1,6 s.
+- **Komplikace:** mapa dna má hrany po blocích. Výtok jde jen stěnou ostrova. Boční kontakty se nepočítají. První verze závisela na rozlišení (opraveno).
+- **Další krok:** Jan rozhodne, jestli `auto` udělat výchozím a jestli chce přechodový pás kolem prahu 0,05.
+
+### 🧪 Blueprint v3 / E54: klient a server, dohnání nepozorovaného, bilance (2026-11-18 23:15 · `blueprint-studie/scripts/dohnani54/`, `shots/test_dohnani54.txt`)
+- **Směr:** Jan (22:52–22:59): vesnice na klientu, výprava na serveru, tedy levně a deterministicky. Tok se spočítá jednou a uloží. Po změně se přepočítá jen po proudu a skončí, jakmile tok sedí. Nepozorovaná oblast se dožene naráz.
+- **Zlepšení:** dohnání 60 dní jedním skokem dává **stejný otisk** jako pozorování po dnech (tůň 223 událostí 0,55 s, koryto 511 událostí 0,75 s). Počítají se jen události, ne 5,2 M tiků. Přepočet po výkopu v korytu 128²: **2,6 ms** průměr, max 7,5. Vodní bilance po každém přepočtu sedí na 0.
+- **Komplikace:** sediment jde celý do první tůně (bez usazování cestou). Vsak a šířka koryta sdílí perm materiálu.
+- **Další krok:** Jan rozhodne o transportu sedimentu a o dvou polích materiálu (`vsak` vs. `kap_bunky`).
+
+### 🧪 Blueprint v3 / E53: plošný tok celými poli (2026-11-18 23:15 · `blueprint-studie/scripts/plosne53/`, shots `53_rozliv.png`, `53_srovnani.png`)
+- **Směr:** Jan (22:11–22:26): místo fronty po buňkách průchody přes celé pole. Pravidlo rozlévání ceil(Q / k) celých buněk, mělká voda, vektorové pole jako funkce.
+- **Zlepšení:** Janův příklad sedí přesně: přítok 4 → 8 buněk v písku k 0,5, 16 buněk na k 0,25, za 67 průchodů. Málo místa → hladina +1 a přeliv přes břehy. Vyhloubení zúží tok 8 → 6, na žule zůstává 16. Vektorové pole dává stejný průtok řezem při 1× / 2× / 4×.
+- **Komplikace:** na herní mapě 64² se rozlévání ani mělká voda za 3000 / 4000 průchodů neustálí (37–44 s). `tok.gd` route trvá 93 ms, změna 2,8 ms. numpy zrychlí krok mělké vody 47 ×, ale průchodů jsou tisíce.
+- **Další krok:** Jan rozhodne. Návrh: pro stav ponechat frontu `tok.gd`, šířku ceil(Q / k) dopočítat nad stopou a mělkou vodu použít jen jako vizuál na GPU.
+
+### 🧪 Blueprint v3 / E52: podzemní voda, varianty (2026-11-18 23:20 · `blueprint-studie/scripts/podzemi52/`, shots `52_pamet_cas.png`, `52_vystupy.png`, `52_vodopady.png`)
+- **Směr:** Jan (21:14–21:31, 22:40): srovnat slovník, plochá pole, hrubou mřížku 32, funkci nad vrstvami a Darcy (2D i 3D s CG).
+- **Zlepšení:** funkce nad vrstvami: **288 MB místo 4002 MB**, řešení **0,6 s místo 155 s**, průsak 2,86 vs. 2,87 l/s. Výsledek je stejný při 16 / 32 / 64. Plochá pole se shodují se základem při 575 MB a 36 s. Vodopád měřený v metrech: 12 / 13 / 19 vodopádů (dřív 12 / 5 / 1).
+- **Komplikace:** hrubá mřížka 32 mění výsledek (průsak 0,42 l/s místo 2,87). Darcy 3D na 16 / blok konverguje (1333 iterací, 58 s), ale bez podmínky průsakové plochy vzniká oběh 85 m³/s mezi výchozy. Na 32 / blok by jedno řešení trvalo ~15 min, běh jsem nedokončil.
+- **Další krok:** Jan rozhodne mezi `nadrz` a `preliv` a jestli Darcy dělat 2D nad vrstvou. Pak mírnější výškové přechody (zatím nezačato).
+
+### 🧪 Blueprint v3 / E51b: lokální přepočet toku (2026-11-18 22:20 · `blueprint-studie/scripts/voda/tok.gd`, `tools/bench_e51b.gd`)
+- **Směr:** Jan (22:09): přepočet po události nesmí projíždět celou mřížku.
+- **Zlepšení:** okno se zpracuje jen v obdélníku, pomocná pole se znovu používají a nulují se jen zapsané buňky. Tůně a jejich `pw` se udržují lokálně, odtoky tůní jen ze změněných položek. Na 128² průměr 230 → 9 ms, medián 232 → 4 ms na událost (E51 výkon 5 → 124 událostí/s). Stav i všechny regresní hashe jsou shodné.
+- **Komplikace:** maxima 40–100 ms (změna přes velkou tůň daleko po proudu, přepočet podzemního tělesa). Start `route()` je dál plný.
+- **Další krok:** E52 podzemí (tělesa po vrstvách místo buněk) zkrátí i přepočet podzemí.
+
+### 🧪 Blueprint v3 / E51: eroze a usazování událostmi (2026-11-18 21:35 · `blueprint-studie/scripts/eroze51/`, shots `51_koryto.png`, `51_tun.png`, `51_hraz.png`)
+- **Směr:** Jan (20:18–20:37): materiál má odpočet objemu vody, než ho voda odnese. Rychlost (Manning) rozhoduje erozi vs. usazování. Jedna halda událostí jen pro mokré buňky, lokální přepočet po proudu, kopání odpočet vynuluje. Prahy jsou data ve sdílené tabulce.
+- **Zlepšení:** testy VŠE OK (přesný odpočet, kopání a položení nulují, determinismus). Měkké koryto se za 60 dní zahloubí o 6,2 m, tvrdé o 0,5 m. Tůň 28 m³ je napůl zanesená za 30 dní. Písková hráz se za 27 dní prořízne, odtok do podzemí zmizí, po proudu 2,43 → 2,83 l/s. Halda 1 M: 2,6 µs na pop + push, 15 MB.
+- **Komplikace:** na mapě 128² jen 5 událostí/s, protože `TOK.update` má globální průchody (~230 ms na událost). Rychlosti jsou odhad, ne kalibrace (koryto je na žule za týdny). V korytu se nic neusazuje a vypuštění tůně nedá vlnu. Horniny 20+ prahy nemají.
+- **Další krok:** zlokalizovat `TOK.update` (okno po proudu, inkrementální tůně). Jan rozhodne o rychlostech (prahy, c0) a jestli chce usazování i v korytu.
+
+### 🧪 Blueprint v3 / E50: svět 8 × 8 po 64 × 64 × 256 buňkách (2026-11-18 21:00 · `blueprint-studie/scripts/svet64`, shots `50_svet64_*`)
+- **Směr:** Jan (20:04–20:09) chtěl větší běh svet8 (bloky 64 × 64 × 256, ne 256 × 256 bloků) se změřenou každou fází, pamětí a odhadem pro telefon.
+- **Zlepšení:** celé generování trvá 516 s na 1 jádře v GDScriptu, z toho:
+  - hrubý svět 0,6 s
+  - detail 354 s (blok min 2,8 / med 5,3 / max 10,4 s)
+  - voda 161 s
+  Peak paměti 4,0 GB. 64 × víc buněk stojí jen 23 × víc času. Švy jemných buněk jsou čisté (2,79 % vs. 2,58 % uvnitř). Je hotový GIF fází a izo.
+- **Komplikace:** podzemí na jemných buňkách stojí 129 s a 3,4 GB (jedno těleso 9,7 M buněk ve slovnících), voda se celá rozpustí v průsaku. Vodopádů je 1 místo 14, protože pravidlo závisí na rozlišení.
+- **Telefon:** C# + 4 vlákna je odhadem ~20 s pro detail. Podzemí musí na pole nebo na hrubší mřížku (32/blok: 17 s, 0,68 GB).
+- **Další krok:** Jan rozhodne o rozlišení vody a podzemí a o pravidle vodopádu v metrech. Pak podzemí na pole a vzorkování po úsecích.
+
 ### 🧪 Blueprint v3 / E47d: podzemní voda po propustné vrstvě (2026-11-18 20:15 · `blueprint-studie/scripts/voda/podzemi.gd`, shots `47d_*`)
 - **Směr:** Jan (20:00): odtok tůně nejde k nejbližšímu okraji, ale po propustné vrstvě. Dutinu zaplní (podzemní jezero). Uzavřená propustná čočka se naplní a přeteče nejnižším výstupem, např. do tůně 4 × 4 nebo pramenem ve svahu. Okraj ostrova = výtok do mlhy.
 - **Zlepšení:** 3D podzemní tělesa (propustná hornina, kras, dutina) se plní jako tůně po vrstvách z (události), do nejnižšího výstupu. Testy OK: čočka 38,4 → plná za 38,4 t, pak tůň 4 × 4 za 48 t. Dutina 27 buněk = jezero, pak po vrstvě ke stěně. Uzavřená čočka se naplní a dál nepřijímá.
@@ -261,6 +353,7 @@ Skupiny: 1 Prototyp a buildy · 2 Terén a tvar · 3 Rozlišení bloku · 4 Ská
 - Ostrov je létající: voda u okraje mapy přepadne přes hranu jako vodopád do mlhy pod ostrovem, dál se nesimuluje (okraj = odtok).
 - Náchylnost k erozi (Jan 20:18): materiál dostane práh = kumulativní objem vody, který musí protéct buňkou nebo po ní, aby ji odplavil. Řešeno jako odpočet času z průtoku (událost, žádný tick); vykopání nebo položení buňky odpočet vynuluje.
 - Usazování (Jan 20:20): v tůních, kde voda neproudí, se materiál usazuje. Odplavení i usazení závisí na rychlosti proudění (práh rychlosti pro odplavení a pro usazení podle materiálu); časy předpočítané z průtoku jako události.
+- Rozhodnutí Jan 21:14: podzemní voda může běžet na hrubší mřížce (ve svet64 32 na blok: 23 s, špička 0,7 GB místo 4 GB); povrchová voda zůstává v plném rozlišení.
 
 ## 3 Rozlišení bloku
 

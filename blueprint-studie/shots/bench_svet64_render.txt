@@ -1,0 +1,2 @@
+render GIF (Python): 69 snímků, 1.69 MB, 3.1 s
+render izo (Godot, OpenGL na xvfb): načtení 14 ms, síť 522242 + řezy 35016 trojúhelníků 483 ms, vykreslení + uložení 1218 ms, celkem 1716 ms

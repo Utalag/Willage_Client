@@ -1,11 +1,11 @@
-# E47 voda a eroze po vrstvách (2026-11-18T20:09:04)
-svět: 8 bloků v2 (sled 46), stavba 2.1 s; eroze 800 kapek na blok
+# E47 voda a eroze po vrstvách (2026-11-19T04:02:22)
+svět: 8 bloků v2 (sled 46), stavba 2.0 s; eroze 800 kapek na blok
 před erozí: šev povrchu hm_f 0.00 U (max 0.00, uvnitř 0.84), zlom na švu 0.74 (max 4.13, uvnitř 0.81) | švy vrstev 0.09 (uvnitř 1.01) | povrch buňky šev 0.00
-voda před: déšť 2458 buněk, odteklo 631, v kalužích 14.57 m³, mokrých sloupců 102 (≥ 2 cm), tok v nejsilnějších 5 % sloupců 42 %, chyba bilance 0.00001, 400 tiků, 13.5 s
-eroze blok: změna povrchu průměr 0.61 U, max odběr 6.43 U, max nános 4.76 U, odběr 817 / nános 424 U³ | šev povrchu hm_f 0.24 (max 2.47, uvnitř 0.75), zlom na švu 0.65 (max 3.58, uvnitř 0.74) | švy vrstev 0.09 (uvnitř 1.01) | povrch buňky šev 0.18 | jiný materiál na povrchu 24 % sloupců, z toho odkrytá vrstva 4 %, nános 0 % | odneseno minerálů 1 | eroze 174 ms, převzorkování 373 ms
-eroze okraj: změna povrchu průměr 0.31 U, max odběr 6.43 U, max nános 3.49 U, odběr 439 / nános 203 U³ | šev povrchu hm_f 0.00 (max 0.00, uvnitř 0.77), zlom na švu 0.73 (max 4.09, uvnitř 0.70) | švy vrstev 0.09 (uvnitř 1.01) | povrch buňky šev 0.00 | jiný materiál na povrchu 13 % sloupců, z toho odkrytá vrstva 2 %, nános 0 % | odneseno minerálů 0 | eroze 177 ms, převzorkování 374 ms
-voda po (okraj): déšť 2458 buněk, odteklo 655, v kalužích 10.06 m³, mokrých sloupců 103 (≥ 2 cm), tok v nejsilnějších 5 % sloupců 37 %, chyba bilance 0.00001, 400 tiků, 12.6 s
-eroze svet: změna povrchu průměr 0.67 U, max odběr 6.70 U, max nános 3.86 U, odběr 770 / nános 601 U³ | šev povrchu hm_f 0.23 (max 2.50, uvnitř 0.72), zlom na švu 0.46 (max 2.40, uvnitř 0.78) | švy vrstev 0.11 (uvnitř 1.01) | povrch buňky šev 0.19 | jiný materiál na povrchu 23 % sloupců, z toho odkrytá vrstva 4 %, nános 0 % | odneseno minerálů 1 | eroze 324 ms, převzorkování 397 ms
-voda po (svet): déšť 2458 buněk, odteklo 683, v kalužích 9.36 m³, mokrých sloupců 102 (≥ 2 cm), tok v nejsilnějších 5 % sloupců 34 %, chyba bilance 0.00001, 400 tiků, 12.5 s
+voda před: déšť 2458 buněk, odteklo 631, v kalužích 14.57 m³, mokrých sloupců 102 (≥ 2 cm), tok v nejsilnějších 5 % sloupců 42 %, chyba bilance 0.00001, 400 tiků, 12.5 s
+eroze blok: změna povrchu průměr 0.61 U, max odběr 6.43 U, max nános 4.76 U, odběr 817 / nános 424 U³ | šev povrchu hm_f 0.24 (max 2.47, uvnitř 0.75), zlom na švu 0.65 (max 3.58, uvnitř 0.74) | švy vrstev 0.09 (uvnitř 1.01) | povrch buňky šev 0.18 | jiný materiál na povrchu 24 % sloupců, z toho odkrytá vrstva 4 %, nános 0 % | odneseno minerálů 1 | eroze 191 ms, převzorkování 364 ms
+eroze okraj: změna povrchu průměr 0.31 U, max odběr 6.43 U, max nános 3.49 U, odběr 439 / nános 203 U³ | šev povrchu hm_f 0.00 (max 0.00, uvnitř 0.77), zlom na švu 0.73 (max 4.09, uvnitř 0.70) | švy vrstev 0.09 (uvnitř 1.01) | povrch buňky šev 0.00 | jiný materiál na povrchu 13 % sloupců, z toho odkrytá vrstva 2 %, nános 0 % | odneseno minerálů 0 | eroze 186 ms, převzorkování 362 ms
+voda po (okraj): déšť 2458 buněk, odteklo 655, v kalužích 10.06 m³, mokrých sloupců 103 (≥ 2 cm), tok v nejsilnějších 5 % sloupců 37 %, chyba bilance 0.00001, 400 tiků, 12.7 s
+eroze svet: změna povrchu průměr 0.67 U, max odběr 6.70 U, max nános 3.86 U, odběr 770 / nános 601 U³ | šev povrchu hm_f 0.23 (max 2.50, uvnitř 0.72), zlom na švu 0.46 (max 2.40, uvnitř 0.78) | švy vrstev 0.11 (uvnitř 1.01) | povrch buňky šev 0.19 | jiný materiál na povrchu 23 % sloupců, z toho odkrytá vrstva 4 %, nános 0 % | odneseno minerálů 1 | eroze 326 ms, převzorkování 374 ms
+voda po (svet): déšť 2458 buněk, odteklo 683, v kalužích 9.36 m³, mokrých sloupců 102 (≥ 2 cm), tok v nejsilnějších 5 % sloupců 34 %, chyba bilance 0.00001, 400 tiků, 12.8 s
 determinismus eroze (okraj) 2×: 36236d38becf / 36236d38becf → STEJNÉ
-celkem 43.8 s
+celkem 43.0 s

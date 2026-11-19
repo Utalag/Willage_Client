@@ -30,6 +30,14 @@ Volitelně: hydraulická eroze kapkami na šabloně před dorovnáním (`--erosi
 ./run.sh voda47d    # E47d podzemní voda po propustné vrstvě: testy čočka → tůň 4 × 4, dutina → podzemní jezero; svět; snímky 47d_*
 ./run.sh voda47b    # E47b/c strže, ponory, vodopády; voda jen z pramenů, okraj ostrova, lokální přepočet, plnění tůní → shots/bench_voda_c.txt, bench_voda_b.txt, 47b_*.png, 47b_vodopad.gif
 ./run.sh svet64     # E50 svět 8 × 8 po 64 × 64 × 256 buňkách: časy fází a bloků, paměť → shots/bench_svet64.txt, 50_svet64_faze.gif, 50_svet64_iso.png
+./run.sh eroze51    # E51 eroze a usazování událostmi (odpočet objemu vody, Manning, halda) → shots/test_eroze51.txt, bench_eroze51.txt, 51_koryto/51_tun/51_hraz.png
+./run.sh podzemi52  # E52 podzemní voda: varianty slovník / pole / hrubá mřížka / funkce nad vrstvami / Darcy 2D a 3D (CG) → shots/podzemi52/*.json, tabulka.md, bench_podzemi52.txt, 52_*.png
+./run.sh plosne53   # E53 plošný tok celými poli: pravidlo rozlévání ceil(Q/k), mělká voda, vektorové pole → shots/test_plosne53.txt, bench_plosne53_*.json, 53_*.png
+./run.sh dohnani54  # E54 dohnání nepozorovaného (jeden skok = stejný stav), ranné zastavení přepočtu, vodní bilance → shots/test_dohnani54.txt
+./run.sh podzemi55  # E55 režim podzemí podle dna tělesa (preliv / nadrz / smes, práh p55_perm_dno) → shots/test_podzemi55.txt, 55_prameny_prusak.png
+./run.sh svah56     # E56 mírnější přechody (s56_on, s56_max_slope …) před / po → shots/bench_svah56.txt, 56_profil.png, 56_mapa.png
+python3 tools/materialy59.py   # E59 návrh vodních vlastností z reálných K / Sy → ../sdilene/materialy_voda_navrh.json, shots/materialy59.md (sdílené tabulky nemění)
+./run.sh alg58      # E58 varianty A / B / C a kombinace: záznam volání podzemí, každá varianta zvlášť, povrch 128²–512² → shots/alg58/*.json, 58_*.png
 ./run.sh svet8      # E49 svět 8 × 8 (hrubě → dlaždice → detail) → shots/bench_svet8.txt, 49_svet_8x8_faze.gif, 49_svet_8x8_*.png
 ```
 Všechny parametry jsou v `scripts/bp/params.gd`. Hlavní jdou ladit i v Inspectoru na uzlu `Svet`.
@@ -68,6 +76,16 @@ Všechny parametry jsou v `scripts/bp/params.gd`. Hlavní jdou ladit i v Inspect
 | `scripts/svet8/hruby_teren.gd`, `pocasi.gd`, `reky.gd`, `biomy.gd`, `dlazdice.gd`, `beh.gd` | E49 fáze hrubého světa, řez na dlaždice, detail od první dlaždice (`s8_*`) |
 | `scripts/svet64/beh64.gd`, `blok64.gd`, `voda64.gd`, `mereni.gd` | E50 svět 8 × 8 v jemných buňkách: běh a tabulka časů, jeden blok n × n × 4n (navázání, vrstvy, minerály, dutiny), voda na jemné mřížce (povrch + podzemí), čas a paměť (`s64_*`) |
 | `tools/test_svet64.gd`, `tools/gif_svet64.py`, `scripts/uzly/scenario_svet64.gd` | E50 měření, GIF po fázích, izo snímek z `shots/svet64/` |
+| `scripts/eroze51/mech.gd`, `hydro.gd`, `halda.gd`, `scenare.gd`, `beh51.gd` | E51 mechanika toku: odpočty eroze a nánosu ve frontě událostí, Manning a rychlost v tůni, halda s generacemi, scénáře koryto/tůň/hráz/výkon, běh a tabulka (`e51_*`, prahy v `sdilene/materialy_voda.json`) |
+| `tools/test_eroze51.gd`, `tools/shots_eroze51.py` | E51 testy + měření, snímky `51_*` z `shots/eroze51.json` |
+| `scripts/podzemi52/cache.gd`, `ug_slovnik.gd`, `ug_pole.gd`, `ug_mrizka.gd`, `ug_funkce.gd`, `ug_darcy3d.gd`, `testy52.gd`, `beh52.gd` | E52 podzemí: cache světa svet64, obal slovníkové verze, plochá pole s limitem hloubky, převod hrubé mřížky, funkce nad vrstvami (`nadrz` / `preliv` / `darcy` 2D), Darcy 3D konečnými objemy + CG (Jan 22:40), demo testy E47d, běh jedné varianty (`p52_*`, `s64_ug_n`, `s64_ug_alg`) |
+| `tools/podzemi52.sh`, `tools/podzemi52.py`, `tools/test_podzemi52.gd`, `tools/cache_podzemi52.gd` | E52 všechny varianty po procesech, tabulka a snímky `52_*` |
+| `scripts/plosne53/rozliv.gd`, `mvoda.gd`, `beh53.gd`, `tools/plosne53.gd`, `tools/plosne53_np.py`, `tools/plosne53_roz.py`, `tools/shots_plosne53.py` | E53 průchody celým polem: pravidlo rozlévání (celé buňky, šířka ceil(Q/k), hromadění, zpětná vazba koryta), mělká voda (trubky), vektorové pole, numpy odhad paralelizace (`p53_*`) |
+| `scripts/dohnani54/beh54.gd`, `tools/test_dohnani54.gd` | E54 klient / server: dohnání 60 dní jedním skokem vs. po dnech (otisk), přepočet s ranným zastavením po výkopech, bilance (kontinuita + celková) po každém přepočtu (`e54_*`) |
+| `scripts/podzemi52/ug_funkce.gd` (`auto`, `floor_of`), `scripts/podzemi52/testy52.gd` (`run_e55`), `tools/test_podzemi55.gd`, `tools/shots_podzemi55.py` | E55 režim podle materiálu pod tělesem: nepropustné dno (perm ≤ `p55_perm_dno` 0,05) → preliv, propustné → nadrz, smíšené → průsak dnem, zbytek nejnižším výstupem |
+| `scripts/svah56/svah.gd`, `beh56.gd`, `tools/svah56.gd`, `tools/shots_svah56.py` (+ `s56_*` v `svet8/hruby_teren.gd`, `svet8/beh.gd`) | E56 omezovač sklonu hrubého světa (tepelná eroze, zachová hmotu), vyhlazení, širší paty hor; výchozí vypnuto |
+| `scripts/alg58/bq58.gd`, `ug58.gd`, `povrch58.gd`, `rec58.gd`, `tools/alg58_rec.gd`, `alg58_ug.gd`, `alg58_tok.gd`, `alg58.sh`, `shots_alg58.py` (+ `voda/tok.gd` `FLOOD_DZ`, výchozí 0) | E58 A kbelíková fronta (stejné pořadí jako halda), B graf těles (souhrny + kandidáti výstupu), C stopa a delta po výkopu; povrch A / B (graf pánví) / C |
+| `tools/materialy59.py` → `../sdilene/materialy_voda_navrh.json` | E59 návrh: K, n, Sy, ret, perm (log škála), ero_v / sed_v, čas průsaku 1 m v herních dnech a reálných minutách; jen návrh |
 | `tools/test_svet8.gd`, `tools/gif_svet8.py` | E49 měření a GIF po fázích |
 | `data/mineraly_hostitele.json` | minerál → povolení hostitelé, tvar a parametry růstu (názvy materiálů ze `sdilene/materialy_voda.json`) |
 
@@ -170,6 +188,20 @@ nic se nepočítá. Po změně terénu u vody se přepočítá jen okno a cesta 
 D = Σ perm · `pit_drain_q`. Plní se rychlostí přítok − D a časy vrstev jsou předpočítané události. Plná pošle D podzemím
 k vyvěračce ve stěně ostrova a zbytek přeteče. D ≥ přítok → ponor. **Okraj mapy = okraj plovoucího ostrova:** voda tam přepadá
 do mlhy a dál se nesimuluje. Chybějící slot je stěna. Varianta `voda_zdroj=plocha` je srovnání s vodou z plochy (E47b).
+
+**Svět 64 (E50, Jan 20:04–20:09):**
+- Stejný svět jako E49, ale bloky se vzorkují v 64 × 64 × 256 buňkách (0,125 m). Funkce na řídicí mřížce 16 × 16 se
+  nemění a minerály i dutiny drží objem (× (n/16)³).
+- Voda běží na jemné mřížce. Parametry v buňkách a na sloupec se přepočtou f = n/16 (`voda64.scaled`, `voda_cell_m`).
+- `--s64_voda_n=32` spustí vodu a podzemí na hrubší mřížce.
+- Časy fází a bloků, RSS a peak jsou v `shots/bench_svet64.txt`.
+- GIF a izo se renderují z `shots/svet64/` zvlášť od generování.
+
+**Eroze E51 (Jan 20:18–20:37):**
+- Každý materiál má odpočet = kolik m³ vody musí přes buňku protéct, než ji odnese (`ero_vol`), ale jen když rychlost
+  proudu v ≥ `ero_v`. Ve stojaté vodě (v < `sed_v`) se usazuje nános. Rychlost z Manningovy rovnice, v tůni Q / (hloubka · √plocha).
+- Žádné tiky: jedna halda událostí, položku mají jen mokré sloupce. Odnesení, nános nebo kopání → `TOK.update` po proudu
+  a přeplánování dotčených sloupců. Kopání a položení odpočet vynuluje.
 
 **Podzemí E47d (Jan 20:00):** odtok tůně vstoupí do nejbližšího propustného tělesa pod ní (propustná hornina, kras nebo
 dutina, 6-sousedé ve 3D buňkách). Voda **sleduje vrstvu**: těleso se plní po vrstvách z jako tůň (dutina celá buňka,

@@ -1,11 +1,11 @@
-# E49 malý svět 8 × 8 bloků (2026-11-18T18:58:31)
-1 hrubý terén: 4 ms
+# E49 malý svět 8 × 8 bloků (2026-11-19T03:58:13)
+1 hrubý terén: 3 ms
 2 počasí: 7 ms
-3 eroze + řeky: 502 ms
-4 biomy: 19 ms
-5 dlaždice: 10 ms
-6 detail: 64 dlaždic od (3, 4) do šířky, 14.5 s (průměr 227 ms, max 308 ms)
-CELKEM 15.1 s (hrubý svět 0.54 s)
+3 eroze + řeky: 448 ms
+4 biomy: 17 ms
+5 dlaždice: 9 ms
+6 detail: 64 dlaždic od (3, 4) do šířky, 13.2 s (průměr 206 ms, max 284 ms)
+CELKEM 13.7 s (hrubý svět 0.48 s)
 typy dlaždic: hora_vyzdvizena 7, svah 5, louka 24, kopec 6, prohlubeň 9, sopka 1, hora_zvrasnena 12
 biomy (body hrubé mřížky): niva 1049, les 225, skály 448, sníh 420, řeka 235, mokřad 29, louka 452, step 916, jezero 322
 řeky 235 bodů (5.7 %), jezera 322 bodů, sopka v dlaždici (1, 4)
@@ -14,5 +14,3 @@ biomy (body hrubé mřížky): niva 1049, les 225, skály 448, sníh 420, řeka 
 náhlé vrstvy: šev: dvojic 1792, náhlých vrstev 0 (z buněk 77), max skok mocnosti 0.00 U | uvnitř: dvojic 15360, náhlých 1239 (z buněk 2736), max skok 9.12 U
 validátor OK 64/64, minerály přesně 57/64
 determinismus 2×: f08f56000feb / f08f56000feb → STEJNÉ
-## srovnání (E49b, stejný hrubý svět): typ hory po dlaždicích (--s8_massif=false) švy vrstev 0.48 (uvnitř 0.54), minerály přesně 55/64;
-## po masivech (výchozí) 0.16 (uvnitř 0.53); všechny hory zvrásněné (--s8_force_mtn=hora_zvrasnena) 0.03 (uvnitř 0.49), minerály 64/64

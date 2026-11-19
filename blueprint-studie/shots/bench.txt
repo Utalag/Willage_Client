@@ -1,13 +1,13 @@
-blueprint-studie – testy a měření (2026-11-18T20:08:59)
+blueprint-studie – testy a měření (2026-11-19T03:57:37)
 parametry: band 4, strata_band 0, free_face neumann, drape [0.0, 0.15, 0.45, 0.6, 0.7], eroze false
 
 ## Vložení (naráz) – časy kroků ms
-1. (0, 1) kopec seed 303 (sousedů při vložení 0): celkem 26 ms | povrch 1, vrstvy 2, buňky 3, minerály 2, voda 8, kontrola 10
-2. (2, 1) louka seed 101 (sousedů při vložení 0): celkem 23 ms | povrch 0, vrstvy 2, buňky 3, minerály 1, voda 7, kontrola 9
-3. (1, 1) svah seed 7 (sousedů při vložení 2): celkem 44 ms | povrch 3, vrstvy 20, buňky 3, minerály 2, voda 7, kontrola 9
-4. (1, 0) prohlubeň seed 55 (sousedů při vložení 1): celkem 94 ms | povrch 3, vrstvy 72, buňky 2, minerály 2, voda 6, kontrola 8
-5. (2, 2) kopec seed 909 (sousedů při vložení 1): celkem 87 ms | povrch 3, vrstvy 63, buňky 2, minerály 2, voda 8, kontrola 9
-celý sled 5 bloků: 276 ms
+1. (0, 1) kopec seed 303 (sousedů při vložení 0): celkem 22 ms | povrch 1, vrstvy 1, buňky 2, minerály 2, voda 7, kontrola 8
+2. (2, 1) louka seed 101 (sousedů při vložení 0): celkem 19 ms | povrch 0, vrstvy 2, buňky 2, minerály 1, voda 7, kontrola 8
+3. (1, 1) svah seed 7 (sousedů při vložení 2): celkem 39 ms | povrch 3, vrstvy 18, buňky 2, minerály 2, voda 6, kontrola 8
+4. (1, 0) prohlubeň seed 55 (sousedů při vložení 1): celkem 80 ms | povrch 2, vrstvy 63, buňky 2, minerály 2, voda 5, kontrola 7
+5. (2, 2) kopec seed 909 (sousedů při vložení 1): celkem 76 ms | povrch 3, vrstvy 54, buňky 2, minerály 2, voda 7, kontrola 8
+celý sled 5 bloků: 238 ms
 
 ## Minerály (cíl → umístěno, schodek; hostitel a jeho buněk v bloku)
 (0, 1) kopec: měděná ruda 20→20 (schodek 0; v Masivní žula (= žula gen-v3)/Granodiorit/Skarn (kontakt), 2157 buněk); železná ruda 24→24 (schodek 0; v Diabaz (= čedič gen-v3)/Masivní jeskynní vápenec (= vápenec gen-v3)/Skarn (kontakt), 3750 buněk); ložiskový jíl 40→40 (schodek 0; v Zvětralá břidlice a jíly (= jíl gen-v3), 742 buněk) | validátor OK  | rarita (jen minerály) 1480 b.
@@ -49,6 +49,6 @@ bez: švy vrstev průměr/max: Diabaz (= čedič gen-v3) 0.73/3 (uvnitř 0.40), 
 s:   švy vrstev průměr/max: Diabaz (= čedič gen-v3) 0.30/1 (uvnitř 0.41), Masivní žula (= žula gen-v3) 0.36/1 (uvnitř 0.38), Masivní jeskynní vápenec (= vápenec gen-v3) 0.28/1 (uvnitř 0.55), Zvětralá břidlice a jíly (= jíl gen-v3) 0.27/1 (uvnitř 0.62), Štěrk, hlinitopísčité sedimenty (= písek gen-v3) 0.19/1 (uvnitř 0.71) | povrch šev 0.00/max 0 (uvnitř 0.59), dvojic 64
 
 ## Volitelná hydraulická eroze (3000 kapek na blok)
-celý sled s erozí 478 ms (bez 276 ms); krok povrch: kopec 41 ms, Δ povrchu 2.05 b., louka 41 ms, Δ povrchu 0.90 b., svah 53 ms, Δ povrchu 2.86 b., prohlubeň 65 ms, Δ povrchu 3.05 b., kopec 45 ms, Δ povrchu 2.39 b.
+celý sled s erozí 435 ms (bez 238 ms); krok povrch: kopec 36 ms, Δ povrchu 2.05 b., louka 35 ms, Δ povrchu 0.90 b., svah 49 ms, Δ povrchu 2.86 b., prohlubeň 60 ms, Δ povrchu 3.05 b., kopec 41 ms, Δ povrchu 2.39 b.
 švy s erozí: švy vrstev průměr/max: Diabaz (= čedič gen-v3) 0.19/6 (uvnitř 0.15), Masivní žula (= žula gen-v3) 0.11/2 (uvnitř 0.15), Masivní jeskynní vápenec (= vápenec gen-v3) 0.11/1 (uvnitř 0.17), Zvětralá břidlice a jíly (= jíl gen-v3) 0.00/0 (uvnitř 0.15), Štěrk, hlinitopísčité sedimenty (= písek gen-v3) 0.02/1 (uvnitř 0.17) | povrch šev 0.00/max 0 (uvnitř 0.25), dvojic 64
 hash s erozí 2× stejný: ano

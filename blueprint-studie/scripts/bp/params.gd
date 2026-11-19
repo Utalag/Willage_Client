@@ -63,12 +63,25 @@ static func defaults() -> Dictionary:
 		"s8_droplets": 2.0, "s8_ero_cap": 1.0, "s8_ero_erode": 0.1, "s8_ero_dep": 0.1, "s8_frames": 8,
 		"s8_river": 18.0, "s8_force_mtn": "", "s8_massif": true, "s8_lake": 0.3, "s8_lake_frac": 0.15, "s8_mtn_mean": 47.0, "s8_mtn_max": 53.0, "s8_hill_relief": 6.0, "s8_slope": 0.6,
 		"s8_first": [3, 4],
+		"s56_on": false, "s56_max_slope": 1.0, "s56_pasy": 200, "s56_hladit": 1, "s56_hladit_w": 0.5, "s56_paty": 0.2, "s56_hreben": 2.0,
 		# E50 svět 8 × 8 v jemných buňkách (scripts/svet64): buněk na stranu bloku (výška 4n), vodní mřížka na blok (dělitel s64_n),
 		# podzemí ve 3D, kolik bloků (0 = všechny), determinismus na prvních N blocích, srovnání s E49, uložit data pro GIF a izo
 		"s64_n": 64, "s64_voda_n": 64, "s64_podzemi": true, "s64_bloky": 0, "s64_det_bloky": 3, "s64_e49": true, "s64_data": true, "s64_out": "bench_svet64",
 		# E50 dutiny: E49 dlaždice dutiny nemají; jedna dutina (vzduch = jeskyně / voda = rezervoár) o s64_dutina_n základních buňkách v typech
 		"s64_dutina": "vzduch", "s64_dutina_n": 40, "s64_dutina_typy": "kopec,svah,hora_vyzdvizena,hora_zvrasnena",
 		"voda_cell_m": 0.5,
+		# E52 podzemí: varianty (scripts/podzemi52). cache světa svet64, varianta (slovnik | pole | hruba | funkce | darcy), podzemí na hrubší
+		# mřížce (s64_ug_n buněk na blok, Jan 21:14 výchozí 32; povrch dál s64_voda_n), pole: těleso jen do p52_hloubka_m pod povrchem,
+		# funkce: režim nadrz (jedna nádrž = jako slovník) | preliv (plnění a přelévání od vstupu), vodopád: spád na vodorovné vzdálenosti
+		"p52_cache": "res://.cache52/svet64.bin", "p52_var": "slovnik", "s64_ug_n": 32, "s64_ug_alg": "pole", "p52_ug_n": 64, "p52_hloubka_m": 6.0,
+		"p52_rezim": "nadrz", "p52_darcy_it": 40000, "p52_darcy_k": 0.0001, "p52_darcy_dz": 0.5, "p52_k0": 0.001, "p55_perm_dno": 0.05, "p58_var": "base", "p58_dz": 0.0625, "p58_edits": 20, "p58_seed": 58, "p58_dig_m": 1.0, "p58_tol": 1e-9, "p58_near": 6, "p58_bfs_max": 20000, "p58_tag": "", "p58_sdz": 1.0, "p58_surf_var": "base", "p52_k_dut": 1.0, "p52_cg_it": 5000, "p52_cg_tol": 1e-6, "p52_out": "podzemi52", "vodopad_dx_m": 0.5,
+		# E51 eroze a usazování událostmi (scripts/eroze51): Manning n, šířka koryta k_b · √Q (m), min. sklon, sklon přes okraj,
+		# exponent rychlosti v odpočtu (0 = čistě objem), koncentrace plavenin c0 (m³/m³), materiál nánosu, okraj okna přepočtu
+		"e51_n": 0.035, "e51_kb": 3.0, "e51_s_min": 0.005, "e51_s_edge": 0.5, "e51_k": 0.0, "e51_c0": 0.0002, "e51_nanos": "clay",
+		"e51_margin": 4, "e51_s_len": 4, "e51_dni": 60.0, "e51_perf_n": 128, "e51_perf_ev": 300, "e51_halda": 1000000, "e51b_ev": 100,
+		# E53 plošný tok maticemi: mapa p53_n² (perf z E51), propustnost l/s na buňku podle materiálu, mělká voda dt/tření
+		"p53_n": 64, "p53_alpha": 0.5, "p53_vcell": 125.0, "p53_k_dirt": 2.0, "p53_k_sand": 2.0, "p53_k_clay": 1.0, "p53_k_rock": 1.0,
+		"p53_max": 3000, "p53_sw_dt": 0.05, "p53_sw_cf": 2.0, "p53_sw_max": 4000, "p53_margin": 12, "p53_epoch": 3, "p53_jen": "",
 		"voda_rain": 0.02, "voda_rain_ticks": 60, "voda_ticks": 400, "voda_depth": 6, "voda_infil": 0.10,
 		# běh po snímcích
 		"budget_ms": 6.0,

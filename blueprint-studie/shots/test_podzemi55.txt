@@ -1,0 +1,11 @@
+# E52 demo testy E47d × varianty podzemí (2026-11-19T04:13:48), propustná Křemenný pískovec por 0.20
+slovnik: 1) čočka 38.40 (čekáno 38.40), plná za 38.40 t, výstup povrch z 10 do (7, 4) OK | 2) dutina: jezero 27 (27), objem do výstupu 40.20 (čekáno 40.20), výstup okraj z 5 x 11 OK | 3) uzavřená čočka 6.40 (čekáno 6.40), výstup žádný, výtok 0.00 OK | OK
+pole: 1) čočka 38.40 (čekáno 38.40), plná za 38.40 t, výstup povrch z 10 do (7, 4) OK | 2) dutina: jezero 27 (27), objem do výstupu 40.20 (čekáno 40.20), výstup okraj z 5 x 11 OK | 3) uzavřená čočka 6.40 (čekáno 6.40), výstup žádný, výtok 0.00 OK | OK
+funkce nadrz: 1) čočka 38.40 (čekáno 38.40), plná za 38.40 t, výstup povrch z 11.0 do (7, 4) OK | 2) dutina: jezero 27 (27), objem do výstupu 27.00 (čekáno 27.00), výstup okraj z 5.0 x 11 OK | 3) uzavřená čočka 6.40 (čekáno 6.40), výstup žádný, výtok 0.00 OK | OK
+funkce preliv: 1) čočka 38.40 (čekáno 38.40), plná za 38.40 t, výstup povrch z 11.0 do (8, 7) OK | 2) dutina: jezero 27 (27), objem do výstupu 27.00 (čekáno 27.00), výstup okraj z 5.0 x 11 OK | 3) uzavřená čočka 6.40 (čekáno 6.40), výstup žádný, výtok 0.00 OK | OK
+funkce auto: 1) čočka 38.40 (čekáno 38.40), plná za 38.40 t, výstup povrch z 11.0 do (8, 7) OK | 2) dutina: jezero 27 (27), objem do výstupu 27.00 (čekáno 27.00), výstup okraj z 5.0 x 11 OK | 3) uzavřená čočka 6.40 (čekáno 6.40), výstup žádný, výtok 0.00 OK | OK
+výsledek: VŠE OK
+E55 dno nepropustne: režim preliv (čekáno preliv), podíl propustného dna 0.00, průsak 0.000, výtok 1.000 (okraj), bilance 0.000000000 → OK
+E55 dno propustne: režim nadrz (čekáno nadrz), podíl propustného dna 1.00, průsak 0.036, výtok 0.964 (okraj), bilance 0.000000000 → OK
+E55 dno pul: režim smes (čekáno smes), podíl propustného dna 0.50, průsak 0.018, výtok 0.982 (okraj), bilance 0.000000000 → OK
+výsledek E55: VŠE OK

@@ -264,6 +264,580 @@ Výchozí: 800 kapek na blok, `ero_cap` 1,0, `ero_erode` 0,1, `ero_deposit_rate`
   v detailu jen vyhloubené koryto, vodu v GIFu kreslím z hrubé fáze (voda_sim na 128 × 128 × 64 jsem nespouštěl). Biomy se
   zatím promítnou jen do podmnožiny hornin, ne do vegetace. Počet minerálů je podle typu, ne podle biomu.
 
+## E59 materiály podle skutečných hodnot, čas průsaku ve hře (plán a výsledek 2026-11-19 04:05; Jan 03:47)
+- **Plán:**
+  - Ke každému materiálu ze `sdilene/materialy_voda.json` a `sdilene/horniny_voda.json` najít skutečné hodnoty:
+    - hydraulická vodivost K
+    - pórovitost n
+    - specifická vydatnost Sy a zadržení n − Sy
+    - práh eroze a usazování (Hjulström)
+  - Spočítat průsak 1 m v herním čase (1 herní den = 10 min reálně, × 144).
+  - Navrhnout herní hodnoty do **samostatného** souboru `sdilene/materialy_voda_navrh.json`. Sdílené tabulky zůstávají
+    beze změny, Jan rozhodne.
+- **Postup:** `tools/materialy59.py`. Materiály jsou zařazené do 18 skupin. K je střed rozsahu v log10 podle Freeze
+  & Cherry tab. 2.2 [38]. Půdy podle Rawls 1982 [40]. Sy podle Johnson 1967 [39]. ero_v / sed_v jsou odečtené řádově
+  z Hjulströmova diagramu [32]. Pórová rychlost v = K · i / Sy při spádu i = 1, čas na 1 m t = Sy / K.
+- **Výsledek** (výběr, celá tabulka je `shots/materialy59.md`, 66 materiálů; „nyní“ = současná hodnota ve sdílené
+  tabulce):
+
+  | materiál | skupina | K m/s | n | Sy | perm návrh (nyní) | ero_v návrh (nyní) | sed_v návrh (nyní) | 1 m: herní dny | 1 m: reálně |
+  |---|---|---|---|---|---|---|---|---|---|
+  | grass | drn | 1e-05 | 0.45 | 0.15 | 0.667 (0.25) | 1.5 (1.2) | 0.003 (0.03) | 0.174 | 2 min |
+  | dirt | hlina | 4e-06 | 0.43 | 0.15 | 0.595 (0.3) | 0.4 (0.35) | 0.003 (0.03) | 0.469 | 5 min |
+  | sand | pisek | 1e-04 | 0.35 | 0.26 | 0.833 (0.8) | 0.25 (0.25) | 0.03 (0.08) | 0.0301 | 18 s |
+  | clay | jil | 1e-10 | 0.5 | 0.02 | 0.0 (0) | 1.2 (0.8) | 0.0005 (0.01) | 2.31e+03 | 16 dní |
+  | limestone | vapenec | 3e-08 | 0.05 | 0.02 | 0.246 (0) | 4.0 (4) | 0.0 (0) | 7.72 | 77 min |
+  | granite | krystal | 1e-12 | 0.01 | 0.005 | 0.0 (0) | 6.0 (6) | 0.0 (0) | 5.79e+04 | 402 dní |
+  | basalt | cedic | 1e-09 | 0.05 | 0.02 | 0.0 (0) | 6.0 (6) | 0.0 (0) | 231 | 39 h |
+  | deep_limestone | vapenec | 3e-08 | 0.05 | 0.02 | 0.246 (0) | 4.0 (—) | 0.0 (—) | 7.72 | 77 min |
+  | siltstone | prachovec | 1e-09 | 0.15 | 0.03 | 0.0 (0.1) | 1.5 (—) | 0.0 (—) | 347 | 2 dní |
+  | conglomerate | slepenec | 1e-06 | 0.2 | 0.1 | 0.5 (0.4) | 2.0 (—) | 0.0 (—) | 1.16 | 12 min |
+  | rock_salt | evaporit | 1e-13 | 0.01 | 0.005 | 0.0 (0) | 1.0 (—) | 0.0 (—) | 5.79e+05 | 11 let |
+  | black_coal | uhli | 1e-07 | 0.08 | 0.03 | 0.333 (0.02) | 1.5 (—) | 0.0 (—) | 3.47 | 35 min |
+  | shale | bridlice | 1e-11 | 0.05 | 0.01 | 0.0 (0) | 2.0 (—) | 0.0 (—) | 1.16e+04 | 80 dní |
+  | quartz_sandstone | piskovec | 1e-07 | 0.2 | 0.1 | 0.333 (0.5) | 2.0 (—) | 0.0 (—) | 11.6 | 116 min |
+  | loess | spras | 1e-07 | 0.45 | 0.08 | 0.333 (0.35) | 0.3 (—) | 0.002 (—) | 9.26 | 93 min |
+  | hill_sand | pisek | 1e-04 | 0.35 | 0.26 | 0.833 (0.7) | 0.25 (—) | 0.03 (—) | 0.0301 | 18 s |
+  | weathered_volcanic | vulk_zvetr | 1e-05 | 0.25 | 0.1 | 0.667 (0.15) | 2.0 (—) | 0.0 (—) | 0.116 | 1 min |
+  | weathered_granite | krystal_pukl | 1e-06 | 0.05 | 0.02 | 0.5 (0.2) | 3.0 (—) | 0.0 (—) | 0.231 | 2 min |
+  | subalpine_scree | sterk | 1e-02 | 0.3 | 0.22 | 1.0 (0.7) | 1.2 (—) | 0.4 (—) | 0.000255 | 0 s |
+
+- **Co to znamená pro hru:**
+  - **Rychlé (písek, štěrk, suť, kras):** sekundy až minuty reálně. Ustálený stav (jak to dělá tok.gd / podzemí), bez
+    simulace.
+  - **Střední (hlína, drn, vápenec nekrasový, rozpukané krystalinikum, pískovec):** minuty až hodiny. Událost v haldě
+    E51 („voda prosákne za t“).
+  - **Pomalé (jíl, břidlice, hutné krystalinikum, čedič, sůl):** dny až roky reálně. Ve hře nepropustné, souhlasí
+    s `perm_leak`.
+- **Návrh kalibrace (Jan rozhodne):**
+  - `perm_navrh` = (log10 K + 9) / 6 omezené na [0, 1]: K ≤ 1e-9 → 0, K ≥ 1e-3 → 1. Lineární v log zachová pořadí
+    a rozsah 13 řádů.
+  - Doplnit pole `K_ms` (m/s) a z něj počítat čas průsaku vrstvou (t = Sy · tloušťka / K) jako událost.
+  - Prahy podle reálného času: t < `t_okamzite` (např. 10 min reálně) = ustálený stav. t > `t_horizont` (např. 30 dní
+    reálně) = nepropustné. Mezi tím událost.
+  - `ret_navrh` = n − Sy (jíl 0,48, písek 0,09, hlína 0,28).
+- **Negativa:**
+  - Rozsahy K mají 3–6 řádů na skupinu, typická hodnota je jen střed. Zařazení 63 hornin do skupin je moje
+    (např. horské pojmenované horniny = krystalinikum).
+  - Hodnoty z Hjulströmova diagramu jsou odečtené řádově, nejsou z tabulky. Skály (ero_v 2–6 m/s) jsou herní odhad.
+  - Návrh mění chování hry:
+    - Drn a hlína by byly propustnější než teď (0,67 / 0,6 proti 0,25 / 0,3).
+    - Vápenec (nekrasový) má podle K perm 0,25, ale Jan 19:18 rozhodl „vápenec nepropustný“. V návrhu je to
+      uvedené jen jako konflikt, nepřijímám to.
+  - Sníh, vzduch a minerály (id ≥ 100) návrh nemá.
+  - Pole jsem nezkoušel ve hře ani ve studiích (žádný běh s novými hodnotami).
+
+## E58 algoritmické varianty A / B / C a jejich kombinace: podzemí i povrch (plán, zapsáno před pokusem 2026-11-19 03:35; Jan 03:30)
+- **Cíl:** odstranit úzké hrdlo E57: po výkopu nad tělesem se podzemí přepočítá celé, 6 řešení × ~260 ms ≈ 1,6 s.
+  Výsledky (průsak, výtok, hladina, výstup, objem, režim tělesa) musí zůstat stejné jako u výchozí varianty 4 `auto` (E55).
+- **Varianty** (samostatná studie `scripts/alg58/`, parametr `p58_var` = `base`, `A`, `B`, `C`, `A+B`, `A+C`, `B+C`, `A+B+C`):
+  - **A, kbelíková fronta:** zaplavování (preliv) přes kbelíky po hladinách `p58_dz` m místo haldy. V aktuálním kbelíku
+    je malá halda, takže pořadí (klíč, id) je přesně stejné jako u haldy. Pomocná pole místo slovníků.
+    Cena O(N + Σ b log b) místo O(N log N).
+  - **B, graf těles:** uzel = souvislé těleso se souhrny (Σ průsak, seznam kandidátů výstupu, plocha dna podle
+    materiálu, objem po hladině). Volání = vyhledání nejnižšího kandidáta místo BFS celého tělesa. Výkop přestaví jen
+    uzly, kterých se týká (pásma ve sloupci výkopu a 4 sousedních). Při shodě kandidátů v toleranci → přesný BFS.
+  - **C, lokální přepočet s ranným zastavením:** volání si pamatuje stopu (sloupce navštívených pásem + sousedé).
+    Výkop mimo stopu → výsledek beze změny, nic se nepočítá. Ve spojení s B: delta souhrnů jen za pásma změněných
+    sloupců. Pokud se nezměnila souvislost (žádné pásmo nezmizelo, žádný překryv se nerozpojil), uzel se nepřestavuje.
+    Zaplavení (preliv) se opakuje, jen když výkop zasáhne jeho stopu.
+- **Měří se** (svět E52, povrch 64 / blok, dutiny 16; vítěz a base také při 16 / 32 / 64):
+  - plné řešení všech volání ze záznamu běhu (ms)
+  - lokální změna po `p58_edits` = 20 výkopech 1 m nad tělesy: průměr a max (ms)
+  - paměť navíc (bajty struktur + peak procesu)
+  - **shoda** s čerstvým plným řešením po každém výkopu (tolerance 1e-9): průsak, výtok, z, typ a sloupec výstupu,
+    objem, režim
+  - počet návratů k přesnému BFS
+- **Povrch (D8 + prohlubně, `tok.gd`):**
+  - A = kbelíkový priority-flood (plný route i okno update)
+  - C = lokální okno s ranným zastavením (už E51b / E54, base update)
+  - B = graf povrchových pánví. Kde to přesně nejde, zapíšu proč.
+  - Srovnání s route (plný přepočet) a update (výkop), při 128² / 256² / 512² (svet64 při 16 / 32 / 64 na blok).
+    Shoda fill / eff bit po bitu.
+- **Hypotéza:**
+  - A zrychlí jen tělesa v režimu preliv (2 ze 3), asi 1,5×.
+  - B a C sníží změnu z ~1,6 s na jednotky až desítky ms, protože se přepočítá jen 1 těleso.
+  - B+C pod 10 ms. A+B+C ≈ B+C, protože zaplavování se po výkopu skoro nespouští.
+  - Na povrchu A zrychlí plný route asi 1,3–2×. Update už je lokální (2,8 ms), A tam pomůže málo.
+
+### E58 výsledky (2026-11-19 ~04:00, `tools/alg58_rec.gd` + `tools/alg58_ug.gd` + `tools/alg58_tok.gd` → `shots/alg58/*.json`, grafy `shots/58_podzemi.png`, `58_povrch.png`, `58_server.png`)
+**Podzemí** (svět E52, povrch 64 / blok, 312 028 pásem, 6 zaznamenaných volání, 20 výkopů 1 m nad tělesy).
+Každá varianta se po každém výkopu porovná s čerstvým plným řešením (průsak, výtok, z, typ a sloupec výstupu, objem,
+režim, počet pásem).
+
+| varianta | plné řešení | výkop průměr / max | paměť navíc | neshod |
+|---|---|---|---|---|
+| base (E55 auto) | 1651 ms | 1704 / 1860 ms | 0 | 0 |
+| A | 1708 ms | 1678 / 1837 ms | 4,8 MB | 0 |
+| B | 1018 ms | 1016 / 1223 ms | 20,5 MB | 0 |
+| C | 1742 ms | 1706 / 1858 ms | 0,1 MB | 0 |
+| A+B | 996 ms | 996 / 1060 ms | 25,3 MB | 0 |
+| A+C | 1767 ms | 1719 / 1837 ms | 4,9 MB | 0 |
+| B+C | 1104 ms | **1,0 / 10,3 ms** | 8,9 MB | 0 |
+| **A+B+C** | 945 ms | **0,9 / 8,8 ms** | 13,7 MB | 0 |
+
+- **Rozlišení** (A+B+C, povrch 16 / 32 / 64): výkop 3,2 / 1,8 / 0,9 ms, 0 neshod ve všech. Base 3315 / 2458 / 1704 ms.
+- **Delší test:** 100 výkopů (seed 581, 98 zásahů tělesa) → 1,3 ms průměr, 9,4 ms max, 0 neshod.
+- **Povrch** (svet64, A = kbelíky `p58_sdz` 1 buňka, B = graf pánví, C = E51b update):
+
+  | mapa | route / A | flood / A | B graf pánví | výkop C / C+A | plný route po výkopu |
+  |---|---|---|---|---|---|
+  | 128² | 378 / 344 ms | 131 / 98 | 44 ms (829 pánví) | 2,8 / 2,6 ms | 379 ms |
+  | 256² | 1400 / 1211 ms | 613 / 476 | 167 ms (1617) | 12,5 / 11,6 ms | 1352 ms |
+  | 512² | 5656 / 4884 ms | 2570 / 1834 | 590 ms (3464) | 54,7 / 44,6 ms | 5695 ms |
+
+  - A je bit po bitu shodné (fill, eff, to, i po 20 výkopech). B je nepřesné (jezera 1818 vs. 1878 buněk při 128²,
+    Δ fill do 0,24 buňky).
+- **E57 znovu s vítězem:** 50 hráčů × 20 úprav / min, 5 % do podzemí. Povrch 128²: 146 % → 4,4 % jádra. Povrch 512²:
+  216 % → 74 % jádra. Úzké hrdlo je teď povrch ve velkém rozlišení.
+- **Hypotéza:**
+  - A samo nezrychlilo podzemí vůbec (čekal jsem 1,5×). Většina času je BFS tělesa kvůli dnu a objemu, ne halda.
+  - B+C pod 10 ms platí: 1 ms průměr.
+  - A na povrchu 1,1–1,16× (čekal jsem 1,3–2×). Samotný flood 1,3–1,4×.
+- **Negativa:**
+  - A ani C samy nepomáhají. B samo jen 1,7× (přestavba celého uzlu).
+  - První verze B+C přestavovala uzel při zmizení pásma (výkop max 1,05 s). Oboustranný omezený BFS to vyřešil.
+    Počet pásem po odebrání malé části byl o 1 mimo (57 neshod při 32). Opraveno tak, že se počet bere ze seznamu.
+  - Tabulka časů plnění (události) se po deltě nepřepočítává (příznak `events_stale`, dopočet při dotazu). V testu se
+    neporovnává.
+  - Počet skoků k výstupu (`out[1]`) B nepočítá (−1). Neporovnává se, je to jen informační pole.
+  - Při rozpadu tělesa, kdy odpadlá část obsahuje vstup tůně, nebo nerozhodnutém v limitu 20 000 pásem → přestavba
+    ~1 s. V testech 0×.
+  - Graf pánví na povrchu není náhrada priority-flood (chybí ε spád pro D8). Jen rychlý odhad tůní.
+  - Update E51b se od plného route liší o 0,000625 l/s eff (512²) a 0,13 buňky fill (128²) na pár buňkách. Je to stará
+    vlastnost okna, ne nového kódu.
+  - Σ průsak / výtok v tabulkách je součet přes zaznamenaná volání. Při 16 a 32 má jedno těleso 2 volání s různým q,
+    takže je to 0,756 l/s, ne průsak světa.
+  - Měřeno v GDScriptu na 1 jádře. Běhy jely po 2–6 současně na 8 jádrech, časy plného řešení kolísají ±10 %.
+- **Doporučení (Jan rozhodne):** podzemí A+B+C jako náhrada přepočtu po výkopu (stejný výsledek, 1900× rychleji).
+  Na povrchu zapnout A (`tok.FLOOD_DZ`, zatím výchozí 0 = vypnuto, hashe beze změny). B na povrchu jen pro náhled.
+
+## E57 odhad zátěže serveru pro 10–50 hráčů (rychlý přepočet z E54 / E55, nic nového neměřeno)
+Předpoklady (moje, ne Janovy):
+- **Úpravy terénu:** 4 / min na hráče je běžná hra, 20 / min je hromadné kopání.
+- **Přepočet povrchové vody po úpravě:** E54 průměr 2,6 ms, max 7,5 ms.
+- **Úpravy, které zasáhnou podzemí:** 5 %. Každá stojí přestavbu podzemí jako v E55, ~1,3 s.
+- Zátěž = úprav / min × ms / 60 000 ms (podíl jednoho jádra).
+
+| hráči | úprav / min | povrch prům. | povrch max | + podzemí 5 % × 1,3 s |
+|---|---|---|---|---|
+| 10 | 40 | 0,2 % | 0,5 % | 4,5 % |
+| 10 | 200 | 0,9 % | 2,5 % | 22 % |
+| 50 | 200 | 0,9 % | 2,5 % | 22 % |
+| 50 | 1000 | 4,3 % | 12,5 % | 108 % (přes 1 jádro) |
+
+- Fronta událostí E51 (2,6 µs na pop + push) a dohnání (511 událostí za 0,77 s na 60 herních dní) jsou proti tomu
+  zanedbatelné.
+- **Závěr:** povrchová voda unese 50 hráčů i při hromadném kopání. Úzké hrdlo je přestavba podzemí 1,3 s. Ta potřebuje
+  lokální přepočet jen dotčeného tělesa, nebo dávkování úprav (1× za N s).
+- **Negativa:** četnost úprav i podíl úprav v podzemí jsou odhad. Měřeno na jednom jádru boxu v GDScriptu.
+
+## E56 mírnější výškové přechody (plán, zapsáno před pokusem v noci 18./19. 11.; Jan 21:12)
+- **Co:** samostatná malá studie `scripts/svah56/`, `./run.sh svah56`, nad světem 8 × 8 (E49). Povrch bloku = hrubý
+  svět bilineárně + šum 0,6 buňky, takže přechody určuje hrubý svět. Všechno je za přepínačem `s56_on` (výchozí
+  false → svet8, svet64 a hashe beze změny).
+- **Parametry:**
+  - `s56_max_slope`: největší sklon v m/m (1,0 = 45°). Omezovač jako tepelná eroze. Průchody celou hrubou mapou, kde
+    rozdíl sousedů nad sklon · vzdálenost se vyrovná napůl (hmota se zachová → hora se rozšíří, nesníží se jen
+    oříznutím). Nejvýš `s56_pasy` průchodů. Po hrubém terénu i po erozi řek.
+  - `s56_hladit`: počet průchodů vyhlazení 3 × 3 (měkčí reliéf hrubého světa), váha `s56_hladit_w`.
+  - `s56_paty`: širší paty hor. Spodní mez masky hor smoothstep(0,05 → 0,05 − paty, 0,45), maska roste pozvolna.
+  - `s56_hreben`: mocnina profilu hřbetu (rd^2 → rd^hreben, výška vrcholu stejná). Zatím jen jako možnost.
+- **Měří se (před / po):**
+  - sklon povrchu jemných buněk (0,5 m): p50 / p95 / max ve stupních
+  - podíl buněk nad 45° a nad 30°, největší schod v buňkách
+  - šířka paty nejvyšší hory: vodorovná vzdálenost od vrcholu k místu, kde výška klesne na čtvrtinu převýšení
+  - výška vrcholu, počet horských dlaždic, čas
+  - švy povrchu (E49 musí zůstat 0,00), validátor 64/64
+- **Snímky `56_*`:**
+  - `56_profil.png`: řez přes nejvyšší vrchol před / po, s postavou 2 m v měřítku
+  - `56_mapa.png`: stínovaný reliéf před / po, strmé buňky nad 45° zvýrazněné
+- **Hypotéza:**
+  - Omezovač 1,0 sníží podíl buněk nad 45° skoro na 0 a pata hory se rozšíří zhruba o polovinu. Vrchol klesne
+    o 1–2 m.
+  - Typy dlaždic se mohou posunout (méně hor, víc kopců), protože typ určuje průměr a maximum výšky. To je možná
+    negativum.
+
+### E56 výsledky (2026-11-19 ~03:00, `./run.sh svah56` → `shots/bench_svah56.txt`; `--s56_max_slope=0.6` → `shots/bench_svah56_s06.txt`)
+Svět 8 × 8 (E49), povrch 128 × 128 buněk 0,5 m. „Před“ = výchozí parametry (hash `f08f56000feb` = beze změny).
+
+| | před | po, ≤ 1,0 (45°) | po, ≤ 0,6 (31°) |
+|---|---|---|---|
+| sklon p50 / p95 / max | 23° / 63° / 82° | 29° / 50° / 64° | 28° / 42° / 66° |
+| buněk nad 45° | 21,3 % | 15,9 % | 2,4 % |
+| buněk nad 30° | 38,5 % | 48,7 % | 43,7 % |
+| největší schod | 7 buněk (3,5 m) | 2 (1 m) | 3 (1,5 m) |
+| vrchol / převýšení | 29,9 / 11,5 m | 29,8 / 11,5 m | 29,0 / 10,7 m |
+| pata nejvyšší hory | 12,1 m | 17,0 m (+40 %) | 15,7 m |
+| louka / kopec / svah / hory | 24 / 6 / 5 / 19 | 10 / 17 / 0 / 23 | 8 / 20 / 1 / 20 |
+| švy povrchu, validátor | 0,00, 64/64 | 0,00, 64/64 | 0,00, 64/64 |
+| čas hrubý + detail | 13,6 s | 15,6 s | 16,3 s |
+
+- Snímky: `shots/56_profil.png` (řez vrcholem 1 : 1, postava 2 m), `shots/56_mapa.png` (stínování, červeně > 45°).
+- **Hypotéza jen zčásti:** se sklonem 1,0 zůstalo nad 45° 16 % buněk, ne „skoro 0“. Teprve 0,6 (31°) dá 2,4 %.
+  Pata se rozšířila o 30–40 % a vrchol klesl o 0–0,9 m.
+- **Negativa:**
+  - Omezovač hrubé mapy nestačí na jemný povrch: šum 0,6 buňky na 0,5 m a bilineární lom dál dělají místa přes 60°.
+    Na tvrdý strop by bylo třeba omezit i jemný povrch (`hm_f`) nebo zmenšit šum na svazích.
+  - Medián sklonu a podíl nad 30° **vzrostly**: strmost se rozprostřela do širšího pásu (hmota se zachová).
+  - Hmota sesypaná dolů zvedla údolí kolem hor o 1,5–2 m (viz řez), pláně jsou vlnitější.
+  - Typy dlaždic se posunuly: louk 24 → 10/8, kopců 6 → 17/20, svahy skoro zmizely. Typ určuje hrubá výška, takže
+    by se muselo přeladit `s8_*` prahy typů, nebo omezovač pouštět až po určení typů.
+  - Při 0,6 je na stínování vidět mřížka bloků 8 m (lom bilineárního povrchu na švech). Metrika švů 0,00 měří
+    jen shodu výšek, ne lom.
+  - `s56_hreben` jsem neladil (nechán 2 = dřívější profil).
+- Otevřené pro Jana: jaký strop sklonu chce (45°, 31°?), a jestli smí omezovač měnit typy dlaždic.
+
+## E55 podzemí: režim podle dna tělesa (plán, zapsáno před pokusem v noci 18./19. 11.; Jan schválil 02:52)
+- **Co:** ve variantě 4 (funkce nad vrstvami) se `nadrz` / `preliv` nevolí globálně, ale **pro každé těleso zvlášť**
+  podle materiálu přímo pod propustnou vrstvou. Nový režim `p52_rezim = "auto"` (výchozí zůstává `nadrz`, aby se
+  E52 a regrese neměnily).
+- **Dno tělesa:** pásma tělesa, pod kterými ve stejném sloupci není další pásmo tělesa. Materiál pásma přímo pod nimi
+  (perm ze `sdilene/materialy_voda.json`), plocha = plocha sloupce řídicí mřížky. Spodek ostrova (pod pásmem nic) =
+  propustné (voda odchází ven z ostrova).
+- **Práh** `p55_perm_dno` = 0,05 (= `perm_leak` sdílené tabulky: perm ≤ 0,05 vodu nepropustí). Dno s perm ≤ práh je
+  nepropustné.
+- **Pravidla:**
+  - **celé dno nepropustné → `preliv`**: hladina stoupá k nejnižšímu výchozu, přebytek tam vyvěrá jako pramen
+    (`out_q` → `src2` povrchu)
+  - **celé dno propustné → `nadrz`**: průsak dolů / ven z ostrova
+  - **smíšené dno:** podíl propustné plochy f = A_prop / A_dna. Průsak = f · průsak `nadrz` (nejvýš přítok), zbytek
+    jde nejnižším výstupem tělesa jako pramen. Hladina a výstup jako `nadrz`.
+- **Měří se:** svět E52 (povrch 64 / blok) s dutinami 16 / 32 / 64 (musí dát stejné l/s). Pro informaci celý běh při
+  16 / 32 / 64.
+  - průsak vs. pramen (l/s)
+  - počty těles podle režimu
+  - čas, paměť
+  - vodní bilance každého tělesa: přítok = průsak + výtok (+ plnění u uzavřených)
+- **Výstup:** `shots/test_podzemi55.txt`, `shots/podzemi52/funkce_auto_*.json`, snímek `55_prameny_prusak.png`
+  (mapa: dno propustné / nepropustné, výstupy pramenů, průsak).
+- **Hypotéza:** část vody, která se v E52 celá ztratila v průsaku, vyteče prameny tam, kde je pod vrstvou žula nebo jíl.
+  Výsledek zůstane nezávislý na rozlišení, protože dno je funkce na řídicí mřížce.
+
+### E55 výsledky (2026-11-19 ~02:56, `tools/test_podzemi55.gd` → `shots/test_podzemi55.txt`, VŠE OK)
+Režim `p52_rezim=auto`, práh `p55_perm_dno` 0,05. Svět E52, povrch 64 / blok.
+
+| dutiny / blok | průsak | výtok pramenem | bilance |
+|---|---|---|---|
+| 16 | 0,378 l/s | 2,484 l/s | 2e-15 |
+| 32 | 0,377 l/s | 2,485 l/s | 2e-15 |
+| 64 | 0,377 l/s | 2,485 l/s | 2e-15 |
+| E52 `nadrz` (pro srovnání) | 2,86 | 0 | |
+
+- Tělesa: 1 `smes` (propustné dno 13,2 %) a 2 `preliv`.
+- Nezávislé na rozlišení: rozdíl 0,3 %.
+- Paměť špička 287 MB. Podzemí 5,1–5,6 s (stavba ~3,6 s + řešení 1,2–1,6 s). Lokální změna ~1,3 s.
+- Celý běh při povrchu 32: přítok 2,04, průsak 0,38, výtok 1,66 l/s. Při 16: 2,52 / 0,38 / 2,13 l/s.
+- Ukázkové testy (čočka, dutina, uzavřená čočka) dávají v `auto` totéž co `preliv`. Tři případy dna (nepropustné
+  → preliv, tráva perm 0,25 → nadrz, půl na půl → smes, f 0,5, průsak 0,5 × plný) jsou OK.
+- Snímek `shots/55_prameny_prusak.png` ukazuje mapu dna (hnědá = nepropustné, zelená = propustné, hvězda = výstup)
+  a sloupce průsak / výtok pro 16, 32 a 64.
+- **Odchylka od plánu:** průsak smíšeného dna = Σ plocha · perm · `leak` jen přes propustné dno, ne f · průsak `nadrz`.
+  Průsak `nadrz` obsahuje i boky, takže by se dno započítalo dvakrát (první verze to dělala).
+- **Negativa:**
+  - Mapa dna má hrany po blocích, protože materiály vrstev jsou po blocích.
+  - Výtok vychází jen na stěně ostrova („okraj“), žádný pramen na povrchu v tomto světě.
+  - Smíšené dno počítá jen průsak dnem. Boční kontakty s propustnou horninou se ignorují.
+  - Jediný práh 0,05, žádný přechodový pás.
+  - První verze závisela na rozlišení (0,82 / 0,77 / 0,68), protože pásma dutin se nepárovala s pásmem pod nimi.
+    Opraveno hledáním pásma, které obsahuje z těsně pod dnem.
+
+## E54 klient / server: uložený tok, přepočet s ranným zastavením, dohnání nepozorovaného (plán, zapsáno před pokusem 2026-11-18 23:05; Jan 22:52–22:59)
+- **Zásady (Jan):**
+  1) Vesnice se počítá na klientu, sdílený svět výpravy na serveru. Proto levné a deterministické: žádné tiky, žádná
+     náhoda mimo seed, stejné pořadí.
+  2) Ustálený tok se spočítá jednou a uloží. Po změně se přepočítá jen od změny po proudu a skončí, jakmile tok sedí
+     s uloženým stavem (`TOK.update`, E51b: fronta po proudu jen dokud se průtok mění).
+  3) Dohnání: když hráč odhalí oblast nebo se vrátí tam, kde nikdo nebyl, efekt uplynulého času se spočítá naráz
+     (plné tůně, odnesené buňky, nános) z uloženého toku a časů událostí. Mimo pozorování se nic nesimuluje.
+- **Test** `./run.sh dohnani54` → `shots/test_dohnani54.txt`:
+  - **Dohnání:** scénáře E51 tůň a koryto, 60 dní. Pozorovaná oblast (`run_until` po dnech) vs. nepozorovaná (jeden
+    skok). Stav musí mít stejný otisk. Cena = počet událostí, ne tiků. Hladina tůně v čase z předpočítaných událostí
+    plnění.
+  - **Ranné zastavení:** 40 výkopů v korytech mapy perf 128². Přepočet v ms, přeplánované sloupce vs. délka cesty po proudu.
+- **Body z GPT review:**
+  - **Vodní bilance po každém přepočtu:** kontinuita v buňce (ain = src + src2 + Σ přítoků) a celková bilance
+    (přítok = ztráty + okraj). Kontrola v testu, `tok.gd` beze změny, hashe zůstanou.
+  - **Transport sedimentu:** E51 dnes odnesenou hmotu posílá celou do první tůně po proudu (`_carry`), jinak přes okraj.
+    Chybí kapacita unosu a usazování cestou (koryto se zpomalí → nános). Jen zapsat jako další krok, Jan rozhodne.
+  - **Vsak oddělit od kapacity / šířky koryta:** dnes `TOK._cell` bere ztrátu vsakem z perm materiálu (L.inf · perm)
+    a šířka koryta je zvlášť (Manning b ~ √Q v E51, pravidlo ceil(Q/k) v E53). V E53 propustnost k určuje šířku i bez
+    vsaku, takže by se to míchalo. Návrh: dvě různá pole v tabulce materiálu (`vsak` a `kap_bunky`). Zapsat, Jan
+    rozhodne.
+
+### E54 výsledky (2026-11-18 23:15, `./run.sh dohnani54` → `shots/test_dohnani54.txt`, VŠE OK)
+- **Dohnání 60 dní:**
+  - **Tůň:** po dnech 223 událostí za 546 ms. Jeden skok 223 událostí za 554 ms. Otisk stavu **shodný**
+    `f83967a30e688676`. Eroze 7, nános 216, do tůně 0,53 m³. Vrstvy plnění tůně 2/2 jsou z událostí plnění, bez
+    simulace.
+  - **Koryto:** 511 událostí za 773 / 754 ms, otisk shodný `fca8f43966daedc9`.
+  - Cena = jen události (5,2 M tiků po 1 s se nepočítá). Dohnání je tedy zadarmo už dnes: halda událostí s absolutními
+    časy (E51).
+- **Ranné zastavení** (40 výkopů v korytech 128²): přepočet průměr **2,6 ms**, medián 2,1, max 7,5. Přeplánuje se
+  průměrně 90 sloupců (okno ± okraj + po proudu), cesta po proudu je průměrně 34 sloupců, mapa má 16 384.
+- **Bilance po každém přepočtu:** kontinuita v buňce i celková bilance 0 (do 1e-9 l/s). Přítok 61,83 l/s = ztráty
+  11,31 (vsak 0,84 + do podzemí 10,47) + okraj 50,52.
+- **Negativa:**
+  - Dohnání platí jen pro to, co je v haldě (eroze, nános, plnění tůní). Nové prameny nebo podzemní výtoky změněné
+    mezitím jinde se samy nedoženou, potřebují vlastní událost.
+  - Transport sedimentu je pořád zjednodušený: celá odnesená hmota jde do první tůně po proudu, bez usazování cestou.
+  - Vsak a kapacita / šířka koryta zatím sdílí perm materiálu (E53 ceil(Q/k)). Rozdělení na dvě pole čeká na Jana.
+
+## E53 plošný tok maticemi: celá pole naráz místo fronty po buňkách (plán, zapsáno před pokusem 2026-11-18 22:35; Jan 22:11–22:26)
+- **Směr (Jan 22:26):** povrchová voda se nemá počítat po buňkách (fronty, procházky po proudu), ale průchody přes celé
+  pole. Každý průchod mění všechny buňky naráz (Jacobi: čte jen předchozí stav). Samostatná studie `scripts/plosne53/`,
+  `./run.sh plosne53`; srovnání s dnešním tokem (`voda/tok.gd`, priority-flood + D8 + fronta).
+- **A) Mělká voda (Jan 22:11):** výška vody + průtoky po hranách buněk (virtuální trubky, jako Stam / „pipe model“ [34]),
+  explicitní krok, všechna pole každý krok. Běží jen lokálně po změně hráče (okno + okraj), dokud se neustálí. Pak se
+  uloží koryto a časy událostí jako dnes. Varianty: studený start (prázdno, tůně se musí naplnit) a teplý start (hladiny
+  tůní z priority-flood). Měří se: ustálené průtoky vs. `tok.gd`, rychlost pro erozi vs. Manning (E51), kroky a čas do
+  ustálení, paměť.
+- **B) Vektorové pole jako funkce (Jan 22:14):** směr a síla toku na řídicí mřížce 0,5 m (vx, vy), mezi body
+  bilineárně jako vrstvy. Rychlost z gradientu hladiny. Test: vzorkování na 16/32/64 buňkách na blok dá stejné pole;
+  srovnání se směry D8 jemné mřížky.
+- **C) Pravidlo rozlévání (Jan 22:18–22:24), bez simulace:**
+  - Buňka vodu buď nese, nebo ne (žádné částečné plnění, hladina v buňce je jen vizuální).
+  - Propustnost = kolik buňka přenese za jednotku času. Šířka toku = **ceil(přítok / propustnost)** celých buněk vedle
+    sebe, pokud jsou volné. Přebytek jde do další volné buňky do strany, ne dopředu.
+  - Málo volných buněk → přebytek se hromadí (stoupá hladina) nebo přeteče jinam.
+  - Testy na malých vzorcích. Jan 22:23: přítok 4 do písku perm 0,5 → 8 buněk, na perm 0,25 → 16 buněk (pokud jsou
+    volné), s menším místem hromadění / přeliv.
+  - Zpětná vazba koryta (22:24): stejný průtok se v zahloubeném korytě soustředí (hlubší = víc na buňku → užší, rychlejší
+    → víc eroze), dokud tvrdší materiál nezpomalí a tok se znovu rozšíří.
+  - Vše jako průchody celým polem: rozlévání, směr z gradientu, eroze.
+- **Měří se:** výsledky vs. `tok.gd` (koryta, průtoky, šířky), čas, paměť, počet průchodů do ustálení. Poznámka
+  k paralelizaci: Jacobi průchody jdou rozdělit na vlákna / GPU compute shader, fronta priority-flood ne. Odhad přes numpy
+  (vektorově) jako náhrada GPU.
+- **Hypotéza:**
+  - C je levné a dá Janovy šířky přesně.
+  - A je v GDScriptu pomalé (tisíce kroků) a se studeným startem se tůně plní hodiny simulace → jen teplý start a lokálně.
+  - B je nezávislé na rozlišení, ale rozmaže ostré koryto (≤ 0,5 m).
+- **Výstup:** `shots/bench_plosne53.txt`, `shots/test_plosne53.txt`, snímky `53_*`.
+
+### E53 výsledky (2026-11-18 23:15, `./run.sh plosne53`, mapa perf z E51 64², testy `shots/test_plosne53.txt`, měření `shots/bench_plosne53_n64.json`, `shots/bench_plosne53_numpy.json`)
+- **C) pravidlo rozlévání, celé pole naráz** (`scripts/plosne53/rozliv.gd`), testy VŠE OK:
+  - **Jan 22:23:** přítok 4 do písku k 0,5 → přesně **8 buněk** (všechny 0,5). Na k 0,25 → přesně **16 buněk**.
+    Ustálí se za **67 průchodů**, odtok okrajem 4,000, 0,6 s v GDScriptu (50 × 41).
+  - **Málo místa** (koryto 12 buněk mezi břehy +1, potřeba 16): přebytek se hromadí, hladina +1 buňka, voda přeteče
+    přes břehy (151 mokrých buněk za břehy). Při α 0,5 (hlubší = víc na buňku) má koryto šířku 11 = ceil(4 / 0,375),
+    ustálí se za 750 průchodů. Při α 0 šířka 10 a 502 průchodů.
+  - **Zpětná vazba koryta** (hlína k 0,5 dvě buňky nad žulou, dál žula k 0,25 o stupeň níž). Epocha = ustálit tok
+    od nuly, pak jeden průchod eroze (plná buňka v měkkém → o buňku níž). Ep0 šířka 8 / žula 16. Po prvním vyhloubení
+    **6 / 16**: hlubší koryto nese 0,75 na buňku, užší, rychlejší. Na žule zůstává široké.
+- **A) mělká voda (trubky)** `mvoda.gd`: **8 ms na krok** v GDScriptu (64²). Za 4000 kroků (200 s simulace) se
+  neustálí ani studený, ani teplý start (tůně z priority-flood). Odtok 25 (studený) / 49 (teplý) z 61,8 l/s.
+  Rychlost vůči Manningu z E51 na korytech: medián 0,65 ×, p10–p90 0,04–3,3 ×.
+- **B) vektorové pole jako funkce na řídicí mřížce:** průtok řezem při vzorkování 1× / 2× / 4× (bilineárně) je
+  **3,846 l/s pokaždé** (přesně ze toků na hranách 3,854). Pás toku se rozmaže jen 13,5 → 13,9 m. Nezávislost na
+  rozlišení platí.
+- **Srovnání s dnešním tokem na 64²:**
+  - `tok.gd`: celý `route` 93 ms, lokální změna (výkop v korytě 15 l/s) 2,8 ms, 88 sloupců.
+  - Rozlévání: 12–15 ms na průchod, studený i teplý start ani za 3000 průchodů (37–44 s) neustálené.
+  - Mělká voda: lokální okno 25 × 25 = 625 buněk, 4000 kroků za 5 s, neustálená.
+  - Paměť na buňku: rozlévání 213 B (float64; float32 ~105 B), mělká voda 65 B, tok.gd ~63 B + tůně.
+- **Paralelizace:** každý průchod je Jacobi (čte jen minulý stav), takže jde rozdělit na pruhy pro vlákna nebo jako
+  compute shader. Rozlévání je zapsané jako rozptyl (+=) a pro GPU by se muselo přepsat na sběr od sousedů. Fronta
+  priority-flood v `tok.gd` je sekvenční.
+  - numpy (vektorově, 1 jádro) na 64²: rozlévání 3,3 ms na průchod (GDScript 12–15), mělká voda 0,17 ms na krok
+    (GDScript 8 → 47 ×).
+  - Na 256² 28,6 / 2,1 ms, na 1024² 646 / 65 ms.
+  - Vlákna nebo GPU zrychlí jeden průchod, ale počet průchodů do ustálení (stovky až tisíce) zůstává.
+- **Negativa:**
+  - Na skutečném terénu (celé buňky, schody, ploché úseky, jámy) se rozlévání ani mělká voda za 3000 průchodů /
+    4000 kroků **neustálí**. Tůně se plní fyzicky a pakety na rovinách kmitají (rozlévání zbývá hromadit 9 l/s).
+  - Mokré buňky nesedí s `tok.gd` (Jaccard 0,13–0,16). Pravidlo dělá široké pásy (15 l/s při k 2 → 8 buněk), tok.gd
+    má stopu D8 o šířce 1. Nejde tedy o chybu, je to jiné pravidlo.
+  - Zpětná vazba funguje jen s ustálením toku od nuly v každé epoše (teplý start drží starou šířku). Pokus
+    o „smršťování“ okraje pásu kmital a je vyřazený. Druhá a další epocha dělá schody a jámy (vyhloubení po celých
+    buňkách), tok se neustálí a šířka zase roste.
+  - Lokální přepočet po změně trvá u obou maticových metod sekundy, `tok.gd` 2,8 ms.
+  - Rychlost z mělké vody se od Manningu liší o řád v obou směrech (mělká voda na schodech).
+- **Doporučení (Jan rozhodne):**
+  - Celá pole naráz se vyplatí jen tam, kde se ustálí za málo průchodů: rozlévání na hladkém svahu (67 průchodů)
+    a vektorové pole jako funkce (B).
+  - Pro koryta a tůně na herní mapě zůstat u fronty (`tok.gd`, ms). Šířku podle pravidla ceil(Q / k) dopočítat nad
+    hotovou stopou D8 jako příčný průchod.
+  - Mělkou vodu jen jako vizuál (GPU), ne jako zdroj stavu.
+
+## E52 podzemní voda: srovnání variant (plán, zapsáno před pokusem 2026-11-18 21:55; Jan 21:14–21:31)
+- **Co:** samostatná studie `scripts/podzemi52/`, `./run.sh podzemi52`. Svět svet64 (8 × 8 bloků po 64 buňkách) se vygeneruje
+  jednou do cache (`.cache52/`, jemné buňky + záznamy bloků hm_f, bs) a každá varianta běží ve **vlastním procesu**, aby
+  peak paměti (VmHWM) patřil jen jí. Kontroly: demo testy E47d (čočka → tůň 4 × 4, dutina = jezero, uzavřená čočka)
+  pro každou variantu.
+- **Varianty** (všechny se zapojí do `tok.gd` stejným rozhraním `entry` / `solve`, tok si vybere `ctx.impl`):
+  1) **slovník** = dnešní `voda/podzemi.gd` na 64/blok (základ, E50: 129 s, 3,4 GB)
+  2) **pole**: stejný algoritmus BFS, ale plochá pole (stav/štítek u8, vzdálenost u16, fronta i32, objem po z), plné
+     rozlišení; těleso omezené na dosah do hloubky vstupu (buňky nejvýš `p52_hloubka_m` pod povrchem sloupce)
+  3) **hrubá mřížka 32/blok** (Jan 21:14: podzemí smí být hrubší → nový výchozí `s64_ug_n` = 32), povrchová voda dál
+     64/blok; sloupce se mezi mřížkami převádějí (vstup tůně → hrubý sloupec, výtok → jemný sloupec). Algoritmus 1 i 2.
+  4) **FUNKCE nad vrstvami (Janova hlavní):** hranice vrstev jsou už 2D matice (hm_f, bs[k] na řídicí mřížce 0,5 m).
+     Každá propustná vrstva (+ půda a kůže hor podle stejných pravidel jako `geo_fn.material`) = intervaly [spodek, vršek]
+     ve sloupci řídicí mřížky. Souvislé oblasti = intervaly sousedních sloupců s překryvem v z. Plní se od nejnižšího z
+     (objem pórů po hladinách) do nejnižšího výstupu (výchoz na povrch, stěna ostrova, tůň). Hladina = další 2D funkce na
+     řídicí mřížce; buňky ji jen vzorkují jako horniny → nezávislé na rozlišení. Dutiny a čočky zůstávají buňkové
+     (zvláštní případ). Dva režimy: `nadrz` (jedna nádrž na celé těleso, stejná sémantika jako 1 → shoda) a `preliv`
+     (plnění a přelévání pánví od vstupu, Janův popis; průsak jen ze zaplavené části).
+  5) volitelně Darcy: relaxace hladiny ve 2D vrstvě (rozdělení výtoku mezi víc výstupů); 3D jen pokud zbude čas.
+- **Měří se pro každou variantu:** peak paměti, čas celého světa, čas jedné lokální změny (vykopání sloupce nad tělesem →
+  přepočet podzemí), výtoky (stěna / prameny z podzemí / průsak v l/s), shoda se základem (přítok, průsak, výstup, hladina).
+- **Nezávislost na rozlišení:** pevné vstupy (stejná místa v metrech, stejný přítok) řešené na 16/32/64 buňkách na blok:
+  varianta 4 musí dát stejné výtoky, buňkové varianty pro srovnání.
+- **Vodopád v metrech:** pravidlo `vodopad_m` se měří jako spád na vodorovné vzdálenosti `vodopad_dx_m` po proudu
+  (ne na jednu buňku). Výchozí 0,5 m = jedna buňka řídicí mřížky → staré testy beze změny; na 0,125 m se spád měří přes
+  4 buňky a souvislý spád se slije do jednoho vodopádu. Kontrola: počet vodopádů povrchu při 16/32/64 na blok.
+- **Hypotéza:**
+  - 2 ušetří paměť ~10 × (pár B na buňku místo slovníků), čas 2–3 ×.
+  - 3 ~8 × méně buněk.
+  - 4 je o řády rychlejší (128 × 128 sloupců × pár intervalů) a výtoky stejné na 16/32/64. Shoda s 1 v režimu `nadrz`
+    blízká, rozdíly z těles (pně, kupole, žíly) a hranic buněk.
+  - Základ 1 „rozpustí“ všechnu vodu v průsaku (E50), protože průsak počítá i suché buňky obřího tělesa. `preliv` ve 4
+    to ukáže.
+- **Výstup:** `shots/bench_podzemi52.txt` (tabulka), `shots/test_podzemi52.txt` (demo testy × varianty), 2–3 snímky `52_*`.
+
+### E52 výsledky (2026-11-18 23:20, `./run.sh podzemi52`, tabulka `shots/bench_podzemi52.txt`, snímky `shots/52_pamet_cas.png`, `52_vystupy.png`, `52_vodopady.png`)
+- **Demo testy E47d** (čočka → tůň, dutina = jezero, uzavřená čočka): VŠE OK pro slovník, pole, funkce `nadrz` i `preliv`.
+- **Srovnání** (svět 8 × 8, povrch 64 / blok, přítok do podzemí 2,87 l/s):
+
+  | varianta | peak paměti | podzemí (sestavení + řešení) | průsak / výtok l/s | lokální změna |
+  |---|---|---|---|---|
+  | 1 slovník 64 (základ) | 4002 MB | 3,1 + 155,5 s | 2,87 / 0 | 0,4 s |
+  | 2 pole 64, limit 6 m | 575 MB | 2,9 + 36,5 s | 2,87 / 0 (shoda) | 0,4 s |
+  | 2 pole 64, bez limitu | 588 MB | 3,7 + 56,9 s | 2,87 / 0 (shoda) | 0,4 s |
+  | 3 pole 32 | 271 MB | 0,4 + 4,4 s (28 řešení) | **0,42** / 0 | 5,3 s |
+  | 3 slovník 32 | 698 MB | 0,4 + 17,0 s | 0,42 / 0 (= pole 32) | 17,3 s |
+  | 3 pole 16 | 269 MB | 0,06 + 0,7 s | 2,62 / 0 | 1,1 s |
+  | **4 funkce `nadrz`** (dutiny 64) | **288 MB** | 4,2 + **0,6 s** | **2,86** / 0 | 1,1 s |
+  | 4 funkce `preliv` | 288 MB | 4,0 + 4,7 s | 0 / **2,86** | 4,7 s |
+  | 5a Darcy 2D (vrstva, SOR), K 1e-4 | 288 MB | 3,8 + 4,6 s | 2,85 průsak u vstupu, mound 9 m | 5,7 s |
+  | 5a Darcy 2D, K 1e-2 | 288 MB | 4,0 + 7,0 s (3200 it.) | 2,69 průsak + 0,15 stěna (5 %) | 7,3 s |
+  | 5b Darcy 3D, konečné objemy + CG, 16 / blok | 270 MB | CG 58 s (99 k neznámých, **1333 it.**) | viz negativa | 116 s |
+
+- **Nezávislost na rozlišení (varianta 4):** dutiny 16 / 32 / 64 → průsak 2,86 / 2,86 / 2,86 l/s. Varianty 1–3
+  se mezi 64 / 32 / 16 liší: 2,87 / 0,42 / 2,62.
+- **Vodopád v metrech** (`vodopad_dx_m` 0,5): vodopádů 12 / 13 / 19 při 16 / 32 / 64 (staré pravidlo na buňku
+  12 / 5 / 1). Okraj beze změny. Regrese beze změny: sled 46, v1, voda_b, `--b`, voda, svet8, test_podzemi, test_tun,
+  E51 VŠE OK.
+- **svet64:** výchozí podzemí je nově hrubá mřížka `s64_ug_n` 32 s `s64_ug_alg` pole (Jan 21:14). Celý svet64 jsem
+  znovu nespustil. Odpovídá řádku „pole 32“.
+- **Negativa:**
+  - **Hrubá mřížka 32 nesedí se základem.** Průsak 0,42 místo 2,87 l/s, zbytek teče do uzavřených těles, která se plní.
+    Slovník 32 dává totéž, takže to dělá rozlišení, ne algoritmus. Tenké propustné vrstvy se v hrubých buňkách spojí
+    nebo rozpadnou. Mezi 16 a 32 je to nemonotónní.
+  - Lokální změna na 32 trvá 5,3 s: přepočte se všech 28 těles, cache se zneplatní příliš široce.
+  - `preliv` mění smysl výsledku (voda vyteče výstupem místo průsaku). Jan rozhodne, která sémantika platí.
+  - Darcy 2D: s malým K vytvoří kupu 9 m a téměř všechno prosákne u vstupu. Výsledek silně závisí na K.
+  - **Darcy 3D** (Jan 22:40: K z tabulky, harmonický průměr stěn, ΣQ = 0, CG, pevná výška na vstupu a na výchozech):
+    - CG konverguje: 1333 iterací do rel. 1e-6, 44 ms na iteraci v GDScriptu.
+    - Pevná výška = nadmořská výška na **všech** výchozech ale protéká tělesem mezi výchozy (vysoké výchozy vodu
+      dodávají, nízké odebírají): 85 m³/s oběhu proti 3,6 l/s ze vstupu, bilance −20 %.
+    - Chybí podmínka průsakové plochy (výchoz jen pro odtok, přítok vypnout a řešit znovu). Každé další řešení by
+      stálo dalších ~60 s.
+    - Na 32 / blok (800 k neznámých) jsem běh ukončil: odhad ~0,35 s na iteraci, ~15 min na jedno řešení, 4 řešení
+      na běh.
+    - Přítok z pevné výšky (3,6 l/s) je řádově stejný jako odtok tůně z BFS (2,61 l/s).
+- **Doporučení (Jan rozhodne):**
+  - Varianta 4 `nadrz` jako výchozí podzemí: 14 × méně paměti než základ, řešení 0,6 s, shoda 99,7 %, nezávislá na
+    rozlišení.
+  - Rozdělení odtoku mezi víc výstupů řešit Darcy 2D nad vrstvou (sekundy), ne 3D v GDScriptu.
+  - Darcy 3D jen s podmínkou průsakové plochy a v nativním kódu nebo na GPU.
+  - Hrubou mřížku 32 pro buňkové podzemí nedoporučuji, protože mění výsledek.
+
+## E51 mechanika toku: eroze a usazování událostmi (plán, zapsáno před pokusem 2026-11-18 21:10; Jan 20:18–20:37, schváleno 20:23)
+- **Co:** samostatná malá studie (`scripts/eroze51/`, `./run.sh eroze51`) nad tokem E47c (`voda/tok.gd`).
+  - **Odpočet:** každý materiál má citlivost na erozi = **kolik m³ vody musí přes buňku protéct, než ji odnese**
+    (odpočet událostí, žádné tiky). Vykopání nebo položení buňky odpočet vynuluje.
+  - **Rozhodnutí podle rychlosti:** rychlost proudu rozhoduje mezi erozí a usazováním. Ve stojaté vodě (tůň) se materiál usazuje.
+- **Hydraulika (zjednodušená, ne CFD):**
+  - **Koryto:** Manningova rovnice [31] pro široké obdélníkové koryto: šířka b = max(buňka, k_b · √Q), hloubka
+    h = (n · Q / (b · √S))^(3/5), rychlost v = Q / (b · h). S je sklon k buňce po proudu, min. `e51_s_min`.
+  - **Tůň:** v = Q_tůně / (hloubka · √plocha).
+- **Pravidla podle rychlosti** (prahy v m/s a objemy v m³ jako DATA ve sdílené tabulce `sdilene/materialy_voda.json`,
+  nová pole `ero_v`, `ero_vol`, `sed_v`, inspirace Hjulströmův diagram [32]):
+  - **Eroze:** v ≥ ero_v vrchní buňky → odpočet R klesá rychlostí Q (m³/s), volitelně × (v/ero_v)^k (`e51_k`, výchozí 0
+    = čistě objem podle Jana). R = 0 → buňka odnesena: sloupec −1, nový vrch dostane plný odpočet. Objem odnesené
+    pevné hmoty (1 − por) jde jako nános do první tůně po proudu, jinak přes okraj ostrova do mlhy (počítá se).
+  - **Usazování:** sloupec tůně s v < sed_v nánosu (`e51_nanos`) sbírá usazeninu rychlostí
+    c0 · Q_tůně / počet sloupců (+ nános z eroze nad tůní). Plná buňka (objem buňky · (1 − por)) → sloupec +1 (nános).
+  - Mezi prahy se nic neděje (transport).
+- **Fronta:** jedna globální halda událostí (čas, buňka, generace; zastaralé položky se přeskočí podle generace).
+  - Položku mají jen sloupce s tekoucí nebo stojatou vodou.
+  - Změna (odnesení, nános, kopání hráče) → `TOK.update` (lokálně po proudu, E47c). Dotčeným sloupcům se dopočítá
+    postup starou rychlostí do „teď“ a naplánuje se nová událost.
+- **Scénáře:**
+  1) koryto v měkké vs. tvrdé hornině (dva souběžné pruhy, stejný pramen)
+  2) tůň se postupně zanáší
+  3) kopání hráče vynuluje odpočet (test s přesným časem)
+  4) protržení hráze z písku změní tok po proudu (tůň zmizí → odtok do podzemí 19:48 zmizí → po proudu víc vody)
+  5) výkon: velikost fronty, události/s, čas přepočtu, syntetická fronta 1 M položek
+- **Hypotéza:**
+  - V měkkém pruhu se koryto zahloubí o metry za týdny, v tvrdém skoro nic.
+  - Tůň se zanese za měsíce a zmizí.
+  - Událost ~1 ms (malá mřížka, přepočet okna). Halda 1 M: push + pop ≈ jednotky s v GDScriptu.
+- **Výstup:**
+  - `shots/51_*.png` (2–3 nejlepší)
+  - `shots/bench_eroze51.txt`
+  - `shots/test_eroze51.txt` (VŠE OK)
+
+### E51 výsledky (2026-11-18 ~21:35, `shots/bench_eroze51.txt`, `shots/test_eroze51.txt`, `./run.sh eroze51`)
+- **Testy VŠE OK:**
+  - A: odpočet hlíny 1500 m³ / 4,98 l/s = 301 447 s přesně
+  - B: kopání v 48 h vynuluje R (zbývalo 644 → 1500 m³, přeplánováno 86 sloupců)
+  - C: položení hlíny → plný odpočet
+  - D: determinismus 2×
+  - E: protržení zvýší průtok po proudu 2,43 → 2,83 l/s
+  - F: halda 1 M v pořadí
+- **Koryto (60 dní, pramen 5 l/s):** měkký pruh (hlína na písku) se zahloubil v průměru o 6,2 m (max 7,5 m, až na žulu),
+  tvrdý jen o 0,5 m (odnesla se jen 1 buňka hlíny, žula drží). 511 událostí, 296 událostí/s, přepočet medián 3,4 ms,
+  přeplánováno 75 sloupců na událost. Z odnesené hmoty 2,6 m³ do tůní, 38 m³ přes okraj do mlhy. Snímek `51_koryto.png`.
+- **Tůň (přítok 2 l/s, c0 0,002):** 27,9 m³ (129 sloupců, 2 m hluboká), polovina zanesená za 30 dní, < 5 % za 50 dní.
+  223 událostí (216 nánosů), přepočet medián 2,7 ms. Snímek `51_tun.png`.
+- **Písková hráz (přítok 3 l/s):** koruna 18 → 11 buněk za 30 dní, tůň 11,3 m³ pod 5 % za 27,5 dne. Odtok do podzemí
+  0,44 → 0,01 l/s, po proudu 2,43 → 2,83 l/s. Největší přeplánování 290 sloupců. Snímek `51_hraz.png`.
+- **Výkon 128 × 128 × 48, 16 pramenů:** start 0,62 s; 2 971 mokrých sloupců = 2 893 živých položek, fronta max 14 113.
+  Jen **5 událostí/s**: přepočet medián 229 ms (max 0,5 s), průměrně 313 přeplánovaných sloupců (max 4 009).
+- **Halda 1 M (GDScript):** push 0,33 µs/položka, pop + push v ustáleném stavu 2,6 µs, pop 3,1 µs, ~15 MB. Fronta tedy
+  není úzké hrdlo.
+- **Úprava během pokusu:** sloupec se stejným režimem a rychlostmi si nechá svou položku (bez nové generace). Zastaralých
+  položek je pak v korytu 5 463 místo 6 234 (fronta max 299 místo 314) a ve výkonu fronta max 14 113 místo 33 247.
+- **Negativa:**
+  - **TOK.update není lokální v ceně:** má globální průchody O(n) (porovnání zdrojů, pole „uvnitř“, pond_mask a ponds
+    přes celou mřížku, `_apply_drains` až 4×). Na 128² to stojí ~200 ms na událost. To je první věc k optimalizaci
+    (okno po proudu, inkrementální tůně) před větší mapou.
+  - Rychlosti jsou se zvolenými čísly rychlé: měkké koryto je na žule za týdny, c0 0,002 je velmi kalná voda. Prahy
+    `ero_v`/`ero_vol`/`sed_v` jsou odhad (inspirace Hjulström [32]), ne kalibrace.
+  - Zastaralé položky pořád převažují nad událostmi zhruba 10 : 1 (každá událost přeplánuje celé okno po proudu).
+  - V korytu se nic neusazuje (nános jen v tůních, mezi prahy je transport).
+  - Ustálený tok: vypuštění tůně nedá přechodnou povodňovou vlnu.
+  - Celočíselné výšky sloupců vyžadují průměrný sklon přes 4 buňky (`e51_s_len`), jinak sklon skáče 0 ↔ 1 buňka.
+  - Pole `ero_*`/`sed_v` jsou jen u 12 základních materiálů; horniny 20+ (`horniny_voda.json`) je nemají a berou se
+    jako tvrdé [6,0 m/s, 1e8 m³].
+  - Kopie tabulky v prototypu (`godot-prototyp/data/materialy_voda.json`) se lišila už od 16:59 (load/cantilever),
+    nesahal jsem na ni.
+- **Regrese** (`tok.gd`: `update` navíc vrací `cells`) beze změny: sled 46 `00dc4dc614729194`, v1 `45f42cd597c0f8c9`, test_voda_b c `604e5080a046`, `--b` `e89b4b1dd59c`, test_voda `36236d38becf`, svet8 `f08f56000feb`, test_podzemi a test_tun VŠE OK.
+
+### E51b lokální přepočet toku (Jan 22:09; 2026-11-18 ~22:20, `tools/bench_e51b.gd`, `voda/tok.gd`)
+- **Co:** `TOK.update` už nemá průchody celou mřížkou.
+  - Okno + okraj se zpracuje jen v obdélníku okna. Pomocná pole (`_ins`, `_done`, `_seen`) se znovu používají a nulují
+    se jen zapsané buňky. Stará fill se ukládá jen pro obdélník.
+  - Tůně (seznam jako `ponds(…, false)` a `pw`) se drží v cache (`_pk` buňka → tůň, `_pd`). Přepočítají se jen tůně u
+    změněných buněk. Když buňka nepřešla mokrá ↔ suchá, přepočte se jen přítok, přeliv a dno bez BFS.
+  - Odtoky tůní (`_apply_drains`) pamatují nenulové indexy `extra` / `src2` a porovnávají jen je. Nejbližší okraj
+    k přelivu je v cache.
+  - Porovnání pramenů je nativní (`src_new != st.src`).
+- **Výsledek (128², mapa perf E51):**
+  - 400 událostí: `TOK.update` průměr **230 → 9,1 ms**, medián **232 → 4,2 ms**.
+  - Otisk stavu (hm, eff, fill, ain, to, pw, extra, src2, log událostí, podzemní výtoky) je **shodný** `6187d1c10aac6b46`.
+  - V `test_eroze51` výkon **5 → 124 událostí/s** (přepočet průměr 210 → 6,7 ms, medián 3,8). Koryto 296 → 630 událostí/s.
+  - `eroze51.json` je bajtově shodné, testy E51 VŠE OK.
+- **Regrese beze změny:** sled 46 `00dc4dc614729194`, v1 `45f42cd597c0f8c9`, voda_b c `604e5080a046`, `--b` `e89b4b1dd59c`,
+  voda `36236d38becf`, svet8 `f08f56000feb`, test_podzemi a test_tun VŠE OK.
+- **Negativa:**
+  - Max je pořád 40–100 ms: událost, která pošle změnu daleko po proudu přes velkou tůň (stovky sloupců), a přepočet těles
+    podzemí v `_apply_drains` (ten je globální podle tělesa, viz E52).
+  - `route()` (start) zůstává plný.
+  - Cache tůní předpokládá, že `fill` / `hm` / `ain` mění jen `update` / `route`. Kdo je změní jinde, musí zavolat
+    `pond_mask(st)`.
+
 ## E50 svět 8 × 8 ve větším rozlišení: 64 × 64 × 256 buněk na blok (plán, zapsáno před pokusem 2026-11-18 20:15)
 - **Co (Jan 20:04–20:09):** stejný běh jako E49 (`svet8`), ale detailní bloky se vzorkují v **64 × 64 × 256 buňkách**.
   Stavět 256 × 256 bloků se nemá. Výsledkem je svět 512 × 512 × 256 buněk (67 M), tj. 64 × víc buněk než E49.
@@ -308,6 +882,104 @@ Výchozí: 800 kapek na blok, `ero_cap` 1,0, `ero_erode` 0,1, `ero_deposit_rate`
   - `shots/bench_svet64.txt`
   - `./run.sh svet64`
 - **Telefon:** odhad z měření (GDScript, 1 jádro Xeon) → C#, vlákna, co optimalizovat napřed.
+
+### E50 výsledky (2026-11-18 ~21:00, `shots/bench_svet64.txt`, `./run.sh svet64`)
+- **Celkem generování 516 s (8,6 min)** na 1 jádře boxu (Xeon, 8 vCPU, GDScript 1 vlákno). Svět 512 × 512 × 256 =
+  67 M buněk. Render je oddělený: GIF v Pythonu 3,1 s, izo v Godotu 1,7 s.
+- **Časy fází** (čas na stěnu):
+
+  | fáze | čas |
+  |---|---|
+  | hrubý svět celkem | 0,60 s |
+  | – z toho eroze + řeky | 0,55 s |
+  | – terén, počasí, biomy, dlaždice | 4 / 7 / 21 / 11 ms |
+  | detail 64 bloků celkem | 354 s |
+  | – navázání (Σ) | 5,6 s |
+  | – vrstvy + vzorky (Σ) | 182 s |
+  | – minerály (Σ) | 57 s |
+  | – dutiny (Σ) | 109 s |
+  | voda celkem | 161 s |
+  | – mřížka | 3,2 s |
+  | – prameny | 1,1 s |
+  | – povrch (koryto + strže) | 13,9 s |
+  | – podzemí navíc | 129 s |
+
+- **Časy na blok** (min / medián / max):
+
+  | část bloku | min | medián | max |
+  |---|---|---|---|
+  | celý blok | 2,8 s | 5,3 s | 10,4 s |
+  | navázání | 72 ms | 83 ms | 148 ms |
+  | vrstvy | 2,3 s | 2,7 s | 4,1 s |
+  | minerály | 0,25 s | 0,66 s | 2,1 s |
+  | dutiny (jen 30 bloků s dutinou) | 2,8 s | 3,4 s | 4,7 s |
+
+  Medián bloku podle typu:
+  - louka 3,2 s
+  - prohlubeň 2,9 s
+  - sopka 4,2 s
+  - svah 6,4 s
+  - hora vyzdvižená 7,2 s
+  - kopec 7,4 s
+  - hora zvrásněná 9,3 s
+- **Paměť:**
+  - RSS po hrubém světě 131 MB, po detailu 361 MB, po mřížce vody 425 MB, po podzemí 3,57 GB
+  - **peak 4,02 GB** (VmHWM)
+  - Godot static 1,97 GB
+  - Podzemí je jedno propustné těleso u povrchu o **9,7 M buněk** ve slovnících BFS.
+- **Hypotéza:**
+  - 64 × buněk dalo jen **23 ×** času proti E49: E49 detail 15,4 s, blok 0,24 s → E50 5,3 s. Náklad na sloupec se rozloží.
+  - Hrubý svět je stejný.
+  - Detail 6 min je pod odhadem 10–20 min.
+  - Podzemí je výrazně nad odhadem: 129 s a 3,4 GB.
+  - Švy jemných buněk: povrch |Δ| 0,00 (uvnitř 0,35). Jiné buňky ve sloupci přes šev 2,79 % (uvnitř 2,58 %) → spojité
+    funkce drží i ve 4 × jemnějším vzorkování.
+- **Determinismus a regrese:**
+  - hash jemných buněk `0c4c96e0a1888ae8` je stejný ve 3 bězích
+  - prvních 3 bloků 2× stejně
+  - minerály: cíl 136 448 buněk (× 64), schodek 1 792 (stejný hostitel chybí jako v E49 57/64)
+  - dutiny 76 800 / 76 800
+- **Varianta voda 32 na blok** (`--s64_voda_n=32`, `bench_svet64_v32.txt`):
+  - voda 22,7 s (podzemí 16,7 s), peak 678 MB
+  - 5 vodopádů, okraj 29,5 l/s, největší těleso 1,2 M buněk
+- **Negativy:**
+  1) **Podzemí** je hlavní náklad času i paměti. Těleso je celá propustná půda u povrchu (9,7 M buněk, Dictionary
+     dist / par). 2,87 l/s z tůní se v jemných buňkách celé rozpustí v průsaku, výtok ze stěny je 0. V E47d to bylo
+     2,06 l/s ze stěny. Model průsaku (počet stěn · perm) závisí na rozlišení i po přepočtu / f².
+  2) **Vodopády:** 1 místo 14 (16/blok) a 5 (32/blok). Pravidlo „spád ≥ 1,5 m mezi sousedními buňkami“ závisí na
+     rozlišení; spád se má měřit na vodorovnou vzdálenost v metrech.
+  3) Jedna dlaždice prohlubně v horách má jiný vrch materiálu ostře po hranici bloku (hnědý čtverec v GIFu i v izo).
+     Je to stejné v E49, pravidlo podle typu dlaždice.
+  4) Krajní jemné buňky bloku interpolují řídicí body souseda, jen pokud už soused existuje (jinak se zrcadlí). Výsledek
+     tedy závisí na pořadí (geo_fn to zaručuje jen při 16). Šev je měřitelně čistý (viz výše), ale není to bit po bitu
+     nezávislé.
+  5) Vsakování a validátor gen-v3 jsou jen pro 16 × 16 × 64, v E50 se nespouští. Strže jen mění výšku vodní mřížky,
+     buňky se po nich znovu nevzorkují.
+  6) Dlaždice E49 dutiny nemají. Kvůli měření dostal kopec, svah a hory jednu jeskyni o 40 základních buňkách
+     (`s64_dutina*`).
+  7) Box je sdílený: v běhu `v32` trval jeden blok 104 s místo 7,8 s (zátěž jiných procesů). Proto se uvádí medián.
+- **Telefon (hrubý odhad, generování na klientu):**
+  - Střední telefon (Snapdragon 7 Gen 3, GB6 1 jádro ≈ 1 140) je na 1 jádro asi 1,5–2 × pomalejší než box. GDScript
+    na telefonu by tedy byl ~13–17 min a s podzemím ve 4 GB paměti by spadl.
+  - **C#:** těsné numerické smyčky 10–50 × ([28] 30–58 × na čisté smyčce), Godot Dictionary skoro nic. Android C# je
+    zatím experimentální [29]. Realisticky ~10 × při převodu hlavních smyček na pole.
+  - **Vlákna:** navázání (83 ms/blok) musí jít v pořadí BFS. Vzorky, minerály a dutiny bloku čtou jen řídicí mřížku
+    sebe a sousedů, takže jdou paralelně (WorkerThreadPool [30]). Na 4 velkých jádrech ~3 ×.
+  - **Odhad C# + 4 vlákna:**
+    - detail 354 s × 1,75 / 10 / 3 ≈ **20 s** pro 64 bloků, první blok ~1 s
+    - hrubý svět < 0,1 s
+    - voda povrch ~2–3 s
+    - podzemí v dnešní podobě ~20 s a GB paměti → **na telefonu neprojde bez změny algoritmu**
+  - **Optimalizovat napřed:**
+    1) Podzemí: pole místo slovníků (PackedInt32 / bitmapy), těleso jen do hloubky vstupu, nebo podzemí na hrubší
+       mřížce (32/blok: 17 s a 0,68 GB už v GDScriptu).
+    2) Vzorkování: v každém sloupci spočítat hranice jednou a plnit úseky z mezi hranicemi, místo `material()` na
+       každou z 1 M buněk (2,5 µs/buňka).
+    3) Dutiny: růst z haldy místo průchodu celé fronty (O(cíl · fronta)).
+    4) Minerály: jen buňky v dosahu R od středů místo třídění všech hostitelských buněk.
+- **Otevřené pro Jana:**
+  - Má podzemí/voda běžet v plném rozlišení buněk, nebo na hrubší vodní mřížce (32/blok)?
+  - Má být pravidlo vodopádu v metrech na vzdálenost?
 
 ### Regrese po v3 (2026-11-18 19:00)
 Sled 46: determinismus 2× `00dc4dc614729194` a po snímcích = naráz (`00dc4dc61472`), švy a ostatní čísla v2.2 beze změny.

@@ -25,6 +25,8 @@ static func coarse(p: Dictionary, frames: int) -> Dictionary:
 	var w := PO.run(t, p); ms["2 počasí"] = _ms(t0)
 	t0 = Time.get_ticks_usec()
 	var ef := RK.erode(t, w, p, frames)
+	if bool(p.get("s56_on", false)) and float(p.get("s56_max_slope", 0.0)) > 0.0:   # E56: řeky nesmí znovu vyrýt strmé stěny
+		t.s56_po_erozi = load("res://scripts/svah56/svah.gd").limit(t.hm, int(t.R), float(p.s56_max_slope), int(p.get("s56_pasy", 200)))
 	var rv := RK.rivers(t, w, p); ms["3 eroze + řeky"] = _ms(t0)
 	t0 = Time.get_ticks_usec()
 	var bio := BM.run(t, w, rv, p); ms["4 biomy"] = _ms(t0)

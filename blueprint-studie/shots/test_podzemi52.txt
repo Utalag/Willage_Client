@@ -1,0 +1,7 @@
+# E52 demo testy E47d × varianty podzemí (2026-11-19T03:01:20), propustná Křemenný pískovec por 0.20
+slovnik: 1) čočka 38.40 (čekáno 38.40), plná za 38.40 t, výstup povrch z 10 do (7, 4) OK | 2) dutina: jezero 27 (27), objem do výstupu 40.20 (čekáno 40.20), výstup okraj z 5 x 11 OK | 3) uzavřená čočka 6.40 (čekáno 6.40), výstup žádný, výtok 0.00 OK | OK
+pole: 1) čočka 38.40 (čekáno 38.40), plná za 38.40 t, výstup povrch z 10 do (7, 4) OK | 2) dutina: jezero 27 (27), objem do výstupu 40.20 (čekáno 40.20), výstup okraj z 5 x 11 OK | 3) uzavřená čočka 6.40 (čekáno 6.40), výstup žádný, výtok 0.00 OK | OK
+funkce nadrz: 1) čočka 38.40 (čekáno 38.40), plná za 38.40 t, výstup povrch z 11.0 do (7, 4) OK | 2) dutina: jezero 27 (27), objem do výstupu 27.00 (čekáno 27.00), výstup okraj z 5.0 x 11 OK | 3) uzavřená čočka 6.40 (čekáno 6.40), výstup žádný, výtok 0.00 OK | OK
+funkce preliv: 1) čočka 38.40 (čekáno 38.40), plná za 38.40 t, výstup povrch z 11.0 do (8, 7) OK | 2) dutina: jezero 27 (27), objem do výstupu 27.00 (čekáno 27.00), výstup okraj z 5.0 x 11 OK | 3) uzavřená čočka 6.40 (čekáno 6.40), výstup žádný, výtok 0.00 OK | OK
+funkce auto: 1) čočka 38.40 (čekáno 38.40), plná za 38.40 t, výstup povrch z 11.0 do (8, 7) OK | 2) dutina: jezero 27 (27), objem do výstupu 27.00 (čekáno 27.00), výstup okraj z 5.0 x 11 OK | 3) uzavřená čočka 6.40 (čekáno 6.40), výstup žádný, výtok 0.00 OK | OK
+výsledek: VŠE OK

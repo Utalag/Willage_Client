@@ -129,11 +129,32 @@ static func run(hm: PackedFloat64Array, W: int, H: int, wall: PackedByteArray, m
 	# vodopády: spád po proudu ≥ vodopad_m; tůň pod ním
 	var falls := []
 	var fdrop := float(p.vodopad_m) / cm
+	# E52: spád se měří na vodorovné vzdálenosti vodopad_dx_m po proudu (0,5 m = 1 buňka řídicí mřížky = staré pravidlo);
+	# souvislý spád přes víc buněk se slije do jednoho vodopádu (horní buňka). vodopad_dx_m ≤ 0 = staré pravidlo na buňku.
+	var dxm := float(p.get("vodopad_dx_m", 0.5))
+	var fstep := PackedInt32Array(); fstep.resize(W * H)
+	var ffoot := PackedInt32Array(); ffoot.resize(W * H); ffoot.fill(-1)
 	for i in W * H:
 		if chan[i] == 0 or to[i] < 0: continue
-		var dh := hm[i] - hm[to[i]]
-		if dh >= fdrop:
-			falls.append({"top": i, "foot": to[i], "drop_m": dh * cm, "acc": eff[i], "z_top": hm[i], "z_foot": hm[to[i]]})
+		var j := to[i]; var nst := 1
+		if dxm > 0.0:
+			var dist := 0.0; j = i; nst = 0
+			while to[j] >= 0 and dist < dxm - 1e-6:
+				var t2 := to[j]
+				dist += cm * (1.4142 if (t2 / H != j / H and t2 % H != j % H) else 1.0)
+				j = t2; nst += 1
+		if hm[i] - hm[j] >= fdrop: ffoot[i] = j; fstep[i] = nst
+	for i in W * H:
+		if ffoot[i] < 0: continue
+		var x := i / H; var y := i % H; var sup := false
+		for d in 8:
+			var qx: int = x + DX[d]; var qy: int = y + DY[d]
+			if qx < 0 or qy < 0 or qx >= W or qy >= H: continue
+			var u := qx * H + qy
+			if to[u] == i and ffoot[u] >= 0 and fstep[u] > 1: sup = true; break
+		if sup: continue
+		var j := ffoot[i]
+		falls.append({"top": i, "foot": j, "drop_m": (hm[i] - hm[j]) * cm, "acc": eff[i], "z_top": hm[i], "z_foot": hm[j]})
 	var plunge := 0.0
 	for f in falls:
 		var j: int = f.foot
