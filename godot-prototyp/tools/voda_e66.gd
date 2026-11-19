@@ -64,7 +64,8 @@ func _init() -> void:
 			bad_tot += int(bad.fill) + int(bad.eff) + int(bad.to)
 		edits.append(e)
 		print("výkop %d sloupec %d %d→%d: %.1f ms (povrch %.1f, podzemí %.1f), kroků R %d (max %.1f ms)%s" % [k + 1, gi, h0, nh, r.ms, r.surf_ms, e.ug_ms, steps, smax, (" neshod %s" % str(e.neshod)) if chk else ""])
-	var out := {"bloky_ms": gen, "voda_ms": v.ms, "souhrn": v.summary(), "vykopy": edits, "neshod_celkem": bad_tot, "souhrn_po": v.summary(), "ug_stats": (v.ug._st if not v.ug.is_empty() else {})}
+	var out := {"bloky_ms": gen, "voda_ms": v.ms, "souhrn": v.summary(), "vykopy": edits, "neshod_celkem": bad_tot, "souhrn_po": v.summary(), "ug_stats": (v.ug._st if not v.ug.is_empty() else {}),
+		"podzemi_vystupy": v.st.get("under", []).map(func(u): return [String(u.typ), snappedf(float(u.z), 0.01), snappedf(float(u.q), 1e-4)])}   # E71: výstupy podzemí (typ, výška m, l/s)
 	DirAccess.make_dir_recursive_absolute(ProjectSettings.globalize_path("res://shots/66_parita"))
 	FileAccess.open(ProjectSettings.globalize_path(_arg("out", "res://shots/66_parita/voda_e66.json")), FileAccess.WRITE).store_string(JSON.stringify(out, " "))
 	print("souhrn po výkopech: ", out.souhrn_po)
