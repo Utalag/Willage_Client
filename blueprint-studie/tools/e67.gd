@@ -44,6 +44,8 @@ func _build() -> void:
 
 func _ctx(extra: Dictionary) -> Dictionary:
 	var q := V64.scaled(p, 16); q.p52_rezim = "auto"
+	q.p70_prumer = _arg("prumer", String(q.get("p70_prumer", "pomer")))   # E70
+	q.p67_prune = _arg("prune", "1" if bool(q.get("p67_prune", true)) else "0") == "1"   # E70: srovnání bez slučování
 	q.merge(extra, true)
 	return F.from_world(world, fine, 16, 16, q)
 
@@ -76,6 +78,7 @@ func _calls(c: Dictionary) -> Array:
 func _sum(c: Dictionary, res: Array, label: String, ms: float) -> Dictionary:
 	var wet := {}; var pitb := {}; var pits := []; var outs := {"okraj": 0, "povrch": 0}; var oq := {"okraj": 0.0, "povrch": 0.0}
 	var vol := 0.0; var lv := []
+	var oql := []   # E70: výstupy s průtokem (otisk rozdělení, nejen součtů)
 	for r in res:
 		vol += float(r.volume_m3)
 		if r.has("pits67"):
@@ -84,7 +87,7 @@ func _sum(c: Dictionary, res: Array, label: String, ms: float) -> Dictionary:
 				for b in pt.bands: pitb[b] = true
 				if pt.objem_m3 > 0.0: pits.append({"hladina": snappedf(pt.hladina, 0.01), "dno": snappedf(pt.dno, 0.01), "pasem": pt.pasem, "typ": pt.typ, "objem_m3": snappedf(pt.objem_m3, 0.1)})
 			for o in r.outs67:
-				outs[o[1]] += 1; oq[o[1]] += float(o[3])
+				outs[o[1]] += 1; oq[o[1]] += float(o[3]); oql.append([int(o[2]), String(o[1]), float(o[3])])
 		else:
 			for b in r.comp_ids:
 				if float(c.lo[b]) < float(r.z_out) - 1e-6: pitb[b] = true
@@ -92,8 +95,10 @@ func _sum(c: Dictionary, res: Array, label: String, ms: float) -> Dictionary:
 				outs[r.out[3]] += 1; oq[r.out[3]] += float(r.out_q)
 			lv.append(snappedf(float(r.z_out), 0.01))
 	pits.sort_custom(func(a, b): return a.objem_m3 > b.objem_m3)
+	oql.sort()
+	var hq := HashingContext.new(); hq.start(HashingContext.HASH_SHA256); hq.update(JSON.stringify(oql.map(func(e): return [e[0], e[1], snappedf(e[2], 1e-9)])).to_utf8_buffer())
 	return {"varianta": label, "volani": res.size(), "mokra_pasma": wet.size(), "pasma_pod_hladinou": pitb.size(), "pasti_s_vodou": pits.size(),
-		"pasti": pits.slice(0, 12), "hladiny_stare": lv, "vystupy": outs, "vystupy_q_lps": oq, "objem_m3": snappedf(vol, 0.1), "ms": snappedf(ms, 0.1)}
+		"pasti": pits.slice(0, 12), "hladiny_stare": lv, "vystupy": outs, "vystupy_q_lps": oq, "objem_m3": snappedf(vol, 0.1), "ms": snappedf(ms, 0.1), "vystupy_otisk": hq.finish().hex_encode().substr(0, 16), "vystupy_q": oql}
 
 func _run(label: String, extra: Dictionary) -> Array:
 	var c := _ctx(extra)
@@ -172,6 +177,6 @@ func _init() -> void:
 	print(JSON.stringify(out.vykopy))
 	# stav pro obrázek: pásma (lo, hi, sloupec) navštívená pretok + O
 	DirAccess.make_dir_recursive_absolute(ProjectSettings.globalize_path("res://shots/e67"))
-	FileAccess.open("res://shots/e67/ostrov.json", FileAccess.WRITE).store_string(JSON.stringify(out, " "))
+	FileAccess.open(_arg("out", "res://shots/e67/ostrov.json"), FileAccess.WRITE).store_string(JSON.stringify(out, " "))
 	print("e67: hotovo za %.1f s" % ((Time.get_ticks_usec() - t0) / 1e6))
 	quit()

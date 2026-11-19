@@ -31,6 +31,7 @@ func _ctx(shape: String, extra: Dictionary) -> Dictionary:
 	var p := PR.defaults()
 	p.ponor_perm = float(_arg("ponor", "0.1")); p.p52_rezim = "auto"; p.ug_hloubka_m = 2.0 * T
 	p.p69_remizy = _arg("remizy", "1") == "1"
+	p.p70_prumer = _arg("prumer", String(p.get("p70_prumer", "pomer")))   # E70
 	p.merge(extra, true)
 	var W := N + 2; var m := W / 2; var nl := PERM.size()
 	var c := F._new(W, W, 1.0, p)
