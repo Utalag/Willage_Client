@@ -6,7 +6,7 @@ Seznam nápadů a úkolů, které čekají na Janovo rozhodnutí nebo na zařaze
 
 Nejdřív se dořeší všechno s vodou, pak další bloky. V rámci bloku se nepřeskakuje na jiné téma.
 
-1. **Voda:** slučování drobných výstupů z pastí → E68 orchestrátor → hladina podzemní vody jako plocha `gw` → eroze v podzemí (kras) → voda po přenosu výřezu se přepočítá → nakonec přepnout čas hry na 1 herní den = 1 h (`p71_cas` = 24, Jan 22:19, až po testech s vodou).
+1. **Voda:** ~~slučování~~ → ~~E68~~ → nálezy E68 (pramen v prohlubni, součet přítoků, pomalé smyčky, zavřené vs prosákne) → hladina podzemní vody jako plocha `gw` → eroze v podzemí (kras) → voda po přenosu výřezu se přepočítá → nakonec přepnout čas hry na 1 herní den = 1 h (`p71_cas` = 24, Jan 22:19, až po testech s vodou).
 2. **Model světa a kopání:** překryv změn po kopání + hash → kde končí funkce a pásma → tenké vrstvy a převzorkování → determinismus celého světa → rešerše implicitní geologie.
 3. **Geologie bloků a přenos výřezu:** otočení výřezu po 90° → jádro vyzdvižené hory přes více bloků → `TerrainSource` a datový kontrakt (jen návrhy, s Willage-backend).
 4. **Měřítko a zobrazení:** oddělené typy jednotek v kódu → plán vzorkování a LOD (test 3 × 3 km) → průhlednost překážek v izometrii → test měřítka v izometrii a blok 128 m → výkon na telefonu.
@@ -14,7 +14,7 @@ Nejdřív se dořeší všechno s vodou, pak další bloky. V rámci bloku se ne
 
 ## Voda
 
-- [ ] **E68 – sjednocení výpočtu povrchu a podzemí (hydrologický orchestrátor).** Podnět: konverzace s ChatGPT 2026-11-19 ([sdílený chat](https://chatgpt.com/share/6aff2aa3-865c-83ed-a19c-63720302f8cf)).
+- [x] **E68 – sjednocení výpočtu povrchu a podzemí (hydrologický orchestrátor).** Podnět: konverzace s ChatGPT 2026-11-19 ([sdílený chat](https://chatgpt.com/share/6aff2aa3-865c-83ed-a19c-63720302f8cf)). Hotovo (tag `e68-orchestrator`, větev `e68-orchestrator`): modul `hydro68.gd`, `p68_hydro` zapnuto, kola do ustálení (max 64), bilance a otisk; smyčka tůň→průsak→pramen chyba 61 % → 0; ostrov bitově stejný.
   - Jeden společný krok pro povrch, podzemí, tůně, prameny a události: sdílená vodní bilance, jedno pořadí výpočtů a jedno místní přepočítání po změně terénu.
   - Algoritmy zůstávají: povrch priority-flood + D8, podzemí pásma a tělesa (E58 A+B+C, E67).
   - Pořadí: terén a geologie → povrch a podzemí → vodní bilance → události → místní invalidace.
@@ -23,7 +23,12 @@ Nejdřív se dořeší všechno s vodou, pak další bloky. V rámci bloku se ne
 - [x] **Harmonický průměr propustností** – ověřeno v E70 (tag `e70-harmonicky`). Jen přepínač `p70_prumer`, výchozí zůstává prostý poměr: na ostrově beze změny, brzdění splní jen jedním směrem. Zapnout spolu s kapacitou vrstev.
 - [x] **Test symetrie a referenční test** – hotovo v E69 (tag `e69-symetrie`, větev `e69-symetrie-test`, nesloučeno). Bilance přesná (chyba ≤ 1e-12 l/s). Nalezena a opravena nesymetrie při shodných váhách větví (`p69_remizy`, rovný díl).
 - [x] **Omezení průtoku dolů podle propustnosti vrstvy** – hotovo v E71 (tag `e71-kapacita`, větev `e71-kapacita-dolu`). Přepínače `p71_kapacita` a `p71_prusak` zapnuté ve výchozím stavu (jen nový výpočet podzemí E67), čas `p71_cas` = 144 (1 herní den = 10 min). Referenční sloupec: z každé vrstvy 0,2 l/s; kupole průsak 0,163 l/s (E58 0,176); ostrov 150 výstupů, kopnutí ~70 ms, 0 neshod.
-- [ ] **Slučování drobných výstupů z pastí** (nález E71): na ostrově 119 ze 150 výstupů < 0,02 l/s; slučovat do silnějších výstupů, nejen skrýt při kreslení.
+- [x] **Slučování drobných výstupů z pastí** – hotovo v E72 (tag `e72-slucovani`): stejný práh `p67_prune_min` 0,1 l/s i pro cesty z E71 (`p72_slucovat`, `p72_prusak`); ostrov 150 → 6 výstupů, Σ 4,10 l/s zachováno; opravena chyba E71 (+0,317 l/s ve variantě přetok bez okraje).
+- [ ] **Pramen v prohlubni, kterou sám zavodní** (nález E68): na ostrově cyklus s periodou 2, bilance −0,02 l/s.
+- [ ] **Odtok tůně ze součtu všech přítoků**, ne jen z nejsilnějšího (nález E68).
+- [ ] **Zrychlit pomalé smyčky** povrch↔podzemí (desítky kol, nález E68).
+- [ ] **E67: rozlišit „zavřené“ a „vše prosákne“** (nález E68), jinak povrch do podzemí nic nepustí.
+- [ ] **Jan rozhodne:** slučovat i průsak tekoucí vody (`p72_prusak`)? omezit vzdálenost slučování výstupů (dnes až 19 sloupců)?
 
 ## Architektura světa
 
