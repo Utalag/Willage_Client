@@ -16,6 +16,7 @@ case "$MODE" in
   eroze51) timeout 900 "$GODOT" --headless --path . -s res://tools/test_eroze51.gd -- "$@" && python3 tools/shots_eroze51.py ;;
   podzemi52) sh tools/podzemi52.sh "$@" ;;
   alg58) sh tools/alg58.sh "$@" ;;
+  alg60) sh tools/alg60.sh "$@" ;;
   podzemi55) timeout 900 "$GODOT" --headless --path . -s res://tools/test_podzemi55.gd -- "$@" && python3 tools/shots_podzemi55.py ;;
   svah56) timeout 1200 "$GODOT" --headless --path . -s res://tools/svah56.gd -- "$@" && python3 tools/shots_svah56.py ;;
   dohnani54) timeout 900 "$GODOT" --headless --path . -s res://tools/test_dohnani54.gd -- "$@" ;;

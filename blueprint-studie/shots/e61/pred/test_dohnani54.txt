@@ -1,0 +1,8 @@
+1) dohnání tun 60 dní: po dnech 223 událostí 542 ms | jeden skok 223 událostí 532 ms | eroze 7, nános 216, do tůně 0.53 m³ | otisk f83967a30e688676 / f83967a30e688676 → STEJNÉ OK | tůň 114 sloupců: 2/2 vrstev plných za 60 dní (z událostí plnění, bez simulace)
+   tiků po 1 s by bylo 5184000 (žádné se nepočítají; cena = události)
+1) dohnání koryto 60 dní: po dnech 511 událostí 747 ms | jeden skok 511 událostí 754 ms | eroze 511, nános 0, do tůně 2.63 m³ | otisk fca8f43966daedc9 / fca8f43966daedc9 → STEJNÉ OK | tůň 28 sloupců: 1/1 vrstev plných za 60 dní (z událostí plnění, bez simulace)
+   tiků po 1 s by bylo 5184000 (žádné se nepočítají; cena = události)
+3) bilance po route (128²): přítok 61.83 l/s = ztráty 11.31 (vsak 0.84, do podzemí 10.47) + okraj 50.52, zbytek -0.000000000, kontinuita max 0.000000000 l/s
+2) ranné zastavení (40 výkopů v korytech 128²): přepočet průměr 2.58 ms, medián 2.05, max 7.95 | přeplánovaných sloupců průměr 90 vs cesta po proudu 34 sloupců | celkem buněk mapy 16384
+3) bilance po každém přepočtu: kontinuita max 0.000000000 l/s, celková max 0.000000000 l/s → OK (konec: přítok 61.83 = ztráty 11.32 + okraj 50.51)
+výsledek: VŠE OK

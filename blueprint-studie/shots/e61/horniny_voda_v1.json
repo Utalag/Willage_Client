@@ -1,0 +1,575 @@
+{
+ "_popis": "ROZŠÍŘENÍ sdilene/materialy_voda.json (stejné schéma: id, perm, por, res, ret) pro nové horniny a minerály z blueprint-studie/data/poradi_hornin.json (MaterialId 20+ a 100+, u8). Původní tabulka se NEMĚNÍ (čte ji voda-studie, lozika-studie a prototyp, který porovnává svou kopii); kdo chce nové horniny, načte obě tabulky. Hodnoty jsou odhad (pískovec, štěrk, spraš, suť propustné; krystalinikum, karbonáty jako vápenec podle Jana nepropustné). Pevnost (Jan 16:58): load = kolik buněk (0,5 m) nad sebou unese jako strop, cantilever = kolik buněk převisne bez podpory; uvnitř se počítá v metrech (× 0,5).",
+ "version": 1,
+ "extends": "materialy_voda.json",
+ "perm_leak": 0.05,
+ "materials": {
+  "peridotite": {
+   "id": 20,
+   "perm": 0.0,
+   "por": 0.0,
+   "res": 0.1,
+   "ret": 0.0,
+   "load": 200,
+   "cantilever": 8
+  },
+  "kimberlite": {
+   "id": 21,
+   "perm": 0.0,
+   "por": 0.0,
+   "res": 0.1,
+   "ret": 0.0,
+   "load": 80,
+   "cantilever": 2
+  },
+  "lherzolite": {
+   "id": 22,
+   "perm": 0.0,
+   "por": 0.0,
+   "res": 0.1,
+   "ret": 0.0,
+   "load": 200,
+   "cantilever": 8
+  },
+  "eclogite": {
+   "id": 23,
+   "perm": 0.0,
+   "por": 0.0,
+   "res": 0.1,
+   "ret": 0.0,
+   "load": 200,
+   "cantilever": 8
+  },
+  "pyroxenite": {
+   "id": 24,
+   "perm": 0.0,
+   "por": 0.0,
+   "res": 0.1,
+   "ret": 0.0,
+   "load": 200,
+   "cantilever": 8
+  },
+  "serpentinite": {
+   "id": 25,
+   "perm": 0.0,
+   "por": 0.0,
+   "res": 0.1,
+   "ret": 0.0,
+   "load": 100,
+   "cantilever": 3
+  },
+  "gabbro": {
+   "id": 26,
+   "perm": 0.0,
+   "por": 0.0,
+   "res": 0.1,
+   "ret": 0.0,
+   "load": 200,
+   "cantilever": 8
+  },
+  "norite": {
+   "id": 27,
+   "perm": 0.0,
+   "por": 0.0,
+   "res": 0.1,
+   "ret": 0.0,
+   "load": 200,
+   "cantilever": 8
+  },
+  "fe_ti_zone": {
+   "id": 28,
+   "perm": 0.0,
+   "por": 0.0,
+   "res": 0.1,
+   "ret": 0.0,
+   "load": 200,
+   "cantilever": 8
+  },
+  "granulite": {
+   "id": 29,
+   "perm": 0.0,
+   "por": 0.0,
+   "res": 0.1,
+   "ret": 0.0,
+   "load": 200,
+   "cantilever": 8
+  },
+  "amphibolite": {
+   "id": 30,
+   "perm": 0.0,
+   "por": 0.0,
+   "res": 0.1,
+   "ret": 0.0,
+   "load": 200,
+   "cantilever": 8
+  },
+  "lower_gneiss": {
+   "id": 31,
+   "perm": 0.0,
+   "por": 0.0,
+   "res": 0.1,
+   "ret": 0.0,
+   "load": 200,
+   "cantilever": 8
+  },
+  "migmatite": {
+   "id": 32,
+   "perm": 0.0,
+   "por": 0.0,
+   "res": 0.1,
+   "ret": 0.0,
+   "load": 200,
+   "cantilever": 8
+  },
+  "orthogneiss": {
+   "id": 33,
+   "perm": 0.0,
+   "por": 0.0,
+   "res": 0.1,
+   "ret": 0.0,
+   "load": 200,
+   "cantilever": 8
+  },
+  "biotite_gneiss": {
+   "id": 34,
+   "perm": 0.0,
+   "por": 0.0,
+   "res": 0.1,
+   "ret": 0.0,
+   "load": 200,
+   "cantilever": 8
+  },
+  "two_mica_gneiss": {
+   "id": 35,
+   "perm": 0.0,
+   "por": 0.0,
+   "res": 0.1,
+   "ret": 0.0,
+   "load": 200,
+   "cantilever": 8
+  },
+  "granodiorite": {
+   "id": 36,
+   "perm": 0.0,
+   "por": 0.0,
+   "res": 0.1,
+   "ret": 0.0,
+   "load": 200,
+   "cantilever": 8
+  },
+  "leucogranite": {
+   "id": 37,
+   "perm": 0.0,
+   "por": 0.0,
+   "res": 0.1,
+   "ret": 0.0,
+   "load": 200,
+   "cantilever": 8
+  },
+  "pegmatite": {
+   "id": 38,
+   "perm": 0.0,
+   "por": 0.0,
+   "res": 0.1,
+   "ret": 0.0,
+   "load": 150,
+   "cantilever": 5
+  },
+  "quartzite": {
+   "id": 39,
+   "perm": 0.0,
+   "por": 0.0,
+   "res": 0.1,
+   "ret": 0.0,
+   "load": 200,
+   "cantilever": 8
+  },
+  "mica_schist": {
+   "id": 40,
+   "perm": 0.0,
+   "por": 0.0,
+   "res": 0.1,
+   "ret": 0.0,
+   "load": 120,
+   "cantilever": 4
+  },
+  "phyllite": {
+   "id": 41,
+   "perm": 0.0,
+   "por": 0.0,
+   "res": 0.1,
+   "ret": 0.0,
+   "load": 80,
+   "cantilever": 3
+  },
+  "skarn": {
+   "id": 42,
+   "perm": 0.0,
+   "por": 0.0,
+   "res": 0.1,
+   "ret": 0.0,
+   "load": 120,
+   "cantilever": 4
+  },
+  "crystalline_transition": {
+   "id": 43,
+   "perm": 0.0,
+   "por": 0.0,
+   "res": 0.1,
+   "ret": 0.0,
+   "load": 200,
+   "cantilever": 8
+  },
+  "deep_limestone": {
+   "id": 44,
+   "perm": 0.0,
+   "por": 0.0,
+   "res": 0.1,
+   "ret": 0.0,
+   "load": 100,
+   "cantilever": 5
+  },
+  "siltstone": {
+   "id": 45,
+   "perm": 0.1,
+   "por": 0.15,
+   "res": 0.15,
+   "ret": 0.05,
+   "load": 40,
+   "cantilever": 2
+  },
+  "conglomerate": {
+   "id": 46,
+   "perm": 0.4,
+   "por": 0.2,
+   "res": 0.2,
+   "ret": 0.03,
+   "load": 40,
+   "cantilever": 2
+  },
+  "rock_salt": {
+   "id": 47,
+   "perm": 0.0,
+   "por": 0.0,
+   "res": 0.1,
+   "ret": 0.0,
+   "load": 60,
+   "cantilever": 2
+  },
+  "gypsum": {
+   "id": 48,
+   "perm": 0.0,
+   "por": 0.0,
+   "res": 0.1,
+   "ret": 0.0,
+   "load": 40,
+   "cantilever": 2
+  },
+  "dolomite": {
+   "id": 49,
+   "perm": 0.0,
+   "por": 0.0,
+   "res": 0.1,
+   "ret": 0.0,
+   "load": 120,
+   "cantilever": 5
+  },
+  "black_coal": {
+   "id": 50,
+   "perm": 0.02,
+   "por": 0.05,
+   "res": 0.1,
+   "ret": 0.0,
+   "load": 150,
+   "cantilever": 5
+  },
+  "shale": {
+   "id": 51,
+   "perm": 0.0,
+   "por": 0.0,
+   "res": 0.1,
+   "ret": 0.0,
+   "load": 30,
+   "cantilever": 1
+  },
+  "quartz_sandstone": {
+   "id": 52,
+   "perm": 0.5,
+   "por": 0.2,
+   "res": 0.2,
+   "ret": 0.05,
+   "load": 60,
+   "cantilever": 3
+  },
+  "lignite": {
+   "id": 105,
+   "perm": 0.06,
+   "por": 0.2,
+   "res": 0.1,
+   "ret": 0.0,
+   "load": 15,
+   "cantilever": 1
+  },
+  "loess": {
+   "id": 54,
+   "perm": 0.35,
+   "por": 0.4,
+   "res": 0.35,
+   "ret": 0.15,
+   "load": 6,
+   "cantilever": 0
+  },
+  "hill_sand": {
+   "id": 55,
+   "perm": 0.7,
+   "por": 0.33,
+   "res": 0.25,
+   "ret": 0.05,
+   "load": 6,
+   "cantilever": 0
+  },
+  "limestone_outcrop": {
+   "id": 56,
+   "perm": 0.0,
+   "por": 0.0,
+   "res": 0.15,
+   "ret": 0.0,
+   "load": 80,
+   "cantilever": 4
+  },
+  "weathered_volcanic": {
+   "id": 57,
+   "perm": 0.15,
+   "por": 0.12,
+   "res": 0.2,
+   "ret": 0.03,
+   "load": 20,
+   "cantilever": 1
+  },
+  "flysch": {
+   "id": 58,
+   "perm": 0.15,
+   "por": 0.15,
+   "res": 0.3,
+   "ret": 0.05,
+   "load": 40,
+   "cantilever": 2
+  },
+  "sandstone_towers": {
+   "id": 59,
+   "perm": 0.5,
+   "por": 0.2,
+   "res": 0.15,
+   "ret": 0.03,
+   "load": 60,
+   "cantilever": 3
+  },
+  "weathered_granite": {
+   "id": 60,
+   "perm": 0.2,
+   "por": 0.15,
+   "res": 0.2,
+   "ret": 0.03,
+   "load": 40,
+   "cantilever": 2
+  },
+  "mountain_ridge": {
+   "id": 61,
+   "perm": 0.0,
+   "por": 0.0,
+   "res": 0.15,
+   "ret": 0.0,
+   "load": 150,
+   "cantilever": 6
+  },
+  "slope_schist": {
+   "id": 62,
+   "perm": 0.0,
+   "por": 0.0,
+   "res": 0.15,
+   "ret": 0.0,
+   "load": 150,
+   "cantilever": 6
+  },
+  "granite_massif": {
+   "id": 63,
+   "perm": 0.0,
+   "por": 0.0,
+   "res": 0.15,
+   "ret": 0.0,
+   "load": 150,
+   "cantilever": 6
+  },
+  "rock_wall": {
+   "id": 64,
+   "perm": 0.0,
+   "por": 0.0,
+   "res": 0.15,
+   "ret": 0.0,
+   "load": 150,
+   "cantilever": 6
+  },
+  "alpine_crystalline": {
+   "id": 65,
+   "perm": 0.0,
+   "por": 0.0,
+   "res": 0.15,
+   "ret": 0.0,
+   "load": 150,
+   "cantilever": 6
+  },
+  "subalpine_scree": {
+   "id": 66,
+   "perm": 0.7,
+   "por": 0.3,
+   "res": 0.2,
+   "ret": 0.02,
+   "load": 4,
+   "cantilever": 0
+  },
+  "alpine_belt": {
+   "id": 67,
+   "perm": 0.0,
+   "por": 0.0,
+   "res": 0.15,
+   "ret": 0.0,
+   "load": 150,
+   "cantilever": 6
+  },
+  "alpine_granite": {
+   "id": 68,
+   "perm": 0.0,
+   "por": 0.0,
+   "res": 0.15,
+   "ret": 0.0,
+   "load": 150,
+   "cantilever": 6
+  },
+  "alpine_quartzite": {
+   "id": 69,
+   "perm": 0.0,
+   "por": 0.0,
+   "res": 0.15,
+   "ret": 0.0,
+   "load": 150,
+   "cantilever": 6
+  },
+  "extreme_ridge": {
+   "id": 70,
+   "perm": 0.0,
+   "por": 0.0,
+   "res": 0.15,
+   "ret": 0.0,
+   "load": 150,
+   "cantilever": 6
+  },
+  "high_massif": {
+   "id": 71,
+   "perm": 0.0,
+   "por": 0.0,
+   "res": 0.15,
+   "ret": 0.0,
+   "load": 150,
+   "cantilever": 6
+  },
+  "rock_spire": {
+   "id": 72,
+   "perm": 0.0,
+   "por": 0.0,
+   "res": 0.15,
+   "ret": 0.0,
+   "load": 150,
+   "cantilever": 6
+  },
+  "summit_pyramid": {
+   "id": 73,
+   "perm": 0.0,
+   "por": 0.0,
+   "res": 0.15,
+   "ret": 0.0,
+   "load": 150,
+   "cantilever": 6
+  },
+  "highest_point": {
+   "id": 74,
+   "perm": 0.0,
+   "por": 0.0,
+   "res": 0.15,
+   "ret": 0.0,
+   "load": 150,
+   "cantilever": 6
+  },
+  "volcanic_conduit": {
+   "id": 75,
+   "perm": 0.0,
+   "por": 0.0,
+   "res": 0.1,
+   "ret": 0.0,
+   "load": 100,
+   "cantilever": 4
+  },
+  "diamond": {
+   "id": 100,
+   "perm": 0.0,
+   "por": 0.0,
+   "res": 0.1,
+   "ret": 0.0,
+   "load": 150,
+   "cantilever": 5
+  },
+  "gem": {
+   "id": 101,
+   "perm": 0.0,
+   "por": 0.0,
+   "res": 0.1,
+   "ret": 0.0,
+   "load": 150,
+   "cantilever": 5
+  },
+  "rare_metal": {
+   "id": 102,
+   "perm": 0.0,
+   "por": 0.0,
+   "res": 0.1,
+   "ret": 0.0,
+   "load": 150,
+   "cantilever": 5
+  },
+  "fe_ti": {
+   "id": 103,
+   "perm": 0.0,
+   "por": 0.0,
+   "res": 0.1,
+   "ret": 0.0,
+   "load": 150,
+   "cantilever": 5
+  },
+  "coal": {
+   "id": 104,
+   "perm": 0.0,
+   "por": 0.0,
+   "res": 0.1,
+   "ret": 0.0,
+   "load": 30,
+   "cantilever": 1
+  },
+  "garnet": {
+   "id": 106,
+   "perm": 0.0,
+   "por": 0.0,
+   "res": 0.1,
+   "ret": 0.0,
+   "load": 120,
+   "cantilever": 4
+  },
+  "gold": {
+   "id": 107,
+   "perm": 0.0,
+   "por": 0.0,
+   "res": 0.1,
+   "ret": 0.0,
+   "load": 100,
+   "cantilever": 4
+  }
+ }
+}

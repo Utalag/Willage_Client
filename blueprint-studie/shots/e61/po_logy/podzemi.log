@@ -1,0 +1,8 @@
+Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+
+# E47d testy podzemí: nepropustná 6 (perm 0), propustná Křemenný pískovec perm 0.33, por 0.20
+1) čočka: 192 buněk, objem pórů 38.40 (čekáno 192 · 0.20 = 38.40), plná za 38.40 t, 4 událostí po vrstvách | výstup povrch z=10 do sloupce (7, 4) = dno tůně, 1.00/t | cesta po vrstvě 8 buněk
+   tůň 4 × 4: 16 sloupců, objem 48.06 (čekáno 48), plná za 48.06 t po čočce → přeliv přes okraj ostrova 1.00/t | celkem do přelivu 86.46 t → OK
+2) dutina: těleso 225 buněk, podzemní jezero 27 buněk (dutina 27), objem do výstupu 40.20 (čekáno 27 + 66 · 0.20 = 40.20), plné za 40.20 t | výstup okraj z=5 x=11 (stěna ostrova → mlha) 1.00/t | cesta po vrstvě 13 buněk → OK
+3) uzavřená čočka: 32 buněk, objem 6.40 (čekáno 32 · 0.20), plná za 6.40 t, výstup žádný → pak nepřijímá, výtok 0.00 → OK
+výsledek: VŠE OK

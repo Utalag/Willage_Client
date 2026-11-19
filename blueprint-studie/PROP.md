@@ -264,6 +264,252 @@ Výchozí: 800 kapek na blok, `ero_cap` 1,0, `ero_erode` 0,1, `ero_deposit_rate`
   v detailu jen vyhloubené koryto, vodu v GIFu kreslím z hrubé fáze (voda_sim na 128 × 128 × 64 jsem nespouštěl). Biomy se
   zatím promítnou jen do podmnožiny hornin, ne do vegetace. Počet minerálů je podle typu, ne podle biomu.
 
+## E62 výsledky (2026-11-19 05:15)
+- **Závislost prelivu na pásmech (příznak D) je přesná, ale skoro nepomáhá.** Tabulky v4, 20 výkopů, záznam `_e61`:
+
+  | mapa | varianta | výkop průměr / max | floodů | ponecháno / přepočteno | neshod |
+  |---|---|---|---|---|---|
+  | s16 | A+B+C | 3929 / 6084 ms | – | – | 0 |
+  | s16 | A+B+C+D | 2862 / 4222 ms | 31 | 11 / 29 | 0 |
+  | s32 | A+B+C | 3778 / 4062 ms | – | – | 0 |
+  | s32 | A+B+C+D | 2961 / 4730 ms | 29 | 13 / 27 | 0 |
+  | s64 | A+B+C+D | 2687 / 3894 ms | 32 | 12 / 28 | 0 |
+  | s64 | A+B+C (E61) | 3401 / 3913 ms | 44 | 0 / 44 | 0 |
+  | s64 | base (E61) | 5967 / 7138 ms | – | – | 0 |
+
+- **Proč nepomáhá:**
+  - Polovina výkopů je schválně u vstupů těles (tak se hraje: kope se u vody).
+  - Vstupy jsou místa, kde tůň na povrchu odtéká do tělesa, takže tam tůň prelivu sahá k povrchu.
+  - Pravidla 3 a 4 tedy oprávněně hlásí změnu. Přeskočit přepočet tam nejde, výsledek se opravdu může změnit.
+  - Ms rozsah by vyžadoval lokální opravu priority-flood prelivu (přeplavit jen kolem výkopu a navázat na staré
+    hladiny). To jsem do konce noci neudělal.
+- **Zátěž serveru za podzemí** (50 hráčů × 20 úprav/min, 5 % výkopů do podzemí, s64):
+
+  | | % jednoho jádra |
+  |---|---|
+  | base | 497 % |
+  | A+B+C | 283 % |
+  | A+B+C+D | 224 % |
+  | A+B+C s v3 (E60) | 0,08 % |
+
+  Při 50 × 4 / min je to 45 %, při 10 × 4 / min 9 % (A+B+C+D).
+- **Příčina průsaku 0,378 → 0 (ověřeno, `tools/e62_dno.gd`):**
+  - Hlavní těleso (26 vstupů) je ve v4 v režimu preliv, dno je celé nepropustné (13 758 m²). Režim ve v3 jsem
+    znovu nespouštěl (sdílené tabulky už jsou v4), běh E60 ve v3 měl 4 floody prelivu.
+  - Průsak v preliv počítá `_leak` jen do slabě propustného okolí: pásma s 0 < perm < `ponor_perm` 0,3, váha
+    perm · leak_m2.
+  - Okolí tělesa tvoří hlavně prachovec (id 45, 1680 m² dna) a flyš (id 58). Ve v3 měly perm 0,1 a 0,15, takže
+    prosakovaly. Ve v4 mají K = 1e-9, tedy perm 0, a neprosakují.
+  - Naopak černé uhlí, zvětralý granit a zvětralý vulkanit přešly nad 0,3 a staly se tělesy (1345 → 1375 těles).
+- **Negativa:**
+  - Cíl „zpět na ms“ jsem **nesplnil**. D dává jen 1,27× (3,4 → 2,7 s).
+  - Pravidla D jsou konzervativní (sloupec + 4 sousedé). Přesnost je ověřená jen na 3 × 20 výkopech.
+  - Výchozí hodnoty beze změny. D je jen v `scripts/alg58/ug58.gd` (`has_flag(v, "D")`) a v `tools/alg58_ug.gd`.
+
+## E62 graf těles B pro režim preliv (plán 2026-11-19 05:05; Jan noční mandát)
+- **Problém (E61):** s v4 je hlavní těleso v režimu preliv. A+B+C po výkopu znovu zaplaví celé těleso, protože
+  sloupcová stopa (sloupce navštívených pásem + 4 sousedé) pokryje skoro celou mapu. Výsledek: 3,4 s na výkop.
+- **Plán (varianta příznak D, `A+B+C+D`, výchozí hodnoty beze změny):**
+  - Místo sloupcové stopy zjistit závislost výsledku prelivu na pásmech. Výsledek se po výkopu ve sloupci cc
+    přepočítá jen když:
+    1. změněné pásmo (hi nebo body) bylo navštíveno (kapilární sestup nebo priority-flood);
+    2. navštívené pásmo ve sloupci cc nebo u 4 sousedů má změněné pásmo v seznamu sousedů;
+    3. pásmo tůně ve sloupci cc nebo u 4 sousedů sahá k nové výšce povrchu (hi ≥ nh − E), kde se mění výstupy
+       na povrch a průsak;
+    4. některý vstup je ve sloupci cc.
+  - Jinak výsledek čte jen nezměněná data, takže je stejný.
+  - Ověřit 0 neshod proti čerstvému plnému řešení při s16 / s32 / s64 s tabulkami v4.
+  - Přepočítat zátěž serveru za podzemí.
+- **Příčina průsaku 0,378 → 0 l/s:** ověřit materiál dna hlavního tělesa v3 proti v4.
+
+## E61 výsledky (2026-11-19 04:50)
+- **Tabulky:**
+  - `materialy_voda.json` v4: 10 materiálů.
+  - `horniny_voda.json` v2: 56 hornin.
+  - Přehled změn je v `shots/e61/zmeny_tabulek.md`.
+  - Zálohy: `shots/e61/materialy_voda_v3.json`, `horniny_voda_v1.json`. Staré výsledky testů jsou
+    v `shots/e61/pred/`.
+  - Nejdůležitější změny:
+
+    | materiál | perm | por | ret | ero_v | sed_v |
+    |---|---|---|---|---|---|
+    | tráva | 0,25 → 0,667 | 0,4 → 0,45 | 0,15 → 0,3 | 1,2 → 1,5 | 0,03 → 0,003 |
+    | hlína | 0,3 → 0,595 | 0,4 → 0,43 | 0,15 → 0,28 | 0,35 → 0,4 | 0,03 → 0,003 |
+    | písek | 0,8 → 0,833 | 0,35 | 0,05 → 0,09 | 0,25 | 0,08 → 0,03 |
+    | jíl | 0 | 0,45 → 0,5 | 0 → 0,48 | 0,8 → 1,2 | 0,01 → 0,0005 |
+    | vápenec | 0 → 0,246 | 0 → 0,05 | 0 → 0,03 | 4 | 0 |
+    | křemenný pískovec | 0,5 → 0,333 | | | | |
+
+- **Testy po změně** (všechny projdou, hashe se podle očekávání změnily):
+
+  | test | starý hash | nový hash | výsledek |
+  |---|---|---|---|
+  | test (blueprint v1) | 45f42cd597c0f8c9 | dda863feffe6f611 | 2× stejné |
+  | horniny (sled46) | 00dc4dc614729194 | d8af7f59b6f8da70 | 2× stejné, validátor vody OK |
+  | svet8 | f08f56000feb | ec0681cc6426 | 2× stejné, jinak beze změny |
+  | voda (eroze okraj) | 36236d38becf | a14136754dd1 | 2× stejné |
+  | voda_b (E47c prameny) | 604e5080a046 | 5ae2b366e84a | 2× stejné |
+  | voda_b --b (E47b) | e89b4b1dd59c | e8cbbc78ca88 | 2× stejné |
+  | dohnani54 tůň / koryto | f83967a30e688676 / fca8f43966daedc9 | 37312ef4b728d6c0 / 1c63729c43fa012d | VŠE OK |
+  | podzemi, eroze51, podzemi55, plosne53, podzemi52 testy | – | – | VŠE OK |
+  | tun (Janův příklad) | – | – | VŠE OK po úpravě testu |
+
+- **Co se změnilo ve vodě:**
+
+  | měření | před (v3) | po (v4) | proč |
+  |---|---|---|---|
+  | E47b déšť (svět): odteklo / kaluže / mokré sloupce | 683 / 9,36 m³ / 102 | 320 / 2,64 m³ / 29 | tráva a hlína propustnější (vsak) |
+  | E47b strže: odteklo / kaluže / ponory pohltily | 583 / 44,9 m³ / 100 buněk | 213 / 27,2 m³ / 52 | totéž |
+  | E47c prameny: ponory pohltily | 0,73 l/s | 0,26 l/s | jiný tok, méně ztrát v korytě |
+  | E47c hráz přes potok: okno / dotčeno | 558 / 585 | 247 / 280 | potok jinde (32, 10) místo (5, 15) |
+  | E51 události: živé položky / fronta max | 2893 / 14113 | 893 / 8018 | nižší sed_v → méně nánosu, vyšší ero_v jílu a trávy |
+  | E54 tůň 60 dní: události / nános / velikost tůně | 223 / 216 / 114 sloupců | 97 / 90 / 195 sloupců (3/3 vrstvy) | nižší sed_v, víc vody v tůni |
+  | E54 koryto 60 dní | 511 událostí, 2,63 m³ do tůně | 511, 2,60 m³ | skoro beze změny |
+  | podzemí svet64 (s64): průsak světa / výtok / tělesa | 0,378 / 2,48 l/s / 1345 | 0,000 / 2,17 l/s / 1375 | pravděpodobně dno z prachovce nebo flyše: perm 0,1–0,15 → 0 (K 1e-9), neověřeno |
+
+- **Úprava testu:**
+  - `scripts/voda/tests_tun.gd` počítal s perm křemenného pískovce 0,5 (Janův příklad: odtok 0,5 za t).
+  - Teď pit_q dopočítá z perm v tabulce (odtok = perm · pit_q · 4), takže čísla Janova příkladu (16 t, 0,5 / 0,5)
+    zůstávají a test nezávisí na hodnotě perm.
+- **Negativa:**
+  - Sdílenou tabulku čte i prototyp (`godot-prototyp/scripts/gen3/water_table.gd`), voda-studie a lozika-studie.
+    Změní se i u nich. Jejich kód jsem neměnil ani nespouštěl.
+  - Snímky v `shots/` jsem nepřekreslil (testy jsem pouštěl bez renderu), obrázky E45–E58 ukazují hodnoty v3.
+    Bench / json soubory testů jsou přepsané novými, staré jsou v `shots/e61/pred/`.
+  - Horniny mají ero_v, ale ero_vol jen měkké (spraš, kopcový písek, suť), takže ostatní dál neerodují.
+  - Režim (okamzite / udalost / nepropustne) je zatím jen pole v tabulce. Kód ho nečte, simulace dál používá perm.
+  - Dlouhý běh `podzemi52` (slovník 64, ~10 min) jsem znovu nespouštěl, jen jeho testy.
+  - Časy E58 / E60 byly měřené s tabulkami v3.
+  - **Podzemí A+B+C s novými materiály ztratilo náskok.** Hlavní těleso (26 vstupů) má teď dno s perm 0, takže
+    režim je preliv. B (graf těles) umí jen nádrž / směs. V preliv po každém výkopu ve stopě znovu zaplaví celé
+    těleso (44 floodů na 20 výkopů).
+
+    | s64, 20 výkopů | výkop průměr / max | neshod |
+    |---|---|---|
+    | base | 5967 / 7138 ms | 0 |
+    | A+B+C | 3401 / 3913 ms | 0 |
+    | A+B+C v3 (pro srovnání) | 1,0 / 10,3 ms | 0 |
+
+    Zátěž serveru E60 (podzemí 5 % výkopů) tak s v4 neplatí: 50 × 20 / min na 512² ≈ 17 % + 283 % za podzemí.
+    Další krok je B pro režim preliv (lokální re-flood), zatím neudělané.
+
+## E60 výsledky (2026-11-19 04:40; tabulky materiálů ještě v3, před E61)
+1. **Σ průsak 0,756 při s16 / s32 byla chyba měření, ne A+B+C.**
+   - `tok.route` volá podzemí v každém kole smyčky povrch ↔ podzemí (až 4 kola) s novým q. Záznam ukládal všechna
+     kola a součet je sčítal. Svět bere jen poslední kolo (`st.ug_bodies`).
+   - **Oprava:** `alg58_rec` označí volání posledního kola (`final`) a uloží průsak světa. `alg58_ug` sčítá jen
+     `final`, starý součet je dál v `leak_all_calls`. Záznam `_e60`, staré soubory E58 zůstávají.
+
+   | mapa | průsak světa | A+B+C | base | neshod | A+B+C výkop průměr / max | base výkop |
+   |---|---|---|---|---|---|---|
+   | s16 | 0,378 | 0,378 | 0,378 | 0 | 1,9 / 10,8 ms | 3471 ms |
+   | s32 | 0,378 | 0,378 | 0,378 | 0 | 2,0 / 11,0 ms | 2725 ms |
+   | s64 | 0,378 | 0,378 | 0,378 | 0 | 1,0 / 10,3 ms | 1837 ms |
+
+   - Průsak je teď nezávislý na rozlišení (dřív 0,756 / 0,756 / 0,378).
+2. **Povrch, lokální přepočet `scripts/alg60/tok60.gd` (kopie `tok.update`, `tok.gd` beze změny).**
+   - 60 výkopů u vody. Pole fill, eff, to, ain, pw, extra, src2, sink, tůně a under se po každém výkopu shodují bit
+     po bitu s `tok.update` (C+A): **0 neshod** na 128², 256² i 512².
+   - Změny:
+     - D8 jen u buněk, kde se změnila fill buňky nebo souseda.
+     - `_cell` jen tam, kde se změnil vstup (fill, cíl odtoku, přítok shora). Mimo okno beze změny.
+     - Flood okna s haldou ve dvou packed polích (pořadí (fill, index) stejné jako reky.gd, takže stejný výsledek).
+     - Okno a kontrola okraje přes lokální pole.
+     - Seřazené klíče tůní se drží, dokud se množina tůní nezmění.
+     - Měkký přepočet tůně (stejné buňky) nepočítá znovu propustnost dna (materiály se výkopem nemění).
+
+   | mapa | tok.update průměr / max | tok60 průměr / max | zrychlení |
+   |---|---|---|---|
+   | 128² | 3,1 / 9,0 ms | 1,1 / 6,0 ms | 2,8× |
+   | 256² | 11,8 / 22,9 ms | 3,4 / 9,4 ms | 3,5× |
+   | 512² | 41,8 / 82,7 ms | 10,2 / 26,1 ms | 4,1× |
+
+   - **Fáze na 512²** (ms na výkop, `tok_prof` / `tok60`):
+
+     | fáze | tok_prof | tok60 |
+     |---|---|---|
+     | okno + flood | 15,2 | 6,3 |
+     | D8 + průtok v okně | 14,8 | 1,7 |
+     | odtoky tůní | 14,5 | 1,9 |
+
+   - **Zátěž serveru znovu** (% jednoho jádra, podzemí A+B+C 1,0 ms na 5 % výkopů):
+
+     | mapa | 50 × 20 / min | 50 × 4 / min | 10 × 4 / min |
+     |---|---|---|---|
+     | 128² | 5,3 → 2,0 | 1,1 → 0,4 | 0,2 → 0,1 |
+     | 256² | 19,7 → 5,7 | 3,9 → 1,1 | 0,8 → 0,2 |
+     | 512² | 69,8 → 17,1 | 14,0 → 3,4 | 2,8 → 0,7 |
+
+3. **Graf pánví B je přesný, rozdíl dělá jen ε.**
+   - B proti priority-flood bez ε (vlastní kopie, ε = 0): **0 rozdílných buněk** na 128², 256² i 512²
+     (Barnes 2014 [36]).
+   - Buňky tůní:
+
+     | mapa | PF bez ε | B | tok.gd s ε = 1e-3 | jen kvůli ε |
+     |---|---|---|---|---|
+     | 128² | 1818 | 1818 | 1878 | 60 |
+     | 256² | 7720 | 7720 | 7927 | 207 |
+     | 512² | 31950 | 31950 | 32845 | 895 |
+
+   - ε zvedá roviny a dna tůní o ε na krok, max o 0,064 / 0,12 / 0,24 buňky. Ploché místo delší než ~10 kroků tak
+     přeleze práh tůně 0,01. Jsou to tedy „tůně z ε“, ne prohlubně.
+   - **B + ε je přesné:** fill tok.gd je pevný bod F = max(hm, min souseda F + ε), protože první vytažený soused má
+     nejmenší fill. Zvedání zdola od B (`tools/alg60_b.gd`) dá bit po bitu stejnou fill jako tok.gd: 0 rozdílů na
+     128². Je ale pomalé: 2,1 s proti 0,14 s PF, 35 054 zvednutí. 256² a 512² jsem nedoměřil (ukončeno kvůli E61).
+- **Negativa:**
+  - Menší počáteční okno (okraj 4 nebo 12 místo 24 s automatickým zvětšením) je rychlejší (7,7 ms), ale **špatně**:
+    proti plnému route eff až o 2,24 l/s, fill o 0,24. Kontrola odtoku na okraji okna nestačí, okraj 24 zůstává.
+  - `tok60` vrací v `touched` / `cells` jen buňky, které se opravdu přepočítaly (méně než tok.update). Pro E51
+    přeplánování je to méně práce, ale rozhraní se liší.
+  - Mezipaměť klíčů tůní předpokládá, že se na stejném stavu nemíchá tok60 s tok.update.
+  - Flood okna je pořád 62 % času. Přesné rané zastavení floodu s ε jsem nenašel (pořadí závisí na ε řetězcích).
+  - Odchylky E51b proti plnému route (fill až 0,91 na 2 buňkách, eff 0,000625) zůstávají. Mají je obě verze stejně,
+    jsou to staré vlastnosti okna.
+  - Měřeno při 3–5 souběžných bězích, absolutní časy kolísají ±15 %. Poměr je ze stejného procesu.
+- Shot `shots/60_povrch.png`. Spuštění `./run.sh alg60`.
+
+## E61 převzetí reálných vodních hodnot do sdílených tabulek (plán 2026-11-19 04:42; Jan 04:39)
+- **Zadání (Jan 04:39):** dosavadní hodnoty materiálů byly zkušební a smí se přepsat. Převzít výsledky výzkumu E59 do
+  `sdilene/materialy_voda.json` a `sdilene/horniny_voda.json`, vápenec včetně (dřívější „vápenec nepropustný“ byla
+  zkušební hodnota). Ponechat log škálu perm, tři režimy a čas hry (1 herní den = 10 min reálně).
+  Číslo E61, protože E60 už je noční optimalizace.
+- **Plán:**
+  - Zálohovat staré tabulky do `shots/e61/` (v3 a v1) i s výsledky testů (bench a json v `shots/`).
+  - Převzít z `materialy_voda_navrh.json` (`tools/materialy61.py`):
+    - perm = (log10 K + 9) / 6
+    - por = n
+    - ret = n − Sy
+    - ero_v a sed_v (Hjulström)
+    - nová pole K_ms, Sy, skupina, t_1m_realne_min, rezim
+  - V hlavičce: mapování, faktor času 144, prahy režimů (okamžitě < 10 min reálně, nepropustné > 30 dní reálně).
+  - Beze změny: res, load, cantilever, ero_vol, vzduch, sníh, minerály (id ≥ 100).
+  - Horniny dostanou ero_v a sed_v. Měkké (spraš, kopcový písek, suť) i ero_vol podle hlíny / písku, ostatní ho dál
+    nemají, takže zůstanou tvrdé.
+  - Spustit všechny testy znovu a zapsat staré a nové hashe a co se změnilo: průsak / výtok, časy tůní, eroze.
+  - Prototyp ani jeho kód se nemění. Čte ale sdílenou tabulku za běhu, takže se změna projeví i v něm (jen konstatuji).
+
+## E60 doladění E58: dvojí volání podzemí, lokální přepočet povrchu 512², přesnost grafu pánví (plán 2026-11-19 04:22; Jan t586u)
+- **Plán:**
+  1. **Σ průsak 0,756 při s16 / s32.**
+     - Zjistit, proč má jedno těleso 2 volání. Předpoklad: smyčka povrch ↔ podzemí v `tok.route` (až 4 kola) volá
+       solve znovu s novým q, záznam ukládá všechna kola.
+     - Opravit součet tak, aby se počítalo jen poslední volání na těleso (to, které je ve `st.ug_bodies` na konci
+       běhu). Ověřit proti průsaku světa (Σ `ug_bodies`).
+     - Spustit znovu base a A+B+C při 16 / 32 / 64. Očekávám 0 neshod a stejné časy.
+  2. **Povrch 512²: lokální přepočet C+A (44,6 ms).**
+     - Změřit, kolik stojí jednotlivé části `tok.update`: okno, flood, D8, průtok po proudu, odtoky tůní, tůně.
+     - Optimalizovat samostatnou kopií `scripts/alg60/tok60.gd`, `tok.gd` se nemění:
+       - znovupoužití pomocných polí místo slovníků
+       - ohraničená oblast
+       - ladění ranného zastavení
+     - Ověřit bit po bitu proti `tok.update`: fill, eff, to, ain, pw, extra, src2.
+     - Přepočítat tabulku zátěže serveru.
+  3. **Graf pánví B (1818 / 1878 buněk tůní při 128²).**
+     - Ověřit předpoklad, že B je přesné vůči priority-flood bez ε (Barnes 2014) a rozdíl dělá jen ε spád 1e-3
+       na rovinách a v tůních.
+     - Zkusit B + lokální ε dopočet. Pokud nebude bit po bitu stejný, popsat proč.
+- Výchozí hodnoty ani `tok.gd` se nemění, hashe musí zůstat stejné.
+
 ## E59 materiály podle skutečných hodnot, čas průsaku ve hře (plán a výsledek 2026-11-19 04:05; Jan 03:47)
 - **Plán:**
   - Ke každému materiálu ze `sdilene/materialy_voda.json` a `sdilene/horniny_voda.json` najít skutečné hodnoty:

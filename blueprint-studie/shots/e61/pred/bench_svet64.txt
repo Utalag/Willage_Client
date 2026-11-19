@@ -1,0 +1,38 @@
+# E50 svět 8 × 8 bloků po 64 × 64 × 256 buňkách (2026-11-18T20:55:11), buňka 0.125 m, svět 512 × 512 × 256 = 67.1 M buněk
+stroj: Intel(R) Xeon(R) Processor, 8 jader, Godot 4.7.2-stable (official), GDScript na 1 vlákně
+
+| fáze | čas | RSS po fázi |
+|---|---|---|
+| 1 hrubý terén | 4 ms | |
+| 2 počasí | 7 ms | |
+| 3 eroze + řeky | 554 ms | |
+| 4 biomy | 21 ms | |
+| 5 dlaždice | 11 ms | |
+| **hrubý svět celkem** | **597 ms** | 131 MB |
+| 6 blok: navázání | Σ 5.63 s (min 72 ms / med 83 ms / max 148 ms) | |
+| 6 blok: vrstvy | Σ 182.27 s (min 2.30 s / med 2.71 s / max 4.12 s) | |
+| 6 blok: minerály | Σ 56.91 s (min 253 ms / med 659 ms / max 2.07 s) | |
+| 6 blok: dutiny | Σ 108.99 s (min 0 ms / med 0 ms / max 4.69 s) | |
+| 6 blok: dutiny jen v 30 blocích s dutinou | min 2.83 s / med 3.43 s / max 4.69 s | |
+| **6 detail 64 bloků** | **354.10 s** (blok min 2.77 s / med 5.26 s / max 10.36 s) | 361 MB |
+| 7 voda: mřížka (+ 3D buňky podzemí) | 3.16 s | |
+| 7 voda: prameny | 1.13 s | |
+| 7 voda: povrch (koryto + strže) | 13.85 s | |
+| 7 voda: podzemí: povrch + podzemí | 143.20 s | |
+| 7 voda: podzemí: navíc proti povrchu | 129.35 s | |
+| **7 voda celkem** (mřížka 512 × 512, 64 na blok) | **161.35 s** | 3566 MB |
+| **CELKEM generování** | **516.05 s** | peak 4022 MB |
+
+paměť: start RSS 131 MB; po hrubém 131; po detailu 361; po mřížce vody 425; po podzemí 3566; peak (VmHWM) 4022 MB; Godot static 1965 MB
+blok podle typu (medián): louka 3.18 s (24), hora_zvrasnena 9.27 s (12), svah 6.35 s (5), prohlubeň 2.92 s (9), kopec 7.41 s (6), sopka 4.17 s (1), hora_vyzdvizena 7.22 s (7)
+nejpomalejší blok (5, 5) hora_zvrasnena: 10.36 s
+minerály: cíl 136448 buněk (× (n/16)³), schodek 1792; dutiny 76800 / 76800 buněk
+švy jemných buněk: povrch |Δ| 0.00 buňky (uvnitř 0.35, max 0); jiné buňky ve sloupci přes šev 2.79 % (uvnitř 2.58 %)
+voda: 10 pramenů 32.0 l/s; povrch: 1525 mokrých sloupců, 994 zahloubených (medián 2.00 m, max 4.00 m), 1 vodopádů, okraj 6 × 28.35 l/s, tůně 36 (20915 sloupců)
+  podzemní těleso: 9726323 buněk, přítok 2.87 l/s, průsak 2.87, výstup okraj z 97, uzavřené false, plní se ne, objem do výstupu 2.6 m³, z 91–97
+voda s podzemím: okraj po povrchu 28.35 l/s, z podzemí 0 výtoků 0.00 l/s, těles 1 (9726323 buněk), ztráty 3.65 l/s, mokrých 1525
+hash jemných buněk 0c4c96e0a1888ae8
+determinismus prvních 3 bloků 2×: 3b61f4dea75b / 3b61f4dea75b → STEJNÉ
+srovnání E49 (16 × 16 × 64, celá pipeline v2 s validátorem): detail 15.41 s, blok průměr 241 ms; poměr E50/E49 23 ×
+render GIF (Python): 69 snímků, 1.69 MB, 3.1 s
+render izo (Godot, OpenGL na xvfb): načtení 14 ms, síť 522242 + řezy 35016 trojúhelníků 483 ms, vykreslení + uložení 1218 ms, celkem 1716 ms

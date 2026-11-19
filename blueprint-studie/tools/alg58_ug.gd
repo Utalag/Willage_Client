@@ -26,12 +26,13 @@ func _init() -> void:
 	for k in js.calls:
 		var ents := PackedInt32Array(); for e in k.e: ents.append(int(e))
 		var excl := {}; for s in k.x: excl[int(s)] = true
-		calls.append({"ents": ents, "q": float(k.q), "excl": excl, "x": k.x, "ex": U.ex_of(ug, k.x)})
+		calls.append({"ents": ents, "q": float(k.q), "excl": excl, "x": k.x, "ex": U.ex_of(ug, k.x), "final": bool(k.get("final", true))})
 	ug._bfs_max = int(p.get("p58_bfs_max", 20000))
 	var ents_all := {}
 	for k in js.calls:
 		for e in k.e: ents_all[int(e)] = true
 	ug._ents = ents_all
+	ug._useD = U.has_flag(v, "D")   # E62
 	var R := U.clone(ug)
 	var m0 := M.mem()
 	var st := {"builds": 0, "floods": 0, "results": 0, "fallback": 0, "exact": 0, "skipped": 0, "rebuilds": 0, "deltas": 0, "gone": 0, "reach": 0, "splits": 0}
@@ -77,7 +78,7 @@ func _init() -> void:
 	em /= maxf(ems.size(), 1)
 	var out := {"var": v, "nv": nv, "nu": nu, "build_ms": build_ms, "full_ms": full_ms, "edit_ms": ems, "edit_avg": em, "edit_max": ex, "edits_hit_ref": ehit,
 		"mismatch": bad.size(), "mismatch_list": bad.slice(0, 20), "stats": st, "extra_mb": extra / 1048576.0, "peak_mb": m1.peak_mb, "rss_before_mb": m0.rss_mb,
-		"tot0": tot0, "tot1": tot1, "tot_ref": tr, "calls": calls.size(), "n_bands": ug.lo.size()}
+		"tot0": tot0, "tot1": tot1, "tot_ref": tr, "world": js.get("world", {}), "calls": calls.size(), "n_bands": ug.lo.size()}
 	var fn := "ug_%s_s%d_u%d%s.json" % [v.replace("+", "p"), nv, nu, String(p.get("p58_tag", ""))]
 	FileAccess.open(ProjectSettings.globalize_path("res://shots/alg58/" + fn), FileAccess.WRITE).store_string(JSON.stringify(out))
 	print("%s s%d u%d: plné %.0f ms | výkop průměr %.1f ms, max %.1f ms (%d výkopů, zásah %d) | neshod %d | navíc %.1f MB, peak %.0f MB | průsak %.3f výtok %.3f l/s (ref %.3f / %.3f) | %s %s" % [
@@ -88,4 +89,7 @@ func _tot(res: Array, calls: Array) -> Dictionary:
 	var l := 0.0; var o := 0.0
 	for i in calls.size():
 		if float(calls[i].q) > 0.0: l += float(res[i].leak); o += float(res[i].out_q)
-	return {"leak": l, "out": o}
+	var lf := 0.0; var of := 0.0   # E60: jen poslední kolo (tělesa světa), dřív se sčítala všechna kola
+	for i in calls.size():
+		if float(calls[i].q) > 0.0 and calls[i].final: lf += float(res[i].leak); of += float(res[i].out_q) if not res[i].closed else 0.0
+	return {"leak_all_calls": l, "out_all_calls": o, "leak": lf, "out": of}

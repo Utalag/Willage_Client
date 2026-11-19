@@ -216,6 +216,64 @@ Skupiny: 1 Prototyp a buildy · 2 Terén a tvar · 3 Rozlišení bloku · 4 Ská
 - **Komplikace:** koryta jsou krátké úseky (malý svět, malá povodí). Krasová vyvěračka 0. Hráz na svahu tůň nevytvořila (potok ji obtekl). Podzemní tok vede zatím zjednodušeně k nejbližšímu okraji.
 - **Další krok:** Jan rozhodne, jak daleko vést podzemní tok (sledovat propustnou vrstvu?) a jestli má mít krasová vyvěračka vlastní pravidlo. Starší otevřené otázky (eroze po blocích vs hrubý svět, jádro hory přes šev, minerály z hrubého světa) zůstávají.
 
+### 🧱 Blueprint v3 / E62: preliv v grafu těles, přesné, ale pomalé (2026-11-19 05:15 · `blueprint-studie/scripts/alg58/ug58.gd` příznak D, `tools/e62_dno.gd`)
+- Výsledek prelivu se po výkopu přepočítá jen tehdy, když se změnila pásma, která četl. Žádné neshody (s16 / s32 /
+  s64), ale výkop trvá dál 2,7–3,0 s (A+B+C 3,4 s, base 6,0 s).
+- Kope se u vstupů a tam tůň prelivu sahá k povrchu, takže přepočet je opravdu potřeba. Na ms je potřeba lokální
+  oprava prelivu, zatím neudělaná.
+- Server za podzemí (50 × 20 / min): 224 % jádra.
+- **Průsak 0,378 → 0:** prachovec a flyš kolem tělesa mají ve v4 perm 0 (K 1e-9). Dřív měly 0,1 / 0,15 a slabě
+  prosakovaly.
+
+### 💧 Blueprint v3 / E61: reálné vodní hodnoty převzaty do sdílených tabulek, na pokyn Jana 04:39 (2026-11-19 04:50 · `sdilene/materialy_voda.json` v4, `horniny_voda.json` v2, `blueprint-studie/tools/materialy61.py`, změny `shots/e61/zmeny_tabulek.md`)
+- Převzaté hodnoty E59 pro 66 materiálů:
+  - perm = (log10 K + 9) / 6
+  - por = n, ret = n − Sy
+  - ero_v / sed_v podle Hjulströma
+  - pole K_ms, Sy, režim
+- Vápenec má perm 0,246. Tráva a hlína ~0,6.
+- Zálohy v3 / v1 a staré výsledky testů jsou v `blueprint-studie/shots/e61/`.
+- **Testy:** všechny VŠE OK. Hashe se změnily podle očekávání:
+  - v1: 45f42cd5 → dda863fe
+  - sled46: 00dc4dc6 → d8af7f59
+  - svet8: f08f5600 → ec0681cc
+  - voda: 36236d38 → a1413675
+  - voda_b: 604e5080 → 5ae2b366
+  - --b: e89b4b1d → e8cbbc78
+- **Co se změnilo:**
+  - Déšť: odteklo 683 → 320 buněk, kaluže 9,4 → 2,6 m³, protože víc vsakuje do trávy a hlíny.
+  - E51: události 2893 → 893.
+  - E54 tůň: 223 → 97 událostí, tůň 114 → 195 sloupců.
+  - Průsak podzemí světa: 0,378 → 0 l/s.
+- **Test tůně:** předpokládal perm 0,5, teď počítá pit_q z tabulky. Janův příklad (16 t) platí dál.
+- **Negativa:**
+  - Mění se i prototyp, voda-studie a lozika-studie, protože čtou stejnou tabulku. Jejich kód jsem neměnil ani nespouštěl.
+  - Snímky nejsou překreslené.
+  - Pole režim kód zatím nečte.
+  - Podzemí A+B+C je s v4 pomalé: 3,4 s na výkop místo 1 ms, base 6,0 s. Hlavní těleso je teď v režimu přeliv a graf
+    těles B ho neumí, takže přeliv pro B je další úkol.
+
+### ⚡ Blueprint v3 / E60: oprava součtu průsaku, povrch 4× rychleji po výkopu, graf pánví přesný (2026-11-19 04:40 · `blueprint-studie/scripts/alg60/tok60.gd`, `tools/alg60_*.gd`, shot `60_povrch.png`)
+
+- **Σ průsak 0,756 byla chyba měření.**
+  - Smyčka povrch ↔ podzemí volá těleso v každém kole a záznam sčítal všechna kola.
+  - Po opravě je průsak 0,378 l/s při 16 / 32 / 64, stejný jako svět, 0 neshod.
+- **Lokální přepočet povrchu** (bit po bitu stejný jako `tok.update`, 60 výkopů, 0 neshod):
+
+  | mapa | před | po | 50 hráčů × 20 úprav/min |
+  |---|---|---|---|
+  | 128² | 3,1 ms | 1,1 ms | 5,3 → 2,0 % jádra |
+  | 256² | 11,8 ms | 3,4 ms | 19,7 → 5,7 % |
+  | 512² | 41,8 ms | 10,2 ms | 69,8 → 17,1 % |
+
+- **Graf pánví B** = priority-flood bez ε přesně, 0 rozdílných buněk. Rozdíl 1818 / 1878 jsou „tůně z ε“ na
+  rovinách. B + ε dopočet je bit po bitu stejný jako tok.gd, ale 15× pomalejší.
+- **Negativa:**
+  - Menší okno je rychlejší, ale chybné (eff až 2,24 l/s), takže zůstává okno 24.
+  - Flood okna je dál 62 % času.
+  - Rozhraní `touched` vrací méně buněk.
+  - `tok.gd` a výchozí hodnoty jsou beze změny.
+
 ### 📚 Blueprint v3 / E59: skutečné vodní vlastnosti materiálů a čas průsaku ve hře, jen návrh (2026-11-19 04:05 · `blueprint-studie/tools/materialy59.py`, návrh `sdilene/materialy_voda_navrh.json`, tabulka `blueprint-studie/shots/materialy59.md`)
 - 66 materiálů (12 + 54 hornin, bez vzduchu, sněhu a minerálů) je zařazeno do 18 skupin s reálnými hodnotami:
   - K: Freeze & Cherry, Rawls 1982

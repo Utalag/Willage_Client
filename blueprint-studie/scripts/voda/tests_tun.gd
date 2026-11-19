@@ -4,6 +4,7 @@ extends RefCounted
 
 const TOK = preload("res://scripts/voda/tok.gd")
 const HR = preload("res://scripts/bp/horniny.gd")
+const VS = preload("res://scripts/voda/voda_svet.gd")
 
 static func _case(pit_q: float) -> Dictionary:
 	var W := 6; var H := 6
@@ -11,7 +12,7 @@ static func _case(pit_q: float) -> Dictionary:
 	var pit := [2 * H + 2, 2 * H + 3, 3 * H + 2, 3 * H + 3]
 	for i in pit: hm[i] = 8.0
 	var wall := PackedByteArray(); wall.resize(W * H)
-	var mats := PackedInt32Array(); mats.resize(W * H); mats.fill(HR.id_of("quartz_sandstone"))   # perm 0,5 ve sdílené tabulce
+	var mats := PackedInt32Array(); mats.resize(W * H); mats.fill(HR.id_of("quartz_sandstone"))   # perm ze sdílené tabulky (v3: 0,5; od v4 E61: 0,333)
 	var src := PackedFloat64Array(); src.resize(W * H); src[pit[0]] = 1.0
 	var L := {"thr": 0.0, "cap": 0.0, "inf": 0.0, "perm_min": 0.3, "springs": true, "pit_q": pit_q}
 	var st := TOK.make(hm, W, H, wall, mats, src, L, true)
@@ -26,14 +27,18 @@ static func _case(pit_q: float) -> Dictionary:
 static func run_all() -> PackedStringArray:
 	var L := PackedStringArray(); var ok := true
 	L.append("# Test plnění prohlubně s propustností (Jan 19:48)")
-	for c in [[0.25, 0.5, 16.0, 0.5, 0.5], [0.5, 1.0, -1.0, 0.0, 1.0], [0.0, 0.0, 8.0, 1.0, 0.0]]:
+	# E61: Janův příklad je odtok 0,5 / 1,0 / 0 za t; pit_q se dopočítá z perm v tabulce (odtok = perm · pit_q · 4 buňky),
+	# takže test nezávisí na hodnotě perm (dřív pevně perm 0,5)
+	var pm := float(VS.table().get(HR.id_of("quartz_sandstone"), [0.0])[0])
+	for c in [[0.5, 0.5, 16.0, 0.5, 0.5], [1.0, 1.0, -1.0, 0.0, 1.0], [0.0, 0.0, 8.0, 1.0, 0.0]]:
+		c[0] = c[0] / (4.0 * pm) if pm > 0.0 else 0.0
 		var r := _case(c[0]); var pd: Dictionary = r.pd; var ev: Array = pd.udalosti
 		var t: float = ev[-1].cas_s if not ev.is_empty() else -1.0
 		var good: bool = absf(pd.drain_lps - c[1]) < 1e-6 and absf(pd.objem_m3 - 8.0) < 0.05 and (absf(t - c[2]) < 0.05 if c[2] > 0 else t < 0.0) \
 			and absf(r.edge - c[3]) < 1e-6 and absf(r.under - c[4]) < 1e-6
 		ok = ok and good
-		L.append("odtok %.2f/t (perm 0,5 · %.2f · 4 buňky): objem %.3f, vrstvy %s → %s | přepad přes okraj %.2f, podzemí %.2f (vyvěračka ve stěně %d) | očekáváno: plná za %s, přepad %.1f, podzemí %.1f → %s" % [
-			pd.drain_lps, c[0], pd.objem_m3, ", ".join(ev.map(func(e): return "%.0f @ %.3f t" % [e.hladina_m, e.cas_s])),
+		L.append("odtok %.2f/t (perm %.3f · %.3f · 4 buňky): objem %.3f, vrstvy %s → %s | přepad přes okraj %.2f, podzemí %.2f (vyvěračka ve stěně %d) | očekáváno: plná za %s, přepad %.1f, podzemí %.1f → %s" % [
+			pd.drain_lps, pm, c[0], pd.objem_m3, ", ".join(ev.map(func(e): return "%.0f @ %.3f t" % [e.hladina_m, e.cas_s])),
 			"NENAPLNÍ SE (ponor)" if pd.nenaplni_se else "plná za %.3f t" % t, r.edge, r.under, r.n_under,
 			"nikdy" if c[2] < 0 else "%.0f t" % c[2], c[3], c[4], "OK" if good else "CHYBA"])
 	L.append("výsledek: %s" % ("VŠE OK" if ok else "CHYBA"))

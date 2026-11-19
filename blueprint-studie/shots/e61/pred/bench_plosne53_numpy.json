@@ -1,0 +1,14 @@
+{
+ "64": {
+  "rozliv_ms_pruchod": 2.533,
+  "mvoda_ms_krok": 0.163
+ },
+ "256": {
+  "rozliv_ms_pruchod": 30.958,
+  "mvoda_ms_krok": 1.867
+ },
+ "1024": {
+  "rozliv_ms_pruchod": 506.342,
+  "mvoda_ms_krok": 48.073
+ }
+}

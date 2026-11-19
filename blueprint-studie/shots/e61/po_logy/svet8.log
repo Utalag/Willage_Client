@@ -1,0 +1,18 @@
+Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+
+# E49 malý svět 8 × 8 bloků (2026-11-19T04:42:13)
+1 hrubý terén: 3 ms
+2 počasí: 6 ms
+3 eroze + řeky: 469 ms
+4 biomy: 18 ms
+5 dlaždice: 9 ms
+6 detail: 64 dlaždic od (3, 4) do šířky, 14.5 s (průměr 227 ms, max 428 ms)
+CELKEM 15.0 s (hrubý svět 0.50 s)
+typy dlaždic: hora_vyzdvizena 7, svah 5, louka 24, kopec 6, prohlubeň 9, sopka 1, hora_zvrasnena 12
+biomy (body hrubé mřížky): niva 1049, les 225, skály 448, sníh 420, řeka 235, mokřad 29, louka 452, step 916, jezero 322
+řeky 235 bodů (5.7 %), jezera 322 bodů, sopka v dlaždici (1, 4)
+švy vrstev 0.16 (uvnitř 0.53) | povrch buňky šev 0.00 (uvnitř 0.41) | šev hm_f 0.00 (max 0.00), zlom 0.41 (uvnitř 0.26)
+švy vrstev podrobně: švy vrstev průměr/max: Peridotit / dunit 0.00/2 (uvnitř 0.29), Gabro 0.00/2 (uvnitř 0.41), Fe-Ti rudní zóna (magnetit) 0.00/2 (uvnitř 0.42), Diabaz (= čedič gen-v3) 0.00/0 (uvnitř 0.40), Amfibolit 0.00/0 (uvnitř 0.16), Ortorula 0.01/3 (uvnitř 0.47), Granodiorit 0.01/3 (uvnitř 0.55), Masivní žula (= žula gen-v3) 0.01/2 (uvnitř 0.60), Svor (granáty, slídy) 0.23/13 (uvnitř 0.33), Hlubinný vápenec / křída 0.23/13 (uvnitř 0.51), Prachovec 0.23/13 (uvnitř 0.53), Slepenec 0.23/13 (uvnitř 0.60), Sádrovec, anhydrit 0.23/13 (uvnitř 0.61), Dolomit 0.24/13 (uvnitř 0.66), Masivní jeskynní vápenec (= vápenec gen-v3) 0.28/13 (uvnitř 0.73), Jílová břidlice 0.26/13 (uvnitř 0.73), Křemenný pískovec 0.26/13 (uvnitř 0.71), Zvětralá břidlice a jíly (= jíl gen-v3) 0.28/13 (uvnitř 0.65), Štěrk, hlinitopísčité sedimenty (= písek gen-v3) 0.34/13 (uvnitř 0.60), Spraš a zvětraliny 0.45/13 (uvnitř 0.58) | povrch šev 0.00/max 0 (uvnitř 0.41), dvojic 1792
+náhlé vrstvy: šev: dvojic 1792, náhlých vrstev 0 (z buněk 77), max skok mocnosti 0.00 U | uvnitř: dvojic 15360, náhlých 1239 (z buněk 2736), max skok 9.12 U
+validátor OK 64/64, minerály přesně 57/64
+determinismus 2×: ec0681cc6426 / ec0681cc6426 → STEJNÉ

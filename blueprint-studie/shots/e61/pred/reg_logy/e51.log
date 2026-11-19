@@ -1,0 +1,32 @@
+Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+
+# E51 testy (2026-11-19T04:04:01)
+A odpočet = ero_vol / Q: sloupec 81, hlína = 1500 m³ / 4.98 l/s → 301447 s (fronta 301447 s) → OK
+B kopání v 48 h: sloupec 133 měl zbývá 644 z 1500 m³ (událost za 36.1 h); po vykopání R = 1500 m³ = plný odpočet nového vrchu (2), událost za — (rychlost pod prahem); přeplánováno 86 sloupců → OK
+C položení hlíny v 49.0 h: R = 1500 m³ = plný odpočet hlíny → OK
+D determinismus koryta 2× (60 dní): STEJNÉ OK
+E protržení změní tok po proudu: 2.43 → 2.83 l/s → OK
+F halda 1 M vybírá ve vzestupném pořadí → OK
+výsledek: VŠE OK
+# E51 eroze a usazování událostmi (2026-11-19T04:04:01), GDScript 1 vlákno, Intel(R) Xeon(R) Processor
+
+## 1 koryto 40 × 13, 2 × pramen 5 l/s, 60 dní
+zahloubení osy koryta: měkký pruh (hlína / písek) průměr 6.22 m, max 7.5 m; tvrdý (hlína 1 buňka na žule) průměr 0.50 m, max 0.5 m
+události 511 (eroze 511, nános 0, zastaralé 5463, ponechané beze změny 32098), fronta max 299, živé položky na konci 0; start 14.1 ms, běh 721 ms → 709 událostí/s
+přepočet po události (TOK.update + přeplánování): průměr 1.17 ms, medián 1.18, max 4.16 (n = 511); přeplánováno sloupců na událost průměr 75.5
+odnesená hmota: do tůní 2.63 m³, přes okraj do mlhy 38.18 m³
+
+## 2 tůň 30 × 20, přítok 2 l/s, c0 0.0020 m³/m³ (+ nános z eroze nad tůní)
+objem tůně 27.90 m³ (129 sloupců, hloubka 2.00 m) → po 720 dnech 0.38 m³ (3 sloupců); polovina do 30.0 dní, zanesená (< 5 %) do 50.0 dní
+události 223 (nános 216, eroze 7, zastaralé 5758), fronta max 3007, běh 526 ms; přepočet průměr 1.82 ms, medián 1.47, max 8.34 (n = 223)
+
+## 4 hráz z písku 36 × 15, přítok 3 l/s, odtok tůně do podzemí pit_drain_q 0.020 l/s · perm
+před: tůň 57 sloupců 11.30 m³, odtok do podzemí 0.44 l/s, po proudu 2.43 l/s; koruna hráze z 18
+po 30 dnech: koruna z 11, tůň 0.13 m³, odtok do podzemí 0.01 l/s, po proudu 2.83 l/s; tůň pod 5 % objemu v 27.5 dnech
+události 88, největší přeplánování po jedné události 290 sloupců, běh 159 ms; přepočet průměr 1.44 ms, medián 1.37, max 4.66 (n = 88)
+
+## 5 výkon 128 × 128 × 48, 16 pramenů
+start (route + plánování všech) 427 ms; mokrých sloupců 2971, živých položek 2893, fronta max 14113
+300 událostí za 2225 ms → 135 událostí/s (simulovaný čas 5.0 dní); zastaralé 3474, ponechané 76785; přepočet průměr 6.15 ms, medián 3.42, max 82.38 (n = 300)
+přeplánováno sloupců na událost průměr 313.0, max 4009
+syntetická halda 1000000 položek: push všech 322 ms (0.32 µs/položka), pop + push v ustáleném stavu 2.50 µs, pop všech 3083 ms (3.08 µs), pořadí OK; paměť ~15 MB (16 B/položka)

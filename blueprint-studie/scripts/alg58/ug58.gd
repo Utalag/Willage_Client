@@ -292,7 +292,7 @@ static func node_solve(c: Dictionary, call: Dictionary, ci: int, useA: bool, dz:
 		c.gen = int(c.gen) + 1
 		var r0: Dictionary = preliv_A(c, ents, q, call.ex, int(c.gen), dz) if useA else F._solve_preliv(c, ents, q, call.ex, int(c.gen))
 		r0.rezim_tel = "preliv"; r0.f_prop = f
-		pc[ci] = {"r": r0, "fp": footprint(c, [r0._vis]) if useA else PackedByteArray()}
+		pc[ci] = {"r": r0, "fp": footprint(c, [r0._vis]) if useA else PackedByteArray(), "vb": _vis_bands(c, r0) if bool(c.get("_useD", false)) else PackedByteArray(), "ents": ents}
 		stats.floods += 1
 		return r0
 	if best.is_empty():   # uzavřené: zmax z aktuálních hi (po deltě může být zastaralé)
@@ -306,6 +306,41 @@ static func node_solve(c: Dictionary, call: Dictionary, ci: int, useA: bool, dz:
 	var r := requ(c, nd.rb, q, lk, best, ents)
 	r.rezim_tel = "nadrz" if f >= 1.0 - 1e-9 else "smes"; r.f_prop = f
 	return r
+
+## E62: pásma navštívená prelivem (1 = kapilární sestup / sousedé, 2 = těleso tůně z priority-flood)
+static func _vis_bands(c: Dictionary, r: Dictionary) -> PackedByteArray:
+	var vb := PackedByteArray(); vb.resize(c.lo.size())
+	for b in r._vis: vb[b] = 1
+	for b in r.comp_ids: vb[b] = 2
+	return vb
+
+## E62: mění výkop ve sloupci cc data, která preliv četl? (pravidla v PROP E62)
+static func _pre_hit(c: Dictionary, pe: Dictionary, cc: int, b0: int, old_hi: PackedFloat64Array, old_body: PackedByteArray, old_h: float) -> bool:
+	var vb: PackedByteArray = pe.vb
+	var bcol: PackedInt32Array = c.bcol
+	for e in pe.ents: if e >= 0 and bcol[e] == cc: return true   # 4. vstup ve sloupci
+	var chg := {}
+	for k in old_hi.size():
+		var b := b0 + k
+		if c.hi[b] != old_hi[k] or c.body[b] != old_body[k]:
+			if vb[b] != 0: return true   # 1. navštívené změněné pásmo
+			chg[b] = true
+	if chg.is_empty() and float(c.h[cc]) == old_h: return false
+	var nh := float(c.h[cc])
+	var W: int = c.W; var H: int = c.H; var x := cc / H; var y := cc % H
+	var cols := [cc]
+	if x > 0: cols.append(cc - H)
+	if x < W - 1: cols.append(cc + H)
+	if y > 0: cols.append(cc - 1)
+	if y < H - 1: cols.append(cc + 1)
+	for col in cols:
+		for b in range(c.cs[col], c.cs[col + 1]):
+			if vb[b] == 0: continue
+			if vb[b] == 2 and float(c.hi[b]) >= nh - E: return true   # 3. výstupy na povrch / průsak u nového povrchu
+			if not chg.is_empty():
+				for j in range(c.ns[b], c.ns[b + 1]):
+					if chg.has(c.nb[j]): return true   # 2. soused navštíveného pásma se změnil
+	return false
 
 ## B+C: delta uzlu po výkopu ve sloupci cc (staré hi pásem sloupce v old_hi). false = nutná přestavba.
 static func node_delta(c: Dictionary, id: int, cc: int, old_hi: PackedFloat64Array, old_body: PackedByteArray, stats: Dictionary) -> bool:
@@ -503,6 +538,8 @@ static func edit(c: Dictionary, calls: Array, prev: Array, s: int, hv: float, v:
 	var b0: int = c.cs[cc]; var b1: int = c.cs[cc + 1]
 	var old_hi := PackedFloat64Array(); var old_body := PackedByteArray()
 	for b in range(b0, b1): old_hi.append(c.hi[b]); old_body.append(c.body[b])
+	var old_h := float(c.h[cc])
+	c._useD = has_flag(v, "D")
 	var hit := F.touched(c, {}, PackedInt32Array([s]), PackedFloat64Array([hv]))
 	if not useB and not useC:   # base / A: jako tok.gd – zásah → všechna volání znovu, jinak nic
 		if not hit: return prev
@@ -536,7 +573,10 @@ static func edit(c: Dictionary, calls: Array, prev: Array, s: int, hv: float, v:
 			# preliv: znovu jen při zásahu stopy (s A přesná stopa, bez A celé těleso)
 			for ci in nd.pre.keys():
 				var fp: PackedByteArray = nd.pre[ci].fp
-				if fp.is_empty() or fp[cc] != 0: nd.pre.erase(ci)
+				if has_flag(v, "D") and not nd.pre[ci].vb.is_empty():   # E62: závislost na pásmech místo sloupcové stopy
+					if _pre_hit(c, nd.pre[ci], cc, b0, old_hi, old_body, old_h): nd.pre.erase(ci); stats.d_hit = int(stats.get("d_hit", 0)) + 1
+					else: stats.skipped += 1; stats.d_keep = int(stats.get("d_keep", 0)) + 1
+				elif fp.is_empty() or fp[cc] != 0: nd.pre.erase(ci)
 				else: stats.skipped += 1
 		else:
 			node_kill(c, id); stats.rebuilds += 1

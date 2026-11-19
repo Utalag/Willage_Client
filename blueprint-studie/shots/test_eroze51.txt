@@ -1,8 +1,8 @@
-# E51 testy (2026-11-19T04:04:01)
-A odpočet = ero_vol / Q: sloupec 81, hlína = 1500 m³ / 4.98 l/s → 301447 s (fronta 301447 s) → OK
-B kopání v 48 h: sloupec 133 měl zbývá 644 z 1500 m³ (událost za 36.1 h); po vykopání R = 1500 m³ = plný odpočet nového vrchu (2), událost za — (rychlost pod prahem); přeplánováno 86 sloupců → OK
+# E51 testy (2026-11-19T04:41:59)
+A odpočet = ero_vol / Q: sloupec 81, hlína = 1500 m³ / 4.95 l/s → 302883 s (fronta 302883 s) → OK
+B kopání v 48 h: sloupec 133 měl zbývá 652 z 1500 m³ (událost za 37.0 h); po vykopání R = 1500 m³ = plný odpočet nového vrchu (2), událost za — (rychlost pod prahem); přeplánováno 86 sloupců → OK
 C položení hlíny v 49.0 h: R = 1500 m³ = plný odpočet hlíny → OK
 D determinismus koryta 2× (60 dní): STEJNÉ OK
-E protržení změní tok po proudu: 2.43 → 2.83 l/s → OK
+E protržení změní tok po proudu: 1.91 → 2.39 l/s → OK
 F halda 1 M vybírá ve vzestupném pořadí → OK
 výsledek: VŠE OK

@@ -53,7 +53,15 @@ func _init() -> void:
 		if used.has(-cc2 - 1): continue
 		used[s] = true; used[-cc2 - 1] = true
 		edits.append([s, float(Gs.hm[s]) - float(p.p58_dig_m) / cm])
-	var out := {"nv": nv, "nu": nu, "W": W, "calls": calls, "edits": edits, "n_bands": ug.lo.size(), "n_comp": int(ug.n_comp), "run_ms": float(r.get("ms", 0.0))}
+	# E60: poslední kolo povrch ↔ podzemí = tělesa v st.ug_bodies na konci běhu; jen ta tvoří průsak světa
+	var fin := {}; var wl := 0.0; var wo := 0.0
+	for b in st.get("ug_bodies", []):
+		var ck := String(b.get("cache_key", ""))
+		var qs := ck.split("|")[1] if ck.split("|").size() > 1 else ""
+		fin["%s|%s" % [str(Array(b.entries)), qs]] = true
+		wl += float(b.leak); wo += float(b.out_q) if not b.closed else 0.0
+	for k in calls: k["final"] = fin.has("%s|%.9f" % [str(k.e), float(k.q)])
+	var out := {"world": {"leak": wl, "out": wo, "bodies": st.get("ug_bodies", []).size()}, "nv": nv, "nu": nu, "W": W, "calls": calls, "edits": edits, "n_bands": ug.lo.size(), "n_comp": int(ug.n_comp), "run_ms": float(r.get("ms", 0.0))}
 	var path := ProjectSettings.globalize_path("res://shots/alg58/calls_s%d_u%d%s.json" % [nv, nu, String(p.get("p58_tag", ""))])
 	FileAccess.open(path, FileAccess.WRITE).store_string(JSON.stringify(out))
 	print("volání %d (unikátních), výkopů %d, pásem %d, těles %d → %s" % [ug._rec.size(), edits.size(), ug.lo.size(), int(ug.n_comp), path])

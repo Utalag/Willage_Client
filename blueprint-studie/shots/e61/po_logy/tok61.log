@@ -1,0 +1,4 @@
+Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+
+proti plnému route: { "ref": { "fill_max": 0.0, "eff_max_lps": 0.00041625, "fill_cells": 0, "eff_cells": 1 }, "new": { "fill_max": 0.0, "eff_max_lps": 0.00041625, "fill_cells": 0, "eff_cells": 1 }, "ref_vs_new": { "fill_max": 0.0, "cells": 0 } }
+m0 0 ff true | 512² fast: tok.update 43.5 ms (max 77.9) | kopie 10.7 ms (max 24.3) | neshod 0 | fáze { "okno0": 0.1735, "flood": 6.35125, "d8_okno": 1.8105, "po_proudu": 0.2427, "odtoky": 2.09415, "tune": 0.04575, "z toho tůně+filtr": 1.6308, "mokrých tůní": 32, "tůní": 373 } | okno/dotčeno/zvětšení [[2401, 2426, 0], [2401, 2429, 0], [2401, 2432, 0], [2401, 2426, 0], [2401, 2444, 0], [2401, 2909, 0]]

@@ -402,3 +402,10 @@ Rozpětí je 13 řádů, takže se to hodí do tří režimů:
 - **prakticky nepropustné**
 
 Návrh je v `sdilene/materialy_voda_navrh.json`. Sdílenou tabulku zatím neměním, o převzetí ještě rozhodnu.
+
+## Dodatek 2: noční doladění (E60) a reálné materiály ve hře (E61)
+
+- **Povrch po výkopu je 2,8–4,1× rychlejší a výsledek je stejný bit po bitu.** Přepočítávám jen buňky, kterým se něco změnilo, a halda je v packed polích. Na 512² to dělá 41,8 → 10,2 ms na výkop. Pro 50 hráčů × 20 úprav za minutu to znamená 70 % → 17 % jednoho jádra.
+- **Graf pánví je přesný.** Shoduje se s priority-flood bez ε v každé buňce. Rozdíl proti hře (1818 / 1878 buněk tůní) dělá jen ε spád: roviny se zvednou o ε na krok a od ~10 kroků vypadají jako tůň.
+- **Reálné materiály (E61).** Do hry jsem převzal propustnost podle skutečné hydraulické vodivosti. Déšť teď víc vsakuje do trávy a hlíny: odtok z mapy klesl na polovinu (683 → 320 buněk) a kaluží je asi čtvrtina (9,4 → 2,6 m³).
+- **Nová slabina.** S novými materiály se hlavní podzemní těleso přepnulo do režimu přeliv a nejrychlejší varianta A+B+C na tom ztrácí. V režimu přeliv musí po výkopu znovu zaplavit celé těleso: 3,4 s místo 1 ms. Graf těles (B) zatím umí jen režim nádrž. Tohle je další úkol.

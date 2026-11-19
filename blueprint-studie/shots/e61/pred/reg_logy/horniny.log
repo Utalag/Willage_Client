@@ -1,0 +1,77 @@
+Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+
+blueprint-studie – geologie v2 (tabulka pořadí hornin) – 2026-11-19T03:57:40
+aktivní vrstvy 17: 0 Peridotit / dunit, 6 Gabro, 8 Fe-Ti rudní zóna (magnetit), 9 Diabaz (= čedič gen-v3), 11 Amfibolit, 14 Ortorula, 17 Granodiorit, 18 Masivní žula (= žula gen-v3), 22 Svor (granáty, slídy), 26 Hlubinný vápenec / křída, 31 Dolomit, 32 Masivní jeskynní vápenec (= vápenec gen-v3), 34 Jílová břidlice, 35 Křemenný pískovec, 37 Zvětralá břidlice a jíly (= jíl gen-v3), 38 Štěrk, hlinitopísčité sedimenty (= písek gen-v3), 39 Spraš a zvětraliny
+tělesa: kimberlit (komín), pegmatit (žíly), skarn (kontakt), kamenná sůl (dóm); horniny hor aktivní 10; minerálů v tabulce 11
+
+## Vložení – časy kroků ms
+1. (0, 1) kopec: 227 ms | povrch 4, vrstvy 137, buňky 46, tělesa 2, minerály 25, voda 6, kontrola 6 | tělesa { "pipe": 0, "dome": 150, "vein": 0, "contact": 272 }
+2. (2, 1) louka: 229 ms | povrch 4, vrstvy 153, buňky 43, tělesa 2, minerály 14, voda 6, kontrola 7 | tělesa { "pipe": 464, "dome": 0, "vein": 0, "contact": 127 }
+3. (1, 1) svah: 326 ms | povrch 4, vrstvy 206, buňky 55, tělesa 2, minerály 18, dutiny 28, voda 6, kontrola 6 | tělesa { "pipe": 0, "dome": 150, "vein": 0, "contact": 173 }
+4. (1, 0) prohlubeň: 192 ms | povrch 4, vrstvy 128, buňky 31, tělesa 2, minerály 12, voda 7, kontrola 8 | tělesa { "pipe": 0, "dome": 0, "vein": 0, "contact": 84 }
+5. (0, 0) hora_vyzdvizena: 349 ms | povrch 4, vrstvy 130, buňky 35, tělesa 2, minerály 168, voda 4, kontrola 5 | tělesa { "pipe": 0, "dome": 0, "vein": 0, "contact": 75 }
+6. (2, 2) kopec: 254 ms | povrch 4, vrstvy 154, buňky 37, tělesa 2, minerály 24, dutiny 19, voda 7, kontrola 7 | tělesa { "pipe": 0, "dome": 0, "vein": 0, "contact": 133 }
+7. (2, 0) sopka: 222 ms | povrch 3, vrstvy 132, buňky 46, tělesa 2, minerály 27, voda 5, kontrola 6 | tělesa { "pipe": 0, "dome": 0, "vein": 0, "contact": 246 }
+8. (1, 2) hora_zvrasnena: 226 ms | povrch 4, vrstvy 133, buňky 42, tělesa 2, minerály 31, voda 7, kontrola 7 | tělesa { "pipe": 0, "dome": 0, "vein": 0, "contact": 156 }
+celý sled 8 bloků: 2027 ms
+
+## Minerály jen v povolených hostitelích (cíl → umístěno, schodek)
+(0, 1) kopec: měděná ruda 20→20 (v Masivní žula (= žula gen-v3)/Granodiorit/Skarn (kontakt): 1898 b.); železná ruda 24→24 (v Diabaz (= čedič gen-v3)/Masivní jeskynní vápenec (= vápenec gen-v3)/Skarn (kontakt): 1538 b.); černé uhlí 30→30 (v Jílová břidlice/Prachovec/Křemenný pískovec: 1189 b.); granáty 6→6 (v Svor (granáty, slídy)/Eklogit/Skarn (kontakt): 632 b.) | validátor OK | rarita 2120
+(2, 1) louka: diamanty 6→6 (v Kimberlit (komíny): 464 b.); titanomagnetit (Fe-Ti) 20→20 (v Gabro/Fe-Ti rudní zóna (magnetit)/Norit / anortozit: 712 b.); černé uhlí 40→40 (v Jílová břidlice/Prachovec/Křemenný pískovec: 943 b.); hnědé uhlí 30→30 (v Zvětralá břidlice a jíly (= jíl gen-v3)/Jílová břidlice/Spraš a zvětraliny: 1252 b.) | validátor OK | rarita 3660
+(1, 1) svah: měděná ruda 30→30 (v Masivní žula (= žula gen-v3)/Granodiorit/Skarn (kontakt): 1899 b.); železná ruda 10→10 (v Diabaz (= čedič gen-v3)/Masivní jeskynní vápenec (= vápenec gen-v3)/Skarn (kontakt): 1561 b.); ložiskový jíl 40→40 (v Zvětralá břidlice a jíly (= jíl gen-v3): 574 b.) | validátor OK | rarita 1530
+(1, 0) prohlubeň: železná ruda 30→30 (v Diabaz (= čedič gen-v3)/Masivní jeskynní vápenec (= vápenec gen-v3)/Skarn (kontakt): 1198 b.); hnědé uhlí 40→40 (v Zvětralá břidlice a jíly (= jíl gen-v3)/Jílová břidlice/Spraš a zvětraliny: 946 b.) | validátor OK | rarita 990
+(0, 0) hora_vyzdvizena: měděná ruda 40→40 (v Masivní žula (= žula gen-v3)/Granodiorit/Skarn (kontakt): 2330 b.); drahokamy 8→0 SCHODEK 8 (v Pegmatitové žíly: 0 b.); vzácné kovy (Li, Sn, Ta) 12→0 SCHODEK 12 (v Pegmatitové žíly: 0 b.); granáty 10→10 (v Svor (granáty, slídy)/Eklogit/Skarn (kontakt): 1275 b.); zlato 6→6 (v Krystalický kvarcit/Pegmatitové žíly/Svor (granáty, slídy): 1193 b.) | validátor OK | rarita 5980
+(2, 2) kopec: měděná ruda 40→40 (v Masivní žula (= žula gen-v3)/Granodiorit/Skarn (kontakt): 1741 b.); železná ruda 40→40 (v Diabaz (= čedič gen-v3)/Masivní jeskynní vápenec (= vápenec gen-v3)/Skarn (kontakt): 1473 b.); titanomagnetit (Fe-Ti) 15→15 (v Gabro/Fe-Ti rudní zóna (magnetit)/Norit / anortozit: 836 b.) | validátor OK | rarita 3050
+(2, 0) sopka: železná ruda 20→20 (v Diabaz (= čedič gen-v3)/Masivní jeskynní vápenec (= vápenec gen-v3)/Skarn (kontakt): 1415 b.); titanomagnetit (Fe-Ti) 10→10 (v Gabro/Fe-Ti rudní zóna (magnetit)/Norit / anortozit: 667 b.); zlato 4→4 (v Krystalický kvarcit/Pegmatitové žíly/Svor (granáty, slídy): 325 b.) | validátor OK | rarita 1800
+(1, 2) hora_zvrasnena: měděná ruda 30→30 (v Masivní žula (= žula gen-v3)/Granodiorit/Skarn (kontakt): 1948 b.); železná ruda 20→20 (v Diabaz (= čedič gen-v3)/Masivní jeskynní vápenec (= vápenec gen-v3)/Skarn (kontakt): 1605 b.); černé uhlí 20→20 (v Jílová břidlice/Prachovec/Křemenný pískovec: 1197 b.); granáty 8→8 (v Svor (granáty, slídy)/Eklogit/Skarn (kontakt): 701 b.) | validátor OK | rarita 2420
+položek 28, se schodkem 2 (hostitel v bloku chybí nebo nestačí)
+
+## Dutiny z materiálů VODA a VZDUCH (rezervoár, jeskyně): v bloku nic, nebo právě jedna (Jan 17:38)
+blueprint VODA 60 + VZDUCH 90: validace ODMÍTNUT ["blueprint.cavity_conflict"]
+generátor s takovým blueprintem: dutin 0, chyba v hlášení ["blueprint.cavity_conflict"] → OK
+jen VODA: validace OK, jen VZDUCH: validace OK, bez dutiny: validace OK
+souvislých podzemních dutin v blocích: (0, 1) 0, (2, 1) 0, (1, 1) 1, (1, 0) 0, (0, 0) 0, (2, 2) 1, (2, 0) 0, (1, 2) 0 → OK (každý blok 0 nebo 1)
+(1, 1) svah: vzduch (jeskyně) 90→90 | kandidátů 7294 (nosná hornina, strop 1 m) 
+(2, 2) kopec: voda (podzemní rezervoár) 60→60 | kandidátů 5036 (nepropustná hornina, stěna 0,5 m) 
+(2, 2) voda v rezervoáru 60 buněk (plné), validátor vody OK
+
+## Determinismus
+2 běhy: 00dc4dc614729194 / 00dc4dc614729194 → STEJNÉ
+
+## Švy vrstev v2 (průměr přes 17 aktivních vrstev)
+A nezávislé bloky (vlastní deska každého bloku): průměr 1.77
+B společná deska + zdvih, bez navázání: průměr 1.17
+C společná deska + zdvih + Laplace: průměr 0.09, uvnitř bloků 1.01, povrch šev 0.00
+C podrobně: švy vrstev průměr/max: Peridotit / dunit 0.01/2 (uvnitř 0.50), Gabro 0.07/3 (uvnitř 0.62), Fe-Ti rudní zóna (magnetit) 0.07/3 (uvnitř 0.64), Diabaz (= čedič gen-v3) 0.00/0 (uvnitř 0.62), Amfibolit 0.00/0 (uvnitř 0.46), Ortorula 0.00/0 (uvnitř 0.87), Granodiorit 0.00/0 (uvnitř 0.91), Masivní žula (= žula gen-v3) 0.01/2 (uvnitř 1.10), Svor (granáty, slídy) 0.01/1 (uvnitř 0.94), Hlubinný vápenec / křída 0.04/2 (uvnitř 1.13), Prachovec 0.04/2 (uvnitř 1.15), Slepenec 0.04/2 (uvnitř 1.16), Sádrovec, anhydrit 0.04/2 (uvnitř 1.18), Dolomit 0.07/3 (uvnitř 1.25), Masivní jeskynní vápenec (= vápenec gen-v3) 0.09/3 (uvnitř 1.29), Jílová břidlice 0.08/3 (uvnitř 1.32), Křemenný pískovec 0.11/3 (uvnitř 1.31), Zvětralá břidlice a jíly (= jíl gen-v3) 0.11/1 (uvnitř 1.28), Štěrk, hlinitopísčité sedimenty (= písek gen-v3) 0.27/1 (uvnitř 1.27), Spraš a zvětraliny 0.62/1 (uvnitř 1.27) | povrch šev 0.00/max 0 (uvnitř 0.83), dvojic 160
+
+## Složení nad výškou 46 (jádro hory) podle zóny
+hora vyzdvižená (0,0): { "krystalinikum": "77 %", "sedimenty": "8 %", "minerál": "4 %", "sníh": "11 %" }
+hora zvrásněná (1,2): { "sedimenty": "45 %", "hory": "41 %", "minerál": "3 %", "sníh": "11 %" }
+sopka (2,0): { "minerál": "8 %", "hory": "42 %", "sedimenty": "14 %", "sníh": "7 %", "telesa": "29 %" }
+bez deformace vrstev (srovnání, hora (0,0)): { "krystalinikum": "85 %", "minerál": "4 %", "sníh": "11 %" }
+švy bez deformace: C 0.08
+
+## Náhlé objevení / zmizení vrstvy na švech (hlavní sled, 20 vrstev zásoby)
+s navázáním: šev: dvojic 160, náhlých vrstev 0 (z buněk 7), max skok mocnosti 0.00 U | uvnitř: dvojic 1920, náhlých 112 (z buněk 547), max skok 8.71 U
+bez navázání (B): šev: dvojic 160, náhlých vrstev 12 (z buněk 69), max skok mocnosti 5.15 U | uvnitř: dvojic 1920, náhlých 96 (z buněk 541), max skok 8.70 U
+
+## Klín (skica Jana 16:49): levý blok 1,2,4,5,6,7 | pravý (nový) 1,3,5,6,7; taper 3.0 m
+s navázáním: šev: dvojic 16, náhlých vrstev 0 (z buněk 0), max skok mocnosti 0.00 U | uvnitř: dvojic 480, náhlých 22 (z buněk 48), max skok 3.05 U
+bez navázání: šev: dvojic 16, náhlých vrstev 40 (z buněk 45), max skok mocnosti 3.03 U | uvnitř: dvojic 480, náhlých 14 (z buněk 43), max skok 3.04 U
+mocnost vrstev (U = 0,5 m) podél řezu y = 8, sloupce x 0–15 levého | 0–15 pravého bloku:
+vrstva 1 Hlubinný vápenec / křída: 2.5 2.2 1.9 1.6 1.5 1.5 1.8 1.8 1.9 1.7 1.7 1.9 1.7 1.5 1.7 1.6 | 1.6 1.5 1.7 2.2 2.3 2.3 2.7 3.0 3.0 3.2 3.3 3.6 3.3 2.8 2.5 2.4
+vrstva 2 Prachovec: 1.8 1.9 2.2 2.3 2.4 2.6 2.4 2.0 1.7 1.7 1.7 1.7 1.8 1.8 1.9 1.9 | 1.9 1.6 1.3 1.0 0.8 0.5 0.1 0.1 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0
+vrstva 3 Slepenec: 0.0 0.0 0.0 0.0 0.0 0.0 0.1 0.2 0.2 0.2 0.1 0.1 0.1 0.1 0.1 0.0 | 0.0 0.4 0.5 0.8 1.2 1.5 2.0 2.1 2.4 2.6 2.6 2.6 2.7 3.2 3.6 3.7
+vrstva 4 Sádrovec, anhydrit: 1.9 1.9 1.9 1.9 2.1 2.2 2.1 2.2 2.2 2.2 2.2 2.2 2.0 2.0 2.1 2.2 | 2.2 1.8 1.5 1.1 0.7 0.4 0.0 0.0 0.0 0.0 0.1 0.2 0.0 0.0 0.0 0.0
+vrstva 5 Dolomit: 2.3 2.3 2.3 2.0 2.0 2.0 2.2 2.2 2.3 2.3 2.0 2.0 2.1 2.2 2.3 2.6 | 2.6 2.7 2.9 2.9 2.9 2.8 2.8 2.9 2.9 2.8 2.6 2.5 2.8 2.7 2.8 2.7
+vrstva 6 Jílová břidlice: 1.8 2.1 2.1 2.5 2.5 2.3 2.3 2.4 2.5 2.6 2.6 2.5 2.6 2.8 2.7 2.3 | 2.3 2.5 2.5 2.5 2.7 2.9 2.9 2.9 3.1 3.1 3.2 3.2 3.1 3.2 3.4 3.3
+vrstva 7 Křemenný pískovec: 2.0 2.0 2.2 2.2 2.2 2.2 2.3 2.4 2.4 2.4 2.7 2.7 2.7 2.8 2.6 2.6 | 2.6 2.9 3.1 3.1 3.2 3.3 3.3 3.0 2.5 2.2 2.3 2.4 2.6 2.6 2.3 2.4
+
+## Nezávislost na rozlišení: 16 × 16 × 64 (0,5 m) vs. 32 × 32 × 128 (0,25 m), jemný zmenšen většinou z 8
+(0, 0) hora_vyzdvizena: shoda 93.8 % (bez minerálů 93.9 %), pevné/vzduch 99.35 %, hrubá hodnota mezi 8 jemnými 99.0 % | 16 = buňky pipeline: ANO | čas 16: 215 ms, 32: 611 ms | minerály 16 → 32: měděná ruda 40/40 → 320/320; drahokamy 0/8 → 0/64; vzácné kovy (Li, Sn, Ta) 0/12 → 0/96; granáty 10/10 → 80/80; zlato 6/6 → 48/48
+(1, 0) prohlubeň: shoda 96.8 % (bez minerálů 96.8 %), pevné/vzduch 99.87 %, hrubá hodnota mezi 8 jemnými 99.9 % | 16 = buňky pipeline: ANO | čas 16: 48 ms, 32: 345 ms | minerály 16 → 32: železná ruda 30/30 → 240/240; hnědé uhlí 40/40 → 320/320
+(2, 0) sopka: shoda 92.0 % (bez minerálů 92.0 %), pevné/vzduch 99.43 %, hrubá hodnota mezi 8 jemnými 99.4 % | 16 = buňky pipeline: ANO | čas 16: 72 ms, 32: 489 ms | minerály 16 → 32: železná ruda 20/20 → 160/160; titanomagnetit (Fe-Ti) 10/10 → 80/80; zlato 4/4 → 32/32
+(1, 1) svah: shoda 95.5 % (bez minerálů 95.6 %), pevné/vzduch 99.79 %, hrubá hodnota mezi 8 jemnými 99.8 % | 16 = buňky pipeline: ANO | čas 16: 93 ms, 32: 785 ms | minerály 16 → 32: měděná ruda 30/30 → 240/240; železná ruda 10/10 → 80/80; ložiskový jíl 40/40 → 320/320; vzduch (jeskyně) 90/90 → 720/720
+(2, 1) louka: shoda 96.6 % (bez minerálů 96.7 %), pevné/vzduch 99.93 %, hrubá hodnota mezi 8 jemnými 99.9 % | 16 = buňky pipeline: ANO | čas 16: 56 ms, 32: 600 ms | minerály 16 → 32: diamanty 6/6 → 48/48; titanomagnetit (Fe-Ti) 20/20 → 160/160; černé uhlí 40/40 → 320/320; hnědé uhlí 30/30 → 240/240
+(2, 2) kopec: shoda 94.8 % (bez minerálů 94.9 %), pevné/vzduch 99.61 %, hrubá hodnota mezi 8 jemnými 99.8 % | 16 = buňky pipeline: ANO | čas 16: 78 ms, 32: 618 ms | minerály 16 → 32: měděná ruda 40/40 → 320/320; železná ruda 40/40 → 320/320; titanomagnetit (Fe-Ti) 15/15 → 120/120; voda (podzemní rezervoár) 60/60 → 480/480
+celkem: shoda 94.9 %, bez minerálů 95.0 %, pevné/vzduch 99.66 %, hrubá hodnota mezi jemnými 99.6 %
