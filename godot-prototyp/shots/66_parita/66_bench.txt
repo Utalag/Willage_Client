@@ -1,0 +1,17 @@
+E66 terén a voda ze studie v prototypu (gen bp); 2026-11-19T14:55:36
+start 4 bloky: voda plný výpočet { "prameny": 9.514, "podzemí: pásma": 284.608, "povrch + podzemí: plný výpočet": 2220.683, "celkem": 2518.217 }
+souhrn: { "prameny": 5, "koryto_sloupcu": 27, "tun_sloupcu": 159, "vodopady": 8, "vodopady_okraj": 5, "okraj_lps": 9.64358, "podzemni_telesa": 1, "vyvery": 1, "volani_podzemi": 4 }
+vložení kopec 404 na (2, 0): generování 232 ms, celkem s vodou a sítí 3577 ms (voda 2881 ms)
+vložení piscina 4504 na (-1, 1): generování 222 ms, celkem s vodou a sítí 3796 ms (voda 3047 ms)
+souhrn po vložení: { "prameny": 5, "koryto_sloupcu": 28, "tun_sloupcu": 403, "vodopady": 9, "vodopady_okraj": 6, "okraj_lps": 10.13477, "podzemni_telesa": 1, "vyvery": 1, "volani_podzemi": 5 }
+kop 1 (-8, 28): vykopáno tráva (lz 33) | kop celkem 684 ms (voda 487: povrch 0, podzemí 487) | kroky R 27 = 1248 ms | neshod s plným výpočtem 0
+kop 2 (-4, 19): vykopáno tráva (lz 36) | kop celkem 877 ms (voda 452: povrch 0, podzemí 452) | kroky R 27 = 1899 ms | neshod s plným výpočtem 0
+kop 3 (-6, 19): vykopáno tráva (lz 34) | kop celkem 745 ms (voda 578: povrch 0, podzemí 578) | kroky R 40 = 1726 ms | neshod s plným výpočtem 0
+kop 4 (-4, 28): vykopáno tráva (lz 36) | kop celkem 908 ms (voda 598: povrch 0, podzemí 598) | kroky R 40 = 2604 ms | neshod s plným výpočtem 0
+kop 5 (-13, 27): vykopáno tráva (lz 35) | kop celkem 981 ms (voda 818: povrch 0, podzemí 818) | kroky R 53 = 3130 ms | neshod s plným výpočtem 0
+kop 6 (23, 28): vykopáno tráva (lz 38) | kop celkem 1067 ms (voda 900: povrch 0, podzemí 899) | kroky R 66 = 2956 ms | neshod s plným výpočtem 0
+kop 7 (16, 12): vykopáno tráva (lz 39) | kop celkem 1501 ms (voda 942: povrch 22, podzemí 920) | kroky R 66 = 2980 ms | neshod s plným výpočtem 0
+kop 8 (40, 7): vykopáno tráva (lz 38) | kop celkem 2028 ms (voda 1836: povrch 887, podzemí 948) | kroky R 66 = 3024 ms | neshod s plným výpočtem 0
+kopání: průměr 1099 ms, max 2028 ms; neshod celkem 0
+položení (bez změny podzemí):
+  položení na (-15, 20): položeno tráva (lz 39), 177 ms; neshod { "fill": 0, "eff": 0, "to": 0 }
