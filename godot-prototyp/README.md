@@ -9,7 +9,12 @@ a nastavit napojení každé strany. Starý test `../godot-3d-test/` zůstal bez
 G=/workspace/tools/Godot_v4.7.2-stable_linux.x86_64
 $G --path /workspace/willage-ideas/godot-prototyp            # interaktivně (s oknem)
 ./shoot.sh                                                     # demo bez okna -> shots/*.png (1280 × 800)
-$G --path . -- --gen=proto                                     # původní generátor podzemí (STRATA), výchozí je --gen=v3
+$G --path . -- --gen=v3                                        # gen-v3 (dřív výchozí); --gen=proto = původní STRATA; výchozí je --gen=bp (E66)
+$G --headless --path . -- --e66-bench                          # E66 vložení bloků, kopání u vody, kontrola proti plnému výpočtu -> shots/66_parita/66_bench.txt
+xvfb-run -a -s "-screen 0 1280x800x24" $G --rendering-driver opengl3 --path . -- --e66-shots   # -> ../blueprint-studie/shots/66_*.png
+$G --headless --path . -s res://tools/parita_e66.gd -- --test=vse   # parita přenesených modulů se studií (6 hashů E61)
+$G --headless --path . -s res://tools/voda_e66.gd -- --vykopu=12   # voda ostrova bez scény: výkopy + kontrola -> shots/66_parita/voda_e66.json
+python3 tools/port_studie.py [--check]                         # znovu přenést moduly studie (nebo jen ověřit, že kopie sedí)
 $G --headless --path . -- --export-vectors                     # vektory -> vectors/vectors.json (proto), veg_vectors.json, gen_v3_vectors.json
 $G --headless --path . -- --genv3-bench --gen=v3 --tag=v3       # měření gen-v3 / proto -> shots/41_genv3_proto_bench_<tag>.txt
 $G --headless --path . -- --flow-bench                         # tok vody po kopání: měření, kontrola delty, determinismus -> shots/42_tok_bench.txt
@@ -103,7 +108,8 @@ Strany: **S** = sever (−z), **V** = východ (+x), **J** = jih (+z), **Z** = z�
 - **Demo** (`-- --demo`): screenshoty a na konci simulovaná myš (najetí, klik, R, Enter) s výpisem `SELFTEST`.
 
 ## Co hotové není
-Simulace vody v ostrově (gen-v3 vodu rozmístí, po kopání teče jen místně uvnitř bloku; tok mezi bloky, déšť a odpar ne), kopání do strany / tunely (jen vrchní buňka sloupce), výběr materiálu k položení (bere se první dostupný), ukládání delty na server, sázení vegetace hráčem, fyzika, ukládání na server,
+Voda gen bp (E66): eroze a usazování po kopání (E51 / E54 přenesené, nespouštějí se), strže, déšť a odpar jako simulace, rychlost
+podzemí po kopání (desetiny s místo desítek ms ze studie, viz PROP E66). gen-v3: vodu rozmístí, po kopání teče jen místně uvnitř bloku, kopání do strany / tunely (jen vrchní buňka sloupce), výběr materiálu k položení (bere se první dostupný), ukládání delty na server, sázení vegetace hráčem, fyzika, ukládání na server,
 kombinované typy bloků, dorovnání přes rohy (diagonální sousedé), animace, stavění domků hráčem (zatím jen demo rozmístění),
 mosty, skutečně zaoblená geometrie kostek (teď jen stínovací trik), vyhlazení (merge) obrysů mezi sousedními objekty.
 
@@ -184,6 +190,29 @@ Main (main.gd)                 propojení uzlů, vstup podle režimu, nápověda
 | `terrain_surface.gdshader`, `water_surface.gdshader`, `surface_common.gdshaderinc`, `surface_look.gdshaderinc`, `meadow_proc.gdshaderinc` | shadery povrchu, vody, písku a procedurální louky (sdílí je i `terrain_toon` a `grass_tuft`) |
 | `scripts/demo/napojeni_demo.gd` | `--napojeni-shots` (snímky 34) a `--napojeni-bench` (měření) |
 | `addons/dev_tuning/` | ladicí okno (samostatný doplněk, do exportu nejde) |
+
+## Terén a voda ze studie (E66, gen bp, výchozí)
+Plán a výsledky: `../blueprint-studie/PROP.md` (E66). Moduly studie jsou **kopie beze změny logiky** (mění se jen cesty
+`preload` / data / výstupy), přenáší je `tools/port_studie.py` (manifest `data/teren/port_manifest.json`, `--check` ověří shodu).
+- `scripts/teren/` – blueprint v2: vrstvy jako funkce (`geo_fn`, `geo2`), navázání mocností na sousedy s klíny, minerály,
+  dutiny, validátor, `pipeline.gd`, svět slotů `world.gd`; `teren/zaklad/` (gen_v3, ore, cave, mat 256 id), `teren/svet/`
+  (svet8, svah56 – vypnutý, E56), `teren/svet64/` (mřížka vody). **Adaptér hry:** `teren/ostrov_teren.gd` (blok ostrova →
+  blueprint podle typu, slot ostrova + (3, 3) = slot světa 8 × 8, parametry `--bp.<klíč>=hodnota`), `teren/tridy.gd`
+  (plné id 0–255 → herní třída Mat 0–12 a paleta hornin).
+- `Block.cells` = herní třída (kopání, inventář, rarita, vegetace, povrch beze změny), `Block.geo` = plné id (horniny 20+,
+  minerály 100+, dutina vody 250). Podzemí je ve výchozím stavu skryté; **rentgen** (stávající přepínač) kreslí plná id paletou studie.
+- `scripts/voda/` – prameny, tok (priority-flood + D8, ztráty v ponorech, tůně, odtok tůní do podzemí), strže (ve hře se
+  nevyřezávají), `voda/povrch/tok60.gd` (E60 lokální přepočet A+C), `voda/podzemi/` (E52 funkce nad vrstvami + auto E55,
+  E58, E64 K/I/P/R), `voda/eroze/` (E51, E54 – přenesené, ve hře se zatím nespouštějí).
+  **Adaptér hry:** `voda/ostrov_voda.gd` (mřížka 128 × 128 sloupců přes celý svět, mlha kolem ostrova = příkop se sklonem
+  k okraji mapy → voda z okraje ostrova padá do mlhy; plný výpočet po vložení bloku, po kopání / položení jen lokálně),
+  `voda/podzemi_ostrov.gd` (rozhraní podzemí pro tok: registr volání, výkop přes E64, kroky R), `voda/ostrov_voda_render.gd`
+  (tůně, koryta, vodopády, mlha pod vodopádem přes okraj).
+- Voda teče jen z pramenů, déšť jen vizuální, simulace jen po změně terénu u vody (suché okolí = nic). Kroky R podzemí
+  běží po snímcích (`voda_r_kroku` na snímek, pevný počet operací `p64_budget`); před další změnou se dokončí.
+- Kontrola: `--e66-bench` a `tools/voda_e66.gd` po každém kopání porovnají stav s čerstvým plným výpočtem (stejné výkopy
+  přehrané do nového podzemí) – fill, průtok i směr odtoku musí sedět na 100 %.
+- Bez podpory v bp: otočení / zrcadlení bloku a režimy stran (`sides`), kalibrace prahů rarity pro bp.
 
 ## gen-v3 v prototypu (Jan 20:14, `scripts/gen3/`)
 - **Volba:** `BlockGen.gen_version` = `"v3"` (výchozí) nebo `"proto"`, CLI `-- --gen=proto|v3`. Tvar povrchu, transformace, dorovnání stran,

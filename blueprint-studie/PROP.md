@@ -293,6 +293,53 @@ Výchozí: 800 kapek na blok, `ero_cap` 1,0, `ero_erode` 0,1, `ero_deposit_rate`
 - **Hypotéza:** parita bit po bitu (kopie se mění jen v cestách). Vložení bloku bp ≈ 0,25–0,4 s jako E49 detail
   (+ povrch a tráva prototypu ~0,4 s), voda ostrova 7 bloků (≈ 112 × 112 sloupců) plně < 1 s, kopání u vody desítky ms.
 
+## E66 výsledky (2026-11-19 15:10)
+- **Git** (Jan 14:35 / 14:37): výchozí stav prototypu = commit `ca6afdf` v `Utalag/Willage_Client`, práce na větvi
+  `e66-integrace-prototypu` po malých commitech (modul po modulu, testy, snímky). Záložní kopie se nedělají.
+- **Přenos modulů** (`godot-prototyp/tools/port_studie.py`): 76 souborů (73 skriptů) z `scripts/{bp, kopie, svet8, svah56, svet64,
+  voda, alg60, alg58, alg64, podzemi52, eroze51, dohnani54}` → `scripts/teren/…`, `scripts/voda/…`, testy do `scripts/studie_testy/`.
+  Mění se jen cesty (`preload`, `res://data/` → `res://data/teren/`, výstupy → `shots/66_parita/`), `--check` ověří, že kopie
+  sedí se studií (po integraci: změněno 0). **Logika se nemění vůbec** – plánovaný příznak `edge_wall` (bod 3) nebyl potřeba, viz níže.
+- **Parita** (`tools/parita_e66.gd`, stejné světy a testy jako studie): **6 / 6 hashů E61 bit po bitu** – v1 dda863feffe6f611
+  (2,9–3,1 s), sled46 d8af7f59b6f8da70 (19 s), svet8 ec0681cc6426 (34 s), voda a14136754dd1 (39 s), voda_b 5ae2b366e84a (8 s),
+  voda_b --b e8cbbc78ca88 (45 s); opakovaný běh STEJNÉ. **E64 s16** (`tools/studie_alg64_ug.gd`, A+B+C+D+K+I+P+R nad záznamem E61):
+  všechny čítače (výběry 205592, navštíveno, S, kroky, neshod K 0, otisk OK 31, líných 11, pásem) shodné se studií;
+  plný 2830 ms (studie 2576), výkop průměr 26,3 ms (26,9), max 348 ms (355). Studie sama beze změny, její testy dál dávají stejné hashe.
+- **Adaptér terénu** (`scripts/teren/ostrov_teren.gd`, `tridy.gd`): blok ostrova → blueprint (louka → louka, kopec → kopec, hora →
+  hora_zvrasnena, piscina → prohlubeň; minerály podle tvaru, ×1,5 u unikátních; každý 5. seed rezervoár vody, každý 3. jeskyně),
+  slot ostrova + (3, 3) = slot světa 8 × 8, navázání na už vložené sousedy přes `world.commit` při `Island.place`.
+  `Block.cells` = herní třída Mat 0–12, `Block.geo` = plné id; rentgen kreslí plná id paletou studie (snímek 66_xray_rez).
+  Generování bloku 205–240 ms (E49: ~0,25 s) – **sedí s hypotézou**.
+- **Adaptér vody** (`scripts/voda/ostrov_voda.gd`, `podzemi_ostrov.gd`, `ostrov_voda_render.gd`): mřížka 128 × 128 sloupců (16 na blok,
+  buňka 0,5 m), prameny jen na ostrově, `tok.make(…, losses(springs), edge_out)`, podzemí `ug_funkce.from_world` + auto + E64
+  (A+B+C+D+K+I+P+R, rozpočet 5000 operací na krok R). Volání podzemí z toku se registrují (vstupy, q, vyloučené sloupce),
+  výkop jde přes `ug64.edit` nad všemi registrovanými voláními, kroky R po snímcích. Kopání i položení → `tok60.update` kolem změny.
+  Když se změní výsledek podzemí, přidají se do přepočtu odtoky tůní a vývěry (jinak by výkop v suchu změnu podzemí na povrch nepustil –
+  první verze měla 102 neshod průtoku, oprava → 0).
+- **Okraj ostrova místo `edge_wall`:** mlha kolem ostrova je v mřížce **příkop** (dno 0, žula, sklon 0,01 buňky na sloupec k okraji mapy).
+  Voda z okraje ostrova do něj spadne (vodopád do mlhy) a odteče přes okraj mapy (`edge_out` studie) → moduly beze změny.
+  Bez sklonu se okno `tok60` na plochém příkopu zvětšovalo až na celou mapu (povrch 1 s na výkop); se sklonem okno 13 × 13.
+- **Kontrola správnosti:** po každém výkopu / položení stav proti čerstvému plnému výpočtu (stejné výkopy přehrané do nového podzemí):
+  `--e66-bench` 8 výkopů + 1 položení, `tools/voda_e66.gd` 6 výkopů → **0 neshod** (fill, průtok, směr odtoku).
+- **Časy ve hře** (`shots/66_parita/66_bench.txt`, box bez GPU): start 4 bloky – voda plně 2,5 s (prameny 9 ms, pásma podzemí 285 ms,
+  povrch + podzemí 2,2 s); vložení dalšího bloku celkem 3,6–3,8 s (generování 0,22 s, voda 2,9–3,0 s, zbytek síť a tráva).
+  Kopání u vody: celkem průměr 1,1 s, max 2,0 s (povrch 0–0,9 s, podzemí 0,45–0,95 s) + kroky R 27–66 × ~60 ms (max ~320 ms) po snímcích.
+  Položení 177 ms.
+- **Negativa / co neplatí z hypotézy:**
+  - **Voda ostrova plně 2,5–3 s místo < 1 s a kopání u vody ~1 s místo desítek ms.** Podzemí: každý výkop rozdělí uzel B
+    (`splits`/`gone` 1 na výkop) → všechna volání jdou přes přesný výpočet (`fallback` = `exact` = počet volání), čas výkopu roste
+    s počtem výkopů (0,45 → 0,95 s). Ve studii E64 byla tělesa menší a výkopy ze záznamu; tady je jedno velké těleso pod celým ostrovem.
+    Registr volání jen roste (nový průtok tůně = nové volání; 4 → 11 po 6 výkopech), staré se neodebírají. Varianty bez R jsou horší
+    (K+I+P 2,2–3,1 s na výkop, A+C 2,6–3,6 s). Povrch: výkop v tůni zvětší okno přes celou tůň (0,5–0,9 s).
+  - Kroky R mají ~60 ms (max ~320 ms) → na snímek je to znát; `p64_budget` se dá snížit (víc kroků).
+  - Výchozí generátor je **bp** (plán bod 4 říkal „výchozí zůstává v3“); `--gen=v3` / Inspector Island.generator vrací gen-v3.
+  - Voda bere celočíselnou výšku bloku (`hm`), ne `hm_f` studie; ve hře se nevyřezávají strže (koryto jen uložené), E51 / E54 se nespouštějí.
+  - Otočení / zrcadlení bloku a režimy stran (`sides`) v bp nejsou; prahy rarity nejsou kalibrované pro bp.
+  - Export hry: parametry vody studie bere z `data/teren`, fallback na `../sdilene` (jako studie) chybí.
+  - `teren/zaklad/gen_v3.gd` je druhá kopie vedle `scripts/gen3/` prototypu (duplicita, sjednotit později).
+  - Hladina vody je na mřížce kostek (čtverce), duální povrch trávy ji místy překrývá; rentgen ukazuje plná id jen v řezu / rentgenu.
+- **Snímky:** `shots/66_reka.png`, `66_tun.png`, `66_pramen.png`, `66_vodopad_okraj.png`, `66_vodopad.png`, `66_xray_rez.png`, `66_celek.png`.
+
 ## E64 výsledky (2026-11-19 13:50)
 - **Co je nového** (kód `scripts/alg64/`, výchozí chování beze změny, zapíná se jen příznakem `K` ve variantě):
   - `heap64.gd`: halda s pevným pořadím (hodnota sestupně, id vzestupně).
