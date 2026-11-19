@@ -12,7 +12,8 @@ Seznam nápadů a úkolů, které čekají na Janovo rozhodnutí nebo na zařaze
   - Postup: nejdřív krátký návrh (PROP), pak větev s měřením.
 - [x] **Harmonický průměr propustností** – ověřeno v E70 (tag `e70-harmonicky`). Jen přepínač `p70_prumer`, výchozí zůstává prostý poměr: na ostrově beze změny, brzdění splní jen jedním směrem. Zapnout spolu s kapacitou vrstev.
 - [x] **Test symetrie a referenční test** – hotovo v E69 (tag `e69-symetrie`, větev `e69-symetrie-test`, nesloučeno). Bilance přesná (chyba ≤ 1e-12 l/s). Nalezena a opravena nesymetrie při shodných váhách větví (`p69_remizy`, rovný díl).
-- [ ] **Omezení průtoku dolů podle propustnosti vrstvy** (nález E69): řešič teď pustí celý tok až do nejspodnější propustné vrstvy, propustnosti 1,0–0,2 ovlivní jen dělení do stran. Doplnit kapacitu průsaku dolů. Také E67 nepočítá průsak z vody protékající nad polopropustnou vrstvou (kupole 0 proti E58 0,176 l/s).
+- [x] **Omezení průtoku dolů podle propustnosti vrstvy** – hotovo v E71 (tag `e71-kapacita`, větev `e71-kapacita-dolu`). Přepínače `p71_kapacita` a `p71_prusak` zapnuté ve výchozím stavu (jen nový výpočet podzemí E67), čas `p71_cas` = 144 (1 herní den = 10 min). Referenční sloupec: z každé vrstvy 0,2 l/s; kupole průsak 0,163 l/s (E58 0,176); ostrov 150 výstupů, kopnutí ~70 ms, 0 neshod.
+- [ ] **Slučování drobných výstupů z pastí** (nález E71): na ostrově 119 ze 150 výstupů < 0,02 l/s; slučovat do silnějších výstupů, nejen skrýt při kreslení.
 
 ## Architektura světa
 
