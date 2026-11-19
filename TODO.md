@@ -6,7 +6,7 @@ Seznam nápadů a úkolů, které čekají na Janovo rozhodnutí nebo na zařaze
 
 Nejdřív se dořeší všechno s vodou, pak další bloky. V rámci bloku se nepřeskakuje na jiné téma.
 
-1. **Voda:** ~~slučování~~ → ~~E68~~ → ~~nálezy E68 (E73)~~ → ~~plocha `gw` (E74)~~ → ~~kras (E75)~~ → voda po přenosu výřezu se přepočítá → nakonec přepnout čas hry na 1 herní den = 1 h (`p71_cas` = 24, Jan 22:19, až po testech s vodou).
+1. **Voda:** ~~slučování~~ → ~~E68~~ → ~~nálezy E68 (E73)~~ → ~~plocha `gw` (E74)~~ → ~~kras (E75)~~ → ~~voda po přenosu (E76)~~ → nakonec přepnout čas hry na 1 herní den = 1 h (`p71_cas` = 24, Jan 22:19, až po testech s vodou).
 2. **Model světa a kopání:** překryv změn po kopání + hash → kde končí funkce a pásma → tenké vrstvy a převzorkování → determinismus celého světa → rešerše implicitní geologie.
 3. **Geologie bloků a přenos výřezu:** otočení výřezu po 90° → jádro vyzdvižené hory přes více bloků → `TerrainSource` a datový kontrakt (jen návrhy, s Willage-backend).
 4. **Měřítko a zobrazení:** oddělené typy jednotek v kódu → plán vzorkování a LOD (test 3 × 3 km) → průhlednost překážek v izometrii → test měřítka v izometrii a blok 128 m → výkon na telefonu.
@@ -50,7 +50,11 @@ Podnět: třetí odpověď ChatGPT 2026-11-19. Dva světy se společnou geologi�
 
 - [ ] **Výřez terénu jako samostatný přenositelný datový objekt:** `TerrainSource` (původní definice), `TerrainTransform` (otočení, svislý posun), `TerrainPlacement` (místo na ostrově), `TerrainInstance` (výsledek po napojení na sousedy). Navázat na formát bloku WVB1 a blueprint, ve spolupráci s Willage-backend.
 - [ ] **Otočení výřezu po 90°:** ověřit, že funkce vrstev, minerály a dutiny se otočí bez rozdílu proti vygenerování na místě.
-- [ ] **Voda se nepřenáší hotová:** přenesou se zdroje, materiály a geometrie, stav vody se po vložení přepočítá v novém okolí a z ustáleného stavu se znovu naplánují události (příchod vody, plnění tůní, eroze).
+- [x] **Voda se nepřenáší hotová:** přenesou se zdroje, materiály a geometrie, stav vody se po vložení přepočítá v novém okolí a z ustáleného stavu se znovu naplánují události (příchod vody, plnění tůní, eroze).
+  - 🧪 Ověřeno v E76 (tag `e76-prenos`, větev `e76-voda-po-prenosu`, nesloučeno): lokální vložení = plný výpočet (0 neshod, bilance 0) i s posunem ±4; přeplánování událostí jen dotčených sloupců 61–104 ms; uložení 4 bloků + 12 výkopů 524 B.
+  - [ ] Jan rozhodne: zapnout `p76_prameny` (uložené prameny u bloku)?
+  - [ ] Po vložení stavět podzemí jen pro nový blok (dnes lokální vložení jen o 10–40 % rychlejší než plné).
+  - [ ] Do datové smlouvy výřezu s backendem patří i uložené prameny a výkopy.
 
 ## Model světa a kopání
 
@@ -74,7 +78,7 @@ Podnět: odpověď ChatGPT 2026-11-19 o měřítku. Nic z toho není rozhodnuté
   - 🧪 Ověřeno v E74 (tag `e74-gw`, větev `e74-gw-plocha`, nesloučeno): kompaktní plocha 9,4 kB místo 1,6 MB pásem, stavba ~30 ms, vzorek stěny 44–63 µs, objem sedí s E52/E58/E67, 0 neshod. Jedna výška nestačí (2–3 intervaly, pravidlo z geologie + 27 výjimek); výtoky E67 dál z řešiče. Přepínače `p74_gw`, `p74_vyzvednout` vypnuté.
   - [ ] Jan rozhodne: má neobsazený pramen zvedat hladinu tělesa místo odtoku ze světa? Zapnout obsazování pramenů ve hře?
   - [ ] Po výkopu stavět plochu jen pro dotčené těleso.
-  - [ ] Při novém postavení ostrova po výkopech se povrchové prameny najdou znovu z terénu a stav se liší od lokálního přepočtu (důležité pro položení bloku).
+  - [x] Při novém postavení ostrova po výkopech se povrchové prameny našly znovu – vyřešeno v E76 uloženými prameny (`p76_prameny`).
 - [x] **Eroze v podzemí po tělesech** (Jan 2026-11-19 20:53, hypotéza). Nematerializované podzemí se neeroduje po buňkách. Průsak pórovitou vrstvou je zanedbatelný; u rozpustných hornin (vápenec, kras) se z průtoku tělesem počítá rozpuštěný objem za čas jako hodnota u tělesa. Po překročení prahu vznikne nebo se zvětší dutina (tvar v prostoru jako u blueprint dutin), buňky se materializují až při prokopání. Navázat na event erozi (E51) a materiálovou tabulku (rozpustnost).
   - 🧪 Ověřeno v E75 (tag `e75-kras`, větev `e75-kras`, nesloučeno): modul `kras75`, rozpustnost v tabulce materiálů, dutina u hladiny ve výstupním pásmu, lokální přepočet přes E68 9–15 ms. Test 0,742 l/s: první dutina vápenec 331 herních dní (55 h), sádrovec 22,5, sůl 0,15. Na ostrově bez efektu (hladina v půdě/písku). `p75_kras` vypnuto.
   - [ ] Jan rozhodne: zrychlení krasu pro hru (`p75_zrychleni`); má generátor dávat vápenec k hladině?
