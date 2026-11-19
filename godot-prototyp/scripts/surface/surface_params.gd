@@ -20,6 +20,9 @@ static func inst():
 @export var xray := false                             ## vývoj: ukaž skutečné materiály (vypne skrytí)
 @export_range(0, 1, 1) var undiscovered_look := 0     ## 0 hlína, 1 skála (textura skryté stěny)
 @export var col_undiscovered := Color(0.66, 0.50, 0.40) ## barva skryté stěny (výchozí hlína)
+@export var side_plain := true                          ## E66b: boky ostrova (směr ven, bez souseda) jednou barvou bez textury
+@export var col_side := Color(0.62, 0.52, 0.45)         ## E66b: barva boku ostrova
+@export var fog_side := false                           ## E66b: vrstvy mlhy kolem ostrova (dělají na boku rozmazaný vzor); vypnuto = bok čistý
 @export_range(0.0, 0.8, 0.05) var undiscovered_darken := 0.25  ## ztmavení / mlha s hloubkou
 @export var wet_tint := true                          ## gen-v3: mokrá půda pod povrchem tmavší (jen viditelný materiál)
 @export var data_water := true                        ## gen-v3: kreslit volnou vodu z vrstvy vody bloku (jeskyně, jezírka)
@@ -108,6 +111,7 @@ func labels() -> Dictionary:
 		"hide_undiscovered": "Skrýt podzemí", "xray": "X-ray (skutečné materiály)",
 		"undiscovered_look": "Textura skryté stěny (0 hlína, 1 skála)",
 		"col_undiscovered": "Barva skryté stěny", "undiscovered_darken": "Ztmavení s hloubkou",
+		"side_plain": "Bok ostrova bez textury", "col_side": "Barva boku ostrova", "fog_side": "Mlha před bokem ostrova",
 		"wet_tint": "Mokrá půda (gen-v3)", "data_water": "Voda z dat bloku (gen-v3)",
 		"dual_enabled": "Duální mřížka zapnuta", "dual_sub": "Dělení dlaždice", "dual_ease": "Vyhlazení svahu",
 		"dual_noise": "Zvlnění hranice", "dual_soft": "Měkkost hranice", "slope_max_layers": "Max. svah (vrstev)",

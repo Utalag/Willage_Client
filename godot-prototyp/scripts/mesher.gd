@@ -32,13 +32,16 @@ static func _pidx(x: int, z: int, y: int) -> int:
 ## wet (volitelně, voda v buňce 0..4096 z Block.water): mokrá půda pod povrchem se ztmaví, jen když je vidět skutečný materiál.
 ## Ložiskový jíl (12) má barvu svou, texturu jílu.
 const WET_COL := Color(0.36, 0.40, 0.58)
-static func build(cells: PackedByteArray, nbs: Array, slice_z: int, tint := Color(1, 1, 1), dual_mask := PackedByteArray(), discovered := PackedByteArray(), neutral_mat := 2, neutral_col := Color(0.66, 0.50, 0.40), darken := 0.25, wet := PackedInt32Array(), geo := PackedByteArray(), pal := PackedColorArray()) -> ArrayMesh:
+static func build(cells: PackedByteArray, nbs: Array, slice_z: int, tint := Color(1, 1, 1), dual_mask := PackedByteArray(), discovered := PackedByteArray(), neutral_mat := 2, neutral_col := Color(0.66, 0.50, 0.40), darken := 0.25, wet := PackedInt32Array(), geo := PackedByteArray(), pal := PackedColorArray(), side_col := Color(0, 0, 0, 0)) -> ArrayMesh:
 	var use_mask := dual_mask.size() == 17 * 17
 	var use_hide := discovered.size() == BS * BS * BH
 	var use_wet := wet.size() == BS * BS * BH
+	# E66b (Jan 15:20 „Skryj texturu na boku dlaždice“): boky bloku směrem ven z ostrova (bez souseda) pod povrchovou buňkou
+	# jednou neutrální barvou bez textury; side_col.a = 0 → vypnuto (rentgen, řez, nastavení side_plain)
+	var use_side := side_col.a > 0.0 and slice_z < 0
 	var top_y := BH if slice_z < 0 else mini(slice_z, BH)
 	var col_hm := PackedInt32Array()
-	if use_hide or use_wet:
+	if use_hide or use_wet or use_side:
 		col_hm.resize(BS * BS)
 		for x in BS:
 			for z in BS:
@@ -115,6 +118,12 @@ static func build(cells: PackedByteArray, nbs: Array, slice_z: int, tint := Colo
 					var n: Vector3i = f[0]
 					if pad[_pidx(x + n.x, z + n.z, y + n.y)] != 0:
 						continue
+					var fc := c; var ftm := tex_m
+					if use_side and n.y == 0 and y < col_hm[x * BS + z] - 1:
+						var ox := x + n.x; var oz := z + n.z
+						var si := 0 if oz < 0 else (1 if ox >= BS else (2 if oz >= BS else (3 if ox < 0 else -1)))
+						if si >= 0 and nbs[si] == null:
+							fc = side_col; ftm = 0
 					var corners: Array = f[1]
 					var ao := [0, 0, 0, 0]
 					for i in 4:
@@ -167,8 +176,8 @@ static func build(cells: PackedByteArray, nbs: Array, slice_z: int, tint := Colo
 							edges.append_array(ef)
 							verts.append(Vector3(x + cv.x, (y + cv.y) * CELL_H, z + cv.z))
 							norms.append(Vector3(n))
-							cols.append(Color(c.r * k, c.g * k, c.b * k))
-							uv2s.append(Vector2(tex_m, k * k0))
+							cols.append(Color(fc.r * k, fc.g * k, fc.b * k))
+							uv2s.append(Vector2(ftm, k * k0))
 						if flip:
 							inds.append_array([start, start + 1, start + 2, start, start + 2, start + 3])
 						else:

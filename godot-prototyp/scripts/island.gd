@@ -182,7 +182,9 @@ func _block_mesh(cells: PackedByteArray, nbs: Array, mask: PackedByteArray, disc
 	var wet := water if p.wet_tint else PackedInt32Array()
 	# E66 gen bp: skutečné horniny a minerály (plná id) jen v rentgenu; jinak třídy prototypu (podzemí skryté)
 	var g := geo if p.xray and geo.size() == cells.size() else PackedByteArray()
-	return Mesher.build(cells, nbs, slice_z, Color(1, 1, 1), mask, disc, nmat, p.col_undiscovered, p.undiscovered_darken, wet, g, TerenTridy.palette() if not g.is_empty() else PackedColorArray())
+	# E66b: bok ostrova jednou barvou bez textury (nastavení side_plain); v rentgenu skutečné materiály
+	var sc: Color = p.col_side if p.side_plain and not p.xray else Color(0, 0, 0, 0)
+	return Mesher.build(cells, nbs, slice_z, Color(1, 1, 1), mask, disc, nmat, p.col_undiscovered, p.undiscovered_darken, wet, g, TerenTridy.palette() if not g.is_empty() else PackedColorArray(), sc)
 
 ## gen-v3: volná voda z vrstvy vody bloku = buňky vzduchu s vodou (jeskyně pod hladinou, jezírko). Výška hladiny v buňce
 ## = voda / 4096. Při skrytí podzemí jen voda v odkrytém vzduchu (discovered 2) nebo nad povrchem. Vodní hladina
@@ -555,8 +557,19 @@ func _make_fog(s: Vector2i) -> void:
 		mi.material_override = mat
 		mi.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
 		mi.position.y = 1.5 + l * 0.9
+		mi.set_meta("nizka", l < layers - FOG_TOP_KEEP)
 		root.add_child(mi)
 	fogs[s] = root
+	apply_fog_side(root)
+
+## E66b: vrstvy mlhy ve slotech kolem ostrova (před bokem) jen při nastavení fog_side; vrstvy nad FOG_TOP_KEEP zůstanou vždy
+const FOG_TOP_KEEP := 0   # 0 = při fog_side vyp. žádná vrstva (i horní příkrov dělal na boku rozmazané kosočtverce)
+func apply_fog_side(root: Node3D = null) -> void:
+	var p = surface.p if surface else SurfaceParamsS.inst()
+	var lst: Array = [root] if root != null else fogs.values()
+	for r in lst:
+		for mi in r.get_children():
+			if mi.get_meta("nizka", false): mi.visible = p.fog_side
 
 var show_frames := false
 

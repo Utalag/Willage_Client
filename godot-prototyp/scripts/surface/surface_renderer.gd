@@ -187,9 +187,12 @@ func apply_all() -> void:
 		_apply_water(water_mat[s])
 	apply_shared(island.toon_mat)
 
-const HIDE_PROPS := ["hide_undiscovered", "xray", "undiscovered_look", "col_undiscovered", "undiscovered_darken", "wet_tint", "data_water"]
+const HIDE_PROPS := ["hide_undiscovered", "xray", "undiscovered_look", "col_undiscovered", "undiscovered_darken", "wet_tint", "data_water", "side_plain", "col_side"]
 
 func _on_param(prop: String) -> void:
+	if prop == "fog_side":
+		island.apply_fog_side()
+		return
 	if prop in HIDE_PROPS:
 		island.rebuild_cube_meshes()
 		return
