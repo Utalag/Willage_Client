@@ -1,6 +1,7 @@
 extends Node
 ## E66 terén a voda ze studie v prototypu (gen bp), přidá ho demo_runner.gd:
 ##   -- --e66-shots   snímky ../blueprint-studie/shots/66_*.png: řeka, tůň, pramen, vodopád na okraji, rentgen řez
+##   -- --e66b-bok    bok ostrova před / po (nastavení side_plain) → ../blueprint-studie/shots/66b_bok.png
 ##   -- --e66-bench   měření vložení bloků, kopání u vody (lokální přepočet + kroky R) a kontrola proti plnému výpočtu
 ##                    → shots/66_parita/66_bench.txt
 
@@ -20,6 +21,8 @@ func _ready() -> void:
 	m.set_game_process(false)
 	if "--e66-shots" in OS.get_cmdline_user_args():
 		_shots.call_deferred()
+	elif "--e66b-bok" in OS.get_cmdline_user_args():
+		_bok.call_deferred()
 	else:
 		_bench.call_deferred()
 
@@ -137,6 +140,41 @@ func _shots() -> void:
 	_label("E66 ostrov: terén blueprint v2 + voda (pohled celkem)")
 	_cam(Vector3(16, 14, 16), 52.0, 45.0, -35.0)
 	await _snap("66_celek.png")
+	get_tree().quit()
+
+func _img() -> Image:
+	for i in 8:
+		await RenderingServer.frame_post_draw
+	return m.get_viewport().get_texture().get_image()
+
+## E66b (Jan 15:20): bok ostrova s texturou vrstev (před) a jednou barvou (po), vedle sebe
+func _bok() -> void:
+	p.set_param("xray", false)
+	p.set_param("hide_undiscovered", true)
+	m.island.water_finish()
+	var shots := []
+	for on in [false, true]:
+		p.set_param("side_plain", on)
+		p.set_param("fog_side", not on)
+		var nv := 0
+		for fs in m.island.fogs:
+			for ch in m.island.fogs[fs].get_children(): if ch.visible: nv += 1
+		print("bok: side_plain %s fog_side %s viditelných vrstev mlhy %d" % [on, p.fog_side, nv])
+		_label("E66b bok ostrova: %s" % ("PO – jedna barva, bez mlhy před bokem (side_plain, fog_side vyp.)" if on else "PŘED – vrstvy na boku + mlha před bokem"))
+		_cam(Vector3(16, 8, 16), 40.0, 45.0, -20.0)
+		shots.append(await _img())
+	if "--bez-mlhy" in OS.get_cmdline_user_args():
+		for fs in m.island.fogs: m.island.fogs[fs].visible = false
+		_label("pokus: bez mlhy")
+		var c: Image = await _img()
+		c.save_png("/tmp/bok_bez_mlhy.png")
+	var a: Image = shots[0]; var b: Image = shots[1]
+	var w := a.get_width(); var h := a.get_height()
+	var out := Image.create(w * 2, h, false, a.get_format())
+	out.blit_rect(a, Rect2i(0, 0, w, h), Vector2i(0, 0))
+	out.blit_rect(b, Rect2i(0, 0, w, h), Vector2i(w, 0))
+	out.save_png(ProjectSettings.globalize_path("res://../blueprint-studie/shots/66b_bok.png"))
+	print("uloženo blueprint-studie/shots/66b_bok.png")
 	get_tree().quit()
 
 func _place(s: Vector2i, kind: String, seed: int) -> Dictionary:
