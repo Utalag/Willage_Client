@@ -10,7 +10,7 @@ Seznam nápadů a úkolů, které čekají na Janovo rozhodnutí nebo na zařaze
   - Pořadí: terén a geologie → povrch a podzemí → vodní bilance → události → místní invalidace.
   - Ohlídat smyčku rybník → průsak → pramen → rybník: předávání vody oběma směry s limitem počtu kol, zachování hmoty, deterministický výsledek (hash).
   - Postup: nejdřív krátký návrh (PROP), pak větev s měřením.
-- [ ] **Harmonický průměr propustností** sousedních materiálů pro dělení vody do stran v E67 (teď prostý poměr propustností), aby jíl brzdil i sousední písek.
+- [x] **Harmonický průměr propustností** – ověřeno v E70 (tag `e70-harmonicky`). Jen přepínač `p70_prumer`, výchozí zůstává prostý poměr: na ostrově beze změny, brzdění splní jen jedním směrem. Zapnout spolu s kapacitou vrstev.
 - [x] **Test symetrie a referenční test** – hotovo v E69 (tag `e69-symetrie`, větev `e69-symetrie-test`, nesloučeno). Bilance přesná (chyba ≤ 1e-12 l/s). Nalezena a opravena nesymetrie při shodných váhách větví (`p69_remizy`, rovný díl).
 - [ ] **Omezení průtoku dolů podle propustnosti vrstvy** (nález E69): řešič teď pustí celý tok až do nejspodnější propustné vrstvy, propustnosti 1,0–0,2 ovlivní jen dělení do stran. Doplnit kapacitu průsaku dolů. Také E67 nepočítá průsak z vody protékající nad polopropustnou vrstvou (kupole 0 proti E58 0,176 l/s).
 
