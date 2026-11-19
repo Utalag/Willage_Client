@@ -216,7 +216,7 @@ Skupiny: 1 Prototyp a buildy · 2 Terén a tvar · 3 Rozlišení bloku · 4 Ská
 - **Komplikace:** koryta jsou krátké úseky (malý svět, malá povodí). Krasová vyvěračka 0. Hráz na svahu tůň nevytvořila (potok ji obtekl). Podzemní tok vede zatím zjednodušeně k nejbližšímu okraji.
 - **Další krok:** Jan rozhodne, jak daleko vést podzemní tok (sledovat propustnou vrstvu?) a jestli má mít krasová vyvěračka vlastní pravidlo. Starší otevřené otázky (eroze po blocích vs hrubý svět, jádro hory přes šev, minerály z hrubého světa) zůstávají.
 
-### 🔄 Blueprint v3 / E76: voda po přenosu výřezu, uložené prameny (2026-11-20 01:40 · prototyp `scripts/voda/prenos76.gd`, `ostrov_voda.gd`, `ug_funkce.gd` (`bands76`), příznak `p76_prameny`, větev `e76-voda-po-prenosu`)
+### 🔄 Blueprint v3 / E76: voda po přenosu výřezu, uložené prameny (2026-11-20 00:49 · prototyp `scripts/voda/prenos76.gd`, `ostrov_voda.gd`, `ug_funkce.gd` (`bands76`), příznak `p76_prameny`, větev `e76-voda-po-prenosu`)
 - **Směr:** TODO Přenos terénu „Voda se nepřenáší hotová“ a nález E74: výřez nese zdroje, materiály a geometrii, voda se po vložení počítá znovu a události se plánují z ustáleného stavu.
 - **Zlepšení:** nové postavení i načtení po výkopech = lokální stav (0 neshod, uloženo 524 B). Výřez vložený vedle bloků i o ±4 buňky: lokální = plný, bilance 0, horniny 100 % jako v původu. Přeplánování 61–104 ms, jen ~380 z 1280 sloupců, stejný plán jako úplné.
 - **Komplikace:** bez uložených pramenů se prameny přesunou i jinde a lokální vložení chybí 1,5–3 l/s. Lokální vložení je jen o 10–40 % rychlejší (podzemí znovu celé). Otočení, kras E75 a obsazení E74 chybí.

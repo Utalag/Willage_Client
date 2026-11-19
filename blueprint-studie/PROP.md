@@ -293,7 +293,7 @@ Výchozí: 800 kapek na blok, `ero_cap` 1,0, `ero_erode` 0,1, `ero_deposit_rate`
 - **Hypotéza:** parita bit po bitu (kopie se mění jen v cestách). Vložení bloku bp ≈ 0,25–0,4 s jako E49 detail
   (+ povrch a tráva prototypu ~0,4 s), voda ostrova 7 bloků (≈ 112 × 112 sloupců) plně < 1 s, kopání u vody desítky ms.
 
-## E76 voda po přenosu výřezu na ostrov (plán, zapsáno před pokusem 2026-11-20 00:55; TODO Přenos terénu „Voda se nepřenáší hotová“ + nález E74)
+## E76 voda po přenosu výřezu na ostrov (plán, zapsáno před pokusem 2026-11-20 00:36; TODO Přenos terénu „Voda se nepřenáší hotová“ + nález E74)
 - **Rozsah:** jen lokální studie klienta, žádná datová smlouva s backendem (`TerrainSource` atd. je pozdější blok).
 - **Co už je:** blok `bp` = blueprint (tvar, seed, minerály) + posun výšky, záznam ve světě studie (`bp_rec`: hm, hm_f, bs,
   buňky) a navázání na sousedy při generování (klíny). Podzemí se staví z funkcí vrstev světa (`ug_funkce.from_world`),
@@ -320,7 +320,7 @@ Výchozí: 800 kapek na blok, `ero_cap` 1,0, `ero_erode` 0,1, `ero_deposit_rate`
   přeplánování; nález E74: výkopy → nové postavení / načtení bez a s `p76_prameny` (neshody, otisk).
 - Beze změny: `p71_cas` 144, `p72_prusak`, vzdálenost slučování.
 
-### E76 výsledky (2026-11-20 01:40, větev `e76-voda-po-prenosu`, prototyp `tools/prenos_e76.gd`, `scripts/voda/prenos76.gd`, shots `shots/e76/`)
+### E76 výsledky (2026-11-20 00:49, větev `e76-voda-po-prenosu`, prototyp `tools/prenos_e76.gd`, `scripts/voda/prenos76.gd`, shots `shots/e76/`)
 - **Nález E74 vyřešen uloženými prameny (`p76_prameny`).** Ostrov 4 bloky, 12 výkopů lokálně (otisk 63d7b89a91385a79),
   pak nové postavení ze stejných bloků a „načtení“ (bloky znovu z typu + seedu + překryvu výkopů):
   - bez `p76`: otisk c65671b2f1147f27, 371 neshod `eff`, 4 z 5 pramenů jinde (prameny se hledají znovu z vykopaného terénu);
