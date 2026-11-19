@@ -2,6 +2,16 @@
 
 Seznam nápadů a úkolů, které čekají na Janovo rozhodnutí nebo na zařazení. Hotové položky se odškrtnou a odkáží na commit nebo tag.
 
+## Pořadí práce po blocích (Jan 2026-11-19 22:44)
+
+Nejdřív se dořeší všechno s vodou, pak další bloky. V rámci bloku se nepřeskakuje na jiné téma.
+
+1. **Voda:** slučování drobných výstupů z pastí → E68 orchestrátor → hladina podzemní vody jako plocha `gw` → eroze v podzemí (kras) → voda po přenosu výřezu se přepočítá → nakonec přepnout čas hry na 1 herní den = 1 h (`p71_cas` = 24, Jan 22:19, až po testech s vodou).
+2. **Model světa a kopání:** překryv změn po kopání + hash → kde končí funkce a pásma → tenké vrstvy a převzorkování → determinismus celého světa → rešerše implicitní geologie.
+3. **Geologie bloků a přenos výřezu:** otočení výřezu po 90° → jádro vyzdvižené hory přes více bloků → `TerrainSource` a datový kontrakt (jen návrhy, s Willage-backend).
+4. **Měřítko a zobrazení:** oddělené typy jednotek v kódu → plán vzorkování a LOD (test 3 × 3 km) → průhlednost překážek v izometrii → test měřítka v izometrii a blok 128 m → výkon na telefonu.
+5. **Janovo rozhodnutí:** charakter krajiny.
+
 ## Voda
 
 - [ ] **E68 – sjednocení výpočtu povrchu a podzemí (hydrologický orchestrátor).** Podnět: konverzace s ChatGPT 2026-11-19 ([sdílený chat](https://chatgpt.com/share/6aff2aa3-865c-83ed-a19c-63720302f8cf)).
