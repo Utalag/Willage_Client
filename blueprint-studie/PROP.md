@@ -293,6 +293,28 @@ Výchozí: 800 kapek na blok, `ero_cap` 1,0, `ero_erode` 0,1, `ero_deposit_rate`
 - **Hypotéza:** parita bit po bitu (kopie se mění jen v cestách). Vložení bloku bp ≈ 0,25–0,4 s jako E49 detail
   (+ povrch a tráva prototypu ~0,4 s), voda ostrova 7 bloků (≈ 112 × 112 sloupců) plně < 1 s, kopání u vody desítky ms.
 
+## E78 překryv změn po kopání: funkce → vzorkovaná buňka → trvalá změna (plán, zapsáno před pokusem 2026-11-20 00:59; TODO Model světa a kopání, devlog/model-sveta.md)
+- **Co už je:** blok `bp` se generuje deterministicky (typ, seed, posun, pořadí vložení = sousedé). Buňky prototypu jsou
+  0,5 m (16 × 16 × 64), kopání dnes mění buňku 0,5 m a výšku sloupce. Záznam bloku E76 (větev `e76-voda-po-prenosu`,
+  vzato do této větve sloučením) ukládá typ, seed, slot, posun, výkopy po sloupcích (`hm` proti `hm_gen`) a prameny.
+  WVB1 (návrh `willage-ideas/navrhy/format-bloku-wvb1.md`) ukládá celé pole materiálů bloku (u8 na buňku, deflate).
+- **Překryv (`scripts/teren/prekryv78.gd`):** herní mřížka 0,25 m (Jan 20:12) = 32 × 32 × 128 buněk na blok, vzorkovaná
+  z buněk 0,5 m (každá na 2 × 2 × 2). Překryv = mapa buňka 0,25 m → materiál (0 = vzduch) jen tam, kde se stav liší
+  od definice. Kanonický: položka rovná definici se smaže (vykopat a zasypat stejným materiálem = žádná změna).
+  Ukládá se konečný stav buňky, ne historie → operace na různých buňkách nezávisí na pořadí; na téže buňce rozhoduje
+  poslední operace (vykopat → zasypat hlínou = hlína; zasypat (plnou buňku nejde) → vykopat = vzduch), záměrně.
+- **Buňka 0,5 m pro vodu a vykreslení:** plná, dokud v ní zbývá aspoň jedna plná buňka 0,25 m (jako pravidlo 0,125 / 0,25),
+  materiál = nejčastější plný (remíza: nižší id). Z toho výška sloupce `hm`. Záznam E76 se rozšíří: místo výkopů po
+  sloupcích překryv buněk (výška sloupců se odvodí, nic se neukládá dvakrát), prameny zůstanou.
+- **Pokus:** ostrov 4 bloky; chodba (vstup z povrchu, 2 m vysoká, přes dva bloky), položení materiálu, zasypání vykopané
+  buňky; náhodné změny 1, 10, 100, 1000 buněk. Uložit jen překryv, načíst (bloky znovu z definice + překryv), porovnat
+  otisk buněk (0,25 i 0,5 m) a vody s živým stavem. Voda je odvozená: po načtení plný přepočet (s uloženými prameny E76).
+- **Měření:** velikost překryvu (syrově a deflate, dvě kódování: seřazené klíče, intervaly ve sloupcích) proti celému poli
+  WVB1 (0,5 m 16 kB a 0,25 m 128 kB na blok, syrově a deflate); čas načtení; shoda otisků; pořadí (vykopat → zasypat proti
+  zasypat → vykopat, operace na různých buňkách v obou pořadích); voda živě (lokální přepočet sloupců) proti načtení.
+- **Očekávání / riziko:** chodba pod povrchem nemění výšku sloupce → lokální přepočet vody ji nevidí, plný přepočet ano
+  (dutina z buněk) → živá voda se může lišit od načtené. Bez backendu: WVB1 jen jako návrh změny.
+
 ## E76 voda po přenosu výřezu na ostrov (plán, zapsáno před pokusem 2026-11-20 00:36; TODO Přenos terénu „Voda se nepřenáší hotová“ + nález E74)
 - **Rozsah:** jen lokální studie klienta, žádná datová smlouva s backendem (`TerrainSource` atd. je pozdější blok).
 - **Co už je:** blok `bp` = blueprint (tvar, seed, minerály) + posun výšky, záznam ve světě studie (`bp_rec`: hm, hm_f, bs,
