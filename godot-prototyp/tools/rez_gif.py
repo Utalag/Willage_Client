@@ -5,8 +5,11 @@ všech buněk odspodu po řez z (roste po --krok), horní stěna = plocha řezu;
 --pohled=shora: plochý řez shora. Každý snímek = vodorovný řez ve výšce z (buňky po 0,5 m) shora: barva = materiál buňky (paleta sdílené tabulky),
 černá = dutina pod povrchem, světlé pozadí = vzduch nad terénem, modře šrafované = pásmo podzemního tělesa
 (tmavší = největší těleso). Vpravo legenda materiálů v řezu (česky) s počtem buněk."""
-import argparse, base64, json, os
-from PIL import Image, ImageDraw, ImageFont
+import argparse, os, sys
+import numpy as np
+from PIL import Image, ImageDraw
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+import rez_spolecne as RS
 
 ap = argparse.ArgumentParser()
 ap.add_argument("data"); ap.add_argument("out")
@@ -16,46 +19,18 @@ ap.add_argument("--px", type=int, default=0, help="pixelů na buňku (0 = automa
 ap.add_argument("--podzemi", type=int, default=1); ap.add_argument("--od", type=int, default=0)
 ap.add_argument("--pohled", default="izo", choices=["izo", "shora"]); ap.add_argument("--smer", default="nahoru", choices=["nahoru", "dolu"])
 a = ap.parse_args()
-d = json.load(open(a.data))
-F = "/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf"
-fn = ImageFont.truetype(F, 13); fb = ImageFont.truetype(F.replace("Sans.ttf", "Sans-Bold.ttf"), 16)
-BS, NZ = 16, 64
-blocks = {}
-for b in d["bloky"]:
-    if a.oblast != "vse" and tuple(b["slot"]) != tuple(int(v) for v in a.oblast.split(",")):
-        continue
-    blocks[tuple(b["slot"])] = (base64.b64decode(b["geo"]), b["hm"], b)
-if not blocks:
-    raise SystemExit("oblast %s: žádný blok" % a.oblast)
-sx = [s[0] for s in blocks]; sy = [s[1] for s in blocks]
-x0, y0 = min(sx) * BS, min(sy) * BS
-W, H = (max(sx) - min(sx) + 1) * BS, (max(sy) - min(sy) + 1) * BS
+D = RS.Data(a.data, a.oblast, bool(a.podzemi))
+fn, fb = RS.fonts()
+BS, NZ = RS.BS, RS.NZ
+blocks, x0, y0, W, H = D.blocks, D.x0, D.y0, D.W, D.H
+col, names, ug, zmax, title = D.col, D.names, D.ug, D.zmax, D.title
+hexrgb = RS.hexrgb
 px = a.px or (max(4, min(24, 640 // max(W, H))) if a.pohled == "shora" else max(4, min(14, 340 // max(W, H))))
-col = {int(k): "#" + v[:6] for k, v in d["barvy"].items()}
-names = {int(k): v for k, v in d["nazvy"].items()}
-ug = d.get("podzemi", {}).get("sloupce", {}) if a.podzemi else {}
-zmax = max(max(hm) for _, hm, _ in blocks.values())
 LW = 300
-title = "ostrov" if a.oblast == "vse" else "blok %s (%s %d)" % (a.oblast, list(blocks.values())[0][2]["typ"], list(blocks.values())[0][2]["seed"])
-
-def hexrgb(h):
-    return tuple(int(h[i:i + 2], 16) for i in (1, 3, 5))
 
 def izo_frames():
-    import numpy as np
     NZv = zmax + 1
-    S = np.zeros((W, H, NZv), dtype=np.int16) - 1          # -1 = mimo blok / vzduch nad terénem, 0 = dutina, jinak id
-    B = np.zeros((W, H, NZv), dtype=np.uint8)              # 1 = pásmo největšího tělesa, 2 = jiné těleso
-    for (s_, (geo, hm, _)) in blocks.items():
-        g = np.frombuffer(geo, dtype=np.uint8).reshape(BS, BS, NZ)
-        for lx in range(BS):
-            for ly in range(BS):
-                X = s_[0] * BS + lx - x0; Y = s_[1] * BS + ly - y0; h = hm[lx * BS + ly]
-                S[X, Y, :min(h, NZv)] = g[lx, ly, :min(h, NZv)]
-                if ug:
-                    for lo, hi, big in ug.get("%d,%d" % (s_[0] * BS + lx, s_[1] * BS + ly), []):
-                        z0 = max(int(lo / 0.5 + 1e-6), 0); z1 = min(int(np.ceil(hi / 0.5 - 1e-6)), NZv)
-                        sl = B[X, Y, z0:z1]; B[X, Y, z0:z1] = np.where((sl == 0) | (sl > big), big, sl)
+    S, B = D.grid(NZv)
     pal = {m: np.array(hexrgb(c), dtype=float) for m, c in col.items()}
     ax_, by_ = px, px / 2.0; cz = px * 0.62                # 1 buňka = 1 × 1 × 0,5 m
     ox = H * ax_ + 10; oy = 50 + NZv * cz
