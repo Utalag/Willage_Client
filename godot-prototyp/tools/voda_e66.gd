@@ -41,8 +41,12 @@ func _init() -> void:
 	for sp in v.springs: cand.append(sp.gi)
 	var edits := []; var bad_tot := 0
 	var rng := RandomNumberGenerator.new(); rng.seed = 66
-	for k in mini(n, cand.size()):
-		var gi: int = cand[rng.randi_range(0, cand.size() - 1)]
+	var seq := []   # E68: pořadí výkopů předem (--poradi=obracene → pozpátku, konečný terén stejný)
+	for k in mini(n, cand.size()): seq.append(cand[rng.randi_range(0, cand.size() - 1)])
+	if _arg("poradi", "") == "obracene": seq.reverse()
+	var h0d := v.hydro()
+	for k in seq.size():
+		var gi: int = seq[k]
 		var a := v.slot_of(gi)
 		var b = blocks[a[0]]
 		var ci: int = a[1] * 16 + a[2]
@@ -56,7 +60,7 @@ func _init() -> void:
 			var t := Time.get_ticks_usec()
 			v.step(); steps += 1
 			smax = maxf(smax, (Time.get_ticks_usec() - t) / 1000.0)
-		var e := {"gi": gi, "ms": r.ms, "surf_ms": r.surf_ms, "ug_ms": (r.ug.ms if r.has("ug") else 0.0), "r_steps": steps, "r_step_max_ms": smax,
+		var e := {"kola68": v.st.get("kolo68", {}), "gi": gi, "ms": r.ms, "surf_ms": r.surf_ms, "ug_ms": (r.ug.ms if r.has("ug") else 0.0), "r_steps": steps, "r_step_max_ms": smax,
 			"okno": r.surf.get("window", 0), "sucho": r.surf.get("dry", false)}
 		if chk:
 			var bad: Dictionary = v.check_full()
@@ -65,10 +69,13 @@ func _init() -> void:
 		edits.append(e)
 		print("výkop %d sloupec %d %d→%d: %.1f ms (povrch %.1f, podzemí %.1f), kroků R %d (max %.1f ms)%s" % [k + 1, gi, h0, nh, r.ms, r.surf_ms, e.ug_ms, steps, smax, (" neshod %s" % str(e.neshod)) if chk else ""])
 	var out := {"bloky_ms": gen, "voda_ms": v.ms, "souhrn": v.summary(), "vykopy": edits, "neshod_celkem": bad_tot, "souhrn_po": v.summary(), "ug_stats": (v.ug._st if not v.ug.is_empty() else {}),
-		"podzemi_vystupy": v.st.get("under", []).map(func(u): return [String(u.typ), snappedf(float(u.z), 0.01), snappedf(float(u.q), 1e-4)])}   # E71: výstupy podzemí (typ, výška m, l/s)
+		"podzemi_vystupy": v.st.get("under", []).map(func(u): return [String(u.typ), snappedf(float(u.z), 0.01), snappedf(float(u.q), 1e-4)]),
+		"hydro68_pred": h0d, "hydro68_po": v.hydro()}   # E71: výstupy podzemí (typ, výška m, l/s)
 	DirAccess.make_dir_recursive_absolute(ProjectSettings.globalize_path("res://shots/66_parita"))
 	FileAccess.open(ProjectSettings.globalize_path(_arg("out", "res://shots/66_parita/voda_e66.json")), FileAccess.WRITE).store_string(JSON.stringify(out, " "))
 	print("souhrn po výkopech: ", out.souhrn_po)
 	print("podzemí počítadla: ", out.ug_stats)
 	print("neshod s plným výpočtem celkem: ", bad_tot)
+	print("E68 před výkopy: ", h0d)
+	print("E68 po výkopech: ", out.hydro68_po)
 	quit()

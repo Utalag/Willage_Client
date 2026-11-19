@@ -4,6 +4,35 @@ extends RefCounted
 const T = preload("res://scripts/voda/tok.gd")
 static var PR := {}
 static var M0 := 0   # E60: počáteční okraj okna (0 = margin jako tok.gd); okno se samo zvětší, když okraj neodvádí
+static var KOLA := 4      # E68: nejvýš kol povrch ↔ podzemí v update (4 = dosavadní)
+static var TOL := 0.0     # E68: konec smyčky, když se extra / src2 změní nejvýš o TOL l/s (0 = jen bitová shoda, dosavadní)
+static var KOLO := {}     # E68: poslední update: {"kola", "zmena", "ustaleno", "cyklus"}
+static var CYKLUS := false   # E68: smyčka se opakuje (stejný stav odtoků jako v dřívějším kole) → skončit v kanonickém členu cyklu
+
+## E68: otisk stavu odtoků tůní a výtoků z podzemí (extra / src2 na nenulových indexech)
+static func sig(st: Dictionary) -> String:
+	var ks: Array = st.get("_xn", {}).keys(); ks.sort()
+	var a := PackedFloat64Array(); var ix := PackedInt32Array()
+	for i in ks: ix.append(i); a.append(st.extra[i]); a.append(st.src2[i])
+	var h := HashingContext.new(); h.start(HashingContext.HASH_SHA256)
+	h.update("xn".to_utf8_buffer())
+	if not ix.is_empty(): h.update(ix.to_byte_array()); h.update(a.to_byte_array())
+	return h.finish().hex_encode().substr(0, 16)
+
+## E68: hlídání cyklu; vrací true = skončit (stav je kanonický člen cyklu: nejmenší otisk)
+static func cyc_step(st: Dictionary, cs: Dictionary) -> bool:
+	var sg := sig(st)
+	if cs.has("min"):
+		return sg == String(cs.min)
+	if cs.seen.has(sg):
+		var j: int = cs.seen[sg]
+		var m := sg
+		for k in range(j, cs.list.size()):
+			if String(cs.list[k]) < m: m = String(cs.list[k])
+		cs.min = m; cs.perioda = cs.list.size() - j
+		return sg == m
+	cs.seen[sg] = cs.list.size(); cs.list.append(sg)
+	return false
 static var FAST_POND := true   # E60: stejná tůň (stejné buňky) → propustnost dna (drain) se nepočítá znovu, materiály se výkopem nemění
 
 ## E60: jako tok._pond_dict(events = false) pro nezměněný tvar tůně; drain z minulého slovníku (stejné buňky, stejné pořadí součtu)
@@ -107,6 +136,7 @@ static func update(st: Dictionary, ch: PackedInt32Array, hv: PackedFloat64Array,
 		# jen fill změněných buněk (aby příští porovnání sedělo), tok beze změny
 		for i in ch: st.fill[i] = maxf(st.fill[i], st.hm[i])
 		if st.has("_pend"): st._pend.append_array(ch)   # E51b: tůně kolem se dopočítají při příštím přepočtu
+		KOLO = {"kola": 0, "zmena": 0.0, "ustaleno": true, "cyklus": 0}
 		return {"touched": 0, "window": 0, "expanded": 0, "ms": (Time.get_ticks_usec() - t0) / 1000.0, "dry": true, "cells": PackedInt32Array()}
 	var x0 := W; var x1 := 0; var y0 := H; var y1 := 0
 	for i in region:
@@ -220,10 +250,19 @@ static func update(st: Dictionary, ch: PackedInt32Array, hv: PackedFloat64Array,
 		if dlt > 1e-9 and st.to[i] >= 0: queued.erase(st.to[i]); T.RK._push(heap, -st.fill[st.to[i]], st.to[i])
 	PR.po_proudu = Time.get_ticks_usec()
 	# odtoky tůní: změněné přelivy přepočítat po proudu
-	for it in 4:
+	var kol := 0; var zm := 0.0; var ust := false
+	var cs := {"seen": {}, "list": []}
+	for it in KOLA:
+		var ox := {}
+		for i in st.get("_xn", {}): ox[i] = [st.extra[i], st.src2[i]]
 		var chg := _apply_drains(st, dirty)
+		kol += 1
 		dirty = PackedInt32Array()
-		if chg.is_empty(): break
+		if chg.is_empty(): ust = true; zm = 0.0; break
+		zm = 0.0
+		for i in chg:
+			var o: Array = ox.get(i, [0.0, 0.0])
+			zm = maxf(zm, maxf(absf(st.extra[i] - float(o[0])), absf(st.src2[i] - float(o[1]))))
 		for i in chg: T.RK._push(heap, -st.fill[i], i)
 		queued = {}
 		while not heap.is_empty():
@@ -232,6 +271,9 @@ static func update(st: Dictionary, ch: PackedInt32Array, hv: PackedFloat64Array,
 			queued[i] = true; touched[i] = true; dirty.append(i)
 			var dlt := T._cell(st, i)
 			if dlt > 1e-9 and st.to[i] >= 0: queued.erase(st.to[i]); T.RK._push(heap, -st.fill[st.to[i]], st.to[i])
+		if TOL > 0.0 and zm <= TOL: ust = true; break
+		if CYKLUS and cyc_step(st, cs): break
+	KOLO = {"kola": kol, "zmena": zm, "ustaleno": ust, "cyklus": int(cs.get("perioda", 0))}
 	PR.odtoky = Time.get_ticks_usec()
 	_ponds_cached(st, dirty)   # pw a seznam tůní kolem posledních změn
 	PR.tune = Time.get_ticks_usec()
