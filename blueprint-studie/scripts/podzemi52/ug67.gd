@@ -247,7 +247,7 @@ static func _pit_dist(c: Dictionary, p: Dictionary, qb: Dictionary, down, outs: 
 		var used := 0.0
 		for k in range(i, j):
 			var e: Array = lk[k]
-			if p.inp.has(int(e[0])): continue
+			if p.inp.has(int(e[0])): used += float(e[3]); continue   # E72 oprava: už odeslaný průsak do pásma, které pak padlo do pasti, se nevrací
 			var tg := float(e[1]) * take / dem if dem > 0.0 else 0.0
 			var d := tg - float(e[3])
 			if d > 1e-15:
