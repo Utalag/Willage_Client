@@ -42,6 +42,9 @@ static func solve(c: Dictionary, entries: PackedInt32Array, q: float, ex: Dictio
 	var pit_of := {}             # pásmo → index pasti
 	var pits := []               # {bands, level, q_in, leak, over, typ: "prah"|"vystup"|"nenaplni", tgt, out, merged}
 	var outs := {}               # "typ|sloupec" → [z, typ, sloupec, q, pásmo]
+	var qtot := {}               # celkový průtok mokrým pásmem (pro práh vykreslení větví)
+	var prune := bool(c.get("prune67", true)) and not trace
+	var pmin := float(c.get("prune67_min", 0.1))
 	var guard := 0
 	var gmax := 40 * NB + 1000
 	while down.size() > 0 and guard < gmax:
@@ -54,6 +57,7 @@ static func solve(c: Dictionary, entries: PackedInt32Array, q: float, ex: Dictio
 			_pit_add(c, pits, _root(pits, int(pit_of[b])), f, qb, down, outs)
 			continue
 		wet[b] = true
+		qtot[b] = float(qtot.get(b, 0.0)) + f
 		var lo: float = c.lo[b]
 		# 1) výstup ve výšce dna (stěna ostrova / nižší povrch souseda) – nejnižší, při shodě nejmenší sloupec
 		var bo := []
@@ -74,13 +78,26 @@ static func solve(c: Dictionary, entries: PackedInt32Array, q: float, ex: Dictio
 			cand.append([b2, w]); ws += w
 		if ws > 0.0:
 			cand.sort_custom(func(a, b3): return a[0] < b3[0])
+			if prune and cand.size() > 1:   # E67b p67_prune: větve s podílem < p67_prune_min → do nejsilnější větve (hmota zůstává)
+				var bi := 0
+				for i in cand.size():
+					if float(cand[i][1]) > float(cand[bi][1]): bi = i
+				var moved := 0.0
+				for i in cand.size():
+					if i != bi and f * float(cand[i][1]) / ws < pmin: moved += float(cand[i][1]); cand[i][1] = 0.0
+				cand[bi][1] = float(cand[bi][1]) + moved
 			for e in cand:
 				var b2: int = e[0]
+				if float(e[1]) <= 0.0: continue
 				qb[b2] = float(qb.get(b2, 0.0)) + f * float(e[1]) / ws; down.push(float(c.lo[b2]), b2)
 			continue
 		# 4) dno pasti
 		_pit_fill(c, pits, pit_of, b, f, qb, down, outs, ex)
-	return _result(c, entries, q, trace, wet, pits, outs, t0, guard >= gmax)
+	var r := _result(c, entries, q, trace, wet, pits, outs, t0, guard >= gmax)
+	var wq := PackedFloat64Array()
+	for b in r.wet67: wq.append(float(qtot.get(b, 0.0)) * (0.0 if trace else 1.0))
+	r.wetq67 = wq
+	return r
 
 ## kam steče voda z pásma s (bez průtoku): koncová pásma sestupu (dno pasti / pásmo s výstupem ve výšce dna)
 static func _probe(c: Dictionary, s: int, ex: Dictionary) -> Array:
