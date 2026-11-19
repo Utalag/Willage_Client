@@ -216,6 +216,12 @@ Skupiny: 1 Prototyp a buildy · 2 Terén a tvar · 3 Rozlišení bloku · 4 Ská
 - **Komplikace:** koryta jsou krátké úseky (malý svět, malá povodí). Krasová vyvěračka 0. Hráz na svahu tůň nevytvořila (potok ji obtekl). Podzemní tok vede zatím zjednodušeně k nejbližšímu okraji.
 - **Další krok:** Jan rozhodne, jak daleko vést podzemní tok (sledovat propustnou vrstvu?) a jestli má mít krasová vyvěračka vlastní pravidlo. Starší otevřené otázky (eroze po blocích vs hrubý svět, jádro hory přes šev, minerály z hrubého světa) zůstávají.
 
+### 🔄 Blueprint v3 / E68: jednotný krok hydrologie povrch + podzemí (2026-11-19 23:10 · `blueprint-studie/scripts/hydro68/hydro68.gd`, prototyp `scripts/voda/hydro68.gd`, příznak `p68_hydro`, větev `e68-orchestrator`)
+- **Směr:** TODO Voda E68: jedno místo pro smyčku povrch ↔ podzemí, společná bilance, otisk, kola do ustálení.
+- **Zlepšení:** smyčka tůň → průsak → pramen → tůň se dopočítá do ustálení (test: chyba bilance 61 % → 0, 13 kol). Opakující se stav se pozná (cyklus). Na ostrově stejný výsledek i čas, 0 neshod, stejný otisk v obou pořadích výkopů. Výchozí zapnuto.
+- **Komplikace:** na ostrově pramen přeskakuje mezi dvěma prohlubněmi (cyklus perioda 2, bilance −0,02 l/s) – nevyřešeno, jen nahlášeno. Pomalé smyčky potřebují desítky kol.
+- **Další krok:** pravidlo pro pramen v prohlubni, kterou sám zavodní; přítok tůně jako součet přítoků.
+
 ### 🔗 Blueprint v3 / E72: slučování drobných výstupů a průsaků podzemí pod prahem (2026-11-19 22:35 · `blueprint-studie/scripts/podzemi52/ug67.gd` příznaky `p72_slucovat`, `p72_prusak`, větev `e68-orchestrator`)
 - **Směr:** Jan 22:24: drobné průsaky a přelivy pod prahem slučovat (stávající `p67_prune_min` 0,1 l/s), nejen skrýt při kreslení.
 - **Zlepšení:** ostrov 150 → 6 výstupů (119 drobných → 0), Σ 4,10 l/s, bilance a symetrie přesné, výkopy 0 neshod, o 10–20 % rychlejší. Nalezena a opravena chyba E71: past znovu dělila už odeslaný průsak (+0,317 l/s navíc ve variantě bez okraje).

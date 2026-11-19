@@ -293,6 +293,71 @@ Výchozí: 800 kapek na blok, `ero_cap` 1,0, `ero_erode` 0,1, `ero_deposit_rate`
 - **Hypotéza:** parita bit po bitu (kopie se mění jen v cestách). Vložení bloku bp ≈ 0,25–0,4 s jako E49 detail
   (+ povrch a tráva prototypu ~0,4 s), voda ostrova 7 bloků (≈ 112 × 112 sloupců) plně < 1 s, kopání u vody desítky ms.
 
+## E68 výsledky (2026-11-19 23:10, větev `e68-orchestrator` z `e71-kapacita-dolu`, do main až po schválení Janem)
+- **Co je nového:** `scripts/hydro68/hydro68.gd` (prototyp `scripts/voda/hydro68.gd` přes `port_studie.py`):
+  - `full(st, kola, tol, cyklus)`: stejné kroky jako `tok.route` (priority-flood + D8 → odtoky tůní → podzemí → prameny →
+    znovu povrch), ale smyčka povrch ↔ podzemí běží do ustálení (změna `extra` / `src2` ≤ `p68_tol`), nejvýš `p68_kola`;
+  - hlídání cyklu: když se stav odtoků zopakuje (otisk `extra` / `src2`), skončí se v členu cyklu s nejmenším otiskem →
+    plný i lokální přepočet dojdou ke stejnému stavu bez ohledu na sudost počtu kol;
+  - `update(...)` = `tok60.update` s `KOLA` / `TOL` / `CYKLUS` (statické proměnné; výchozí 4 / 0 / vyp = bitově dosavadní);
+  - `bilance(st)`: zdroje, prameny z podzemí, okraj, ponory, odtok tůní, vstup / prameny / stěna / průsak podzemí,
+    do hloubky; chyby svět / povrch / dolů / nahoru / podzemí;
+  - `otisk(st)` (fill, eff, to, extra, src2, výstupy podzemí), `udalosti(st)` (plnění tůní seřazené podle času);
+  - prototyp `ostrov_voda.gd`: plný výpočet, výkop, krok R i `check_full` přes `p68_hydro` (`p68_kola` 64, `p68_tol` 1e-9),
+    `hydro()` pro hlášení; `voda_e66.gd` hlásí bilanci / otisk / kola a umí `--poradi=obracene`.
+  - Algoritmy povrchu a podzemí beze změny. `p68_hydro` výchozí **zapnuto** (viz rozhodnutí).
+- **Test smyčky (`tools/e68.gd`, mísa 15 × 15: tůň nad polopropustnou vrstvou (perm 0,2), pod ní písek, komín písku
+  na kopci nad tůní → pramen teče zpět do tůně, přeliv k okraji; kapacita odtoku tůně 0,742 l/s, průsak podzemí 0,0394):**
+
+  | zdroj | kola (4 = dosud) | přeliv k okraji | pramen | chyba bilance | kola do ustálení | přeliv | pramen | chyba | čas |
+  |---|---|---|---|---|---|---|---|---|---|
+  | 0,10 | 4, neustáleno | 0 | 0,242 | **0,0606 (61 %)** | 13 | 0,0606 | 0,703 | 1e-17 | 60–100 ms |
+  | 0,05 | 4, neustáleno | 0 | 0,042 | **0,0106 (21 %)** | 68 | 0,0106 | 0,703 | 8e-17 | 300–480 ms |
+  | 0,03 | 2 (auto) / 1 (pretok) | – | 0 | 0 | stejné | – | – | 0 | 10–16 ms |
+
+  Ustálený stav sedí s výpočtem ručně: přítok tůně = zdroj + kapacita − průsak (0,803), přeliv = zdroj − průsak.
+  Auto (E58) i pretok (E67) dávají stejný otisk; dva běhy stejný otisk.
+- **Startovní ostrov (prototyp `voda_e66`, 12 výkopů, kontrola proti plnému výpočtu po každém):**
+
+  | | výchozí hra (E58) vyp | výchozí hra zap | E67 vyp | E67 zap |
+  |---|---|---|---|---|
+  | prameny / vodopády / na okraji | 5 / 8 / 5 | stejné | 5 / 8 / 5 | stejné |
+  | Σ přes okraj (vodopády) | 9,652 l/s | stejné | 9,652 | stejné |
+  | tůně / koryto (sloupce) | 160 / 26 | stejné | 160 / 26 | stejné |
+  | výstupy podzemí | pramen 0,1815 v 18,5 m | stejné | stěna 0,0808 + 0,0808 | stejné |
+  | kola plného výpočtu | 4 (pevně) | 4, cyklus perioda 2 | 2 | 2, ustáleno |
+  | chyba bilance svět | −0,0200 l/s | −0,0200 (nahlášeno) | 0 | 0 |
+  | plný výpočet | 2,0–2,7 s | 2,3–2,5 s | 0,52–0,54 s | 0,59–0,60 s |
+  | výkop průměr (dvě pořadí) | 0,99 / 1,04 s | 0,99 / 1,00 s | 82 / 16 ms | 69 / 16 ms |
+  | neshody s plným výpočtem | 0 | 0 | 0 | 0 |
+  | otisk po výkopech, obě pořadí | 5284ab63f040e8e5 | stejný | 905eec578834b4ff | stejný |
+
+  Zapnuto = na ostrově bitově stejný výsledek jako dosud (otisk před i po výkopech). Přímé měření stejného stavu:
+  `tok.route` 2,28 / 2,46 s, `full` 4 kola 2,26 / 2,43 s, `full` 64 kol + cyklus 2,45 / 2,35 s (rozdíly jsou šum boxu).
+- **Nález na ostrově (výchozí hra):** smyčka povrch ↔ podzemí se neustálí, ale přepíná s periodou 2: pramen tělesa vyjde
+  střídavě ve sloupci 8781 a 9931; každý z nich zavodní jinou suchou prohlubeň (12170 / 17136), ta se v dalším kole stane
+  vstupem a její buňky se vyloučí z výstupů (`excl`), takže pramen skočí jinam. Dosavadní 4 kola tak končí náhodně „v půlce“
+  cyklu a bilance nesedí o 0,02 l/s (pramen 0,1732 vs odtok tůní 0,1532: vznikne voda navíc). E68 to teď pozná a nahlásí
+  (`cyklus: 2`), výsledek je stejný jako dřív. **Nevyřešeno.**
+- **Negativa:**
+  1. smyčka s velkou kapacitou odtoku a malým čistým zdrojem konverguje pomalu: kol ≈ kapacita / (zdroj − průsak)
+     (0,05 l/s → 68 kol, ~0,5 s); každé kolo = nové volání podzemí s jiným průtokem (v prototypu se registruje a opravuje
+     při každém výkopu). Limit 64 kol – pak `ustaleno: false` a chyba bilance v hlášení;
+  2. cyklus na ostrově (výše) – potřebuje pravidlo pro pramen v prohlubni, kterou sám plní (dnes `excl` = buňky tůní
+     vstupu); pravděpodobně dovolit pramen v tůni, kterou zavodnil jen on;
+  3. odtok tůně vidí jen nejsilnější přítok (`q = max ain` v tůni); pramen, který do tůně teče jinou větví než zdroj,
+     se do odtoku nepočítá (první verze testu: pramen tekl kolem odtoku tůně rovnou k okraji). Test proto má zdroj
+     pod pramenem;
+  4. E67 vrací `closed`, když voda z pasti celá prosákne (žádný výstup) → tok pak do podzemí nepustí nic (zdroj 0,03:
+     auto prosákne 0,03, pretok nechá 0,03 přetéct po povrchu). Rozdíl auto / pretok;
+  5. `tools/alg60_tok.gd` (parita tok60) bez dat cache `p52_cache` na boxu nespustí; parita ověřena otiskem v prototypu
+     (vyp / zap bitově stejné) a 0 neshodami.
+- **Rozhodnutí:** `p68_hydro` výchozí zapnuto: hra se nemění (stejný otisk), čas v šumu, 0 neshod, stejný otisk v obou
+  pořadích výkopů, smyčky se dopočítají do ustálení a cyklus se nahlásí. Vypnout jde `--bp.p68_hydro=false`.
+- **Doporučení do TODO:** (a) pravidlo pro pramen v prohlubni, kterou sám zavodní (cyklus ostrova); (b) přítok tůně =
+  součet všech přítoků, ne nejsilnější; (c) zrychlení pomalých smyček (skok o odhad přírůstku); (d) `closed` vs
+  „vše prosákne“ v E67.
+
 ## E72 slučování drobných výstupů a průsaků E71 pod prahem p67_prune_min (výsledky 2026-11-19 22:35, větev `e68-orchestrator`; Jan 22:24 „malé průsaky a přelivy pod prahem se slučují“, TODO Voda „Slučování drobných výstupů z pastí“)
 - **Pozn. k postupu:** Jan chtěl opravu hned, před E68; plán a výsledky jsou proto v jednom zápisu (napsáno po pokusu).
 - **Příčina (E71):** práh `p67_prune_min` (0,1 l/s, E67b) se použil jen při dělení do stran. Nové cesty E71 ho obcházely:
