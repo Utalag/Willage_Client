@@ -216,6 +216,12 @@ Skupiny: 1 Prototyp a buildy · 2 Terén a tvar · 3 Rozlišení bloku · 4 Ská
 - **Komplikace:** koryta jsou krátké úseky (malý svět, malá povodí). Krasová vyvěračka 0. Hráz na svahu tůň nevytvořila (potok ji obtekl). Podzemní tok vede zatím zjednodušeně k nejbližšímu okraji.
 - **Další krok:** Jan rozhodne, jak daleko vést podzemní tok (sledovat propustnou vrstvu?) a jestli má mít krasová vyvěračka vlastní pravidlo. Starší otevřené otázky (eroze po blocích vs hrubý svět, jádro hory přes šev, minerály z hrubého světa) zůstávají.
 
+### 🔄 Blueprint v3 / E76: voda po přenosu výřezu, uložené prameny (2026-11-20 01:40 · prototyp `scripts/voda/prenos76.gd`, `ostrov_voda.gd`, `ug_funkce.gd` (`bands76`), příznak `p76_prameny`, větev `e76-voda-po-prenosu`)
+- **Směr:** TODO Přenos terénu „Voda se nepřenáší hotová“ a nález E74: výřez nese zdroje, materiály a geometrii, voda se po vložení počítá znovu a události se plánují z ustáleného stavu.
+- **Zlepšení:** nové postavení i načtení po výkopech = lokální stav (0 neshod, uloženo 524 B). Výřez vložený vedle bloků i o ±4 buňky: lokální = plný, bilance 0, horniny 100 % jako v původu. Přeplánování 61–104 ms, jen ~380 z 1280 sloupců, stejný plán jako úplné.
+- **Komplikace:** bez uložených pramenů se prameny přesunou i jinde a lokální vložení chybí 1,5–3 l/s. Lokální vložení je jen o 10–40 % rychlejší (podzemí znovu celé). Otočení, kras E75 a obsazení E74 chybí.
+- **Další krok:** Jan rozhodne o zapnutí `p76_prameny`; podzemí po vložení stavět jen pro nový blok; datová smlouva výřezu s backendem.
+
 ### 🔄 Blueprint v3 / E73: opravy nálezů E68 (2026-11-19 23:45 · `blueprint-studie/scripts/voda/tok.gd`, `alg60/tok60.gd`, `hydro68/hydro68.gd`, `podzemi52/ug67.gd`, příznaky `p73_vyver`, `p73_pritok`, `p73_zrychleni`, `p73_prusak_tok`, větev `e73-nalezy-e68`)
 - **Směr:** TODO Voda: pramen ve vlastní tůni, přítok tůně jako součet, zrychlení pomalé smyčky, E67 „vše prosákne“ ≠ uzavřené.
 - **Zlepšení:** ostrov bez cyklu, bilance přesně 0 (dřív −0,02 l/s), 3 kola místo 4, výkop ⌀ 1,1 → 0,76 s, 0 neshod, stejný otisk v obou pořadích. Test smyčky 68 → 17 kol, pretok = auto. Opravena chyba plného výpočtu (chyběly prameny E67). Výchozí zapnuto.
