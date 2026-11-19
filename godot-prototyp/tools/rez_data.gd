@@ -69,6 +69,56 @@ func _init() -> void:
 		out.telesove_mat = bm
 		out.podzemi = {"sloupce": cols, "teles": c.n_comp, "nejvetsi_pasem": size.get(big, 0)}
 		c.clear()
+	# voda (volitelně, --voda=1): hladina po sloupcích ostrova z ostrov_voda.gd (stejný výpočet jako ve hře)
+	if _arg("voda", "0") == "1":
+		var OV = load("res://scripts/voda/ostrov_voda.gd")
+		var v = OV.new()
+		v.build(blocks)
+		var wv := {}
+		for i in v.W * v.H:
+			if v.island[i] == 0: continue
+			var lv: float = v.level(i)
+			if lv < 0.0: continue
+			var g := Vector2i(i / v.H, i % v.H) - T.OFF * 16
+			wv["%d,%d" % [g.x, g.y]] = [snappedf(lv, 0.001), 1 if v.is_pond(i) else 0]
+		out.voda = wv
+		# podzemní voda ze stavu řešiče podzemí (tok60 st.ug_bodies po doběhnutí kroků R): každé těleso, do kterého teče voda
+		# z tůní, má hladinu z_out a výstup (pramen na povrchu / okraj ostrova); výplň = pásma tělesa od spodku po hladinu
+		var gw := {}; var tv := []
+		if not v.ug.is_empty():
+			var n_st := 0
+			while v.pending() and n_st < 10000:
+				v.step(); n_st += 1
+			var UGF = load("res://scripts/voda/podzemi/ug_funkce.gd")
+			var c2: Dictionary = v.ug
+			var bodies: Array = v.st.get("ug_bodies", [])
+			var fill := {}   # sloupec řídicí mřížky → [[lo, top, index tělesa]]
+			for bi in bodies.size():
+				var r: Dictionary = bodies[bi]
+				var L: float = float(r.z_out)
+				for b in r.comp_ids:
+					var top := minf(float(c2.hi[b]), L)
+					if top - float(c2.lo[b]) <= 0.0001: continue
+					var cc: int = c2.bcol[b]
+					if not fill.has(cc): fill[cc] = []
+					fill[cc].append([snappedf(c2.lo[b], 0.001), snappedf(top, 0.001), bi])
+				var o := {"hladina": snappedf(L, 0.001), "uzavrene": bool(r.closed), "nenaplni": bool(r.never_fills),
+					"q_in": snappedf(float(r.q_in), 0.0001), "out_q": snappedf(float(r.out_q), 0.0001), "objem_m3": snappedf(float(r.volume_m3), 0.1),
+					"pasem": r.comp_ids.size(), "typ": "", "vystup": [], "rezim": String(r.get("rezim_tel", "")),
+					"prusak_q": snappedf(float(r.leak), 0.0001)}
+				if not r.out.is_empty():
+					var s_: int = int(r.out[4])
+					var g3 := Vector2i(s_ / v.H, s_ % v.H) - T.OFF * 16
+					o.typ = String(r.out[3]); o.vystup = [g3.x, g3.y, snappedf(float(r.out[0]), 0.001)]
+				tv.append(o)
+			for i in v.W * v.H:
+				if v.island[i] == 0: continue
+				var cc2: int = UGF.col_of(c2, i)
+				if not fill.has(cc2): continue
+				var g2 := Vector2i(i / v.H, i % v.H) - T.OFF * 16
+				gw["%d,%d" % [g2.x, g2.y]] = fill[cc2]
+		out.podzemni_voda = gw; out.telesa_voda = tv
+		v.dispose()
 	var path := _arg("out", "/tmp/rez_data.json")
 	FileAccess.open(path, FileAccess.WRITE).store_string(JSON.stringify(out))
 	print("rez_data: %d bloků → %s" % [blocks.size(), path])
