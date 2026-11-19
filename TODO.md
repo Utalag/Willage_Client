@@ -6,7 +6,7 @@ Seznam nápadů a úkolů, které čekají na Janovo rozhodnutí nebo na zařaze
 
 Nejdřív se dořeší všechno s vodou, pak další bloky. V rámci bloku se nepřeskakuje na jiné téma.
 
-1. **Voda:** ~~slučování~~ → ~~E68~~ → nálezy E68 (pramen v prohlubni, součet přítoků, pomalé smyčky, zavřené vs prosákne) → hladina podzemní vody jako plocha `gw` → eroze v podzemí (kras) → voda po přenosu výřezu se přepočítá → nakonec přepnout čas hry na 1 herní den = 1 h (`p71_cas` = 24, Jan 22:19, až po testech s vodou).
+1. **Voda:** ~~slučování~~ → ~~E68~~ → ~~nálezy E68 (E73)~~ → hladina podzemní vody jako plocha `gw` → eroze v podzemí (kras) → voda po přenosu výřezu se přepočítá → nakonec přepnout čas hry na 1 herní den = 1 h (`p71_cas` = 24, Jan 22:19, až po testech s vodou).
 2. **Model světa a kopání:** překryv změn po kopání + hash → kde končí funkce a pásma → tenké vrstvy a převzorkování → determinismus celého světa → rešerše implicitní geologie.
 3. **Geologie bloků a přenos výřezu:** otočení výřezu po 90° → jádro vyzdvižené hory přes více bloků → `TerrainSource` a datový kontrakt (jen návrhy, s Willage-backend).
 4. **Měřítko a zobrazení:** oddělené typy jednotek v kódu → plán vzorkování a LOD (test 3 × 3 km) → průhlednost překážek v izometrii → test měřítka v izometrii a blok 128 m → výkon na telefonu.
@@ -24,10 +24,12 @@ Nejdřív se dořeší všechno s vodou, pak další bloky. V rámci bloku se ne
 - [x] **Test symetrie a referenční test** – hotovo v E69 (tag `e69-symetrie`, větev `e69-symetrie-test`, nesloučeno). Bilance přesná (chyba ≤ 1e-12 l/s). Nalezena a opravena nesymetrie při shodných váhách větví (`p69_remizy`, rovný díl).
 - [x] **Omezení průtoku dolů podle propustnosti vrstvy** – hotovo v E71 (tag `e71-kapacita`, větev `e71-kapacita-dolu`). Přepínače `p71_kapacita` a `p71_prusak` zapnuté ve výchozím stavu (jen nový výpočet podzemí E67), čas `p71_cas` = 144 (1 herní den = 10 min). Referenční sloupec: z každé vrstvy 0,2 l/s; kupole průsak 0,163 l/s (E58 0,176); ostrov 150 výstupů, kopnutí ~70 ms, 0 neshod.
 - [x] **Slučování drobných výstupů z pastí** – hotovo v E72 (tag `e72-slucovani`): stejný práh `p67_prune_min` 0,1 l/s i pro cesty z E71 (`p72_slucovat`, `p72_prusak`); ostrov 150 → 6 výstupů, Σ 4,10 l/s zachováno; opravena chyba E71 (+0,317 l/s ve variantě přetok bez okraje).
-- [ ] **Pramen v prohlubni, kterou sám zavodní** (nález E68): na ostrově cyklus s periodou 2, bilance −0,02 l/s.
-- [ ] **Odtok tůně ze součtu všech přítoků**, ne jen z nejsilnějšího (nález E68).
-- [ ] **Zrychlit pomalé smyčky** povrch↔podzemí (desítky kol, nález E68).
-- [ ] **E67: rozlišit „zavřené“ a „vše prosákne“** (nález E68), jinak povrch do podzemí nic nepustí.
+- [x] **Pramen v prohlubni, kterou sám zavodní** – E73 (`p73_vyver`), ostrov bez cyklu, bilance 0.
+- [x] **Odtok tůně ze součtu všech přítoků** – E73 (`p73_pritok`).
+- [x] **Zrychlit pomalé smyčky** – E73 (`p73_zrychleni`), 68 → 17 kol.
+- [x] **E67: rozlišit „zavřené“ a „vše prosákne“** – E73 (`p73_prusak_tok`).
+  - E73: tag `e73-nalezy`, větev `e73-nalezy-e68`, výchozí zapnuto, čeká na Janovo schválení a sloučení. Opravena i chyba: plný výpočet bral z E67 jen hlavní výstup.
+- [ ] **Měřit objem vody v `voda_e66`** (drobnost z E73).
 - [ ] **Jan rozhodne:** slučovat i průsak tekoucí vody (`p72_prusak`)? omezit vzdálenost slučování výstupů (dnes až 19 sloupců)?
 
 ## Architektura světa
