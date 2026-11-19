@@ -25,6 +25,39 @@ static func _below(c: Dictionary, b: int) -> int:
 		if float(c.lo[b2]) < lo - E and float(c.hi[b2]) >= lo - E and (best < 0 or float(c.hi[b2]) > float(c.hi[best])): best = b2
 	return best
 
+## E71: hydraulická vodivost K (m/s) z propustnosti tabulky (mapování tabulky v4: perm = (log10 K + 9) / 6)
+static func _kms(c: Dictionary, b: int, t: Dictionary) -> float:
+	return pow(10.0, 6.0 * _perm(c, b, t) - 9.0)
+
+## E71: zbývající kapacita rozhraní b → bl dolů (l/s): K_eff · A · spád 1 · 1000 · p71_cas; K_eff = K spodní vrstvy (pomer)
+## nebo harmonický průměr K obou (p70_prumer = harmonicky)
+static func _caprem(c: Dictionary, b: int, bl: int) -> float:
+	var K: Dictionary = c._k71
+	var k2 := _kms(c, bl, K.t)
+	if bool(K.harm):
+		var k1 := _kms(c, b, K.t); k2 = 2.0 * k1 * k2 / (k1 + k2)
+	return maxf(k2 * float(K.sc) - float(K.capu.get(b, 0.0)), 0.0)
+
+## E71 P: průsak protékané vody dnem do polopropustného materiálu pod pásmem (wq · A jako dno pasti v F._leak), nejvýš f
+static func _seep(c: Dictionary, b: int, f: float) -> float:
+	var K: Dictionary = c._k71
+	var cc: int = c.bcol[b]; var lo: float = c.lo[b]
+	for u in range(c.cs[cc], c.cs[cc + 1]):
+		if u == b or absf(float(c.hi[u]) - lo) >= E or c.body[u] == 1: continue
+		var w: float = c.wq[u]
+		if w <= 0.0: continue
+		var s := minf(f, w * float(c.A) - float(K.lku.get(b, 0.0)))
+		if s <= 0.0: return f
+		K.lku[b] = float(K.lku.get(b, 0.0)) + s; K.wl = float(K.wl) + s
+		return f - s
+	return f
+
+## E71: přičte průtok a vloží do haldy jen tehdy, když tam pásmo ještě nečeká (bez duplicit → méně kroků sestupu)
+static func _qpush(c: Dictionary, qb: Dictionary, down, g: int, d: float) -> void:
+	var was := float(qb.get(g, 0.0))
+	qb[g] = was + d
+	if was <= 0.0: down.push(float(c.lo[g]), g)
+
 static func solve(c: Dictionary, entries: PackedInt32Array, q: float, ex: Dictionary) -> Dictionary:
 	var t0 := Time.get_ticks_usec()
 	var t := VS.table()
@@ -41,16 +74,28 @@ static func solve(c: Dictionary, entries: PackedInt32Array, q: float, ex: Dictio
 	var wet := {}                # mokrá pásma sestupu (film u dna)
 	var pit_of := {}             # pásmo → index pasti
 	var pits := []               # {bands, level, q_in, leak, over, typ: "prah"|"vystup"|"nenaplni", tgt, out, merged}
-	var outs := {}               # "typ|sloupec" → [z, typ, sloupec, q, pásmo]
+	var outs := {}               # "typ|sloupec" (E71 K: "|z" navíc) → [z, typ, sloupec, q, pásmo]
 	var qtot := {}               # celkový průtok mokrým pásmem (pro práh vykreslení větví)
 	var prune := bool(c.get("prune67", true)) and not trace
 	var pmin := float(c.get("prune67_min", 0.1))
 	var remizy := bool(c.get("remizy69", true))
 	var harm := String(c.get("prumer70", "pomer")) == "harmonicky"
+	var kap := bool(c.get("kap71", false)) and not trace     # E71 K: kapacita průtoku dolů
+	var prus := bool(c.get("prus71", false)) and not trace   # E71 P: průsak protékané vody
+	if kap: outs["_z71"] = true
+	c._k71 = {"on": kap, "harm": harm, "sc": 1000.0 * float(c.get("cas71", 144.0)) * float(c.A), "capu": {}, "lku": {}, "wl": 0.0, "t": t, "prus": prus}
 	var guard := 0
 	var gmax := 40 * NB + 1000
-	while down.size() > 0 and guard < gmax:
+	var defer := []              # E71 K: dna pastí ve stejné výšce se zakládají až po ostatních pásmech té výšky (nezávislost na id)
+	var deflo := 0.0
+	while (down.size() > 0 or not defer.is_empty()) and guard < gmax:
 		guard += 1
+		if not defer.is_empty() and (down.size() == 0 or down.top_v() < deflo - E):
+			for d in defer:
+				if pit_of.has(int(d[0])): _pit_add(c, pits, _root(pits, int(pit_of[int(d[0])])), float(d[1]), qb, down, outs)
+				else: _pit_fill(c, pits, pit_of, int(d[0]), float(d[1]), qb, down, outs, ex)
+			defer = []
+			continue
 		var b := down.pop()
 		var f := float(qb.get(b, 0.0))
 		if f <= 1e-12: qb[b] = 0.0; continue
@@ -61,15 +106,24 @@ static func solve(c: Dictionary, entries: PackedInt32Array, q: float, ex: Dictio
 		wet[b] = true
 		qtot[b] = float(qtot.get(b, 0.0)) + f
 		var lo: float = c.lo[b]
+		var bl := _below(c, b)
+		if kap and bl >= 0:   # E71 K: dolů nejvýš zbývající kapacita rozhraní, zbytek dál jako dosud (výstup / do stran / past)
+			var dn := minf(f, _caprem(c, b, bl))
+			if dn > 0.0:
+				c._k71.capu[b] = float(c._k71.capu.get(b, 0.0)) + dn
+				_qpush(c, qb, down, bl, dn)
+				f -= dn
+			if f <= 1e-12: continue
 		# 1) výstup ve výšce dna (stěna ostrova / nižší povrch souseda) – nejnižší, při shodě nejmenší sloupec
 		var bo := []
 		for o in F._outs(c, b, ex):
 			if float(o[0]) <= lo + E and (bo.is_empty() or float(o[0]) < float(bo[0]) - E or (absf(float(o[0]) - float(bo[0])) <= E and int(o[2]) < int(bo[2]))): bo = o
 		if not bo.is_empty():
-			_out_add(outs, bo, f, b); continue
+			if prus: f = _seep(c, b, f)
+			if f > 1e-12: _out_add(outs, bo, f, b)
+			continue
 		# 2) dolů
-		var bl := _below(c, b)
-		if bl >= 0:
+		if bl >= 0 and not kap:
 			qb[bl] = float(qb.get(bl, 0.0)) + f; down.push(float(c.lo[bl]), bl); continue
 		# 3) do stran do pásem s nižším dnem, váha perm × výška překryvu
 		var cand := []; var ws := 0.0
@@ -81,6 +135,9 @@ static func solve(c: Dictionary, entries: PackedInt32Array, q: float, ex: Dictio
 			if harm: k2 = 2.0 * k1 * k2 / (k1 + k2)   # E70: propustnost rozhraní = harmonický průměr obou materiálů
 			var w := k2 * maxf(float(nb[2]) - float(nb[1]), 0.01)
 			cand.append([b2, w]); ws += w
+		if ws > 0.0 and prus:
+			f = _seep(c, b, f)
+			if f <= 1e-12: continue
 		if ws > 0.0:
 			cand.sort_custom(func(a, b3): return a[0] < b3[0])
 			if prune and cand.size() > 1:   # E67b p67_prune: větve s podílem < p67_prune_min → do nejsilnější větve (hmota zůstává)
@@ -101,11 +158,15 @@ static func solve(c: Dictionary, entries: PackedInt32Array, q: float, ex: Dictio
 				qb[b2] = float(qb.get(b2, 0.0)) + f * float(e[1]) / ws; down.push(float(c.lo[b2]), b2)
 			continue
 		# 4) dno pasti
+		if kap: defer.append([b, f]); deflo = lo; continue
 		_pit_fill(c, pits, pit_of, b, f, qb, down, outs, ex)
+	outs.erase("_z71")
 	var r := _result(c, entries, q, trace, wet, pits, outs, t0, guard >= gmax)
 	var wq := PackedFloat64Array()
 	for b in r.wet67: wq.append(float(qtot.get(b, 0.0)) * (0.0 if trace else 1.0))
 	r.wetq67 = wq
+	r.leak67w = float(c._k71.wl)
+	c.erase("_k71")
 	return r
 
 ## kam steče voda z pásma s (bez průtoku): koncová pásma sestupu (dno pasti / pásmo s výstupem ve výšce dna)
@@ -137,6 +198,7 @@ static func _root(pits: Array, i: int) -> int:
 
 static func _out_add(outs: Dictionary, o: Array, f: float, b: int) -> void:
 	var k := "%s|%d" % [String(o[1]), int(o[2])]
+	if outs.has("_z71"): k += "|%.4f" % float(o[0])   # E71 K: výstupy ve stejném sloupci v různé výšce (vrstvy) zvlášť
 	if not outs.has(k): outs[k] = [float(o[0]), String(o[1]), int(o[2]), 0.0, b]
 	outs[k][3] = float(outs[k][3]) + f
 
@@ -148,8 +210,11 @@ static func _pit_out(outs: Dictionary, p: Dictionary, f: float) -> void:
 ## další průtok do už vyřešené pasti: přebytek nad průsakem jde za práh / do výstupu
 static func _pit_add(c: Dictionary, pits: Array, i: int, f: float, qb: Dictionary, down, outs: Dictionary) -> void:
 	var p: Dictionary = pits[i]
+	if bool(c._k71.on):
+		p.q_in = float(p.q_in) + f; _pit_dist(c, p, qb, down, outs); return
 	var old := maxf(float(p.q_in) - float(p.leak), 0.0)
 	p.q_in = float(p.q_in) + f
+	p.lused = minf(float(p.q_in), float(p.leak))
 	var dlt := maxf(float(p.q_in) - float(p.leak), 0.0) - old
 	if dlt <= 1e-12: return
 	if p.typ == "nenaplni": p.typ = String(p.get("typ_full", "uzavrena"))
@@ -158,15 +223,64 @@ static func _pit_add(c: Dictionary, pits: Array, i: int, f: float, qb: Dictionar
 		var g: int = p.tgt
 		qb[g] = float(qb.get(g, 0.0)) + dlt; down.push(float(c.lo[g]), g)
 
+## E71 K: svislý spoj člena pasti id dolů (pásmo tělesa pod ním) = průsak pasti, ne práh; [bl, kapacita, klíč floodu, odesláno]
+static func _link_add(c: Dictionary, p: Dictionary, id: int, key: float) -> int:
+	var bl := _below(c, id)
+	if bl < 0: return -1
+	var cap := _caprem(c, id, bl)
+	if cap > 0.0: p.links.append([bl, cap, key, 0.0])
+	return bl
+
+## E71 K: rozdělení přítoku pasti: průsaky dolů po skupinách klíče floodu (nejníž první, uvnitř skupiny poměrně → symetrie),
+## pak průsak do okolí (F._leak), zbytek přetéká výstupem / prahem. Už odeslané se nevrací (přítok jen roste).
+static func _pit_dist(c: Dictionary, p: Dictionary, qb: Dictionary, down, outs: Dictionary) -> void:
+	var lk: Array = p.links
+	lk.sort_custom(func(a, b): return float(a[2]) < float(b[2]) - E or (absf(float(a[2]) - float(b[2])) <= E and int(a[0]) < int(b[0])))
+	var rem := float(p.q_in)
+	var i := 0
+	while i < lk.size():
+		var j := i; var dem := 0.0
+		while j < lk.size() and absf(float(lk[j][2]) - float(lk[i][2])) <= E:
+			if not p.inp.has(int(lk[j][0])): dem += float(lk[j][1])
+			j += 1
+		var take := minf(maxf(rem, 0.0), dem)
+		var used := 0.0
+		for k in range(i, j):
+			var e: Array = lk[k]
+			if p.inp.has(int(e[0])): continue
+			var tg := float(e[1]) * take / dem if dem > 0.0 else 0.0
+			var d := tg - float(e[3])
+			if d > 1e-15:
+				_qpush(c, qb, down, int(e[0]), d); e[3] = tg
+			used += float(e[3])
+		rem -= used
+		i = j
+	rem = maxf(rem, 0.0)
+	p.lused = minf(rem, float(p.leak)); rem -= float(p.lused)
+	var d2 := rem - float(p.get("osent", 0.0))
+	if rem <= 1e-12:
+		if p.typ != "nenaplni": p.typ_full = p.typ; p.typ = "nenaplni"
+		return
+	if p.typ == "nenaplni": p.typ = String(p.get("typ_full", "uzavrena"))
+	if d2 <= 1e-12: return
+	p.osent = rem
+	if not p.out.is_empty(): _pit_out(outs, p, d2)
+	elif int(p.tgt) >= 0:
+		var g2: int = p.tgt
+		_qpush(c, qb, down, g2, d2)
+
 ## priority-flood ze dna pasti b (jako F._solve_preliv), práh = pásmo s nižším dnem, dosažené shora
 static func _pit_fill(c: Dictionary, pits: Array, pit_of: Dictionary, b: int, f: float, qb: Dictionary, down, outs: Dictionary, ex: Dictionary) -> void:
 	var NB: int = c.lo.size()
 	var cur := pits.size()
-	var p := {"bands": PackedInt32Array(), "level": float(c.lo[b]), "q_in": f, "leak": 0.0, "typ": "", "tgt": -1, "out": [], "merged": -1, "floor": float(c.lo[b])}
+	var p := {"bands": PackedInt32Array(), "level": float(c.lo[b]), "q_in": f, "leak": 0.0, "typ": "", "tgt": -1, "out": [], "merged": -1, "floor": float(c.lo[b]),
+		"links": [], "osent": 0.0, "lused": 0.0}
+	var kap := bool(c._k71.on)
 	pits.append(p)
 	var h := HP.new()
 	var od := []                 # výstupy jako položky haldy (id NB + i)
 	var inp := {}
+	p.inp = inp
 	h.push(-float(c.lo[b]), b)
 	var L := float(c.lo[b])
 	while h.size() > 0:
@@ -190,13 +304,15 @@ static func _pit_fill(c: Dictionary, pits: Array, pit_of: Dictionary, b: int, f:
 				if key >= float(pits[j].level) - E:   # spojení s dřívější pastí: její pásma do této, hladina stoupá dál
 					var pj: Dictionary = pits[j]
 					pj.merged = cur
-					p.q_in = float(p.q_in) + float(pj.q_in) - maxf(float(pj.q_in) - float(pj.leak), 0.0)
+					if kap: p.q_in = float(p.q_in) + float(pj.q_in) - float(pj.osent); p.links.append_array(pj.links)   # E71: odeslané průsaky jdou s pastí
+					else: p.q_in = float(p.q_in) + float(pj.q_in) - maxf(float(pj.q_in) - float(pj.leak), 0.0)
 					for b2 in pj.bands:
 						inp[b2] = true; pit_of[b2] = cur; p.bands.append(b2)
 						for o in F._outs(c, b2, ex):
 							od.append(o); h.push(-maxf(key, float(o[0])), NB + od.size() - 1)
+						var bl2 := _below(c, b2) if kap else -1
 						for nb in F._nbrs(c, b2):
-							if not inp.has(int(nb[0])): h.push(-maxf(key, float(nb[1])), int(nb[0]))
+							if not inp.has(int(nb[0])) and int(nb[0]) != bl2: h.push(-maxf(key, float(nb[1])), int(nb[0]))
 					continue
 				# práh do pasti s vyšší hladinou: přeteče do ní – ledaže ta přetéká zpět sem (vzájemný přeliv → spojit)
 				var back := false
@@ -206,13 +322,15 @@ static func _pit_fill(c: Dictionary, pits: Array, pit_of: Dictionary, b: int, f:
 				if back:
 					var pj2: Dictionary = pits[j]
 					pj2.merged = cur
-					p.q_in = float(p.q_in) + float(pj2.q_in) - maxf(float(pj2.q_in) - float(pj2.leak), 0.0)
+					if kap: p.q_in = float(p.q_in) + float(pj2.q_in) - float(pj2.osent); p.links.append_array(pj2.links)   # E71: odeslané průsaky jdou s pastí
+					else: p.q_in = float(p.q_in) + float(pj2.q_in) - maxf(float(pj2.q_in) - float(pj2.leak), 0.0)
 					for b2 in pj2.bands:
 						inp[b2] = true; pit_of[b2] = cur; p.bands.append(b2)
 						for o in F._outs(c, b2, ex):
 							od.append(o); h.push(-maxf(key, float(o[0])), NB + od.size() - 1)
+						var bl2 := _below(c, b2) if kap else -1
 						for nb in F._nbrs(c, b2):
-							if not inp.has(int(nb[0])): h.push(-maxf(key, float(nb[1])), int(nb[0]))
+							if not inp.has(int(nb[0])) and int(nb[0]) != bl2: h.push(-maxf(key, float(nb[1])), int(nb[0]))
 					L = maxf(L, float(pj2.level))
 					continue
 				p.tgt = id; p.typ = "prah"; L = maxf(L, key); break
@@ -226,13 +344,16 @@ static func _pit_fill(c: Dictionary, pits: Array, pit_of: Dictionary, b: int, f:
 		L = maxf(L, key)
 		for o in F._outs(c, id, ex):
 			od.append(o); h.push(-maxf(key, float(o[0])), NB + od.size() - 1)
+		var bl3 := _link_add(c, p, id, key) if kap else -1   # E71 K: spoj dolů = průsak pasti, ne práh
 		for nb in F._nbrs(c, id):
-			if not inp.has(int(nb[0])): h.push(-maxf(key, float(nb[1])), int(nb[0]))
+			if not inp.has(int(nb[0])) and int(nb[0]) != bl3: h.push(-maxf(key, float(nb[1])), int(nb[0]))
 	if p.typ == "": p.typ = "uzavrena"
 	p.level = L
 	var lk := 0.0
 	for b2 in p.bands: lk += F._leak(c, b2, L)
 	p.leak = lk
+	if kap: _pit_dist(c, p, qb, down, outs); return
+	p.lused = minf(float(p.q_in), lk)
 	var over := maxf(float(p.q_in) - lk, 0.0)
 	if over <= 0.0: p.typ_full = p.typ; p.typ = "nenaplni"; return
 	if not p.out.is_empty(): _pit_out(outs, p, over)
@@ -241,7 +362,7 @@ static func _pit_fill(c: Dictionary, pits: Array, pit_of: Dictionary, b: int, f:
 		qb[g] = float(qb.get(g, 0.0)) + over; down.push(float(c.lo[g]), g)
 
 static func _result(c: Dictionary, entries: PackedInt32Array, q: float, trace: bool, wet: Dictionary, pits: Array, outs: Dictionary, t0: int, cut: bool) -> Dictionary:
-	var comp := PackedInt32Array(); var vol := 0.0; var lake := 0.0; var leak := 0.0; var zmin := INF
+	var comp := PackedInt32Array(); var vol := 0.0; var lake := 0.0; var leak := float(c._k71.wl); var zmin := INF
 	var pl := []
 	var qs := 1.0 if not trace else 0.0
 	for i in pits.size():
@@ -256,10 +377,14 @@ static func _result(c: Dictionary, entries: PackedInt32Array, q: float, trace: b
 				v += pa * w
 				if int(c.mat[b]) == 0: lake += pa * w
 				var cc: int = c.bcol[b]; c.wt[cc] = maxf(c.wt[cc], top)
-		vol += v; leak += float(p.leak) * qs
-		var net := float(p.q_in) - float(p.leak)
+		var e71 := bool(c._k71.on) or bool(c._k71.prus)
+		var sent := 0.0
+		for e in p.get("links", []): sent += float(e[3])
+		vol += v; leak += (float(p.get("lused", 0.0)) if e71 else float(p.leak)) * qs
+		var net := float(p.q_in) - (float(p.lused) + sent if bool(c._k71.on) else float(p.leak))
 		pl.append({"hladina": float(p.level), "dno": float(p.floor), "pasem": p.bands.size(), "objem_m3": v, "typ": String(p.typ),
-			"q_in": float(p.q_in) * qs, "cas_s": (v / (net * float(c.q_to_m3))) if net > 0.0 and not trace else -1.0, "bands": p.bands})
+			"q_in": float(p.q_in) * qs, "cas_s": (v / (net * float(c.q_to_m3))) if net > 0.0 and not trace else -1.0, "bands": p.bands,
+			"prusak_pouzit": float(p.get("lused", 0.0)) * qs, "dolu": sent * qs})
 	var ol := []
 	for k in outs: ol.append(outs[k])
 	ol.sort_custom(func(a, b): return float(a[3]) > float(b[3]) or (float(a[3]) == float(b[3]) and int(a[2]) < int(b[2])))
