@@ -1,0 +1,12 @@
+
+permutace (6 pořadí): K 1 různých otisků ["f4abdd74a13b4365", "f4abdd74a13b4365", "f4abdd74a13b4365", "f4abdd74a13b4365", "f4abdd74a13b4365", "f4abdd74a13b4365"] | E 2 různých ["378d114260ca1410", "706f126e48c1e311", "706f126e48c1e311", "706f126e48c1e311", "706f126e48c1e311", "706f126e48c1e311"]
+výkopy: [[6821, 149.193069458008], [8356, 148.807418823242], [6312, 148.329925537109]] sloupce [425, 553, 426]
+a,b sync           kroků R   0 | líných stavů na konci 2 | kontroly [hotové výkopy, otisk výsledků+stavů, shoda s čerstvým] [["[0]", "da76dafbfaa2", true], ["[0, 1]", "524b67f9864a", true]]
+b,a sync           kroků R   0 | líných stavů na konci 2 | kontroly [hotové výkopy, otisk výsledků+stavů, shoda s čerstvým] [["[1]", "e82563aebddc", true], ["[1, 0]", "524b67f9864a", true]]
+a,1 krok,b R       kroků R  79 | líných stavů na konci 2 | kontroly [hotové výkopy, otisk výsledků+stavů, shoda s čerstvým] [["[0]", "da76dafbfaa2", true], ["[0]", "da76dafbfaa2", true], ["[0, 1]", "524b67f9864a", true]]
+b,a hned R         kroků R  16 | líných stavů na konci 2 | kontroly [hotové výkopy, otisk výsledků+stavů, shoda s čerstvým] [["[1, 0]", "524b67f9864a", true]]
+a dokončit,b R     kroků R  78 | líných stavů na konci 2 | kontroly [hotové výkopy, otisk výsledků+stavů, shoda s čerstvým] [["[0]", "da76dafbfaa2", true], ["[0]", "da76dafbfaa2", true], ["[0, 1]", "524b67f9864a", true]]
+a,b,3 kroky,c R    kroků R  19 | líných stavů na konci 2 | kontroly [hotové výkopy, otisk výsledků+stavů, shoda s čerstvým] [["[0]", "da76dafbfaa2", true], ["[0, 1, 2]", "b39d7009d11d", true]]
+c,a,1 krok,b R     kroků R  79 | líných stavů na konci 2 | kontroly [hotové výkopy, otisk výsledků+stavů, shoda s čerstvým] [["[2]", "a9609c8fa3c8", <null>], ["[2, 0]", "ef65517bf62a", <null>], ["[2, 0]", "ef65517bf62a", <null>], ["[2, 0, 1]", "b39d7009d11d", true]]
+b,c,a sync         kroků R   0 | líných stavů na konci 2 | kontroly [hotové výkopy, otisk výsledků+stavů, shoda s čerstvým] [["[1]", "e82563aebddc", true], ["[1, 2]", "a4011e4a3a56", <null>], ["[1, 2, 0]", "b39d7009d11d", true]]
+čerstvé: { "a": "c21e93c29f92", "b": "9ce2e47d505b", "ab": "605d4aedc6c0", "abc": "db32581550af" }

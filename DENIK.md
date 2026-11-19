@@ -216,6 +216,22 @@ Skupiny: 1 Prototyp a buildy · 2 Terén a tvar · 3 Rozlišení bloku · 4 Ská
 - **Komplikace:** koryta jsou krátké úseky (malý svět, malá povodí). Krasová vyvěračka 0. Hráz na svahu tůň nevytvořila (potok ji obtekl). Podzemní tok vede zatím zjednodušeně k nejbližšímu okraji.
 - **Další krok:** Jan rozhodne, jak daleko vést podzemní tok (sledovat propustnou vrstvu?) a jestli má mít krasová vyvěračka vlastní pravidlo. Starší otevřené otázky (eroze po blocích vs hrubý svět, jádro hory přes šev, minerály z hrubého světa) zůstávají.
 
+### 🧱 Blueprint v3 / E64: sestup bez závislosti na pořadí, oprava se zárukou shody, kroky R, P z paměti (2026-11-19 13:50 · `blueprint-studie/scripts/alg64/`, shot `64_podzemi.png`)
+- **Směr:** Jan 12:36 „Jon určitě to zkus.“ Vychází z rešerše Gemini. K = halda (hodnota, id), ostrá zlepšení bez ε.
+  I = oprava přes všechny hrany do S. R = kroky po počtu operací. M = test více hráčů. V = komprese sloupců.
+- **Zlepšení:**
+  - Shoda s plným přepočtem je dokázaná (náčrt v PROP E64) a ověřená otisky: 3 × 20 výkopů, 0 neshod.
+  - Fuzz pořadí: K má 1 otisk, E63 E 2 různé.
+  - Dva až tři hráči v libovolném pořadí, i během kroků R: 20 / 20 kontrol = čerstvý výpočet, na konci stejný otisk.
+  - Průměr výkopu 94 / 111 / 90 → 27 / 20 / 38 ms (K+I+P). Výkop z E63 za 461 ms trvá 10 ms.
+  - Server jen za podzemí 7,5 % → 3,2 % jádra (50 × 20/min).
+  - R s rozpočtem 2k drží nejhorší výkop pod 16 ms na krok (s64, 158 kroků).
+- **Komplikace:**
+  - Kmenový výkop (S 30–45 tisíc pásem) trvá bez R 0,4–0,6 s, víc než v E63.
+  - Stav sestupu má 40 MB místo 16 MB.
+  - Okamžitá část R (prameny u výkopu hned) není. Zveřejní se až celý výsledek.
+- **Další krok:** vážit operace floodu v rozpočtu R, okamžitá část R, snížit režii kroku 0 (ug58.edit, ~10–25 ms).
+
 ### 🧱 Blueprint v3 / E63: přeliv po výkopu 2,3 s → 0,09 s, lokální oprava sestupu (2026-11-19 09:45 · `blueprint-studie/scripts/alg58/ug58.gd` příznaky E, I, shot `63_podzemi.png`)
 - **Směr:** Jan 08:39 „Zkus tu optimalizaci o které jsi psal.“ Nejdřív profil:
   - 98 % času je kapilární sestup od vstupů (~118 000 pásem).
@@ -651,7 +667,10 @@ Godot .NET (nebo GDExtension) a stavba chunků ve vlákně, napojení bloků na 
 - **Dlouhé žíhání stébel na procedurální louce (14:40):** čárky přes ~0,3 buňky po směru větru vypadaly z izometrické kamery jako déšť. Zkráceno na ~0,15 buňky a slabší.
 
 ## 7 Výkon
-- (zatím nic)
+- **E64 V: svislá komprese pásem podzemí (2026-11-19):** jen 1,45 % pásem tělesa jsou články svislých řetězců bez bočních
+  sousedů. Plný sestup ušetří 85 výběrů z 207 410 a čas se nezlepší. Odhad Gemini (10⁵ → 10⁴) na našich datech neplatí.
+- **E64 prořezání podstromu při opravě I:** ponechat potomka s jinou bezpečnou oporou. Kmenový výkop zmenší jen
+  47 393 → 44 822 pásem, protože hodnoty se tam opravdu mění. Kód nechávám (je dokázaně správný), přínos je malý.
 
 ---
 
@@ -721,4 +740,8 @@ Nevyzkoušené nápady na zrychlení. Stav: 💡 návrh · 🔬 ověřuje se · 
 - 💡 **Voda jen v aktivních buňkách a uspávání chunků (16:05, `voda-studie/`):** teď se každý tik projdou všechny buňky (blok 16 × 16 × 64 = 4,6–4,8 ms/tik v GDScriptu). Seznam buněk s vodou a „ustálené“ chunky 8³ přeskakovat jako Noita [13][14]; odhad < 1 ms na blok.
 - 💡 **Voda: kontrolu bilance jen v ladění:** dva součty všech buněk za tik stojí ~0,37 ms z 4,7 ms (8 %); na serveru počítat bilanci jen z přítoků a odtoků.
 - 💡 **Voda v C# / na serveru v celých číslech:** fixed-point objem (např. setiny buňky v uint16) = shodný výsledek klient/server a menší paměť; C# podle skály ~10× rychlejší.
+- 💡 **E64 R: vážený rozpočet:** operace floodu je ~5× dražší než operace sestupu (F._nbrs a _outs alokují pole). Vážit ji v rozpočtu nebo flood přepsat na packed pole jako E. Na s32 je krok 33 ms i při 2k.
+- 💡 **E64 R: okamžitá část:** hned po výkopu přepočítat jen výstupy na povrch (prameny, odtok, čas plnění) v okolí výkopu, hluboký sestup až v dalších krocích.
+- 💡 **E64 režie kroku 0:** ug58.edit (delta uzlů B, pravidla D) stojí 10–25 ms na výkop i bez přepočtu. Dá se dělat jen nad stavem K (vb, X).
+- 💡 **E64 paměť stavu K:** 33 B na pásmo a volání (40 MB na s64). Pole fch / nsib / psib jde nahradit jedním CSR dětí přestavěným jen v S, nebo držet stav jen pro volání v režimu preliv.
 - 💡 **Voda: nižší frekvence tiků pro vzdálené bloky:** bloky bez hráčů počítat třeba 1× za 4 tiky s větším krokem.

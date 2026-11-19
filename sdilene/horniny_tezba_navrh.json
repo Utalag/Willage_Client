@@ -1,0 +1,4536 @@
+{
+  "_popis": "E65 NÁVRH (2026-11-19): vlastnosti a těžba hornin. Nepřepisuje materialy_voda.json ani horniny_voda.json. Typické hodnoty (střed rozsahu) z rešerše, rozsahy jsou široké. Jan 13:23 (rozhodnutí): každá hornina má seznam získatelných surovin; blueprint vrstvy může přepsat jen podíly (součet 1000 ‰, jen povolené suroviny). Jan 13:27 (hypotéza, ne rozhodnutí): zpracování rozloží horninu v poměrech bloku; dovednost Mineralogie odemyká poznávání. Jan 13:31 (rozhodnutí): po identifikaci zůstanou obě jména (vlastní i skutečné); vlastní jméno může hráč sám smazat. Čas a výnos jsou úměrné objemu (buňka 0,5 m = 0,125 m³; při 0,125 m vše × 1/64).",
+  "version": 1,
+  "status": "navrh, ceka na Jana",
+  "datum": "2026-11-19",
+  "zdroje": [
+    42,
+    43,
+    44,
+    45,
+    46,
+    47,
+    48,
+    49,
+    50,
+    51,
+    52,
+    53,
+    55
+  ],
+  "cas_hry_faktor": 144.0,
+  "bunka_m": 0.5,
+  "objem_bunky_m3": 0.125,
+  "nastroje": [
+    {
+      "id": "ruka",
+      "idx": 0,
+      "nazev": "ruka / dřevo",
+      "popis": "sypké zeminy a sníh"
+    },
+    {
+      "id": "kamen",
+      "idx": 1,
+      "nazev": "kamenné nástroje",
+      "popis": "měkké horniny (sádrovec, sůl, uhlí, břidlice)"
+    },
+    {
+      "id": "bronz",
+      "idx": 2,
+      "nazev": "bronz / měď",
+      "popis": "středně pevné sedimenty (vápenec, pískovec)"
+    },
+    {
+      "id": "zelezo",
+      "idx": 3,
+      "nazev": "železo",
+      "popis": "tvrdé krystalinikum (žula, čedič, rula, gabro)"
+    },
+    {
+      "id": "ocel",
+      "idx": 4,
+      "nazev": "ocel",
+      "popis": "velmi tvrdé a abrazivní (kvarcit, eklogit)"
+    },
+    {
+      "id": "trhaviny",
+      "idx": 5,
+      "nazev": "trhaviny",
+      "popis": "volitelně plocha, rychleji, víc suti a prachu; není nutná brána"
+    }
+  ],
+  "tridy_tvrdosti": [
+    {
+      "id": "sypka",
+      "nastroj_min": "ruka",
+      "ucs_mpa": [
+        0,
+        1
+      ],
+      "popis": "sypké nebo velmi slabé (písek, suť, ornice, sníh)"
+    },
+    {
+      "id": "mekka",
+      "nastroj_min": "kamen",
+      "ucs_mpa": [
+        1,
+        25
+      ],
+      "popis": "měkká hornina (sádrovec, sůl, uhlí, jílovec, zvětraliny)"
+    },
+    {
+      "id": "stredni",
+      "nastroj_min": "bronz",
+      "ucs_mpa": [
+        25,
+        80
+      ],
+      "popis": "střední (vápenec, pískovec, dolomit, fylit)"
+    },
+    {
+      "id": "tvrda",
+      "nastroj_min": "zelezo",
+      "ucs_mpa": [
+        80,
+        200
+      ],
+      "popis": "tvrdá (žula, čedič, rula, gabro)"
+    },
+    {
+      "id": "velmi_tvrda",
+      "nastroj_min": "ocel",
+      "ucs_mpa": [
+        200,
+        400
+      ],
+      "popis": "velmi tvrdá / vysoce abrazivní (kvarcit, eklogit, amfibolit)"
+    }
+  ],
+  "suroviny": {
+    "blok_horniny": {
+      "id": 200,
+      "nazev": "stavební kámen / kvádr",
+      "popis": "znovu položitelný jako stejné MaterialId",
+      "placeable": "host",
+      "score": 3,
+      "kusovy": false
+    },
+    "sterk": {
+      "id": 201,
+      "nazev": "štěrk / drcený kámen",
+      "placeable": "gravel_or_fill",
+      "score": 1,
+      "kusovy": false
+    },
+    "pisek": {
+      "id": 202,
+      "nazev": "písek",
+      "placeable": "sand",
+      "score": 1.5,
+      "kusovy": false
+    },
+    "jil": {
+      "id": 203,
+      "nazev": "jíl",
+      "placeable": "clay",
+      "score": 2,
+      "kusovy": false
+    },
+    "hlina": {
+      "id": 204,
+      "nazev": "hlína",
+      "placeable": "dirt",
+      "score": 1,
+      "kusovy": false
+    },
+    "vapno": {
+      "id": 205,
+      "nazev": "vápno / vápencová surovina",
+      "placeable": null,
+      "score": 4,
+      "kusovy": false
+    },
+    "sul": {
+      "id": 206,
+      "nazev": "sůl",
+      "placeable": null,
+      "score": 5,
+      "kusovy": false
+    },
+    "sadrovec": {
+      "id": 207,
+      "nazev": "sádrovec",
+      "placeable": null,
+      "score": 3,
+      "kusovy": false
+    },
+    "uhli": {
+      "id": 208,
+      "nazev": "černé uhlí",
+      "placeable": "coal",
+      "score": 12,
+      "kusovy": false
+    },
+    "lignit": {
+      "id": 209,
+      "nazev": "hnědé uhlí",
+      "placeable": "lignite",
+      "score": 6,
+      "kusovy": false
+    },
+    "ruda_med": {
+      "id": 210,
+      "nazev": "měděná ruda",
+      "placeable": null,
+      "score": 40,
+      "kusovy": false
+    },
+    "ruda_zelezo": {
+      "id": 211,
+      "nazev": "železná ruda",
+      "placeable": null,
+      "score": 25,
+      "kusovy": false
+    },
+    "ruda_fe_ti": {
+      "id": 212,
+      "nazev": "titanomagnetit (Fe-Ti)",
+      "placeable": null,
+      "score": 30,
+      "kusovy": false
+    },
+    "ruda_zlato": {
+      "id": 213,
+      "nazev": "zlatá ruda",
+      "placeable": null,
+      "score": 250,
+      "kusovy": false
+    },
+    "ruda_vzacne": {
+      "id": 214,
+      "nazev": "vzácné kovy (Li, Sn, Ta)",
+      "placeable": null,
+      "score": 90,
+      "kusovy": false
+    },
+    "drahokamy": {
+      "id": 215,
+      "nazev": "drahokamy",
+      "placeable": null,
+      "score": 150,
+      "kusovy": true
+    },
+    "diamanty": {
+      "id": 216,
+      "nazev": "diamanty",
+      "placeable": null,
+      "score": 400,
+      "kusovy": true
+    },
+    "granaty": {
+      "id": 217,
+      "nazev": "granáty",
+      "placeable": null,
+      "score": 60,
+      "kusovy": true
+    },
+    "kremenny_pisek": {
+      "id": 218,
+      "nazev": "křemenný písek",
+      "placeable": "sand",
+      "score": 2,
+      "kusovy": false
+    },
+    "snih": {
+      "id": 219,
+      "nazev": "sníh / led",
+      "placeable": "snow",
+      "score": 8,
+      "kusovy": false
+    },
+    "prach": {
+      "id": 220,
+      "nazev": "prach / jemná suť (část nepoužitelná)",
+      "placeable": null,
+      "score": 0,
+      "kusovy": false
+    },
+    "jalovina": {
+      "id": 221,
+      "nazev": "jalovina",
+      "placeable": null,
+      "score": 0.5,
+      "kusovy": false
+    }
+  },
+  "rozhodnuti": {
+    "2026-11-17_17:53": "Výnos kopání: vždy 1 blok materiálu + šance na nález. Platí dál pro krok kopání v doporučené dvoukrokové variantě.",
+    "2026-11-19_13:23": "Každá hornina má seznam získatelných surovin (i více druhů). Při definici vrstev blueprintu může blok přepsat procenta výnosu. Podíly sečtou 100 %, jen suroviny povolené u té horniny.",
+    "2026-11-19_13:31": "Po identifikaci zůstanou obě jména (vlastní název hráče i skutečný název). Vlastní název může hráč sám smazat."
+  },
+  "hypotezy": {
+    "2026-11-19_13:27": "Zpracování rozloží horninu na suroviny v poměrech bloku. Postava s Mineralogií pozná, které minerály to jsou. Zlepšení dovednosti buď odemkne další vrstvu/třídu hornin, nebo dá body na poznání konkrétního materiálu. Neznámé suroviny stejně padají (jako „neznámý minerál“ se znaky barva/tvrdost/hustota) a jdou zkoušet.",
+    "2026-11-19_13:33": "Krystaly mají kvalitu. Lze je brousit, drtit nebo dál zpracovat. Některé suroviny lze destilovat a rozložit na jiné; to odemyká jinou dovednost než Mineralogii (chemie / alchymie)."
+  },
+  "validace_vytezku": {
+    "soucet_promile": 1000,
+    "jen_povolene": "každá surovina v přepisu musí být v vytezek_vychozi_promile (nebo vytezek_kusovy) dané horniny",
+    "alespon_jedna": true,
+    "chybejici_polozka": "chybějící povolená surovina = 0 ‰",
+    "kusovy_zvlast": "kusový výnos (drahokamy) se do 1000 ‰ nepočítá; objem buňky vyplní jalovina / suť"
+  },
+  "blueprint_a_wvb1": {
+    "vychozi": "když blok nemá přepis, použije se vytezek_vychozi_promile z této tabulky",
+    "tvar_json": {
+      "yield_overrides": [
+        {
+          "host_mat_id": 5,
+          "podily_promile": {
+            "blok_horniny": 400,
+            "vapno": 450,
+            "sterk": 150
+          }
+        }
+      ]
+    },
+    "wvb1_navrh_pole": "Nové volitelné pole v hlavičce WVB1 (nový bit ve flags), ne parametry zásobníku (tabulka shape má pevný počet i32). Formát: u16 počet; N× { u16 host_mat_id; u8 n_prod; n_prod× { u16 surovina_id; u16 promile } }. Server pole přepočítá / zkontroluje při vydání i při zpracování.",
+    "zachovani": "Doporučená dvoukroková varianta: kopání odebere 1 buňku MaterialId do inventáře (rozhodnutí 17:53, WVB1 bod 4: souhrn − vytěžené + položené). Zpracování pak buňku rozloží na suroviny podle podílů; součet objemů surovin = objem buňky. Položení terénu spotřebuje blok_horniny (nebo nezpracovanou buňku).",
+    "rarita": "Rarita-v2 (skóre buněk) zůstává. Volitelný bonus kvality z nadstandardních podílů cenných surovin Jan teprve rozhodne; prahy se teď nemění. Rudné buňky už mají vysoké skóre, nesčítat je dvakrát."
+  },
+  "varianty_tezby": {
+    "A_brana_trid": {
+      "popis": "Nástroj musí dosáhnout nastroj_min, čas je pevný podle třídy (t_navrh_s).",
+      "plus": "Jednoduché, čitelné, snadno laditelné.",
+      "minus": "Skok mezi třídami, horší nástroj nepomůže ani pomalu."
+    },
+    "B_cas_podle_sily": {
+      "popis": "Čas = t_zaklad × (UCS / síla_nástroje); slabší nástroj pomaleji, silnější rychleji. Tvrdší než ocel bez trhavin jen velmi pomalu, nebo s prahem.",
+      "plus": "Plynulé, sedí s UCS, jeden vzorec.",
+      "minus": "Hůř čitelné; hrozí extrémně dlouhé časy u kvarcitu s bronzem."
+    },
+    "C_prace_energie": {
+      "popis": "Práce = UCS × objem × (1 + CAI/3). Nástroj má výkon a výdrž; opotřebení ~ CAI × objem.",
+      "plus": "Nejlíp sedí s reálnou razitelností a abrazí; nezávislé na rozlišení.",
+      "minus": "Víc parametrů, hůř vysvětlitelné na streamu."
+    },
+    "doporuceni": "Hybrid A+B: tvrdá brána o 1–2 stupně pod minimem (rukou žulu ne), jinak čas podle síly. Trhaviny zrychlí a zvednou podíl suti/prachu (např. +200 ‰ sterk na úkor blok_horniny)."
+  },
+  "zpracovani_retezce": {
+    "status": "hypotéza Jan 13:33, konfigurovatelné, ne rozhodnutí",
+    "kvalita_krystalu": {
+      "rozsah": [
+        0,
+        100
+      ],
+      "urceni": "deterministicky z (seed bloku, MaterialId, index buňky); nejde přerolovat opakovaným kopáním (stejný princip jako nález ze seedu buňky, 17:53)",
+      "vliv_bloku": "volitelně posun rozdělení podle rarity bloku nebo nadstandardního podílu v yield_overrides (bohatší vrstva → vyšší střed kvality). Konfigurovatelné váhy.",
+      "vliv_na_cenu": "hodnota broušeného kamene roste s kvalitou (navrhovaná křivka: hodnota ~ kvalita², ať špičky jsou vzácné). Drticí výnos kvalitu ničí (vznikne písek / drť stejného objemu)."
+    },
+    "dovednosti": [
+      {
+        "id": "mineralogie",
+        "kroky": [
+          "identifikace"
+        ],
+        "poznamka": "hypotéza 13:27; jména po identifikaci rozhodnutí 13:31"
+      },
+      {
+        "id": "kamenictvi",
+        "kroky": [
+          "brousit",
+          "drtit"
+        ],
+        "poznamka": "oddělené od Mineralogie; název laditelný"
+      },
+      {
+        "id": "chemie",
+        "kroky": [
+          "palit",
+          "destilovat",
+          "rozlozit",
+          "tavit"
+        ],
+        "poznamka": "Jan 13:33: jiná dovednost než Mineralogie (chemie / alchymie). Odemkne termický rozklad a destilaci."
+      }
+    ],
+    "operace": [
+      {
+        "id": "brousit",
+        "vstup": "krystal / drahokam (kus)",
+        "vystup": "broušený kámen stejného druhu",
+        "zachova_kvalitu": true,
+        "ztrata_objemu": "malá (navrh 5–15 %), konfigurovatelné",
+        "dovednost": "kamenictvi"
+      },
+      {
+        "id": "drtit",
+        "vstup": "krystal nebo stavební kámen",
+        "vystup": "křemenný písek / drť (objemový)",
+        "zachova_kvalitu": false,
+        "ztrata_objemu": "0 (objem se zachová, kvalita padá)",
+        "dovednost": "kamenictvi"
+      },
+      {
+        "id": "palit",
+        "vstup": "vápenec / dolomit / vápenná surovina",
+        "vystup": "pálené vápno",
+        "zachova_kvalitu": false,
+        "ztrata_objemu": "část uniká jako plyn (herně konfigurovatelné, reálně CO2)",
+        "dovednost": "chemie"
+      },
+      {
+        "id": "destilovat",
+        "vstup": "surovina s těkavou složkou (př. rumělka)",
+        "vystup": "čistší látka + zbytek",
+        "zachova_kvalitu": false,
+        "ztrata_objemu": "podle tabulky reakce",
+        "dovednost": "chemie"
+      },
+      {
+        "id": "rozlozit",
+        "vstup": "složená surovina",
+        "vystup": "jednodušší suroviny podle tabulky reakcí",
+        "zachova_kvalitu": false,
+        "ztrata_objemu": "součet výstupů = vstup minus ztráta v tabulce",
+        "dovednost": "chemie"
+      },
+      {
+        "id": "tavit",
+        "vstup": "ruda + palivo (uhlí aj.)",
+        "vystup": "kov + struska",
+        "zachova_kvalitu": false,
+        "ztrata_objemu": "podle jakosti rudy",
+        "dovednost": "chemie"
+      }
+    ],
+    "priklady_reakci": [
+      {
+        "vstup": "křemen / křišťál",
+        "brousit": "broušený křišťál (drží kvalitu)",
+        "drtit": "křemenný písek",
+        "chemie": null
+      },
+      {
+        "vstup": "malachit / měděná ruda",
+        "brousit": "broušený malachit (okrasa)",
+        "drtit": "drť (horší pro tavení)",
+        "chemie": "tavit → měď + struska"
+      },
+      {
+        "vstup": "rumělka (HgS)",
+        "brousit": null,
+        "drtit": "prášek k pražení",
+        "chemie": "pražení + destilace → rtuť"
+      },
+      {
+        "vstup": "vápenec",
+        "brousit": null,
+        "drtit": "drť / štěrk",
+        "chemie": "pálení → pálené vápno"
+      },
+      {
+        "vstup": "sádrovec",
+        "brousit": "alabastr (když kvalita stačí)",
+        "drtit": "sádrový prášek",
+        "chemie": "pálení → sádra"
+      },
+      {
+        "vstup": "kamenná sůl",
+        "brousit": null,
+        "drtit": "sůl",
+        "chemie": "rozpuštění / čištění (volitelné)"
+      }
+    ],
+    "poznamka": "Rumělka ve hře zatím není v katalogu; je to jen příklad řetězce. Tabulka reakcí je samostatná a konfigurovatelná, nepřepisuje výnosy kopání."
+  },
+  "znalosti_mineralogie": {
+    "status": "hypotéza Jan 13:27; jména po identifikaci jsou rozhodnutí Jan 13:31",
+    "urovne": [
+      {
+        "id": 0,
+        "nazev": "neznámý",
+        "zobrazeni": "„neznámý minerál“ + viditelné znaky (barva, tvrdost Mohs, hustota)"
+      },
+      {
+        "id": 1,
+        "nazev": "znaky",
+        "zobrazeni": "více znaků / testů (vryp, hmotnost, tavení), stále bez jistého jména"
+      },
+      {
+        "id": 2,
+        "nazev": "identifikovaný",
+        "zobrazeni": "skutečný název i vlastní název hráče (obě jména zůstanou). Vlastní název může hráč sám smazat (Jan 13:31)."
+      }
+    ],
+    "pad": "Neznámá surovina stejně padá a jde do inventáře. Lze ji zkoušet ve výrobě i v pokusech. Identifikace je u postavy, ne ve světě (podíly bloku zná server vždy).",
+    "postup_tiers": {
+      "popis": "Zlepšení dovednosti odemkne další třídu tvrdosti / vrstvu hornin.",
+      "plus": "Jednoduchý postup, sedí s nástroji.",
+      "minus": "Méně volby, celá třída naráz."
+    },
+    "postup_body": {
+      "popis": "Zlepšení dá body na poznání konkrétního materiálu.",
+      "plus": "Hráč si vybere, víc RPG.",
+      "minus": "Víc UI, může být zdlouhavé."
+    },
+    "postup_hybrid": {
+      "popis": "Úroveň dovednosti odemkne třídu k poznávání; body nebo pokusy identifikují konkrétní surovinu. Doporučený výchozí přepínač.",
+      "plus": "Oboje laditelné jednou tabulkou.",
+      "minus": "O něco víc pravidel."
+    },
+    "pokusy": "Pokusy (tavení, vryp, hustota, kyselina u vápence) můžou zvednout úroveň nebo rovnou identifikovat. Konfigurovatelné: kolik pokusů / jaký test stačí. Neznámé jde použít naslepo (riziko zmetku)."
+  },
+  "materials": {
+    "air": {
+      "id": 0,
+      "nazev": "vzduch",
+      "idx": null,
+      "zona": "vzduch",
+      "kind": "air",
+      "skupina_tezba": "vzduch",
+      "mohs": 0,
+      "mohs_rozsah": [
+        0,
+        0
+      ],
+      "ucs_mpa": 0,
+      "ucs_rozsah_mpa": [
+        0,
+        0
+      ],
+      "hustota_kg_m3": 1,
+      "cai": 0,
+      "trida_tvrdosti": "sypka",
+      "nastroj_min": "ruka",
+      "chovani": "netezitelne",
+      "vzacnost_horniny": "—",
+      "vytezek_vychozi_promile": [
+        {
+          "surovina": "prach",
+          "promile": 1000
+        }
+      ],
+      "cas": null,
+      "netezitelne": true,
+      "zdroje": [
+        42
+      ],
+      "opotrebeni_na_bunku_05": 0.0
+    },
+    "cloud_line": {
+      "id": 0,
+      "nazev": "Hranice mraků (vzduch)",
+      "idx": 62,
+      "zona": "vzduch",
+      "kind": "air",
+      "skupina_tezba": "vzduch",
+      "mohs": 0,
+      "mohs_rozsah": [
+        0,
+        0
+      ],
+      "ucs_mpa": 0,
+      "ucs_rozsah_mpa": [
+        0,
+        0
+      ],
+      "hustota_kg_m3": 1,
+      "cai": 0,
+      "trida_tvrdosti": "sypka",
+      "nastroj_min": "ruka",
+      "chovani": "netezitelne",
+      "vzacnost_horniny": "—",
+      "vytezek_vychozi_promile": [
+        {
+          "surovina": "prach",
+          "promile": 1000
+        }
+      ],
+      "cas": null,
+      "netezitelne": true,
+      "zdroje": [
+        42
+      ],
+      "alias_material_id": 0,
+      "opotrebeni_na_bunku_05": 0.0
+    },
+    "map_ceiling": {
+      "id": 0,
+      "nazev": "Strop mapy, vzduch",
+      "idx": 63,
+      "zona": "vzduch",
+      "kind": "air",
+      "skupina_tezba": "vzduch",
+      "mohs": 0,
+      "mohs_rozsah": [
+        0,
+        0
+      ],
+      "ucs_mpa": 0,
+      "ucs_rozsah_mpa": [
+        0,
+        0
+      ],
+      "hustota_kg_m3": 1,
+      "cai": 0,
+      "trida_tvrdosti": "sypka",
+      "nastroj_min": "ruka",
+      "chovani": "netezitelne",
+      "vzacnost_horniny": "—",
+      "vytezek_vychozi_promile": [
+        {
+          "surovina": "prach",
+          "promile": 1000
+        }
+      ],
+      "cas": null,
+      "netezitelne": true,
+      "zdroje": [
+        42
+      ],
+      "alias_material_id": 0,
+      "opotrebeni_na_bunku_05": 0.0
+    },
+    "grass": {
+      "id": 1,
+      "nazev": "tráva / drn",
+      "idx": null,
+      "zona": "povrch",
+      "kind": "soil",
+      "skupina_tezba": "puda",
+      "mohs": 2.0,
+      "mohs_rozsah": [
+        1,
+        2.5
+      ],
+      "ucs_mpa": 0.3,
+      "ucs_rozsah_mpa": [
+        0.05,
+        1
+      ],
+      "hustota_kg_m3": 1700,
+      "cai": 0.4,
+      "trida_tvrdosti": "sypka",
+      "nastroj_min": "ruka",
+      "chovani": "soudrzna_zemina",
+      "vzacnost_horniny": "běžná",
+      "vytezek_vychozi_promile": [
+        {
+          "surovina": "hlina",
+          "promile": 700
+        },
+        {
+          "surovina": "jil",
+          "promile": 150
+        },
+        {
+          "surovina": "pisek",
+          "promile": 150
+        }
+      ],
+      "cas": {
+        "prod_m3_h": 0.8,
+        "t_real_min_bunka_05": 9.38,
+        "t_herni_s_bunka_05": 3.91,
+        "t_navrh_s_bunka_05": 1.0
+      },
+      "netezitelne": false,
+      "zdroje": [
+        42,
+        43,
+        45
+      ],
+      "opotrebeni_na_bunku_05": 0.067
+    },
+    "dirt": {
+      "id": 2,
+      "nazev": "hlína",
+      "idx": null,
+      "zona": "povrch",
+      "kind": "soil",
+      "skupina_tezba": "puda",
+      "mohs": 2.0,
+      "mohs_rozsah": [
+        1,
+        2.5
+      ],
+      "ucs_mpa": 0.3,
+      "ucs_rozsah_mpa": [
+        0.05,
+        1
+      ],
+      "hustota_kg_m3": 1700,
+      "cai": 0.4,
+      "trida_tvrdosti": "sypka",
+      "nastroj_min": "ruka",
+      "chovani": "soudrzna_zemina",
+      "vzacnost_horniny": "běžná",
+      "vytezek_vychozi_promile": [
+        {
+          "surovina": "hlina",
+          "promile": 800
+        },
+        {
+          "surovina": "jil",
+          "promile": 150
+        },
+        {
+          "surovina": "pisek",
+          "promile": 50
+        }
+      ],
+      "cas": {
+        "prod_m3_h": 0.8,
+        "t_real_min_bunka_05": 9.38,
+        "t_herni_s_bunka_05": 3.91,
+        "t_navrh_s_bunka_05": 1.0
+      },
+      "netezitelne": false,
+      "zdroje": [
+        42,
+        43,
+        45
+      ],
+      "opotrebeni_na_bunku_05": 0.067
+    },
+    "topsoil": {
+      "id": 2,
+      "nazev": "Ornice, humus",
+      "idx": 40,
+      "zona": "povrch",
+      "kind": "soil",
+      "skupina_tezba": "puda",
+      "mohs": 2.0,
+      "mohs_rozsah": [
+        1,
+        2.5
+      ],
+      "ucs_mpa": 0.3,
+      "ucs_rozsah_mpa": [
+        0.05,
+        1
+      ],
+      "hustota_kg_m3": 1700,
+      "cai": 0.4,
+      "trida_tvrdosti": "sypka",
+      "nastroj_min": "ruka",
+      "chovani": "soudrzna_zemina",
+      "vzacnost_horniny": "běžná",
+      "vytezek_vychozi_promile": [
+        {
+          "surovina": "hlina",
+          "promile": 800
+        },
+        {
+          "surovina": "jil",
+          "promile": 150
+        },
+        {
+          "surovina": "pisek",
+          "promile": 50
+        }
+      ],
+      "cas": {
+        "prod_m3_h": 0.8,
+        "t_real_min_bunka_05": 9.38,
+        "t_herni_s_bunka_05": 3.91,
+        "t_navrh_s_bunka_05": 1.0
+      },
+      "netezitelne": false,
+      "zdroje": [
+        42,
+        43,
+        45
+      ],
+      "alias_material_id": 2,
+      "opotrebeni_na_bunku_05": 0.067
+    },
+    "sand": {
+      "id": 3,
+      "nazev": "písek",
+      "idx": null,
+      "zona": "sedimenty",
+      "kind": "layer",
+      "skupina_tezba": "pisek",
+      "mohs": 6.0,
+      "mohs_rozsah": [
+        5,
+        7
+      ],
+      "ucs_mpa": 0.0,
+      "ucs_rozsah_mpa": [
+        0,
+        0.2
+      ],
+      "hustota_kg_m3": 1800,
+      "cai": 1.5,
+      "trida_tvrdosti": "sypka",
+      "nastroj_min": "ruka",
+      "chovani": "sypka",
+      "vzacnost_horniny": "běžná",
+      "vytezek_vychozi_promile": [
+        {
+          "surovina": "pisek",
+          "promile": 900
+        },
+        {
+          "surovina": "sterk",
+          "promile": 100
+        }
+      ],
+      "cas": {
+        "prod_m3_h": 0.8,
+        "t_real_min_bunka_05": 9.38,
+        "t_herni_s_bunka_05": 3.91,
+        "t_navrh_s_bunka_05": 1.0
+      },
+      "netezitelne": false,
+      "zdroje": [
+        45,
+        46,
+        48
+      ],
+      "opotrebeni_na_bunku_05": 0.25
+    },
+    "gravel_sand": {
+      "id": 3,
+      "nazev": "Štěrk, hlinitopísčité sedimenty",
+      "idx": 38,
+      "zona": "sedimenty",
+      "kind": "layer",
+      "skupina_tezba": "sterk",
+      "mohs": 5.0,
+      "mohs_rozsah": [
+        3,
+        7
+      ],
+      "ucs_mpa": 0.0,
+      "ucs_rozsah_mpa": [
+        0,
+        0.2
+      ],
+      "hustota_kg_m3": 1900,
+      "cai": 1.5,
+      "trida_tvrdosti": "sypka",
+      "nastroj_min": "ruka",
+      "chovani": "sypka",
+      "vzacnost_horniny": "běžná",
+      "vytezek_vychozi_promile": [
+        {
+          "surovina": "sterk",
+          "promile": 500
+        },
+        {
+          "surovina": "pisek",
+          "promile": 500
+        }
+      ],
+      "cas": {
+        "prod_m3_h": 0.8,
+        "t_real_min_bunka_05": 9.38,
+        "t_herni_s_bunka_05": 3.91,
+        "t_navrh_s_bunka_05": 1.0
+      },
+      "netezitelne": false,
+      "zdroje": [
+        45,
+        46
+      ],
+      "alias_material_id": 3,
+      "opotrebeni_na_bunku_05": 0.25
+    },
+    "clay": {
+      "id": 4,
+      "nazev": "jíl",
+      "idx": null,
+      "zona": "sedimenty",
+      "kind": "layer",
+      "skupina_tezba": "jil",
+      "mohs": 2.0,
+      "mohs_rozsah": [
+        1,
+        2.5
+      ],
+      "ucs_mpa": 0.4,
+      "ucs_rozsah_mpa": [
+        0.05,
+        1
+      ],
+      "hustota_kg_m3": 1800,
+      "cai": 0.4,
+      "trida_tvrdosti": "sypka",
+      "nastroj_min": "ruka",
+      "chovani": "soudrzna_zemina",
+      "vzacnost_horniny": "běžná",
+      "vytezek_vychozi_promile": [
+        {
+          "surovina": "jil",
+          "promile": 900
+        },
+        {
+          "surovina": "hlina",
+          "promile": 100
+        }
+      ],
+      "cas": {
+        "prod_m3_h": 0.8,
+        "t_real_min_bunka_05": 9.38,
+        "t_herni_s_bunka_05": 3.91,
+        "t_navrh_s_bunka_05": 1.0
+      },
+      "netezitelne": false,
+      "zdroje": [
+        43,
+        45,
+        46
+      ],
+      "opotrebeni_na_bunku_05": 0.067
+    },
+    "weathered_clay": {
+      "id": 4,
+      "nazev": "Zvětralá břidlice a jíly",
+      "idx": 37,
+      "zona": "sedimenty",
+      "kind": "layer",
+      "skupina_tezba": "jil",
+      "mohs": 2.0,
+      "mohs_rozsah": [
+        1,
+        2.5
+      ],
+      "ucs_mpa": 0.4,
+      "ucs_rozsah_mpa": [
+        0.05,
+        1
+      ],
+      "hustota_kg_m3": 1800,
+      "cai": 0.4,
+      "trida_tvrdosti": "sypka",
+      "nastroj_min": "ruka",
+      "chovani": "soudrzna_zemina",
+      "vzacnost_horniny": "běžná",
+      "vytezek_vychozi_promile": [
+        {
+          "surovina": "jil",
+          "promile": 900
+        },
+        {
+          "surovina": "hlina",
+          "promile": 100
+        }
+      ],
+      "cas": {
+        "prod_m3_h": 0.8,
+        "t_real_min_bunka_05": 9.38,
+        "t_herni_s_bunka_05": 3.91,
+        "t_navrh_s_bunka_05": 1.0
+      },
+      "netezitelne": false,
+      "zdroje": [
+        43,
+        45,
+        46
+      ],
+      "alias_material_id": 4,
+      "opotrebeni_na_bunku_05": 0.067
+    },
+    "limestone": {
+      "id": 5,
+      "nazev": "vápenec",
+      "idx": null,
+      "zona": "sedimenty",
+      "kind": "layer",
+      "skupina_tezba": "vapenec",
+      "mohs": 3.2,
+      "mohs_rozsah": [
+        3,
+        4
+      ],
+      "ucs_mpa": 107,
+      "ucs_rozsah_mpa": [
+        30,
+        250
+      ],
+      "hustota_kg_m3": 2640,
+      "cai": 1.5,
+      "trida_tvrdosti": "stredni",
+      "nastroj_min": "bronz",
+      "chovani": "soudrzna",
+      "vzacnost_horniny": "běžná",
+      "vytezek_vychozi_promile": [
+        {
+          "surovina": "blok_horniny",
+          "promile": 600
+        },
+        {
+          "surovina": "vapno",
+          "promile": 250
+        },
+        {
+          "surovina": "sterk",
+          "promile": 150
+        }
+      ],
+      "cas": {
+        "prod_m3_h": 0.12,
+        "t_real_min_bunka_05": 62.5,
+        "t_herni_s_bunka_05": 26.04,
+        "t_navrh_s_bunka_05": 6.0
+      },
+      "netezitelne": false,
+      "zdroje": [
+        42,
+        44,
+        45,
+        46,
+        48
+      ],
+      "opotrebeni_na_bunku_05": 0.25
+    },
+    "cave_limestone": {
+      "id": 5,
+      "nazev": "Masivní jeskynní vápenec",
+      "idx": 32,
+      "zona": "sedimenty",
+      "kind": "layer",
+      "skupina_tezba": "vapenec",
+      "mohs": 3.2,
+      "mohs_rozsah": [
+        3,
+        4
+      ],
+      "ucs_mpa": 107,
+      "ucs_rozsah_mpa": [
+        30,
+        250
+      ],
+      "hustota_kg_m3": 2640,
+      "cai": 1.5,
+      "trida_tvrdosti": "stredni",
+      "nastroj_min": "bronz",
+      "chovani": "soudrzna",
+      "vzacnost_horniny": "běžná",
+      "vytezek_vychozi_promile": [
+        {
+          "surovina": "blok_horniny",
+          "promile": 600
+        },
+        {
+          "surovina": "vapno",
+          "promile": 250
+        },
+        {
+          "surovina": "sterk",
+          "promile": 150
+        }
+      ],
+      "cas": {
+        "prod_m3_h": 0.12,
+        "t_real_min_bunka_05": 62.5,
+        "t_herni_s_bunka_05": 26.04,
+        "t_navrh_s_bunka_05": 6.0
+      },
+      "netezitelne": false,
+      "zdroje": [
+        42,
+        44,
+        45,
+        46,
+        48
+      ],
+      "alias_material_id": 5,
+      "opotrebeni_na_bunku_05": 0.25
+    },
+    "granite": {
+      "id": 6,
+      "nazev": "žula",
+      "idx": 18,
+      "zona": "krystalinikum",
+      "kind": "layer",
+      "skupina_tezba": "zula",
+      "mohs": 6.5,
+      "mohs_rozsah": [
+        6,
+        7
+      ],
+      "ucs_mpa": 154,
+      "ucs_rozsah_mpa": [
+        100,
+        250
+      ],
+      "hustota_kg_m3": 2720,
+      "cai": 5.0,
+      "trida_tvrdosti": "tvrda",
+      "nastroj_min": "zelezo",
+      "chovani": "soudrzna",
+      "vzacnost_horniny": "běžná",
+      "vytezek_vychozi_promile": [
+        {
+          "surovina": "blok_horniny",
+          "promile": 700
+        },
+        {
+          "surovina": "sterk",
+          "promile": 250
+        },
+        {
+          "surovina": "kremenny_pisek",
+          "promile": 50
+        }
+      ],
+      "cas": {
+        "prod_m3_h": 0.05,
+        "t_real_min_bunka_05": 150.0,
+        "t_herni_s_bunka_05": 62.5,
+        "t_navrh_s_bunka_05": 12.0
+      },
+      "netezitelne": false,
+      "zdroje": [
+        42,
+        44,
+        45,
+        46,
+        48
+      ],
+      "opotrebeni_na_bunku_05": 0.833
+    },
+    "basalt": {
+      "id": 7,
+      "nazev": "čedič",
+      "idx": null,
+      "zona": "plast",
+      "kind": "layer",
+      "skupina_tezba": "cedic",
+      "mohs": 6.5,
+      "mohs_rozsah": [
+        6,
+        8
+      ],
+      "ucs_mpa": 145,
+      "ucs_rozsah_mpa": [
+        100,
+        300
+      ],
+      "hustota_kg_m3": 3000,
+      "cai": 3.0,
+      "trida_tvrdosti": "tvrda",
+      "nastroj_min": "zelezo",
+      "chovani": "soudrzna",
+      "vzacnost_horniny": "běžná",
+      "vytezek_vychozi_promile": [
+        {
+          "surovina": "blok_horniny",
+          "promile": 700
+        },
+        {
+          "surovina": "sterk",
+          "promile": 300
+        }
+      ],
+      "cas": {
+        "prod_m3_h": 0.05,
+        "t_real_min_bunka_05": 150.0,
+        "t_herni_s_bunka_05": 62.5,
+        "t_navrh_s_bunka_05": 12.0
+      },
+      "netezitelne": false,
+      "zdroje": [
+        42,
+        44,
+        45,
+        46
+      ],
+      "opotrebeni_na_bunku_05": 0.5
+    },
+    "diabase": {
+      "id": 7,
+      "nazev": "Diabaz (= čedič gen-v3)",
+      "idx": 9,
+      "zona": "plast",
+      "kind": "layer",
+      "skupina_tezba": "cedic",
+      "mohs": 6.5,
+      "mohs_rozsah": [
+        6,
+        8
+      ],
+      "ucs_mpa": 229,
+      "ucs_rozsah_mpa": [
+        150,
+        350
+      ],
+      "hustota_kg_m3": 2800,
+      "cai": 3.0,
+      "trida_tvrdosti": "tvrda",
+      "nastroj_min": "zelezo",
+      "chovani": "soudrzna",
+      "vzacnost_horniny": "běžná",
+      "vytezek_vychozi_promile": [
+        {
+          "surovina": "blok_horniny",
+          "promile": 700
+        },
+        {
+          "surovina": "sterk",
+          "promile": 300
+        }
+      ],
+      "cas": {
+        "prod_m3_h": 0.05,
+        "t_real_min_bunka_05": 150.0,
+        "t_herni_s_bunka_05": 62.5,
+        "t_navrh_s_bunka_05": 12.0
+      },
+      "netezitelne": false,
+      "zdroje": [
+        44,
+        45
+      ],
+      "alias_material_id": 7,
+      "opotrebeni_na_bunku_05": 0.5
+    },
+    "copper": {
+      "id": 8,
+      "nazev": "měděná ruda",
+      "idx": null,
+      "zona": "rudy",
+      "kind": "vein",
+      "skupina_tezba": "ruda_med",
+      "mohs": 4.0,
+      "mohs_rozsah": [
+        3,
+        5
+      ],
+      "ucs_mpa": 80,
+      "ucs_rozsah_mpa": [
+        40,
+        150
+      ],
+      "hustota_kg_m3": 3200,
+      "cai": 2.0,
+      "trida_tvrdosti": "stredni",
+      "nastroj_min": "bronz",
+      "chovani": "soudrzna",
+      "vzacnost_horniny": "vzácná",
+      "vytezek_vychozi_promile": [
+        {
+          "surovina": "ruda_med",
+          "promile": 400
+        },
+        {
+          "surovina": "jalovina",
+          "promile": 600
+        }
+      ],
+      "cas": {
+        "prod_m3_h": 0.12,
+        "t_real_min_bunka_05": 62.5,
+        "t_herni_s_bunka_05": 26.04,
+        "t_navrh_s_bunka_05": 6.0
+      },
+      "netezitelne": false,
+      "zdroje": [
+        45,
+        49
+      ],
+      "poznamka": "Buňka už je obohacená žíla, ne porfyrový průměr 0,44 % Cu [49]. Herní podíl 400 ‰ je abstrakce.",
+      "opotrebeni_na_bunku_05": 0.333
+    },
+    "iron": {
+      "id": 9,
+      "nazev": "železná ruda",
+      "idx": null,
+      "zona": "rudy",
+      "kind": "pocket",
+      "skupina_tezba": "ruda_fe",
+      "mohs": 6.0,
+      "mohs_rozsah": [
+        5.5,
+        6.5
+      ],
+      "ucs_mpa": 150,
+      "ucs_rozsah_mpa": [
+        80,
+        250
+      ],
+      "hustota_kg_m3": 4500,
+      "cai": 3.0,
+      "trida_tvrdosti": "tvrda",
+      "nastroj_min": "zelezo",
+      "chovani": "soudrzna",
+      "vzacnost_horniny": "neobvyklá",
+      "vytezek_vychozi_promile": [
+        {
+          "surovina": "ruda_zelezo",
+          "promile": 700
+        },
+        {
+          "surovina": "jalovina",
+          "promile": 300
+        }
+      ],
+      "cas": {
+        "prod_m3_h": 0.05,
+        "t_real_min_bunka_05": 150.0,
+        "t_herni_s_bunka_05": 62.5,
+        "t_navrh_s_bunka_05": 12.0
+      },
+      "netezitelne": false,
+      "zdroje": [
+        45,
+        55
+      ],
+      "poznamka": "Buňka je už ložisková čočka; podíl 700 ‰ odpovídá spíš DSO/magnetitu (~50–60 % Fe) [55] než chudé hornině.",
+      "opotrebeni_na_bunku_05": 0.5
+    },
+    "snow": {
+      "id": 10,
+      "nazev": "sníh",
+      "idx": null,
+      "zona": "hory",
+      "kind": "snow",
+      "skupina_tezba": "snih",
+      "mohs": 1.5,
+      "mohs_rozsah": [
+        1,
+        2
+      ],
+      "ucs_mpa": 0.5,
+      "ucs_rozsah_mpa": [
+        0.1,
+        2
+      ],
+      "hustota_kg_m3": 850,
+      "cai": 0.2,
+      "trida_tvrdosti": "sypka",
+      "nastroj_min": "ruka",
+      "chovani": "sypka",
+      "vzacnost_horniny": "běžná",
+      "vytezek_vychozi_promile": [
+        {
+          "surovina": "snih",
+          "promile": 1000
+        }
+      ],
+      "cas": {
+        "prod_m3_h": 0.8,
+        "t_real_min_bunka_05": 9.38,
+        "t_herni_s_bunka_05": 3.91,
+        "t_navrh_s_bunka_05": 1.0
+      },
+      "netezitelne": false,
+      "zdroje": [
+        48
+      ],
+      "opotrebeni_na_bunku_05": 0.033
+    },
+    "eternal_snow": {
+      "id": 10,
+      "nazev": "Věčný sníh a led",
+      "idx": 57,
+      "zona": "hory",
+      "kind": "snow",
+      "skupina_tezba": "snih",
+      "mohs": 1.5,
+      "mohs_rozsah": [
+        1,
+        2
+      ],
+      "ucs_mpa": 0.5,
+      "ucs_rozsah_mpa": [
+        0.1,
+        2
+      ],
+      "hustota_kg_m3": 850,
+      "cai": 0.2,
+      "trida_tvrdosti": "sypka",
+      "nastroj_min": "ruka",
+      "chovani": "sypka",
+      "vzacnost_horniny": "běžná",
+      "vytezek_vychozi_promile": [
+        {
+          "surovina": "snih",
+          "promile": 1000
+        }
+      ],
+      "cas": {
+        "prod_m3_h": 0.8,
+        "t_real_min_bunka_05": 9.38,
+        "t_herni_s_bunka_05": 3.91,
+        "t_navrh_s_bunka_05": 1.0
+      },
+      "netezitelne": false,
+      "zdroje": [
+        48
+      ],
+      "alias_material_id": 10,
+      "opotrebeni_na_bunku_05": 0.033
+    },
+    "clay_deposit": {
+      "id": 12,
+      "nazev": "ložiskový jíl",
+      "idx": null,
+      "zona": "sedimenty",
+      "kind": "layer",
+      "skupina_tezba": "jil",
+      "mohs": 2.0,
+      "mohs_rozsah": [
+        1,
+        2.5
+      ],
+      "ucs_mpa": 0.4,
+      "ucs_rozsah_mpa": [
+        0.05,
+        1
+      ],
+      "hustota_kg_m3": 1800,
+      "cai": 0.4,
+      "trida_tvrdosti": "sypka",
+      "nastroj_min": "ruka",
+      "chovani": "soudrzna_zemina",
+      "vzacnost_horniny": "neobvyklá",
+      "vytezek_vychozi_promile": [
+        {
+          "surovina": "jil",
+          "promile": 1000
+        }
+      ],
+      "cas": {
+        "prod_m3_h": 0.8,
+        "t_real_min_bunka_05": 9.38,
+        "t_herni_s_bunka_05": 3.91,
+        "t_navrh_s_bunka_05": 1.0
+      },
+      "netezitelne": false,
+      "zdroje": [
+        43,
+        45,
+        46
+      ],
+      "opotrebeni_na_bunku_05": 0.067
+    },
+    "peridotite": {
+      "id": 20,
+      "nazev": "Peridotit / dunit",
+      "idx": 0,
+      "zona": "plast",
+      "kind": "layer",
+      "skupina_tezba": "peridotit",
+      "mohs": 6.7,
+      "mohs_rozsah": [
+        6.5,
+        7
+      ],
+      "ucs_mpa": 197,
+      "ucs_rozsah_mpa": [
+        100,
+        280
+      ],
+      "hustota_kg_m3": 3200,
+      "cai": 4.0,
+      "trida_tvrdosti": "tvrda",
+      "nastroj_min": "zelezo",
+      "chovani": "soudrzna",
+      "vzacnost_horniny": "neobvyklá",
+      "vytezek_vychozi_promile": [
+        {
+          "surovina": "blok_horniny",
+          "promile": 700
+        },
+        {
+          "surovina": "sterk",
+          "promile": 300
+        }
+      ],
+      "cas": {
+        "prod_m3_h": 0.05,
+        "t_real_min_bunka_05": 150.0,
+        "t_herni_s_bunka_05": 62.5,
+        "t_navrh_s_bunka_05": 12.0
+      },
+      "netezitelne": false,
+      "zdroje": [
+        44,
+        45,
+        48
+      ],
+      "opotrebeni_na_bunku_05": 0.667
+    },
+    "kimberlite": {
+      "id": 21,
+      "nazev": "Kimberlit (komíny)",
+      "idx": 1,
+      "zona": "plast",
+      "kind": "pipe",
+      "skupina_tezba": "kimberlit",
+      "mohs": 4.5,
+      "mohs_rozsah": [
+        4,
+        6
+      ],
+      "ucs_mpa": 40,
+      "ucs_rozsah_mpa": [
+        20,
+        80
+      ],
+      "hustota_kg_m3": 2600,
+      "cai": 1.5,
+      "trida_tvrdosti": "stredni",
+      "nastroj_min": "bronz",
+      "chovani": "soudrzna",
+      "vzacnost_horniny": "vzácná",
+      "vytezek_vychozi_promile": [
+        {
+          "surovina": "sterk",
+          "promile": 850
+        },
+        {
+          "surovina": "blok_horniny",
+          "promile": 150
+        }
+      ],
+      "cas": {
+        "prod_m3_h": 0.12,
+        "t_real_min_bunka_05": 62.5,
+        "t_herni_s_bunka_05": 26.04,
+        "t_navrh_s_bunka_05": 6.0
+      },
+      "netezitelne": false,
+      "zdroje": [
+        44,
+        50
+      ],
+      "poznamka": "Diamanty nejsou objemový podíl (reálně 0,02–10 ct/t, medián 0,25 [50]). Jsou v buňkách diamond + šance na nález.",
+      "opotrebeni_na_bunku_05": 0.25
+    },
+    "lherzolite": {
+      "id": 22,
+      "nazev": "Lherzolit, olivín",
+      "idx": 2,
+      "zona": "plast",
+      "kind": "layer",
+      "skupina_tezba": "peridotit",
+      "mohs": 6.7,
+      "mohs_rozsah": [
+        6.5,
+        7
+      ],
+      "ucs_mpa": 197,
+      "ucs_rozsah_mpa": [
+        100,
+        280
+      ],
+      "hustota_kg_m3": 3200,
+      "cai": 4.0,
+      "trida_tvrdosti": "tvrda",
+      "nastroj_min": "zelezo",
+      "chovani": "soudrzna",
+      "vzacnost_horniny": "neobvyklá",
+      "vytezek_vychozi_promile": [
+        {
+          "surovina": "blok_horniny",
+          "promile": 700
+        },
+        {
+          "surovina": "sterk",
+          "promile": 300
+        }
+      ],
+      "cas": {
+        "prod_m3_h": 0.05,
+        "t_real_min_bunka_05": 150.0,
+        "t_herni_s_bunka_05": 62.5,
+        "t_navrh_s_bunka_05": 12.0
+      },
+      "netezitelne": false,
+      "zdroje": [
+        44,
+        45,
+        48
+      ],
+      "opotrebeni_na_bunku_05": 0.667
+    },
+    "eclogite": {
+      "id": 23,
+      "nazev": "Eklogit",
+      "idx": 3,
+      "zona": "plast",
+      "kind": "layer",
+      "skupina_tezba": "eklogit",
+      "mohs": 7.0,
+      "mohs_rozsah": [
+        6.5,
+        7.5
+      ],
+      "ucs_mpa": 250,
+      "ucs_rozsah_mpa": [
+        180,
+        350
+      ],
+      "hustota_kg_m3": 3400,
+      "cai": 5.0,
+      "trida_tvrdosti": "velmi_tvrda",
+      "nastroj_min": "ocel",
+      "chovani": "soudrzna",
+      "vzacnost_horniny": "vzácná",
+      "vytezek_vychozi_promile": [
+        {
+          "surovina": "blok_horniny",
+          "promile": 700
+        },
+        {
+          "surovina": "sterk",
+          "promile": 300
+        }
+      ],
+      "cas": {
+        "prod_m3_h": 0.03,
+        "t_real_min_bunka_05": 250.0,
+        "t_herni_s_bunka_05": 104.17,
+        "t_navrh_s_bunka_05": 18.0
+      },
+      "netezitelne": false,
+      "zdroje": [
+        44,
+        45,
+        48
+      ],
+      "opotrebeni_na_bunku_05": 0.833
+    },
+    "pyroxenite": {
+      "id": 24,
+      "nazev": "Pyroxenit",
+      "idx": 4,
+      "zona": "plast",
+      "kind": "layer",
+      "skupina_tezba": "gabro",
+      "mohs": 6.5,
+      "mohs_rozsah": [
+        6,
+        7
+      ],
+      "ucs_mpa": 200,
+      "ucs_rozsah_mpa": [
+        100,
+        300
+      ],
+      "hustota_kg_m3": 3200,
+      "cai": 3.0,
+      "trida_tvrdosti": "velmi_tvrda",
+      "nastroj_min": "ocel",
+      "chovani": "soudrzna",
+      "vzacnost_horniny": "neobvyklá",
+      "vytezek_vychozi_promile": [
+        {
+          "surovina": "blok_horniny",
+          "promile": 650
+        },
+        {
+          "surovina": "sterk",
+          "promile": 350
+        }
+      ],
+      "cas": {
+        "prod_m3_h": 0.03,
+        "t_real_min_bunka_05": 250.0,
+        "t_herni_s_bunka_05": 104.17,
+        "t_navrh_s_bunka_05": 18.0
+      },
+      "netezitelne": false,
+      "zdroje": [
+        44,
+        45,
+        46
+      ],
+      "opotrebeni_na_bunku_05": 0.5
+    },
+    "serpentinite": {
+      "id": 25,
+      "nazev": "Serpentinit (hadec)",
+      "idx": 5,
+      "zona": "plast",
+      "kind": "layer",
+      "skupina_tezba": "hadec",
+      "mohs": 4.0,
+      "mohs_rozsah": [
+        3,
+        5
+      ],
+      "ucs_mpa": 60,
+      "ucs_rozsah_mpa": [
+        30,
+        120
+      ],
+      "hustota_kg_m3": 2600,
+      "cai": 1.0,
+      "trida_tvrdosti": "stredni",
+      "nastroj_min": "bronz",
+      "chovani": "soudrzna",
+      "vzacnost_horniny": "neobvyklá",
+      "vytezek_vychozi_promile": [
+        {
+          "surovina": "blok_horniny",
+          "promile": 600
+        },
+        {
+          "surovina": "sterk",
+          "promile": 400
+        }
+      ],
+      "cas": {
+        "prod_m3_h": 0.12,
+        "t_real_min_bunka_05": 62.5,
+        "t_herni_s_bunka_05": 26.04,
+        "t_navrh_s_bunka_05": 6.0
+      },
+      "netezitelne": false,
+      "zdroje": [
+        44,
+        48
+      ],
+      "opotrebeni_na_bunku_05": 0.167
+    },
+    "gabbro": {
+      "id": 26,
+      "nazev": "Gabro",
+      "idx": 6,
+      "zona": "plast",
+      "kind": "layer",
+      "skupina_tezba": "gabro",
+      "mohs": 6.5,
+      "mohs_rozsah": [
+        6,
+        7
+      ],
+      "ucs_mpa": 228,
+      "ucs_rozsah_mpa": [
+        100,
+        300
+      ],
+      "hustota_kg_m3": 3000,
+      "cai": 3.0,
+      "trida_tvrdosti": "velmi_tvrda",
+      "nastroj_min": "ocel",
+      "chovani": "soudrzna",
+      "vzacnost_horniny": "neobvyklá",
+      "vytezek_vychozi_promile": [
+        {
+          "surovina": "blok_horniny",
+          "promile": 650
+        },
+        {
+          "surovina": "sterk",
+          "promile": 350
+        }
+      ],
+      "cas": {
+        "prod_m3_h": 0.03,
+        "t_real_min_bunka_05": 250.0,
+        "t_herni_s_bunka_05": 104.17,
+        "t_navrh_s_bunka_05": 18.0
+      },
+      "netezitelne": false,
+      "zdroje": [
+        44,
+        45,
+        46
+      ],
+      "opotrebeni_na_bunku_05": 0.5
+    },
+    "norite": {
+      "id": 27,
+      "nazev": "Norit / anortozit",
+      "idx": 7,
+      "zona": "plast",
+      "kind": "layer",
+      "skupina_tezba": "gabro",
+      "mohs": 6.5,
+      "mohs_rozsah": [
+        6,
+        7
+      ],
+      "ucs_mpa": 229,
+      "ucs_rozsah_mpa": [
+        100,
+        300
+      ],
+      "hustota_kg_m3": 3000,
+      "cai": 3.0,
+      "trida_tvrdosti": "velmi_tvrda",
+      "nastroj_min": "ocel",
+      "chovani": "soudrzna",
+      "vzacnost_horniny": "neobvyklá",
+      "vytezek_vychozi_promile": [
+        {
+          "surovina": "blok_horniny",
+          "promile": 650
+        },
+        {
+          "surovina": "sterk",
+          "promile": 350
+        }
+      ],
+      "cas": {
+        "prod_m3_h": 0.03,
+        "t_real_min_bunka_05": 250.0,
+        "t_herni_s_bunka_05": 104.17,
+        "t_navrh_s_bunka_05": 18.0
+      },
+      "netezitelne": false,
+      "zdroje": [
+        44,
+        45,
+        46
+      ],
+      "opotrebeni_na_bunku_05": 0.5
+    },
+    "fe_ti_zone": {
+      "id": 28,
+      "nazev": "Fe-Ti rudní zóna (magnetit)",
+      "idx": 8,
+      "zona": "plast",
+      "kind": "layer",
+      "skupina_tezba": "gabro",
+      "mohs": 6.5,
+      "mohs_rozsah": [
+        6,
+        7
+      ],
+      "ucs_mpa": 228,
+      "ucs_rozsah_mpa": [
+        100,
+        300
+      ],
+      "hustota_kg_m3": 3000,
+      "cai": 3.0,
+      "trida_tvrdosti": "velmi_tvrda",
+      "nastroj_min": "ocel",
+      "chovani": "soudrzna",
+      "vzacnost_horniny": "neobvyklá",
+      "vytezek_vychozi_promile": [
+        {
+          "surovina": "blok_horniny",
+          "promile": 650
+        },
+        {
+          "surovina": "sterk",
+          "promile": 350
+        }
+      ],
+      "cas": {
+        "prod_m3_h": 0.03,
+        "t_real_min_bunka_05": 250.0,
+        "t_herni_s_bunka_05": 104.17,
+        "t_navrh_s_bunka_05": 18.0
+      },
+      "netezitelne": false,
+      "zdroje": [
+        44,
+        45,
+        46
+      ],
+      "poznamka": "Hornina zóny je jako gabro; ruda je v buňkách fe_ti, ne jako objemový podíl hostitele.",
+      "opotrebeni_na_bunku_05": 0.5
+    },
+    "granulite": {
+      "id": 29,
+      "nazev": "Granulit",
+      "idx": 10,
+      "zona": "plast",
+      "kind": "layer",
+      "skupina_tezba": "rula",
+      "mohs": 6.5,
+      "mohs_rozsah": [
+        6,
+        7
+      ],
+      "ucs_mpa": 90,
+      "ucs_rozsah_mpa": [
+        60,
+        200
+      ],
+      "hustota_kg_m3": 2750,
+      "cai": 4.5,
+      "trida_tvrdosti": "tvrda",
+      "nastroj_min": "zelezo",
+      "chovani": "soudrzna",
+      "vzacnost_horniny": "běžná",
+      "vytezek_vychozi_promile": [
+        {
+          "surovina": "blok_horniny",
+          "promile": 650
+        },
+        {
+          "surovina": "sterk",
+          "promile": 350
+        }
+      ],
+      "cas": {
+        "prod_m3_h": 0.05,
+        "t_real_min_bunka_05": 150.0,
+        "t_herni_s_bunka_05": 62.5,
+        "t_navrh_s_bunka_05": 12.0
+      },
+      "netezitelne": false,
+      "zdroje": [
+        44
+      ],
+      "opotrebeni_na_bunku_05": 0.75
+    },
+    "amphibolite": {
+      "id": 30,
+      "nazev": "Amfibolit",
+      "idx": 11,
+      "zona": "plast",
+      "kind": "layer",
+      "skupina_tezba": "amfibolit",
+      "mohs": 6.0,
+      "mohs_rozsah": [
+        5,
+        7
+      ],
+      "ucs_mpa": 212,
+      "ucs_rozsah_mpa": [
+        100,
+        280
+      ],
+      "hustota_kg_m3": 3000,
+      "cai": 5.0,
+      "trida_tvrdosti": "velmi_tvrda",
+      "nastroj_min": "ocel",
+      "chovani": "soudrzna",
+      "vzacnost_horniny": "neobvyklá",
+      "vytezek_vychozi_promile": [
+        {
+          "surovina": "blok_horniny",
+          "promile": 600
+        },
+        {
+          "surovina": "sterk",
+          "promile": 400
+        }
+      ],
+      "cas": {
+        "prod_m3_h": 0.03,
+        "t_real_min_bunka_05": 250.0,
+        "t_herni_s_bunka_05": 104.17,
+        "t_navrh_s_bunka_05": 18.0
+      },
+      "netezitelne": false,
+      "zdroje": [
+        44,
+        46
+      ],
+      "opotrebeni_na_bunku_05": 0.833
+    },
+    "lower_gneiss": {
+      "id": 31,
+      "nazev": "Spodní přechodová břidlice / rula",
+      "idx": 12,
+      "zona": "plast",
+      "kind": "layer",
+      "skupina_tezba": "rula",
+      "mohs": 6.5,
+      "mohs_rozsah": [
+        6,
+        7
+      ],
+      "ucs_mpa": 130,
+      "ucs_rozsah_mpa": [
+        80,
+        240
+      ],
+      "hustota_kg_m3": 2750,
+      "cai": 4.5,
+      "trida_tvrdosti": "tvrda",
+      "nastroj_min": "zelezo",
+      "chovani": "soudrzna",
+      "vzacnost_horniny": "běžná",
+      "vytezek_vychozi_promile": [
+        {
+          "surovina": "blok_horniny",
+          "promile": 650
+        },
+        {
+          "surovina": "sterk",
+          "promile": 350
+        }
+      ],
+      "cas": {
+        "prod_m3_h": 0.05,
+        "t_real_min_bunka_05": 150.0,
+        "t_herni_s_bunka_05": 62.5,
+        "t_navrh_s_bunka_05": 12.0
+      },
+      "netezitelne": false,
+      "zdroje": [
+        44,
+        45,
+        46,
+        48
+      ],
+      "opotrebeni_na_bunku_05": 0.75
+    },
+    "migmatite": {
+      "id": 32,
+      "nazev": "Migmatit",
+      "idx": 13,
+      "zona": "krystalinikum",
+      "kind": "layer",
+      "skupina_tezba": "rula",
+      "mohs": 6.5,
+      "mohs_rozsah": [
+        6,
+        7
+      ],
+      "ucs_mpa": 130,
+      "ucs_rozsah_mpa": [
+        80,
+        240
+      ],
+      "hustota_kg_m3": 2750,
+      "cai": 4.5,
+      "trida_tvrdosti": "tvrda",
+      "nastroj_min": "zelezo",
+      "chovani": "soudrzna",
+      "vzacnost_horniny": "běžná",
+      "vytezek_vychozi_promile": [
+        {
+          "surovina": "blok_horniny",
+          "promile": 650
+        },
+        {
+          "surovina": "sterk",
+          "promile": 350
+        }
+      ],
+      "cas": {
+        "prod_m3_h": 0.05,
+        "t_real_min_bunka_05": 150.0,
+        "t_herni_s_bunka_05": 62.5,
+        "t_navrh_s_bunka_05": 12.0
+      },
+      "netezitelne": false,
+      "zdroje": [
+        44,
+        45,
+        46,
+        48
+      ],
+      "opotrebeni_na_bunku_05": 0.75
+    },
+    "orthogneiss": {
+      "id": 33,
+      "nazev": "Ortorula",
+      "idx": 14,
+      "zona": "krystalinikum",
+      "kind": "layer",
+      "skupina_tezba": "rula",
+      "mohs": 6.5,
+      "mohs_rozsah": [
+        6,
+        7
+      ],
+      "ucs_mpa": 130,
+      "ucs_rozsah_mpa": [
+        80,
+        240
+      ],
+      "hustota_kg_m3": 2750,
+      "cai": 4.5,
+      "trida_tvrdosti": "tvrda",
+      "nastroj_min": "zelezo",
+      "chovani": "soudrzna",
+      "vzacnost_horniny": "běžná",
+      "vytezek_vychozi_promile": [
+        {
+          "surovina": "blok_horniny",
+          "promile": 650
+        },
+        {
+          "surovina": "sterk",
+          "promile": 350
+        }
+      ],
+      "cas": {
+        "prod_m3_h": 0.05,
+        "t_real_min_bunka_05": 150.0,
+        "t_herni_s_bunka_05": 62.5,
+        "t_navrh_s_bunka_05": 12.0
+      },
+      "netezitelne": false,
+      "zdroje": [
+        44,
+        45,
+        46,
+        48
+      ],
+      "opotrebeni_na_bunku_05": 0.75
+    },
+    "biotite_gneiss": {
+      "id": 34,
+      "nazev": "Biotitická rula",
+      "idx": 15,
+      "zona": "krystalinikum",
+      "kind": "layer",
+      "skupina_tezba": "rula",
+      "mohs": 6.5,
+      "mohs_rozsah": [
+        6,
+        7
+      ],
+      "ucs_mpa": 130,
+      "ucs_rozsah_mpa": [
+        80,
+        240
+      ],
+      "hustota_kg_m3": 2750,
+      "cai": 4.5,
+      "trida_tvrdosti": "tvrda",
+      "nastroj_min": "zelezo",
+      "chovani": "soudrzna",
+      "vzacnost_horniny": "běžná",
+      "vytezek_vychozi_promile": [
+        {
+          "surovina": "blok_horniny",
+          "promile": 650
+        },
+        {
+          "surovina": "sterk",
+          "promile": 350
+        }
+      ],
+      "cas": {
+        "prod_m3_h": 0.05,
+        "t_real_min_bunka_05": 150.0,
+        "t_herni_s_bunka_05": 62.5,
+        "t_navrh_s_bunka_05": 12.0
+      },
+      "netezitelne": false,
+      "zdroje": [
+        44,
+        45,
+        46,
+        48
+      ],
+      "opotrebeni_na_bunku_05": 0.75
+    },
+    "two_mica_gneiss": {
+      "id": 35,
+      "nazev": "Dvojslídná rula",
+      "idx": 16,
+      "zona": "krystalinikum",
+      "kind": "layer",
+      "skupina_tezba": "rula",
+      "mohs": 6.5,
+      "mohs_rozsah": [
+        6,
+        7
+      ],
+      "ucs_mpa": 130,
+      "ucs_rozsah_mpa": [
+        80,
+        240
+      ],
+      "hustota_kg_m3": 2750,
+      "cai": 4.5,
+      "trida_tvrdosti": "tvrda",
+      "nastroj_min": "zelezo",
+      "chovani": "soudrzna",
+      "vzacnost_horniny": "běžná",
+      "vytezek_vychozi_promile": [
+        {
+          "surovina": "blok_horniny",
+          "promile": 650
+        },
+        {
+          "surovina": "sterk",
+          "promile": 350
+        }
+      ],
+      "cas": {
+        "prod_m3_h": 0.05,
+        "t_real_min_bunka_05": 150.0,
+        "t_herni_s_bunka_05": 62.5,
+        "t_navrh_s_bunka_05": 12.0
+      },
+      "netezitelne": false,
+      "zdroje": [
+        44,
+        45,
+        46,
+        48
+      ],
+      "opotrebeni_na_bunku_05": 0.75
+    },
+    "granodiorite": {
+      "id": 36,
+      "nazev": "Granodiorit",
+      "idx": 17,
+      "zona": "krystalinikum",
+      "kind": "layer",
+      "skupina_tezba": "zula",
+      "mohs": 6.5,
+      "mohs_rozsah": [
+        6,
+        7
+      ],
+      "ucs_mpa": 160,
+      "ucs_rozsah_mpa": [
+        100,
+        250
+      ],
+      "hustota_kg_m3": 2720,
+      "cai": 5.0,
+      "trida_tvrdosti": "tvrda",
+      "nastroj_min": "zelezo",
+      "chovani": "soudrzna",
+      "vzacnost_horniny": "běžná",
+      "vytezek_vychozi_promile": [
+        {
+          "surovina": "blok_horniny",
+          "promile": 700
+        },
+        {
+          "surovina": "sterk",
+          "promile": 250
+        },
+        {
+          "surovina": "kremenny_pisek",
+          "promile": 50
+        }
+      ],
+      "cas": {
+        "prod_m3_h": 0.05,
+        "t_real_min_bunka_05": 150.0,
+        "t_herni_s_bunka_05": 62.5,
+        "t_navrh_s_bunka_05": 12.0
+      },
+      "netezitelne": false,
+      "zdroje": [
+        44
+      ],
+      "opotrebeni_na_bunku_05": 0.833
+    },
+    "leucogranite": {
+      "id": 37,
+      "nazev": "Světlá granitoidní žula",
+      "idx": 19,
+      "zona": "krystalinikum",
+      "kind": "layer",
+      "skupina_tezba": "zula",
+      "mohs": 6.5,
+      "mohs_rozsah": [
+        6,
+        7
+      ],
+      "ucs_mpa": 154,
+      "ucs_rozsah_mpa": [
+        100,
+        250
+      ],
+      "hustota_kg_m3": 2720,
+      "cai": 5.0,
+      "trida_tvrdosti": "tvrda",
+      "nastroj_min": "zelezo",
+      "chovani": "soudrzna",
+      "vzacnost_horniny": "běžná",
+      "vytezek_vychozi_promile": [
+        {
+          "surovina": "blok_horniny",
+          "promile": 700
+        },
+        {
+          "surovina": "sterk",
+          "promile": 250
+        },
+        {
+          "surovina": "kremenny_pisek",
+          "promile": 50
+        }
+      ],
+      "cas": {
+        "prod_m3_h": 0.05,
+        "t_real_min_bunka_05": 150.0,
+        "t_herni_s_bunka_05": 62.5,
+        "t_navrh_s_bunka_05": 12.0
+      },
+      "netezitelne": false,
+      "zdroje": [
+        42,
+        44,
+        45,
+        46,
+        48
+      ],
+      "opotrebeni_na_bunku_05": 0.833
+    },
+    "pegmatite": {
+      "id": 38,
+      "nazev": "Pegmatitové žíly",
+      "idx": 20,
+      "zona": "krystalinikum",
+      "kind": "vein",
+      "skupina_tezba": "zula",
+      "mohs": 6.5,
+      "mohs_rozsah": [
+        6,
+        7
+      ],
+      "ucs_mpa": 120,
+      "ucs_rozsah_mpa": [
+        60,
+        200
+      ],
+      "hustota_kg_m3": 2720,
+      "cai": 5.0,
+      "trida_tvrdosti": "tvrda",
+      "nastroj_min": "zelezo",
+      "chovani": "soudrzna",
+      "vzacnost_horniny": "běžná",
+      "vytezek_vychozi_promile": [
+        {
+          "surovina": "blok_horniny",
+          "promile": 700
+        },
+        {
+          "surovina": "sterk",
+          "promile": 250
+        },
+        {
+          "surovina": "kremenny_pisek",
+          "promile": 50
+        }
+      ],
+      "cas": {
+        "prod_m3_h": 0.05,
+        "t_real_min_bunka_05": 150.0,
+        "t_herni_s_bunka_05": 62.5,
+        "t_navrh_s_bunka_05": 12.0
+      },
+      "netezitelne": false,
+      "zdroje": [
+        42,
+        44,
+        45,
+        46,
+        48
+      ],
+      "poznamka": "Drahokamy a vzácné kovy jsou samostatné buňky (gem, rare_metal, gold), ne objemový podíl žíly.",
+      "opotrebeni_na_bunku_05": 0.833
+    },
+    "quartzite": {
+      "id": 39,
+      "nazev": "Krystalický kvarcit",
+      "idx": 21,
+      "zona": "krystalinikum",
+      "kind": "layer",
+      "skupina_tezba": "kvarcit",
+      "mohs": 7.0,
+      "mohs_rozsah": [
+        7,
+        7
+      ],
+      "ucs_mpa": 209,
+      "ucs_rozsah_mpa": [
+        150,
+        300
+      ],
+      "hustota_kg_m3": 2650,
+      "cai": 5.5,
+      "trida_tvrdosti": "velmi_tvrda",
+      "nastroj_min": "ocel",
+      "chovani": "soudrzna",
+      "vzacnost_horniny": "neobvyklá",
+      "vytezek_vychozi_promile": [
+        {
+          "surovina": "blok_horniny",
+          "promile": 600
+        },
+        {
+          "surovina": "kremenny_pisek",
+          "promile": 200
+        },
+        {
+          "surovina": "sterk",
+          "promile": 200
+        }
+      ],
+      "cas": {
+        "prod_m3_h": 0.03,
+        "t_real_min_bunka_05": 250.0,
+        "t_herni_s_bunka_05": 104.17,
+        "t_navrh_s_bunka_05": 18.0
+      },
+      "netezitelne": false,
+      "zdroje": [
+        42,
+        44,
+        45,
+        46,
+        48
+      ],
+      "opotrebeni_na_bunku_05": 0.917
+    },
+    "mica_schist": {
+      "id": 40,
+      "nazev": "Svor (granáty, slídy)",
+      "idx": 22,
+      "zona": "krystalinikum",
+      "kind": "layer",
+      "skupina_tezba": "svor",
+      "mohs": 5.0,
+      "mohs_rozsah": [
+        4,
+        7
+      ],
+      "ucs_mpa": 104,
+      "ucs_rozsah_mpa": [
+        60,
+        200
+      ],
+      "hustota_kg_m3": 2700,
+      "cai": 1.8,
+      "trida_tvrdosti": "tvrda",
+      "nastroj_min": "zelezo",
+      "chovani": "soudrzna",
+      "vzacnost_horniny": "běžná",
+      "vytezek_vychozi_promile": [
+        {
+          "surovina": "blok_horniny",
+          "promile": 300
+        },
+        {
+          "surovina": "sterk",
+          "promile": 700
+        }
+      ],
+      "cas": {
+        "prod_m3_h": 0.05,
+        "t_real_min_bunka_05": 150.0,
+        "t_herni_s_bunka_05": 62.5,
+        "t_navrh_s_bunka_05": 12.0
+      },
+      "netezitelne": false,
+      "zdroje": [
+        44,
+        46,
+        48
+      ],
+      "opotrebeni_na_bunku_05": 0.3
+    },
+    "phyllite": {
+      "id": 41,
+      "nazev": "Fylit",
+      "idx": 23,
+      "zona": "krystalinikum",
+      "kind": "layer",
+      "skupina_tezba": "fylit",
+      "mohs": 3.5,
+      "mohs_rozsah": [
+        3,
+        5
+      ],
+      "ucs_mpa": 39,
+      "ucs_rozsah_mpa": [
+        20,
+        70
+      ],
+      "hustota_kg_m3": 2600,
+      "cai": 0.8,
+      "trida_tvrdosti": "stredni",
+      "nastroj_min": "bronz",
+      "chovani": "soudrzna",
+      "vzacnost_horniny": "běžná",
+      "vytezek_vychozi_promile": [
+        {
+          "surovina": "sterk",
+          "promile": 700
+        },
+        {
+          "surovina": "blok_horniny",
+          "promile": 200
+        },
+        {
+          "surovina": "jil",
+          "promile": 100
+        }
+      ],
+      "cas": {
+        "prod_m3_h": 0.12,
+        "t_real_min_bunka_05": 62.5,
+        "t_herni_s_bunka_05": 26.04,
+        "t_navrh_s_bunka_05": 6.0
+      },
+      "netezitelne": false,
+      "zdroje": [
+        44,
+        46
+      ],
+      "opotrebeni_na_bunku_05": 0.133
+    },
+    "skarn": {
+      "id": 42,
+      "nazev": "Skarn (kontakt)",
+      "idx": 24,
+      "zona": "krystalinikum",
+      "kind": "contact",
+      "skupina_tezba": "vapenec",
+      "mohs": 5.0,
+      "mohs_rozsah": [
+        4,
+        7
+      ],
+      "ucs_mpa": 100,
+      "ucs_rozsah_mpa": [
+        30,
+        250
+      ],
+      "hustota_kg_m3": 2640,
+      "cai": 2.5,
+      "trida_tvrdosti": "tvrda",
+      "nastroj_min": "zelezo",
+      "chovani": "soudrzna",
+      "vzacnost_horniny": "běžná",
+      "vytezek_vychozi_promile": [
+        {
+          "surovina": "blok_horniny",
+          "promile": 500
+        },
+        {
+          "surovina": "vapno",
+          "promile": 200
+        },
+        {
+          "surovina": "sterk",
+          "promile": 300
+        }
+      ],
+      "cas": {
+        "prod_m3_h": 0.05,
+        "t_real_min_bunka_05": 150.0,
+        "t_herni_s_bunka_05": 62.5,
+        "t_navrh_s_bunka_05": 12.0
+      },
+      "netezitelne": false,
+      "zdroje": [
+        42,
+        44,
+        45,
+        46,
+        48
+      ],
+      "poznamka": "Cu, Fe a granáty jsou samostatné buňky v hostiteli.",
+      "opotrebeni_na_bunku_05": 0.417
+    },
+    "crystalline_transition": {
+      "id": 43,
+      "nazev": "Přechodová zóna krystalinika",
+      "idx": 25,
+      "zona": "krystalinikum",
+      "kind": "layer",
+      "skupina_tezba": "rula",
+      "mohs": 6.5,
+      "mohs_rozsah": [
+        6,
+        7
+      ],
+      "ucs_mpa": 130,
+      "ucs_rozsah_mpa": [
+        80,
+        240
+      ],
+      "hustota_kg_m3": 2750,
+      "cai": 4.5,
+      "trida_tvrdosti": "tvrda",
+      "nastroj_min": "zelezo",
+      "chovani": "soudrzna",
+      "vzacnost_horniny": "běžná",
+      "vytezek_vychozi_promile": [
+        {
+          "surovina": "blok_horniny",
+          "promile": 650
+        },
+        {
+          "surovina": "sterk",
+          "promile": 350
+        }
+      ],
+      "cas": {
+        "prod_m3_h": 0.05,
+        "t_real_min_bunka_05": 150.0,
+        "t_herni_s_bunka_05": 62.5,
+        "t_navrh_s_bunka_05": 12.0
+      },
+      "netezitelne": false,
+      "zdroje": [
+        44,
+        45,
+        46,
+        48
+      ],
+      "opotrebeni_na_bunku_05": 0.75
+    },
+    "deep_limestone": {
+      "id": 44,
+      "nazev": "Hlubinný vápenec / křída",
+      "idx": 26,
+      "zona": "sedimenty",
+      "kind": "layer",
+      "skupina_tezba": "vapenec",
+      "mohs": 3.2,
+      "mohs_rozsah": [
+        3,
+        4
+      ],
+      "ucs_mpa": 107,
+      "ucs_rozsah_mpa": [
+        30,
+        250
+      ],
+      "hustota_kg_m3": 2640,
+      "cai": 1.5,
+      "trida_tvrdosti": "stredni",
+      "nastroj_min": "bronz",
+      "chovani": "soudrzna",
+      "vzacnost_horniny": "běžná",
+      "vytezek_vychozi_promile": [
+        {
+          "surovina": "blok_horniny",
+          "promile": 600
+        },
+        {
+          "surovina": "vapno",
+          "promile": 250
+        },
+        {
+          "surovina": "sterk",
+          "promile": 150
+        }
+      ],
+      "cas": {
+        "prod_m3_h": 0.12,
+        "t_real_min_bunka_05": 62.5,
+        "t_herni_s_bunka_05": 26.04,
+        "t_navrh_s_bunka_05": 6.0
+      },
+      "netezitelne": false,
+      "zdroje": [
+        42,
+        44,
+        45,
+        46,
+        48
+      ],
+      "poznamka": "V tabulce pořadí je i křída, ale load 100/5 odpovídá spíš kompetentnímu vápenci než křídě (UCS ~1 MPa [44]). Hodnoty jako vápenec.",
+      "opotrebeni_na_bunku_05": 0.25
+    },
+    "siltstone": {
+      "id": 45,
+      "nazev": "Prachovec",
+      "idx": 27,
+      "zona": "sedimenty",
+      "kind": "layer",
+      "skupina_tezba": "prachovec",
+      "mohs": 3.5,
+      "mohs_rozsah": [
+        3,
+        5
+      ],
+      "ucs_mpa": 50,
+      "ucs_rozsah_mpa": [
+        20,
+        90
+      ],
+      "hustota_kg_m3": 2400,
+      "cai": 1.0,
+      "trida_tvrdosti": "stredni",
+      "nastroj_min": "bronz",
+      "chovani": "soudrzna",
+      "vzacnost_horniny": "běžná",
+      "vytezek_vychozi_promile": [
+        {
+          "surovina": "sterk",
+          "promile": 600
+        },
+        {
+          "surovina": "jil",
+          "promile": 300
+        },
+        {
+          "surovina": "pisek",
+          "promile": 100
+        }
+      ],
+      "cas": {
+        "prod_m3_h": 0.12,
+        "t_real_min_bunka_05": 62.5,
+        "t_herni_s_bunka_05": 26.04,
+        "t_navrh_s_bunka_05": 6.0
+      },
+      "netezitelne": false,
+      "zdroje": [
+        44,
+        45
+      ],
+      "opotrebeni_na_bunku_05": 0.167
+    },
+    "conglomerate": {
+      "id": 46,
+      "nazev": "Slepenec",
+      "idx": 28,
+      "zona": "sedimenty",
+      "kind": "layer",
+      "skupina_tezba": "slepenec",
+      "mohs": 5.0,
+      "mohs_rozsah": [
+        3,
+        7
+      ],
+      "ucs_mpa": 80,
+      "ucs_rozsah_mpa": [
+        40,
+        130
+      ],
+      "hustota_kg_m3": 2500,
+      "cai": 2.0,
+      "trida_tvrdosti": "stredni",
+      "nastroj_min": "bronz",
+      "chovani": "soudrzna",
+      "vzacnost_horniny": "běžná",
+      "vytezek_vychozi_promile": [
+        {
+          "surovina": "blok_horniny",
+          "promile": 400
+        },
+        {
+          "surovina": "sterk",
+          "promile": 500
+        },
+        {
+          "surovina": "pisek",
+          "promile": 100
+        }
+      ],
+      "cas": {
+        "prod_m3_h": 0.12,
+        "t_real_min_bunka_05": 62.5,
+        "t_herni_s_bunka_05": 26.04,
+        "t_navrh_s_bunka_05": 6.0
+      },
+      "netezitelne": false,
+      "zdroje": [
+        44,
+        45
+      ],
+      "opotrebeni_na_bunku_05": 0.333
+    },
+    "rock_salt": {
+      "id": 47,
+      "nazev": "Kamenná sůl (dómy)",
+      "idx": 29,
+      "zona": "sedimenty",
+      "kind": "dome",
+      "skupina_tezba": "evap_sul",
+      "mohs": 2.3,
+      "mohs_rozsah": [
+        2,
+        2.5
+      ],
+      "ucs_mpa": 27,
+      "ucs_rozsah_mpa": [
+        15,
+        35
+      ],
+      "hustota_kg_m3": 2160,
+      "cai": 0.3,
+      "trida_tvrdosti": "mekka",
+      "nastroj_min": "kamen",
+      "chovani": "soudrzna",
+      "vzacnost_horniny": "neobvyklá",
+      "vytezek_vychozi_promile": [
+        {
+          "surovina": "sul",
+          "promile": 900
+        },
+        {
+          "surovina": "sterk",
+          "promile": 100
+        }
+      ],
+      "cas": {
+        "prod_m3_h": 0.25,
+        "t_real_min_bunka_05": 30.0,
+        "t_herni_s_bunka_05": 12.5,
+        "t_navrh_s_bunka_05": 3.0
+      },
+      "netezitelne": false,
+      "zdroje": [
+        44,
+        45,
+        48
+      ],
+      "opotrebeni_na_bunku_05": 0.05
+    },
+    "gypsum": {
+      "id": 48,
+      "nazev": "Sádrovec, anhydrit",
+      "idx": 30,
+      "zona": "sedimenty",
+      "kind": "layer",
+      "skupina_tezba": "evap_sad",
+      "mohs": 2.0,
+      "mohs_rozsah": [
+        2,
+        2
+      ],
+      "ucs_mpa": 12,
+      "ucs_rozsah_mpa": [
+        7,
+        35
+      ],
+      "hustota_kg_m3": 2300,
+      "cai": 0.3,
+      "trida_tvrdosti": "mekka",
+      "nastroj_min": "kamen",
+      "chovani": "soudrzna",
+      "vzacnost_horniny": "neobvyklá",
+      "vytezek_vychozi_promile": [
+        {
+          "surovina": "sadrovec",
+          "promile": 850
+        },
+        {
+          "surovina": "sterk",
+          "promile": 150
+        }
+      ],
+      "cas": {
+        "prod_m3_h": 0.25,
+        "t_real_min_bunka_05": 30.0,
+        "t_herni_s_bunka_05": 12.5,
+        "t_navrh_s_bunka_05": 3.0
+      },
+      "netezitelne": false,
+      "zdroje": [
+        44,
+        48
+      ],
+      "opotrebeni_na_bunku_05": 0.05
+    },
+    "dolomite": {
+      "id": 49,
+      "nazev": "Dolomit",
+      "idx": 31,
+      "zona": "sedimenty",
+      "kind": "layer",
+      "skupina_tezba": "dolomit",
+      "mohs": 3.7,
+      "mohs_rozsah": [
+        3.5,
+        4
+      ],
+      "ucs_mpa": 86,
+      "ucs_rozsah_mpa": [
+        15,
+        120
+      ],
+      "hustota_kg_m3": 2850,
+      "cai": 1.5,
+      "trida_tvrdosti": "stredni",
+      "nastroj_min": "bronz",
+      "chovani": "soudrzna",
+      "vzacnost_horniny": "neobvyklá",
+      "vytezek_vychozi_promile": [
+        {
+          "surovina": "blok_horniny",
+          "promile": 500
+        },
+        {
+          "surovina": "vapno",
+          "promile": 300
+        },
+        {
+          "surovina": "sterk",
+          "promile": 200
+        }
+      ],
+      "cas": {
+        "prod_m3_h": 0.12,
+        "t_real_min_bunka_05": 62.5,
+        "t_herni_s_bunka_05": 26.04,
+        "t_navrh_s_bunka_05": 6.0
+      },
+      "netezitelne": false,
+      "zdroje": [
+        44,
+        45,
+        48
+      ],
+      "opotrebeni_na_bunku_05": 0.25
+    },
+    "black_coal": {
+      "id": 50,
+      "nazev": "Černé uhlí (sloj)",
+      "idx": 33,
+      "zona": "sedimenty",
+      "kind": "seam",
+      "skupina_tezba": "uhli",
+      "mohs": 2.3,
+      "mohs_rozsah": [
+        2,
+        3
+      ],
+      "ucs_mpa": 30,
+      "ucs_rozsah_mpa": [
+        8,
+        50
+      ],
+      "hustota_kg_m3": 1400,
+      "cai": 0.6,
+      "trida_tvrdosti": "mekka",
+      "nastroj_min": "kamen",
+      "chovani": "soudrzna",
+      "vzacnost_horniny": "neobvyklá",
+      "vytezek_vychozi_promile": [
+        {
+          "surovina": "uhli",
+          "promile": 850
+        },
+        {
+          "surovina": "jalovina",
+          "promile": 150
+        }
+      ],
+      "cas": {
+        "prod_m3_h": 0.25,
+        "t_real_min_bunka_05": 30.0,
+        "t_herni_s_bunka_05": 12.5,
+        "t_navrh_s_bunka_05": 3.0
+      },
+      "netezitelne": false,
+      "zdroje": [
+        44,
+        45,
+        46
+      ],
+      "opotrebeni_na_bunku_05": 0.1
+    },
+    "shale": {
+      "id": 51,
+      "nazev": "Jílová břidlice",
+      "idx": 34,
+      "zona": "sedimenty",
+      "kind": "layer",
+      "skupina_tezba": "bridlice",
+      "mohs": 3.0,
+      "mohs_rozsah": [
+        2,
+        4
+      ],
+      "ucs_mpa": 30,
+      "ucs_rozsah_mpa": [
+        5,
+        100
+      ],
+      "hustota_kg_m3": 2500,
+      "cai": 0.7,
+      "trida_tvrdosti": "mekka",
+      "nastroj_min": "kamen",
+      "chovani": "soudrzna",
+      "vzacnost_horniny": "běžná",
+      "vytezek_vychozi_promile": [
+        {
+          "surovina": "jil",
+          "promile": 500
+        },
+        {
+          "surovina": "sterk",
+          "promile": 400
+        },
+        {
+          "surovina": "prach",
+          "promile": 100
+        }
+      ],
+      "cas": {
+        "prod_m3_h": 0.25,
+        "t_real_min_bunka_05": 30.0,
+        "t_herni_s_bunka_05": 12.5,
+        "t_navrh_s_bunka_05": 3.0
+      },
+      "netezitelne": false,
+      "zdroje": [
+        42,
+        44,
+        46,
+        48
+      ],
+      "opotrebeni_na_bunku_05": 0.117
+    },
+    "quartz_sandstone": {
+      "id": 52,
+      "nazev": "Křemenný pískovec",
+      "idx": 35,
+      "zona": "sedimenty",
+      "kind": "layer",
+      "skupina_tezba": "piskovec",
+      "mohs": 6.5,
+      "mohs_rozsah": [
+        6,
+        7
+      ],
+      "ucs_mpa": 80,
+      "ucs_rozsah_mpa": [
+        20,
+        170
+      ],
+      "hustota_kg_m3": 2400,
+      "cai": 2.5,
+      "trida_tvrdosti": "stredni",
+      "nastroj_min": "bronz",
+      "chovani": "soudrzna",
+      "vzacnost_horniny": "běžná",
+      "vytezek_vychozi_promile": [
+        {
+          "surovina": "blok_horniny",
+          "promile": 500
+        },
+        {
+          "surovina": "kremenny_pisek",
+          "promile": 300
+        },
+        {
+          "surovina": "sterk",
+          "promile": 200
+        }
+      ],
+      "cas": {
+        "prod_m3_h": 0.12,
+        "t_real_min_bunka_05": 62.5,
+        "t_herni_s_bunka_05": 26.04,
+        "t_navrh_s_bunka_05": 6.0
+      },
+      "netezitelne": false,
+      "zdroje": [
+        42,
+        44,
+        45,
+        46,
+        48
+      ],
+      "opotrebeni_na_bunku_05": 0.417
+    },
+    "lignite": {
+      "id": 105,
+      "nazev": "hnědé uhlí (minerál)",
+      "idx": null,
+      "zona": "rudy",
+      "kind": "layer",
+      "skupina_tezba": "lignit",
+      "mohs": 2.0,
+      "mohs_rozsah": [
+        1.5,
+        2.5
+      ],
+      "ucs_mpa": 15,
+      "ucs_rozsah_mpa": [
+        5,
+        30
+      ],
+      "hustota_kg_m3": 1200,
+      "cai": 0.5,
+      "trida_tvrdosti": "mekka",
+      "nastroj_min": "kamen",
+      "chovani": "soudrzna",
+      "vzacnost_horniny": "běžná",
+      "vytezek_vychozi_promile": [
+        {
+          "surovina": "lignit",
+          "promile": 800
+        },
+        {
+          "surovina": "jil",
+          "promile": 200
+        }
+      ],
+      "cas": {
+        "prod_m3_h": 0.25,
+        "t_real_min_bunka_05": 30.0,
+        "t_herni_s_bunka_05": 12.5,
+        "t_navrh_s_bunka_05": 3.0
+      },
+      "netezitelne": false,
+      "zdroje": [
+        44,
+        45
+      ],
+      "opotrebeni_na_bunku_05": 0.083
+    },
+    "loess": {
+      "id": 54,
+      "nazev": "Spraš a zvětraliny",
+      "idx": 39,
+      "zona": "sedimenty",
+      "kind": "layer",
+      "skupina_tezba": "spras",
+      "mohs": 2.0,
+      "mohs_rozsah": [
+        1,
+        2.5
+      ],
+      "ucs_mpa": 0.2,
+      "ucs_rozsah_mpa": [
+        0.05,
+        0.8
+      ],
+      "hustota_kg_m3": 1550,
+      "cai": 0.5,
+      "trida_tvrdosti": "sypka",
+      "nastroj_min": "ruka",
+      "chovani": "sypka",
+      "vzacnost_horniny": "běžná",
+      "vytezek_vychozi_promile": [
+        {
+          "surovina": "hlina",
+          "promile": 500
+        },
+        {
+          "surovina": "pisek",
+          "promile": 400
+        },
+        {
+          "surovina": "jil",
+          "promile": 100
+        }
+      ],
+      "cas": {
+        "prod_m3_h": 0.8,
+        "t_real_min_bunka_05": 9.38,
+        "t_herni_s_bunka_05": 3.91,
+        "t_navrh_s_bunka_05": 1.0
+      },
+      "netezitelne": false,
+      "zdroje": [
+        43,
+        45
+      ],
+      "opotrebeni_na_bunku_05": 0.083
+    },
+    "hill_sand": {
+      "id": 55,
+      "nazev": "Písčité podloží pahorků",
+      "idx": 41,
+      "zona": "hory",
+      "kind": "mountain",
+      "skupina_tezba": "pisek",
+      "mohs": 6.0,
+      "mohs_rozsah": [
+        5,
+        7
+      ],
+      "ucs_mpa": 0.0,
+      "ucs_rozsah_mpa": [
+        0,
+        0.2
+      ],
+      "hustota_kg_m3": 1800,
+      "cai": 1.5,
+      "trida_tvrdosti": "sypka",
+      "nastroj_min": "ruka",
+      "chovani": "sypka",
+      "vzacnost_horniny": "běžná",
+      "vytezek_vychozi_promile": [
+        {
+          "surovina": "pisek",
+          "promile": 900
+        },
+        {
+          "surovina": "sterk",
+          "promile": 100
+        }
+      ],
+      "cas": {
+        "prod_m3_h": 0.8,
+        "t_real_min_bunka_05": 9.38,
+        "t_herni_s_bunka_05": 3.91,
+        "t_navrh_s_bunka_05": 1.0
+      },
+      "netezitelne": false,
+      "zdroje": [
+        45,
+        46,
+        48
+      ],
+      "opotrebeni_na_bunku_05": 0.25
+    },
+    "limestone_outcrop": {
+      "id": 56,
+      "nazev": "Vápencové výchozy",
+      "idx": 42,
+      "zona": "hory",
+      "kind": "mountain",
+      "skupina_tezba": "vapenec",
+      "mohs": 3.2,
+      "mohs_rozsah": [
+        3,
+        4
+      ],
+      "ucs_mpa": 107,
+      "ucs_rozsah_mpa": [
+        30,
+        250
+      ],
+      "hustota_kg_m3": 2640,
+      "cai": 1.5,
+      "trida_tvrdosti": "stredni",
+      "nastroj_min": "bronz",
+      "chovani": "soudrzna",
+      "vzacnost_horniny": "běžná",
+      "vytezek_vychozi_promile": [
+        {
+          "surovina": "blok_horniny",
+          "promile": 600
+        },
+        {
+          "surovina": "vapno",
+          "promile": 250
+        },
+        {
+          "surovina": "sterk",
+          "promile": 150
+        }
+      ],
+      "cas": {
+        "prod_m3_h": 0.12,
+        "t_real_min_bunka_05": 62.5,
+        "t_herni_s_bunka_05": 26.04,
+        "t_navrh_s_bunka_05": 6.0
+      },
+      "netezitelne": false,
+      "zdroje": [
+        42,
+        44,
+        45,
+        46,
+        48
+      ],
+      "opotrebeni_na_bunku_05": 0.25
+    },
+    "weathered_volcanic": {
+      "id": 57,
+      "nazev": "Zvětralé vyvřeliny",
+      "idx": 43,
+      "zona": "hory",
+      "kind": "mountain",
+      "skupina_tezba": "zvetr",
+      "mohs": 4.0,
+      "mohs_rozsah": [
+        2,
+        6
+      ],
+      "ucs_mpa": 20,
+      "ucs_rozsah_mpa": [
+        5,
+        40
+      ],
+      "hustota_kg_m3": 2300,
+      "cai": 1.2,
+      "trida_tvrdosti": "mekka",
+      "nastroj_min": "kamen",
+      "chovani": "soudrzna",
+      "vzacnost_horniny": "běžná",
+      "vytezek_vychozi_promile": [
+        {
+          "surovina": "sterk",
+          "promile": 500
+        },
+        {
+          "surovina": "pisek",
+          "promile": 300
+        },
+        {
+          "surovina": "jil",
+          "promile": 200
+        }
+      ],
+      "cas": {
+        "prod_m3_h": 0.25,
+        "t_real_min_bunka_05": 30.0,
+        "t_herni_s_bunka_05": 12.5,
+        "t_navrh_s_bunka_05": 3.0
+      },
+      "netezitelne": false,
+      "zdroje": [
+        42,
+        45
+      ],
+      "opotrebeni_na_bunku_05": 0.2
+    },
+    "flysch": {
+      "id": 58,
+      "nazev": "Lesní půdy, flyš",
+      "idx": 44,
+      "zona": "hory",
+      "kind": "mountain",
+      "skupina_tezba": "flys",
+      "mohs": 4.0,
+      "mohs_rozsah": [
+        3,
+        6
+      ],
+      "ucs_mpa": 40,
+      "ucs_rozsah_mpa": [
+        15,
+        80
+      ],
+      "hustota_kg_m3": 2450,
+      "cai": 1.5,
+      "trida_tvrdosti": "stredni",
+      "nastroj_min": "bronz",
+      "chovani": "soudrzna",
+      "vzacnost_horniny": "běžná",
+      "vytezek_vychozi_promile": [
+        {
+          "surovina": "sterk",
+          "promile": 400
+        },
+        {
+          "surovina": "jil",
+          "promile": 300
+        },
+        {
+          "surovina": "pisek",
+          "promile": 300
+        }
+      ],
+      "cas": {
+        "prod_m3_h": 0.12,
+        "t_real_min_bunka_05": 62.5,
+        "t_herni_s_bunka_05": 26.04,
+        "t_navrh_s_bunka_05": 6.0
+      },
+      "netezitelne": false,
+      "zdroje": [
+        42,
+        44
+      ],
+      "opotrebeni_na_bunku_05": 0.25
+    },
+    "sandstone_towers": {
+      "id": 59,
+      "nazev": "Pískovcové věže a stěny",
+      "idx": 45,
+      "zona": "hory",
+      "kind": "mountain",
+      "skupina_tezba": "piskovec",
+      "mohs": 6.5,
+      "mohs_rozsah": [
+        6,
+        7
+      ],
+      "ucs_mpa": 80,
+      "ucs_rozsah_mpa": [
+        20,
+        170
+      ],
+      "hustota_kg_m3": 2400,
+      "cai": 2.5,
+      "trida_tvrdosti": "stredni",
+      "nastroj_min": "bronz",
+      "chovani": "soudrzna",
+      "vzacnost_horniny": "běžná",
+      "vytezek_vychozi_promile": [
+        {
+          "surovina": "blok_horniny",
+          "promile": 500
+        },
+        {
+          "surovina": "kremenny_pisek",
+          "promile": 300
+        },
+        {
+          "surovina": "sterk",
+          "promile": 200
+        }
+      ],
+      "cas": {
+        "prod_m3_h": 0.12,
+        "t_real_min_bunka_05": 62.5,
+        "t_herni_s_bunka_05": 26.04,
+        "t_navrh_s_bunka_05": 6.0
+      },
+      "netezitelne": false,
+      "zdroje": [
+        42,
+        44,
+        45,
+        46,
+        48
+      ],
+      "opotrebeni_na_bunku_05": 0.417
+    },
+    "weathered_granite": {
+      "id": 60,
+      "nazev": "Zvětralá žula vysočin",
+      "idx": 46,
+      "zona": "hory",
+      "kind": "mountain",
+      "skupina_tezba": "zvetr",
+      "mohs": 4.0,
+      "mohs_rozsah": [
+        2,
+        6
+      ],
+      "ucs_mpa": 20,
+      "ucs_rozsah_mpa": [
+        5,
+        40
+      ],
+      "hustota_kg_m3": 2300,
+      "cai": 1.2,
+      "trida_tvrdosti": "mekka",
+      "nastroj_min": "kamen",
+      "chovani": "soudrzna",
+      "vzacnost_horniny": "běžná",
+      "vytezek_vychozi_promile": [
+        {
+          "surovina": "sterk",
+          "promile": 500
+        },
+        {
+          "surovina": "pisek",
+          "promile": 300
+        },
+        {
+          "surovina": "jil",
+          "promile": 200
+        }
+      ],
+      "cas": {
+        "prod_m3_h": 0.25,
+        "t_real_min_bunka_05": 30.0,
+        "t_herni_s_bunka_05": 12.5,
+        "t_navrh_s_bunka_05": 3.0
+      },
+      "netezitelne": false,
+      "zdroje": [
+        42,
+        45
+      ],
+      "poznamka": "Grus: zvětralá žula se rozpadá na štěrk, písek a jíl.",
+      "opotrebeni_na_bunku_05": 0.2
+    },
+    "mountain_ridge": {
+      "id": 61,
+      "nazev": "Horské hřebeny (Šumava/Krkonoše)",
+      "idx": 47,
+      "zona": "hory",
+      "kind": "mountain",
+      "skupina_tezba": "rula",
+      "mohs": 6.5,
+      "mohs_rozsah": [
+        6,
+        7
+      ],
+      "ucs_mpa": 130,
+      "ucs_rozsah_mpa": [
+        80,
+        240
+      ],
+      "hustota_kg_m3": 2750,
+      "cai": 4.5,
+      "trida_tvrdosti": "tvrda",
+      "nastroj_min": "zelezo",
+      "chovani": "soudrzna",
+      "vzacnost_horniny": "běžná",
+      "vytezek_vychozi_promile": [
+        {
+          "surovina": "blok_horniny",
+          "promile": 650
+        },
+        {
+          "surovina": "sterk",
+          "promile": 350
+        }
+      ],
+      "cas": {
+        "prod_m3_h": 0.05,
+        "t_real_min_bunka_05": 150.0,
+        "t_herni_s_bunka_05": 62.5,
+        "t_navrh_s_bunka_05": 12.0
+      },
+      "netezitelne": false,
+      "zdroje": [
+        44,
+        45,
+        46,
+        48
+      ],
+      "opotrebeni_na_bunku_05": 0.75
+    },
+    "slope_schist": {
+      "id": 62,
+      "nazev": "Krystalické břidlice svahů",
+      "idx": 48,
+      "zona": "hory",
+      "kind": "mountain",
+      "skupina_tezba": "svor",
+      "mohs": 5.0,
+      "mohs_rozsah": [
+        4,
+        7
+      ],
+      "ucs_mpa": 104,
+      "ucs_rozsah_mpa": [
+        60,
+        200
+      ],
+      "hustota_kg_m3": 2700,
+      "cai": 1.8,
+      "trida_tvrdosti": "tvrda",
+      "nastroj_min": "zelezo",
+      "chovani": "soudrzna",
+      "vzacnost_horniny": "běžná",
+      "vytezek_vychozi_promile": [
+        {
+          "surovina": "blok_horniny",
+          "promile": 300
+        },
+        {
+          "surovina": "sterk",
+          "promile": 700
+        }
+      ],
+      "cas": {
+        "prod_m3_h": 0.05,
+        "t_real_min_bunka_05": 150.0,
+        "t_herni_s_bunka_05": 62.5,
+        "t_navrh_s_bunka_05": 12.0
+      },
+      "netezitelne": false,
+      "zdroje": [
+        44,
+        46,
+        48
+      ],
+      "opotrebeni_na_bunku_05": 0.3
+    },
+    "granite_massif": {
+      "id": 63,
+      "nazev": "Žulové masivy hřbetů",
+      "idx": 49,
+      "zona": "hory",
+      "kind": "mountain",
+      "skupina_tezba": "zula",
+      "mohs": 6.5,
+      "mohs_rozsah": [
+        6,
+        7
+      ],
+      "ucs_mpa": 154,
+      "ucs_rozsah_mpa": [
+        100,
+        250
+      ],
+      "hustota_kg_m3": 2720,
+      "cai": 5.0,
+      "trida_tvrdosti": "tvrda",
+      "nastroj_min": "zelezo",
+      "chovani": "soudrzna",
+      "vzacnost_horniny": "běžná",
+      "vytezek_vychozi_promile": [
+        {
+          "surovina": "blok_horniny",
+          "promile": 700
+        },
+        {
+          "surovina": "sterk",
+          "promile": 250
+        },
+        {
+          "surovina": "kremenny_pisek",
+          "promile": 50
+        }
+      ],
+      "cas": {
+        "prod_m3_h": 0.05,
+        "t_real_min_bunka_05": 150.0,
+        "t_herni_s_bunka_05": 62.5,
+        "t_navrh_s_bunka_05": 12.0
+      },
+      "netezitelne": false,
+      "zdroje": [
+        42,
+        44,
+        45,
+        46,
+        48
+      ],
+      "opotrebeni_na_bunku_05": 0.833
+    },
+    "rock_wall": {
+      "id": 64,
+      "nazev": "Strmé skalní stěny",
+      "idx": 50,
+      "zona": "hory",
+      "kind": "mountain",
+      "skupina_tezba": "zula",
+      "mohs": 6.5,
+      "mohs_rozsah": [
+        6,
+        7
+      ],
+      "ucs_mpa": 154,
+      "ucs_rozsah_mpa": [
+        100,
+        250
+      ],
+      "hustota_kg_m3": 2720,
+      "cai": 5.0,
+      "trida_tvrdosti": "tvrda",
+      "nastroj_min": "zelezo",
+      "chovani": "soudrzna",
+      "vzacnost_horniny": "běžná",
+      "vytezek_vychozi_promile": [
+        {
+          "surovina": "blok_horniny",
+          "promile": 700
+        },
+        {
+          "surovina": "sterk",
+          "promile": 250
+        },
+        {
+          "surovina": "kremenny_pisek",
+          "promile": 50
+        }
+      ],
+      "cas": {
+        "prod_m3_h": 0.05,
+        "t_real_min_bunka_05": 150.0,
+        "t_herni_s_bunka_05": 62.5,
+        "t_navrh_s_bunka_05": 12.0
+      },
+      "netezitelne": false,
+      "zdroje": [
+        42,
+        44,
+        45,
+        46,
+        48
+      ],
+      "opotrebeni_na_bunku_05": 0.833
+    },
+    "alpine_crystalline": {
+      "id": 65,
+      "nazev": "Vysokohorské krystalinikum",
+      "idx": 51,
+      "zona": "hory",
+      "kind": "mountain",
+      "skupina_tezba": "rula",
+      "mohs": 6.5,
+      "mohs_rozsah": [
+        6,
+        7
+      ],
+      "ucs_mpa": 130,
+      "ucs_rozsah_mpa": [
+        80,
+        240
+      ],
+      "hustota_kg_m3": 2750,
+      "cai": 4.5,
+      "trida_tvrdosti": "tvrda",
+      "nastroj_min": "zelezo",
+      "chovani": "soudrzna",
+      "vzacnost_horniny": "běžná",
+      "vytezek_vychozi_promile": [
+        {
+          "surovina": "blok_horniny",
+          "promile": 650
+        },
+        {
+          "surovina": "sterk",
+          "promile": 350
+        }
+      ],
+      "cas": {
+        "prod_m3_h": 0.05,
+        "t_real_min_bunka_05": 150.0,
+        "t_herni_s_bunka_05": 62.5,
+        "t_navrh_s_bunka_05": 12.0
+      },
+      "netezitelne": false,
+      "zdroje": [
+        44,
+        45,
+        46,
+        48
+      ],
+      "opotrebeni_na_bunku_05": 0.75
+    },
+    "subalpine_scree": {
+      "id": 66,
+      "nazev": "Subalpínské pásmo (skály, sutě)",
+      "idx": 52,
+      "zona": "hory",
+      "kind": "mountain",
+      "skupina_tezba": "sterk",
+      "mohs": 5.0,
+      "mohs_rozsah": [
+        3,
+        7
+      ],
+      "ucs_mpa": 0.0,
+      "ucs_rozsah_mpa": [
+        0,
+        0.2
+      ],
+      "hustota_kg_m3": 1900,
+      "cai": 1.5,
+      "trida_tvrdosti": "sypka",
+      "nastroj_min": "ruka",
+      "chovani": "sypka",
+      "vzacnost_horniny": "běžná",
+      "vytezek_vychozi_promile": [
+        {
+          "surovina": "sterk",
+          "promile": 800
+        },
+        {
+          "surovina": "pisek",
+          "promile": 200
+        }
+      ],
+      "cas": {
+        "prod_m3_h": 0.8,
+        "t_real_min_bunka_05": 9.38,
+        "t_herni_s_bunka_05": 3.91,
+        "t_navrh_s_bunka_05": 1.0
+      },
+      "netezitelne": false,
+      "zdroje": [
+        45,
+        46
+      ],
+      "opotrebeni_na_bunku_05": 0.25
+    },
+    "alpine_belt": {
+      "id": 67,
+      "nazev": "Alpínský stupeň",
+      "idx": 53,
+      "zona": "hory",
+      "kind": "mountain",
+      "skupina_tezba": "rula",
+      "mohs": 6.5,
+      "mohs_rozsah": [
+        6,
+        7
+      ],
+      "ucs_mpa": 130,
+      "ucs_rozsah_mpa": [
+        80,
+        240
+      ],
+      "hustota_kg_m3": 2750,
+      "cai": 4.5,
+      "trida_tvrdosti": "tvrda",
+      "nastroj_min": "zelezo",
+      "chovani": "soudrzna",
+      "vzacnost_horniny": "běžná",
+      "vytezek_vychozi_promile": [
+        {
+          "surovina": "blok_horniny",
+          "promile": 650
+        },
+        {
+          "surovina": "sterk",
+          "promile": 350
+        }
+      ],
+      "cas": {
+        "prod_m3_h": 0.05,
+        "t_real_min_bunka_05": 150.0,
+        "t_herni_s_bunka_05": 62.5,
+        "t_navrh_s_bunka_05": 12.0
+      },
+      "netezitelne": false,
+      "zdroje": [
+        44,
+        45,
+        46,
+        48
+      ],
+      "opotrebeni_na_bunku_05": 0.75
+    },
+    "alpine_granite": {
+      "id": 68,
+      "nazev": "Vysokohorský granit",
+      "idx": 54,
+      "zona": "hory",
+      "kind": "mountain",
+      "skupina_tezba": "zula",
+      "mohs": 6.5,
+      "mohs_rozsah": [
+        6,
+        7
+      ],
+      "ucs_mpa": 154,
+      "ucs_rozsah_mpa": [
+        100,
+        250
+      ],
+      "hustota_kg_m3": 2720,
+      "cai": 5.0,
+      "trida_tvrdosti": "tvrda",
+      "nastroj_min": "zelezo",
+      "chovani": "soudrzna",
+      "vzacnost_horniny": "běžná",
+      "vytezek_vychozi_promile": [
+        {
+          "surovina": "blok_horniny",
+          "promile": 700
+        },
+        {
+          "surovina": "sterk",
+          "promile": 250
+        },
+        {
+          "surovina": "kremenny_pisek",
+          "promile": 50
+        }
+      ],
+      "cas": {
+        "prod_m3_h": 0.05,
+        "t_real_min_bunka_05": 150.0,
+        "t_herni_s_bunka_05": 62.5,
+        "t_navrh_s_bunka_05": 12.0
+      },
+      "netezitelne": false,
+      "zdroje": [
+        42,
+        44,
+        45,
+        46,
+        48
+      ],
+      "opotrebeni_na_bunku_05": 0.833
+    },
+    "alpine_quartzite": {
+      "id": 69,
+      "nazev": "Vysokohorské kvarcity a břidlice",
+      "idx": 55,
+      "zona": "hory",
+      "kind": "mountain",
+      "skupina_tezba": "kvarcit",
+      "mohs": 7.0,
+      "mohs_rozsah": [
+        7,
+        7
+      ],
+      "ucs_mpa": 209,
+      "ucs_rozsah_mpa": [
+        150,
+        300
+      ],
+      "hustota_kg_m3": 2650,
+      "cai": 5.5,
+      "trida_tvrdosti": "velmi_tvrda",
+      "nastroj_min": "ocel",
+      "chovani": "soudrzna",
+      "vzacnost_horniny": "neobvyklá",
+      "vytezek_vychozi_promile": [
+        {
+          "surovina": "blok_horniny",
+          "promile": 600
+        },
+        {
+          "surovina": "kremenny_pisek",
+          "promile": 200
+        },
+        {
+          "surovina": "sterk",
+          "promile": 200
+        }
+      ],
+      "cas": {
+        "prod_m3_h": 0.03,
+        "t_real_min_bunka_05": 250.0,
+        "t_herni_s_bunka_05": 104.17,
+        "t_navrh_s_bunka_05": 18.0
+      },
+      "netezitelne": false,
+      "zdroje": [
+        42,
+        44,
+        45,
+        46,
+        48
+      ],
+      "opotrebeni_na_bunku_05": 0.917
+    },
+    "extreme_ridge": {
+      "id": 70,
+      "nazev": "Extrémní hřebeny",
+      "idx": 56,
+      "zona": "hory",
+      "kind": "mountain",
+      "skupina_tezba": "zula",
+      "mohs": 6.5,
+      "mohs_rozsah": [
+        6,
+        7
+      ],
+      "ucs_mpa": 154,
+      "ucs_rozsah_mpa": [
+        100,
+        250
+      ],
+      "hustota_kg_m3": 2720,
+      "cai": 5.0,
+      "trida_tvrdosti": "tvrda",
+      "nastroj_min": "zelezo",
+      "chovani": "soudrzna",
+      "vzacnost_horniny": "běžná",
+      "vytezek_vychozi_promile": [
+        {
+          "surovina": "blok_horniny",
+          "promile": 700
+        },
+        {
+          "surovina": "sterk",
+          "promile": 250
+        },
+        {
+          "surovina": "kremenny_pisek",
+          "promile": 50
+        }
+      ],
+      "cas": {
+        "prod_m3_h": 0.05,
+        "t_real_min_bunka_05": 150.0,
+        "t_herni_s_bunka_05": 62.5,
+        "t_navrh_s_bunka_05": 12.0
+      },
+      "netezitelne": false,
+      "zdroje": [
+        42,
+        44,
+        45,
+        46,
+        48
+      ],
+      "opotrebeni_na_bunku_05": 0.833
+    },
+    "high_massif": {
+      "id": 71,
+      "nazev": "Velehorský masiv",
+      "idx": 58,
+      "zona": "hory",
+      "kind": "mountain",
+      "skupina_tezba": "zula",
+      "mohs": 6.5,
+      "mohs_rozsah": [
+        6,
+        7
+      ],
+      "ucs_mpa": 154,
+      "ucs_rozsah_mpa": [
+        100,
+        250
+      ],
+      "hustota_kg_m3": 2720,
+      "cai": 5.0,
+      "trida_tvrdosti": "tvrda",
+      "nastroj_min": "zelezo",
+      "chovani": "soudrzna",
+      "vzacnost_horniny": "běžná",
+      "vytezek_vychozi_promile": [
+        {
+          "surovina": "blok_horniny",
+          "promile": 700
+        },
+        {
+          "surovina": "sterk",
+          "promile": 250
+        },
+        {
+          "surovina": "kremenny_pisek",
+          "promile": 50
+        }
+      ],
+      "cas": {
+        "prod_m3_h": 0.05,
+        "t_real_min_bunka_05": 150.0,
+        "t_herni_s_bunka_05": 62.5,
+        "t_navrh_s_bunka_05": 12.0
+      },
+      "netezitelne": false,
+      "zdroje": [
+        42,
+        44,
+        45,
+        46,
+        48
+      ],
+      "opotrebeni_na_bunku_05": 0.833
+    },
+    "rock_spire": {
+      "id": 72,
+      "nazev": "Skalní věže",
+      "idx": 59,
+      "zona": "hory",
+      "kind": "mountain",
+      "skupina_tezba": "zula",
+      "mohs": 6.5,
+      "mohs_rozsah": [
+        6,
+        7
+      ],
+      "ucs_mpa": 154,
+      "ucs_rozsah_mpa": [
+        100,
+        250
+      ],
+      "hustota_kg_m3": 2720,
+      "cai": 5.0,
+      "trida_tvrdosti": "tvrda",
+      "nastroj_min": "zelezo",
+      "chovani": "soudrzna",
+      "vzacnost_horniny": "běžná",
+      "vytezek_vychozi_promile": [
+        {
+          "surovina": "blok_horniny",
+          "promile": 700
+        },
+        {
+          "surovina": "sterk",
+          "promile": 250
+        },
+        {
+          "surovina": "kremenny_pisek",
+          "promile": 50
+        }
+      ],
+      "cas": {
+        "prod_m3_h": 0.05,
+        "t_real_min_bunka_05": 150.0,
+        "t_herni_s_bunka_05": 62.5,
+        "t_navrh_s_bunka_05": 12.0
+      },
+      "netezitelne": false,
+      "zdroje": [
+        42,
+        44,
+        45,
+        46,
+        48
+      ],
+      "opotrebeni_na_bunku_05": 0.833
+    },
+    "summit_pyramid": {
+      "id": 73,
+      "nazev": "Vrcholové pyramidy",
+      "idx": 60,
+      "zona": "hory",
+      "kind": "mountain",
+      "skupina_tezba": "zula",
+      "mohs": 6.5,
+      "mohs_rozsah": [
+        6,
+        7
+      ],
+      "ucs_mpa": 154,
+      "ucs_rozsah_mpa": [
+        100,
+        250
+      ],
+      "hustota_kg_m3": 2720,
+      "cai": 5.0,
+      "trida_tvrdosti": "tvrda",
+      "nastroj_min": "zelezo",
+      "chovani": "soudrzna",
+      "vzacnost_horniny": "běžná",
+      "vytezek_vychozi_promile": [
+        {
+          "surovina": "blok_horniny",
+          "promile": 700
+        },
+        {
+          "surovina": "sterk",
+          "promile": 250
+        },
+        {
+          "surovina": "kremenny_pisek",
+          "promile": 50
+        }
+      ],
+      "cas": {
+        "prod_m3_h": 0.05,
+        "t_real_min_bunka_05": 150.0,
+        "t_herni_s_bunka_05": 62.5,
+        "t_navrh_s_bunka_05": 12.0
+      },
+      "netezitelne": false,
+      "zdroje": [
+        42,
+        44,
+        45,
+        46,
+        48
+      ],
+      "opotrebeni_na_bunku_05": 0.833
+    },
+    "highest_point": {
+      "id": 74,
+      "nazev": "Nejvyšší bod (skála, led)",
+      "idx": 61,
+      "zona": "hory",
+      "kind": "mountain",
+      "skupina_tezba": "zula",
+      "mohs": 6.5,
+      "mohs_rozsah": [
+        6,
+        7
+      ],
+      "ucs_mpa": 154,
+      "ucs_rozsah_mpa": [
+        100,
+        250
+      ],
+      "hustota_kg_m3": 2720,
+      "cai": 5.0,
+      "trida_tvrdosti": "tvrda",
+      "nastroj_min": "zelezo",
+      "chovani": "soudrzna",
+      "vzacnost_horniny": "běžná",
+      "vytezek_vychozi_promile": [
+        {
+          "surovina": "blok_horniny",
+          "promile": 700
+        },
+        {
+          "surovina": "sterk",
+          "promile": 250
+        },
+        {
+          "surovina": "kremenny_pisek",
+          "promile": 50
+        }
+      ],
+      "cas": {
+        "prod_m3_h": 0.05,
+        "t_real_min_bunka_05": 150.0,
+        "t_herni_s_bunka_05": 62.5,
+        "t_navrh_s_bunka_05": 12.0
+      },
+      "netezitelne": false,
+      "zdroje": [
+        42,
+        44,
+        45,
+        46,
+        48
+      ],
+      "poznamka": "Název mísí skálu a led; hodnoty jako žula. Sníh je samostatná buňka eternal_snow.",
+      "opotrebeni_na_bunku_05": 0.833
+    },
+    "volcanic_conduit": {
+      "id": 75,
+      "nazev": "Sopouch (vulkanický kanál)",
+      "idx": 64,
+      "zona": "telesa",
+      "kind": "vent",
+      "skupina_tezba": "cedic",
+      "mohs": 6.5,
+      "mohs_rozsah": [
+        6,
+        8
+      ],
+      "ucs_mpa": 100,
+      "ucs_rozsah_mpa": [
+        100,
+        300
+      ],
+      "hustota_kg_m3": 3000,
+      "cai": 3.0,
+      "trida_tvrdosti": "tvrda",
+      "nastroj_min": "zelezo",
+      "chovani": "soudrzna",
+      "vzacnost_horniny": "běžná",
+      "vytezek_vychozi_promile": [
+        {
+          "surovina": "blok_horniny",
+          "promile": 700
+        },
+        {
+          "surovina": "sterk",
+          "promile": 300
+        }
+      ],
+      "cas": {
+        "prod_m3_h": 0.05,
+        "t_real_min_bunka_05": 150.0,
+        "t_herni_s_bunka_05": 62.5,
+        "t_navrh_s_bunka_05": 12.0
+      },
+      "netezitelne": false,
+      "zdroje": [
+        42,
+        44,
+        45,
+        46
+      ],
+      "opotrebeni_na_bunku_05": 0.5
+    },
+    "diamond": {
+      "id": 100,
+      "nazev": "diamanty",
+      "idx": null,
+      "zona": "rudy",
+      "kind": "pocket",
+      "skupina_tezba": "drahokam",
+      "mohs": 10,
+      "mohs_rozsah": [
+        10,
+        10
+      ],
+      "ucs_mpa": 200,
+      "ucs_rozsah_mpa": [
+        100,
+        400
+      ],
+      "hustota_kg_m3": 3500,
+      "cai": 5.0,
+      "trida_tvrdosti": "velmi_tvrda",
+      "nastroj_min": "ocel",
+      "chovani": "soudrzna",
+      "vzacnost_horniny": "vzácná",
+      "vytezek_vychozi_promile": [
+        {
+          "surovina": "jalovina",
+          "promile": 900
+        },
+        {
+          "surovina": "sterk",
+          "promile": 100
+        }
+      ],
+      "cas": {
+        "prod_m3_h": 0.03,
+        "t_real_min_bunka_05": 250.0,
+        "t_herni_s_bunka_05": 104.17,
+        "t_navrh_s_bunka_05": 18.0
+      },
+      "netezitelne": false,
+      "zdroje": [
+        48,
+        50
+      ],
+      "vytezek_kusovy": [
+        {
+          "surovina": "diamanty",
+          "kusu_na_bunku_05": 1
+        }
+      ],
+      "poznamka": "Kusový výnos 1 kámen / buňku 0,5 m (hra, ne reálný objem). Zbytek objemu je jalovina. Reálná teoretická jakost kimberlitu je ct/t [50].",
+      "opotrebeni_na_bunku_05": 0.833
+    },
+    "gem": {
+      "id": 101,
+      "nazev": "drahokamy",
+      "idx": null,
+      "zona": "rudy",
+      "kind": "pocket",
+      "skupina_tezba": "drahokam",
+      "mohs": 7.5,
+      "mohs_rozsah": [
+        7,
+        9
+      ],
+      "ucs_mpa": 200,
+      "ucs_rozsah_mpa": [
+        100,
+        400
+      ],
+      "hustota_kg_m3": 3500,
+      "cai": 5.0,
+      "trida_tvrdosti": "velmi_tvrda",
+      "nastroj_min": "ocel",
+      "chovani": "soudrzna",
+      "vzacnost_horniny": "vzácná",
+      "vytezek_vychozi_promile": [
+        {
+          "surovina": "jalovina",
+          "promile": 900
+        },
+        {
+          "surovina": "sterk",
+          "promile": 100
+        }
+      ],
+      "cas": {
+        "prod_m3_h": 0.03,
+        "t_real_min_bunka_05": 250.0,
+        "t_herni_s_bunka_05": 104.17,
+        "t_navrh_s_bunka_05": 18.0
+      },
+      "netezitelne": false,
+      "zdroje": [
+        48,
+        50
+      ],
+      "vytezek_kusovy": [
+        {
+          "surovina": "drahokamy",
+          "kusu_na_bunku_05": 1
+        }
+      ],
+      "opotrebeni_na_bunku_05": 0.833
+    },
+    "rare_metal": {
+      "id": 102,
+      "nazev": "vzácné kovy (Li, Sn, Ta)",
+      "idx": null,
+      "zona": "rudy",
+      "kind": "vein",
+      "skupina_tezba": "ruda_med",
+      "mohs": 4.0,
+      "mohs_rozsah": [
+        3,
+        5
+      ],
+      "ucs_mpa": 80,
+      "ucs_rozsah_mpa": [
+        40,
+        150
+      ],
+      "hustota_kg_m3": 3200,
+      "cai": 2.0,
+      "trida_tvrdosti": "stredni",
+      "nastroj_min": "bronz",
+      "chovani": "soudrzna",
+      "vzacnost_horniny": "vzácná",
+      "vytezek_vychozi_promile": [
+        {
+          "surovina": "ruda_vzacne",
+          "promile": 300
+        },
+        {
+          "surovina": "jalovina",
+          "promile": 700
+        }
+      ],
+      "cas": {
+        "prod_m3_h": 0.12,
+        "t_real_min_bunka_05": 62.5,
+        "t_herni_s_bunka_05": 26.04,
+        "t_navrh_s_bunka_05": 6.0
+      },
+      "netezitelne": false,
+      "zdroje": [
+        45,
+        49
+      ],
+      "poznamka": "Buňka je už žíla; 300 ‰ je herní abstrakce (reálné cín/Li ložisko bývá < 1 % [49-typově]).",
+      "opotrebeni_na_bunku_05": 0.333
+    },
+    "fe_ti": {
+      "id": 103,
+      "nazev": "titanomagnetit (Fe-Ti)",
+      "idx": null,
+      "zona": "rudy",
+      "kind": "pocket",
+      "skupina_tezba": "ruda_fe",
+      "mohs": 6.0,
+      "mohs_rozsah": [
+        5.5,
+        6.5
+      ],
+      "ucs_mpa": 150,
+      "ucs_rozsah_mpa": [
+        80,
+        250
+      ],
+      "hustota_kg_m3": 4500,
+      "cai": 3.0,
+      "trida_tvrdosti": "tvrda",
+      "nastroj_min": "zelezo",
+      "chovani": "soudrzna",
+      "vzacnost_horniny": "neobvyklá",
+      "vytezek_vychozi_promile": [
+        {
+          "surovina": "ruda_fe_ti",
+          "promile": 600
+        },
+        {
+          "surovina": "jalovina",
+          "promile": 400
+        }
+      ],
+      "cas": {
+        "prod_m3_h": 0.05,
+        "t_real_min_bunka_05": 150.0,
+        "t_herni_s_bunka_05": 62.5,
+        "t_navrh_s_bunka_05": 12.0
+      },
+      "netezitelne": false,
+      "zdroje": [
+        45,
+        55
+      ],
+      "opotrebeni_na_bunku_05": 0.5
+    },
+    "coal": {
+      "id": 104,
+      "nazev": "černé uhlí (minerál)",
+      "idx": null,
+      "zona": "rudy",
+      "kind": "layer",
+      "skupina_tezba": "uhli",
+      "mohs": 2.3,
+      "mohs_rozsah": [
+        2,
+        3
+      ],
+      "ucs_mpa": 30,
+      "ucs_rozsah_mpa": [
+        8,
+        50
+      ],
+      "hustota_kg_m3": 1400,
+      "cai": 0.6,
+      "trida_tvrdosti": "mekka",
+      "nastroj_min": "kamen",
+      "chovani": "soudrzna",
+      "vzacnost_horniny": "neobvyklá",
+      "vytezek_vychozi_promile": [
+        {
+          "surovina": "uhli",
+          "promile": 850
+        },
+        {
+          "surovina": "jalovina",
+          "promile": 150
+        }
+      ],
+      "cas": {
+        "prod_m3_h": 0.25,
+        "t_real_min_bunka_05": 30.0,
+        "t_herni_s_bunka_05": 12.5,
+        "t_navrh_s_bunka_05": 3.0
+      },
+      "netezitelne": false,
+      "zdroje": [
+        44,
+        45,
+        46
+      ],
+      "opotrebeni_na_bunku_05": 0.1
+    },
+    "garnet": {
+      "id": 106,
+      "nazev": "granáty",
+      "idx": null,
+      "zona": "rudy",
+      "kind": "pocket",
+      "skupina_tezba": "drahokam",
+      "mohs": 7.0,
+      "mohs_rozsah": [
+        6.5,
+        7.5
+      ],
+      "ucs_mpa": 200,
+      "ucs_rozsah_mpa": [
+        100,
+        400
+      ],
+      "hustota_kg_m3": 3500,
+      "cai": 5.0,
+      "trida_tvrdosti": "velmi_tvrda",
+      "nastroj_min": "ocel",
+      "chovani": "soudrzna",
+      "vzacnost_horniny": "vzácná",
+      "vytezek_vychozi_promile": [
+        {
+          "surovina": "jalovina",
+          "promile": 900
+        },
+        {
+          "surovina": "sterk",
+          "promile": 100
+        }
+      ],
+      "cas": {
+        "prod_m3_h": 0.03,
+        "t_real_min_bunka_05": 250.0,
+        "t_herni_s_bunka_05": 104.17,
+        "t_navrh_s_bunka_05": 18.0
+      },
+      "netezitelne": false,
+      "zdroje": [
+        48,
+        50
+      ],
+      "vytezek_kusovy": [
+        {
+          "surovina": "granaty",
+          "kusu_na_bunku_05": 1
+        }
+      ],
+      "opotrebeni_na_bunku_05": 0.833
+    },
+    "gold": {
+      "id": 107,
+      "nazev": "zlato",
+      "idx": null,
+      "zona": "rudy",
+      "kind": "vein",
+      "skupina_tezba": "ruda_med",
+      "mohs": 4.0,
+      "mohs_rozsah": [
+        3,
+        5
+      ],
+      "ucs_mpa": 80,
+      "ucs_rozsah_mpa": [
+        40,
+        150
+      ],
+      "hustota_kg_m3": 3200,
+      "cai": 2.0,
+      "trida_tvrdosti": "stredni",
+      "nastroj_min": "bronz",
+      "chovani": "soudrzna",
+      "vzacnost_horniny": "vzácná",
+      "vytezek_vychozi_promile": [
+        {
+          "surovina": "ruda_zlato",
+          "promile": 80
+        },
+        {
+          "surovina": "kremenny_pisek",
+          "promile": 620
+        },
+        {
+          "surovina": "jalovina",
+          "promile": 300
+        }
+      ],
+      "cas": {
+        "prod_m3_h": 0.12,
+        "t_real_min_bunka_05": 62.5,
+        "t_herni_s_bunka_05": 26.04,
+        "t_navrh_s_bunka_05": 6.0
+      },
+      "netezitelne": false,
+      "zdroje": [
+        45,
+        49
+      ],
+      "poznamka": "Reálně g/t (žilné zlato často jednotky g/t). Buňka je už bohatá žíla; 80 ‰ je herní abstrakce, ne hmotnostní jakost.",
+      "opotrebeni_na_bunku_05": 0.333
+    }
+  }
+}

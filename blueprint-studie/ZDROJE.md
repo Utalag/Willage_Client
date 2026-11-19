@@ -72,3 +72,6 @@
 | 39 | https://doi.org/10.3133/wsp1662D (Johnson 1967: Specific yield, USGS WSP 1662-D, tab. 29) | Specifická vydatnost Sy (jíl 0,02, prach 0,08, jemný písek 0,21, střední 0,26, štěrk 0,22–0,25); zadržení = n − Sy; E59 |
 | 40 | https://doi.org/10.13031/2013.33720 (Rawls, Brakensiek, Saxton 1982: Estimation of soil water properties) | Nasycená vodivost půd (písek ~5,8e-5, hlína ~3,7e-6, jílovitá půda ~1,7e-7 m/s); E59 drn a hlína |
 | 41 | https://en.wikipedia.org/wiki/Stokes%27_law | Usazovací rychlost malých částic (Stokes): jíl a prach se usazují jen ve skoro stojaté vodě; E59 sed_v |
+| 42 | `gemini/podzemi-konzultace/odpoved.md` (Gemini, chat 2026-11-19, režim „Automaticky“) | Rešerše řešení podzemí E64: pevné pořadí místo ε, oprava přes všechny hrany do S, kroky po rozpočtu (ne podle času), test více hráčů, svislá komprese (na našich datech jen 1,45 % pásem) |
+| 43 | https://doi.org/10.1016/0020-0190(77)90002-3 (Knuth 1977: A generalization of Dijkstra's algorithm, IPL 6(1)) | Dijkstra pro monotónní „superior“ funkce hran; E64 K důkaz (f(x) ≤ x, neklesající) |
+| 44 | https://doi.org/10.1006/jagm.1996.0046 (Ramalingam, Reps 1996: An incremental algorithm for a generalization of the shortest-path problem, J. Algorithms 21) | Inkrementální přepočet po změně hran (zneplatnit podstrom, osadit z hranice); E64 I a prořezání |

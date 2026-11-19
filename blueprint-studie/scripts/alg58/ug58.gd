@@ -8,6 +8,7 @@ const BQ = preload("res://scripts/alg58/bq58.gd")
 const VS = preload("res://scripts/voda/voda_svet.gd")
 const E := 1e-6
 const SH := 4194304.0   # 2^22 pro kódování (z, index) v jednom čísle při řazení
+const P64 = preload("res://scripts/alg64/pre64.gd")   # E64 K (jen s c._useK)
 
 static func has_flag(v: String, f: String) -> bool:
 	return v.split("+").has(f)
@@ -37,6 +38,7 @@ static func _arr(c: Dictionary) -> void:
 
 static var PROF := {}   # E63: časy fází prelivu (jen měření)
 static func preliv_A(c: Dictionary, entries: PackedInt32Array, q: float, ex: Dictionary, g: int, dz: float) -> Dictionary:
+	if bool(c.get("_useK", false)): return P64.preliv(c, entries, q, ex, g, dz, _p1key)   # E64
 	var _t0 := Time.get_ticks_usec()
 	_arr(c)
 	var lab: PackedInt32Array = c.lab; var capg: PackedInt32Array = c._capg; var capv: PackedFloat64Array = c._capv; var dng: PackedInt32Array = c._dng
@@ -446,7 +448,8 @@ static func node_solve(c: Dictionary, call: Dictionary, ci: int, useA: bool, dz:
 		c.gen = int(c.gen) + 1
 		var r0: Dictionary = preliv_A(c, ents, q, call.ex, int(c.gen), dz) if useA else F._solve_preliv(c, ents, q, call.ex, int(c.gen))
 		r0.rezim_tel = "preliv"; r0.f_prop = f
-		pc[ci] = {"r": r0, "fp": footprint(c, [r0._vis]) if useA else PackedByteArray(), "vb": _vis_bands(c, r0) if bool(c.get("_useD", false)) else PackedByteArray(), "ents": ents}
+		if bool(c.get("_useK", false)): pc[ci] = P64.cache_entry(c, r0, ents, ci)   # E64
+		else: pc[ci] = {"r": r0, "fp": footprint(c, [r0._vis]) if useA else PackedByteArray(), "vb": _vis_bands(c, r0) if bool(c.get("_useD", false)) else PackedByteArray(), "ents": ents}
 		stats.floods += 1
 		return r0
 	if best.is_empty():   # uzavřené: zmax z aktuálních hi (po deltě může být zastaralé)

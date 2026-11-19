@@ -1,11 +1,11 @@
-# E49 malý svět 8 × 8 bloků (2026-11-19T09:30:41)
+# E49 malý svět 8 × 8 bloků (2026-11-19T13:17:28)
 1 hrubý terén: 3 ms
-2 počasí: 7 ms
-3 eroze + řeky: 488 ms
+2 počasí: 8 ms
+3 eroze + řeky: 510 ms
 4 biomy: 18 ms
 5 dlaždice: 9 ms
-6 detail: 64 dlaždic od (3, 4) do šířky, 13.6 s (průměr 213 ms, max 268 ms)
-CELKEM 14.1 s (hrubý svět 0.53 s)
+6 detail: 64 dlaždic od (3, 4) do šířky, 13.6 s (průměr 213 ms, max 300 ms)
+CELKEM 14.2 s (hrubý svět 0.55 s)
 typy dlaždic: hora_vyzdvizena 7, svah 5, louka 24, kopec 6, prohlubeň 9, sopka 1, hora_zvrasnena 12
 biomy (body hrubé mřížky): niva 1049, les 225, skály 448, sníh 420, řeka 235, mokřad 29, louka 452, step 916, jezero 322
 řeky 235 bodů (5.7 %), jezera 322 bodů, sopka v dlaždici (1, 4)

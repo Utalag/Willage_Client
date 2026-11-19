@@ -1,0 +1,4 @@
+
+A+B+C+D+K+I+P s16 b5000: plné 2607 ms (205592 výběrů) | výkop průměr 27.2 p95 14.0 max 368.4 ms (výkop 15) | krok max 368.4 ms, kroků max 1 | navštíveno průměr 1546 | neshod K 0 (otisk sestupu OK 31, líných 11) | neshod se starým -1 | stav 20.4 MB, peak 299 MB
+profil výkopů (ms celkem): { "sestup": 370.513, "pf": 6.918, "leak": 0.0, "result": 0.0 } S průměr 1549.5
+nejhorší výkop 15: 368.4 ms, S 30237, { "X": 3, "sestup": 358.195, "pf": 0.426, "leak": 0.0, "result": 0.0 }

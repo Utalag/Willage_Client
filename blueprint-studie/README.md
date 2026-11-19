@@ -39,6 +39,7 @@ Volitelně: hydraulická eroze kapkami na šabloně před dorovnáním (`--erosi
 python3 tools/materialy59.py   # E59 návrh vodních vlastností z reálných K / Sy → ../sdilene/materialy_voda_navrh.json, shots/materialy59.md (sdílené tabulky nemění)
 ./run.sh alg60      # E60 průsak světa (jen poslední kolo), povrch tok60 vs tok.update bit po bitu, graf pánví vs PF bez ε → shots/alg60/*.json, 60_povrch.png
 python3 tools/materialy61.py   # E61 převzetí reálných hodnot do sdílených tabulek (záloha shots/e61/, změny shots/e61/zmeny_tabulek.md)
+./tools/alg64.sh    # E64 varianty K / I / R / V / P (s16 / s32 / s64) → shots/e64/*.json; python3 tools/shots_e64.py → 64_podzemi.png
 ./run.sh alg58      # E58 varianty A / B / C a kombinace: záznam volání podzemí, každá varianta zvlášť, povrch 128²–512² → shots/alg58/*.json, 58_*.png
 ./run.sh svet8      # E49 svět 8 × 8 (hrubě → dlaždice → detail) → shots/bench_svet8.txt, 49_svet_8x8_faze.gif, 49_svet_8x8_*.png
 ```
@@ -89,6 +90,7 @@ Všechny parametry jsou v `scripts/bp/params.gd`. Hlavní jdou ladit i v Inspect
 | `scripts/alg58/bq58.gd`, `ug58.gd`, `povrch58.gd`, `rec58.gd`, `tools/alg58_rec.gd`, `alg58_ug.gd`, `alg58_tok.gd`, `alg58.sh`, `shots_alg58.py` (+ `voda/tok.gd` `FLOOD_DZ`, výchozí 0) | E58 A kbelíková fronta (stejné pořadí jako halda), B graf těles (souhrny + kandidáti výstupu), C stopa a delta po výkopu; povrch A / B (graf pánví) / C |
 | `tools/materialy59.py` → `../sdilene/materialy_voda_navrh.json` | E59 návrh: K, n, Sy, ret, perm (log škála), ero_v / sed_v, čas průsaku 1 m v herních dnech a reálných minutách; jen návrh |
 | `scripts/alg60/tok60.gd`, `tok60p.gd`, `tools/alg60_tok.gd`, `alg60_b.gd`, `alg60.sh`, `shots_alg60.py` | E60 optimalizovaná kopie `tok.update` (stejný výsledek, 2,8–4,1× rychleji), profil fází, B vs PF bez ε a B + ε dopočet |
+| `scripts/alg64/heap64.gd`, `sestup64.gd`, `pre64.gd`, `ug64.gd` (+ 2 háčky v `alg58/ug58.gd` jen při `_useK`), `tools/alg64_ug.gd`, `alg64_fuzz.gd`, `alg64_info.gd`, `alg64.sh`, `shots_e64.py`, `shots/e64/` | E64 K sestup bez závislosti na pořadí (dokázaná shoda), I oprava přes hranici S, R kroky po rozpočtu operací, P flood z paměti, V komprese (negativní); fuzz pořadí a dva až tři hráči |
 | `scripts/alg58/ug58.gd` příznaky E, I (`_p1_fast`, `_p1_inc`), `tools/shots_e63.py`, `shots/e63/` | E63 sestup prelivu bez volání (E, 3,6×) a lokální oprava sestupu po výkopu přes strom rodičů (I): výkop 90–111 ms místo 2,3–2,5 s, 0 neshod |
 | `scripts/alg58/ug58.gd` příznak D, `tools/e62_dno.gd` | E62 závislost prelivu na pásmech (přesné, jen 1,3×); dno a okolí hlavního tělesa |
 | `tools/materialy61.py`, `shots/e61/` | E61 převzetí E59 do `sdilene/materialy_voda.json` v4 a `horniny_voda.json` v2; zálohy, staré a nové logy testů |

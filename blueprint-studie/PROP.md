@@ -264,6 +264,147 @@ Výchozí: 800 kapek na blok, `ero_cap` 1,0, `ero_erode` 0,1, `ero_deposit_rate`
   v detailu jen vyhloubené koryto, vodu v GIFu kreslím z hrubé fáze (voda_sim na 128 × 128 × 64 jsem nespouštěl). Biomy se
   zatím promítnou jen do podmnožiny hornin, ne do vegetace. Počet minerálů je podle typu, ne podle biomu.
 
+## E64 výsledky (2026-11-19 13:50)
+- **Co je nového** (kód `scripts/alg64/`, výchozí chování beze změny, zapíná se jen příznakem `K` ve variantě):
+  - `heap64.gd`: halda s pevným pořadím (hodnota sestupně, id vzestupně).
+  - `sestup64.gd`: sestup K, oprava I, řetězce V, práce po krocích.
+  - `pre64.gd`: preliv jako úloha po krocích (sestup → priority-flood → průsak → souhrn) a cache P.
+  - `ug64.gd`: řízení variant, výkop, krok R, otisky.
+  - Háčky v `ug58.gd`: 2 řádky, jen při `c._useK`.
+  - Nástroje: `tools/alg64_ug.gd`, `alg64_fuzz.gd`, `alg64_info.gd`, `alg64.sh`, `shots_e64.py`.
+- **Stejné vstupy jako E63:** záznam `_e61`, 3 × 20 výkopů (s16 / s32 / s64), 4 běhy souběžně.
+- **Výkop ms (průměr / p95 / max), 0 neshod všude:**
+
+  | varianta | s16 | s32 | s64 | max krok s64 | kroků max s64 | stav MB s64 |
+  |---|---|---|---|---|---|---|
+  | E63 +E+I | 94 / 131 / 144 | 111 / 179 / 461 | 90 / 133 / 164 | 164 | 1 | 16,3 (I) + 15 (D) |
+  | K (plný sestup) | 1098 / 1500 / 1810 | 1027 / 1513 / 1528 | 1083 / 1575 / 1613 | 1613 | 1 | 40,1 |
+  | K+I | 64 / 68 / 387 | 53 / 112 / 128 | 75 / 108 / 599 | 599 | 1 | 40,1 |
+  | K+I+V | 66 / 84 / 421 | 55 / 120 / 145 | 85 / 101 / 731 | 731 | 1 | 40,4 |
+  | K+I+R (5k) | 62 / 63 / 418 | 51 / 110 / 121 | 77 / 117 / 594 | 66 | 64 | 40,1 |
+  | K+I+R+V | 66 / 121 / 400 | 53 / 112 / 129 | 77 / 105 / 652 | 62 | 64 | 40,4 |
+  | **K+I+P** | **27** / 14 / 368 | **20** / 82 / 84 | **38** / 45 / 540 | 540 | 1 | 40,1 |
+  | **K+I+P+R (5k)** | 27 / 14 / 355 | 22 / 79 / 88 | 42 / 46 / 597 | **42** | 63 | 40,1 |
+  | K+I+P+R+V | 28 / 20 / 363 | 20 / 73 / 87 | 46 / 44 / 693 | 51 | 63 | 40,4 |
+
+  - Max u R = součet všech kroků výkopu. Délku jednoho kroku ukazuje sloupec „max krok“.
+  - p95 je 19. nejhorší z 20 výkopů. U s16 je menší než průměr, protože průměr táhne jeden výkop (#15).
+  - Navštíveno (sestup) průměrně 1 546 / 713 / 2 487 pásem na výkop. Plný sestup K má ~150 000 výběrů.
+- **Výkop z E63 za 461 ms** (s32 #13): K+I 71 ms, K+I+R 58 ms, K+I+P 10 ms, K+I+P+R 17 ms.
+- **Nejhorší výkop teď** je s64 #18 (540–600 ms) a s16 #15 (~370 ms):
+  - Výkop přetne kmen sestupu.
+  - S = 44 822 / 30 237 pásem a jejich hodnoty se opravdu mění (semínko vstupu kleslo).
+  - Prořezání (ponechat potomka s jinou bezpečnou oporou se stejnou hodnotou) S skoro nezmenší (47 393 → 44 822).
+  - Tuhle práci jde jen rozložit (R), ušetřit ne.
+- **R, rozpočet operací na krok** (K+I+P+R):
+
+  | rozpočet | max krok s16 / s32 / s64 | kroků nejhoršího výkopu s16 / s64 |
+  |---|---|---|
+  | 2 000 | 14 / 33 / 16 ms | 78 / 158 |
+  | 5 000 | 33 / 64 / 42 ms | 32 / 63 |
+  | 10 000 | 62 / – / 80 ms | 17 / 32 |
+
+  - Konečný stav = plný přepočet (otisky).
+  - Krok 0 má pevnou režii ~10–25 ms (ug58.edit: delta uzlů B, pravidla D), tu R nerozloží.
+  - Na s32 je operace floodu ~5× dražší než operace sestupu, proto tam má krok 33 ms i při 2k.
+- **K: důkaz a fuzz.**
+  - Permutace pořadí sousedů v CSR a pořadí vstupů (6 pořadí, s16 i s64): K dává 1 otisk sestupu.
+  - E63 E dává 2 různé otisky. Závislost na pořadí u ε-sestupu je tedy skutečná, ne jen teoretická.
+  - Po každém výkopu: otisk stavu sestupu (capv všech pásem + pool) = čerstvý plný K. Shoda 31 / 29 / 32 čistých
+    stavů, 0 neshod výsledků s tol 0.
+  - Proti starému F.solve (tol 1e-9): 0 neshod (K+I na všech mapách, K+I+P+R 2k na s32). Pevné pořadí (lo, id) při
+    volbě pool tedy na těchto datech výsledek nemění.
+- **M, dva až tři hráči** (`tools/alg64_fuzz.gd`, `shots/e64/fuzz_s16.json`, `fuzz_s64.json`):
+  - Nejhorší výkop + výkopy v sousedních sloupcích (x+1, y+1).
+  - 8 scénářů: sync a, b / b, a / b, c, a; R s 2k: výkop během rozpracovaných kroků, výkop hned po výkopu,
+    tři výkopy prokládané 1–3 kroky.
+  - Po každém dokončení všech kroků je otisk = čerstvý plný výpočet pro danou množinu výkopů. 20 / 20 kontrol OK.
+  - Na konci mají všechna pořadí stejný otisk (s16 i s64).
+- **Kde pořadí oprávněně záleží:**
+  - Zveřejněný výsledek během rozpracovaných kroků: platí starý výsledek, dokud úloha nedoběhne.
+  - Počet kroků (17–152 podle pořadí).
+  - Vnitřní čítače (gen, lab, id uzlů B).
+  - Líné stavy: D přeskočí volání, jehož výsledek se nezměnil, a jeho stav sestupu nese jen špinavá pásma. Na s64
+    jsou 2 na konci každého scénáře. Výsledek je správný, stav se opraví při dalším přepočtu.
+  - Výkop sám je komutativní (h = min(h, nh)). Zasypání zatím neumíme, tam by pořadí záleželo.
+- **V (vertikální komprese): negativní.**
+  - Vnitřní článek řetězce (bez bočních sousedů, nejvýš 1 nad a 1 pod) je jen 1 897 ze 130 862 pásem tělesa (1,45 %)
+    (`tools/alg64_info.gd`).
+  - Plný sestup ušetří 85 výběrů z 207 410. Čas se nezlepšil, někde se zhoršil (šum + režie).
+  - Odhad Gemini 10⁵ → 10⁴ na našich datech neplatí. Pásma mají skoro vždy boční sousedy.
+- **P (navíc, není v zadání), priority-flood z paměti:**
+  - Po opravě I zbyly floody a průsak (~35–45 ms na výkop).
+  - Když se pool nezměnil a výkop nesáhl na data, která flood četl, výsledek se vezme z paměti. Ta data jsou: sloupce
+    pásem tůně + 4 sousedé, sloupec výstupu a sousedé pásem tůně v CSR.
+  - Přeskočí se na s16 / s64 skoro vždy, na s32 jen někdy.
+  - Navíc se `vb` pro D udržuje průběžně ve stavu místo průchodu 118 000 pásmy (~10 ms na flood).
+- **Server, jen podzemí** (s64, 5 % výkopů do podzemí, % jednoho jádra):
+
+  | | E63 +E+I | K+I | K+I+R | K+I+P | K+I+P+R |
+  |---|---|---|---|---|---|
+  | 50 × 20/min | 7,5 | 6,3 | 6,4 | **3,2** | 3,5 |
+  | 50 × 4/min | 1,5 | 1,3 | 1,3 | **0,63** | 0,69 |
+  | 10 × 4/min | 0,3 | 0,25 | 0,26 | **0,13** | 0,14 |
+
+- **Paměť:**
+  - Stav K+I je 33 B na pásmo a volání: capv 8 B; par, děti (3×), pos, mk po 4 B; vb 1 B. Plus cl.
+  - Na s64 (4 volání) je to 40 MB, v E63 16 MB. Peak 299–344 MB (E63 282–294 MB).
+- **Negativa:**
+  - Nejhorší výkop se bez R nezlepšil (s64 164 → 540–600 ms). Strom rodičů z haldy (max-first) má pro kmenový výkop
+    větší podstrom než FIFO strom E63. Průměr a s32 se zlepšily. R to drží pod 16 ms na krok (2k).
+  - Paměť stavu 2,5× víc než E63.
+  - Úplné K (bez I) je 1,0–1,1 s na výkop. Halda v GDScript je dražší než FIFO E (~0,65 s).
+  - „Okamžitá část“ R (prameny, odtoky a časy plnění hned u výkopu) **není** udělaná. Zveřejní se až celý výsledek.
+    Do té doby platí starý výsledek s příznakem `_pending`.
+  - Rozpočet počítá operace stejně, i když operace floodu je ~5× dražší. Vážení je nápad do C.
+  - Měřeno při 4 souběžných bězích. Časy kolísají ±20 % (K+I s64 průměr 75–92 ms mezi běhy).
+- **Testy a hashe po změně:** v1 dda863feffe6f611, sled46 d8af7f59b6f8da70, svet8 ec0681cc6426, voda a14136754dd1,
+  voda_b 5ae2b366e84a, voda_b --b e8cbbc78ca88. Všechny beze změny, 2× stejné (`shots/e64/testy/`). Běhy alg58
+  (E58–E63) jsem znovu nepouštěl, aby nepřepsaly `shots/alg58/`. Háčky v ug58 jsou jen za `c._useK`.
+- **Shot:** `shots/64_podzemi.png`. Tabulka `shots/e64/tabulka.md`, logy a json `shots/e64/`.
+
+## E64 kanonický sestup, oprava se zárukou shody, kroky R, dva hráči, komprese V (plán 2026-11-19 12:40; Jan 12:36 „Jon určitě to zkus.“, podle rešerše Gemini [42])
+- **Problém (E63):**
+  - Sestup s tolerancí E závisí na pořadí zpracování, takže lokální oprava I je shodná jen empiricky.
+  - Nejhorší výkop trval 461 ms.
+  - Chybí test, kde kope víc hráčů.
+- **Varianty** (příznaky ve variantě, např. `A+B+C+D+K+I+R`, výchozí hodnoty beze změny, kód `scripts/alg64/`):
+  - **K:** halda s klíčem (capv sestupně, id vzestupně). Pravidla hran stejná jako E63 (`_p1_edge`). Zlepšení se přijme
+    jen ostře (nc > capv), bez tolerance E. Pool = nejmenší (lo, id).
+  - **I:** S = změněná pásma X + jejich potomci ve stromu rodičů. S se vynuluje, osadí ze **všech** hran z dosažených
+    pásem mimo S do S (max f(capv(u))) a ze vstupů v S. Pak běží stejný sestup, který smí zlepšit i pásma mimo S.
+  - **R:** oprava, flood a průsak po krocích s pevným počtem operací (2k / 5k / 10k), nikdy podle času. Výsledek se
+    zveřejní po doběhnutí. Nový výkop během kroků se přidá do rozpracované haldy.
+  - **M:** 2–3 výkopy u sebe v různém pořadí a prokládané nedokončenými kroky R. Po každém dokončení se porovná otisk
+    s čerstvým plným výpočtem.
+  - **V:** články svislých řetězců (bez bočních sousedů) se zpracují hned bez haldy.
+  - Kombinace: K+I, K+I+R, K+I+V, K+I+R+V.
+- **Náčrt důkazu (K, I):**
+  1. Hrana je f(x) = (x > práh) ? min(x, strop) : −∞, kde práh a strop jsou jen z dat pásem. Funkce je neklesající
+     a f(x) ≤ x. Jde o „superior function“ ve smyslu zobecněného Dijkstry [43].
+  2. Optimum opt(b) = max přes cesty od vstupů je jediné. Hodnoty vznikají jen přes min / max ze vstupních čísel,
+     takže jsou to přesně ta samá čísla (bitově).
+  3. **Lemma:** když je každý štítek dosažitelný platnou cestou (zdravý) a žádná hrana už nezlepší (uzavřený), pak
+     štítky = opt. Důkaz: na optimální cestě vezmi první pásmo se štítkem < opt. Jeho předchůdce má štítek ≥ opt
+     předchůdce. Z monotonie by hrana štítek zlepšila, a to je spor.
+  4. Na pořadí zpracování tedy nezáleží, halda jen šetří práci. Plný výpočet = oprava s S = vše.
+  5. **I:** mimo S vede řetězec rodičů jen přes nezměněná pásma a semínka, takže zůstává zdravý. Hrany mimo S
+     s nezměněnými konci zůstaly uzavřené. Hrany do S se osadí všechny. Každé změněné pásmo jde do haldy a zpracuje
+     se s konečnou hodnotou. Na konci je stav zdravý a uzavřený, tedy = plný výpočet.
+  6. X stačí jen ze změněných pásem (hi, body) a ze všech vstupů ve sloupci, kde se změnil povrch (semínko min(hi, h)).
+     Ostatní pásma sloupce mají stejné hrany.
+  7. Prořezání (navíc): potomek si hodnotu nechá, když má oporu mimo S s ostře vyšší hodnotou, nebo už ponechanou.
+     Kandidáti jdou v pořadí hodnot sestupně, takže taková opora už do S nepřibude. To je obdoba [44].
+- **Metriky:** ms na výkop (průměr, p95, max), max ms na krok a počet kroků u R, navštívená pásma, paměť stavu,
+  neshody proti čerstvému plnému K (tol 0 + otisk stavu) a proti starému F.solve (tol 1e-9), zátěž serveru jako E63.
+- **Kritéria úspěchu:**
+  - 0 neshod a bitová shoda otisků na všech výkopech.
+  - Fuzz pořadí: 1 otisk.
+  - M: shoda po každém dokončení.
+  - R: max krok ≤ ~30 ms u nejhoršího výkopu.
+  - Průměr ≤ E63.
+  - Hashe E61 beze změny.
+
 ## E63 výsledky (2026-11-19 09:40)
 - **Profil fází prelivu** (s64, A+B+C+D, 32 volání), součet za běh:
 

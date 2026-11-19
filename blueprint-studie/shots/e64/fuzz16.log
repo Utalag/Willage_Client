@@ -1,0 +1,12 @@
+
+permutace (6 pořadí): K 1 různých otisků ["010d4b1d73b26496", "010d4b1d73b26496", "010d4b1d73b26496", "010d4b1d73b26496", "010d4b1d73b26496", "010d4b1d73b26496"] | E 2 různých ["aafb304c56113c23", "ff6e110c185a87b7", "ff6e110c185a87b7", "ff6e110c185a87b7", "ff6e110c185a87b7", "ff6e110c185a87b7"]
+výkopy: [[38, 36.5518836975098], [166, 36.7694664001465], [39, 36.3446846008301]] sloupce [38, 166, 39]
+a,b sync           kroků R   0 | líných stavů na konci 0 | kontroly [hotové výkopy, otisk výsledků+stavů, shoda s čerstvým] [["[0]", "55783b309b2b", true], ["[0, 1]", "97893a0d9dab", true]]
+b,a sync           kroků R   0 | líných stavů na konci 0 | kontroly [hotové výkopy, otisk výsledků+stavů, shoda s čerstvým] [["[1]", "4b0893cc4006", true], ["[1, 0]", "97893a0d9dab", true]]
+a,1 krok,b R       kroků R  17 | líných stavů na konci 0 | kontroly [hotové výkopy, otisk výsledků+stavů, shoda s čerstvým] [["[0, 1]", "97893a0d9dab", true]]
+b,a hned R         kroků R  77 | líných stavů na konci 0 | kontroly [hotové výkopy, otisk výsledků+stavů, shoda s čerstvým] [["[1]", "4b0893cc4006", true], ["[1, 0]", "97893a0d9dab", true]]
+a dokončit,b R     kroků R 152 | líných stavů na konci 0 | kontroly [hotové výkopy, otisk výsledků+stavů, shoda s čerstvým] [["[0]", "55783b309b2b", true], ["[0, 1]", "97893a0d9dab", true]]
+a,b,3 kroky,c R    kroků R  20 | líných stavů na konci 0 | kontroly [hotové výkopy, otisk výsledků+stavů, shoda s čerstvým] [["[0, 1, 2]", "25c639035892", true]]
+c,a,1 krok,b R     kroků R  18 | líných stavů na konci 0 | kontroly [hotové výkopy, otisk výsledků+stavů, shoda s čerstvým] [["[2, 0, 1]", "25c639035892", true]]
+b,c,a sync         kroků R   0 | líných stavů na konci 0 | kontroly [hotové výkopy, otisk výsledků+stavů, shoda s čerstvým] [["[1]", "4b0893cc4006", true], ["[1, 2]", "63ec247bb86b", <null>], ["[1, 2, 0]", "25c639035892", true]]
+čerstvé: { "a": "55783b309b2b", "b": "4b0893cc4006", "ab": "97893a0d9dab", "abc": "25c639035892" }

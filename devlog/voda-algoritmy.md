@@ -428,3 +428,38 @@ Návrh je v `sdilene/materialy_voda_navrh.json`. Sdílenou tabulku zatím neměn
 - **Server jen za podzemí** (50 hráčů × 20 výkopů za minutu, 5 % výkopů sahá do podzemí): 193 % jádra → 7,5 %.
 - **Slabina.** U sestupu s tolerancí ε může záležet na pořadí, ve kterém se pásma zpracují. Lokální oprava proto není
   bit po bitu dokázaná, shodu jsem ověřil jen testy (60 výkopů). Paměť navíc je 8–16 MB.
+
+## Dodatek 4: sestup, na jehož pořadí nezáleží, a výkop po krocích (E64)
+
+*Utalag · 19. 11. 2026 odpoledne · nápady z rešerše Gemini, čísla z `blueprint-studie/PROP.md` E64*
+
+- **Proč.** Slabina z E63: výsledek sestupu mohl záviset na pořadí zpracování. Ve hře pro víc hráčů je to nebezpečné.
+  Telefon a server by se mohly rozejít, i když dostanou stejné výkopy.
+- **K, pevné pořadí.** Sestup teď bere pásma z haldy podle (hodnota, id). Hodnotu přepíše jen ostře lepší, žádná
+  tolerance ε.
+  - Hrana je jen „propusť nad prahem a ořízni stropem“. Hodnota po cestě nikdy neroste.
+  - Takový problém má jediné řešení a na pořadí nezáleží. Je to zobecněný Dijkstra (Knuth 1977).
+  - Ověřeno: 6 náhodných pořadí dá u K 1 otisk, u starého sestupu 2 různé.
+- **I, oprava se zárukou.**
+  - Vynuluji jen pásma, jejichž data se výkopem opravdu změnila, a jejich potomky ve stromu.
+  - Dosadím je ze všech hran zvenku.
+  - Výsledek je pak dokazatelně stejný jako plný přepočet. Otisky sedí bit po bitu na 3 × 20 výkopech.
+- **P, plnění tůně z paměti.** Když výkop nesáhl na nic, co plnění tůně četlo, vezme se starý výsledek. Tím zmizelo
+  dalších ~35 ms na výkop.
+- **R, výkop po krocích.** Velký výkop, který přetne „kmen“ podzemního toku (30–45 tisíc pásem), se rozloží do kroků.
+  - Každý krok má pevný počet operací, nikdy ne podle hodin. Telefon i server tak udělají přesně totéž.
+  - Při 2 000 operacích je krok do 16 ms. Nejhorší výkop pak trvá 158 kroků.
+  - Do dokončení platí starý výsledek.
+- **Dva hráči.** Kopou vedle sebe v různém pořadí, i uprostřed rozpracovaných kroků. Po dokončení je stav vždy stejný
+  jako plný přepočet. Na konci je stejný pro každé pořadí.
+- **Co nevyšlo.**
+  - Komprese sloupců (V): jen 1,45 % pásem jsou „čisté“ svislé řetězce, přínos ~0.
+  - Kmenový výkop bez kroků trvá 0,4–0,6 s, víc než dřív.
+  - Paměť stavu je 40 MB místo 16 MB.
+  - Okamžité dopočítání pramenů hned u výkopu zatím není.
+- **Čísla:**
+  - Průměrný výkop je 20–38 ms (dřív 90–111 ms).
+  - Nejhorší výkop z E63 (461 ms) trvá 10 ms.
+  - Server jen za podzemí: 7,5 % → 3,2 % jádra (50 hráčů × 20 výkopů za minutu).
+
+![E64 srovnání](img/64_podzemi.png)

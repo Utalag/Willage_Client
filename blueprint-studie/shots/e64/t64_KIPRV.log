@@ -1,0 +1,4 @@
+
+A+B+C+D+K+I+P+R+V s64 b5000: plné 2568 ms (207321 výběrů) | výkop průměr 46.0 p95 44.1 max 692.6 ms (výkop 18) | krok max 50.6 ms, kroků max 63 | navštíveno průměr 2487 | neshod K 0 (otisk sestupu OK 32, líných 52) | neshod se starým -1 | stav 40.4 MB, peak 343 MB
+profil výkopů (ms celkem): { "sestup": 739.279, "pf": 6.751, "leak": 0.0, "result": 0.0 } S průměr 2489.95
+nejhorší výkop 18: 692.6 ms, S 44822, { "X": 2, "sestup": 682.134, "pf": 0.401, "leak": 0.0, "result": 0.0 }

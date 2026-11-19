@@ -1,0 +1,4 @@
+
+A+B+C+D+K s32 b5000: plné 2613 ms (204644 výběrů) | výkop průměr 1027.0 p95 1512.6 max 1527.6 ms (výkop 19) | krok max 1527.6 ms, kroků max 1 | navštíveno průměr 142947 | neshod K 0 (otisk sestupu OK 29, líných 13) | neshod se starým -1 | stav 20.4 MB, peak 308 MB
+profil výkopů (ms celkem): { "sestup": 19636.755, "pf": 421.902, "leak": 240.473, "result": 24.659 } S průměr 0.0
+nejhorší výkop 19: 1527.6 ms, S 0, { "X": 3, "sestup": 1470.736, "pf": 32.535, "leak": 17.767, "result": 1.793 }

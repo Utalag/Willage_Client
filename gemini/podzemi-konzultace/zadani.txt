@@ -1,0 +1,26 @@
+Jsi expert na hydrologické a herní algoritmy (podzemní voda, priority-flood, inkrementální grafové algoritmy). Potřebuji druhý názor: jak bys řešil(a) níže popsaný problém ty? Možná nám uniká lepší přístup. Odpověz česky, konkrétně, se složitostí a riziky.
+
+KONTEXT
+Hra Willage: plovoucí ostrov z bloků 8x8 m, hráči kopou a staví (desítky hráčů, klient i telefon 30 FPS). Server ukládá a validuje, takže výpočet vody musí být deterministický (stejný vstup = stejný otisk stavu). Voda se nepočítá tikáním, ale jako ustálený stav + události s předpočítaným časem (t = V/(Qin-Qout)). Po změně terénu se přepočte jen to, co se změnilo. 1 herní den = 10 min.
+
+Terén = spojité funkce vrstev (2D matice horních hranic vrstev na řídicí mřížce 0,5 m, 16x16 bodů na blok), buňky jen vzorkují (16/32/64 buněk na blok). Materiály mají perm (0-1, log škála K), pórovitost, polní kapacitu atd. perm <= 0,05 = nepropustné.
+
+PODZEMÍ – SOUČASNÉ ŘEŠENÍ
+- Každý sloupec řídicí mřížky je zásobník pásem [lo,hi) s materiálem (CSR pole). Testovací svět: 128x128 sloupců, ~312 000 pásem, 1345 souvislých těles.
+- Souvislost: pásma se dotýkají ve sloupci nebo se překrývají v z se sousedním sloupcem.
+- Hladina tělesa = minimax přes spodky překryvů (priority-flood po pásmech od nejnižšího z).
+- Režim volen podle materiálu pod tělesem: nepropustné dno -> "přeliv" (voda steče dolů, hladina stoupá k nejnižšímu výchozu, tam pramen); propustné dno -> "nádrž" (průsak dolů K*A*(h+d)/d). Bilance každého tělesa sedí na 1e-9.
+- Přeliv má 2 fáze: (1) "kapilární sestup" od vstupů vody (tůně, ponory) dolů a do stran přes propustná pásma s tolerancí eps, fronta s pevným pořadím; projde ~118 000 pásem a bere 98 % času; (2) priority-flood plnění, ~25 ms.
+- Celý přepočet hlavního tělesa po výkopu: 2,3-2,5 s (GDScript).
+- Nejlepší dosavadní optimalizace (E63): (a) zrychlený sestup bez slovníků 3,6x; (b) lokální oprava: pamatujeme strom rodičů (odkud pásmo dostalo hodnotu), po výkopu zneplatníme jen pásma ve vykopaném sloupci a jejich podstrom (~300 pásem), znovu je dosadíme z nezměněných sousedů a pustíme sestup. Výkop 90-111 ms, 0 neshod s plným přepočtem na 60 testovacích výkopech. Server: 50 hráčů x 20 výkopů/min (5 % do podzemí) = 7,5 % jádra.
+- Slabiny: shoda lokální opravy je jen empirická (u sestupu s eps může záležet na pořadí), jeden výkop trval 461 ms (velký podstrom), paměť +8-16 MB.
+- Vyzkoušeno a zamítnuto: buňky ve slovníku (4 GB, 155 s), plochá pole po buňkách (575 MB, 36 s), hrubá mřížka 32 (výsledek závisí na rozlišení), Darcy relaxace 3D (bez podmínky výtokové plochy chybná), plošné iterační metody (neustálí se, lokální změna trvá sekundy).
+Podrobný devlog je v příloze (voda-algoritmy.md), pokud ho vidíš.
+
+OTÁZKY
+1. Jak bys podzemí modeloval ty? Je reprezentace pásmy sloupců rozumná, nebo existuje lepší (např. graf povodí/merge tree, contour tree, union-find po hladinách, hierarchie výplní)?
+2. Jak bys udělal inkrementální přepočet po výkopu deterministicky a s dokazatelnou shodou s plným přepočtem? (dynamic SSSP / minimax cesty, dynamic connectivity, barrier tree, retroaktivní fronta...)
+3. Dá se kapilární sestup nahradit něčím, co nemusí projít 118 000 pásem (např. předpočet, komprese pásem do uzlů grafu, hierarchické shlukování)?
+4. Jak omezit nejhorší případ (461 ms) – rozložit práci do více snímků, horní mez, aproximace?
+5. Co nám podle tebe úplně chybí nebo co děláme zbytečně?
+Seřaď návrhy podle očekávaného přínosu a uveď u každého odhad složitosti, paměti a determinismu.
