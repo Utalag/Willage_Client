@@ -68,7 +68,7 @@ func _build(W: int, p: Dictionary, zdroj: float, pit_q: float) -> Dictionary:
 
 func _run(W: int, p: Dictionary, zdroj: float, pit_q: float, kola: int, tol: float) -> Dictionary:
 	var st := _build(W, p, zdroj, pit_q)
-	var r := H68.full(st, kola, tol, kola > 4)
+	var r := H68.full(st, kola, tol, kola > 4, kola > 4 and bool(p.get("p73_zrychleni", false)))
 	var b := H68.bilance(st)
 	var o := H68.otisk(st)
 	var ponds := TOK.ponds(st, 0.25, 0.5, false)
@@ -82,7 +82,7 @@ func _run(W: int, p: Dictionary, zdroj: float, pit_q: float, kola: int, tol: flo
 			while i >= 0 and g < 40: path.append([i / W, i % W, snappedf(st.hm[i], 0.01), snappedf(st.fill[i], 0.01)]); i = st.to[i]; g += 1
 			print("výstup ", u, " cesta ", path)
 	st.ug.clear(); st.clear()
-	return {"kola": r.kola, "ustaleno": r.ustaleno, "zmena": r.zmena, "ms": snappedf(r.ms, 0.01), "bilance": b, "otisk": o,
+	return {"skoky": r.get("skoky", 0), "kola": r.kola, "ustaleno": r.ustaleno, "zmena": r.zmena, "ms": snappedf(r.ms, 0.01), "bilance": b, "otisk": o,
 		"tun_drain_kapacita": dr, "tun_pritok": pq, "volani_podzemi": calls}
 
 func _init() -> void:
@@ -100,8 +100,8 @@ func _init() -> void:
 		out[rz] = {"4_kola": a, "ustaleni": z, "znovu_stejny_otisk": z.otisk == z2.otisk}
 		for nm in ["4_kola", "ustaleni"]:
 			var e: Dictionary = out[rz][nm]; var bb: Dictionary = e.bilance
-			print("%-7s %-9s kola %3d ustaleno %-5s změna %.9f | zdroje %.6f okraj %.6f průsak %.6f stěna %.6f do hloubky %.6f | prameny %.6f odtok tůní %.6f (kapacita %.6f, přítok tůně %.6f) | chyba svět %.9f povrch %.9f dolů %.9f nahoru %.9f podzemí %.9f | volání %d | %s ms %.1f" % [
-				rz, nm, e.kola, str(e.ustaleno), e.zmena, bb.zdroje, bb.okraj, bb.podzemi_prusak, bb.podzemi_stena, bb.do_hloubky,
+			print("%-7s %-9s skoky %d kola %3d ustaleno %-5s změna %.9f | zdroje %.6f okraj %.6f průsak %.6f stěna %.6f do hloubky %.6f | prameny %.6f odtok tůní %.6f (kapacita %.6f, přítok tůně %.6f) | chyba svět %.9f povrch %.9f dolů %.9f nahoru %.9f podzemí %.9f | volání %d | %s ms %.1f" % [
+				rz, nm, e.skoky, e.kola, str(e.ustaleno), e.zmena, bb.zdroje, bb.okraj, bb.podzemi_prusak, bb.podzemi_stena, bb.do_hloubky,
 				bb.prameny_z_podzemi, bb.odtok_tuni, e.tun_drain_kapacita, e.tun_pritok, bb.chyba_svet, bb.chyba_povrch, bb.chyba_dolu,
 				bb.chyba_nahoru, bb.chyba_podzemi, e.volani_podzemi, e.otisk, e.ms])
 		print("%-7s otisk při opakování stejný: %s" % [rz, str(out[rz].znovu_stejny_otisk)])
