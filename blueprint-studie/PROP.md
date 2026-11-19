@@ -293,6 +293,41 @@ Výchozí: 800 kapek na blok, `ero_cap` 1,0, `ero_erode` 0,1, `ero_deposit_rate`
 - **Hypotéza:** parita bit po bitu (kopie se mění jen v cestách). Vložení bloku bp ≈ 0,25–0,4 s jako E49 detail
   (+ povrch a tráva prototypu ~0,4 s), voda ostrova 7 bloků (≈ 112 × 112 sloupců) plně < 1 s, kopání u vody desítky ms.
 
+## E68 jednotný orchestrátor hydrologie povrch + podzemí (plán, zapsáno před pokusem 2026-11-19 22:07; TODO Voda E68, Jan 21:3x „V ToDo máš úkoly půst se do nich…“)
+- **Co už existuje (nenavrhuje se znovu):** jeden krok povrch ↔ podzemí už je v `voda/tok.gd route()` a `alg60/tok60.gd update()`:
+  priority-flood + D8 → `_apply_drains` (odtok mokrých tůní do tělesa, volání podzemí seskupená podle `members`, výstupy
+  `outs67` / `out` → `src2` pramenů a `st.under`) → znovu povrch. Lokální přepočet po výkopu: v prototypu
+  `ostrov_voda.edit()` = výkop podzemí (E64 K+I+P+R, `UGO.dig`) → `_add_drains` → `tok60.update` (okno + po proudu).
+  Kontrola proti plnému výpočtu `check_full()`. Pořadí teren → povrch + podzemí → (události tůní `fill_events`) → lokální
+  přepočet tedy už platí.
+- **Co chybí (E68 doplní):**
+  1. smyčka povrch ↔ podzemí má pevně **4 kola** a končí jen při bitové shodě `extra` / `src2`; nikdo neví, jestli
+     doběhla. Smyčka tůň → průsak → pramen → tůň (pramen nad tůní ji znovu plní) konverguje pomalu (každé kolo přidá
+     další průtok), takže výsledek po 4 kolech závisí na počtu kol a neodpovídá ustálenému stavu;
+  2. **společná bilance** neexistuje: zdroje, ztráty v ponorech, odtok přes okraj, odtok tůní do podzemí, výstupy podzemí
+     (prameny / stěna), průsak do hloubky, `lost_deep`;
+  3. **otisk stavu** (hash) celé hydrologie pro shodu mezi běhy a pořadím výkopů;
+  4. jedno místo, kde se to volá (dnes kopie v `route`, `update`, prototypu).
+- **Návrh `scripts/hydro68/hydro68.gd` (za přepínačem `p68_hydro`, vypnuto = bitově dnešní stav):**
+  - `full(st, kola, tol)`: stejné kroky jako `tok.route`, ale smyčka povrch ↔ podzemí do ustálení: kolo = odtoky tůní +
+    podzemí (`_apply_drains`) → povrch po proudu; konec, když se `extra` / `src2` nezmění o víc než `p68_tol` (l/s), nejvýš
+    `p68_kola` kol. Vrací počet kol, poslední změnu, `ustaleno`.
+  - lokální přepočet: `tok60.update` s parametry `KOLA` / `TOL` (statické proměnné jako `FAST_POND`; výchozí 4 / 0 = beze změny).
+  - `bilance(st)`: povrch (Σ zdroje + Σ prameny z podzemí = okraj + ponory + odtoky tůní), podzemí (vstup = výstupy +
+    průsak + `lost_deep`), svět (zdroje = okraj + ponory + výstupy ve stěně + průsak do hloubky). Chyba svět / povrch / spoj.
+  - `otisk(st)`: hash `fill`, `eff`, `to`, `extra`, `src2` a seřazených `under`.
+  - `udalosti(st)`: události plnění tůní (`fill_events`) seřazené podle času (pevné pořadí).
+- **Test smyčky (`tools/e68.gd`):** malá mísa: zdroj na svahu → tůň na dně nad polopropustnou vrstvou → zvodeň (písek)
+  vychází na svah nad tůní → pramen teče zpět do tůně; přelivem tůně voda odtéká k okraji mapy. Měří se: počet kol do
+  ustálení, chyba bilance po 4 kolech a po ustálení, analytická kontrola (ustálený přeliv = zdroj − ztráty), otisk mezi
+  běhy. Varianty: E58 (auto) a E67 (pretok, K+P).
+- **Ostrov (prototyp `tools/voda_e66.gd`):** před / po (vypnuto / zapnuto): Σ průtok přes okraj, mokrá koryta, tůně,
+  prameny, výstupy podzemí, objem, kola, bilance, čas plného výpočtu, čas výkopu, neshody proti plnému výpočtu, otisk
+  ve dvou pořadích výkopů a dvou bězích.
+- **Hypotéza:** ostrov má smyčku (stará E58: pramen 29,27 m nad tůní, E67 poznámka „4 volání → 2“); po 4 kolech zbude
+  chyba bilance, ustálení potřebuje víc kol. Každé kolo s jiným průtokem je nové registrované volání podzemí → výkop
+  opravuje víc volání (riziko času). Výchozí zapnout jen při 0 neshod, přesné bilanci a rozumném čase.
+
 ## E71 výsledky (2026-11-19 22:40, větev `e71-kapacita-dolu` z `e70-harmonicky-prumer`, do main až po schválení Janem)
 - **Co je nového (`ug67.gd`, studie i prototyp, CLI `--bp.p71_*`):**
   - `p71_kapacita` (K): dolů nejvýš `K · A · 1000 · p71_cas` l/s na rozhraní, K = 10^(6·perm − 9) m/s (mapování tabulky v4),
