@@ -1,3 +1,4 @@
+@tool
 extends RefCounted
 ## Kostkový mesher: kreslí jen stěny sousedící se vzduchem, AO ve vrcholech, výška buňky 0,5.
 ## Okraje sousedních bloků se načtou do obalu 18 × 18 × 66, takže mezi bloky nevznikají zbytečné stěny.

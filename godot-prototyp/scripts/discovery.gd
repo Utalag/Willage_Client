@@ -1,3 +1,4 @@
+@tool
 extends RefCounted
 ## Které buňky jsou „odkryté“: mají stěnu u vzduchu nad výškovou mapou (obloha nebo jáma).
 ## Chybějící soused (mlha, okraj ostrova) se nepočítá, takže boky bloku pod povrchem zůstanou skryté.

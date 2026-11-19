@@ -1,3 +1,4 @@
+@tool
 ## Cesty: A* po povrchu ostrova (globální sloupce gx, gz).
 ## Průchozí: sloupec patří vloženému bloku (ne mlha, ne mezera), není pod stavbou,
 ## krok na souseda (4-okolí) má |Δhm| ≤ MAX_STEP = 4 buňky (1 buňka = 0,5 m). Větší útesy, mlha a voda neprojdou.

@@ -1,5 +1,9 @@
+@tool
 extends Node3D
 ## Ostrov: sloty v přibližném kruhu, umístěné bloky, mlha, zvýraznění platných slotů a náhled.
+## Startovní bloky a generátor jsou parametry v Inspectoru (skupina „Startovní ostrov“). V editoru (@tool) se ostrov
+## vygeneruje jako náhled ve 3D pohledu (vypínač „editor_preview“, tlačítko „Přegenerovat náhled“); za běhu ho
+## sestaví Main (setup() + generate_start()). Uzly náhledu nemají vlastníka, do main.tscn se neukládají.
 
 const Mat = preload("res://scripts/mat.gd")
 const Block = preload("res://scripts/block.gd")
@@ -14,6 +18,25 @@ const CELL_H := 0.5
 const SURF_Y := 32 * CELL_H       # výchozí povrch (střed výšky)
 const CENTER := Vector2(1.0, 1.0) # střed rozložení ve slotech (start 2 × 2 = sloty 0..1)
 const RADIUS := 2.6
+
+@export_group("Startovní ostrov")
+## generátor podzemí (CLI -- --gen=proto|v3 má přednost)
+@export_enum("v3", "proto") var generator: String = "v3"
+## startovní bloky v pořadí vkládání: slot, typ (louka / kopec / hora / piscina) a seed
+@export var start_slots: Array[Vector2i] = [Vector2i(0, 0), Vector2i(1, 0), Vector2i(0, 1), Vector2i(1, 1)]
+@export var start_kinds: PackedStringArray = ["louka", "hora", "kopec", "louka"]
+@export var start_seeds: PackedInt32Array = [101, 202, 303, 404]
+@export_group("Náhled v editoru")
+## vygenerovat ostrov ve 3D pohledu editoru (asi 1 s); vypnout, když editor zdržuje
+@export var editor_preview := true:
+	set(v):
+		editor_preview = v
+		if Engine.is_editor_hint() and is_node_ready():
+			_editor_rebuild()
+@export_tool_button("Přegenerovat náhled", "Reload") var _regen_btn = _editor_rebuild
+
+var gen_times: Array[float] = []
+var mesh_times: Array[float] = []
 
 var slots: Array[Vector2i] = []   # všechna místa ostrova (blok nebo mlha)
 var blocks := {}                  # Vector2i -> Block
@@ -221,6 +244,53 @@ func _init() -> void:
 		for sz in range(-3, 5):
 			if Vector2(sx + 0.5, sz + 0.5).distance_to(CENTER) <= RADIUS:
 				slots.append(Vector2i(sx, sz))
+
+func _ready() -> void:
+	if Engine.is_editor_hint():
+		_editor_rebuild.call_deferred()
+
+## blok z receptu (typ, seed); unikátní blok má bonus rud
+static func make_block(kind: String, seed: int, title: String, category := "běžný") -> Block:
+	var b := Block.new()
+	b.kind = kind; b.seed = seed; b.title = title; b.category = category
+	if category == "unikátní":
+		b.ore_bonus = 0.12
+	return b
+
+## vygeneruje a vloží startovní bloky (pořadí = pořadí vkládání, každý se napojí na už vložené sousedy)
+func generate_start(log := true) -> void:
+	for i in start_slots.size():
+		var kind: String = start_kinds[i] if i < start_kinds.size() else "louka"
+		var b := make_block(kind, start_seeds[i] if i < start_seeds.size() else 101 * (i + 1), "Start: " + kind)
+		b.slot = start_slots[i]
+		BlockGen.build(b, neighbor_hms(b.slot))
+		place(b)
+		if log:
+			log_block(b)
+
+func log_block(b: Block) -> void:
+	gen_times.append(b.gen_ms)
+	mesh_times.append(b.mesh_ms)
+	print("blok %s %s seed %d slot %s: generování %.1f ms, mesh %.1f ms" % [b.title, b.kind, b.seed, b.slot, b.gen_ms, b.mesh_ms])
+
+## editor: smaže náhled (uzly bez vlastníka) a podle vypínače vygeneruje znovu
+func _editor_rebuild() -> void:
+	if not Engine.is_editor_hint():
+		return
+	for c in get_children():
+		if c.owner == null:
+			remove_child(c)
+			c.queue_free()
+	blocks.clear(); meshes.clear(); wmeshes.clear(); fogs.clear(); frames.clear(); vegs.clear()
+	props.clear(); roads.clear(); occupied.clear(); preview_labels.clear()
+	preview_block = null; preview_veg = null; hover_slot = null; slice_z = -1
+	if not editor_preview:
+		return
+	var t := Time.get_ticks_msec()
+	BlockGen.gen_version = generator
+	setup()
+	generate_start(false)
+	print("Island: náhled v editoru %d bloků za %d ms (%s)" % [blocks.size(), Time.get_ticks_msec() - t, generator])
 
 func setup() -> void:
 	flat_mat = StandardMaterial3D.new()

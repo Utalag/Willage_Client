@@ -1,3 +1,4 @@
+@tool
 class_name ShoreFields
 extends RefCounted
 ## Data povrchu jednoho bloku pro duální mřížku a doplňky pobřeží (jen vzhled, data bloků se nemění).

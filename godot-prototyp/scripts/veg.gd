@@ -1,3 +1,4 @@
+@tool
 extends RefCounted
 ## Vegetace: samostatná vrstva nad buňkami terénu. Základní porost se generuje deterministicky ze seedu bloku
 ## (účel "VEG"), každý druh má skóre a smí jen na vhodný povrchový materiál. Hráč bude sázet sám (později).

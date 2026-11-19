@@ -1,3 +1,4 @@
+@tool
 ## KOPIE z lozika-studie (= voda-studie/scripts/water_sim.gd se zadrženou vodou) pro prototyp; změna jen cesta preload.
 extends RefCounted
 ## KOPIE z voda-studie/scripts/water_sim.gd (od 19:19 se zadrženou vodou ret_*), jen cesta k materiálům – kontrola stability gen-v3.

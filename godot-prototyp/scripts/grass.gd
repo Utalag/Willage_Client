@@ -1,3 +1,4 @@
+@tool
 extends RefCounted
 ## Tráva C v hlavním prototypu (převzato ze studie trava-studie, varianta C, schválena 17. 11. 2026):
 ## hustě instancované trsy z veg-v2 (MultiMesh) na každém travnatém sloupci + kvítky, vítr a rozhrnování stopou.

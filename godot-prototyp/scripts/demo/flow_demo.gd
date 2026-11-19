@@ -1,5 +1,5 @@
 extends Node
-## Tok vody po kopání (Jan 20:39), přidá ho main.gd:
+## Tok vody po kopání (Jan 20:39), přidá ho demo_runner.gd:
 ##   -- --flow-shots [--tag=X]   časová řada: jáma ze strany prokopnutá do jeskyně s vodou → shots/42_tok_*<_tag>.png
 ##   -- --flow-bench [--tag=X]   měření kopání s tokem, kontrola delty, determinismus → shots/42_tok_bench<_tag>.txt
 
@@ -25,7 +25,7 @@ func _ready() -> void:
 	for a in OS.get_cmdline_user_args():
 		if a.begins_with("--tag="):
 			tag = a.substr(6)
-	m.set_process(false)
+	m.set_game_process(false)
 	if "--flow-shots" in OS.get_cmdline_user_args():
 		_shots.call_deferred()
 	else:
@@ -35,8 +35,8 @@ func _sfx(base: String, ext: String) -> String:
 	return "42_tok_%s%s.%s" % [base, ("_" + tag) if tag != "" else "", ext]
 
 func _cam(c: Vector3, size: float, yaw := 45.0, pitch := -35.0) -> void:
-	m.center = c; m.cam.size = size; m.yaw = yaw; m.pitch = pitch
-	m._place_camera()
+	m.rig.center = c; m.cam.size = size; m.rig.yaw = yaw; m.rig.pitch = pitch
+	m.rig.place()
 
 func _snap(name: String) -> void:
 	for i in 6:
@@ -48,7 +48,7 @@ func _snap(name: String) -> void:
 
 func _place(s: Vector2i, kind: String, seed: int) -> float:
 	var t0 := Time.get_ticks_usec()
-	var b = m._make_block(kind, seed, "gen-v3")
+	var b = m.island.make_block(kind, seed, "gen-v3")
 	b.slot = s
 	BlockGen.build(b, m.island.neighbor_hms(s))
 	m.island.place(b)
@@ -136,12 +136,12 @@ func _pit_cols(site: Array) -> Array:
 ## vykope jámu za stěnou až po hladinu − 2 (stěna N zůstane) – toky v nasycené půdě se dopočítají hned
 func _dig_pit(site: Array) -> void:
 	var b: Block = m.island.blocks[site[0]]
-	m.flow_sync = true
+	m.water.flow_sync = true
 	for g in _pit_cols(site):
 		var l: Vector2i = g - site[0] * BS
 		var guard := 0
 		while b.hm[l.x * BS + l.y] > site[3] - PIT_DEPTH and guard < 64:
-			m._dig(g); guard += 1
+			m.digging.dig(g); guard += 1
 
 func _wall(site: Array) -> Vector2i:
 	return site[0] * BS + Vector2i(site[1], site[2]) + site[4]
@@ -151,11 +151,11 @@ func _dig_wall_to_opening(site: Array, sync: bool) -> void:
 	var b: Block = m.island.blocks[site[0]]
 	var g := _wall(site)
 	var l: Vector2i = g - site[0] * BS
-	m.flow_sync = true
+	m.water.flow_sync = true
 	while b.hm[l.x * BS + l.y] > site[3] + 1:
-		m._dig(g)
-	m.flow_sync = sync
-	m._dig(g)
+		m.digging.dig(g)
+	m.water.flow_sync = sync
+	m.digging.dig(g)
 
 ## voda v jámě (sloupce jámy a stěny, vzduch nad dnem) a v jeskyni (zbytek) v buňkách
 func _pit_water(site: Array) -> float:
@@ -203,21 +203,21 @@ func _shots() -> void:
 	m.island.set_slice(-1)
 	# otevření ze strany: tok se nedopočítá hned, krokujeme ho po snímcích
 	_dig_wall_to_opening(site, false)
-	if m.flows.is_empty():
+	if m.water.flows.is_empty():
 		print("tok: otevření nespustilo tok"); get_tree().quit(); return
-	var e: Dictionary = m.flows[0]
+	var e: Dictionary = m.water.flows[0]
 	var f = e.flow
 	print("tok: výřez ", f.box(), " (", f.box_cells(), " buněk)")
 	var marks := [0, 6, 20, -1]
 	var names := ["1_otevreno", "2_tik06", "3_tik20", "4_ustaleno"]
 	for k in marks.size():
 		if marks[k] < 0:
-			m._flow_finish_all()
+			m.water.finish_all()
 		else:
 			f.step_n(marks[k] - f.ticks)
 			f.write_preview()
 			m.island._remesh(s)
-		var info := "tik %d" % f.ticks if marks[k] >= 0 else "ustáleno po %d tikách (kontrola delty %s)" % [f.ticks, "OK" if m.last_flow.valid.ok else "CHYBA"]
+		var info := "tik %d" % f.ticks if marks[k] >= 0 else "ustáleno po %d tikách (kontrola delty %s)" % [f.ticks, "OK" if m.water.last_flow.valid.ok else "CHYBA"]
 		lab.text = "tok vody: stěna prokopnutá do jeskyně ze strany – %s, voda v jámě %.2f buňky (simulace voda-studie jen ve výřezu %d × %d × %d)" % [info, _pit_water(site), f.nx, f.ny, f.nz]
 		_cam(cpit, 11.0, yaw, -62.0)
 		await _snap(_sfx(names[k], "png"))
@@ -260,11 +260,11 @@ func _bench() -> void:
 		allv.append("OK" if b.gen3.get("valid", {}).get("ok", false) else "CHYBA")
 	out.append("validátor při vložení na všech %d blocích ostrova: %d OK" % [allv.size(), allv.count("OK")])
 	# 1) kopání v suchu (jen kontrola spouštěče) vs. bez toku
-	m.flow_sync = true
+	m.water.flow_sync = true
 	var t0 := Time.get_ticks_usec()
 	for i in 4:
-		m._dig(Vector2i(-BS + 6 + i, 8))
-	out.append("kopání v suchu (spouštěč nic nenašel): %.1f ms na buňku, toků %d" % [(Time.get_ticks_usec() - t0) / 4000.0, m.flows.size()])
+		m.digging.dig(Vector2i(-BS + 6 + i, 8))
+	out.append("kopání v suchu (spouštěč nic nenašel): %.1f ms na buňku, toků %d" % [(Time.get_ticks_usec() - t0) / 4000.0, m.water.flows.size()])
 	# 2) jáma ze strany do jeskyně s vodou (stejné místo jako ve screenshotech)
 	var site := _find_site()
 	if site.is_empty():
@@ -274,64 +274,64 @@ func _bench() -> void:
 		_dig_pit(site)
 		var g := _wall(site)
 		var l: Vector2i = g - site[0] * BS
-		m.flow_sync = true
+		m.water.flow_sync = true
 		while b.hm[l.x * BS + l.y] > site[3] + 1:
-			m._dig(g)
+			m.digging.dig(g)
 		var sn := _snapshot(b)
 		var w0 := 0
 		for v in b.water: w0 += v
 		t0 = Time.get_ticks_usec()
-		m._dig(g)
+		m.digging.dig(g)
 		var tdig := (Time.get_ticks_usec() - t0) / 1000.0
-		var lf: Dictionary = m.last_flow
+		var lf: Dictionary = m.water.last_flow
 		var h1 := _hash(b)
 		var w1 := 0
 		for v in b.water: w1 += v
-		var dl: Dictionary = m.deltas[site[0]].back()
+		var dl: Dictionary = m.digging.deltas[site[0]].back()
 		out.append("jáma ze strany do jeskyně (blok %s, hladina lz %d): kopání + tok do ustálení %.0f ms, z toho simulace %.0f ms (%d tiků, %.2f ms/tik), výřez %s = %d buněk" % [str(site[0]), site[3], tdig, lf.ms, lf.ticks, lf.ms / maxf(lf.ticks, 1), str(lf.box), lf.cells])
 		out.append("  delta: přesunuto %d jednotek (%.2f buňky), změněných buněk vody %d, součet vody bloku před %d − vykopáno %d = po %d (%s); kontrola delty %s, ověření max %.4f" % [lf.valid.moved_units, lf.valid.moved_units / 4096.0, dl.flow.water.size(), w0, dl.get("water_old", 0), w1, "sedí" if w0 - dl.get("water_old", 0) == w1 else "NESEDÍ", "OK" if lf.valid.ok else "CHYBA " + str(lf.valid.errors), lf.valid.verify_max_delta])
 		out.append("  voda v jámě po ustálení %.2f buňky" % _pit_water(site))
 		# determinismus: znovu synchronně, a po snímcích (kroky 1, 3, 7 tiků) přes _flow_tick
 		_restore(b, sn)
-		m._dig(g)
+		m.digging.dig(g)
 		var h2 := _hash(b)
 		var hs := []
 		for chunk in [1, 3, 7]:
 			_restore(b, sn)
-			m.flow_sync = false
-			m._dig(g)
-			var f = m.flows[0].flow
+			m.water.flow_sync = false
+			m.digging.dig(g)
+			var f = m.water.flows[0].flow
 			while not f.done:
 				f.step_n(chunk)
 				f.write_preview()
-			m._flow_finish_all()
+			m.water.finish_all()
 			hs.append(_hash(b))
-			m.flow_sync = true
+			m.water.flow_sync = true
 		var same := h1 == h2 and hs.count(h1) == hs.size()
 		out.append("  determinismus: synchronně 2× a po snímcích (po 1, 3, 7 tikách) %s (%s)" % ["shodné" if same else "ROZDÍLNÉ", ", ".join([h1, h2] + hs)])
 		# ve hře: rozpočet na snímek
 		_restore(b, sn)
-		m.flow_sync = false
-		m._dig(g)
+		m.water.flow_sync = false
+		m.digging.dig(g)
 		var frames := 0
 		var fmax := 0.0
-		while not m.flows.is_empty():
+		while not m.water.flows.is_empty():
 			var tf := Time.get_ticks_usec()
-			m._flow_tick()
+			m.water.tick()
 			fmax = maxf(fmax, (Time.get_ticks_usec() - tf) / 1000.0)
 			frames += 1
-		out.append("  ve hře (rozpočet %.0f ms/snímek + náhled vody): %d snímků (≈ %.1f s při 60 fps), nejdelší snímek %.1f ms, výsledek %s" % [m.FLOW_BUDGET_MS, frames, frames / 60.0, fmax, "shodný" if _hash(b) == h1 else "ROZDÍLNÝ"])
-		m.flow_sync = true
+		out.append("  ve hře (rozpočet %.0f ms/snímek + náhled vody): %d snímků (≈ %.1f s při 60 fps), nejdelší snímek %.1f ms, výsledek %s" % [m.water.FLOW_BUDGET_MS, frames, frames / 60.0, fmax, "shodný" if _hash(b) == h1 else "ROZDÍLNÝ"])
+		m.water.flow_sync = true
 	# 3) kopání pod hladinou v písčině (nasycený písek, voda přitéká do jámy z okolí)
 	var pb: Block = m.island.blocks[Vector2i(0, 2)]
 	var pg := Vector2i(8, 2 * BS + 8)
 	var nf := 0; var tsum := 0.0; var tk := 0; var okc := 0
 	t0 = Time.get_ticks_usec()
 	for k in 8:
-		var before: Dictionary = m.last_flow
-		m._dig(pg)
-		if m.last_flow != before:
-			nf += 1; tk += m.last_flow.ticks; tsum += m.last_flow.ms; okc += 1 if m.last_flow.valid.ok else 0
+		var before: Dictionary = m.water.last_flow
+		m.digging.dig(pg)
+		if m.water.last_flow != before:
+			nf += 1; tk += m.water.last_flow.ticks; tsum += m.water.last_flow.ms; okc += 1 if m.water.last_flow.valid.ok else 0
 	var tall := (Time.get_ticks_usec() - t0) / 1000.0
 	out.append("písčina 4504, sloupec (8, 8) kopaný 8 buněk dolů: %.0f ms celkem, toků %d (kontrola delty OK %d), tiků %d, simulace %.0f ms, povrch sloupce lz %d" % [tall, nf, okc, tk, tsum, pb.hm[8 * BS + 8]])
 	# 4) průzkum na samotných blocích: 4 recepty × 6 seedů, sloupec vedle jeskyně s vodou kopaný až do otevření

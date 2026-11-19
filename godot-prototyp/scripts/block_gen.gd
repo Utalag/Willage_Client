@@ -1,3 +1,4 @@
+@tool
 extends RefCounted
 ## Generátor bloku v2 (sdílená spec s backendem, viz README „Specifikace generátoru“).
 ## Osy podle plánu backendu: lx, ly = vodorovně (0–15), lz = výška (0–63). V Godotu: lx → x, ly → z, lz → y.

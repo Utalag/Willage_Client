@@ -1,3 +1,4 @@
+@tool
 ## KOPIE z lozika-studie/scripts/gen3_server.gd (gen-v3-study-4) pro prototyp; změny jen cesty preload.
 extends RefCounted
 ## ZÁSTUPCE SERVERU pro gen-v3: katalog materiál -> tvar + parametry (celá čísla), sestavení a seřazení zásobníku.

@@ -1,3 +1,4 @@
+@tool
 extends RefCounted
 ## Sdílená tabulka vlastností vody (perm, por, res, ret) pro gen-v3 v prototypu.
 ## Jediný zdroj pravdy je ../sdilene/materialy_voda.json (vedle složky projektu, Jan 19:18). Když tam není

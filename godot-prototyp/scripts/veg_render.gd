@@ -1,3 +1,4 @@
+@tool
 extends RefCounted
 ## Vykreslení vegetace bloku: každý druh jeden MultiMeshInstance3D (trsy, květiny, suchá tráva, mech procedurálně,
 ## stromy/keř/kaktus z .glb vytvořených Blenderem). Výška buňky 0,5.

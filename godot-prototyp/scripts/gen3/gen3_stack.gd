@@ -1,3 +1,4 @@
+@tool
 ## KOPIE z lozika-studie/scripts/gen3_stack.gd (gen-v3-study-4) pro prototyp; změny jen cesty preload.
 extends RefCounted
 ## Zásobník gen-v3 (dohoda s Willage-backend 18:59): binární kódování, tabulky parametrů tvarů, kontrola world.stack_invalid.

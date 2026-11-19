@@ -1,3 +1,4 @@
+@tool
 extends RefCounted
 ## Sdílené kawaii materiály objektů (vegetace, domky, cesty). set_on() přepíná všechny najednou (klávesa T).
 

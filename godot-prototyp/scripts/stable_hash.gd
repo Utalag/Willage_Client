@@ -1,3 +1,4 @@
+@tool
 extends RefCounted
 ## Deterministické 64bitové hashe nezávislé na jazyku (C# ulong ↔ GDScript int s přetečením mod 2^64).
 ## - splitmix64(x): finalizér SplitMix64 (Steele, Lea, Flood 2014), vstup x + 0x9E3779B97F4A7C15

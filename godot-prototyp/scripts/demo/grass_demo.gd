@@ -1,5 +1,5 @@
 extends Node
-## Ukázka a měření trávy C v hlavním prototypu (přidá ji main.gd):
+## Ukázka a měření trávy C v hlavním prototypu (přidá ji demo_runner.gd):
 ##   -- --grass-shots  screenshoty shots/28_trava_C_*.png (celek, detail, průchod postavičky)
 ##   -- --grass-bench  měření snímku a počtu instancí: startovní ostrov a plný ostrov (všechny sloty) → shots/28_trava_C_bench.txt
 ## Skript nesahá na trávu přímo (jen přes strom uzlů), takže jde pustit i ve starší verzi prototypu (srovnání před/po).
@@ -7,7 +7,7 @@ extends Node
 const Roads = preload("res://scripts/roads.gd")
 const BlockGen = preload("res://scripts/block_gen.gd")
 const STEP := 1.0 / 30.0
-var m           # main.gd
+var m           # Main (main.gd)
 var Grass = null
 var walker: Node3D
 var out := []
@@ -20,7 +20,7 @@ func _ready() -> void:
 	for a in OS.get_cmdline_user_args():
 		if a.begins_with("--tag="):
 			tag = a.substr(6)
-	m.set_process(false)   # žádné posouvání kamery klávesami, simulaci trávy řídíme sami
+	m.set_game_process(false)   # žádné posouvání kamery klávesami, simulaci trávy řídíme sami
 	if "--grass-map" in OS.get_cmdline_user_args():
 		_map(); m.get_tree().quit(); return
 	if "--grass-shots" in OS.get_cmdline_user_args():
@@ -51,8 +51,8 @@ func _tick(dt: float) -> void:
 		Grass.tick(dt)
 
 func _cam(c: Vector3, size: float, yaw := 45.0, pitch := -35.0) -> void:
-	m.center = c; m.cam.size = size; m.yaw = yaw; m.pitch = pitch
-	m._place_camera()
+	m.rig.center = c; m.cam.size = size; m.rig.yaw = yaw; m.rig.pitch = pitch
+	m.rig.place()
 
 func _gy(p: Vector2) -> float:
 	return Roads.height(m.island, Vector2i(floori(p.x), floori(p.y))) * 0.5
@@ -187,7 +187,7 @@ func _bench() -> void:
 	for s in m.island.slots:
 		if m.island.blocks.has(s):
 			continue
-		var b = m._make_block(kinds[i % kinds.size()], 5000 + i * 37, "plný ostrov")
+		var b = m.island.make_block(kinds[i % kinds.size()], 5000 + i * 37, "plný ostrov")
 		b.slot = s
 		BlockGen.build(b, m.island.neighbor_hms(s))
 		m.island.place(b)

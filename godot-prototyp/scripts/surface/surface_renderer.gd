@@ -1,3 +1,4 @@
+@tool
 class_name SurfaceRenderer
 extends RefCounted
 ## Vykreslení povrchu louka / písek / voda nad bloky ostrova (vlastní ho island.gd):

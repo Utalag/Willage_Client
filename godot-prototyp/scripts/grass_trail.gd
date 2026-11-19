@@ -1,3 +1,4 @@
+@tool
 extends RefCounted
 ## Stopa rozhrnutí (ze studie trava-studie/scripts/trail.gd): float textura, pixel = R čas otisku, GB směr, A síla.
 ## Návrat trávy počítá shader z (čas − R), CPU přepisuje jen pixely pod postavičkou.
