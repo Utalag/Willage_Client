@@ -293,6 +293,32 @@ Výchozí: 800 kapek na blok, `ero_cap` 1,0, `ero_erode` 0,1, `ero_deposit_rate`
 - **Hypotéza:** parita bit po bitu (kopie se mění jen v cestách). Vložení bloku bp ≈ 0,25–0,4 s jako E49 detail
   (+ povrch a tráva prototypu ~0,4 s), voda ostrova 7 bloků (≈ 112 × 112 sloupců) plně < 1 s, kopání u vody desítky ms.
 
+## E69 test symetrie a referenční test podzemí (plán, zapsáno před pokusem 2026-11-19 21:45; TODO Voda, Jan 21:3x „V ToDo máš úkoly půst se do nich, ověř je…“)
+- **Zadání (TODO):** zdroj 1 l/s nad sloupcem, propustné vrstvy 1,0 / 0,8 / 0,6 / 0,4 / 0,2, nepropustné podloží; symetrický
+  terén musí dát symetrický výsledek a voda se nesmí ztratit. Na řešič E67 / E67b (`p67_rezim = "pretok"`, `ug67.gd`) a, pokud
+  to jde snadno, na E58 A+B+C (`ug58.gd`, režim auto, jedna hladina na těleso).
+- **Postup (nástroj `tools/e69.gd`, `./run.sh e69`, vše laditelné `--klic=hodnota`):** syntetický kontext přímo nad pásmy
+  `ug_funkce` (`_new` → sloupce [spodek, vršek, materiál] → `_finish`), bez generátoru bloků. Čtverec N × N (výchozí 21)
+  uvnitř prstence zdi (stěna = výstup „okraj“, `p67_okraj`), zdroj 1 l/s do vstupního pásma prostředního sloupce.
+  Vrstvy shora: 1,0 / 0,8 / 0,6 / 0,4 / 0,2 (zkušební materiály s touto propustností vložené do tabulky jen v testu,
+  `ponor_perm` testu 0,1, aby všech 5 bylo tělesem), pod nimi nepropustné podloží (perm 0). Tvary (všechny symetrické
+  podle grupy čtverce D4 kolem středu, hranice závisí jen na r² = dx² + dy²):
+  1. **plocha** – vodorovné vrstvy (degenerovaný případ: všechna dna stejně vysoko),
+  2. **kupole** – vrstvy klesají od středu (voda musí téct do stran),
+  3. **mísa** – vrstvy stoupají od středu (past ve středu, plnění a přeliv přes okraj mísy).
+  Varianty řešiče: pretok + O se slučováním (E67b výchozí), pretok + O bez slučování, E58 A+B+C (auto) + O, E58 base.
+- **Metriky:**
+  - *Symetrie:* pro každou z 8 transformací D4 rozdíl veličin po sloupcích (průtok mokrými pásmy podle vrstvy, výstupy
+    podle sloupce, hladina `wt`): max |f(s) − f(T s)| v l/s (resp. m) a počet nesymetrických sloupců.
+  - *Bilance:* vstup 1 l/s = Σ výstupů + průsak pastí (min(přítok, průsak)) + zbytek; chyba |vstup − výstup| (l/s).
+  - *Referenční profil:* kolik vody vyteče z které vrstvy a kolik projde dolů do další vrstvy (výsledek pro TODO tabulku).
+- **Hypotéza:** bilance přesně (chyba < 1e-9 l/s), slučování ani pasti hmotu neztrácejí. Symetrie: kupole bez slučování
+  symetrická (dělení perm × překryv je symetrické); se slučováním (`p67_prune`, nejsilnější větev = při shodě nejmenší id
+  pásma) a v plochém / mísovém případě (výstup pasti = jeden, při shodě výšky nejmenší id) čekám nesymetrii z rozhodování
+  remíz podle id. Řešič nemá svislou kapacitu vrstvy (dolů jde celý průtok), takže propustnosti 1,0 … 0,2 se projeví jen
+  v dělení do stran – referenční „kapacitní“ profil (každá vrstva propustí dolů jen svou kapacitu) E67 nesplní z konstrukce.
+- **Když test najde chybu:** minimální oprava na větvi `e69-symetrie-test`, znovu změřit, čísla před / po sem.
+
 ## E67b prahy: slučování slabých větví a prahy kreslení (2026-11-19, větev `e67-podzemi-okraje`; Jan 16:21 → oprava 16:22, 16:23, 16:25)
 
 - **Zadání:** malé výstupy se ze simulace NEZAHAZUJÍ (hmota beze změny), práh jen pro kreslení; stovky drobných větví přetoku:
