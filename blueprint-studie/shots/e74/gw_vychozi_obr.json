@@ -1,0 +1,446 @@
+{
+ "gw_ms": 43.224,
+ "hydro68": {
+  "bilance": {
+   "chyba_dolu": 0.0000000000000000832667268468867,
+   "chyba_nahoru": 0.0,
+   "chyba_podzemi": 0.0,
+   "chyba_povrch": -0.00000000000000077715611723761,
+   "chyba_svet": 0.0,
+   "do_hloubky": 0.0,
+   "konec_jinde": 0.0,
+   "odtok_tuni": 0.17316,
+   "okraj": 9.79676,
+   "podzemi_prameny": 0.17316,
+   "podzemi_prusak": 0.0,
+   "podzemi_stena": 0.0,
+   "podzemi_vstup": 0.17316,
+   "ponory": 0.203239999999999,
+   "prameny_z_podzemi": 0.17316,
+   "zavrena_telesa": 0,
+   "zdroje": 10.0
+  },
+  "kolo": {
+   "cyklus": 0,
+   "kola": 3,
+   "skoky": 0,
+   "ustaleno": true,
+   "zmena": 0.0
+  },
+  "otisk": "d7aedf3a6d9d10e8"
+ },
+ "hydro68_po": {
+  "bilance": {
+   "chyba_dolu": 0.0000000000000000277555756156289,
+   "chyba_nahoru": 0.0,
+   "chyba_podzemi": 0.0,
+   "chyba_povrch": 0.000000000000000111022302462516,
+   "chyba_svet": 0.0,
+   "do_hloubky": 0.0,
+   "konec_jinde": 0.0,
+   "odtok_tuni": 0.18149,
+   "okraj": 9.81342,
+   "podzemi_prameny": 0.18149,
+   "podzemi_prusak": 0.0,
+   "podzemi_stena": 0.0,
+   "podzemi_vstup": 0.18149,
+   "ponory": 0.186579999999999,
+   "prameny_z_podzemi": 0.18149,
+   "zavrena_telesa": 0,
+   "zdroje": 10.0
+  },
+  "kolo": {
+   "cyklus": 0,
+   "kola": 1,
+   "skoky": 0,
+   "ustaleno": true,
+   "zmena": 0.0
+  },
+  "otisk": "63d7b89a91385a79"
+ },
+ "hydro_otisk_po": "63d7b89a91385a79",
+ "neshod_celkem": 0,
+ "objem": {
+  "plocha": 201.295173406862,
+  "resic": 201.295241192458,
+  "rozdil": -0.0000677855966841889
+ },
+ "objem_po": {
+  "plocha": 116.316695062301,
+  "resic": 116.316730680778
+ },
+ "obsazeno": 0,
+ "otisk_neshod": 0,
+ "otisk_po": "5fae39823f8074f9",
+ "otisk_pred": "d51b9a4aabfa8e3a",
+ "pamet": {
+  "film_sloupcu": 0,
+  "pasem": 18886,
+  "pasma_B": 1640140,
+  "plocha_B": 165932,
+  "plocha_kompakt_B": 9372,
+  "plocha_ridka_B": 47148,
+  "sloupcu": 16384,
+  "sloupcu_s_vodou": 1024,
+  "teles": 1,
+  "telesa_vysledky_B": 108228,
+  "tvar_sloupcu": 1024,
+  "vyjimek": 27
+ },
+ "plocha_neshod": 0,
+ "rezimy": {
+  "auto": {
+   "film": 0,
+   "kompakt_B": 9044,
+   "objem_plocha": 116.316695,
+   "objem_resic": 116.316731,
+   "otisk": "5fae39823f8074f9",
+   "rozdil": -0.0000356184765450962,
+   "sloupcu": 1024,
+   "tvar": 1015,
+   "vyjimek": 18
+  },
+  "nadrz": {
+   "film": 0,
+   "kompakt_B": 9044,
+   "objem_plocha": 116.748026,
+   "objem_resic": 116.748062,
+   "otisk": "0bef677845240b4d",
+   "rozdil": -0.0000358765933583527,
+   "sloupcu": 1024,
+   "tvar": 1015,
+   "vyjimek": 18
+  },
+  "preliv": {
+   "film": 0,
+   "kompakt_B": 9044,
+   "objem_plocha": 116.316695,
+   "objem_resic": 116.316731,
+   "otisk": "5fae39823f8074f9",
+   "rozdil": -0.0000356184765450962,
+   "sloupcu": 1024,
+   "tvar": 1015,
+   "vyjimek": 18
+  },
+  "pretok": {
+   "film": 3,
+   "kompakt_B": 9116,
+   "objem_plocha": 116.367331,
+   "objem_resic": 116.367366,
+   "otisk": "2b55a669b892d2f8",
+   "rozdil": -0.0000356479920071706,
+   "sloupcu": 1024,
+   "tvar": 1015,
+   "vyjimek": 18
+  }
+ },
+ "souhrn": {
+  "koryto_sloupcu": 27,
+  "okraj_lps": 9.64358,
+  "podzemni_telesa": 1,
+  "prameny": 5,
+  "tun_sloupcu": 159,
+  "vodopady": 8,
+  "vodopady_okraj": 5,
+  "volani_podzemi": 3,
+  "vyvery": 1
+ },
+ "souhrn_po": {
+  "koryto_sloupcu": 26,
+  "okraj_lps": 9.65191,
+  "podzemni_telesa": 1,
+  "prameny": 5,
+  "tun_sloupcu": 160,
+  "vodopady": 8,
+  "vodopady_okraj": 5,
+  "volani_podzemi": 9,
+  "vyvery": 1
+ },
+ "voda_ms": {
+  "celkem": 2156.901,
+  "podzemí: pásma": 253.743,
+  "povrch + podzemí: plný výpočet": 1844.643,
+  "prameny": 9.877
+ },
+ "vykopy": [
+  {
+   "gi": 6337,
+   "gw_ms": 33.403,
+   "gw_shoda": true,
+   "kontakt": {
+    "bunek": 20,
+    "hladina_jamy": -1.0,
+    "mokra": 4,
+    "sucha": 1,
+    "us": 54,
+    "vytok": 15
+   },
+   "ms": 1145.116,
+   "neshod": {
+    "eff": 0,
+    "fill": 0,
+    "to": 0
+   },
+   "otisk": "f80573de1fd3d817",
+   "otisk_shoda": true
+  },
+  {
+   "gi": 7484,
+   "gw_ms": 32.327,
+   "gw_shoda": true,
+   "kontakt": {
+    "bunek": 16,
+    "hladina_jamy": -1.0,
+    "mokra": 0,
+    "sucha": 0,
+    "us": 28,
+    "vytok": 16
+   },
+   "ms": 444.075,
+   "neshod": {
+    "eff": 0,
+    "fill": 0,
+    "to": 0
+   },
+   "otisk": "333a59d73c7a3357",
+   "otisk_shoda": true
+  },
+  {
+   "gi": 9407,
+   "gw_ms": 31.356,
+   "gw_shoda": true,
+   "kontakt": {
+    "bunek": 16,
+    "hladina_jamy": -1.0,
+    "mokra": 4,
+    "sucha": 4,
+    "us": 46,
+    "vytok": 8
+   },
+   "ms": 784.443,
+   "neshod": {
+    "eff": 0,
+    "fill": 0,
+    "to": 0
+   },
+   "otisk": "425bfdac15c3dc93",
+   "otisk_shoda": true
+  },
+  {
+   "gi": 8387,
+   "gw_ms": 31.791,
+   "gw_shoda": true,
+   "kontakt": {
+    "bunek": 16,
+    "hladina_jamy": -1.0,
+    "mokra": 4,
+    "sucha": 4,
+    "us": 42,
+    "vytok": 8
+   },
+   "ms": 455.736,
+   "neshod": {
+    "eff": 0,
+    "fill": 0,
+    "to": 0
+   },
+   "otisk": "9154ab5ad5c04950",
+   "otisk_shoda": true
+  },
+  {
+   "gi": 7752,
+   "gw_ms": 82.576,
+   "gw_shoda": true,
+   "kontakt": {
+    "bunek": 16,
+    "hladina_jamy": -1.0,
+    "mokra": 0,
+    "sucha": 0,
+    "us": 29,
+    "vytok": 16
+   },
+   "ms": 1662.54,
+   "neshod": {
+    "eff": 0,
+    "fill": 0,
+    "to": 0
+   },
+   "otisk": "724e36ad76ce5df7",
+   "otisk_shoda": true
+  },
+  {
+   "gi": 8002,
+   "gw_ms": 32.132,
+   "gw_shoda": true,
+   "kontakt": {
+    "bunek": 16,
+    "hladina_jamy": -1.0,
+    "mokra": 4,
+    "sucha": 4,
+    "us": 47,
+    "vytok": 8
+   },
+   "ms": 602.296,
+   "neshod": {
+    "eff": 0,
+    "fill": 0,
+    "to": 0
+   },
+   "otisk": "ab986d5910b99a6e",
+   "otisk_shoda": true
+  },
+  {
+   "gi": 7612,
+   "gw_ms": 31.325,
+   "gw_shoda": true,
+   "kontakt": {
+    "bunek": 12,
+    "hladina_jamy": -1.0,
+    "mokra": 0,
+    "sucha": 0,
+    "us": 24,
+    "vytok": 12
+   },
+   "ms": 584.006,
+   "neshod": {
+    "eff": 0,
+    "fill": 0,
+    "to": 0
+   },
+   "otisk": "7ccc7a78dd4c97f5",
+   "otisk_shoda": true
+  },
+  {
+   "gi": 8385,
+   "gw_ms": 30.371,
+   "gw_shoda": true,
+   "kontakt": {
+    "bunek": 16,
+    "hladina_jamy": -1.0,
+    "mokra": 4,
+    "sucha": 4,
+    "us": 48,
+    "vytok": 8
+   },
+   "ms": 553.388,
+   "neshod": {
+    "eff": 0,
+    "fill": 0,
+    "to": 0
+   },
+   "otisk": "9311195f69b67bdc",
+   "otisk_shoda": true
+  },
+  {
+   "gi": 8910,
+   "gw_ms": 31.054,
+   "gw_shoda": true,
+   "kontakt": {
+    "bunek": 16,
+    "hladina_jamy": -1.0,
+    "mokra": 2,
+    "sucha": 14,
+    "us": 52,
+    "vytok": 0
+   },
+   "ms": 1050.12,
+   "neshod": {
+    "eff": 0,
+    "fill": 0,
+    "to": 0
+   },
+   "otisk": "5fae39823f8074f9",
+   "otisk_shoda": true
+  },
+  {
+   "gi": 7611,
+   "gw_ms": 28.142,
+   "gw_shoda": true,
+   "kontakt": {
+    "bunek": 12,
+    "hladina_jamy": -1.0,
+    "mokra": 2,
+    "sucha": 10,
+    "us": 48,
+    "vytok": 0
+   },
+   "ms": 639.863,
+   "neshod": {
+    "eff": 0,
+    "fill": 0,
+    "to": 0
+   },
+   "otisk": "5fae39823f8074f9",
+   "otisk_shoda": true
+  },
+  {
+   "gi": 6450,
+   "gw_ms": 28.181,
+   "gw_shoda": true,
+   "kontakt": {
+    "bunek": 20,
+    "hladina_jamy": -1.0,
+    "mokra": 4,
+    "sucha": 16,
+    "us": 65,
+    "vytok": 0
+   },
+   "ms": 655.608,
+   "neshod": {
+    "eff": 0,
+    "fill": 0,
+    "to": 0
+   },
+   "otisk": "5fae39823f8074f9",
+   "otisk_shoda": true
+  },
+  {
+   "gi": 7751,
+   "gw_ms": 32.23,
+   "gw_shoda": true,
+   "kontakt": {
+    "bunek": 15,
+    "hladina_jamy": -1.0,
+    "mokra": 3,
+    "sucha": 12,
+    "us": 51,
+    "vytok": 0
+   },
+   "ms": 807.032,
+   "neshod": {
+    "eff": 0,
+    "fill": 0,
+    "to": 0
+   },
+   "otisk": "5fae39823f8074f9",
+   "otisk_shoda": true
+  }
+ ],
+ "vytoky": {
+  "mimo": [],
+  "na_vytoku": 1,
+  "typy": {
+   "povrch": 4,
+   "stena": 8
+  },
+  "vedle": 0,
+  "vystupu_resice": 1,
+  "vytoku_plochy": 12
+ },
+ "vytoky_po": {
+  "mimo": [],
+  "na_vytoku": 1,
+  "typy": {
+   "povrch": 8
+  },
+  "vedle": 0,
+  "vystupu_resice": 1,
+  "vytoku_plochy": 8
+ },
+ "vyver74": 0,
+ "vzorek_vse": {
+  "bunek": 32809,
+  "ms": 36.506,
+  "s_vodou": 16739
+ }
+}
