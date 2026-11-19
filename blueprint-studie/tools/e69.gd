@@ -14,6 +14,13 @@ const VS = preload("res://scripts/voda/voda_svet.gd")
 const M0 := 9000
 const E := 1e-6
 
+## --bp.<klíč>=hodnota → parametry studie (E71)
+static func bp_args(p: Dictionary) -> Dictionary:
+	var a := PackedStringArray()
+	for s in OS.get_cmdline_user_args():
+		if s.begins_with("--bp."): a.append("--" + s.substr(5))
+	return PR.apply_args(p, a)
+
 func _arg(k: String, d: String) -> String:
 	for s in OS.get_cmdline_user_args():
 		if s.begins_with("--" + k + "="): return s.split("=", true, 1)[1]
@@ -33,6 +40,7 @@ func _ctx(shape: String, extra: Dictionary) -> Dictionary:
 	p.p69_remizy = _arg("remizy", "1") == "1"
 	p.p70_prumer = _arg("prumer", String(p.get("p70_prumer", "pomer")))   # E70
 	p.merge(extra, true)
+	p = bp_args(p)
 	var W := N + 2; var m := W / 2; var nl := PERM.size()
 	var c := F._new(W, W, 1.0, p)
 	var rmax := sqrt(2.0) * (N / 2)
@@ -113,12 +121,12 @@ func _run(shape: String, label: String, solver: String, extra: Dictionary) -> Di
 			var kk := _key(c, int(c.bcol[b]), _lay(c, b))
 			fw[kk] = float(fw.get(kk, 0.0)) + float(r.wetq67[i])
 		var pits := []
+		cons = float(r.get("leak67w", 0.0)); out.prusak_tok = snappedf(cons, 1e-12)
 		for pt in r.pits67:
-			var lk := 0.0
-			for b in pt.bands: lk += F._leak(c, b, float(pt.hladina))
-			cons += minf(float(pt.q_in), lk)
-			pits.append({"hladina": snappedf(pt.hladina, 1e-4), "pasem": pt.pasem, "typ": pt.typ, "q_in": snappedf(pt.q_in, 1e-9), "prusak": snappedf(lk, 1e-9), "objem_m3": snappedf(pt.objem_m3, 1e-4)})
-		out.pasti = pits; out.mokrych = r.wet67.size(); out.vystupu = r.outs67.size()
+			var lk := float(pt.prusak_pouzit)   # E71: použitý průsak pasti (dřív min(přítok, průsak))
+			cons += lk
+			pits.append({"hladina": snappedf(pt.hladina, 1e-4), "pasem": pt.pasem, "typ": pt.typ, "q_in": snappedf(pt.q_in, 1e-9), "prusak": snappedf(lk, 1e-9), "dolu": snappedf(pt.dolu, 1e-9), "objem_m3": snappedf(pt.objem_m3, 1e-4)})
+		out.pasti = pits; out.mokrych = r.wet67.size(); out.vystupu = r.outs67.size(); out.oriznuto = r.cut67
 	else:
 		oq = float(r.out_q); cons = float(r.leak)
 		if not r.out.is_empty():
@@ -149,9 +157,9 @@ func _init() -> void:
 		for nm in names:
 			var o := _run(shape, nm, V[nm][0], V[nm][1])
 			res.append(o)
-			print("%-7s %-24s bilance chyba %.12f (výstupy %.9f, průsak %.9f) | sym výstupy %.4f (%d) tok %.4f (%d) hladina %.4f (%d) | výstupů %d | %s" % [shape, nm,
+			print("%-7s %-24s bilance chyba %.12f (výstupy %.9f, průsak %.9f) | sym výstupy %.4f (%d) tok %.4f (%d) hladina %.4f (%d) | výstupů %d%s | %s" % [shape, nm,
 				o.bilance.chyba, o.bilance.vystupy, o.bilance.prusak, o.symetrie.vystupy_lps.max, o.symetrie.vystupy_lps.nesym,
-				o.symetrie.tok_lps.max, o.symetrie.tok_lps.nesym, o.symetrie.hladina_m.max, o.symetrie.hladina_m.nesym, o.vystupu, JSON.stringify(o.vystupy_po_vrstvach)])
+				o.symetrie.tok_lps.max, o.symetrie.tok_lps.nesym, o.symetrie.hladina_m.max, o.symetrie.hladina_m.nesym, o.vystupu, " ORIZNUTO" if o.get("oriznuto", false) else "", JSON.stringify(o.vystupy_po_vrstvach)])
 	var tag := _arg("tag", "")
 	DirAccess.make_dir_recursive_absolute(ProjectSettings.globalize_path("res://shots/e69"))
 	FileAccess.open("res://shots/e69/vysledky%s.json" % tag, FileAccess.WRITE).store_string(JSON.stringify({"n": N, "t": T, "sklon": S, "q": Q, "perm": PERM, "ponor": _arg("ponor", "0.1"), "vysledky": res}, " "))

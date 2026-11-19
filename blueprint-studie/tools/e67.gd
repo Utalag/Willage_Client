@@ -17,6 +17,13 @@ const SHAPE := {"louka": "louka", "kopec": "kopec", "hora": "hora_zvrasnena"}
 const MIN := {"louka": {8: 10, 9: 14, 104: 20}, "kopec": {8: 20, 9: 24, 106: 6, 104: 30}, "hora_zvrasnena": {8: 30, 9: 20, 104: 20, 106: 8}}
 const WAT := {"louka": 150, "kopec": 120, "hora_zvrasnena": 80}
 
+## --bp.<klíč>=hodnota → parametry studie (E71)
+static func bp_args(p: Dictionary) -> Dictionary:
+	var a := PackedStringArray()
+	for s in OS.get_cmdline_user_args():
+		if s.begins_with("--bp."): a.append("--" + s.substr(5))
+	return PR.apply_args(p, a)
+
 func _arg(k: String, d: String) -> String:
 	for s in OS.get_cmdline_user_args():
 		if s.begins_with("--" + k + "="): return s.split("=", true, 1)[1]
@@ -46,6 +53,7 @@ func _ctx(extra: Dictionary) -> Dictionary:
 	var q := V64.scaled(p, 16); q.p52_rezim = "auto"
 	q.p70_prumer = _arg("prumer", String(q.get("p70_prumer", "pomer")))   # E70
 	q.p67_prune = _arg("prune", "1" if bool(q.get("p67_prune", true)) else "0") == "1"   # E70: srovnání bez slučování
+	q = bp_args(q)
 	q.merge(extra, true)
 	return F.from_world(world, fine, 16, 16, q)
 
@@ -87,7 +95,7 @@ func _sum(c: Dictionary, res: Array, label: String, ms: float) -> Dictionary:
 				for b in pt.bands: pitb[b] = true
 				if pt.objem_m3 > 0.0: pits.append({"hladina": snappedf(pt.hladina, 0.01), "dno": snappedf(pt.dno, 0.01), "pasem": pt.pasem, "typ": pt.typ, "objem_m3": snappedf(pt.objem_m3, 0.1)})
 			for o in r.outs67:
-				outs[o[1]] += 1; oq[o[1]] += float(o[3]); oql.append([int(o[2]), String(o[1]), float(o[3])])
+				outs[o[1]] += 1; oq[o[1]] += float(o[3]); oql.append([int(o[2]), String(o[1]), float(o[3]), snappedf(float(o[0]), 1e-4)])
 		else:
 			for b in r.comp_ids:
 				if float(c.lo[b]) < float(r.z_out) - 1e-6: pitb[b] = true
