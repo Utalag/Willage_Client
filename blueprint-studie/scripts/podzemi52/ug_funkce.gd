@@ -69,7 +69,7 @@ static func _new(W: int, H: int, side: float, p: Dictionary) -> Dictionary:
 	var c := {"W": W, "H": H, "side": side, "A": side * side, "perm_min": float(p.ponor_perm), "depth_m": float(p.get("ug_hloubka_m", 6.0)),
 		"q_to_m3": float(p.get("ug_q_to_m3", 0.001)), "leak_m2": float(p.get("ug_leak_m2", 0.002)), "rezim": String(p.get("p52_rezim", "nadrz")), "perm_dno": float(p.get("p55_perm_dno", 0.05)),
 		"okraj67": bool(p.get("p67_okraj", false)), "kras67": bool(p.get("p67_kras", true)), "rezim67": String(p.get("p67_rezim", "")),
-		"film67": float(p.get("p67_film_m", 0.5)), "prune67": bool(p.get("p67_prune", true)), "prune67_min": float(p.get("p67_prune_min", 0.1)), "remizy69": bool(p.get("p69_remizy", true)), "prumer70": String(p.get("p70_prumer", "pomer")), "kap71": bool(p.get("p71_kapacita", true)), "prus71": bool(p.get("p71_prusak", true)), "cas71": float(p.get("p71_cas", 144.0)),
+		"film67": float(p.get("p67_film_m", 0.5)), "prune67": bool(p.get("p67_prune", true)), "prune67_min": float(p.get("p67_prune_min", 0.1)), "slu72": bool(p.get("p72_slucovat", true)), "slu72p": bool(p.get("p72_prusak", true)), "remizy69": bool(p.get("p69_remizy", true)), "prumer70": String(p.get("p70_prumer", "pomer")), "kap71": bool(p.get("p71_kapacita", true)), "prus71": bool(p.get("p71_prusak", true)), "cas71": float(p.get("p71_cas", 144.0)),
 		"cols": [], "h": PackedFloat64Array(), "wall": PackedByteArray(), "impl": SELF, "gen": 0, "NZ": 1,
 		"stats": {"solve_ms": 0.0, "solves": 0, "cells": 0, "build_ms": 0.0}}
 	c.h.resize(W * H); c.wall.resize(W * H); c.wall.fill(1)
