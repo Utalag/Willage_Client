@@ -293,6 +293,63 @@ Výchozí: 800 kapek na blok, `ero_cap` 1,0, `ero_erode` 0,1, `ero_deposit_rate`
 - **Hypotéza:** parita bit po bitu (kopie se mění jen v cestách). Vložení bloku bp ≈ 0,25–0,4 s jako E49 detail
   (+ povrch a tráva prototypu ~0,4 s), voda ostrova 7 bloků (≈ 112 × 112 sloupců) plně < 1 s, kopání u vody desítky ms.
 
+## E67 výsledky (2026-11-19 16:40, větev `e67-podzemi-okraje`, do main až po schválení Janem)
+- **Co je nového** (výchozí vypnuto, parita):
+  - `scripts/podzemi52/ug67.gd`: režim `p67_rezim = "pretok"` – sestup od zdroje (halda: dno sestupně, id vzestupně) dolů,
+    jinak do stran do pásem s nižším dnem podle perm × výšky překryvu; výstup ve výšce dna bere celý průtok; dno pasti →
+    priority-flood (stejný klíč i `_outs` jako preliv) do výstupu nebo prahu; vzájemný přeliv dvou pastí a „práh, který steče
+    zpět“ se spojí (sonda `_probe` po hranách sestupu); stopa `_fp67` (sloupce navštívených pásem).
+  - `p67_okraj` (O): výstup „okraj“ i u zdi (stěna ostrova) ve výšce dna pásma – v `_outs`, `_solve_nadrz`, `ug58._cands_b`.
+  - `p67_kras` (výchozí true = beze změny): false → rozpustná hornina je tělesem jen s perm ≥ `ponor_perm`. Tabulka materiálů beze změny.
+  - `ug58._one` / `ug58.edit`: při pretok plný výpočet volání; výkop přepočítá jen volání, jejichž stopa obsahuje sloupec
+    výkopu nebo jeho 4 sousedy (výsledek čte jen tato data → jinak bitově stejný). `tok60`: když výsledek nese `outs67`,
+    přidá všechny prameny (ne jen jeden).
+  - Nástroj `tools/e67.gd` (startovní ostrov 4 bloky bp jako prototyp, zdroje = místní minima povrchu 0,02 l/s, po tělesech),
+    výsledky `shots/e67/ostrov.json`, testy `shots/e67/testy/`.
+- **Studie, startovní ostrov, zdroje v místních minimech (1 volání, 4,1 l/s)** – mokrá = pásma, kudy voda opravdu teče:
+
+  | varianta | těles / největší (pásem) | stojatá voda (pásem pod hladinou) | mokrá (protékající) | hladiny | výstupy (počet, l/s) | objem m³ | ms |
+  |---|---|---|---|---|---|---|---|
+  | stará (auto, preliv) | 30 / 7690 | 6137 | – | 1: 19,24 m | 1 pramen 4,1 | 179,9 | 467 |
+  | stará + O | 30 / 7690 | 0 | – | 1: 12,33 m (= dno pánve u stěny) | 1 okraj 4,1 | 0,0 | 180 |
+  | **pretok + O** | 30 / 7690 | **506** | **1548** | **46 pastí** (18,11 / 18,39 / 21,6 … m), všechny „vana po práh“ | **93 okraj 3,95 + 14 pramenů 0,15** | 7,1 | 91 |
+  | pretok bez O | 30 / 7690 | 6151 | 1993 | 6 (hlavní 19,24 m, 6137 pásem) | 15 pramenů 4,1 | 180,1 | 4442 |
+  | stará, kras jen perm ≥ 0,3 | **224 / 4228** | 2677 | – | 1: 19,24 m | 1 pramen 4,1 | 153,1 | 33 |
+  | pretok + O, kras jen perm ≥ 0,3 | 224 / 4228 | 502 | 1111 | 35 | 88 okraj 3,94 + 14 pramenů 0,15 | 9,4 | 58 |
+
+  - **Dosažená pásma vs. těleso:** pretok + O zasáhne 1548 + 506 = 2054 ze 7690 pásem tělesa (27 %), stojatá voda jen 506
+    (6,6 %, stará 6137 = 80 %); objem stojaté vody 7,1 m³ místo 179,9 m³.
+  - **Kontrola smyslu:** pretok bez O dá znovu přesně starou vanu (19,2435 m, 6137 pásem, 179,9 m³) – bez výstupu ve stěně je
+    celý ostrov uzavřená miska (sloupce mimo ostrov jsou zeď), takže se vana tvoří správně jen tam, kde má (Jan 16:00).
+- **Prototyp (`--bp.voda_e67=true` = O + pretok; `--bp.p67_okraj=true` samotné O s E64 K+I+P+R), skutečné tůně hry,
+  `tools/voda_e66.gd --vykopu=12`, logy `godot-prototyp/shots/67/`:**
+
+  | | plný výpočet vody | podzemí při výkopu (ms) | kroky R | neshod s plným výpočtem |
+  |---|---|---|---|---|
+  | stará | 2,6 s | 277–906 (průměr ~670) | 22–66, max krok 474 ms | 0 |
+  | O (E64 K+I+P+R) | 1,07 s | 2–11 | 0–11, max 13 ms | 0 |
+  | **E67 (O + pretok)** | **0,77 s** | **0,2–114** (bez zásahu stopy 0,2) | 0 | **0** |
+
+  - Hra: stará = 1 těleso, hladina 19,56 m přes 1024 sloupců (6746 pásem, 210 m³), pramen 29,27. E67: tůň u stěny (0,18)
+    vyteče hned ve stěně ve 18,19 m (vodopád do mlhy, 0,153 l/s), stojatá voda 2 pásma (0,01 m³), mokrá 3 pásma.
+    Do podzemí jde 0,153 místo 0,173 l/s: dřív pramen 29,27 vracel vodu na povrch a ta zčásti znovu tekla do podzemí (4 volání → 2).
+- **Parita:** hashe testů studie (v1, sled46, svet8, voda, voda_b, voda_b --b) beze změny (`shots/e67/testy/` = `shots/e64/testy/`).
+  O ve světech bez zdí (svet64 8 × 8) nemá vliv z konstrukce (`wedge` je vždy false); záznam alg64 jsem znovu nepouštěl.
+- **Důkazy E64:** O mění jen množinu výstupů floodu (čte sloupec + 4 sousedy, zeď se výkopem nemění) → K, I, P, R platí beze
+  změny; potvrzeno 0 neshod u 12 výkopů s K+I+P+R. Pretok lokální opravu I / kroky R **nepoužívá**: výkop = plný přepočet
+  dotčených volání, výsledek je čistá funkce dat ve stopě → přesnost i nezávislost na pořadí výkopů triviálně (studie: 2 pořadí
+  12 výkopů → stejný otisk, 0 neshod; prototyp 0 neshod). Lokální oprava pro pretok zatím není.
+- **Negativa a otevřené:**
+  - Bez O je pretok pomalý (4,4 s): opakovaná spojování pastí se sondou `_probe` (velká vana přes celý ostrov). S O 58–91 ms.
+  - Rozdělení do stran je jen váha perm × překryv (ne Darcy); dolů jde vždy celý průtok, když pod pásmem je těleso.
+  - Výstupy po stovkách drobných větví (93 vodopádů na okraji, 14 pramenů, další < 1 ml/s) – pro hru asi sloučit / prahovat.
+  - Mokrá pásma = film 0,5 m u dna (`p67_film_m`), jen pro zobrazení; čas průchodu se nepočítá (jen časy plnění pastí).
+  - Kras vždy propustný: vypnutí (p67_kras=false) rozpadne 1 těleso na 224 (největší 4228 pásem), ale vana tělesa ve staré
+    variantě zůstane (19,24 m); s pretok skoro beze změny výstupů. Výchozí ponecháno (tabulka materiálů nezměněna).
+  - `rez_gif.sh` vodu nekreslí (jen tělesa), GIF před / po je stejný; vizuály jsou svislé řezy.
+- **Obrázky:** `godot-prototyp/shots/rez/e67/` – `pred_hra/`, `po_hra/` (tůně hry), `pred_minima/`, `po_minima/` (ukázkové zdroje
+  v místních minimech, `--zdroje=minima`), každý s `prehled.png`; srovnání `pred_po_minima_x12.png`, `pred_po_hra_x12.png`.
+
 ## E67 podzemní voda vytéká z vrstev na okraji, zavěšená voda, přetoky ve 3D (plán, zapsáno před pokusem 2026-11-19 16:00; Jan 15:54 „Ano voda na krajích bloku měla vytékat z vrstev kam se dostane.“, 15:56 přetoky ve 3D)
 - **Problém (E66b, řezy `godot-prototyp/shots/rez/profil_ostrov/`):** startovní ostrov má jedno těleso s vodou a jednu hladinu
   19,56 m přes celý ostrov („vana“): voda z tůní se v režimu auto/preliv rozlije do nejnižšího dosažitelného pásma celého
