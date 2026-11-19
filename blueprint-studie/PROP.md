@@ -316,6 +316,40 @@ Výchozí: 800 kapek na blok, `ero_cap` 1,0, `ero_erode` 0,1, `ero_deposit_rate`
   3 sníží kola testu 13 / 68 na jednotky; 4 srovná auto / pretok v testu se zdrojem 0,03.
 - Beze změny: `p71_cas` 144, `p72_prusak`, žádný limit vzdálenosti slučování.
 
+## E73 výsledky (2026-11-19 23:45, větev `e73-nalezy-e68` z `e68-orchestrator`, do main až po schválení Janem)
+Data `blueprint-studie/shots/e73/` (souhrn `tools/e73_souhrn.py`), test smyčky `tools/e68.gd --kola=200`, prototyp
+`voda_e66 --vykopu=12 --kontrola=1` (obě pořadí výkopů), výchozí hra i `--bp.voda_e67=true`.
+- **Nález navíc (oprava 291f74a):** plný výpočet `tok.route` bral z výstupů E67 jen hlavní, lokální `tok60.update` všechny →
+  prameny E67 v plném výpočtu chyběly. Opraveno (stejná větev `outs67` v obou). Mění test smyčky v režimu pretok
+  (prameny 0,121 místo 0,703 – druhý výstup E67 teče jinou větví mimo tůň).
+- **1. Vývěrová tůň (`p73_vyver`):**
+  - *Negativ (první verze z plánu):* „tůň napájená pramenem není vstupem téhož tělesa“ kmitá v testu smyčky: tůň bez vstupu →
+    pramen zmizí → tůň není napájená → znovu vstup (auto z 0,1: 3 kola, cyklus, změna 0,742, chyba bilance 0,061). Zamítnuto.
+  - *Pravidlo (použito):* tůň zavodněná pramenem tělesa (cesta D8 od výtoku pramene z minulého kola, těleso = členové
+    trasovacího řešení) **zůstává vstupem, ale její buňky se nevylučují z výstupů tělesa** – pramen smí vyvěrat v tůni, kterou
+    sám zavodnil, voda z tůně zároveň prosakuje zpět. Pevný bod je stabilní (stejné vstupy i výstup v dalším kole).
+  - Ostrov (výchozí hra): kola 4 (cyklus 2) → 3 bez cyklu; chyba bilance −0,01998 → **0** (před i po výkopech); Σ okraj
+    9,8167 → 9,7968 l/s (zmizelo 0,02 l/s „z ničeho“); odtok tůní 0,1532 → 0,1732 = prameny 0,1732; plný výpočet 2467 → 2024 ms;
+    výkop ⌀ 1103 → 762 ms, max 2036 → 1256 ms; 0 neshod; otisk 63d7b89a91385a79 shodný v obou pořadích. Souhrn beze změny
+    (5 pramenů, 8 vodopádů, 5 na okraji 9,652 l/s, 160 sloupců tůní, 26 koryta, výstup podzemí 0,1815 l/s ve 18,5 m).
+  - E67 ostrov: beze změny (otisk 905eec578834b4ff).
+  - Test smyčky: pramen se přesune do tůně (písková trubka sousedí s tůní) → bez opravy 2 se jeho voda do odtoku nepočítá
+    (odtok 0,1, prameny 0,062); s opravou 2 smyčka zase běží (prameny 0,704, odtok 0,742). Proto zapínat jen spolu s 2.
+- **2. Přítok tůně jako součet (`p73_pritok`):** ostrov beze změny (stejný otisk 5284ab63f040e8e5 bez 1, 63d7b89a91385a79 s 1 –
+  tůně ostrova mají jednu výtokovou buňku). Test smyčky: pretok z 0,1 / 0,05 nově shodný s auto (prameny 0,7026, 14 / 69 kol;
+  dřív 0,121 / 0,021, protože druhá větev do tůně se nepočítala). Auto beze změny.
+- **3. Zrychlení smyčky (`p73_zrychleni`):** test smyčky auto z 0,1: 13 → 8 kol (2 skoky), z 0,05: 68 → 17 kol (5 skoků),
+  stejný otisk; pretok 26 → 4 a 24 → 4 kola, stejné hodnoty, navíc přesná bitová shoda místo konce na toleranci 1e-9.
+  Vše zapnuté: 10 / 19 kol. Ostrov: beze změny (smyčky mají 2–3 kola, žádný skok), otisky stejné.
+  *Negativ:* Aitken po buňkách zkoušen nebyl – stačil společný poměr přírůstků; při různých poměrech na buňkách skok neproběhne.
+- **4. E67 „vše prosákne“ (`p73_prusak_tok`):** test pretok z 0,03: dřív těleso „uzavřené“ → tůň neodtékala, 0,03 přetekla na
+  okraj; nově 0,03 prosákne jako v auto (otisk bdff72158cede340 = auto). Ostrov (obě hry) beze změny. E69 (výchozí,
+  `--ponor=0.3`, referenční sloupec): výsledky bit po bitu stejné (kromě časů), chyba bilance 0.
+- **Výchozí hodnoty:** všechny čtyři zapnuté (`p73_* = true`). Výchozí hra po přepnutí: otisk 63d7b89a91385a79, chyba 0,
+  3 kola, 0 neshod, plný výpočet ~1,7–2,0 s. Objem vody prototyp neměří přímo; sloupce tůní a koryt beze změny (160 / 26).
+- Jeden běh prototypu měl výkop 509 s (zaseknutý box); opakování 0,5–2,2 s, data nahrazena.
+- Beze změny: `p71_cas` 144, `p72_prusak`, žádný limit vzdálenosti slučování.
+
 ## E68 výsledky (2026-11-19 23:10, větev `e68-orchestrator` z `e71-kapacita-dolu`, do main až po schválení Janem)
 - **Co je nového:** `scripts/hydro68/hydro68.gd` (prototyp `scripts/voda/hydro68.gd` přes `port_studie.py`):
   - `full(st, kola, tol, cyklus)`: stejné kroky jako `tok.route` (priority-flood + D8 → odtoky tůní → podzemí → prameny →

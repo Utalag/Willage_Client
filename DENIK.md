@@ -216,6 +216,12 @@ Skupiny: 1 Prototyp a buildy · 2 Terén a tvar · 3 Rozlišení bloku · 4 Ská
 - **Komplikace:** koryta jsou krátké úseky (malý svět, malá povodí). Krasová vyvěračka 0. Hráz na svahu tůň nevytvořila (potok ji obtekl). Podzemní tok vede zatím zjednodušeně k nejbližšímu okraji.
 - **Další krok:** Jan rozhodne, jak daleko vést podzemní tok (sledovat propustnou vrstvu?) a jestli má mít krasová vyvěračka vlastní pravidlo. Starší otevřené otázky (eroze po blocích vs hrubý svět, jádro hory přes šev, minerály z hrubého světa) zůstávají.
 
+### 🔄 Blueprint v3 / E73: opravy nálezů E68 (2026-11-19 23:45 · `blueprint-studie/scripts/voda/tok.gd`, `alg60/tok60.gd`, `hydro68/hydro68.gd`, `podzemi52/ug67.gd`, příznaky `p73_vyver`, `p73_pritok`, `p73_zrychleni`, `p73_prusak_tok`, větev `e73-nalezy-e68`)
+- **Směr:** TODO Voda: pramen ve vlastní tůni, přítok tůně jako součet, zrychlení pomalé smyčky, E67 „vše prosákne“ ≠ uzavřené.
+- **Zlepšení:** ostrov bez cyklu, bilance přesně 0 (dřív −0,02 l/s), 3 kola místo 4, výkop ⌀ 1,1 → 0,76 s, 0 neshod, stejný otisk v obou pořadích. Test smyčky 68 → 17 kol, pretok = auto. Opravena chyba plného výpočtu (chyběly prameny E67). Výchozí zapnuto.
+- **Komplikace:** první pravidlo pro vývěrovou tůň kmitalo (zamítnuto). Pramen ve vlastní tůni potřebuje i přítok jako součet. Zrychlení na ostrově nic nezrychlí (smyčky jsou krátké).
+- **Další krok:** Jan schválí výchozí hodnoty a sloučení; dál `p72_prusak` a limit vzdálenosti slučování.
+
 ### 🔄 Blueprint v3 / E68: jednotný krok hydrologie povrch + podzemí (2026-11-19 23:10 · `blueprint-studie/scripts/hydro68/hydro68.gd`, prototyp `scripts/voda/hydro68.gd`, příznak `p68_hydro`, větev `e68-orchestrator`)
 - **Směr:** TODO Voda E68: jedno místo pro smyčku povrch ↔ podzemí, společná bilance, otisk, kola do ustálení.
 - **Zlepšení:** smyčka tůň → průsak → pramen → tůň se dopočítá do ustálení (test: chyba bilance 61 % → 0, 13 kol). Opakující se stav se pozná (cyklus). Na ostrově stejný výsledek i čas, 0 neshod, stejný otisk v obou pořadích výkopů. Výchozí zapnuto.
