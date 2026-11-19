@@ -34,6 +34,8 @@ var veg_summary_orig := PackedInt32Array()
 var water := PackedInt32Array()        # gen-v3: voda v buňce, 4096 = plná buňka (v půdě nejvýš pórovitost); prázdné = bez dat vody
 var gen := "proto"                     # který generátor blok vytvořil (BlockGen.gen_version)
 var gen3 := {}                         # gen-v3: zásobník (hex, hash), voda (nalito / přidělení), schodek, validátor
+var geo := PackedByteArray()          # E66 gen bp: plné MaterialId 0–255 (horniny, minerály) pro vzhled a vodu; cells = herní třída (scripts/teren/tridy.gd)
+var bp_rec := {}                       # E66 gen bp: záznam bloku ve světě studie (bp, hm_f, bs, cells, water, rep)
 var gen_ms := 0.0
 var mesh_ms := 0.0
 

@@ -10,6 +10,7 @@ const Block = preload("res://scripts/block.gd")
 const H = preload("res://scripts/stable_hash.gd")
 const Veg = preload("res://scripts/veg.gd")
 const Gen3 = preload("res://scripts/gen3/gen3_proto.gd")
+const TerenBP = preload("res://scripts/teren/ostrov_teren.gd")
 const BS := 16
 const BH := 64
 const GENERATOR_VERSION := 2
@@ -67,9 +68,10 @@ static func base_heightmap(kind: String, seed: int) -> PackedInt32Array:
 			hm[lx * BS + ly] = clampi(int(round(h)), 1, BH - 1)
 	return hm
 
-## Generátor podzemí: "v3" = gen-v3 (zásobník ze serveru, Jan 20:14, výchozí), "proto" = původní STRATA se šumovými rudami.
-## CLI: -- --gen=proto|v3. Tvar povrchu, dorovnání stran a slupka jsou v obou stejné.
-static var gen_version := "v3":
+## Generátor: "bp" = terén ze studie (E66, výchozí od 2026-11-19, Jan 14:21: blueprint, vrstvy jako funkce, navázání na sousedy,
+## voda ze studie), "v3" = gen-v3 (zásobník ze serveru, Jan 20:14), "proto" = původní STRATA se šumovými rudami.
+## CLI: -- --gen=bp|proto|v3. U v3 a proto jsou tvar povrchu, dorovnání stran a slupka stejné.
+static var gen_version := "bp":
 	set(v):
 		gen_version = v
 		Mat.rarity_gen = v   # prahy rarity-v2 podle generátoru (Mat.thresholds)
@@ -78,10 +80,10 @@ static func apply_cli() -> void:
 	for a in OS.get_cmdline_user_args():
 		if a.begins_with("--gen="):
 			var v := a.substr(6)
-			if v in ["proto", "v3"]:
+			if v in ["proto", "v3", "bp"]:
 				gen_version = v
 			else:
-				push_warning("neznámý generátor --gen=%s (proto | v3)" % v)
+				push_warning("neznámý generátor --gen=%s (bp | proto | v3)" % v)
 
 ## Verze tvaru kopce a hory: "v2.2" (profil nad makro-šumem, výchozí) nebo "v2.1" (eliptické vrcholy, jen pro srovnání)
 static var relief_version := "v2.2"
@@ -231,6 +233,16 @@ static func to_src(lx: int, ly: int, mirror: bool, rot: int) -> Vector2i:
 
 ## neighbors: Array[4] výškových map sousedů (nebo null) ve směrech DIRS
 static func build(b: Block, neighbors: Array) -> void:
+	if gen_version == "bp":   # E66: terén ze studie (vrstvy jako funkce, navázání na sousedy), scripts/teren/ostrov_teren.gd
+		var t1 := Time.get_ticks_usec()
+		TerenBP.build(b)
+		b.recount()
+		b.veg = Veg.generate(b)
+		b.veg_summary = Veg.summary(b.veg)
+		b.veg_summary_orig = b.veg_summary.duplicate()
+		b.summary_orig = b.summary.duplicate()
+		b.gen_ms = (Time.get_ticks_usec() - t1) / 1000.0
+		return
 	var t0 := Time.get_ticks_usec()
 	var base := base_heightmap(b.kind, b.seed)
 	var hm := PackedInt32Array()
