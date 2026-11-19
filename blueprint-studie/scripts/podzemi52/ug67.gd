@@ -458,7 +458,7 @@ static func _result(c: Dictionary, entries: PackedInt32Array, q: float, trace: b
 	for b in comp: fp[int(c.bcol[b])] = 1
 	var mem := F.Members.new(); mem.ctx = c; mem.id = c.comp[entries[0]] if not entries.is_empty() and entries[0] >= 0 else -1
 	var zo := float(ol[0][0]) if not ol.is_empty() else (float(pl[0].hladina) if not pl.is_empty() else 0.0)
-	var closed := ol.is_empty()
+	var closed := ol.is_empty() and not (bool(c.get("prus73", false)) and not trace and q > 0.0 and leak >= q * (1.0 - 1e-9))   # E73: vše prosákne → těleso vodu přijímá
 	var nf := (q - leak) <= 0.0
 	return {"cells": comp.size() + wl.size(), "q_in": q, "leak": minf(leak, q), "zmin": zmin, "z_out": zo, "out": out, "events": [],
 		"volume_m3": vol, "never_fills": nf, "out_q": oq if not closed else 0.0, "closed": closed, "lake_m3": lake, "members": mem,
