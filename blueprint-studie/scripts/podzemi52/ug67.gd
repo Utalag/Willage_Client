@@ -80,8 +80,8 @@ static func solve(c: Dictionary, entries: PackedInt32Array, q: float, ex: Dictio
 	var pmin := float(c.get("prune67_min", 0.1))
 	var remizy := bool(c.get("remizy69", true))
 	var harm := String(c.get("prumer70", "pomer")) == "harmonicky"
-	var kap := bool(c.get("kap71", false)) and not trace     # E71 K: kapacita průtoku dolů
-	var prus := bool(c.get("prus71", false)) and not trace   # E71 P: průsak protékané vody
+	var kap := bool(c.get("kap71", true)) and not trace     # E71 K: kapacita průtoku dolů
+	var prus := bool(c.get("prus71", true)) and not trace   # E71 P: průsak protékané vody
 	if kap: outs["_z71"] = true
 	c._k71 = {"on": kap, "harm": harm, "sc": 1000.0 * float(c.get("cas71", 144.0)) * float(c.A), "capu": {}, "lku": {}, "wl": 0.0, "t": t, "prus": prus}
 	var guard := 0
