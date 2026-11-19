@@ -293,6 +293,33 @@ Výchozí: 800 kapek na blok, `ero_cap` 1,0, `ero_erode` 0,1, `ero_deposit_rate`
 - **Hypotéza:** parita bit po bitu (kopie se mění jen v cestách). Vložení bloku bp ≈ 0,25–0,4 s jako E49 detail
   (+ povrch a tráva prototypu ~0,4 s), voda ostrova 7 bloků (≈ 112 × 112 sloupců) plně < 1 s, kopání u vody desítky ms.
 
+## E76 voda po přenosu výřezu na ostrov (plán, zapsáno před pokusem 2026-11-20 00:55; TODO Přenos terénu „Voda se nepřenáší hotová“ + nález E74)
+- **Rozsah:** jen lokální studie klienta, žádná datová smlouva s backendem (`TerrainSource` atd. je pozdější blok).
+- **Co už je:** blok `bp` = blueprint (tvar, seed, minerály) + posun výšky, záznam ve světě studie (`bp_rec`: hm, hm_f, bs,
+  buňky) a navázání na sousedy při generování (klíny). Podzemí se staví z funkcí vrstev světa (`ug_funkce.from_world`),
+  šum hornin hor (`_mountain_rock`) bere souřadnice světa. Prameny `prameny.find` se hledají znovu pro CELÝ ostrov
+  (kvantil vrcholů, pořadí, rozestupy) → vložení bloku i nové postavení po výkopech mění prameny i jinde (nález E74).
+  Výkopy jsou v `Block.hm` proti `hm_gen` (překryv, `_replay_digs`). Události: E51 (`eroze/mech.gd`, odpočet v haldě),
+  plnění tůní (`hydro68.udalosti`). E74 (obsazení pramenů) a E75 (kras) v main nejsou (jen větve) → jen napojení.
+- **Výřez v paměti (`scripts/voda/prenos76.gd`):** {blueprint (tvar, seed, minerály), slot původu, svislý posun dz (buňky),
+  záznam bloku (hm_f, bs, hm, buňky), prameny výřezu v místních souřadnicích}. Geometrie a materiály se přenesou hotové,
+  stav vody ne. Otočení po 90° se nedělá (pole, šum i tělesa by se musela otáčet; není triviální).
+- **Vložení:** záznam se posune o dz (hm, hm_f, bs, buňky) a vloží na nový slot. Podzemí: sloupce výřezu se vyhodnotí
+  s posunem souřadnic (šum podle místa původu, výška − dz), aby materiály byly stejné jako v původním světě; pole
+  vrstev se na švu dál interpolují se sousedy (napojení).
+- **Prameny jako uložené zdroje (`p76_prameny`, výchozí vyp):** při prvním postavení se prameny najdou jako dnes a uloží
+  k blokům (místní souřadnice, z, q, druh). Další postavení (po výkopech, po načtení, po vložení výřezu) bere uložené;
+  výřez přinese své prameny z původu (z + dz). Hypotéza: nové postavení po výkopech = lokální přepočet (0 neshod).
+  Uložit je tedy potřeba: blueprint + seed + transformace (dz, slot), překryv výkopů (`hm` proti `hm_gen`) a prameny
+  (u E74 i obsazení pramenů).
+- **Přepočet po vložení:** plný (`build`) a lokální (nové podzemí + `hydro68.update` jen kolem sloupců výřezu a švu).
+- **Události z ustáleného stavu:** E51 (odpočty ve výřezu od plné hodnoty, jinde se dopočítají do teď a přeplánují jen
+  změněné sloupce), plnění tůní, příchod vody (čas toku od pramene po D8, Manning). Kras E75 jen jako napojení.
+- **Měření:** výřez vedle bloků ostrova a o jinou výšku (dz 0, +4, −4): čas plného přepočtu, lokální proti plnému
+  (neshody, otisk), bilance, změny proti původnímu světu (prameny, tůně, odtok přes okraj / vodopády), čas a počty
+  přeplánování; nález E74: výkopy → nové postavení / načtení bez a s `p76_prameny` (neshody, otisk).
+- Beze změny: `p71_cas` 144, `p72_prusak`, vzdálenost slučování.
+
 ## E73 nálezy E68: pramen ve vlastní tůni, přítok tůně jako součet, zrychlení smyčky, E67 „vše prosákne“ (plán, zapsáno před pokusem 2026-11-19 23:15; TODO Voda, Jan: nejdřív dodělat vodu)
 - **1. Pramen v prohlubni, kterou sám zavodní (`p73_vyver`):** cyklus ostrova s periodou 2 (E68) vzniká tím, že
   zavodněná prohlubeň se v dalším kole stane vstupem téhož tělesa a její buňky se vyloučí z výstupů (`excl`). Pravidlo:
