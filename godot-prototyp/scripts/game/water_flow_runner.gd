@@ -22,6 +22,10 @@ func start(b, sl: Vector2i, lx: int, ly: int, lz: int, dl: Dictionary, w_old: in
 
 func _process(_dt: float) -> void:
 	tick()
+	# E66 gen bp: kroky R podzemí (pevný počet operací na krok, ne podle času → výsledek nezávisí na snímcích)
+	if island.voda != null:
+		if flow_sync: island.water_finish()
+		else: island.water_step(int(island.TerenBP.p.get("voda_r_kroku", 1)))
 
 func tick() -> void:
 	if flows.is_empty():
@@ -38,6 +42,7 @@ func tick() -> void:
 		island.remesh_water(e.slot)
 
 func finish_all() -> void:
+	if island.voda != null: island.water_finish()
 	while not flows.is_empty():
 		_finish(flows.pop_front())
 

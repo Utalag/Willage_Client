@@ -32,7 +32,7 @@ static func _pidx(x: int, z: int, y: int) -> int:
 ## wet (volitelně, voda v buňce 0..4096 z Block.water): mokrá půda pod povrchem se ztmaví, jen když je vidět skutečný materiál.
 ## Ložiskový jíl (12) má barvu svou, texturu jílu.
 const WET_COL := Color(0.36, 0.40, 0.58)
-static func build(cells: PackedByteArray, nbs: Array, slice_z: int, tint := Color(1, 1, 1), dual_mask := PackedByteArray(), discovered := PackedByteArray(), neutral_mat := 2, neutral_col := Color(0.66, 0.50, 0.40), darken := 0.25, wet := PackedInt32Array()) -> ArrayMesh:
+static func build(cells: PackedByteArray, nbs: Array, slice_z: int, tint := Color(1, 1, 1), dual_mask := PackedByteArray(), discovered := PackedByteArray(), neutral_mat := 2, neutral_col := Color(0.66, 0.50, 0.40), darken := 0.25, wet := PackedInt32Array(), geo := PackedByteArray(), pal := PackedColorArray()) -> ArrayMesh:
 	var use_mask := dual_mask.size() == 17 * 17
 	var use_hide := discovered.size() == BS * BS * BH
 	var use_wet := wet.size() == BS * BS * BH
@@ -91,6 +91,9 @@ static func build(cells: PackedByteArray, nbs: Array, slice_z: int, tint := Colo
 					continue
 				var draw_m := m
 				var base: Color = Mat.COLORS[m]
+				if not geo.is_empty():   # E66 gen bp: plné id horniny / minerálu (paleta studie; alfa 0 = barva třídy)
+					var gc: Color = pal[geo[(x * BS + z) * BH + y]]
+					if gc.a > 0.0: base = gc
 				if use_hide and m != Mat.FOG and discovered[(x * BS + z) * BH + y] == 0:
 					draw_m = neutral_mat
 					base = neutral_col

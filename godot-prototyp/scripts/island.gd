@@ -13,6 +13,10 @@ const Discovery = preload("res://scripts/discovery.gd")
 const SurfaceParamsS = preload("res://scripts/surface/surface_params.gd")
 const VegRender = preload("res://scripts/veg_render.gd")
 const SurfaceRendererS = preload("res://scripts/surface/surface_renderer.gd")
+const TerenBP = preload("res://scripts/teren/ostrov_teren.gd")
+const TerenTridy = preload("res://scripts/teren/tridy.gd")
+const OstrovVoda = preload("res://scripts/voda/ostrov_voda.gd")
+const OstrovVodaRender = preload("res://scripts/voda/ostrov_voda_render.gd")
 const BS := 16
 const CELL_H := 0.5
 const SURF_Y := 32 * CELL_H       # výchozí povrch (střed výšky)
@@ -20,8 +24,8 @@ const CENTER := Vector2(1.0, 1.0) # střed rozložení ve slotech (start 2 × 2 
 const RADIUS := 2.6
 
 @export_group("Startovní ostrov")
-## generátor podzemí (CLI -- --gen=proto|v3 má přednost)
-@export_enum("v3", "proto") var generator: String = "v3"
+## generátor (CLI -- --gen=bp|proto|v3 má přednost): bp = terén a voda ze studie (E66), v3 = gen-v3, proto = původní vrstvy
+@export_enum("bp", "v3", "proto") var generator: String = "bp"
 ## startovní bloky v pořadí vkládání: slot, typ (louka / kopec / hora / piscina) a seed
 @export var start_slots: Array[Vector2i] = [Vector2i(0, 0), Vector2i(1, 0), Vector2i(0, 1), Vector2i(1, 1)]
 @export var start_kinds: PackedStringArray = ["louka", "hora", "kopec", "louka"]
@@ -54,6 +58,12 @@ var has_textures := false
 var textured := false
 
 var bevel := false
+## E66 gen bp: voda ostrova ze studie (prameny, koryta, tůně, vodopády, podzemí); null u jiných generátorů
+var voda = null
+var voda_mi := {}                 # "voda" / "vodopad" / "mlha" → MeshInstance3D
+var voda_mats := {}
+var voda_batch := false           # generate_start: voda se spočítá jednou po vložení všech bloků
+var voda_log := true
 func set_bevel(on: bool) -> void:
 	bevel = on
 	toon_mat.set_shader_parameter("use_bevel", on)
@@ -165,12 +175,14 @@ func _hide_on() -> bool:
 	var p = surface.p if surface else SurfaceParamsS.inst()
 	return p.hide_undiscovered and not p.xray
 
-func _block_mesh(cells: PackedByteArray, nbs: Array, mask: PackedByteArray, discovered: PackedByteArray, water := PackedInt32Array()) -> ArrayMesh:
+func _block_mesh(cells: PackedByteArray, nbs: Array, mask: PackedByteArray, discovered: PackedByteArray, water := PackedInt32Array(), geo := PackedByteArray()) -> ArrayMesh:
 	var p = surface.p if surface else SurfaceParamsS.inst()
 	var disc := discovered if _hide_on() else PackedByteArray()
 	var nmat: int = Mat.DIRT if p.undiscovered_look == 0 else Mat.GRANITE
 	var wet := water if p.wet_tint else PackedInt32Array()
-	return Mesher.build(cells, nbs, slice_z, Color(1, 1, 1), mask, disc, nmat, p.col_undiscovered, p.undiscovered_darken, wet)
+	# E66 gen bp: skutečné horniny a minerály (plná id) jen v rentgenu; jinak třídy prototypu (podzemí skryté)
+	var g := geo if p.xray and geo.size() == cells.size() else PackedByteArray()
+	return Mesher.build(cells, nbs, slice_z, Color(1, 1, 1), mask, disc, nmat, p.col_undiscovered, p.undiscovered_darken, wet, g, TerenTridy.palette() if not g.is_empty() else PackedColorArray())
 
 ## gen-v3: volná voda z vrstvy vody bloku = buňky vzduchu s vodou (jeskyně pod hladinou, jezírko). Výška hladiny v buňce
 ## = voda / 4096. Při skrytí podzemí jen voda v odkrytém vzduchu (discovered 2) nebo nad povrchem. Vodní hladina
@@ -178,7 +190,7 @@ func _block_mesh(cells: PackedByteArray, nbs: Array, mask: PackedByteArray, disc
 func _data_water_mesh(b: Block) -> ArrayMesh:
 	var am := ArrayMesh.new()
 	var p = surface.p if surface else SurfaceParamsS.inst()
-	if not p.data_water or b.water.size() != BS * BS * 64:
+	if not p.data_water or b.water.size() != BS * BS * 64 or b.gen == "bp":   # bp: voda z ostrov_voda.gd
 		return am
 	var hide := _hide_on() and b.discovered.size() == BS * BS * 64
 	var top := 64 if slice_z < 0 else mini(slice_z, 64)
@@ -259,6 +271,7 @@ static func make_block(kind: String, seed: int, title: String, category := "bě�
 
 ## vygeneruje a vloží startovní bloky (pořadí = pořadí vkládání, každý se napojí na už vložené sousedy)
 func generate_start(log := true) -> void:
+	voda_batch = true
 	for i in start_slots.size():
 		var kind: String = start_kinds[i] if i < start_kinds.size() else "louka"
 		var b := make_block(kind, start_seeds[i] if i < start_seeds.size() else 101 * (i + 1), "Start: " + kind)
@@ -267,6 +280,8 @@ func generate_start(log := true) -> void:
 		place(b)
 		if log:
 			log_block(b)
+	voda_batch = false
+	rebuild_water()
 
 func log_block(b: Block) -> void:
 	gen_times.append(b.gen_ms)
@@ -375,6 +390,8 @@ func neighbor_cells(s: Vector2i) -> Array:
 ## Vloží hotový (vygenerovaný) blok do ostrova; slot opustí mlhu.
 func place(b: Block) -> void:
 	blocks[b.slot] = b
+	if b.gen == "bp":
+		TerenBP.commit(b)   # blok se stane sousedem pro další bloky (navázání vrstev)
 	if fogs.has(b.slot):
 		fogs[b.slot].queue_free()
 		fogs.erase(b.slot)
@@ -401,6 +418,73 @@ func place(b: Block) -> void:
 		if s != b.slot:
 			refresh_veg(s)
 	refresh_frames()
+	if not voda_batch:
+		rebuild_water()
+
+## E66: plný výpočet vody ostrova (po vložení bloku); jen pro bloky gen bp
+func rebuild_water() -> void:
+	if Engine.is_editor_hint():   # náhled v editoru bez vody (plný výpočet trvá sekundy)
+		return
+	var any := false
+	for s in blocks:
+		if blocks[s].gen == "bp": any = true
+	if not any:
+		return
+	if voda == null:
+		voda = OstrovVoda.new()
+	voda.build(blocks)
+	if voda_log:
+		print("E66 voda: ", voda.ms, " ", voda.summary())
+	render_water()
+
+func _exit_tree() -> void:
+	if voda != null:
+		voda.dispose()
+		voda = null
+
+## jen síť vody ostrova (po změně vody nebo řezu)
+func render_water() -> void:
+	if voda == null:
+		return
+	if voda_mats.is_empty():
+		voda_mats = OstrovVodaRender.mats()
+	var m: Dictionary = OstrovVodaRender.build(voda, slice_z)
+	for k in ["voda", "vodopad", "mlha"]:
+		if not voda_mi.has(k):
+			var mi := MeshInstance3D.new()
+			mi.material_override = voda_mats[k]
+			mi.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
+			add_child(mi)
+			voda_mi[k] = mi
+		voda_mi[k].mesh = m[k]
+
+## E66: změna sloupce (kopání / položení) bloku gen bp → lokální přepočet vody (podzemí E64, povrch tok60)
+func water_edit(sl: Vector2i, lx: int, ly: int) -> Dictionary:
+	if voda == null or not blocks.has(sl) or blocks[sl].gen != "bp":
+		return {}
+	var r: Dictionary = voda.edit(sl, lx, ly, blocks[sl].hm[lx * BS + ly])
+	render_water()
+	return r
+
+## E66: kroky R podzemí po snímcích (pevný počet operací na krok); po dokončení se síť vody obnoví
+func water_step(n := 1) -> bool:
+	if voda == null or not voda.pending():
+		return false
+	var more := true
+	for k in n:
+		more = voda.step()
+		if not more: break
+	if not more:
+		render_water()
+	return more
+
+## E66: dokončit rozpracované kroky (před další změnou terénu; výsledek nezávisí na snímcích)
+func water_finish() -> void:
+	if voda == null: return
+	var any := false
+	while voda.pending():
+		voda.step(); any = true
+	if any: render_water()
 
 ## jen síť volné vody z dat (náhled běžícího toku po kopání, levné na snímek)
 func remesh_water(s: Vector2i) -> void:
@@ -413,8 +497,8 @@ func _remesh(s: Vector2i) -> void:
 	var b: Block = blocks[s]
 	if _hide_on() and b.discovered.size() != BS * BS * 64:
 		refresh_discovered(s)
-	meshes[s].mesh = _block_mesh(b.cells, neighbor_cells(s), mk, b.discovered, b.water)
-	if b.water.size() > 0:
+	meshes[s].mesh = _block_mesh(b.cells, neighbor_cells(s), mk, b.discovered, b.water if b.gen != "bp" else PackedInt32Array(), b.geo)
+	if b.water.size() > 0 and b.gen != "bp":
 		if not wmeshes.has(s):
 			var wm := MeshInstance3D.new()
 			wm.material_override = data_water_mat
@@ -447,6 +531,7 @@ func set_slice(z: int) -> void:
 		p.visible = z < 0
 	for v in vegs:
 		vegs[v].visible = z < 0
+	render_water()
 	refresh_frames()
 	if preview_block:
 		show_preview(preview_block)

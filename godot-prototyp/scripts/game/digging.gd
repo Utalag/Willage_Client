@@ -48,6 +48,7 @@ func dig(g: Vector2i, place := false, mat := -1) -> String:
 		return "pod stavbou nebo cestou: nelze"
 	var b: Block = island.blocks[sl]
 	water.finish_all()   # rozběhnutý tok se před další změnou dokončí (výsledek nezávisí na snímcích)
+	island.water_finish()   # E66: rozpracované kroky podzemí taky
 	var lx := g.x - sl.x * BS
 	var ly := g.y - sl.y * BS
 	var h: int = b.hm[lx * BS + ly]
@@ -81,6 +82,8 @@ func dig(g: Vector2i, place := false, mat := -1) -> String:
 		b.hm[lx * BS + ly] = nh
 	var idx := (lx * BS + ly) * 64 + lz
 	b.cells[idx] = nw
+	if b.gen == "bp" and b.geo.size() == b.cells.size():
+		b.geo[idx] = nw   # E66: plné id (položená buňka = id třídy, ta jsou ve studii stejná)
 	var w_old := 0
 	if b.water.size() == b.cells.size():
 		w_old = b.water[idx]; b.water[idx] = 0   # voda v pórech odejde s materiálem (bez simulace; položená buňka je suchá)
@@ -89,7 +92,10 @@ func dig(g: Vector2i, place := false, mat := -1) -> String:
 	if w_old > 0: dl["water_old"] = w_old
 	deltas[sl].append(dl)
 	b.recount()
-	if not place:
+	if b.gen == "bp":
+		var wr: Dictionary = island.water_edit(sl, lx, ly)   # E66: kop i položení → lokální přepočet vody ostrova
+		if not wr.is_empty(): dl["voda_ms"] = wr.get("ms", 0.0)
+	elif not place:
 		water.start(b, sl, lx, ly, lz, dl, w_old)
 	var kept := []
 	for r in b.veg:   # rostlina na změněném sloupci zmizí
