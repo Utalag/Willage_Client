@@ -17,7 +17,7 @@
    "K_ms": 1e-12,
    "Sy": 0.005,
    "skupina": "krystal",
-   "t_1m_realne_min": 578703.7037,
+   "t_1m_realne_min": 3472222.2222,
    "rezim": "nepropustne"
   },
   "kimberlite": {
@@ -33,7 +33,7 @@
    "K_ms": 1e-12,
    "Sy": 0.005,
    "skupina": "krystal",
-   "t_1m_realne_min": 578703.7037,
+   "t_1m_realne_min": 3472222.2222,
    "rezim": "nepropustne"
   },
   "lherzolite": {
@@ -49,7 +49,7 @@
    "K_ms": 1e-12,
    "Sy": 0.005,
    "skupina": "krystal",
-   "t_1m_realne_min": 578703.7037,
+   "t_1m_realne_min": 3472222.2222,
    "rezim": "nepropustne"
   },
   "eclogite": {
@@ -65,7 +65,7 @@
    "K_ms": 1e-12,
    "Sy": 0.005,
    "skupina": "krystal",
-   "t_1m_realne_min": 578703.7037,
+   "t_1m_realne_min": 3472222.2222,
    "rezim": "nepropustne"
   },
   "pyroxenite": {
@@ -81,7 +81,7 @@
    "K_ms": 1e-12,
    "Sy": 0.005,
    "skupina": "krystal",
-   "t_1m_realne_min": 578703.7037,
+   "t_1m_realne_min": 3472222.2222,
    "rezim": "nepropustne"
   },
   "serpentinite": {
@@ -97,7 +97,7 @@
    "K_ms": 1e-12,
    "Sy": 0.005,
    "skupina": "krystal",
-   "t_1m_realne_min": 578703.7037,
+   "t_1m_realne_min": 3472222.2222,
    "rezim": "nepropustne"
   },
   "gabbro": {
@@ -113,7 +113,7 @@
    "K_ms": 1e-12,
    "Sy": 0.005,
    "skupina": "krystal",
-   "t_1m_realne_min": 578703.7037,
+   "t_1m_realne_min": 3472222.2222,
    "rezim": "nepropustne"
   },
   "norite": {
@@ -129,7 +129,7 @@
    "K_ms": 1e-12,
    "Sy": 0.005,
    "skupina": "krystal",
-   "t_1m_realne_min": 578703.7037,
+   "t_1m_realne_min": 3472222.2222,
    "rezim": "nepropustne"
   },
   "fe_ti_zone": {
@@ -145,7 +145,7 @@
    "K_ms": 1e-12,
    "Sy": 0.005,
    "skupina": "krystal",
-   "t_1m_realne_min": 578703.7037,
+   "t_1m_realne_min": 3472222.2222,
    "rezim": "nepropustne"
   },
   "granulite": {
@@ -161,7 +161,7 @@
    "K_ms": 1e-12,
    "Sy": 0.005,
    "skupina": "krystal",
-   "t_1m_realne_min": 578703.7037,
+   "t_1m_realne_min": 3472222.2222,
    "rezim": "nepropustne"
   },
   "amphibolite": {
@@ -177,7 +177,7 @@
    "K_ms": 1e-12,
    "Sy": 0.005,
    "skupina": "krystal",
-   "t_1m_realne_min": 578703.7037,
+   "t_1m_realne_min": 3472222.2222,
    "rezim": "nepropustne"
   },
   "lower_gneiss": {
@@ -193,7 +193,7 @@
    "K_ms": 1e-12,
    "Sy": 0.005,
    "skupina": "krystal",
-   "t_1m_realne_min": 578703.7037,
+   "t_1m_realne_min": 3472222.2222,
    "rezim": "nepropustne"
   },
   "migmatite": {
@@ -209,7 +209,7 @@
    "K_ms": 1e-12,
    "Sy": 0.005,
    "skupina": "krystal",
-   "t_1m_realne_min": 578703.7037,
+   "t_1m_realne_min": 3472222.2222,
    "rezim": "nepropustne"
   },
   "orthogneiss": {
@@ -225,7 +225,7 @@
    "K_ms": 1e-12,
    "Sy": 0.005,
    "skupina": "krystal",
-   "t_1m_realne_min": 578703.7037,
+   "t_1m_realne_min": 3472222.2222,
    "rezim": "nepropustne"
   },
   "biotite_gneiss": {
@@ -241,7 +241,7 @@
    "K_ms": 1e-12,
    "Sy": 0.005,
    "skupina": "krystal",
-   "t_1m_realne_min": 578703.7037,
+   "t_1m_realne_min": 3472222.2222,
    "rezim": "nepropustne"
   },
   "two_mica_gneiss": {
@@ -257,7 +257,7 @@
    "K_ms": 1e-12,
    "Sy": 0.005,
    "skupina": "krystal",
-   "t_1m_realne_min": 578703.7037,
+   "t_1m_realne_min": 3472222.2222,
    "rezim": "nepropustne"
   },
   "granodiorite": {
@@ -273,7 +273,7 @@
    "K_ms": 1e-12,
    "Sy": 0.005,
    "skupina": "krystal",
-   "t_1m_realne_min": 578703.7037,
+   "t_1m_realne_min": 3472222.2222,
    "rezim": "nepropustne"
   },
   "leucogranite": {
@@ -289,7 +289,7 @@
    "K_ms": 1e-12,
    "Sy": 0.005,
    "skupina": "krystal",
-   "t_1m_realne_min": 578703.7037,
+   "t_1m_realne_min": 3472222.2222,
    "rezim": "nepropustne"
   },
   "pegmatite": {
@@ -305,7 +305,7 @@
    "K_ms": 1e-12,
    "Sy": 0.005,
    "skupina": "krystal",
-   "t_1m_realne_min": 578703.7037,
+   "t_1m_realne_min": 3472222.2222,
    "rezim": "nepropustne"
   },
   "quartzite": {
@@ -321,7 +321,7 @@
    "K_ms": 1e-12,
    "Sy": 0.005,
    "skupina": "krystal",
-   "t_1m_realne_min": 578703.7037,
+   "t_1m_realne_min": 3472222.2222,
    "rezim": "nepropustne"
   },
   "mica_schist": {
@@ -337,7 +337,7 @@
    "K_ms": 1e-11,
    "Sy": 0.01,
    "skupina": "bridlice",
-   "t_1m_realne_min": 115740.7407,
+   "t_1m_realne_min": 694444.4442,
    "rezim": "nepropustne"
   },
   "phyllite": {
@@ -353,7 +353,7 @@
    "K_ms": 1e-11,
    "Sy": 0.01,
    "skupina": "bridlice",
-   "t_1m_realne_min": 115740.7407,
+   "t_1m_realne_min": 694444.4442,
    "rezim": "nepropustne"
   },
   "skarn": {
@@ -369,7 +369,7 @@
    "K_ms": 1e-12,
    "Sy": 0.005,
    "skupina": "krystal",
-   "t_1m_realne_min": 578703.7037,
+   "t_1m_realne_min": 3472222.2222,
    "rezim": "nepropustne"
   },
   "crystalline_transition": {
@@ -385,7 +385,7 @@
    "K_ms": 1e-12,
    "Sy": 0.005,
    "skupina": "krystal",
-   "t_1m_realne_min": 578703.7037,
+   "t_1m_realne_min": 3472222.2222,
    "rezim": "nepropustne"
   },
   "deep_limestone": {
@@ -401,7 +401,7 @@
    "K_ms": 3e-08,
    "Sy": 0.02,
    "skupina": "vapenec",
-   "t_1m_realne_min": 77.1605,
+   "t_1m_realne_min": 462.963,
    "rezim": "udalost"
   },
   "siltstone": {
@@ -417,7 +417,7 @@
    "K_ms": 1e-09,
    "Sy": 0.03,
    "skupina": "prachovec",
-   "t_1m_realne_min": 3472.2222,
+   "t_1m_realne_min": 20833.3332,
    "rezim": "udalost"
   },
   "conglomerate": {
@@ -433,7 +433,7 @@
    "K_ms": 1e-06,
    "Sy": 0.1,
    "skupina": "slepenec",
-   "t_1m_realne_min": 11.5741,
+   "t_1m_realne_min": 69.4446,
    "rezim": "udalost"
   },
   "rock_salt": {
@@ -449,7 +449,7 @@
    "K_ms": 1e-13,
    "Sy": 0.005,
    "skupina": "evaporit",
-   "t_1m_realne_min": 5787037.037,
+   "t_1m_realne_min": 34722222.222,
    "rezim": "nepropustne"
   },
   "gypsum": {
@@ -465,7 +465,7 @@
    "K_ms": 1e-13,
    "Sy": 0.005,
    "skupina": "evaporit",
-   "t_1m_realne_min": 5787037.037,
+   "t_1m_realne_min": 34722222.222,
    "rezim": "nepropustne"
   },
   "dolomite": {
@@ -481,7 +481,7 @@
    "K_ms": 3e-08,
    "Sy": 0.02,
    "skupina": "vapenec",
-   "t_1m_realne_min": 77.1605,
+   "t_1m_realne_min": 462.963,
    "rezim": "udalost"
   },
   "black_coal": {
@@ -497,7 +497,7 @@
    "K_ms": 1e-07,
    "Sy": 0.03,
    "skupina": "uhli",
-   "t_1m_realne_min": 34.7222,
+   "t_1m_realne_min": 208.3332,
    "rezim": "udalost"
   },
   "shale": {
@@ -513,7 +513,7 @@
    "K_ms": 1e-11,
    "Sy": 0.01,
    "skupina": "bridlice",
-   "t_1m_realne_min": 115740.7407,
+   "t_1m_realne_min": 694444.4442,
    "rezim": "nepropustne"
   },
   "quartz_sandstone": {
@@ -529,7 +529,7 @@
    "K_ms": 1e-07,
    "Sy": 0.1,
    "skupina": "piskovec",
-   "t_1m_realne_min": 115.7407,
+   "t_1m_realne_min": 694.4442,
    "rezim": "udalost"
   },
   "lignite": {
@@ -545,7 +545,7 @@
    "K_ms": 1e-07,
    "Sy": 0.03,
    "skupina": "uhli",
-   "t_1m_realne_min": 34.7222,
+   "t_1m_realne_min": 208.3332,
    "rezim": "udalost"
   },
   "loess": {
@@ -562,7 +562,7 @@
    "K_ms": 1e-07,
    "Sy": 0.08,
    "skupina": "spras",
-   "t_1m_realne_min": 92.5926,
+   "t_1m_realne_min": 555.5556,
    "rezim": "udalost"
   },
   "hill_sand": {
@@ -579,7 +579,7 @@
    "K_ms": 0.0001,
    "Sy": 0.26,
    "skupina": "pisek",
-   "t_1m_realne_min": 0.3009,
+   "t_1m_realne_min": 1.8054,
    "rezim": "okamzite"
   },
   "limestone_outcrop": {
@@ -595,7 +595,7 @@
    "K_ms": 3e-08,
    "Sy": 0.02,
    "skupina": "vapenec",
-   "t_1m_realne_min": 77.1605,
+   "t_1m_realne_min": 462.963,
    "rezim": "udalost"
   },
   "weathered_volcanic": {
@@ -611,7 +611,7 @@
    "K_ms": 1e-05,
    "Sy": 0.1,
    "skupina": "vulk_zvetr",
-   "t_1m_realne_min": 1.1574,
+   "t_1m_realne_min": 6.9444,
    "rezim": "okamzite"
   },
   "flysch": {
@@ -627,7 +627,7 @@
    "K_ms": 1e-09,
    "Sy": 0.03,
    "skupina": "prachovec",
-   "t_1m_realne_min": 3472.2222,
+   "t_1m_realne_min": 20833.3332,
    "rezim": "udalost"
   },
   "sandstone_towers": {
@@ -643,7 +643,7 @@
    "K_ms": 1e-07,
    "Sy": 0.1,
    "skupina": "piskovec",
-   "t_1m_realne_min": 115.7407,
+   "t_1m_realne_min": 694.4442,
    "rezim": "udalost"
   },
   "weathered_granite": {
@@ -659,8 +659,8 @@
    "K_ms": 1e-06,
    "Sy": 0.02,
    "skupina": "krystal_pukl",
-   "t_1m_realne_min": 2.3148,
-   "rezim": "okamzite"
+   "t_1m_realne_min": 13.8888,
+   "rezim": "udalost"
   },
   "mountain_ridge": {
    "id": 61,
@@ -675,7 +675,7 @@
    "K_ms": 1e-12,
    "Sy": 0.005,
    "skupina": "krystal",
-   "t_1m_realne_min": 578703.7037,
+   "t_1m_realne_min": 3472222.2222,
    "rezim": "nepropustne"
   },
   "slope_schist": {
@@ -691,7 +691,7 @@
    "K_ms": 1e-11,
    "Sy": 0.01,
    "skupina": "bridlice",
-   "t_1m_realne_min": 115740.7407,
+   "t_1m_realne_min": 694444.4442,
    "rezim": "nepropustne"
   },
   "granite_massif": {
@@ -707,7 +707,7 @@
    "K_ms": 1e-12,
    "Sy": 0.005,
    "skupina": "krystal",
-   "t_1m_realne_min": 578703.7037,
+   "t_1m_realne_min": 3472222.2222,
    "rezim": "nepropustne"
   },
   "rock_wall": {
@@ -723,7 +723,7 @@
    "K_ms": 1e-12,
    "Sy": 0.005,
    "skupina": "krystal",
-   "t_1m_realne_min": 578703.7037,
+   "t_1m_realne_min": 3472222.2222,
    "rezim": "nepropustne"
   },
   "alpine_crystalline": {
@@ -739,7 +739,7 @@
    "K_ms": 1e-12,
    "Sy": 0.005,
    "skupina": "krystal",
-   "t_1m_realne_min": 578703.7037,
+   "t_1m_realne_min": 3472222.2222,
    "rezim": "nepropustne"
   },
   "subalpine_scree": {
@@ -756,7 +756,7 @@
    "K_ms": 0.01,
    "Sy": 0.22,
    "skupina": "sterk",
-   "t_1m_realne_min": 0.0025,
+   "t_1m_realne_min": 0.015,
    "rezim": "okamzite"
   },
   "alpine_belt": {
@@ -772,7 +772,7 @@
    "K_ms": 1e-12,
    "Sy": 0.005,
    "skupina": "krystal",
-   "t_1m_realne_min": 578703.7037,
+   "t_1m_realne_min": 3472222.2222,
    "rezim": "nepropustne"
   },
   "alpine_granite": {
@@ -788,7 +788,7 @@
    "K_ms": 1e-12,
    "Sy": 0.005,
    "skupina": "krystal",
-   "t_1m_realne_min": 578703.7037,
+   "t_1m_realne_min": 3472222.2222,
    "rezim": "nepropustne"
   },
   "alpine_quartzite": {
@@ -804,7 +804,7 @@
    "K_ms": 1e-12,
    "Sy": 0.005,
    "skupina": "krystal",
-   "t_1m_realne_min": 578703.7037,
+   "t_1m_realne_min": 3472222.2222,
    "rezim": "nepropustne"
   },
   "extreme_ridge": {
@@ -820,7 +820,7 @@
    "K_ms": 1e-12,
    "Sy": 0.005,
    "skupina": "krystal",
-   "t_1m_realne_min": 578703.7037,
+   "t_1m_realne_min": 3472222.2222,
    "rezim": "nepropustne"
   },
   "high_massif": {
@@ -836,7 +836,7 @@
    "K_ms": 1e-12,
    "Sy": 0.005,
    "skupina": "krystal",
-   "t_1m_realne_min": 578703.7037,
+   "t_1m_realne_min": 3472222.2222,
    "rezim": "nepropustne"
   },
   "rock_spire": {
@@ -852,7 +852,7 @@
    "K_ms": 1e-12,
    "Sy": 0.005,
    "skupina": "krystal",
-   "t_1m_realne_min": 578703.7037,
+   "t_1m_realne_min": 3472222.2222,
    "rezim": "nepropustne"
   },
   "summit_pyramid": {
@@ -868,7 +868,7 @@
    "K_ms": 1e-12,
    "Sy": 0.005,
    "skupina": "krystal",
-   "t_1m_realne_min": 578703.7037,
+   "t_1m_realne_min": 3472222.2222,
    "rezim": "nepropustne"
   },
   "highest_point": {
@@ -884,7 +884,7 @@
    "K_ms": 1e-12,
    "Sy": 0.005,
    "skupina": "krystal",
-   "t_1m_realne_min": 578703.7037,
+   "t_1m_realne_min": 3472222.2222,
    "rezim": "nepropustne"
   },
   "volcanic_conduit": {
@@ -900,7 +900,7 @@
    "K_ms": 1e-12,
    "Sy": 0.005,
    "skupina": "krystal",
-   "t_1m_realne_min": 578703.7037,
+   "t_1m_realne_min": 3472222.2222,
    "rezim": "nepropustne"
   },
   "diamond": {
@@ -967,9 +967,9 @@
    "cantilever": 4
   }
  },
- "_e61": "Od v4 (Jan 04:39, blueprint-studie E61): vodní pole podle reálných hodnot (výzkum E59, ZDROJE [32], [38]–[41]). perm = (log10 K + 9) / 6 v [0, 1] (K ≤ 1e-9 m/s → 0, K ≥ 1e-3 → 1); por = pórovitost n; ret = n − Sy (zadržená voda); K_ms = typická hydraulická vodivost m/s; Sy = specifická vydatnost; t_1m_realne_min = průsak 1 m při spádu 1 v reálných minutách při čase hry × 144 (1 herní den = 10 min); rezim = okamzite (< 10 min reálně: ustálený stav) / udalost (halda E51) / nepropustne (> 30 dní reálně). ero_v, sed_v odečteny z Hjulströmova diagramu (řádově). Dřívější hodnoty byly zkušební (záloha blueprint-studie/shots/e61/).",
+ "_e61": "Od v4 (Jan 04:39, blueprint-studie E61): vodní pole podle reálných hodnot (výzkum E59, ZDROJE [32], [38]–[41]). perm = (log10 K + 9) / 6 v [0, 1] (K ≤ 1e-9 m/s → 0, K ≥ 1e-3 → 1); por = pórovitost n; ret = n − Sy (zadržená voda); K_ms = typická hydraulická vodivost m/s; Sy = specifická vydatnost; t_1m_realne_min = průsak 1 m při spádu 1 v reálných minutách při čase hry × 24 (1 herní den = 60 min, E77); rezim = okamzite (< 10 min reálně: ustálený stav) / udalost (halda E51) / nepropustne (> 30 dní reálně). ero_v, sed_v odečteny z Hjulströmova diagramu (řádově). Dřívější hodnoty byly zkušební (záloha blueprint-studie/shots/e61/).",
  "perm_mapovani": "(log10 K_ms + 9) / 6",
- "cas_faktor": 144,
+ "cas_faktor": 24,
  "rezim_okamzite_min": 10.0,
  "rezim_nepropustne_min": 43200.0
 }
