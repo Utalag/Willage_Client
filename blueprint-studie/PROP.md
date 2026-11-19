@@ -293,6 +293,24 @@ Výchozí: 800 kapek na blok, `ero_cap` 1,0, `ero_erode` 0,1, `ero_deposit_rate`
 - **Hypotéza:** parita bit po bitu (kopie se mění jen v cestách). Vložení bloku bp ≈ 0,25–0,4 s jako E49 detail
   (+ povrch a tráva prototypu ~0,4 s), voda ostrova 7 bloků (≈ 112 × 112 sloupců) plně < 1 s, kopání u vody desítky ms.
 
+## E70 harmonický průměr propustností pro dělení do stran v E67 (plán, zapsáno před pokusem 2026-11-19 21:50; TODO Voda, Jan 21:3x „V ToDo máš úkoly půst se do nich…“)
+- **Zadání (TODO):** dělení vody do stran v E67 (`ug67.gd`, krok 3 sestupu) dnes váží sousední pásmo `perm(cíl) × překryv`
+  (prostý poměr propustností cílů). Návrh: propustnost rozhraní = harmonický průměr obou materiálů
+  `2·k₁·k₂ / (k₁ + k₂)` (k₁ = pásmo, ze kterého voda teče, k₂ = soused), aby jíl brzdil i sousední písek.
+- **Varianta (příznak, výchozí zatím „pomer“ → parita):** `p70_prumer = "pomer" | "harmonicky"` (studie `scripts/bp/params.gd`,
+  kontext `prumer70`, prototyp přes `port_studie.py`, CLI `--bp.p70_prumer`). Váha se použije i ve slučování (`p67_prune`).
+- **Očekávání z rozboru:** dělení je normované (Σ váh = 1), takže absolutní „brzdění“ (zpomalení, menší průtok) model bez
+  času a kapacity neumí; mění se jen poměr mezi směry. Pro zdroj v písku se harmonický průměr k jílu *zvýší* proti poměru
+  (H(0,833; 0,05) = 0,094 > 0,05 → jíl dostane víc), pro zdroj v jílu se rozdíl mezi pískem a jílem zmenší (písek už
+  vodu „nevysaje“: poměr 94 / 6 %, harmonicky 65 / 35 %). Ve hře jsou tělesem jen pásma s perm ≥ 0,3, kras (0,246) a
+  rozpustné s perm 0 (podlaha 0,01), takže efekt čekám malý – hlavně rozhraní kras / písek.
+- **Ověření:** (a) testy E69 (symetrie, bilance) beze změny; (b) malý případ `tools/e70.gd`: řada sloupců, zdroj uprostřed,
+  vlevo / vpravo různé materiály (písek / jíl jako zkušební tělesa, a skutečné vápenec / písek) – podíl vody na stranách
+  pomer vs harmonicky; (c) startovní ostrov `tools/e67.gd` (Σ průtok, objem, mokrá pásma, výstupy, výkopy 0 neshod, obě
+  pořadí) a prototyp `voda_e66 --bp.voda_e67=true`; (d) čas řešení (ms).
+- **Rozhodnutí:** zapnout výchozí jen tehdy, když (a) i (c) zůstanou v pořádku a (b) ukáže zamýšlený efekt bez vedlejších
+  škod; jinak nechat vypnuté a zapsat proč.
+
 ## E69 výsledky (2026-11-19 21:50, větev `e69-symetrie-test` z `e67-podzemi-okraje`, do main až po schválení Janem)
 - **Nástroj:** `tools/e69.gd` (`./run.sh e69 [--n=21 --t=1 --sklon=0.25 --q=1 --ponor=0.1 --remizy=1 …]`), výsledky
   `shots/e69/vysledky_pred*.json` (před opravou) a `vysledky*.json` (po). Čtverec 21 × 21 v prstenci zdi, zdroj 1 l/s
