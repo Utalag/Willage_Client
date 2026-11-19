@@ -293,6 +293,52 @@ Výchozí: 800 kapek na blok, `ero_cap` 1,0, `ero_erode` 0,1, `ero_deposit_rate`
 - **Hypotéza:** parita bit po bitu (kopie se mění jen v cestách). Vložení bloku bp ≈ 0,25–0,4 s jako E49 detail
   (+ povrch a tráva prototypu ~0,4 s), voda ostrova 7 bloků (≈ 112 × 112 sloupců) plně < 1 s, kopání u vody desítky ms.
 
+## E67 podzemní voda vytéká z vrstev na okraji, zavěšená voda, přetoky ve 3D (plán, zapsáno před pokusem 2026-11-19 16:00; Jan 15:54 „Ano voda na krajích bloku měla vytékat z vrstev kam se dostane.“, 15:56 přetoky ve 3D)
+- **Problém (E66b, řezy `godot-prototyp/shots/rez/profil_ostrov/`):** startovní ostrov má jedno těleso s vodou a jednu hladinu
+  19,56 m přes celý ostrov („vana“): voda z tůní se v režimu auto/preliv rozlije do nejnižšího dosažitelného pásma celého
+  souvislého tělesa a hladina stoupá, dokud nenarazí na nejnižší výchoz na povrchu (pramen 29,27). Tři příčiny v kódu:
+  1. **Okraj ostrova není výstup.** `_outs`, `_solve_nadrz` a `ug58._cands_b` znají jen okraj řídicí mřížky světa (x = 0 / W−1)
+     a nižší povrch souseda; sloupce mimo ostrov jsou zeď (`wall`), takže stěna ostrova nikdy nepustí vodu ven.
+  2. **Žádná zavěšená voda.** Preliv bere jako pánev globálně nejnižší dosažitelné pásmo a plní jen ji; mezilehlé nepropustné
+     čočky (misky) se nenaplní a nepřetečou, nevznikne víc hladin.
+  3. **Okamžité „rozlití“:** sestup s kapacitou (cap) navštíví vše, co je pod hladinou vstupu, ne cestu, kudy voda skutečně teče.
+- **Cíl (Jan):** podzemní voda se chová jako povrchové přetoky, ale ve 3D: od zdroje nejdřív **dolů**, pak dolů a do stran
+  podle propustnosti vrstev; v pastech na nepropustném dně se drží (zavěšená voda), po naplnění přeteče do další; mokré jsou
+  jen pásma, kam voda opravdu doteče; ven vyteče z odkryté vrstvy na okraji (stěna ostrova → vodopád do mlhy) nebo v prameni,
+  ve výšce té vrstvy (na nepropustném dně, nejnižší odkryté místo vrstvy). Událostně / předpočítaně, ne simulace po krocích.
+- **Varianty (příznaky v parametrech, výchozí vypnuto → parita):**
+  - **O (`p67_okraj`):** výstup „okraj“ i tam, kde soused pásma je zeď (mimo ostrov): z = spodek pásma (voda sedí na dně
+    vrstvy a vyteče ve stěně). Stejně v `_outs`, `_solve_nadrz` a `ug58._cands_b`, takže platí pro preliv, nádrž i uzly B
+    a celé E64 (K+I+P+R) beze změny: sestup O nečte, flood čte výstupy jen ze sloupce a 4 sousedů a zeď se výkopem nemění.
+  - **Z (`p67_rezim = "pretok"`, nový režim podzemí, soubor `scripts/podzemi52/ug67.gd`):** přetoky ve 3D nad stejnými pásmy:
+    1. *Sestup (tok):* pásma v pořadí spodku shora dolů (halda: lo sestupně, id vzestupně). Pásmo s vodou pošle průtok
+       **dolů**, když se ho dotýká pásmo tělesa pod ním ve stejném sloupci; jinak **do stran** do sousedních pásem s nižším dnem,
+       rozdělené vahou perm × výška překryvu (jako D∞ na povrchu). Výstup ve výšce dna (okraj / nižší povrch souseda ≤ dno)
+       vezme celý průtok pásma (vývěr ve stěně / prameni). Mokrá = navštívená pásma (film u dna).
+    2. *Past:* pásmo bez cesty dolů a bez výstupu = dno pasti. Priority-flood z ní (stejný jako preliv: klíč max(hladina,
+       spodek překryvu), výstupy `_outs`): hladina stoupá, dokud (a) nenarazí na výstup → vyteče, nebo (b) nenarazí na pásmo,
+       jehož dno je pod hladinou a které do pasti nepatří (přeliv přes práh) → past je plná na hladině prahu (zavěšená voda),
+       přebytek (průtok − průsak) teče sestupem dál z toho pásma.
+    3. *Spojení (fill-spill-merge [Barnes]):* když hladina pozdější pasti dosáhne hladiny dřívější sousední pasti, spojí se
+       v jedno jezero a hladina stoupá dál.
+    4. *Ustálený stav:* každá past na cestě, do které teče víc než průsak, je plná po práh; časy plnění = objem / čistý průtok
+       (události po 0,5 m jako dosud). Výsledek: pasti (hladina, pásma, práh / výstup), mokrá pásma sestupu, všechny výstupy
+       s průtokem; `out` = výstup s největším průtokem (rozhraní tok60 beze změny), `outs67` = všechny (tok60 je přidá, když existují).
+  - **Kras (`p67_kras`):** dnes je rozpustná hornina tělesem vždy (`UG._soluble`, i sádrovec s perm 0). Změřit vliv, kdyby
+    kras musel mít perm ≥ `ponor_perm`; tabulku materiálů neměnit (jen pokusný přepínač, výchozí beze změny).
+- **Hypotéza:**
+  1. O: na startovním ostrově vyteče voda ve stěně ostrova pod úrovní 19,56 m (dno pískovce / vápence ~13–16 m);
+     hladina klesne o metry, objem v tělese řádově klesne; pramen 29,27 zmizí nebo zeslábne.
+  2. Z: mokrá pásma ≪ velikost tělesa (řádově jednotky až desítky % ze 7690 pásem); víc hladin (zavěšená voda nad čočkami);
+     výstupy hlavně „okraj“ na stěně ostrova.
+  3. Parita: O i Z vypnuté → hashe testů studie a prototypu beze změny; O ve světech bez zdí (svet64 8 × 8) beze změny výsledků.
+  4. Výkop: O nemění E64 důkazy (K, I, P, R). Z zatím bez lokální opravy: výkop = plný přepočet registrovaných volání
+     (čistá funkce stavu → přesnost i nezávislost na pořadí triviálně), odhad pod současných 0,45–0,95 s, protože navštíví
+     jen mokrou část místo celého tělesa.
+- **Metriky:** počet těles, pasti s vodou, hladiny, výstupy (pramen / okraj) a průtoky, mokrá pásma vs. velikost tělesa,
+  objem, čas řešení a výkopu (ms), parita (hashe testů, shoda se starým výsledkem při vypnutí), vliv krasu na tělesa.
+  Obrázky: `tools/rez_profil.sh` a `tools/rez_gif.sh` před / po (`prehled.png`).
+
 ## E66b podzemní těleso, bok ostrova, řezy GIF (2026-11-19 15:45; Jan 15:20 „Proč je tam velké podzemní těleso? Skryj texturu na boku dlaždice.“, 15:26 GIF řezů)
 - **Proč jedno velké těleso (diagnostika `godot-prototyp/tools/teleso_e66.gd`, obrázek `shots/66b_teleso.png`):**
   - Startovní ostrov (4 bloky, 1024 sloupců, 18886 pásem): 30 těles, z toho **jedno má 7690 pásem ve všech 1024 sloupcích**
