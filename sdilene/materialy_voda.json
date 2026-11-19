@@ -2,6 +2,7 @@
  "_popis": "JEDINÝ zdroj vodních vlastností materiálů (Jan 19:18: jedna tabulka pro gen-v3 i voda-studie; vápenec od v4 podle reálné K, Jan 04:39). perm = propustnost 0–1 (0 nepropustí, 1 jako vzduch), por = pórovitost (kolik vody buňka pojme, × objem buňky), res = odpor povrchu (0 hladký – 1 voda skoro neteče). Buňka je pro vsakování gen-v3 propustná, když perm > perm_leak. Čtou: voda-studie/scripts/params.gd, lozika-studie/scripts/voda_params.gd a gen_v3.gd (přes water_table.gd). Od v3 (Jan 19:19, bod b): ret = voda zadržená v pórech nad hladinou (polní kapacita, × objem buňky, ≤ por); simulace ji nepohne (nepohyblivá voda), gen-v3 ji dává do písku nad hladinou a do hlíny/trávy nejvýš 2 buňky nad jílem (zavěšená voda).",
  "version": 4,
  "perm_leak": 0.05,
+ "_rozp75": "E75 (2026-11-20): rozp_kg_m3 = rozpuštěná hornina v rovnováze na m³ vody (kras), hustota_kg_m3 = hustota horniny. Řády: vápenec 0,05–0,3 (krasová voda 50–300 mg/l CaCO3, Dreybrodt / Gabrovšek, Acta Carsologica), dolomit o něco méně, sádrovec 2,531 g/l při 20 °C (Klimchouk, Int. J. Speleol. 25(3)), kamenná sůl 360 g/l. Bez pole = nerozpustná (0).",
  "materials": {
   "air": {
    "id": 0,
@@ -85,6 +86,8 @@
   },
   "limestone": {
    "id": 5,
+   "rozp_kg_m3": 0.2,
+   "hustota_kg_m3": 2700,
    "perm": 0.246,
    "por": 0.05,
    "res": 0.1,
