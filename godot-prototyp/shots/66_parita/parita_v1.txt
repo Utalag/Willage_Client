@@ -1,0 +1,1 @@
+PARITA OK v1: otisk sedí (ref dda863feffe6f611, 2.9 s) | běh 2 dda863feffe6f611 → STEJNÉ

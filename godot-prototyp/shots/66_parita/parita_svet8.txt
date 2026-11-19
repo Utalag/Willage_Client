@@ -1,0 +1,1 @@
+PARITA OK svet8: otisk sedí (ref ec0681cc6426, 33.8 s) | determinismus 2×: ec0681cc6426 / ec0681cc6426 → STEJNÉ

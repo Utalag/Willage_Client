@@ -1,0 +1,1 @@
+PARITA OK voda_bb: otisk sedí (ref e8cbbc78ca88, 45.3 s) | determinismus 2×: e8cbbc78ca88 / e8cbbc78ca88 → STEJNÉ
