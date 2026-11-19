@@ -264,6 +264,35 @@ Výchozí: 800 kapek na blok, `ero_cap` 1,0, `ero_erode` 0,1, `ero_deposit_rate`
   v detailu jen vyhloubené koryto, vodu v GIFu kreslím z hrubé fáze (voda_sim na 128 × 128 × 64 jsem nespouštěl). Biomy se
   zatím promítnou jen do podmnožiny hornin, ne do vegetace. Počet minerálů je podle typu, ne podle biomu.
 
+## E66 integrace terénu a vody do prototypu (plán 2026-11-19 14:30; Jan 14:21 „Studií terénu a vody implementuj do prototyp projektu.“)
+- **Cíl:** prototyp (`../godot-prototyp/`) umí ostrov z blueprintů studie (vrstvy jako funkce, navázání na sousedy, klíny)
+  a vodu studie (prameny, priority-flood + D8, tůně, podzemí auto, vodopád přes okraj do mlhy, lokální přepočet po kopání).
+  Studie zůstávají beze změny a jejich hashe platí dál (E61: v1 dda863feffe6f611, sled46 d8af7f59b6f8da70, svet8 ec0681cc6426,
+  voda a14136754dd1, voda_b 5ae2b366e84a, voda_b --b e8cbbc78ca88). Těžba (`tezba-studie`) se nepřenáší.
+- **Postup:**
+  1. Verze přes git (Jan 14:35: žádné záložní kopie): výchozí stav prototypu jako samostatný commit v `Utalag/Willage_Client`, pak práce po logických krocích.
+  2. **Přenos modulů skriptem** `godot-prototyp/tools/port_studie.py`: kopie beze změny logiky, změní se jen cesty `preload`
+     a výstupní cesty testů. Rozdělení: `scripts/teren/` (bp: funkce vrstev, navázání, minerály, dutiny), `scripts/teren/zaklad/`
+     (kopie studie gen_v3 / ore_v0 / mat 256 id …), `scripts/teren/svet/` (svet8, potřebuje ho tok), `scripts/voda/` (prameny, tok, strže,
+     tůně), `scripts/voda/povrch/` (E60 tok60), `scripts/voda/podzemi/` (E52 ug_funkce + auto E55, E58 ug58, E64 alg64),
+     `scripts/voda/eroze/` (E51, E54). Testy studie jdou do `scripts/studie_testy/` jen pro test parity.
+  3. **Jediná změna logiky = opt-in příznak:** okraj ostrova u chybějícího slotu (mlha) se chová jako okraj mapy
+     (`edge_wall`, výchozí vypnuto), aby kruhový ostrov přepadal do mlhy všude, ne jen na okraji obdélníku. Ve studijních
+     světech je vypnutý, takže parita platí.
+  4. **Adaptér do hry:** `--gen=bp` (výchozí zůstává v3, dokud Jan nerozhodne). Blok ostrova = blueprint (typ → tvar),
+     navázání na už vložené sousedy přes svět studie (sloty ostrova posunuté do kladných souřadnic). Hra dál pracuje s Mat 0–12:
+     `Block.cells` = herní třída materiálu (horniny → žula / vápenec / čedič / písek / jíl, rudy → měď / železo), `Block.geo` = plné id 0–255
+     pro vzhled (paleta hornin) a pro vodu. Podzemí skryté, rentgen (stávající přepínač) ukáže vrstvy.
+  5. **Voda ostrova:** mřížka 16 sloupců na blok přes celý ostrov, prameny, `strze.run` s podzemím `ug_funkce` v režimu auto
+     (nepropustné dno → preliv / pramen, propustné → nádrž s průsakem), po kopání `tok60.update` jen kolem změny (A+C),
+     podzemí E64 K+I+P(+R kroky po počtu operací) jako ve studii. Déšť jen vizuální, počasí ne, svah limit vypnutý (E56 výchozí).
+     Eroze / usazování E51 a dohnání E54 se přenesou jako moduly, ve hře se zatím nespouštějí (jen po kopání koryto).
+  6. **Ověření:** prototyp headless bez chyb; test parity v prototypu (stejných 6 hashů ze stejných světů, navíc hash buněk
+     a vody adaptéru proti `pipeline.run_sync` pro sled46); časy vložení bloku a kopání proti číslům studie;
+     snímky `shots/66_*.png` (řeka, tůň, pramen, vodopád na okraji, rentgen řez). README prototypu.
+- **Hypotéza:** parita bit po bitu (kopie se mění jen v cestách). Vložení bloku bp ≈ 0,25–0,4 s jako E49 detail
+  (+ povrch a tráva prototypu ~0,4 s), voda ostrova 7 bloků (≈ 112 × 112 sloupců) plně < 1 s, kopání u vody desítky ms.
+
 ## E64 výsledky (2026-11-19 13:50)
 - **Co je nového** (kód `scripts/alg64/`, výchozí chování beze změny, zapíná se jen příznakem `K` ve variantě):
   - `heap64.gd`: halda s pevným pořadím (hodnota sestupně, id vzestupně).
