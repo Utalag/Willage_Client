@@ -42,6 +42,12 @@ Návrh kontejneru `WVB1` popisuje, jak klient pošle blok: hlavička (seed, rece
 
 → [Architektura](architektura.md)
 
+### Model světa: buňky z funkcí
+
+Svět je buněčný, ale buňky se neukládají ani nepočítají všude. Odvozují se z funkcí vrstev a z pásem a každý systém pracuje na úrovni, která mu stačí: geologie na funkcích, voda na pásmech a grafu těles, vykreslení a kopání na vzorkovaných buňkách. Stránka popisuje i srovnání s voxely a Dwarf Fortress a hranice modelu (převisy, jeskyně).
+
+→ [Model světa](model-sveta.md)
+
 ## 3. Blueprint terénu
 
 ### Vrstvy jako spojité funkce
