@@ -216,6 +216,12 @@ Skupiny: 1 Prototyp a buildy · 2 Terén a tvar · 3 Rozlišení bloku · 4 Ská
 - **Komplikace:** koryta jsou krátké úseky (malý svět, malá povodí). Krasová vyvěračka 0. Hráz na svahu tůň nevytvořila (potok ji obtekl). Podzemní tok vede zatím zjednodušeně k nejbližšímu okraji.
 - **Další krok:** Jan rozhodne, jak daleko vést podzemní tok (sledovat propustnou vrstvu?) a jestli má mít krasová vyvěračka vlastní pravidlo. Starší otevřené otázky (eroze po blocích vs hrubý svět, jádro hory přes šev, minerály z hrubého světa) zůstávají.
 
+### 🔗 Blueprint v3 / E72: slučování drobných výstupů a průsaků podzemí pod prahem (2026-11-19 22:35 · `blueprint-studie/scripts/podzemi52/ug67.gd` příznaky `p72_slucovat`, `p72_prusak`, větev `e68-orchestrator`)
+- **Směr:** Jan 22:24: drobné průsaky a přelivy pod prahem slučovat (stávající `p67_prune_min` 0,1 l/s), nejen skrýt při kreslení.
+- **Zlepšení:** ostrov 150 → 6 výstupů (119 drobných → 0), Σ 4,10 l/s, bilance a symetrie přesné, výkopy 0 neshod, o 10–20 % rychlejší. Nalezena a opravena chyba E71: past znovu dělila už odeslaný průsak (+0,317 l/s navíc ve variantě bez okraje).
+- **Komplikace:** průsak protékané vody (E71 P) je na pásmo vždy pod prahem, takže se slučováním zmizí (kupole 0,045 → 0). Výstupy se slučují až přes 19 sloupců.
+- **Další krok:** Jan rozhodne o `p72_prusak` a o omezení vzdálenosti slučování.
+
 ### 🪨 Blueprint v3 / E71: kapacita průtoku dolů podle vrstvy a průsak protékané vody (2026-11-19 22:40 · `blueprint-studie/scripts/podzemi52/ug67.gd` příznaky `p71_kapacita`, `p71_prusak`, větev `e71-kapacita-dolu`)
 - **Směr:** negativa E69: vrstvy propouštěly dolů vše, protékaná voda neprosakovala.
 - **Zlepšení:** referenční sloupec 1 l/s s vrstvami 1,0 … 0,2 l/s dá přesně 0,2 l/s z každé vrstvy. Symetrie a bilance přesné, výkopy 0 neshod. Průsak protékané vody v kupoli 0 → 0,045–0,163 l/s (E58 0,176). Výchozí zapnuto (jen E67 pretok).

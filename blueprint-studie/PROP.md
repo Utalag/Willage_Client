@@ -293,6 +293,51 @@ Výchozí: 800 kapek na blok, `ero_cap` 1,0, `ero_erode` 0,1, `ero_deposit_rate`
 - **Hypotéza:** parita bit po bitu (kopie se mění jen v cestách). Vložení bloku bp ≈ 0,25–0,4 s jako E49 detail
   (+ povrch a tráva prototypu ~0,4 s), voda ostrova 7 bloků (≈ 112 × 112 sloupců) plně < 1 s, kopání u vody desítky ms.
 
+## E72 slučování drobných výstupů a průsaků E71 pod prahem p67_prune_min (výsledky 2026-11-19 22:35, větev `e68-orchestrator`; Jan 22:24 „malé průsaky a přelivy pod prahem se slučují“, TODO Voda „Slučování drobných výstupů z pastí“)
+- **Pozn. k postupu:** Jan chtěl opravu hned, před E68; plán a výsledky jsou proto v jednom zápisu (napsáno po pokusu).
+- **Příčina (E71):** práh `p67_prune_min` (0,1 l/s, E67b) se použil jen při dělení do stran. Nové cesty E71 ho obcházely:
+  dělení kapacitou dolů (dolů / zbytek), průsak protékané vody dnem a výstupy pastí. Navíc zdroje na ostrově jsou samy
+  malé (desítky tůní po 0,02–0,05 l/s), takže i bez E71 končily drobnými výstupy (E70: 67 výstupů 0,02–0,05 l/s).
+- **Co je nového (`ug67.gd`, studie i prototyp; přepínače `p72_slucovat` (výchozí zapnuto), `p72_prusak` (výchozí zapnuto); práh
+  je stávající `p67_prune_min`, žádný nový):**
+  - dělení kapacitou: menší z větví (dolů / dál) pod prahem → celá do větší (dolů smí přetéct kapacitu nejvýš o < práh);
+  - průsak protékané vody: průsak nebo zbytek pod prahem → do větší části;
+  - výstupy: výstup pod prahem se přičte nejbližšímu silnému výstupu (≥ práh) téhož volání; shoda vzdálenosti i průtoku →
+    rovným dílem. Když silný není, vše do největšího (shoda → rovným dílem, např. plochá vrstva zůstane 80 × 0,0125);
+  - vypnuto = bitově E71 (ostrov otisk výstupů 43943a241bcaf1d0, výkopy e704e819891f87e7).
+- **Chyba nalezená testem (E71, opraveno zvlášť `1c7fe14`):** past rozdělovala znovu průsak, který už odeslala do pásma, jež
+  pak padlo do pasti. Ostrov „pretok bez O“: Σ výstupů 4,417 l/s při vstupu 4,100 (hmota navíc +0,317). Po opravě 4,100.
+  Varianta „pretok + O“ (hra) se nemění. Tvrzení E71 „Σ 4,10 zachováno ve všech variantách“ neplatilo.
+- **Ostrov (`tools/e67.gd`, pretok + O, výchozí K + P):**
+
+  | | E71 (vyp) | E72 (zap) |
+  |---|---|---|
+  | výstupů | 150 | 6 |
+  | < 0,02 l/s | 119 | 0 |
+  | 0,02–0,1 l/s | 24 | 0 |
+  | ≥ 0,1 l/s | 7 | 6 (0,22–1,79) |
+  | Σ výstupy | 4,100 | 4,100 |
+  | mokrá pásma | 1225 | 868 |
+  | pod hladinou / pasti s vodou | 478 / 37 | 414 / 31 |
+  | objem | 7,0 m³ | 7,0 m³ |
+  | výpočet podzemí | 88–92 ms | 78–82 ms |
+  | výkop průměr / max | 60–66 / 61–70 ms | 49–54 / 52–56 ms |
+  | neshody, dvě pořadí | 0, stejný otisk | 0, stejný otisk e8deb156254e1840 |
+
+  Sloučeno 96 drobných výstupů, nejdál 19,3 sloupce řídicí mřížky. Starý řešič (otisk 23b823aa710c9942) beze změny.
+- **Testy E69:** bilance chyba 0 a symetrie 0 ve všech případech (plocha, kupole, mísa; i s ponorem 0,3). Reference
+  (vrstvy 1,0 … 0,2 l/s) beze změny 5 × 0,2. Kupole: 16 → 8 výstupů, voda vyjde z L3 (dřív 0,742 L4 + 0,258 L5).
+- **Prototyp (`voda_e66 --bp.voda_e67=true`, 12 výkopů):** povrch beze změny (5 pramenů, 8 vodopádů, 5 na okraji 9,65 l/s,
+  0 neshod); výstupy podzemí 4 (0,0808 / 0,0787 / 0,002 / 0,0) → 2 (0,0808 v 18,09 m, 0,0808 v 12,53 m). Výchozí hra (E58)
+  řešič ug67 nepoužívá → beze změny.
+- **Negativa:** (1) průsak protékané vody (E71 P) se slučováním prakticky zmizí: průsak jednoho pásma je wq · A (≈ 0,0004 l/s),
+  vždy pod prahem → zůstane v toku. Kupole 0,045 → 0, plocha 0,032 → 0 l/s; průsak pastí zůstává (mísa 0,162). Pro P se dá
+  vypnout `p72_prusak=false` (pak slučuje jen kapacita a výstupy). (2) výstupy se slučují i přes 19 sloupců – „nejbližší
+  silný“ může být daleko; voda se tak objeví jinde, než by drobně vytekla. (3) symetrické drobné výstupy (plocha) sloučit
+  nejde bez porušení symetrie, zůstanou.
+- **Doporučení:** nechat zapnuto (Jan to chtěl, hmota a symetrie přesné, rychlejší). Jan rozhodne, jestli průsak protékané
+  vody slučovat (`p72_prusak`), a jestli omezit vzdálenost slučování výstupů.
+
 ## E68 jednotný orchestrátor hydrologie povrch + podzemí (plán, zapsáno před pokusem 2026-11-19 22:07; TODO Voda E68, Jan 21:3x „V ToDo máš úkoly půst se do nich…“)
 - **Co už existuje (nenavrhuje se znovu):** jeden krok povrch ↔ podzemí už je v `voda/tok.gd route()` a `alg60/tok60.gd update()`:
   priority-flood + D8 → `_apply_drains` (odtok mokrých tůní do tělesa, volání podzemí seskupená podle `members`, výstupy
