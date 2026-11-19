@@ -6,7 +6,7 @@ Seznam nápadů a úkolů, které čekají na Janovo rozhodnutí nebo na zařaze
 
 Nejdřív se dořeší všechno s vodou, pak další bloky. V rámci bloku se nepřeskakuje na jiné téma.
 
-1. **Voda:** ~~slučování~~ → ~~E68~~ → ~~nálezy E68 (E73)~~ → ~~plocha `gw` (E74)~~ → eroze v podzemí (kras) → voda po přenosu výřezu se přepočítá → nakonec přepnout čas hry na 1 herní den = 1 h (`p71_cas` = 24, Jan 22:19, až po testech s vodou).
+1. **Voda:** ~~slučování~~ → ~~E68~~ → ~~nálezy E68 (E73)~~ → ~~plocha `gw` (E74)~~ → ~~kras (E75)~~ → voda po přenosu výřezu se přepočítá → nakonec přepnout čas hry na 1 herní den = 1 h (`p71_cas` = 24, Jan 22:19, až po testech s vodou).
 2. **Model světa a kopání:** překryv změn po kopání + hash → kde končí funkce a pásma → tenké vrstvy a převzorkování → determinismus celého světa → rešerše implicitní geologie.
 3. **Geologie bloků a přenos výřezu:** otočení výřezu po 90° → jádro vyzdvižené hory přes více bloků → `TerrainSource` a datový kontrakt (jen návrhy, s Willage-backend).
 4. **Měřítko a zobrazení:** oddělené typy jednotek v kódu → plán vzorkování a LOD (test 3 × 3 km) → průhlednost překážek v izometrii → test měřítka v izometrii a blok 128 m → výkon na telefonu.
@@ -75,6 +75,9 @@ Podnět: odpověď ChatGPT 2026-11-19 o měřítku. Nic z toho není rozhodnuté
   - [ ] Jan rozhodne: má neobsazený pramen zvedat hladinu tělesa místo odtoku ze světa? Zapnout obsazování pramenů ve hře?
   - [ ] Po výkopu stavět plochu jen pro dotčené těleso.
   - [ ] Při novém postavení ostrova po výkopech se povrchové prameny najdou znovu z terénu a stav se liší od lokálního přepočtu (důležité pro položení bloku).
-- [ ] **Eroze v podzemí po tělesech** (Jan 2026-11-19 20:53, hypotéza). Nematerializované podzemí se neeroduje po buňkách. Průsak pórovitou vrstvou je zanedbatelný; u rozpustných hornin (vápenec, kras) se z průtoku tělesem počítá rozpuštěný objem za čas jako hodnota u tělesa. Po překročení prahu vznikne nebo se zvětší dutina (tvar v prostoru jako u blueprint dutin), buňky se materializují až při prokopání. Navázat na event erozi (E51) a materiálovou tabulku (rozpustnost).
+- [x] **Eroze v podzemí po tělesech** (Jan 2026-11-19 20:53, hypotéza). Nematerializované podzemí se neeroduje po buňkách. Průsak pórovitou vrstvou je zanedbatelný; u rozpustných hornin (vápenec, kras) se z průtoku tělesem počítá rozpuštěný objem za čas jako hodnota u tělesa. Po překročení prahu vznikne nebo se zvětší dutina (tvar v prostoru jako u blueprint dutin), buňky se materializují až při prokopání. Navázat na event erozi (E51) a materiálovou tabulku (rozpustnost).
+  - 🧪 Ověřeno v E75 (tag `e75-kras`, větev `e75-kras`, nesloučeno): modul `kras75`, rozpustnost v tabulce materiálů, dutina u hladiny ve výstupním pásmu, lokální přepočet přes E68 9–15 ms. Test 0,742 l/s: první dutina vápenec 331 herních dní (55 h), sádrovec 22,5, sůl 0,15. Na ostrově bez efektu (hladina v půdě/písku). `p75_kras` vypnuto.
+  - [ ] Jan rozhodne: zrychlení krasu pro hru (`p75_zrychleni`); má generátor dávat vápenec k hladině?
+  - [ ] Propojení těles dutinou a zobrazení dutiny ve scéně při kopání.
 - [ ] **Plán vzorkování a LOD** (Jan 2026-11-19 20:58, hypotéza). Svět zůstává funkcí; vzorkuje se jen povrchová slupka (viditelné buňky + 1–2 vrstvy pod nimi), zbytek až při interakci. LOD podle vzdálenosti kamery: zblízka 0,25 m, dál 0,5 m, zdálky/oddálení 1 m, vše ze stejných funkcí. Vyřešit švy mezi úrovněmi (bez děr). Test: mapa 3 × 3 km (~550 bloků po 128 m) jen jako hrubá data a funkce, detail kolem několika hráčů; změřit paměť a čas.
 - [ ] **Průhlednost překážek v izometrii** (Jan 2026-11-19 21:03). Při cestování nebo kopání za překážkou zprůhlednit (nebo nevykreslit) buňky v kuželu mezi kamerou a postavou. V podzemí řez do výšky: terén nad úrovní postavy se skryje (styl Dwarf Fortress / The Sims). Navázat na skrývání vrstev a xray přepínač v prototypu.
