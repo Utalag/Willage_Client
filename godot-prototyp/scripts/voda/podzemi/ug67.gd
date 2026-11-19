@@ -49,9 +49,56 @@ static func _seep(c: Dictionary, b: int, f: float) -> float:
 		if w <= 0.0: continue
 		var s := minf(f, w * float(c.A) - float(K.lku.get(b, 0.0)))
 		if s <= 0.0: return f
+		if float(c.get("_slu72", 0.0)) > 0.0:   # E72: drobný průsak / zbytek → do větší části
+			s = _merge2(s, f - s, float(c._slu72))
+			if s <= 0.0: return f
 		K.lku[b] = float(K.lku.get(b, 0.0)) + s; K.wl = float(K.wl) + s
 		return f - s
 	return f
+
+## E72: dělení f = a + b; když je menší část pod prahem a druhá je větší, připadne celá větší části (hmota zůstává).
+## Vrací novou hodnotu a. Při rovnosti se nedělí nic (symetrie).
+static func _merge2(a: float, b: float, pmin: float) -> float:
+	if a < pmin and b > a: return 0.0
+	if b < pmin and a > b: return a + b
+	return a
+
+## E72: výstupy < pmin se přičtou nejbližšímu silnému výstupu (q ≥ pmin; vzdálenost sloupců, pak větší q); shoda vzdálenosti
+## i q → rovným dílem (symetrie). Když žádný silný není, všechno do největšího (shoda → rovným dílem). Hmota zůstává.
+static func _merge_outs(c: Dictionary, outs: Dictionary, pmin: float) -> Array:
+	var H: int = c.H
+	var ks := outs.keys(); ks.sort()
+	var strong := []; var weak := []
+	for k in ks:
+		if float(outs[k][3]) >= pmin: strong.append(k)
+		else: weak.append(k)
+	if weak.is_empty(): return [0, 0.0]
+	if strong.is_empty():
+		var mx := 0.0
+		for k in ks: mx = maxf(mx, float(outs[k][3]))
+		for k in ks:
+			if float(outs[k][3]) >= mx * (1.0 - 1e-12): strong.append(k)
+		weak = []
+		for k in ks:
+			if not strong.has(k): weak.append(k)
+		var tot := 0.0
+		for k in weak: tot += float(outs[k][3]); outs.erase(k)
+		for k in strong: outs[k][3] = float(outs[k][3]) + tot / strong.size()
+		return [weak.size(), -1.0]
+	var add := {}; var dmax := 0
+	for k in weak:
+		var cw: int = outs[k][2]; var xw := cw / H; var yw := cw % H
+		var best := []; var bd := -1; var bq := 0.0
+		for k2 in strong:
+			var cs: int = outs[k2][2]; var dx := cs / H - xw; var dy := cs % H - yw
+			var d := dx * dx + dy * dy; var qq := float(outs[k2][3])
+			if bd < 0 or d < bd or (d == bd and qq > bq * (1.0 + 1e-12)): best = [k2]; bd = d; bq = qq
+			elif d == bd and qq >= bq * (1.0 - 1e-12): best.append(k2)
+		for k2 in best: add[k2] = float(add.get(k2, 0.0)) + float(outs[k][3]) / best.size()
+		dmax = maxi(dmax, bd)
+	for k in weak: outs.erase(k)
+	for k in add: outs[k][3] = float(outs[k][3]) + float(add[k])
+	return [weak.size(), sqrt(float(dmax))]   # počet sloučených, největší vzdálenost (sloupce řídicí mřížky)
 
 ## E71: přičte průtok a vloží do haldy jen tehdy, když tam pásmo ještě nečeká (bez duplicit → méně kroků sestupu)
 static func _qpush(c: Dictionary, qb: Dictionary, down, g: int, d: float) -> void:
@@ -83,6 +130,8 @@ static func solve(c: Dictionary, entries: PackedInt32Array, q: float, ex: Dictio
 	var harm := String(c.get("prumer70", "pomer")) == "harmonicky"
 	var kap := bool(c.get("kap71", true)) and not trace     # E71 K: kapacita průtoku dolů
 	var prus := bool(c.get("prus71", true)) and not trace   # E71 P: průsak protékané vody
+	var slu := prune and bool(c.get("slu72", true))         # E72: drobné větve kapacity / průsaku a výstupy < p67_prune_min slučovat
+	c._slu72 = pmin if slu and bool(c.get("slu72p", true)) else 0.0   # E72: průsak protékané vody taky (p72_prusak)
 	if kap: outs["_z71"] = true
 	c._k71 = {"on": kap, "harm": harm, "sc": 1000.0 * float(c.get("cas71", 144.0)) * float(c.A), "capu": {}, "lku": {}, "wl": 0.0, "t": t, "prus": prus}
 	var guard := 0
@@ -110,6 +159,7 @@ static func solve(c: Dictionary, entries: PackedInt32Array, q: float, ex: Dictio
 		var bl := _below(c, b)
 		if kap and bl >= 0:   # E71 K: dolů nejvýš zbývající kapacita rozhraní, zbytek dál jako dosud (výstup / do stran / past)
 			var dn := minf(f, _caprem(c, b, bl))
+			if slu: dn = _merge2(dn, f - dn, pmin)   # E72: menší z větví (dolů / dál) < práh → do větší
 			if dn > 0.0:
 				c._k71.capu[b] = float(c._k71.capu.get(b, 0.0)) + dn
 				_qpush(c, qb, down, bl, dn)
@@ -162,11 +212,14 @@ static func solve(c: Dictionary, entries: PackedInt32Array, q: float, ex: Dictio
 		if kap: defer.append([b, f]); deflo = lo; continue
 		_pit_fill(c, pits, pit_of, b, f, qb, down, outs, ex)
 	outs.erase("_z71")
+	var slo: Array = _merge_outs(c, outs, pmin) if slu else [0, 0.0]
+	c.erase("_slu72")
 	var r := _result(c, entries, q, trace, wet, pits, outs, t0, guard >= gmax)
 	var wq := PackedFloat64Array()
 	for b in r.wet67: wq.append(float(qtot.get(b, 0.0)) * (0.0 if trace else 1.0))
 	r.wetq67 = wq
 	r.leak67w = float(c._k71.wl)
+	r.slouceno72 = slo[0]; r.slouceno72_d = slo[1]
 	c.erase("_k71")
 	return r
 
@@ -248,7 +301,7 @@ static func _pit_dist(c: Dictionary, p: Dictionary, qb: Dictionary, down, outs: 
 		var used := 0.0
 		for k in range(i, j):
 			var e: Array = lk[k]
-			if p.inp.has(int(e[0])): continue
+			if p.inp.has(int(e[0])): used += float(e[3]); continue   # E72 oprava: už odeslaný průsak do pásma, které pak padlo do pasti, se nevrací
 			var tg := float(e[1]) * take / dem if dem > 0.0 else 0.0
 			var d := tg - float(e[3])
 			if d > 1e-15:
