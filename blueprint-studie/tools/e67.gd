@@ -87,6 +87,7 @@ func _sum(c: Dictionary, res: Array, label: String, ms: float) -> Dictionary:
 	var wet := {}; var pitb := {}; var pits := []; var outs := {"okraj": 0, "povrch": 0}; var oq := {"okraj": 0.0, "povrch": 0.0}
 	var vol := 0.0; var lv := []
 	var oql := []   # E70: výstupy s průtokem (otisk rozdělení, nejen součtů)
+	var slo := 0; var sld := 0.0   # E72: sloučené drobné výstupy, největší vzdálenost
 	for r in res:
 		vol += float(r.volume_m3)
 		if r.has("pits67"):
@@ -94,6 +95,7 @@ func _sum(c: Dictionary, res: Array, label: String, ms: float) -> Dictionary:
 			for pt in r.pits67:
 				for b in pt.bands: pitb[b] = true
 				if pt.objem_m3 > 0.0: pits.append({"hladina": snappedf(pt.hladina, 0.01), "dno": snappedf(pt.dno, 0.01), "pasem": pt.pasem, "typ": pt.typ, "objem_m3": snappedf(pt.objem_m3, 0.1)})
+			slo += int(r.get("slouceno72", 0)); sld = maxf(sld, float(r.get("slouceno72_d", 0.0)))
 			for o in r.outs67:
 				outs[o[1]] += 1; oq[o[1]] += float(o[3]); oql.append([int(o[2]), String(o[1]), float(o[3]), snappedf(float(o[0]), 1e-4)])
 		else:
@@ -106,7 +108,7 @@ func _sum(c: Dictionary, res: Array, label: String, ms: float) -> Dictionary:
 	oql.sort()
 	var hq := HashingContext.new(); hq.start(HashingContext.HASH_SHA256); hq.update(JSON.stringify(oql.map(func(e): return [e[0], e[1], snappedf(e[2], 1e-9)])).to_utf8_buffer())
 	return {"varianta": label, "volani": res.size(), "mokra_pasma": wet.size(), "pasma_pod_hladinou": pitb.size(), "pasti_s_vodou": pits.size(),
-		"pasti": pits.slice(0, 12), "hladiny_stare": lv, "vystupy": outs, "vystupy_q_lps": oq, "objem_m3": snappedf(vol, 0.1), "ms": snappedf(ms, 0.1), "vystupy_otisk": hq.finish().hex_encode().substr(0, 16), "vystupy_q": oql}
+		"pasti": pits.slice(0, 12), "hladiny_stare": lv, "vystupy": outs, "vystupy_q_lps": oq, "objem_m3": snappedf(vol, 0.1), "ms": snappedf(ms, 0.1), "vystupy_otisk": hq.finish().hex_encode().substr(0, 16), "vystupy_q": oql, "slouceno72": slo, "slouceno72_d": sld}
 
 func _run(label: String, extra: Dictionary) -> Array:
 	var c := _ctx(extra)
