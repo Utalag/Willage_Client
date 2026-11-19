@@ -11,7 +11,7 @@ static var LADIT := false   # E68: výpis kol (ladění)
 ## plný výpočet jako tok.route, smyčka povrch ↔ podzemí nejvýš `kola` kol, konec při změně ≤ tol (l/s)
 ## cyklus = true: když se stav odtoků zopakuje (smyčka přepíná, např. pramen mezi dvěma tůněmi), skončí se v členu cyklu
 ## s nejmenším otiskem → stejný výsledek z plného i lokálního přepočtu bez ohledu na sudost počtu kol
-static func full(st: Dictionary, kola := 4, tol := 0.0, cyklus := false) -> Dictionary:
+static func full(st: Dictionary, kola := 4, tol := 0.0, cyklus := false, acc := false) -> Dictionary:
 	var t0 := Time.get_ticks_usec()
 	var n: int = st.W * st.H
 	var inside := PackedByteArray(); inside.resize(n); inside.fill(1)
@@ -25,6 +25,7 @@ static func full(st: Dictionary, kola := 4, tol := 0.0, cyklus := false) -> Dict
 	st.order = order
 	var kol := 0; var zm := 0.0; var ust := false
 	var cs := {"seen": {}, "list": []}
+	var ah := {}
 	for it in kola:
 		var ox := {}
 		for i in st.get("_xn", {}): ox[i] = [st.extra[i], st.src2[i]]
@@ -42,17 +43,20 @@ static func full(st: Dictionary, kola := 4, tol := 0.0, cyklus := false) -> Dict
 		for k in range(order.size() - 1, -1, -1): T._cell(st, order[k])
 		if tol > 0.0 and zm <= tol: ust = true; break
 		if cyklus and T60.cyc_step(st, cs): break
+		if acc and not T60.acc_step(st, ah).is_empty():   # E73: skok smyčky → povrch znovu
+			for k in range(order.size() - 1, -1, -1): T._cell(st, order[k])
 	T.pond_mask(st)
 	var cy := int(cs.get("perioda", 0))
-	st.kolo68 = {"kola": kol, "zmena": zm, "ustaleno": ust, "cyklus": cy}
-	return {"ms": (Time.get_ticks_usec() - t0) / 1000.0, "cells": order.size(), "kola": kol, "zmena": zm, "ustaleno": ust, "cyklus": cy}
+	var sk := int(ah.get("skoky", 0))
+	st.kolo68 = {"kola": kol, "zmena": zm, "ustaleno": ust, "cyklus": cy, "skoky": sk}
+	return {"ms": (Time.get_ticks_usec() - t0) / 1000.0, "cells": order.size(), "kola": kol, "zmena": zm, "ustaleno": ust, "cyklus": cy, "skoky": sk}
 
 ## lokální přepočet (tok60.update) se stejným počtem kol a tolerancí
-static func update(st: Dictionary, ch: PackedInt32Array, hv: PackedFloat64Array, src_new: PackedFloat64Array, margin: int, kola := 4, tol := 0.0, cyklus := false) -> Dictionary:
-	var k0 := T60.KOLA; var t0 := T60.TOL; var c0 := T60.CYKLUS
-	T60.KOLA = kola; T60.TOL = tol; T60.CYKLUS = cyklus
+static func update(st: Dictionary, ch: PackedInt32Array, hv: PackedFloat64Array, src_new: PackedFloat64Array, margin: int, kola := 4, tol := 0.0, cyklus := false, acc := false) -> Dictionary:
+	var k0 := T60.KOLA; var t0 := T60.TOL; var c0 := T60.CYKLUS; var a0 := T60.ACC
+	T60.KOLA = kola; T60.TOL = tol; T60.CYKLUS = cyklus; T60.ACC = acc
 	var r := T60.update(st, ch, hv, src_new, margin)
-	T60.KOLA = k0; T60.TOL = t0; T60.CYKLUS = c0
+	T60.KOLA = k0; T60.TOL = t0; T60.CYKLUS = c0; T60.ACC = a0
 	r.merge(T60.KOLO, true)
 	st.kolo68 = T60.KOLO.duplicate()
 	return r

@@ -8,6 +8,43 @@ static var TOL := 0.0     # E68: konec smyčky, když se extra / src2 změní ne
 static var KOLO := {}     # E68: poslední update: {"kola", "zmena", "ustaleno", "cyklus"}
 static var CYKLUS := false   # E68: smyčka se opakuje (stejný stav odtoků jako v dřívějším kole) → skončit v kanonickém členu cyklu
 
+static var ACC := false      # E73 p73_zrychleni: skok smyčky podle posledních dvou přírůstků výtoků pramenů (src2)
+
+## E73: zrychlení smyčky povrch ↔ podzemí. x = src2 na nenulových výtocích po kole; d1 = x_k − x_{k−1}, d2 = x_{k−1} − x_{k−2}.
+## d1 = r · d2 na všech buňkách (stejné buňky): r < 1 → geometrická řada, skok na limitu x + d1 · r / (1 − r); r ≈ 1
+## (lineární růst do kapacity) → skok x + d1 · J (J = 2, 4, 8 … do 1024). Vrací buňky, kde se src2 změnilo (pak se povrch
+## dopočítá); další kolo spočítá skutečný stav ze skoku, konec až při bitové shodě (pevný bod).
+static func acc_step(st: Dictionary, h: Dictionary) -> PackedInt32Array:
+	var out := PackedInt32Array()
+	var ks: Array = []
+	for i in st.get("_xn", {}):
+		if st.src2[i] != 0.0: ks.append(i)
+	ks.sort()
+	var x := PackedFloat64Array()
+	for i in ks: x.append(st.src2[i])
+	if h.has("x2") and h.k1 == ks and h.k2 == ks and not ks.is_empty():
+		var x1: PackedFloat64Array = h.x1; var x2: PackedFloat64Array = h.x2
+		var n2 := 0.0; var dd := 0.0; var n1 := 0.0
+		for k in ks.size():
+			var d1 := x[k] - x1[k]; var d2 := x1[k] - x2[k]
+			n2 += d2 * d2; dd += d1 * d2; n1 += d1 * d1
+		if n2 > 1e-24 and n1 > 1e-24:
+			var r := dd / n2; var res := 0.0
+			for k in ks.size():
+				var e := (x[k] - x1[k]) - r * (x1[k] - x2[k]); res += e * e
+			if r > 0.0 and res <= 1e-12 * n1:
+				var f := 0.0
+				if r < 1.0 - 1e-6: f = r / (1.0 - r)
+				else: f = float(h.get("J", 2.0)); h.J = minf(f * 2.0, 1024.0)
+				for k in ks.size():
+					var i: int = ks[k]
+					st.src2[i] = maxf(x[k] + (x[k] - x1[k]) * f, 0.0); out.append(i)
+				h.erase("x1"); h.erase("x2"); h.skoky = int(h.get("skoky", 0)) + 1
+				return out
+	if h.has("x1"): h.x2 = h.x1; h.k2 = h.k1
+	h.x1 = x; h.k1 = ks
+	return out
+
 ## E68: otisk stavu odtoků tůní a výtoků z podzemí (extra / src2 na nenulových indexech)
 static func sig(st: Dictionary) -> String:
 	var ks: Array = st.get("_xn", {}).keys(); ks.sort()
@@ -256,6 +293,7 @@ static func update(st: Dictionary, ch: PackedInt32Array, hv: PackedFloat64Array,
 	# odtoky tůní: změněné přelivy přepočítat po proudu
 	var kol := 0; var zm := 0.0; var ust := false
 	var cs := {"seen": {}, "list": []}
+	var ah := {}
 	for it in KOLA:
 		var ox := {}
 		for i in st.get("_xn", {}): ox[i] = [st.extra[i], st.src2[i]]
@@ -277,7 +315,18 @@ static func update(st: Dictionary, ch: PackedInt32Array, hv: PackedFloat64Array,
 			if dlt > 1e-9 and st.to[i] >= 0: queued.erase(st.to[i]); T.RK._push(heap, -st.fill[st.to[i]], st.to[i])
 		if TOL > 0.0 and zm <= TOL: ust = true; break
 		if CYKLUS and cyc_step(st, cs): break
-	KOLO = {"kola": kol, "zmena": zm, "ustaleno": ust, "cyklus": int(cs.get("perioda", 0))}
+		if ACC:   # E73: skok smyčky → povrch po proudu od změněných výtoků
+			var jc := acc_step(st, ah)
+			if not jc.is_empty():
+				for i in jc: T.RK._push(heap, -st.fill[i], i)
+				queued = {}
+				while not heap.is_empty():
+					var e := T.RK._pop(heap); var i: int = e[1]
+					if queued.has(i): continue
+					queued[i] = true; touched[i] = true; dirty.append(i)
+					var dlt := T._cell(st, i)
+					if dlt > 1e-9 and st.to[i] >= 0: queued.erase(st.to[i]); T.RK._push(heap, -st.fill[st.to[i]], st.to[i])
+	KOLO = {"kola": kol, "zmena": zm, "ustaleno": ust, "cyklus": int(cs.get("perioda", 0)), "skoky": int(ah.get("skoky", 0))}
 	PR.odtoky = Time.get_ticks_usec()
 	_ponds_cached(st, dirty)   # pw a seznam tůní kolem posledních změn
 	PR.tune = Time.get_ticks_usec()
