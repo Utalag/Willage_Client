@@ -1,0 +1,24 @@
+Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+
+# E47b strže, ponory, vodopády (2026-11-19T09:30:52)
+voda před: déšť 2458 buněk, odteklo 265, v kalužích 5.68 m³, mokrých sloupců 44 (≥ 2 cm), tok v nejsilnějších 5 % sloupců 60 %, chyba bilance 0.00002, 400 tiků, 11.1 s
+koryta: 129 sloupců (6.3 %), K 3.069 | hloubka medián 2.00 m, p10 0.73, p90 4.00, max 4.00 m
+  měkké (k 1,2–1,3): 84 sloupců, medián 2.47 m, p90 4.00 m
+  sedimenty (k 1,0): 36 sloupců, medián 1.22 m, p90 2.23 m
+  tvrdé (k ≤ 0,7): 9 sloupců, medián 2.14 m, p90 4.00 m
+
+  z toho krasové ponory 0, ostatní = konec ztrácejícího se toku v propustné hornině
+ponory: 10 sloupců, pohlceno 112 z 2048 sloupců průtoku | hornina: Štěrk, hlinitopísčité sedimenty (= písek gen-v3) 10 | bloky: hora_vyzdvizena 2, hora_zvrasnena 2, louka 4, kopec 2
+vodopády (spád ≥ 1.5 m): 4, výška medián 1.76 m, max 1.78 m | bloky: sopka 3, kopec 1 | tůň max 0.89 m
+  citlivost: vodopad_m 1.0 → 5 vodopádů
+  citlivost: vodopad_m 2.0 → 0 vodopádů
+  citlivost: vodopad_m 3.0 → 0 vodopádů
+  citlivost: ponor_inf 0.00 → koryt 134 sloupců, ponorů 0 (kras 0), max průtok 131 sloupců
+  citlivost: ponor_inf 0.25 → koryt 129 sloupců, ponorů 10 (kras 0), max průtok 131 sloupců
+  citlivost: ponor_inf 0.50 → koryt 129 sloupců, ponorů 10 (kras 0), max průtok 131 sloupců
+  citlivost: ponor_inf 1.50 → koryt 129 sloupců, ponorů 12 (kras 0), max průtok 131 sloupců
+eroze strze: změna povrchu průměr 0.48 U, max odběr 10.48 U | šev povrchu 0.45 (max 5.20, uvnitř 1.16), zlom 0.99 (uvnitř 1.31) | švy vrstev 0.10 (uvnitř 1.04) | jiný materiál navrchu 16 %, odkrytá vrstva 7 % | odneseno minerálů 0 | strže 32 ms, převzorkování 343 ms
+voda po (strze, ponory): déšť 2458 buněk, odteklo 213, v kalužích 27.24 m³, mokrých sloupců 121 (≥ 2 cm), tok v nejsilnějších 5 % sloupců 61 %, chyba bilance 0.00002, 400 tiků, 12.6 s, pohltily ponory 52 buněk
+voda po (strze, bez ponorů): déšť 2458 buněk, odteklo 227, v kalužích 28.47 m³, mokrých sloupců 128 (≥ 2 cm), tok v nejsilnějších 5 % sloupců 61 %, chyba bilance 0.00002, 400 tiků, 12.9 s
+determinismus 2×: e8cbbc78ca88 / e8cbbc78ca88 → STEJNÉ
+celkem 42.3 s

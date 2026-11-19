@@ -1,0 +1,8 @@
+Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+
+A+B+C s64 u16: plné 4683 ms | výkop průměr 3423.3 ms, max 3987.2 ms (20 výkopů, zásah 19) | neshod 0 | navíc 15.0 MB, peak 289 MB | průsak 0.000 výtok 2.173 l/s (ref 0.000 / 2.173) | { "builds": 2, "floods": 44, "results": 0, "fallback": 0, "exact": 0, "skipped": 0, "rebuilds": 0, "deltas": 20, "gone": 18, "reach": 351, "splits": 17 } []
+E63 profil prelivu: { &"n": 44, "sestup": 69784.584, "pf": 1135.245, "leak": 360.183, "result": 34.556, &"cl": 118824, &"comp": 676 }
+WARNING: 7 ObjectDB instances were leaked at exit (run with `--verbose` for details).
+   at: cleanup (core/object/object.cpp:2536)
+ERROR: 1 resources still in use at exit (run with --verbose for details).
+   at: clear (core/io/resource.cpp:822)

@@ -1,4 +1,4 @@
-# E47c voda jen z pramenů, strže, ponory, vodopády, okraj ostrova, lokální přepočet, plnění tůní (2026-11-19T04:42:44)
+# E47c voda jen z pramenů, strže, ponory, vodopády, okraj ostrova, lokální přepočet, plnění tůní (2026-11-19T09:30:45)
 prameny: 7 (snih 3, kontakt 4), celkem 18.0 l/s; déšť jen vizuální (0 l/s)
   snih (9, 11) z 52 U, 4.0 l/s, hornina 2 m pod povrchem: Svor (granáty, slídy)
   snih (24, 43) z 50 U, 4.0 l/s, hornina 2 m pod povrchem: Subalpínské pásmo (skály, sutě)
@@ -11,8 +11,8 @@ tok: mokrých sloupců 83 (4.1 %), z toho zahloubené koryto 35 | hloubka strže
 ponory: 0 (kras 0), pohltily 0.26 l/s
 vodopády ve strži (spád ≥ 1.5 m): 8, výška medián 1.86 m, max 3.48 m, tůň pod nimi max 1.00 m
 okraj ostrova: 7 vodopádů přes okraj do mlhy, 15.61 l/s (87 % vody z pramenů), dál se nesimuluje
-eroze: změna povrchu průměr 0.16 U, max odběr 10.74 U | šev povrchu 0.05 (uvnitř 0.92) | švy vrstev 0.09 (uvnitř 1.02) | odneseno minerálů 2 | strže 316 ms, převzorkování 348 ms
-uložené koryto po erozi: plný výpočet 290.4 ms
+eroze: změna povrchu průměr 0.16 U, max odběr 10.74 U | šev povrchu 0.05 (uvnitř 0.92) | švy vrstev 0.09 (uvnitř 1.02) | odneseno minerálů 2 | strže 288 ms, převzorkování 342 ms
+uložené koryto po erozi: plný výpočet 287.4 ms
 tůně: 14 prohlubní, mokrých (s přítokem) 4; odtok prohlubně = Σ perm · 0.010 l/s na sloupec (Jan 19:48)
 podzemí (E47d, po propustné vrstvě): 1 těles, do hloubky bez tělesa 0.00 l/s
   těleso 18369 buněk (z 22–24), přítok 2.23 l/s, průsak 0.00 l/s, objem do výstupu 1.3 m³ → plné za 575 s (0.2 h), podzemní jezero 0 buněk dutin | výstup okraj z=24 sloupec (47, 37), 2.23 l/s | cesta po vrstvě 42 buněk
@@ -22,11 +22,11 @@ ustálené rozdělení (uloženo, dál se nepočítá): přes okraj po povrchu 1
   tůň 1 sloupců, přítok 3.99 l/s, odtok do podzemí 0.00 l/s, hloubka 0.83 m, objem 0.2 m³ → plná za 52 s (0.0 h) | ustáleno: podzemí 0.00, přeliv 3.98 l/s | 2 událostí po 0,5 m: 0.5 m @ 31 s, 0.8 m @ 52 s
   tůň 16 sloupců, přítok 1.50 l/s, odtok do podzemí 0.03 l/s, hloubka 1.04 m, objem 2.9 m³ → plná za 1965 s (0.5 h) | ustáleno: podzemí 0.03, přeliv 1.47 l/s | 3 událostí po 0,5 m: 0.5 m @ 510 s, 1.0 m @ 1869 s, 1.0 m @ 1965 s
 lokální přepočet (okraj okna 6 sloupců):
-  kopeček 2 m daleko od vody (8 sloupců od nejbližší vody): změněno 9 sloupců → SUCHO, nic se nesimuluje, okno 0, dotčeno 0 z 2304 sloupců (rozšíření okna 0×), 5.2 ms (plný přepočet 319.1 ms) | aktivní prameny 7/7 | přes okraj vč. podzemí 17.82 l/s (plný 17.82) | vs plný: max rozdíl průtoku 0.000 l/s, shoda mokrých sloupců 100 %
-  hráz 2 m (7 sloupců napříč) přes potok 3.98 l/s v (32, 10): změněno 7 sloupců → přepočet, okno 247, dotčeno 280 z 2304 sloupců (rozšíření okna 0×), 252.1 ms (plný přepočet 298.7 ms) | aktivní prameny 7/7 | přes okraj vč. podzemí 17.87 l/s (plný 17.87) | vs plný: max rozdíl průtoku 0.000 l/s, shoda mokrých sloupců 100 %
+  kopeček 2 m daleko od vody (8 sloupců od nejbližší vody): změněno 9 sloupců → SUCHO, nic se nesimuluje, okno 0, dotčeno 0 z 2304 sloupců (rozšíření okna 0×), 5.5 ms (plný přepočet 299.2 ms) | aktivní prameny 7/7 | přes okraj vč. podzemí 17.82 l/s (plný 17.82) | vs plný: max rozdíl průtoku 0.000 l/s, shoda mokrých sloupců 100 %
+  hráz 2 m (7 sloupců napříč) přes potok 3.98 l/s v (32, 10): změněno 7 sloupců → přepočet, okno 247, dotčeno 280 z 2304 sloupců (rozšíření okna 0×), 276.4 ms (plný přepočet 380.5 ms) | aktivní prameny 7/7 | přes okraj vč. podzemí 17.87 l/s (plný 17.87) | vs plný: max rozdíl průtoku 0.000 l/s, shoda mokrých sloupců 100 %
     mokrých tůní před hrází 4, po 4
     za hrází tůň 641 sloupců, přítok 4.00 l/s, 4.65 m hluboká, 162.3 m³ → přeteče za 89385 s; události: 0.5 m @ 1101 s, 1.0 m @ 3441 s, 1.5 m @ 7089 s, 2.0 m @ 12251 s, 2.5 m @ 19065 s, 3.0 m @ 27462 s, 3.5 m @ 37993 s, 4.0 m @ 51621 s, 4.5 m @ 75917 s, 4.7 m @ 89385 s
-  zasypaný pramen snih (9, 11) o 1,5 m: změněno 1 sloupců → přepočet, okno 169, dotčeno 203 z 2304 sloupců (rozšíření okna 0×), 7.5 ms (plný přepočet 299.1 ms) | aktivní prameny 6/7 | přes okraj vč. podzemí 13.93 l/s (plný 13.93) | vs plný: max rozdíl průtoku 0.000 l/s, shoda mokrých sloupců 100 %
-  pramen znovu odkopaný: změněno 1 sloupců → přepočet, okno 169, dotčeno 203 z 2304 sloupců (rozšíření okna 0×), 8.3 ms (plný přepočet 285.9 ms) | aktivní prameny 7/7 | přes okraj vč. podzemí 17.87 l/s (plný 17.87) | vs plný: max rozdíl průtoku 0.000 l/s, shoda mokrých sloupců 100 %
+  zasypaný pramen snih (9, 11) o 1,5 m: změněno 1 sloupců → přepočet, okno 169, dotčeno 203 z 2304 sloupců (rozšíření okna 0×), 9.6 ms (plný přepočet 300.7 ms) | aktivní prameny 6/7 | přes okraj vč. podzemí 13.93 l/s (plný 13.93) | vs plný: max rozdíl průtoku 0.000 l/s, shoda mokrých sloupců 100 %
+  pramen znovu odkopaný: změněno 1 sloupců → přepočet, okno 169, dotčeno 203 z 2304 sloupců (rozšíření okna 0×), 7.7 ms (plný přepočet 278.6 ms) | aktivní prameny 7/7 | přes okraj vč. podzemí 17.87 l/s (plný 17.87) | vs plný: max rozdíl průtoku 0.000 l/s, shoda mokrých sloupců 100 %
 determinismus 2×: 5ae2b366e84a / 5ae2b366e84a → STEJNÉ
 celkem 6.9 s

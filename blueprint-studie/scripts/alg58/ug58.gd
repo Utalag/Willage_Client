@@ -35,27 +35,34 @@ static func _arr(c: Dictionary) -> void:
 	var v := PackedFloat64Array(); v.resize(n); c._capv = v
 	var d := PackedInt32Array(); d.resize(n); c._dng = d
 
+static var PROF := {}   # E63: časy fází prelivu (jen měření)
 static func preliv_A(c: Dictionary, entries: PackedInt32Array, q: float, ex: Dictionary, g: int, dz: float) -> Dictionary:
+	var _t0 := Time.get_ticks_usec()
 	_arr(c)
 	var lab: PackedInt32Array = c.lab; var capg: PackedInt32Array = c._capg; var capv: PackedFloat64Array = c._capv; var dng: PackedInt32Array = c._dng
 	var lo: PackedFloat64Array = c.lo; var hi: PackedFloat64Array = c.hi; var bcol: PackedInt32Array = c.bcol
-	var qu := PackedInt32Array(); var cl := PackedInt32Array()
-	for e in entries:
-		if e < 0: continue
-		if capg[e] != g: cl.append(e)
-		capv[e] = minf(hi[e], float(c.h[bcol[e]])); capg[e] = g; qu.append(e); lab[e] = g
-	var k := 0
-	while k < qu.size():
-		var b := qu[k]; k += 1
-		var cb := capv[b]
-		for nb in F._nbrs(c, b):
-			var b2: int = nb[0]; var olo: float = nb[1]; var ohi: float = nb[2]
-			var below: bool = bcol[b2] == bcol[b] and hi[b2] <= lo[b] + E
-			if not below and cb <= olo + E: continue
-			var nc := minf(cb, hi[b2]) if below else minf(cb, ohi)
-			if capg[b2] != g or nc > capv[b2] + E:
-				if capg[b2] != g: cl.append(b2)
-				capv[b2] = nc; capg[b2] = g; qu.append(b2); lab[b2] = g
+	var cl := PackedInt32Array()
+	if bool(c.get("_useE", false)) and bool(c.get("_useI", false)) and _p1key >= 0: cl = _p1_inc(c, entries, _p1key, g).duplicate()
+	elif bool(c.get("_useE", false)): cl = _p1_fast(c, entries, g)
+	else:
+		var qu := PackedInt32Array()
+		for e in entries:
+			if e < 0: continue
+			if capg[e] != g: cl.append(e)
+			capv[e] = minf(hi[e], float(c.h[bcol[e]])); capg[e] = g; qu.append(e); lab[e] = g
+		var k := 0
+		while k < qu.size():
+			var b := qu[k]; k += 1
+			var cb := capv[b]
+			for nb in F._nbrs(c, b):
+				var b2: int = nb[0]; var olo: float = nb[1]; var ohi: float = nb[2]
+				var below: bool = bcol[b2] == bcol[b] and hi[b2] <= lo[b] + E
+				if not below and cb <= olo + E: continue
+				var nc := minf(cb, hi[b2]) if below else minf(cb, ohi)
+				if capg[b2] != g or nc > capv[b2] + E:
+					if capg[b2] != g: cl.append(b2)
+					capv[b2] = nc; capg[b2] = g; qu.append(b2); lab[b2] = g
+	var _t1 := Time.get_ticks_usec()
 	var pool := -1
 	for b in cl:
 		if pool < 0 or lo[b] < lo[pool] - E or (absf(lo[b] - lo[pool]) <= E and b < pool): pool = b
@@ -80,12 +87,159 @@ static func preliv_A(c: Dictionary, entries: PackedInt32Array, q: float, ex: Dic
 			bq.push(maxf(key, float(o[0])), -outs.size())
 		for nb in F._nbrs(c, id):
 			if dng[int(nb[0])] != g: bq.push(maxf(key, float(nb[1])), int(nb[0]))
+	var _t2 := Time.get_ticks_usec()
 	var closed := best.is_empty()
 	var leak := 0.0
 	for b in comp: leak += F._leak(c, b, L)
+	var _t3 := Time.get_ticks_usec()
 	var r := F._result(c, comp, L, best, q, leak, entries, closed)
+	var _t4 := Time.get_ticks_usec()
+	PROF.n = int(PROF.get("n", 0)) + 1
+	for kv in [["sestup", _t1 - _t0], ["pf", _t2 - _t1], ["leak", _t3 - _t2], ["result", _t4 - _t3]]: PROF[kv[0]] = float(PROF.get(kv[0], 0.0)) + kv[1] / 1000.0
+	PROF.cl = cl.size(); PROF.comp = comp.size()
 	cl.append_array(comp); r._vis = cl
 	return r
+
+## ---------------- E63: kapilární sestup prelivu (fáze 1) ----------------
+## E: stejný algoritmus jako v preliv_A (stejné pořadí fronty), jen bez volání F._nbrs a slovníkových přístupů.
+static var _p1key := -1   # index volání (nastaví _one), klíč stavu pro I
+static func _p1_fast(c: Dictionary, entries: PackedInt32Array, g: int) -> PackedInt32Array:
+	var lab: PackedInt32Array = c.lab; var capg: PackedInt32Array = c._capg; var capv: PackedFloat64Array = c._capv
+	var lo: PackedFloat64Array = c.lo; var hi: PackedFloat64Array = c.hi; var bcol: PackedInt32Array = c.bcol
+	var body: PackedByteArray = c.body; var ns: PackedInt32Array = c.ns; var nb: PackedInt32Array = c.nb; var hh: PackedFloat64Array = c.h
+	var qu := PackedInt32Array(); var cl := PackedInt32Array()
+	for e in entries:
+		if e < 0: continue
+		if capg[e] != g: cl.append(e)
+		capv[e] = minf(hi[e], hh[bcol[e]]); capg[e] = g; qu.append(e); lab[e] = g
+	var k := 0
+	while k < qu.size():
+		var b := qu[k]; k += 1
+		var cb := capv[b]; var lb := lo[b]; var hb := hi[b]; var colb := bcol[b]
+		for j in range(ns[b], ns[b + 1]):
+			var b2 := nb[j]
+			if body[b2] == 0: continue
+			var lo2 := lo[b2]; var hi2 := hi[b2]
+			var olo := maxf(lb, lo2); var ohi := minf(hb, hi2)
+			var same := bcol[b2] == colb
+			if same:
+				if ohi < olo - E: continue
+			elif ohi <= olo + E: continue
+			var below := same and hi2 <= lb + E
+			if not below and cb <= olo + E: continue
+			var nc := minf(cb, hi2) if below else minf(cb, ohi)
+			if capg[b2] != g or nc > capv[b2] + E:
+				if capg[b2] != g: cl.append(b2)
+				capv[b2] = nc; capg[b2] = g; qu.append(b2); lab[b2] = g
+	return cl
+
+## hrana u → b sestupu (stejná pravidla jako F._nbrs + preliv_A); vrací nc nebo -INF, když hrana neplatí
+static func _p1_edge(cb: float, lu: float, hu: float, cu: int, lb: float, hb: float, cbb: int) -> float:
+	var olo := maxf(lu, lb); var ohi := minf(hu, hb)
+	var same := cbb == cu
+	if same:
+		if ohi < olo - E: return -INF
+	elif ohi <= olo + E: return -INF
+	var below := same and hb <= lu + E
+	if not below and cb <= olo + E: return -INF
+	return minf(cb, hb) if below else minf(cb, ohi)
+
+## I: lokální oprava sestupu. Stav na volání: capv, dosaženo (rch), rodič (par, strom posledních zlepšení), cl.
+## Po výkopech ve sloupcích D: X = pásma v D + vstupy v D; S = X + potomci X ve stromu rodičů. Mimo S se hodnoty
+## nemění (cesta k nim nevede přes změněná data). S se vynuluje, osadí z dosažených sousedů mimo S a ze vstupů
+## a dál běží stejný sestup (může zlepšit i pásma mimo S).
+static func _p1_inc(c: Dictionary, entries: PackedInt32Array, key: int, g: int) -> PackedInt32Array:
+	if not c.has("_p1st"): c._p1st = {}
+	var sts: Dictionary = c._p1st
+	var lab: PackedInt32Array = c.lab
+	var lo: PackedFloat64Array = c.lo; var hi: PackedFloat64Array = c.hi; var bcol: PackedInt32Array = c.bcol
+	var body: PackedByteArray = c.body; var ns: PackedInt32Array = c.ns; var nb: PackedInt32Array = c.nb; var hh: PackedFloat64Array = c.h
+	var cs: PackedInt32Array = c.cs
+	var n := lo.size()
+	var st = sts.get(key)
+	var capv: PackedFloat64Array; var rch: PackedByteArray; var par: PackedInt32Array
+	var qu := PackedInt32Array(); var add := PackedInt32Array()
+	var inS := PackedByteArray()
+	var kept := PackedInt32Array()
+	if st == null or st.ents != entries:
+		capv = PackedFloat64Array(); capv.resize(n); rch = PackedByteArray(); rch.resize(n); rch.fill(0)
+		par = PackedInt32Array(); par.resize(n); par.fill(-1)
+		for e in entries:
+			if e < 0: continue
+			if rch[e] == 0: add.append(e)
+			capv[e] = minf(hi[e], hh[bcol[e]]); rch[e] = 1; par[e] = -1; qu.append(e)
+		PROF.p1_full = int(PROF.get("p1_full", 0)) + 1
+	else:
+		capv = st.capv; rch = st.rch; par = st.par
+		var dirty: Dictionary = st.dirty
+		if dirty.is_empty():
+			PROF.p1_same = int(PROF.get("p1_same", 0)) + 1
+			return st.cl
+		var X := PackedInt32Array()
+		for col in dirty:
+			for b in range(cs[col], cs[col + 1]): X.append(b)
+		for e in entries:
+			if e >= 0 and dirty.has(bcol[e]): X.append(e)
+		# potomci ve stromu rodičů (spojové seznamy dětí)
+		var head := PackedInt32Array(); head.resize(n); head.fill(-1)
+		var nxt := PackedInt32Array(); nxt.resize(n)
+		var ocl: PackedInt32Array = st.cl
+		for b in ocl:
+			var pb := par[b]
+			if pb >= 0: nxt[b] = head[pb]; head[pb] = b
+		inS.resize(n); inS.fill(0)
+		var S := PackedInt32Array()
+		for b in X:
+			if inS[b] == 0: inS[b] = 1; S.append(b)
+		var k0 := 0
+		while k0 < S.size():
+			var b := S[k0]; k0 += 1
+			if rch[b] == 0: continue
+			var ch := head[b]
+			while ch >= 0:
+				if inS[ch] == 0: inS[ch] = 1; S.append(ch)
+				ch = nxt[ch]
+		for b in S: rch[b] = 0; par[b] = -1
+		for b in ocl: if inS[b] == 0: kept.append(b)
+		# vstupy v S
+		for e in entries:
+			if e < 0 or inS[e] == 0: continue
+			if rch[e] == 0: add.append(e)
+			capv[e] = minf(hi[e], hh[bcol[e]]); rch[e] = 1; par[e] = -1
+		# osazení z dosažených sousedů mimo S (hrana u → b musí být v CSR u)
+		for b in S:
+			if body[b] == 0: continue
+			var lb := lo[b]; var hb := hi[b]; var cbb := bcol[b]
+			for j in range(ns[b], ns[b + 1]):
+				var u := nb[j]
+				if inS[u] == 1 or rch[u] == 0: continue
+				var ok := false
+				for j2 in range(ns[u], ns[u + 1]):
+					if nb[j2] == b: ok = true; break
+				if not ok: continue
+				var nc := _p1_edge(capv[u], lo[u], hi[u], bcol[u], lb, hb, cbb)
+				if nc == -INF: continue
+				if rch[b] == 0 or nc > capv[b] + E:
+					if rch[b] == 0: add.append(b)
+					capv[b] = nc; rch[b] = 1; par[b] = u
+		for b in S: if rch[b] == 1: qu.append(b)
+		PROF.p1_rep = int(PROF.get("p1_rep", 0)) + 1; PROF.p1_S = int(PROF.get("p1_S", 0)) + S.size()
+	var k := 0
+	while k < qu.size():
+		var b := qu[k]; k += 1
+		var cb := capv[b]; var lb := lo[b]; var hb := hi[b]; var colb := bcol[b]
+		for j in range(ns[b], ns[b + 1]):
+			var b2 := nb[j]
+			if body[b2] == 0: continue
+			var nc := _p1_edge(cb, lb, hb, colb, lo[b2], hi[b2], bcol[b2])
+			if nc == -INF: continue
+			if rch[b2] == 0 or nc > capv[b2] + E:
+				if rch[b2] == 0: add.append(b2)
+				capv[b2] = nc; rch[b2] = 1; par[b2] = b; qu.append(b2)
+	for b in add: lab[b] = g
+	kept.append_array(add)
+	sts[key] = {"capv": capv, "rch": rch, "par": par, "cl": kept, "ents": entries, "dirty": {}}
+	return kept
 
 ## auto jako F._solve_auto (A volitelně), vrací i tělo nadrz (_body) a navštívená pásma prelivu (_vis) pro stopu C
 static func auto_X(c: Dictionary, entries: PackedInt32Array, q: float, ex: Dictionary, useA: bool, dz: float) -> Dictionary:
@@ -517,6 +671,7 @@ static func solve_all(c: Dictionary, calls: Array, v: String, dz: float, stats: 
 
 static func _one(c: Dictionary, calls: Array, ci: int, useA: bool, useB: bool, useC: bool, dz: float, stats: Dictionary) -> Dictionary:
 	var call: Dictionary = calls[ci]
+	_p1key = ci
 	if useB:
 		var r = node_solve(c, call, ci, useA, dz, stats)
 		if r != null: return r
@@ -541,6 +696,8 @@ static func edit(c: Dictionary, calls: Array, prev: Array, s: int, hv: float, v:
 	var old_h := float(c.h[cc])
 	c._useD = has_flag(v, "D")
 	var hit := F.touched(c, {}, PackedInt32Array([s]), PackedFloat64Array([hv]))
+	if c.has("_p1st"):   # E63 I: sloupec cc je pro všechny uložené sestupy špinavý
+		for kst in c._p1st: c._p1st[kst].dirty[cc] = true
 	if not useB and not useC:   # base / A: jako tok.gd – zásah → všechna volání znovu, jinak nic
 		if not hit: return prev
 		var o := []

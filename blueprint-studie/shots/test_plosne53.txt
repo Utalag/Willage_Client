@@ -1,5 +1,5 @@
-1) Jan 22:23 přítok 4: šířky x=5,15,24 | 30,45 = [8, 8, 8, 16, 16] (čekáno 8 | 16), ustáleno za 67 průchodů, odtok okrajem 4.000, 490 ms OK
+1) Jan 22:23 přítok 4: šířky x=5,15,24 | 30,45 = [8, 8, 8, 16, 16] (čekáno 8 | 16), ustáleno za 67 průchodů, odtok okrajem 4.000, 425 ms OK
 2) koryto 12 buněk (potřeba 16), α=0.5: šířka v korytě x=40 11, mokré buňky za břehy 151, hladina max +1 buňky, ustáleno za 750 průchodů, odtok 4.000 OK
 2) koryto 12 buněk (potřeba 16), α=0.0: šířka v korytě x=40 10, mokré buňky za břehy 151, hladina max +1 buňky, ustáleno za 502 průchodů, odtok 4.000 OK
-3) zpětná vazba (šířky x=5,20 hlína | x=40 žula): ep0 šířky [8, 8, 16] hloubka 0 q_max(x=20) 0.50 (67 průch.) vyhloubeno 264 ; ep1 šířky [6, 6, 16] hloubka 1 q_max(x=20) 0.75 (62 průch.) vyhloubeno 132 ; ep2 šířky [7, 7, 14] hloubka 2 q_max(x=20) 0.50 (3000 průch. NEUST.) vyhloubeno 67 → OK, celkem 3129 průchodů 20184 ms
+3) zpětná vazba (šířky x=5,20 hlína | x=40 žula): ep0 šířky [8, 8, 16] hloubka 0 q_max(x=20) 0.50 (67 průch.) vyhloubeno 264 ; ep1 šířky [6, 6, 16] hloubka 1 q_max(x=20) 0.75 (62 průch.) vyhloubeno 132 ; ep2 šířky [7, 7, 14] hloubka 2 q_max(x=20) 0.50 (3000 průch. NEUST.) vyhloubeno 67 → OK, celkem 3129 průchodů 19604 ms
 výsledek: VŠE OK

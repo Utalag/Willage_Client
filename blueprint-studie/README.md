@@ -89,6 +89,7 @@ Všechny parametry jsou v `scripts/bp/params.gd`. Hlavní jdou ladit i v Inspect
 | `scripts/alg58/bq58.gd`, `ug58.gd`, `povrch58.gd`, `rec58.gd`, `tools/alg58_rec.gd`, `alg58_ug.gd`, `alg58_tok.gd`, `alg58.sh`, `shots_alg58.py` (+ `voda/tok.gd` `FLOOD_DZ`, výchozí 0) | E58 A kbelíková fronta (stejné pořadí jako halda), B graf těles (souhrny + kandidáti výstupu), C stopa a delta po výkopu; povrch A / B (graf pánví) / C |
 | `tools/materialy59.py` → `../sdilene/materialy_voda_navrh.json` | E59 návrh: K, n, Sy, ret, perm (log škála), ero_v / sed_v, čas průsaku 1 m v herních dnech a reálných minutách; jen návrh |
 | `scripts/alg60/tok60.gd`, `tok60p.gd`, `tools/alg60_tok.gd`, `alg60_b.gd`, `alg60.sh`, `shots_alg60.py` | E60 optimalizovaná kopie `tok.update` (stejný výsledek, 2,8–4,1× rychleji), profil fází, B vs PF bez ε a B + ε dopočet |
+| `scripts/alg58/ug58.gd` příznaky E, I (`_p1_fast`, `_p1_inc`), `tools/shots_e63.py`, `shots/e63/` | E63 sestup prelivu bez volání (E, 3,6×) a lokální oprava sestupu po výkopu přes strom rodičů (I): výkop 90–111 ms místo 2,3–2,5 s, 0 neshod |
 | `scripts/alg58/ug58.gd` příznak D, `tools/e62_dno.gd` | E62 závislost prelivu na pásmech (přesné, jen 1,3×); dno a okolí hlavního tělesa |
 | `tools/materialy61.py`, `shots/e61/` | E61 převzetí E59 do `sdilene/materialy_voda.json` v4 a `horniny_voda.json` v2; zálohy, staré a nové logy testů |
 | `tools/test_svet8.gd`, `tools/gif_svet8.py` | E49 měření a GIF po fázích |

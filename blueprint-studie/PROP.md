@@ -264,6 +264,90 @@ Výchozí: 800 kapek na blok, `ero_cap` 1,0, `ero_erode` 0,1, `ero_deposit_rate`
   v detailu jen vyhloubené koryto, vodu v GIFu kreslím z hrubé fáze (voda_sim na 128 × 128 × 64 jsem nespouštěl). Biomy se
   zatím promítnou jen do podmnožiny hornin, ne do vegetace. Počet minerálů je podle typu, ne podle biomu.
 
+## E63 výsledky (2026-11-19 09:40)
+- **Profil fází prelivu** (s64, A+B+C+D, 32 volání), součet za běh:
+
+  | fáze | ms celkem | podíl |
+  |---|---|---|
+  | kapilární sestup (fáze 1) | 51 993 | 98 % |
+  | priority-flood | 807 | 1,5 % |
+  | průsak | 297 | 0,6 % |
+  | souhrn | 25 | 0,05 % |
+
+  Sestup projde ~118 000 pásem, tůň má jen 676 pásem.
+- **Plán se změnil:** pokračování floodu od t* by ušetřilo nejvýš 1,5 %. **Nedělal jsem ho.** Místo toho:
+  - **E** = stejný sestup (stejné pořadí fronty), jen s lokálními packed poli a bez `F._nbrs`.
+  - **I** = lokální oprava sestupu přes strom rodičů:
+    - S = pásma ve vykopaných sloupcích (i ve sloupcích výkopů, kdy se volání přeskočilo) + vstupy v nich + jejich
+      potomci ve stromu.
+    - S se vynuluje, osadí ze sousedů mimo S (hrana musí být v CSR souseda) a pak běží stejný sestup.
+    - Průměrná velikost S: 282 pásem (s64), 522 (s16), 2 697 (s32).
+- **Výkop, průměr / max ms, 20 výkopů, 0 neshod všude:**
+
+  | varianta | s16 | s32 | s64 |
+  |---|---|---|---|
+  | base | 6191 / 6653 | 6204 / 6738 | 5802 / 6310 |
+  | A+B+C | 3503 / 4170 | 3460 / 3764 | 3423 / 3987 |
+  | +D (E62) | 2541 / 3588 | 2393 / 3480 | 2320 / 3346 |
+  | +E | 682 / 947 | 672 / 984 | 649 / 998 |
+  | **+E+I** | **94 / 144** | **111 / 461** | **90 / 164** |
+
+  Plné řešení: base 6,1 s, D 4,5 s, E 2,1 s, E+I 2,4 s (zapisuje strom rodičů).
+- **Paměť:**
+  - D: 15,0 MB navíc (beze změny).
+  - Stav I: 13 B na pásmo a volání + cl. Při 312 028 pásmech je to 8,5 MB (2 volání, s16 / s32) a 16,3 MB
+    (4 volání, s64).
+  - Peak 282–294 MB, dřív 283–290 MB.
+- **Server, jen podzemí** (s64, 5 % výkopů do podzemí, % jednoho jádra):
+
+  | | base | A+B+C | +D | +E | +E+I |
+  |---|---|---|---|---|---|
+  | 50 × 20/min | 484 | 285 | 193 | 54 | **7,5** |
+  | 50 × 4/min | 97 | 57 | 39 | 11 | **1,5** |
+  | 10 × 4/min | 19 | 11 | 7,7 | 2,2 | **0,3** |
+
+- **Negativa:**
+  - I není dokázaně bit po bitu shodná. Sestup s tolerancí E závisí na pořadí uvnitř E, takže se hodnoty capv mohou
+    lišit o méně než E. Shoda výsledků (60 výkopů × volání) je ověřená jen empiricky.
+  - Max na s32 461 ms: výkop 13 s velkým S. Na s32 je průměrná velikost S 2 697 pásem.
+  - Plné řešení s I je o ~0,3 s pomalejší než s E.
+  - Měřeno při 3–4 souběžných bězích. Dvě zastavení boxu (249 s a 355 s, ve všech souběžných bězích naráz) jsem
+    přeměřil: D na s16 / s32, base na s32 / s64.
+  - PF + průsak (~35 ms na volání) zůstávají plné a jsou teď většinou zbylého času.
+- **Shot:** `shots/63_podzemi.png`. Logy: `shots/e63/`, json `shots/alg58/ug_*_e61.json`.
+- **Příznaky:** E, I jen ve variantě (`A+B+C+D+E+I`). Výchozí hodnoty beze změny. Instrumentace `U.PROF` jen měří.
+
+## E63 lokální oprava prelivu po výkopu (plán 2026-11-19 08:45; Jan 08:39 „Zkus tu optimalizaci o které jsi psal“)
+- **Problém (E62):** s tabulkami v4 je hlavní těleso v režimu preliv. Každý výkop u vstupu znovu pustí celý
+  priority-flood tělesa: 2,7–3,0 s na výkop (A+B+C+D).
+- **Klíčová vlastnost priority-flood prelivu:**
+  - Pořadí výběru je dané jen klíči (hladina, id) a daty pásem, která vybrané pásmo čte. To jsou `_nbrs` a `_outs`,
+    tedy pásma ve stejném sloupci a ve 4 sousedních sloupcích, a výška povrchu těchto sloupců.
+  - Výkop ve sloupci cc mění jen pásma a povrch ve sloupci cc. Až do prvního výběru pásma ze sloupců cc + 4
+    sousedé (množina A) je proto průběh flood **přesně stejný**.
+  - Stav fronty v tom okamžiku jde složit ze záznamu: vložené položky před t*, které ještě nebyly vybrány.
+- **Plán (příznak E, varianta `A+B+C+D+E`, výchozí hodnoty beze změny):**
+  1. Preliv si při výpočtu zapíše záznam:
+     - pořadí výběru pásem a pořadí každého pásma v něm;
+     - vložené položky (klíč, id, kdo je vložil);
+     - spotřebované položky fronty;
+     - výstupy.
+     Fronta nese i index vložení. Pořadí mezi stejnými (klíč, id) na výsledek nemá vliv.
+  2. Po výkopu: t* = nejmenší pořadí výběru pásma z A.
+     - Prefix 0..t* zůstane, frontu složím z položek vložených před t* a nespotřebovaných.
+     - Flood pokračuje od t* s novými daty a dál zapisuje záznam (řetězí se přes další výkopy).
+     - Když v A nebylo vybráno žádné pásmo, výsledek se nemění.
+  3. Kapilární sestup (fáze 1: vstupy → nejnižší pásmo tůně) se přepočte celý, jen pokud ho výkop zasáhne
+     (pravidla E62). Změní-li se nejnižší pásmo, pustí se celý flood.
+  4. Průsak a souhrn (objem, události) se přepočtou nad tůní. `_leak` znovu jen u pásem z A a u pásem, kterých se
+     týká změna hladiny L. Ostatní hodnoty se vezmou z paměti.
+- **Ověření:**
+  - 0 neshod proti čerstvému plnému řešení po každém výkopu, s16 / s32 / s64, stejných 20 výkopů včetně výkopů
+    u odtoků tůní.
+  - Časy výkopu průměr / max pro base, A+B+C, +D, +E. Paměť záznamu.
+  - Znovu tabulka zátěže serveru za podzemí.
+  - Testy a hashe E61 beze změny.
+
 ## E62 výsledky (2026-11-19 05:15)
 - **Závislost prelivu na pásmech (příznak D) je přesná, ale skoro nepomáhá.** Tabulky v4, 20 výkopů, záznam `_e61`:
 

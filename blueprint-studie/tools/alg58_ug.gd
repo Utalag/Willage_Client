@@ -33,6 +33,7 @@ func _init() -> void:
 		for e in k.e: ents_all[int(e)] = true
 	ug._ents = ents_all
 	ug._useD = U.has_flag(v, "D")   # E62
+	ug._useE = U.has_flag(v, "E"); ug._useI = U.has_flag(v, "I")   # E63
 	var R := U.clone(ug)
 	var m0 := M.mem()
 	var st := {"builds": 0, "floods": 0, "results": 0, "fallback": 0, "exact": 0, "skipped": 0, "rebuilds": 0, "deltas": 0, "gone": 0, "reach": 0, "splits": 0}
@@ -73,6 +74,10 @@ func _init() -> void:
 		for nd in ug._nodes: extra += nd.cz.size() * (8 + 4 * 4) + nd.sorted.size() * 8 + nd.bands.size() * 4
 	if ug.has("_capg"): extra += ug.lo.size() * 16
 	for r in res: if r.has("_fp"): extra += r._fp.size()
+	if ug.has("_p1st"):   # E63 I
+		for kst in ug._p1st:
+			var s1: Dictionary = ug._p1st[kst]
+			extra += s1.capv.size() * 8 + s1.rch.size() + s1.par.size() * 4 + s1.cl.size() * 4
 	var em := 0.0; var ex := 0.0
 	for x in ems: em += x; ex = maxf(ex, x)
 	em /= maxf(ems.size(), 1)
@@ -83,6 +88,13 @@ func _init() -> void:
 	FileAccess.open(ProjectSettings.globalize_path("res://shots/alg58/" + fn), FileAccess.WRITE).store_string(JSON.stringify(out))
 	print("%s s%d u%d: plné %.0f ms | výkop průměr %.1f ms, max %.1f ms (%d výkopů, zásah %d) | neshod %d | navíc %.1f MB, peak %.0f MB | průsak %.3f výtok %.3f l/s (ref %.3f / %.3f) | %s %s" % [
 		v, nv, nu, full_ms, em, ex, ems.size(), ehit, bad.size(), extra / 1048576.0, m1.peak_mb, tot1.leak, tot1.out, tr.leak, tr.out, str(st), str(bad.slice(0, 3))])
+	if ug.has("_p1st"):   # E63 I: velikost uložených stavů sestupu
+		var by := 0
+		for kst in ug._p1st:
+			var stt: Dictionary = ug._p1st[kst]
+			by += stt.capv.size() * 8 + stt.rch.size() + stt.par.size() * 4 + stt.cl.size() * 4
+		U.PROF.p1_mb = by / 1048576.0; U.PROF.bands = ug.lo.size()
+	if not U.PROF.is_empty(): print("E63 profil prelivu: ", U.PROF)
 	quit()
 
 func _tot(res: Array, calls: Array) -> Dictionary:

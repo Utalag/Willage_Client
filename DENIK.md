@@ -216,6 +216,38 @@ Skupiny: 1 Prototyp a buildy · 2 Terén a tvar · 3 Rozlišení bloku · 4 Ská
 - **Komplikace:** koryta jsou krátké úseky (malý svět, malá povodí). Krasová vyvěračka 0. Hráz na svahu tůň nevytvořila (potok ji obtekl). Podzemní tok vede zatím zjednodušeně k nejbližšímu okraji.
 - **Další krok:** Jan rozhodne, jak daleko vést podzemní tok (sledovat propustnou vrstvu?) a jestli má mít krasová vyvěračka vlastní pravidlo. Starší otevřené otázky (eroze po blocích vs hrubý svět, jádro hory přes šev, minerály z hrubého světa) zůstávají.
 
+### 🧱 Blueprint v3 / E63: přeliv po výkopu 2,3 s → 0,09 s, lokální oprava sestupu (2026-11-19 09:45 · `blueprint-studie/scripts/alg58/ug58.gd` příznaky E, I, shot `63_podzemi.png`)
+- **Směr:** Jan 08:39 „Zkus tu optimalizaci o které jsi psal.“ Nejdřív profil:
+  - 98 % času je kapilární sestup od vstupů (~118 000 pásem).
+  - Plnění tůně je jen 1,5 %.
+  - Plánované pokračování floodu od výkopu proto nemělo smysl a nedělal jsem ho.
+- **Zlepšení:** E = stejný sestup bez volání funkcí (3,6×). I = po výkopu se přepočte jen podstrom pásem, která
+  hodnotu dostala přes vykopaný sloupec (průměr ~300 pásem). 0 neshod na s16 / s32 / s64.
+
+  | výkop průměr / max ms | s16 | s32 | s64 |
+  |---|---|---|---|
+  | base | 6191 / 6653 | 6204 / 6738 | 5802 / 6310 |
+  | A+B+C | 3503 / 4170 | 3460 / 3764 | 3423 / 3987 |
+  | +D | 2541 / 3588 | 2393 / 3480 | 2320 / 3346 |
+  | +E | 682 / 947 | 672 / 984 | 649 / 998 |
+  | +E+I | 94 / 144 | 111 / 461 | 90 / 164 |
+
+- **Server jen za podzemí:**
+
+  | | +D | +E+I |
+  |---|---|---|
+  | 50 × 20/min | 193 % | 7,5 % |
+  | 50 × 4/min | 39 % | 1,5 % |
+  | 10 × 4/min | 7,7 % | 0,3 % |
+
+- **Paměť:** +8,5 MB (2 volání) / +16,3 MB (4 volání) navíc k 15 MB z D.
+- **Komplikace:**
+  - Shoda I je ověřená testy, ne dokázaná. Sestup s tolerancí ε může záviset na pořadí.
+  - Max 461 ms na s32 (jeden výkop s velkým podstromem).
+  - Dvě zastavení boxu (249 s / 355 s) jsem přeměřil.
+- **Testy:** všechny VŠE OK, hashe E61 beze změny. Výchozí hodnoty beze změny.
+- **Další krok:** Jan rozhodne, jestli E+I převzít. Zbytek času tvoří plný flood a průsak (~35 ms na volání).
+
 ### 🧱 Blueprint v3 / E62: preliv v grafu těles, přesné, ale pomalé (2026-11-19 05:15 · `blueprint-studie/scripts/alg58/ug58.gd` příznak D, `tools/e62_dno.gd`)
 - Výsledek prelivu se po výkopu přepočítá jen tehdy, když se změnila pásma, která četl. Žádné neshody (s16 / s32 /
   s64), ale výkop trvá dál 2,7–3,0 s (A+B+C 3,4 s, base 6,0 s).

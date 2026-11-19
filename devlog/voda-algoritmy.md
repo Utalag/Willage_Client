@@ -409,3 +409,22 @@ Návrh je v `sdilene/materialy_voda_navrh.json`. Sdílenou tabulku zatím neměn
 - **Graf pánví je přesný.** Shoduje se s priority-flood bez ε v každé buňce. Rozdíl proti hře (1818 / 1878 buněk tůní) dělá jen ε spád: roviny se zvednou o ε na krok a od ~10 kroků vypadají jako tůň.
 - **Reálné materiály (E61).** Do hry jsem převzal propustnost podle skutečné hydraulické vodivosti. Déšť teď víc vsakuje do trávy a hlíny: odtok z mapy klesl na polovinu (683 → 320 buněk) a kaluží je asi čtvrtina (9,4 → 2,6 m³).
 - **Nová slabina.** S novými materiály se hlavní podzemní těleso přepnulo do režimu přeliv a nejrychlejší varianta A+B+C na tom ztrácí. V režimu přeliv musí po výkopu znovu zaplavit celé těleso: 3,4 s místo 1 ms. Graf těles (B) zatím umí jen režim nádrž. Tohle je další úkol.
+
+## Dodatek 3: přeliv po výkopu zase v desítkách ms (E62, E63)
+
+- **E62.** Výsledek přelivu se po výkopu přepočítá, jen když se změnila pásma, která četl. Chyby žádné, ale pomoc
+  malá: kope se u vstupů, takže přepočet je skoro vždy potřeba. Výkop trvá 2,3–2,5 s.
+- **Kde se čas opravdu tráví.** Změřil jsem fáze přelivu. 98 % času spolkne první fáze: kapilární sestup od vstupů,
+  který projde ~118 000 pásem. Plnění tůně (priority-flood) jsou jen ~25 ms. Původní nápad „pokračovat ve floodu od
+  místa výkopu“ by proto skoro nic neušetřil a nedělal jsem ho.
+- **E63 krok 1 (E).** Stejný sestup se stejným pořadím fronty, jen bez volání pomocné funkce a bez čtení ze slovníku
+  v každém kroku. Výkop je 3,6× rychlejší (2,3 s → 0,65 s).
+- **E63 krok 2 (I), lokální oprava sestupu.** Pro každé volání si pamatuji, odkud každé pásmo dostalo svou hodnotu
+  (strom rodičů). Po výkopu:
+  - Vynuluji jen pásma ve vykopaném sloupci a všechno, co z nich ve stromu vyrostlo. To je v průměru ~300 pásem
+    ze 118 000.
+  - Tato pásma znovu dosadím z nezměněných sousedů a pustím stejný sestup.
+  - Výkop pak trvá **90–111 ms** místo 2,3–2,5 s. Chyby: 0 na s16 / s32 / s64.
+- **Server jen za podzemí** (50 hráčů × 20 výkopů za minutu, 5 % výkopů sahá do podzemí): 193 % jádra → 7,5 %.
+- **Slabina.** U sestupu s tolerancí ε může záležet na pořadí, ve kterém se pásma zpracují. Lokální oprava proto není
+  bit po bitu dokázaná, shodu jsem ověřil jen testy (60 výkopů). Paměť navíc je 8–16 MB.

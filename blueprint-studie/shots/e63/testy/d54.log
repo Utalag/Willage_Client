@@ -1,0 +1,10 @@
+Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+
+1) dohnání tun 60 dní: po dnech 97 událostí 281 ms | jeden skok 97 událostí 278 ms | eroze 7, nános 90, do tůně 0.50 m³ | otisk 37312ef4b728d6c0 / 37312ef4b728d6c0 → STEJNÉ OK | tůň 195 sloupců: 3/3 vrstev plných za 60 dní (z událostí plnění, bez simulace)
+   tiků po 1 s by bylo 5184000 (žádné se nepočítají; cena = události)
+1) dohnání koryto 60 dní: po dnech 511 událostí 801 ms | jeden skok 511 událostí 804 ms | eroze 511, nános 0, do tůně 2.60 m³ | otisk 1c63729c43fa012d / 1c63729c43fa012d → STEJNÉ OK | tůň 28 sloupců: 1/1 vrstev plných za 60 dní (z událostí plnění, bez simulace)
+   tiků po 1 s by bylo 5184000 (žádné se nepočítají; cena = události)
+3) bilance po route (128²): přítok 61.83 l/s = ztráty 22.43 (vsak 1.67, do podzemí 20.76) + okraj 39.41, zbytek -0.000000000, kontinuita max 0.000000000 l/s
+2) ranné zastavení (40 výkopů v korytech 128²): přepočet průměr 2.68 ms, medián 2.23, max 7.59 | přeplánovaných sloupců průměr 90 vs cesta po proudu 34 sloupců | celkem buněk mapy 16384
+3) bilance po každém přepočtu: kontinuita max 0.000000000 l/s, celková max 0.000000000 l/s → OK (konec: přítok 61.83 = ztráty 22.46 + okraj 39.38)
+výsledek: VŠE OK
