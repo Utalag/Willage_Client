@@ -293,6 +293,40 @@ Výchozí: 800 kapek na blok, `ero_cap` 1,0, `ero_erode` 0,1, `ero_deposit_rate`
 - **Hypotéza:** parita bit po bitu (kopie se mění jen v cestách). Vložení bloku bp ≈ 0,25–0,4 s jako E49 detail
   (+ povrch a tráva prototypu ~0,4 s), voda ostrova 7 bloků (≈ 112 × 112 sloupců) plně < 1 s, kopání u vody desítky ms.
 
+## E67b prahy: slučování slabých větví a prahy kreslení (2026-11-19, větev `e67-podzemi-okraje`; Jan 16:21 → oprava 16:22, 16:23, 16:25)
+
+- **Zadání:** malé výstupy se ze simulace NEZAHAZUJÍ (hmota beze změny), práh jen pro kreslení; stovky drobných větví přetoku:
+  (a) práh kreslení, (b) slučování v simulaci `p67_prune` – **zapnuto** (Jan 16:23: „deci-/centilitry v přetocích neřešíme“), práh
+  v řádu desetin litru za sekundu, slabá větev se přičte do nejsilnější sousední cesty (zachová hmotu). Všechny prahy laditelné (16:25).
+- **Parametry (bp `scripts/bp/params.gd`, prototyp `HRA` v `ostrov_teren.gd`, CLI `--bp.<klíč>`, ladicí panel „Voda E67“):**
+  `p67_prune = true`, `p67_prune_min = 0.1` l/s (jednotka toku řešiče = l/s; 0,1 l/s ≈ 6 l/min, menší větev hráč neuvidí a nevyužije),
+  `p67_min_vytok_render = 0.02` l/s, `p67_min_tok_render = 0.02` l/s (= jeden ukázkový zdroj 0,02 l/s; slabší je jen odštěpek).
+- **Histogram výstupů (ostrov 4 bloky, ukázkové zdroje 0,02 l/s v každém místním minimu, součet 4,10 l/s):**
+
+  | q (l/s) | <0,001 | 0,001–0,005 | 0,005–0,01 | 0,01–0,02 | 0,02–0,05 | 0,05–0,1 | 0,1–1 | ≥1 |
+  |---|---|---|---|---|---|---|---|---|
+  | bez slučování | 13 | 4 | 5 | 7 | 68 | 3 | 6 | 1 |
+  | slučování 0,1 | 0 | 0 | 0 | 0 | 69 | 3 | 7 | 1 |
+
+  Zbylo kreslených výstupů při prahu kreslení 0,01 / 0,02 / 0,05 / 0,1: bez slučování 85 / 78 / 10 / 7 ze 107, se slučováním 80 / 80 / 11 / 8 z 80.
+  Tůně hry (1 výstup 0,153 l/s) se nemění.
+- **Vliv slučování (b), ukázkové zdroje:**
+
+  | p67_prune_min | výstupů | Σ q l/s | protékaných pásem | stojatých vod | podzemí ms |
+  |---|---|---|---|---|---|
+  | vypnuto | 107 | 4,100 | 1548 | 46 | 74 |
+  | 0,01 | 86 | 4,100 | 813 | 31 | 51 |
+  | 0,05 | 81 | 4,100 | 743 | 30 | 51 |
+  | **0,1** | **80** | **4,100** | **700** | **26** | **56** |
+  | 0,2 | 80 | 4,100 | 698 | 26 | 51 |
+
+  Hra (`voda_e66 --bp.voda_e67=true`, 12 výkopů): plný výpočet podzemí 271 → 248 ms, výkop podzemí max 114 → 91 ms, průměr 53 → 48 ms,
+  neshod s plným výpočtem 0, souhrn (5 pramenů, 5 vodopádů na okraji 9,64 l/s) beze změny. Studie `tools/e67.gd`: neshod 0, obě pořadí stejný otisk.
+- **Závěr:** slučování ubere ~55 % protékaných pásem a čtvrtinu výstupů bez ztráty hmoty; nad 0,05 l/s se už skoro nic nemění, 0,1 je
+  bezpečně „litrový“ řád podle Jana. Se zapnutým slučováním pod 0,02 l/s nic nezbude, prahy kreslení jsou pojistka pro `p67_prune=false`.
+  Jediná větev slabší než práh, která nemá souseda, se neslučuje (teče dál celá) – proto zůstávají výstupy 0,02 l/s z jednotlivých zdrojů.
+- **Obrázky:** `godot-prototyp/shots/rez/e67/po_minima/prehled.png`, `po_hra/prehled.png`, pro srovnání `po_minima_bez_prune/prehled.png`.
+
 ## E67 výsledky (2026-11-19 16:40, větev `e67-podzemi-okraje`, do main až po schválení Janem)
 - **Co je nového** (výchozí vypnuto, parita):
   - `scripts/podzemi52/ug67.gd`: režim `p67_rezim = "pretok"` – sestup od zdroje (halda: dno sestupně, id vzestupně) dolů,

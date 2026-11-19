@@ -235,6 +235,18 @@ Plán a výsledky: `../blueprint-studie/PROP.md` (E66). Moduly studie jsou **kop
   dolů a do stran podle propustnosti, stojí jen v uzavřených miskách po práh, vyteče z vrstvy ve stěně ostrova = vodopád do mlhy
   nebo v prameni); `--bp.p67_okraj=true` samotný výstup ve stěně se starým podzemím. Řezy: světle modrá = protékající voda.
   Měření a obrázky: `blueprint-studie/PROP.md` (E67), `shots/67/`, `shots/rez/e67/`.
+  **Prahy E67b (všechny laditelné, CLI `--bp.<klíč>=hodnota`, ladicí panel `-- --dev` → „Voda E67 (podzemí, prahy)“,
+  zdroj `scripts/voda/voda_e67_params.gd`, hodnoty v `T.p` / `HRA` v `scripts/teren/ostrov_teren.gd`):**
+
+  | klíč | výchozí | co dělá |
+  |---|---|---|
+  | `p67_prune` | `true` | simulace: slabé větve přetoku se sloučí do nejsilnější sousední cesty (hmota beze změny) |
+  | `p67_prune_min` | `0.1` l/s | práh slučování větví (Jan 16:23: deci-/centilitry neřešíme) |
+  | `p67_min_vytok_render` | `0.02` l/s | jen kreslení: slabší výstup (vodopád ve stěně / pramen) se nekreslí; v řezech obrys ▽ |
+  | `p67_min_tok_render` | `0.02` l/s | jen kreslení: slabší protékající větev se v řezech nekreslí |
+
+  Simulační prahy se projeví při dalším plném výpočtu vody, prahy kreslení při další stavbě sítě vody / řezu.
+  `tools/rez_profil.py --min_vytok= --min_tok=` přepíše prahy kreslení jen pro obrázek.
 
 ## gen-v3 v prototypu (Jan 20:14, `scripts/gen3/`)
 - **Volba:** `BlockGen.gen_version` = `"v3"` (výchozí) nebo `"proto"`, CLI `-- --gen=proto|v3`. Tvar povrchu, transformace, dorovnání stran,
