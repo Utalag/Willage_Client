@@ -1,0 +1,8 @@
+Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+
+auto    4_kola    skoky 0 kola   4 ustaleno false změna 0.072719769 | zdroje 0.100000 okraj 0.000000 průsak 0.037760 stěna 0.000000 do hloubky 0.000000 | prameny 0.247280 odtok tůní 0.347280 (kapacita 0.742000, přítok tůně 0.347280) | chyba svět 0.062240000 povrch 0.000000000 dolů 0.062240000 nahoru 0.000000000 podzemí -0.000000000 | volání 5 | 55c9e48814be6fd0 ms 35.0
+auto    ustaleni  skoky 2 kola  10 ustaleno true  změna 0.000000000 | zdroje 0.100000 okraj 0.062240 průsak 0.037760 stěna 0.000000 do hloubky 0.000000 | prameny 0.704240 odtok tůní 0.742000 (kapacita 0.742000, přítok tůně 0.804240) | chyba svět 0.000000000 povrch 0.000000000 dolů 0.000000000 nahoru 0.000000000 podzemí 0.000000000 | volání 9 | add3c2014e601243 ms 65.5
+auto    otisk při opakování stejný: true
+pretok  4_kola    skoky 0 kola   4 ustaleno false změna 0.072719769 | zdroje 0.100000 okraj 0.000000 průsak 0.037760 stěna 0.000000 do hloubky 0.000000 | prameny 0.247280 odtok tůní 0.347280 (kapacita 0.742000, přítok tůně 0.347280) | chyba svět 0.062240000 povrch 0.000000000 dolů 0.062240000 nahoru 0.000000000 podzemí -0.000000000 | volání 5 | a4159783c2acee51 ms 57.0
+pretok  ustaleni  skoky 2 kola  10 ustaleno true  změna 0.000000000 | zdroje 0.100000 okraj 0.062240 průsak 0.037760 stěna 0.000000 do hloubky 0.000000 | prameny 0.704240 odtok tůní 0.742000 (kapacita 0.742000, přítok tůně 0.804240) | chyba svět 0.000000000 povrch 0.000000000 dolů 0.000000000 nahoru 0.000000000 podzemí 0.000000000 | volání 9 | add3c2014e601243 ms 45.7
+pretok  otisk při opakování stejný: true
