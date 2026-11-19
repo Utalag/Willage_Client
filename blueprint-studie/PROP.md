@@ -293,6 +293,23 @@ Výchozí: 800 kapek na blok, `ero_cap` 1,0, `ero_erode` 0,1, `ero_deposit_rate`
 - **Hypotéza:** parita bit po bitu (kopie se mění jen v cestách). Vložení bloku bp ≈ 0,25–0,4 s jako E49 detail
   (+ povrch a tráva prototypu ~0,4 s), voda ostrova 7 bloků (≈ 112 × 112 sloupců) plně < 1 s, kopání u vody desítky ms.
 
+## E77 čas hry: 1 herní den = 1 reálná hodina (plán, zapsáno před pokusem 2026-11-20 00:58; Jan 2026-11-19 22:19 rozhodnutí, použít po testech vody)
+- **Změna:** výchozí `p71_cas` 144 → 24 (faktor zrychlení času: herní den 86 400 s / reálné sekundy za herní den).
+- **Kde je dnes 10 min / 144 natvrdo (main):** `p71_cas` v parametrech studie a prototypu; náhradní hodnota 144 v
+  `ug_funkce._new` a `ug67` (kapacita dolů E71 = K · A · 1000 · faktor); sdílené tabulky `cas_faktor` 144 a odvozená pole
+  `t_1m_realne_min` + `rezim` (jen popis, kód je nečte); generátory `tools/materialy59.py`, `materialy61.py`. Časy E51
+  a plnění tůní jsou ve fyzikálních (herních) sekundách bez faktoru – reálný čas z nich dnes nikde nepočítá kód hry.
+  E75 kras a E76 přeplánování nejsou v main (větve; nástroje tam násobí dny × 10 min) → upraví se až při sloučení.
+  Studie těžby (`tezba-studie/tools/horniny65.py`, návrh T01) má vlastní faktor 144 – mimo vodu, jen zapsat.
+- **Jedno místo:** nový `scripts/voda/cas_hry.gd` (studie, port do prototypu): faktor z `p71_cas` (výchozí 24), převody
+  herní s → herní dny → reálné minuty. Tabulky: `cas_faktor` 24 a přepočtená odvozená pole (generátor čte faktor
+  z jednoho místa).
+- **Měření před / po (144 / 24):** ostrov (prototyp `voda_e66`, výchozí hra i E67): výstupy, prameny, mokrá pásma, objem,
+  Σ průtok, chyba bilance, čas plného výpočtu a výkopu, neshody, otisk; referenční testy E69 (sloupec / plocha, kupole,
+  mísa) a test smyčky `tools/e68.gd`; časy událostí (první naplnění tůně, první eroze E51) v herních dnech a reálně.
+- **Hypotéza:** kapacita dolů E71 klesne 6× → kde omezuje, víc vody zůstane v horní vrstvě / vyteče ve stěně; jinde beze
+  změny. Časy událostí v herních sekundách se nezmění (kromě tůní nad tělesy s omezením), reálně budou 6× delší.
+
 ## E73 nálezy E68: pramen ve vlastní tůni, přítok tůně jako součet, zrychlení smyčky, E67 „vše prosákne“ (plán, zapsáno před pokusem 2026-11-19 23:15; TODO Voda, Jan: nejdřív dodělat vodu)
 - **1. Pramen v prohlubni, kterou sám zavodní (`p73_vyver`):** cyklus ostrova s periodou 2 (E68) vzniká tím, že
   zavodněná prohlubeň se v dalším kole stane vstupem téhož tělesa a její buňky se vyloučí z výstupů (`excl`). Pravidlo:
