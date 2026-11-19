@@ -350,6 +350,8 @@ def document_meta(materials: dict) -> dict:
         "hypotezy": {
             "2026-11-19_13:27": "Zpracování rozloží horninu na suroviny v poměrech bloku. Postava s Mineralogií pozná, které minerály to jsou. Zlepšení dovednosti buď odemkne další vrstvu/třídu hornin, nebo dá body na poznání konkrétního materiálu. Neznámé suroviny stejně padají (jako „neznámý minerál“ se znaky barva/tvrdost/hustota) a jdou zkoušet.",
             "2026-11-19_13:33": "Krystaly mají kvalitu. Lze je brousit, drtit nebo dál zpracovat. Některé suroviny lze destilovat a rozložit na jiné; to odemyká jinou dovednost než Mineralogii (chemie / alchymie).",
+            "2026-11-19_13:36": "Katalog výrobků z surovin (drcený křemen → sklo). Viz navrhy/katalog-materialu.md.",
+            "2026-11-19_13:39": "Katalog je základ koupitelných receptů. Koupený recept dá průměr; jednotka umožní ladit parametry ke skrytému optimu a vyšší kvalitě.",
         },
         "validace_vytezku": {
             "soucet_promile": 1000,
@@ -528,7 +530,7 @@ def make_chart(materials: dict) -> None:
     ax2.grid(True, axis="x", alpha=0.3)
     fig.text(
         0.01, 0.01,
-        "Typické hodnoty, rozsahy jsou široké (ZDROJE [42]–[48]). Návrh E65, čeká na Jana. Trhaviny jsou zrychlení, ne další třída v grafu.",
+        "Typické hodnoty, rozsahy jsou široké (ZDROJE [45]–[51]). Návrh E65, čeká na Jana. Trhaviny jsou zrychlení, ne další třída v grafu.",
         fontsize=7, ha="left", va="bottom",
     )
     fig.tight_layout(rect=[0, 0.025, 1, 0.96])

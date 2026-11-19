@@ -18,6 +18,8 @@ Hypotézy (ne rozhodnutí):
 
 - 19. 11. 2026 13:27: zpracování rozloží horninu v poměrech bloku. Dovednost Mineralogie slouží k poznání. Neznámé suroviny stejně padají.
 - 19. 11. 2026 13:33: krystaly mají kvalitu. Lze je brousit, drtit nebo dál zpracovat. Destilace a rozklad odemykají jinou dovednost (chemie / alchymie).
+- 19. 11. 2026 13:36: katalog běžných výrobků (sklo, malta, kovy, …) z těchto surovin. Příklad: drcený křemen → sklo. Viz [katalog materiálů](katalog-materialu.md).
+- 19. 11. 2026 13:39: popisy v katalogu jsou základ koupitelných receptů. Koupený recept dá jen průměrnou kvalitu. Ve výrobní jednotce lze recept ladit (poměry, teplota, čas, přísady, čistota vstupů) a kvalitu výrazně zlepšit.
 - Ostrov jako základna s chudým podzemím a plnou těžbou na výpravách zůstává dřívější hypotézou.
 
 ## Co už existuje (ať se to nenavrhuje znovu)
@@ -106,13 +108,13 @@ Hypotézy (ne rozhodnutí):
 
 ## Reálné hodnoty (rešerše)
 
-Typická hodnota je střed rozsahu, ne přesné číslo jedné lokality. Rozsahy UCS mají často 3–5× [42][43][44].
+Typická hodnota je střed rozsahu, ne přesné číslo jedné lokality. Rozsahy UCS mají často 3–5× [45][46][47].
 
-- **Mohs** u horniny bere dominantní minerál: kalcit 3, sádrovec 2, halit 2,5, živec/křemen 6–7, olivín 6,5–7, diamant 10 [48].
-- **UCS** typicky: zeminy < 1 MPa, sádrovec ~12, sůl ~27, uhlí ~30, břidlice 5–100, vápenec typ. 107 (30–250), pískovec typ. 80–109 (20–170), žula typ. 154 (100–250), čedič typ. 145 (100–300), gabro typ. 228, kvarcit typ. 209 (150–300) [42][44][45].
-- **Hustota** typicky: půdy 1,5–1,8 t/m³, uhlí 1,2–1,6, sůl 2,16, vápenec 2,64, žula 2,72, čedič/gabro ~3,0, peridotit ~3,2 [45].
-- **CAI** (abraze, opotřebení nástrojů): jíl/uhlí 0,3–1; vápenec 1–2; čedič a křemenný pískovec 2–4; žula, rula, kvarcit 4–6 [46][47].
-- **Jakost rud v přírodě** je nízká: porfyrická měď typicky 0,3–2 % Cu, průměr 2008 0,44 % [49]; diamant v kimberlitu 0,02–10 ct/t, medián 0,25 [50]; žilné zlato jednotky g/t; železná ruda DSO často > 50–60 % Fe [55].
+- **Mohs** u horniny bere dominantní minerál: kalcit 3, sádrovec 2, halit 2,5, živec/křemen 6–7, olivín 6,5–7, diamant 10 [51].
+- **UCS** typicky: zeminy < 1 MPa, sádrovec ~12, sůl ~27, uhlí ~30, břidlice 5–100, vápenec typ. 107 (30–250), pískovec typ. 80–109 (20–170), žula typ. 154 (100–250), čedič typ. 145 (100–300), gabro typ. 228, kvarcit typ. 209 (150–300) [45][47][48].
+- **Hustota** typicky: půdy 1,5–1,8 t/m³, uhlí 1,2–1,6, sůl 2,16, vápenec 2,64, žula 2,72, čedič/gabro ~3,0, peridotit ~3,2 [48].
+- **CAI** (abraze, opotřebení nástrojů): jíl/uhlí 0,3–1; vápenec 1–2; čedič a křemenný pískovec 2–4; žula, rula, kvarcit 4–6 [49][50].
+- **Jakost rud v přírodě** je nízká: porfyrická měď typicky 0,3–2 % Cu, průměr 2008 0,44 % [52]; diamant v kimberlitu 0,02–10 ct/t, medián 0,25 [53]; žilné zlato jednotky g/t; železná ruda DSO často > 50–60 % Fe [67].
 - Ve hře už je rudná **buňka** samostatné ložisko (žíla, čočka, sloj). Proto výchozí podíly u buněk mědi/železa/zlata jsou herní abstrakce, ne surový průměr ložiska. Kimberlit jako hornina diamanty objemově nedává; diamanty zůstávají v buňkách `diamond` a ve šanci na nález.
 
 Použití ve hře (výchozí výnosy):
@@ -148,7 +150,7 @@ Doporučení (hypotéza, kromě bodů už rozhodnutých):
 | železo | 0,05 | 150 min | 63 s | 12 s |
 | ocel | 0,03 | 250 min | 104 s | 18 s |
 
-Odhad m³/h je řádový: ruční zemina podle 0,6–1,2 m³/h [51][52]; tvrdá skála je pomalejší než nakládání sypké zeminy, středověké ražení šachet bylo metry za měsíc [53]. Historický čas po × 144 je u žuly pořád ~1 min na buňku, na streamu to může vadit. Proto je v tabulce zvlášť kratší `t_navrh_s`. Jan vybere měřítko.
+Odhad m³/h je řádový: ruční zemina podle 0,6–1,2 m³/h [54][55]; tvrdá skála je pomalejší než nakládání sypké zeminy, středověké ražení šachet bylo metry za měsíc [56]. Historický čas po × 144 je u žuly pořád ~1 min na buňku, na streamu to může vadit. Proto je v tabulce zvlášť kratší `t_navrh_s`. Jan vybere měřítko.
 
 ## Varianty času a nástrojů
 
@@ -243,7 +245,7 @@ Operace a dovednosti (názvy laditelné):
 | rozložit | Chemie / alchymie | složená surovina | jednodušší suroviny podle tabulky | zaniká |
 | tavit | Chemie / alchymie | ruda + palivo | kov + struska | zaniká |
 
-Chemie je **jiná** dovednost než Mineralogie. Tabulka reakcí je samostatná a konfigurovatelná. Nepřepisuje výnosy kopání.
+Chemie je **jiná** dovednost než Mineralogie. Tabulka reakcí je samostatná a konfigurovatelná. Nepřepisuje výnosy kopání. Navazující výrobky (sklo z drceného křemene, malta, kovy) a ladění receptů jsou v [katalogu materiálů](katalog-materialu.md).
 
 Příklady (reálně věrohodné; rumělka v katalogu zatím není):
 
@@ -264,7 +266,7 @@ flowchart LR
 | křemen / křišťál | broušený křišťál (drží kvalitu) | křemenný písek | — |
 | malachit / měděná ruda | broušený malachit | drť (horší k tavení) | tavit → měď + struska |
 | rumělka (HgS) | — | prášek k pražení | pražení + destilace → rtuť |
-| vápenec | — | štěrk / drť | pálení → pálené vápno [54] |
+| vápenec | — | štěrk / drť | pálení → pálené vápno [57] |
 | sádrovec | alabastr (když kvalita stačí) | sádrový prášek | pálení → sádra |
 | kamenná sůl | — | sůl | volitelně čištění |
 
@@ -272,7 +274,7 @@ flowchart LR
 
 - UCS a CAI mají široké rozsahy. Zařazení do třídy bere typickou hodnotu. Gabro (typ. 228 MPa) proto spadlo k oceli, žula (typ. 154) k železu, i když se obě často těží podobně. Práh 200 MPa jde posunout.
 - Horské „pojmenované“ horniny (hřeben, věže, velehory) dědí vlastnosti žuly / ruly / kvarcitu. Nejsou to vždy samostatné litologie.
-- Hlubinný vápenec / křída má v pořadí název křídy, ale load 100/5 je jako kompetentní vápenec, ne křída (~1 MPa) [44]. V návrhu jsou hodnoty vápence.
+- Hlubinný vápenec / křída má v pořadí název křídy, ale load 100/5 je jako kompetentní vápenec, ne křída (~1 MPa) [47]. V návrhu jsou hodnoty vápence.
 - Podíly surovin u ordinary hornin jsou herní, opřené o typické použití, ne o laboratoř.
 - Historický čas po × 144 může být na streamu dlouhý. Návrh proto nabízí kratší `t_navrh_s`.
 - Pole jsem ve hře nezkoušel. Žádný běh kódu to nečte.
@@ -290,6 +292,7 @@ flowchart LR
 9. Kvalita krystalů 0–100 a cena ~ kvalita² vyhovuje, nebo jiné měřítko?
 10. Mají do katalogu přibýt reaktanty jako rumělka, nebo stačí později?
 11. Má prach / ztráta při trhavinách a broušení být použitelný materiál, nebo jen úbytek?
+12. Recepty (13:39): odemknou se natrvalo? Optimum skrýt úplně, nebo ukázat rozmezí?
 
 Rozhodnutí o svahu, režimu auto a jemné mřížce sem nepatří a dál čekají.
 
@@ -299,5 +302,6 @@ Rozhodnutí o svahu, režimu auto a jemné mřížce sem nepatří a dál čekaj
 - `blueprint-studie/tools/horniny65.py` — generátor tabulky a grafu
 - `blueprint-studie/shots/65_horniny_tezba.png` — Mohs × UCS a pevnost podle nástroje
 - `blueprint-studie/PROP.md` — záznam E65
-- `blueprint-studie/ZDROJE.md` — [42]–[55]
+- `blueprint-studie/ZDROJE.md` — [45]–[72] ([42]–[44] patří E64)
+- [katalog materiálů a výrobků](katalog-materialu.md) — recepty, jednotky, ladění kvality
 - tento dokument

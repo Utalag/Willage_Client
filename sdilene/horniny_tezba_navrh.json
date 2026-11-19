@@ -1,12 +1,9 @@
 {
-  "_popis": "E65 NÁVRH (2026-11-19): vlastnosti a těžba hornin. Nepřepisuje materialy_voda.json ani horniny_voda.json. Typické hodnoty (střed rozsahu) z rešerše, rozsahy jsou široké. Jan 13:23 (rozhodnutí): každá hornina má seznam získatelných surovin; blueprint vrstvy může přepsat jen podíly (součet 1000 ‰, jen povolené suroviny). Jan 13:27 (hypotéza, ne rozhodnutí): zpracování rozloží horninu v poměrech bloku; dovednost Mineralogie odemyká poznávání. Jan 13:31 (rozhodnutí): po identifikaci zůstanou obě jména (vlastní i skutečné); vlastní jméno může hráč sám smazat. Čas a výnos jsou úměrné objemu (buňka 0,5 m = 0,125 m³; při 0,125 m vše × 1/64).",
+  "_popis": "E65 NÁVRH (2026-11-19): vlastnosti a těžba hornin. Nepřepisuje materialy_voda.json ani horniny_voda.json. Typické hodnoty (střed rozsahu) z rešerše, rozsahy jsou široké. Jan 13:23 (rozhodnutí): každá hornina má seznam získatelných surovin; blueprint vrstvy může přepsat jen podíly (součet 1000 ‰, jen povolené suroviny). Jan 13:27 (hypotéza, ne rozhodnutí): zpracování rozloží horninu v poměrech bloku; dovednost Mineralogie odemyká poznávání. Jan 13:31 (rozhodnutí): po identifikaci zůstanou obě jména (vlastní i skutečné); vlastní jméno může hráč sám smazat. Čas a výnos jsou úměrné objemu (buňka 0,5 m = 0,125 m³; při 0,125 m vše × 1/64). Jan 13:36–13:39 (hypotézy): katalog výrobků a koupitelné recepty s laděním kvality ve výrobní jednotce.",
   "version": 1,
   "status": "navrh, ceka na Jana",
   "datum": "2026-11-19",
   "zdroje": [
-    42,
-    43,
-    44,
     45,
     46,
     47,
@@ -16,7 +13,10 @@
     51,
     52,
     53,
-    55
+    54,
+    55,
+    56,
+    67
   ],
   "cas_hry_faktor": 144.0,
   "bunka_m": 0.5,
@@ -270,7 +270,9 @@
   },
   "hypotezy": {
     "2026-11-19_13:27": "Zpracování rozloží horninu na suroviny v poměrech bloku. Postava s Mineralogií pozná, které minerály to jsou. Zlepšení dovednosti buď odemkne další vrstvu/třídu hornin, nebo dá body na poznání konkrétního materiálu. Neznámé suroviny stejně padají (jako „neznámý minerál“ se znaky barva/tvrdost/hustota) a jdou zkoušet.",
-    "2026-11-19_13:33": "Krystaly mají kvalitu. Lze je brousit, drtit nebo dál zpracovat. Některé suroviny lze destilovat a rozložit na jiné; to odemyká jinou dovednost než Mineralogii (chemie / alchymie)."
+    "2026-11-19_13:33": "Krystaly mají kvalitu. Lze je brousit, drtit nebo dál zpracovat. Některé suroviny lze destilovat a rozložit na jiné; to odemyká jinou dovednost než Mineralogii (chemie / alchymie).",
+    "2026-11-19_13:36": "Katalog běžných výrobků z vytěžených surovin (sklo, vápno, malta, cihla, kovy, …). Příklad: drcený křemen → sklo. Viz navrhy/katalog-materialu.md.",
+    "2026-11-19_13:39": "Popisy v katalogu jsou základ koupitelných receptů. Koupený recept dá jen průměrnou kvalitu. Ve výrobní jednotce lze recept ladit (poměry, teplota, čas, přísady, čistota/kvalita vstupů) a kvalitu výrazně zlepšit. Parametry mají skryté optimum."
   },
   "validace_vytezku": {
     "soucet_promile": 1000,
@@ -513,7 +515,7 @@
       "cas": null,
       "netezitelne": true,
       "zdroje": [
-        42
+        45
       ],
       "opotrebeni_na_bunku_05": 0.0
     },
@@ -549,7 +551,7 @@
       "cas": null,
       "netezitelne": true,
       "zdroje": [
-        42
+        45
       ],
       "alias_material_id": 0,
       "opotrebeni_na_bunku_05": 0.0
@@ -586,7 +588,7 @@
       "cas": null,
       "netezitelne": true,
       "zdroje": [
-        42
+        45
       ],
       "alias_material_id": 0,
       "opotrebeni_na_bunku_05": 0.0
@@ -636,9 +638,9 @@
       },
       "netezitelne": false,
       "zdroje": [
-        42,
-        43,
-        45
+        45,
+        46,
+        48
       ],
       "opotrebeni_na_bunku_05": 0.067
     },
@@ -687,9 +689,9 @@
       },
       "netezitelne": false,
       "zdroje": [
-        42,
-        43,
-        45
+        45,
+        46,
+        48
       ],
       "opotrebeni_na_bunku_05": 0.067
     },
@@ -738,9 +740,9 @@
       },
       "netezitelne": false,
       "zdroje": [
-        42,
-        43,
-        45
+        45,
+        46,
+        48
       ],
       "alias_material_id": 2,
       "opotrebeni_na_bunku_05": 0.067
@@ -786,9 +788,9 @@
       },
       "netezitelne": false,
       "zdroje": [
-        45,
-        46,
-        48
+        48,
+        49,
+        51
       ],
       "opotrebeni_na_bunku_05": 0.25
     },
@@ -833,8 +835,8 @@
       },
       "netezitelne": false,
       "zdroje": [
-        45,
-        46
+        48,
+        49
       ],
       "alias_material_id": 3,
       "opotrebeni_na_bunku_05": 0.25
@@ -880,9 +882,9 @@
       },
       "netezitelne": false,
       "zdroje": [
-        43,
-        45,
-        46
+        46,
+        48,
+        49
       ],
       "opotrebeni_na_bunku_05": 0.067
     },
@@ -927,9 +929,9 @@
       },
       "netezitelne": false,
       "zdroje": [
-        43,
-        45,
-        46
+        46,
+        48,
+        49
       ],
       "alias_material_id": 4,
       "opotrebeni_na_bunku_05": 0.067
@@ -979,11 +981,11 @@
       },
       "netezitelne": false,
       "zdroje": [
-        42,
-        44,
         45,
-        46,
-        48
+        47,
+        48,
+        49,
+        51
       ],
       "opotrebeni_na_bunku_05": 0.25
     },
@@ -1032,11 +1034,11 @@
       },
       "netezitelne": false,
       "zdroje": [
-        42,
-        44,
         45,
-        46,
-        48
+        47,
+        48,
+        49,
+        51
       ],
       "alias_material_id": 5,
       "opotrebeni_na_bunku_05": 0.25
@@ -1086,11 +1088,11 @@
       },
       "netezitelne": false,
       "zdroje": [
-        42,
-        44,
         45,
-        46,
-        48
+        47,
+        48,
+        49,
+        51
       ],
       "opotrebeni_na_bunku_05": 0.833
     },
@@ -1135,10 +1137,10 @@
       },
       "netezitelne": false,
       "zdroje": [
-        42,
-        44,
         45,
-        46
+        47,
+        48,
+        49
       ],
       "opotrebeni_na_bunku_05": 0.5
     },
@@ -1183,8 +1185,8 @@
       },
       "netezitelne": false,
       "zdroje": [
-        44,
-        45
+        47,
+        48
       ],
       "alias_material_id": 7,
       "opotrebeni_na_bunku_05": 0.5
@@ -1230,8 +1232,8 @@
       },
       "netezitelne": false,
       "zdroje": [
-        45,
-        49
+        48,
+        52
       ],
       "poznamka": "Buňka už je obohacená žíla, ne porfyrový průměr 0,44 % Cu [49]. Herní podíl 400 ‰ je abstrakce.",
       "opotrebeni_na_bunku_05": 0.333
@@ -1277,8 +1279,8 @@
       },
       "netezitelne": false,
       "zdroje": [
-        45,
-        55
+        48,
+        67
       ],
       "poznamka": "Buňka je už ložisková čočka; podíl 700 ‰ odpovídá spíš DSO/magnetitu (~50–60 % Fe) [55] než chudé hornině.",
       "opotrebeni_na_bunku_05": 0.5
@@ -1320,7 +1322,7 @@
       },
       "netezitelne": false,
       "zdroje": [
-        48
+        51
       ],
       "opotrebeni_na_bunku_05": 0.033
     },
@@ -1361,7 +1363,7 @@
       },
       "netezitelne": false,
       "zdroje": [
-        48
+        51
       ],
       "alias_material_id": 10,
       "opotrebeni_na_bunku_05": 0.033
@@ -1403,9 +1405,9 @@
       },
       "netezitelne": false,
       "zdroje": [
-        43,
-        45,
-        46
+        46,
+        48,
+        49
       ],
       "opotrebeni_na_bunku_05": 0.067
     },
@@ -1450,9 +1452,9 @@
       },
       "netezitelne": false,
       "zdroje": [
-        44,
-        45,
-        48
+        47,
+        48,
+        51
       ],
       "opotrebeni_na_bunku_05": 0.667
     },
@@ -1497,8 +1499,8 @@
       },
       "netezitelne": false,
       "zdroje": [
-        44,
-        50
+        47,
+        53
       ],
       "poznamka": "Diamanty nejsou objemový podíl (reálně 0,02–10 ct/t, medián 0,25 [50]). Jsou v buňkách diamond + šance na nález.",
       "opotrebeni_na_bunku_05": 0.25
@@ -1544,9 +1546,9 @@
       },
       "netezitelne": false,
       "zdroje": [
-        44,
-        45,
-        48
+        47,
+        48,
+        51
       ],
       "opotrebeni_na_bunku_05": 0.667
     },
@@ -1591,9 +1593,9 @@
       },
       "netezitelne": false,
       "zdroje": [
-        44,
-        45,
-        48
+        47,
+        48,
+        51
       ],
       "opotrebeni_na_bunku_05": 0.833
     },
@@ -1638,9 +1640,9 @@
       },
       "netezitelne": false,
       "zdroje": [
-        44,
-        45,
-        46
+        47,
+        48,
+        49
       ],
       "opotrebeni_na_bunku_05": 0.5
     },
@@ -1685,8 +1687,8 @@
       },
       "netezitelne": false,
       "zdroje": [
-        44,
-        48
+        47,
+        51
       ],
       "opotrebeni_na_bunku_05": 0.167
     },
@@ -1731,9 +1733,9 @@
       },
       "netezitelne": false,
       "zdroje": [
-        44,
-        45,
-        46
+        47,
+        48,
+        49
       ],
       "opotrebeni_na_bunku_05": 0.5
     },
@@ -1778,9 +1780,9 @@
       },
       "netezitelne": false,
       "zdroje": [
-        44,
-        45,
-        46
+        47,
+        48,
+        49
       ],
       "opotrebeni_na_bunku_05": 0.5
     },
@@ -1825,9 +1827,9 @@
       },
       "netezitelne": false,
       "zdroje": [
-        44,
-        45,
-        46
+        47,
+        48,
+        49
       ],
       "poznamka": "Hornina zóny je jako gabro; ruda je v buňkách fe_ti, ne jako objemový podíl hostitele.",
       "opotrebeni_na_bunku_05": 0.5
@@ -1873,7 +1875,7 @@
       },
       "netezitelne": false,
       "zdroje": [
-        44
+        47
       ],
       "opotrebeni_na_bunku_05": 0.75
     },
@@ -1918,8 +1920,8 @@
       },
       "netezitelne": false,
       "zdroje": [
-        44,
-        46
+        47,
+        49
       ],
       "opotrebeni_na_bunku_05": 0.833
     },
@@ -1964,10 +1966,10 @@
       },
       "netezitelne": false,
       "zdroje": [
-        44,
-        45,
-        46,
-        48
+        47,
+        48,
+        49,
+        51
       ],
       "opotrebeni_na_bunku_05": 0.75
     },
@@ -2012,10 +2014,10 @@
       },
       "netezitelne": false,
       "zdroje": [
-        44,
-        45,
-        46,
-        48
+        47,
+        48,
+        49,
+        51
       ],
       "opotrebeni_na_bunku_05": 0.75
     },
@@ -2060,10 +2062,10 @@
       },
       "netezitelne": false,
       "zdroje": [
-        44,
-        45,
-        46,
-        48
+        47,
+        48,
+        49,
+        51
       ],
       "opotrebeni_na_bunku_05": 0.75
     },
@@ -2108,10 +2110,10 @@
       },
       "netezitelne": false,
       "zdroje": [
-        44,
-        45,
-        46,
-        48
+        47,
+        48,
+        49,
+        51
       ],
       "opotrebeni_na_bunku_05": 0.75
     },
@@ -2156,10 +2158,10 @@
       },
       "netezitelne": false,
       "zdroje": [
-        44,
-        45,
-        46,
-        48
+        47,
+        48,
+        49,
+        51
       ],
       "opotrebeni_na_bunku_05": 0.75
     },
@@ -2208,7 +2210,7 @@
       },
       "netezitelne": false,
       "zdroje": [
-        44
+        47
       ],
       "opotrebeni_na_bunku_05": 0.833
     },
@@ -2257,11 +2259,11 @@
       },
       "netezitelne": false,
       "zdroje": [
-        42,
-        44,
         45,
-        46,
-        48
+        47,
+        48,
+        49,
+        51
       ],
       "opotrebeni_na_bunku_05": 0.833
     },
@@ -2310,11 +2312,11 @@
       },
       "netezitelne": false,
       "zdroje": [
-        42,
-        44,
         45,
-        46,
-        48
+        47,
+        48,
+        49,
+        51
       ],
       "poznamka": "Drahokamy a vzácné kovy jsou samostatné buňky (gem, rare_metal, gold), ne objemový podíl žíly.",
       "opotrebeni_na_bunku_05": 0.833
@@ -2364,11 +2366,11 @@
       },
       "netezitelne": false,
       "zdroje": [
-        42,
-        44,
         45,
-        46,
-        48
+        47,
+        48,
+        49,
+        51
       ],
       "opotrebeni_na_bunku_05": 0.917
     },
@@ -2413,9 +2415,9 @@
       },
       "netezitelne": false,
       "zdroje": [
-        44,
-        46,
-        48
+        47,
+        49,
+        51
       ],
       "opotrebeni_na_bunku_05": 0.3
     },
@@ -2464,8 +2466,8 @@
       },
       "netezitelne": false,
       "zdroje": [
-        44,
-        46
+        47,
+        49
       ],
       "opotrebeni_na_bunku_05": 0.133
     },
@@ -2514,11 +2516,11 @@
       },
       "netezitelne": false,
       "zdroje": [
-        42,
-        44,
         45,
-        46,
-        48
+        47,
+        48,
+        49,
+        51
       ],
       "poznamka": "Cu, Fe a granáty jsou samostatné buňky v hostiteli.",
       "opotrebeni_na_bunku_05": 0.417
@@ -2564,10 +2566,10 @@
       },
       "netezitelne": false,
       "zdroje": [
-        44,
-        45,
-        46,
-        48
+        47,
+        48,
+        49,
+        51
       ],
       "opotrebeni_na_bunku_05": 0.75
     },
@@ -2616,11 +2618,11 @@
       },
       "netezitelne": false,
       "zdroje": [
-        42,
-        44,
         45,
-        46,
-        48
+        47,
+        48,
+        49,
+        51
       ],
       "poznamka": "V tabulce pořadí je i křída, ale load 100/5 odpovídá spíš kompetentnímu vápenci než křídě (UCS ~1 MPa [44]). Hodnoty jako vápenec.",
       "opotrebeni_na_bunku_05": 0.25
@@ -2670,8 +2672,8 @@
       },
       "netezitelne": false,
       "zdroje": [
-        44,
-        45
+        47,
+        48
       ],
       "opotrebeni_na_bunku_05": 0.167
     },
@@ -2720,8 +2722,8 @@
       },
       "netezitelne": false,
       "zdroje": [
-        44,
-        45
+        47,
+        48
       ],
       "opotrebeni_na_bunku_05": 0.333
     },
@@ -2766,9 +2768,9 @@
       },
       "netezitelne": false,
       "zdroje": [
-        44,
-        45,
-        48
+        47,
+        48,
+        51
       ],
       "opotrebeni_na_bunku_05": 0.05
     },
@@ -2813,8 +2815,8 @@
       },
       "netezitelne": false,
       "zdroje": [
-        44,
-        48
+        47,
+        51
       ],
       "opotrebeni_na_bunku_05": 0.05
     },
@@ -2863,9 +2865,9 @@
       },
       "netezitelne": false,
       "zdroje": [
-        44,
-        45,
-        48
+        47,
+        48,
+        51
       ],
       "opotrebeni_na_bunku_05": 0.25
     },
@@ -2910,9 +2912,9 @@
       },
       "netezitelne": false,
       "zdroje": [
-        44,
-        45,
-        46
+        47,
+        48,
+        49
       ],
       "opotrebeni_na_bunku_05": 0.1
     },
@@ -2961,10 +2963,10 @@
       },
       "netezitelne": false,
       "zdroje": [
-        42,
-        44,
-        46,
-        48
+        45,
+        47,
+        49,
+        51
       ],
       "opotrebeni_na_bunku_05": 0.117
     },
@@ -3013,11 +3015,11 @@
       },
       "netezitelne": false,
       "zdroje": [
-        42,
-        44,
         45,
-        46,
-        48
+        47,
+        48,
+        49,
+        51
       ],
       "opotrebeni_na_bunku_05": 0.417
     },
@@ -3062,8 +3064,8 @@
       },
       "netezitelne": false,
       "zdroje": [
-        44,
-        45
+        47,
+        48
       ],
       "opotrebeni_na_bunku_05": 0.083
     },
@@ -3112,8 +3114,8 @@
       },
       "netezitelne": false,
       "zdroje": [
-        43,
-        45
+        46,
+        48
       ],
       "opotrebeni_na_bunku_05": 0.083
     },
@@ -3158,9 +3160,9 @@
       },
       "netezitelne": false,
       "zdroje": [
-        45,
-        46,
-        48
+        48,
+        49,
+        51
       ],
       "opotrebeni_na_bunku_05": 0.25
     },
@@ -3209,11 +3211,11 @@
       },
       "netezitelne": false,
       "zdroje": [
-        42,
-        44,
         45,
-        46,
-        48
+        47,
+        48,
+        49,
+        51
       ],
       "opotrebeni_na_bunku_05": 0.25
     },
@@ -3262,8 +3264,8 @@
       },
       "netezitelne": false,
       "zdroje": [
-        42,
-        45
+        45,
+        48
       ],
       "opotrebeni_na_bunku_05": 0.2
     },
@@ -3312,8 +3314,8 @@
       },
       "netezitelne": false,
       "zdroje": [
-        42,
-        44
+        45,
+        47
       ],
       "opotrebeni_na_bunku_05": 0.25
     },
@@ -3362,11 +3364,11 @@
       },
       "netezitelne": false,
       "zdroje": [
-        42,
-        44,
         45,
-        46,
-        48
+        47,
+        48,
+        49,
+        51
       ],
       "opotrebeni_na_bunku_05": 0.417
     },
@@ -3415,8 +3417,8 @@
       },
       "netezitelne": false,
       "zdroje": [
-        42,
-        45
+        45,
+        48
       ],
       "poznamka": "Grus: zvětralá žula se rozpadá na štěrk, písek a jíl.",
       "opotrebeni_na_bunku_05": 0.2
@@ -3462,10 +3464,10 @@
       },
       "netezitelne": false,
       "zdroje": [
-        44,
-        45,
-        46,
-        48
+        47,
+        48,
+        49,
+        51
       ],
       "opotrebeni_na_bunku_05": 0.75
     },
@@ -3510,9 +3512,9 @@
       },
       "netezitelne": false,
       "zdroje": [
-        44,
-        46,
-        48
+        47,
+        49,
+        51
       ],
       "opotrebeni_na_bunku_05": 0.3
     },
@@ -3561,11 +3563,11 @@
       },
       "netezitelne": false,
       "zdroje": [
-        42,
-        44,
         45,
-        46,
-        48
+        47,
+        48,
+        49,
+        51
       ],
       "opotrebeni_na_bunku_05": 0.833
     },
@@ -3614,11 +3616,11 @@
       },
       "netezitelne": false,
       "zdroje": [
-        42,
-        44,
         45,
-        46,
-        48
+        47,
+        48,
+        49,
+        51
       ],
       "opotrebeni_na_bunku_05": 0.833
     },
@@ -3663,10 +3665,10 @@
       },
       "netezitelne": false,
       "zdroje": [
-        44,
-        45,
-        46,
-        48
+        47,
+        48,
+        49,
+        51
       ],
       "opotrebeni_na_bunku_05": 0.75
     },
@@ -3711,8 +3713,8 @@
       },
       "netezitelne": false,
       "zdroje": [
-        45,
-        46
+        48,
+        49
       ],
       "opotrebeni_na_bunku_05": 0.25
     },
@@ -3757,10 +3759,10 @@
       },
       "netezitelne": false,
       "zdroje": [
-        44,
-        45,
-        46,
-        48
+        47,
+        48,
+        49,
+        51
       ],
       "opotrebeni_na_bunku_05": 0.75
     },
@@ -3809,11 +3811,11 @@
       },
       "netezitelne": false,
       "zdroje": [
-        42,
-        44,
         45,
-        46,
-        48
+        47,
+        48,
+        49,
+        51
       ],
       "opotrebeni_na_bunku_05": 0.833
     },
@@ -3862,11 +3864,11 @@
       },
       "netezitelne": false,
       "zdroje": [
-        42,
-        44,
         45,
-        46,
-        48
+        47,
+        48,
+        49,
+        51
       ],
       "opotrebeni_na_bunku_05": 0.917
     },
@@ -3915,11 +3917,11 @@
       },
       "netezitelne": false,
       "zdroje": [
-        42,
-        44,
         45,
-        46,
-        48
+        47,
+        48,
+        49,
+        51
       ],
       "opotrebeni_na_bunku_05": 0.833
     },
@@ -3968,11 +3970,11 @@
       },
       "netezitelne": false,
       "zdroje": [
-        42,
-        44,
         45,
-        46,
-        48
+        47,
+        48,
+        49,
+        51
       ],
       "opotrebeni_na_bunku_05": 0.833
     },
@@ -4021,11 +4023,11 @@
       },
       "netezitelne": false,
       "zdroje": [
-        42,
-        44,
         45,
-        46,
-        48
+        47,
+        48,
+        49,
+        51
       ],
       "opotrebeni_na_bunku_05": 0.833
     },
@@ -4074,11 +4076,11 @@
       },
       "netezitelne": false,
       "zdroje": [
-        42,
-        44,
         45,
-        46,
-        48
+        47,
+        48,
+        49,
+        51
       ],
       "opotrebeni_na_bunku_05": 0.833
     },
@@ -4127,11 +4129,11 @@
       },
       "netezitelne": false,
       "zdroje": [
-        42,
-        44,
         45,
-        46,
-        48
+        47,
+        48,
+        49,
+        51
       ],
       "poznamka": "Název mísí skálu a led; hodnoty jako žula. Sníh je samostatná buňka eternal_snow.",
       "opotrebeni_na_bunku_05": 0.833
@@ -4177,10 +4179,10 @@
       },
       "netezitelne": false,
       "zdroje": [
-        42,
-        44,
         45,
-        46
+        47,
+        48,
+        49
       ],
       "opotrebeni_na_bunku_05": 0.5
     },
@@ -4225,8 +4227,8 @@
       },
       "netezitelne": false,
       "zdroje": [
-        48,
-        50
+        51,
+        53
       ],
       "vytezek_kusovy": [
         {
@@ -4278,8 +4280,8 @@
       },
       "netezitelne": false,
       "zdroje": [
-        48,
-        50
+        51,
+        53
       ],
       "vytezek_kusovy": [
         {
@@ -4330,8 +4332,8 @@
       },
       "netezitelne": false,
       "zdroje": [
-        45,
-        49
+        48,
+        52
       ],
       "poznamka": "Buňka je už žíla; 300 ‰ je herní abstrakce (reálné cín/Li ložisko bývá < 1 % [49-typově]).",
       "opotrebeni_na_bunku_05": 0.333
@@ -4377,8 +4379,8 @@
       },
       "netezitelne": false,
       "zdroje": [
-        45,
-        55
+        48,
+        67
       ],
       "opotrebeni_na_bunku_05": 0.5
     },
@@ -4423,9 +4425,9 @@
       },
       "netezitelne": false,
       "zdroje": [
-        44,
-        45,
-        46
+        47,
+        48,
+        49
       ],
       "opotrebeni_na_bunku_05": 0.1
     },
@@ -4470,8 +4472,8 @@
       },
       "netezitelne": false,
       "zdroje": [
-        48,
-        50
+        51,
+        53
       ],
       "vytezek_kusovy": [
         {
@@ -4526,11 +4528,17 @@
       },
       "netezitelne": false,
       "zdroje": [
-        45,
-        49
+        48,
+        52
       ],
       "poznamka": "Reálně g/t (žilné zlato často jednotky g/t). Buňka je už bohatá žíla; 80 ‰ je herní abstrakce, ne hmotnostní jakost.",
       "opotrebeni_na_bunku_05": 0.333
     }
+  },
+  "recepty": {
+    "status": "hypotéza Jan 13:39, konfigurovatelné, ne rozhodnutí",
+    "zaklad": "Koupený recept = průměrná kvalita. Jednotka umožní ladit parametry.",
+    "optimum": "Skryté, ne nutně monotónní (okno teploty). Kvalita vstupů omezuje strop.",
+    "katalog": "navrhy/katalog-materialu.md"
   }
 }

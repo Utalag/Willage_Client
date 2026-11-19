@@ -232,6 +232,28 @@ Skupiny: 1 Prototyp a buildy · 2 Terén a tvar · 3 Rozlišení bloku · 4 Ská
   - Okamžitá část R (prameny u výkopu hned) není. Zveřejní se až celý výsledek.
 - **Další krok:** vážit operace floodu v rozpočtu R, okamžitá část R, snížit režii kroku 0 (ug58.edit, ~10–25 ms).
 
+### ✅ Výnosy hornin: seznam surovin a podíly podle vrstvy blueprintu (2026-11-19 13:23, rozhodnutí Jana)
+- **Směr:** každá hornina má seznam získatelných surovin (i více druhů). Při definici vrstev blueprintu může blok přepsat procenta toho, co z horniny po zpracování vypadne. Součet podílů je 100 %. Smí jen suroviny povolené u té horniny.
+- **Vztah k 17:53:** kopání dál dává 1 buňku materiálu + šanci na nález. Přepis podílů se týká **zpracování** té buňky, ne změny souhrnu MaterialId v bloku.
+- **Další krok:** tvar dat, validace a napojení na WVB1 jsou v návrhu E65. Jan rozhodne o dvoukroku (kopání, pak zpracování) vs rozkladu hned při kopání.
+
+### ✅ Po identifikaci zůstanou obě jména (2026-11-19 13:31, rozhodnutí Jana)
+- **Směr:** až postava surovinu pozná, zůstane vlastní název, který jí dal hráč, i skutečný název. Vlastní název může hráč sám smazat.
+- **Další krok:** platí pro model znalostí v E65 (úroveň „identifikovaný“). Varianty pojmenování se už nenavrhují.
+
+### 💡 Hypotéza: Mineralogie, řetězce zpracování a koupitelné recepty (2026-11-19 13:27–13:39, Jan)
+- 13:27: zpracování rozloží horninu v poměrech bloku. Mineralogie poznává, co to je. Zlepšení dovednosti buď odemkne další třídu hornin, nebo dá body na konkrétní materiál. Neznámé suroviny stejně padají (jako „neznámý minerál“ se znaky barva / tvrdost / hustota) a jdou zkoušet.
+- 13:33: krystaly mají kvalitu. Lze je brousit, drtit nebo dál zpracovat. Některé suroviny lze destilovat a rozložit; to odemyká jinou dovednost (chemie / alchymie).
+- 13:36: katalog běžných výrobků z těchto surovin (sklo, vápno, malta, kovy, …). Příklad: drcený křemen → sklo.
+- 13:39: popisy v katalogu jsou základ koupitelných receptů. Koupený recept řekne co a jak, ale dá jen průměrnou kvalitu. Ve výrobní jednotce (pec, dílna, huť) lze recept ladit (poměry, teplota, čas, přísady, čistota vstupů) a kvalitu výrazně zlepšit.
+- **Další krok:** rozepsáno v `navrhy/horniny-vlastnosti-tezba.md` a `navrhy/katalog-materialu.md`. Čeká na rozhodnutí.
+
+### 🧪 Blueprint / E65: vlastnosti a těžba hornin, katalog výrobků, jen návrh (2026-11-19 13:43 · `sdilene/horniny_tezba_navrh.json`, `navrhy/horniny-vlastnosti-tezba.md`, `navrhy/katalog-materialu.md`, shot `65_horniny_tezba.png`)
+- **Směr:** Jan chtěl jít do hornin, nejdřív vlastnosti a těžbu (tvrdost, výnos, nástroje). Navazuje na rozhodnutí 13:23 a 13:31 a na hypotézy 13:27–13:39. Sdílené vodní tabulky se nemění. Nic se necommituje (souběh s E64).
+- **Zlepšení:** je zapsané, co už existuje (pořadí 0–63, load/cantilever, rarita-v2, výnos 17:53, hostitelé minerálů, WVB1). Nová tabulka má typické Mohs, UCS, hustotu, CAI, třídu nástroje, čas na buňku 0,5 m a výchozí podíly surovin [45]–[56]. Návrh přepisu podílů v blueprintu / WVB1, varianty času A/B/C, model znalostí a řetězců. Katalog výrobků přidává jednotky a laditelné parametry kvality (koupitelný recept = průměr).
+- **Komplikace:** rozsahy UCS jsou široké, typická hodnota může přehodit třídu (gabro vs žula). Jakost rudných buněk je herní abstrakce, ne průměr ložiska [52][53][67]. Historický čas po × 144 je u tvrdé skály na streamu dlouhý, proto je v tabulce i kratší návrh. Ve hře se nic nezkoušelo.
+- **Další krok:** Jan vybere otevřené otázky v návrhu (dvoukrok, čas, recepty, Mineralogie).
+
 ### 🧱 Blueprint v3 / E63: přeliv po výkopu 2,3 s → 0,09 s, lokální oprava sestupu (2026-11-19 09:45 · `blueprint-studie/scripts/alg58/ug58.gd` příznaky E, I, shot `63_podzemi.png`)
 - **Směr:** Jan 08:39 „Zkus tu optimalizaci o které jsi psal.“ Nejdřív profil:
   - 98 % času je kapilární sestup od vstupů (~118 000 pásem).
