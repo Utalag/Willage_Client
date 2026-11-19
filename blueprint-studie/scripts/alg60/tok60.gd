@@ -539,12 +539,16 @@ static func _apply_drains(st: Dictionary, dirty = null) -> PackedInt32Array:
 					for o in r.outs67:
 						var col67: int = o[2]
 						if float(o[3]) <= 0.0: continue
-						if o[1] == "povrch": st.src2[col67] += float(o[3]); wr.append(col67)
-						st.under.append({"v0": ents[grp[0]][0], "from": ents[grp[0]][1].outlet, "exit": col67, "q": float(o[3]), "z": float(o[0]), "typ": o[1]})
+						var ty67: String = o[1]
+						if ty67 == "povrch" and bool(st.L.get("v74", false)) and not st.get("claim74", {}).has(col67): ty67 = "vyver74"   # E74: neobsazený výtok jen k vykreslení
+						if ty67 == "povrch": st.src2[col67] += float(o[3]); wr.append(col67)
+						st.under.append({"v0": ents[grp[0]][0], "from": ents[grp[0]][1].outlet, "exit": col67, "q": float(o[3]), "z": float(o[0]), "typ": ty67})
 				elif not r.closed and r.out_q > 0.0:
 					var col: int = r.out[4]
-					if r.out[3] == "povrch": st.src2[col] += r.out_q; wr.append(col)
-					st.under.append({"v0": ents[grp[0]][0], "from": ents[grp[0]][1].outlet, "exit": col, "q": r.out_q, "z": float(r.out[0]), "typ": r.out[3]})
+					var ty: String = r.out[3]
+					if ty == "povrch" and bool(st.L.get("v74", false)) and not st.get("claim74", {}).has(col): ty = "vyver74"   # E74: neobsazený výtok jen k vykreslení
+					if ty == "povrch": st.src2[col] += r.out_q; wr.append(col)
+					st.under.append({"v0": ents[grp[0]][0], "from": ents[grp[0]][1].outlet, "exit": col, "q": r.out_q, "z": float(r.out[0]), "typ": ty})
 				r.erase("members"); r.entries = vs; r.cache_key = sk
 				st.ug_bodies.append(r)
 	var chg := PackedInt32Array()
