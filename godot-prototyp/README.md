@@ -15,7 +15,7 @@ xvfb-run -a -s "-screen 0 1280x800x24" $G --rendering-driver opengl3 --path . --
 $G --headless --path . -s res://tools/parita_e66.gd -- --test=vse   # parita přenesených modulů se studií (6 hashů E61)
 $G --headless --path . -s res://tools/voda_e66.gd -- --vykopu=12   # voda ostrova bez scény: výkopy + kontrola -> shots/66_parita/voda_e66.json
 python3 tools/port_studie.py [--check]                         # znovu přenést moduly studie (nebo jen ověřit, že kopie sedí)
-tools/rez_gif.sh [--oblast=vse|x,y] [--krok=2] [--ms=600] [--out=shots/rez/x.gif] [--podzemi=1] [--bloky="0,0:louka:101;..."]
+tools/rez_gif.sh [--oblast=vse|x,y] [--krok=2] [--ms=750] [--out=shots/rez/x.gif] [--podzemi=1] [--bloky="0,0:louka:101;..."]
                                                                # řezy po vrstvách → animovaný GIF (bez GPU, ~3 s): materiály, česká legenda, podzemní tělesa
 xvfb-run -a -s "-screen 0 1280x800x24" $G --rendering-driver opengl3 --path . -- --e66b-bok   # bok ostrova před / po -> ../blueprint-studie/shots/66b_bok.png
 $G --headless --path . -s res://tools/teleso_e66.gd && python3 tools/teleso_obrazek.py   # diagnostika podzemního tělesa -> 66b_teleso.png

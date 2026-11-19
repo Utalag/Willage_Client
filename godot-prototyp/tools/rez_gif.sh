@@ -3,13 +3,13 @@
 #   tools/rez_gif.sh                                   # celý startovní ostrov, krok 2 → shots/rez/ostrov.gif
 #   tools/rez_gif.sh --oblast=0,0 --krok=2 --ms=500 --out=shots/rez/blok_0_0.gif
 #   tools/rez_gif.sh --bloky="0,0:hora:7" --oblast=0,0 --podzemi=0
-# Volby: --oblast=vse|x,y (slot bloku), --krok=N (výchozí 2), --ms=N (doba snímku), --out=cesta.gif,
+# Volby: --oblast=vse|x,y (slot bloku), --krok=N (výchozí 2), --ms=N (doba snímku, výchozí 750 ms), --out=cesta.gif,
 #        --bloky="x,y:typ:seed;..." (výchozí startovní ostrov hry), --podzemi=0|1 (překryv podzemních těles),
 #        --od=z (první vrstva), --px=N (pixelů na buňku), --bp.<param>=hodnota (parametry terénu studie).
 set -euo pipefail
 cd "$(dirname "$0")/.."
 G=${G:-/workspace/tools/Godot_v4.7.2-stable_linux.x86_64}
-oblast=vse; krok=2; ms=600; out=""; bloky=""; podzemi=1; od=0; px=0; extra=()
+oblast=vse; krok=2; ms=750; out=""; bloky=""; podzemi=1; od=0; px=0; extra=()
 for a in "$@"; do
   case "$a" in
     --oblast=*) oblast=${a#*=} ;; --krok=*) krok=${a#*=} ;; --ms=*) ms=${a#*=} ;; --out=*) out=${a#*=} ;;

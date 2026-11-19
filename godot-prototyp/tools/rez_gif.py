@@ -9,7 +9,7 @@ from PIL import Image, ImageDraw, ImageFont
 ap = argparse.ArgumentParser()
 ap.add_argument("data"); ap.add_argument("out")
 ap.add_argument("--oblast", default="vse", help="vse | x,y (slot bloku ostrova)")
-ap.add_argument("--krok", type=int, default=2); ap.add_argument("--ms", type=int, default=600)
+ap.add_argument("--krok", type=int, default=2); ap.add_argument("--ms", type=int, default=750)
 ap.add_argument("--px", type=int, default=0, help="pixelů na buňku (0 = automaticky)")
 ap.add_argument("--podzemi", type=int, default=1); ap.add_argument("--od", type=int, default=0)
 a = ap.parse_args()
