@@ -46,6 +46,7 @@ static func solve(c: Dictionary, entries: PackedInt32Array, q: float, ex: Dictio
 	var prune := bool(c.get("prune67", true)) and not trace
 	var pmin := float(c.get("prune67_min", 0.1))
 	var remizy := bool(c.get("remizy69", true))
+	var harm := String(c.get("prumer70", "pomer")) == "harmonicky"
 	var guard := 0
 	var gmax := 40 * NB + 1000
 	while down.size() > 0 and guard < gmax:
@@ -72,10 +73,13 @@ static func solve(c: Dictionary, entries: PackedInt32Array, q: float, ex: Dictio
 			qb[bl] = float(qb.get(bl, 0.0)) + f; down.push(float(c.lo[bl]), bl); continue
 		# 3) do stran do pásem s nižším dnem, váha perm × výška překryvu
 		var cand := []; var ws := 0.0
+		var k1 := _perm(c, b, t)
 		for nb in F._nbrs(c, b):
 			var b2: int = nb[0]
 			if int(c.bcol[b2]) == int(c.bcol[b]) or float(c.lo[b2]) >= lo - E: continue
-			var w := _perm(c, b2, t) * maxf(float(nb[2]) - float(nb[1]), 0.01)
+			var k2 := _perm(c, b2, t)
+			if harm: k2 = 2.0 * k1 * k2 / (k1 + k2)   # E70: propustnost rozhraní = harmonický průměr obou materiálů
+			var w := k2 * maxf(float(nb[2]) - float(nb[1]), 0.01)
 			cand.append([b2, w]); ws += w
 		if ws > 0.0:
 			cand.sort_custom(func(a, b3): return a[0] < b3[0])
