@@ -293,6 +293,29 @@ Výchozí: 800 kapek na blok, `ero_cap` 1,0, `ero_erode` 0,1, `ero_deposit_rate`
 - **Hypotéza:** parita bit po bitu (kopie se mění jen v cestách). Vložení bloku bp ≈ 0,25–0,4 s jako E49 detail
   (+ povrch a tráva prototypu ~0,4 s), voda ostrova 7 bloků (≈ 112 × 112 sloupců) plně < 1 s, kopání u vody desítky ms.
 
+## E73 nálezy E68: pramen ve vlastní tůni, přítok tůně jako součet, zrychlení smyčky, E67 „vše prosákne“ (plán, zapsáno před pokusem 2026-11-19 23:15; TODO Voda, Jan: nejdřív dodělat vodu)
+- **1. Pramen v prohlubni, kterou sám zavodní (`p73_vyver`):** cyklus ostrova s periodou 2 (E68) vzniká tím, že
+  zavodněná prohlubeň se v dalším kole stane vstupem téhož tělesa a její buňky se vyloučí z výstupů (`excl`). Pravidlo:
+  **tůň napájená pramenem tělesa (výtok pramene do ní teče po povrchu, cesta D8) není vstupem téhož tělesa** – je to
+  vývěrová tůň, voda z ní jen odtéká přelivem (do jiného tělesa smí). Informace z minulého kola (výstupy `st.under` +
+  členové tělesa z trasovacího řešení) → bez historie navíc; v pevném bodě je pravidlo splněné. Jen na úrovni toku
+  (`_apply_drains`), podzemí se nemění (oprava výkopu E64 zůstává platná).
+- **2. Přítok tůně = součet všech přítoků (`p73_pritok`):** dnes `q = max ain` v tůni a odtok do podzemí jen na buňce
+  s největším přítokem; větev, která vtéká jinudy, se nepočítá. Nově: výtokové buňky tůně (buňka tůně, jejíž D8 cíl leží
+  mimo tůň), `Q = Σ ain` výtokových buněk, kapacita odtoku se rozdělí poměrem `ain / Q` (`extra` na každé výtokové buňce),
+  odteče `min(Q, D)`.
+- **3. Zrychlení pomalé smyčky (`p73_zrychleni`):** z posledních dvou přírůstků výtoků pramenů (`src2`): poměr r stejný na
+  všech buňkách → geometrická řada (r < 1: skok na limitu `x + d·r / (1 − r)`), r ≈ 1 (lineární růst do kapacity) →
+  skok o d · J (J se zdvojuje). Po skoku běží normální kolo; konec až při bitové shodě (pevný bod), aby plný a lokální
+  přepočet daly stejné bity. Výsledek se nesmí změnit, jen počet kol.
+- **4. E67 „vše prosákne“ ≠ uzavřené (`p73_prusak_tok`):** `closed` jen když nemá výstup a průsak nestačí (voda by stoupala);
+  když průsak pojme celý přítok, těleso vodu přijímá (tok pustí odtok tůně), výstupy žádné.
+- **Měření:** ostrov (prototyp `voda_e66`, výchozí hra i E67): prameny, vodopády, výstupy, tůně, Σ okraj, objem, chyba
+  bilance, kola, čas plného výpočtu a výkopu, neshody, otisk v obou pořadích; test smyčky `tools/e68.gd`; testy E69.
+- **Hypotéza:** 1 odstraní cyklus (bilance ostrova přesně 0); 2 změní ostrov jen tam, kde do tůně teče víc větví;
+  3 sníží kola testu 13 / 68 na jednotky; 4 srovná auto / pretok v testu se zdrojem 0,03.
+- Beze změny: `p71_cas` 144, `p72_prusak`, žádný limit vzdálenosti slučování.
+
 ## E68 výsledky (2026-11-19 23:10, větev `e68-orchestrator` z `e71-kapacita-dolu`, do main až po schválení Janem)
 - **Co je nového:** `scripts/hydro68/hydro68.gd` (prototyp `scripts/voda/hydro68.gd` přes `port_studie.py`):
   - `full(st, kola, tol, cyklus)`: stejné kroky jako `tok.route` (priority-flood + D8 → odtoky tůní → podzemí → prameny →
