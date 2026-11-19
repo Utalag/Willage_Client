@@ -11,6 +11,7 @@ const ParamRegistry_ = preload("res://scripts/param_registry.gd")
 func activate() -> void:
 	ParamRegistry_.register_stat("Instance vegetace (kreslené)", self, &"veg_instances")
 	ParamRegistry_.register_stat("Bloků", self, &"block_count")
+	ParamRegistry_.register("Voda E67 (podzemí, prahy)", load("res://scripts/voda/voda_e67_params.gd").inst())
 	ParamRegistry_.load_dev_addons(self)   # jen s -- --dev a jen když doplněk existuje (v exportu není)
 
 func block_count() -> int:

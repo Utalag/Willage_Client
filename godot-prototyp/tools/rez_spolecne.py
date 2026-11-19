@@ -33,10 +33,24 @@ class Data:
         self.ug = d.get("podzemi", {}).get("sloupce", {}) if podzemi else {}
         self.voda = d.get("voda", {})
         self.gw = d.get("podzemni_voda", {}) if podzemi else {}   # výplň podzemní vodou po sloupcích [[spodek m, hladina m, těleso]] ze stavu řešiče
-        self.tv = d.get("telesa_voda", []) if podzemi else []    # tělesa s vodou: hladina, výstup [x, y, z], typ povrch|okraj, režim
+        self.hl = d.get("hladiny_voda", []) if podzemi else []   # stojatá podzemní voda: [{hladina, typ, pasem, objem_m3}]
+        self.vy_all = d.get("vystupy_voda", []) if podzemi else []   # výstupy podzemní vody [x, y, z, typ povrch|okraj, q l/s], dle q
+        self.film = d.get("protok_voda", {}) if podzemi else {}  # E67 pretok: protékající voda po sloupcích [[spodek, vršek]]
+        self.rezim = d.get("rezim_vody", "")
+        self.zdroje = d.get("zdroje", "hra")
         self.zmax = max(max(hm) for _, hm, _ in self.blocks.values())
         b0 = list(self.blocks.values())[0][2]
         self.title = "ostrov" if oblast == "vse" else "blok %s (%s %d)" % (oblast, b0["typ"], b0["seed"])
+        self.render67 = d.get("render67", {"min_vytok": 0.0, "min_tok": 0.0})
+        self.set_render(None, None)
+
+    def set_render(self, min_vytok, min_tok):
+        """E67b: prahy jen pro kreslení (simulace beze změny): výstupy / protékající větve slabší než práh se nekreslí"""
+        if min_vytok is not None: self.render67["min_vytok"] = min_vytok
+        if min_tok is not None: self.render67["min_tok"] = min_tok
+        mv = self.render67.get("min_vytok", 0.0)
+        self.vy = [v for v in self.vy_all if v[4] >= mv]
+        self.vy_skryte = [v for v in self.vy_all if v[4] < mv]
 
     def color(self, m):
         return (17, 17, 17) if m == 0 else hexrgb(self.col.get(m, "#ff00ff"))

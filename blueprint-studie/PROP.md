@@ -293,6 +293,552 @@ Výchozí: 800 kapek na blok, `ero_cap` 1,0, `ero_erode` 0,1, `ero_deposit_rate`
 - **Hypotéza:** parita bit po bitu (kopie se mění jen v cestách). Vložení bloku bp ≈ 0,25–0,4 s jako E49 detail
   (+ povrch a tráva prototypu ~0,4 s), voda ostrova 7 bloků (≈ 112 × 112 sloupců) plně < 1 s, kopání u vody desítky ms.
 
+## E73 nálezy E68: pramen ve vlastní tůni, přítok tůně jako součet, zrychlení smyčky, E67 „vše prosákne“ (plán, zapsáno před pokusem 2026-11-19 23:15; TODO Voda, Jan: nejdřív dodělat vodu)
+- **1. Pramen v prohlubni, kterou sám zavodní (`p73_vyver`):** cyklus ostrova s periodou 2 (E68) vzniká tím, že
+  zavodněná prohlubeň se v dalším kole stane vstupem téhož tělesa a její buňky se vyloučí z výstupů (`excl`). Pravidlo:
+  **tůň napájená pramenem tělesa (výtok pramene do ní teče po povrchu, cesta D8) není vstupem téhož tělesa** – je to
+  vývěrová tůň, voda z ní jen odtéká přelivem (do jiného tělesa smí). Informace z minulého kola (výstupy `st.under` +
+  členové tělesa z trasovacího řešení) → bez historie navíc; v pevném bodě je pravidlo splněné. Jen na úrovni toku
+  (`_apply_drains`), podzemí se nemění (oprava výkopu E64 zůstává platná).
+- **2. Přítok tůně = součet všech přítoků (`p73_pritok`):** dnes `q = max ain` v tůni a odtok do podzemí jen na buňce
+  s největším přítokem; větev, která vtéká jinudy, se nepočítá. Nově: výtokové buňky tůně (buňka tůně, jejíž D8 cíl leží
+  mimo tůň), `Q = Σ ain` výtokových buněk, kapacita odtoku se rozdělí poměrem `ain / Q` (`extra` na každé výtokové buňce),
+  odteče `min(Q, D)`.
+- **3. Zrychlení pomalé smyčky (`p73_zrychleni`):** z posledních dvou přírůstků výtoků pramenů (`src2`): poměr r stejný na
+  všech buňkách → geometrická řada (r < 1: skok na limitu `x + d·r / (1 − r)`), r ≈ 1 (lineární růst do kapacity) →
+  skok o d · J (J se zdvojuje). Po skoku běží normální kolo; konec až při bitové shodě (pevný bod), aby plný a lokální
+  přepočet daly stejné bity. Výsledek se nesmí změnit, jen počet kol.
+- **4. E67 „vše prosákne“ ≠ uzavřené (`p73_prusak_tok`):** `closed` jen když nemá výstup a průsak nestačí (voda by stoupala);
+  když průsak pojme celý přítok, těleso vodu přijímá (tok pustí odtok tůně), výstupy žádné.
+- **Měření:** ostrov (prototyp `voda_e66`, výchozí hra i E67): prameny, vodopády, výstupy, tůně, Σ okraj, objem, chyba
+  bilance, kola, čas plného výpočtu a výkopu, neshody, otisk v obou pořadích; test smyčky `tools/e68.gd`; testy E69.
+- **Hypotéza:** 1 odstraní cyklus (bilance ostrova přesně 0); 2 změní ostrov jen tam, kde do tůně teče víc větví;
+  3 sníží kola testu 13 / 68 na jednotky; 4 srovná auto / pretok v testu se zdrojem 0,03.
+- Beze změny: `p71_cas` 144, `p72_prusak`, žádný limit vzdálenosti slučování.
+
+## E73 výsledky (2026-11-19 23:45, větev `e73-nalezy-e68` z `e68-orchestrator`, do main až po schválení Janem)
+Data `blueprint-studie/shots/e73/` (souhrn `tools/e73_souhrn.py`), test smyčky `tools/e68.gd --kola=200`, prototyp
+`voda_e66 --vykopu=12 --kontrola=1` (obě pořadí výkopů), výchozí hra i `--bp.voda_e67=true`.
+- **Nález navíc (oprava 291f74a):** plný výpočet `tok.route` bral z výstupů E67 jen hlavní, lokální `tok60.update` všechny →
+  prameny E67 v plném výpočtu chyběly. Opraveno (stejná větev `outs67` v obou). Mění test smyčky v režimu pretok
+  (prameny 0,121 místo 0,703 – druhý výstup E67 teče jinou větví mimo tůň).
+- **1. Vývěrová tůň (`p73_vyver`):**
+  - *Negativ (první verze z plánu):* „tůň napájená pramenem není vstupem téhož tělesa“ kmitá v testu smyčky: tůň bez vstupu →
+    pramen zmizí → tůň není napájená → znovu vstup (auto z 0,1: 3 kola, cyklus, změna 0,742, chyba bilance 0,061). Zamítnuto.
+  - *Pravidlo (použito):* tůň zavodněná pramenem tělesa (cesta D8 od výtoku pramene z minulého kola, těleso = členové
+    trasovacího řešení) **zůstává vstupem, ale její buňky se nevylučují z výstupů tělesa** – pramen smí vyvěrat v tůni, kterou
+    sám zavodnil, voda z tůně zároveň prosakuje zpět. Pevný bod je stabilní (stejné vstupy i výstup v dalším kole).
+  - Ostrov (výchozí hra): kola 4 (cyklus 2) → 3 bez cyklu; chyba bilance −0,01998 → **0** (před i po výkopech); Σ okraj
+    9,8167 → 9,7968 l/s (zmizelo 0,02 l/s „z ničeho“); odtok tůní 0,1532 → 0,1732 = prameny 0,1732; plný výpočet 2467 → 2024 ms;
+    výkop ⌀ 1103 → 762 ms, max 2036 → 1256 ms; 0 neshod; otisk 63d7b89a91385a79 shodný v obou pořadích. Souhrn beze změny
+    (5 pramenů, 8 vodopádů, 5 na okraji 9,652 l/s, 160 sloupců tůní, 26 koryta, výstup podzemí 0,1815 l/s ve 18,5 m).
+  - E67 ostrov: beze změny (otisk 905eec578834b4ff).
+  - Test smyčky: pramen se přesune do tůně (písková trubka sousedí s tůní) → bez opravy 2 se jeho voda do odtoku nepočítá
+    (odtok 0,1, prameny 0,062); s opravou 2 smyčka zase běží (prameny 0,704, odtok 0,742). Proto zapínat jen spolu s 2.
+- **2. Přítok tůně jako součet (`p73_pritok`):** ostrov beze změny (stejný otisk 5284ab63f040e8e5 bez 1, 63d7b89a91385a79 s 1 –
+  tůně ostrova mají jednu výtokovou buňku). Test smyčky: pretok z 0,1 / 0,05 nově shodný s auto (prameny 0,7026, 14 / 69 kol;
+  dřív 0,121 / 0,021, protože druhá větev do tůně se nepočítala). Auto beze změny.
+- **3. Zrychlení smyčky (`p73_zrychleni`):** test smyčky auto z 0,1: 13 → 8 kol (2 skoky), z 0,05: 68 → 17 kol (5 skoků),
+  stejný otisk; pretok 26 → 4 a 24 → 4 kola, stejné hodnoty, navíc přesná bitová shoda místo konce na toleranci 1e-9.
+  Vše zapnuté: 10 / 19 kol. Ostrov: beze změny (smyčky mají 2–3 kola, žádný skok), otisky stejné.
+  *Negativ:* Aitken po buňkách zkoušen nebyl – stačil společný poměr přírůstků; při různých poměrech na buňkách skok neproběhne.
+- **4. E67 „vše prosákne“ (`p73_prusak_tok`):** test pretok z 0,03: dřív těleso „uzavřené“ → tůň neodtékala, 0,03 přetekla na
+  okraj; nově 0,03 prosákne jako v auto (otisk bdff72158cede340 = auto). Ostrov (obě hry) beze změny. E69 (výchozí,
+  `--ponor=0.3`, referenční sloupec): výsledky bit po bitu stejné (kromě časů), chyba bilance 0.
+- **Výchozí hodnoty:** všechny čtyři zapnuté (`p73_* = true`). Výchozí hra po přepnutí: otisk 63d7b89a91385a79, chyba 0,
+  3 kola, 0 neshod, plný výpočet ~1,7–2,0 s. Objem vody prototyp neměří přímo; sloupce tůní a koryt beze změny (160 / 26).
+- Jeden běh prototypu měl výkop 509 s (zaseknutý box); opakování 0,5–2,2 s, data nahrazena.
+- Beze změny: `p71_cas` 144, `p72_prusak`, žádný limit vzdálenosti slučování.
+
+## E68 výsledky (2026-11-19 23:10, větev `e68-orchestrator` z `e71-kapacita-dolu`, do main až po schválení Janem)
+- **Co je nového:** `scripts/hydro68/hydro68.gd` (prototyp `scripts/voda/hydro68.gd` přes `port_studie.py`):
+  - `full(st, kola, tol, cyklus)`: stejné kroky jako `tok.route` (priority-flood + D8 → odtoky tůní → podzemí → prameny →
+    znovu povrch), ale smyčka povrch ↔ podzemí běží do ustálení (změna `extra` / `src2` ≤ `p68_tol`), nejvýš `p68_kola`;
+  - hlídání cyklu: když se stav odtoků zopakuje (otisk `extra` / `src2`), skončí se v členu cyklu s nejmenším otiskem →
+    plný i lokální přepočet dojdou ke stejnému stavu bez ohledu na sudost počtu kol;
+  - `update(...)` = `tok60.update` s `KOLA` / `TOL` / `CYKLUS` (statické proměnné; výchozí 4 / 0 / vyp = bitově dosavadní);
+  - `bilance(st)`: zdroje, prameny z podzemí, okraj, ponory, odtok tůní, vstup / prameny / stěna / průsak podzemí,
+    do hloubky; chyby svět / povrch / dolů / nahoru / podzemí;
+  - `otisk(st)` (fill, eff, to, extra, src2, výstupy podzemí), `udalosti(st)` (plnění tůní seřazené podle času);
+  - prototyp `ostrov_voda.gd`: plný výpočet, výkop, krok R i `check_full` přes `p68_hydro` (`p68_kola` 64, `p68_tol` 1e-9),
+    `hydro()` pro hlášení; `voda_e66.gd` hlásí bilanci / otisk / kola a umí `--poradi=obracene`.
+  - Algoritmy povrchu a podzemí beze změny. `p68_hydro` výchozí **zapnuto** (viz rozhodnutí).
+- **Test smyčky (`tools/e68.gd`, mísa 15 × 15: tůň nad polopropustnou vrstvou (perm 0,2), pod ní písek, komín písku
+  na kopci nad tůní → pramen teče zpět do tůně, přeliv k okraji; kapacita odtoku tůně 0,742 l/s, průsak podzemí 0,0394):**
+
+  | zdroj | kola (4 = dosud) | přeliv k okraji | pramen | chyba bilance | kola do ustálení | přeliv | pramen | chyba | čas |
+  |---|---|---|---|---|---|---|---|---|---|
+  | 0,10 | 4, neustáleno | 0 | 0,242 | **0,0606 (61 %)** | 13 | 0,0606 | 0,703 | 1e-17 | 60–100 ms |
+  | 0,05 | 4, neustáleno | 0 | 0,042 | **0,0106 (21 %)** | 68 | 0,0106 | 0,703 | 8e-17 | 300–480 ms |
+  | 0,03 | 2 (auto) / 1 (pretok) | – | 0 | 0 | stejné | – | – | 0 | 10–16 ms |
+
+  Ustálený stav sedí s výpočtem ručně: přítok tůně = zdroj + kapacita − průsak (0,803), přeliv = zdroj − průsak.
+  Auto (E58) i pretok (E67) dávají stejný otisk; dva běhy stejný otisk.
+- **Startovní ostrov (prototyp `voda_e66`, 12 výkopů, kontrola proti plnému výpočtu po každém):**
+
+  | | výchozí hra (E58) vyp | výchozí hra zap | E67 vyp | E67 zap |
+  |---|---|---|---|---|
+  | prameny / vodopády / na okraji | 5 / 8 / 5 | stejné | 5 / 8 / 5 | stejné |
+  | Σ přes okraj (vodopády) | 9,652 l/s | stejné | 9,652 | stejné |
+  | tůně / koryto (sloupce) | 160 / 26 | stejné | 160 / 26 | stejné |
+  | výstupy podzemí | pramen 0,1815 v 18,5 m | stejné | stěna 0,0808 + 0,0808 | stejné |
+  | kola plného výpočtu | 4 (pevně) | 4, cyklus perioda 2 | 2 | 2, ustáleno |
+  | chyba bilance svět | −0,0200 l/s | −0,0200 (nahlášeno) | 0 | 0 |
+  | plný výpočet | 2,0–2,7 s | 2,3–2,5 s | 0,52–0,54 s | 0,59–0,60 s |
+  | výkop průměr (dvě pořadí) | 0,99 / 1,04 s | 0,99 / 1,00 s | 82 / 16 ms | 69 / 16 ms |
+  | neshody s plným výpočtem | 0 | 0 | 0 | 0 |
+  | otisk po výkopech, obě pořadí | 5284ab63f040e8e5 | stejný | 905eec578834b4ff | stejný |
+
+  Zapnuto = na ostrově bitově stejný výsledek jako dosud (otisk před i po výkopech). Přímé měření stejného stavu:
+  `tok.route` 2,28 / 2,46 s, `full` 4 kola 2,26 / 2,43 s, `full` 64 kol + cyklus 2,45 / 2,35 s (rozdíly jsou šum boxu).
+- **Nález na ostrově (výchozí hra):** smyčka povrch ↔ podzemí se neustálí, ale přepíná s periodou 2: pramen tělesa vyjde
+  střídavě ve sloupci 8781 a 9931; každý z nich zavodní jinou suchou prohlubeň (12170 / 17136), ta se v dalším kole stane
+  vstupem a její buňky se vyloučí z výstupů (`excl`), takže pramen skočí jinam. Dosavadní 4 kola tak končí náhodně „v půlce“
+  cyklu a bilance nesedí o 0,02 l/s (pramen 0,1732 vs odtok tůní 0,1532: vznikne voda navíc). E68 to teď pozná a nahlásí
+  (`cyklus: 2`), výsledek je stejný jako dřív. **Nevyřešeno.**
+- **Negativa:**
+  1. smyčka s velkou kapacitou odtoku a malým čistým zdrojem konverguje pomalu: kol ≈ kapacita / (zdroj − průsak)
+     (0,05 l/s → 68 kol, ~0,5 s); každé kolo = nové volání podzemí s jiným průtokem (v prototypu se registruje a opravuje
+     při každém výkopu). Limit 64 kol – pak `ustaleno: false` a chyba bilance v hlášení;
+  2. cyklus na ostrově (výše) – potřebuje pravidlo pro pramen v prohlubni, kterou sám plní (dnes `excl` = buňky tůní
+     vstupu); pravděpodobně dovolit pramen v tůni, kterou zavodnil jen on;
+  3. odtok tůně vidí jen nejsilnější přítok (`q = max ain` v tůni); pramen, který do tůně teče jinou větví než zdroj,
+     se do odtoku nepočítá (první verze testu: pramen tekl kolem odtoku tůně rovnou k okraji). Test proto má zdroj
+     pod pramenem;
+  4. E67 vrací `closed`, když voda z pasti celá prosákne (žádný výstup) → tok pak do podzemí nepustí nic (zdroj 0,03:
+     auto prosákne 0,03, pretok nechá 0,03 přetéct po povrchu). Rozdíl auto / pretok;
+  5. `tools/alg60_tok.gd` (parita tok60) bez dat cache `p52_cache` na boxu nespustí; parita ověřena otiskem v prototypu
+     (vyp / zap bitově stejné) a 0 neshodami.
+- **Rozhodnutí:** `p68_hydro` výchozí zapnuto: hra se nemění (stejný otisk), čas v šumu, 0 neshod, stejný otisk v obou
+  pořadích výkopů, smyčky se dopočítají do ustálení a cyklus se nahlásí. Vypnout jde `--bp.p68_hydro=false`.
+- **Doporučení do TODO:** (a) pravidlo pro pramen v prohlubni, kterou sám zavodní (cyklus ostrova); (b) přítok tůně =
+  součet všech přítoků, ne nejsilnější; (c) zrychlení pomalých smyček (skok o odhad přírůstku); (d) `closed` vs
+  „vše prosákne“ v E67.
+
+## E72 slučování drobných výstupů a průsaků E71 pod prahem p67_prune_min (výsledky 2026-11-19 22:35, větev `e68-orchestrator`; Jan 22:24 „malé průsaky a přelivy pod prahem se slučují“, TODO Voda „Slučování drobných výstupů z pastí“)
+- **Pozn. k postupu:** Jan chtěl opravu hned, před E68; plán a výsledky jsou proto v jednom zápisu (napsáno po pokusu).
+- **Příčina (E71):** práh `p67_prune_min` (0,1 l/s, E67b) se použil jen při dělení do stran. Nové cesty E71 ho obcházely:
+  dělení kapacitou dolů (dolů / zbytek), průsak protékané vody dnem a výstupy pastí. Navíc zdroje na ostrově jsou samy
+  malé (desítky tůní po 0,02–0,05 l/s), takže i bez E71 končily drobnými výstupy (E70: 67 výstupů 0,02–0,05 l/s).
+- **Co je nového (`ug67.gd`, studie i prototyp; přepínače `p72_slucovat` (výchozí zapnuto), `p72_prusak` (výchozí zapnuto); práh
+  je stávající `p67_prune_min`, žádný nový):**
+  - dělení kapacitou: menší z větví (dolů / dál) pod prahem → celá do větší (dolů smí přetéct kapacitu nejvýš o < práh);
+  - průsak protékané vody: průsak nebo zbytek pod prahem → do větší části;
+  - výstupy: výstup pod prahem se přičte nejbližšímu silnému výstupu (≥ práh) téhož volání; shoda vzdálenosti i průtoku →
+    rovným dílem. Když silný není, vše do největšího (shoda → rovným dílem, např. plochá vrstva zůstane 80 × 0,0125);
+  - vypnuto = bitově E71 (ostrov otisk výstupů 43943a241bcaf1d0, výkopy e704e819891f87e7).
+- **Chyba nalezená testem (E71, opraveno zvlášť `1c7fe14`):** past rozdělovala znovu průsak, který už odeslala do pásma, jež
+  pak padlo do pasti. Ostrov „pretok bez O“: Σ výstupů 4,417 l/s při vstupu 4,100 (hmota navíc +0,317). Po opravě 4,100.
+  Varianta „pretok + O“ (hra) se nemění. Tvrzení E71 „Σ 4,10 zachováno ve všech variantách“ neplatilo.
+- **Ostrov (`tools/e67.gd`, pretok + O, výchozí K + P):**
+
+  | | E71 (vyp) | E72 (zap) |
+  |---|---|---|
+  | výstupů | 150 | 6 |
+  | < 0,02 l/s | 119 | 0 |
+  | 0,02–0,1 l/s | 24 | 0 |
+  | ≥ 0,1 l/s | 7 | 6 (0,22–1,79) |
+  | Σ výstupy | 4,100 | 4,100 |
+  | mokrá pásma | 1225 | 868 |
+  | pod hladinou / pasti s vodou | 478 / 37 | 414 / 31 |
+  | objem | 7,0 m³ | 7,0 m³ |
+  | výpočet podzemí | 88–92 ms | 78–82 ms |
+  | výkop průměr / max | 60–66 / 61–70 ms | 49–54 / 52–56 ms |
+  | neshody, dvě pořadí | 0, stejný otisk | 0, stejný otisk e8deb156254e1840 |
+
+  Sloučeno 96 drobných výstupů, nejdál 19,3 sloupce řídicí mřížky. Starý řešič (otisk 23b823aa710c9942) beze změny.
+- **Testy E69:** bilance chyba 0 a symetrie 0 ve všech případech (plocha, kupole, mísa; i s ponorem 0,3). Reference
+  (vrstvy 1,0 … 0,2 l/s) beze změny 5 × 0,2. Kupole: 16 → 8 výstupů, voda vyjde z L3 (dřív 0,742 L4 + 0,258 L5).
+- **Prototyp (`voda_e66 --bp.voda_e67=true`, 12 výkopů):** povrch beze změny (5 pramenů, 8 vodopádů, 5 na okraji 9,65 l/s,
+  0 neshod); výstupy podzemí 4 (0,0808 / 0,0787 / 0,002 / 0,0) → 2 (0,0808 v 18,09 m, 0,0808 v 12,53 m). Výchozí hra (E58)
+  řešič ug67 nepoužívá → beze změny.
+- **Negativa:** (1) průsak protékané vody (E71 P) se slučováním prakticky zmizí: průsak jednoho pásma je wq · A (≈ 0,0004 l/s),
+  vždy pod prahem → zůstane v toku. Kupole 0,045 → 0, plocha 0,032 → 0 l/s; průsak pastí zůstává (mísa 0,162). Pro P se dá
+  vypnout `p72_prusak=false` (pak slučuje jen kapacita a výstupy). (2) výstupy se slučují i přes 19 sloupců – „nejbližší
+  silný“ může být daleko; voda se tak objeví jinde, než by drobně vytekla. (3) symetrické drobné výstupy (plocha) sloučit
+  nejde bez porušení symetrie, zůstanou.
+- **Doporučení:** nechat zapnuto (Jan to chtěl, hmota a symetrie přesné, rychlejší). Jan rozhodne, jestli průsak protékané
+  vody slučovat (`p72_prusak`), a jestli omezit vzdálenost slučování výstupů.
+
+## E68 jednotný orchestrátor hydrologie povrch + podzemí (plán, zapsáno před pokusem 2026-11-19 22:07; TODO Voda E68, Jan 21:3x „V ToDo máš úkoly půst se do nich…“)
+- **Co už existuje (nenavrhuje se znovu):** jeden krok povrch ↔ podzemí už je v `voda/tok.gd route()` a `alg60/tok60.gd update()`:
+  priority-flood + D8 → `_apply_drains` (odtok mokrých tůní do tělesa, volání podzemí seskupená podle `members`, výstupy
+  `outs67` / `out` → `src2` pramenů a `st.under`) → znovu povrch. Lokální přepočet po výkopu: v prototypu
+  `ostrov_voda.edit()` = výkop podzemí (E64 K+I+P+R, `UGO.dig`) → `_add_drains` → `tok60.update` (okno + po proudu).
+  Kontrola proti plnému výpočtu `check_full()`. Pořadí teren → povrch + podzemí → (události tůní `fill_events`) → lokální
+  přepočet tedy už platí.
+- **Co chybí (E68 doplní):**
+  1. smyčka povrch ↔ podzemí má pevně **4 kola** a končí jen při bitové shodě `extra` / `src2`; nikdo neví, jestli
+     doběhla. Smyčka tůň → průsak → pramen → tůň (pramen nad tůní ji znovu plní) konverguje pomalu (každé kolo přidá
+     další průtok), takže výsledek po 4 kolech závisí na počtu kol a neodpovídá ustálenému stavu;
+  2. **společná bilance** neexistuje: zdroje, ztráty v ponorech, odtok přes okraj, odtok tůní do podzemí, výstupy podzemí
+     (prameny / stěna), průsak do hloubky, `lost_deep`;
+  3. **otisk stavu** (hash) celé hydrologie pro shodu mezi běhy a pořadím výkopů;
+  4. jedno místo, kde se to volá (dnes kopie v `route`, `update`, prototypu).
+- **Návrh `scripts/hydro68/hydro68.gd` (za přepínačem `p68_hydro`, vypnuto = bitově dnešní stav):**
+  - `full(st, kola, tol)`: stejné kroky jako `tok.route`, ale smyčka povrch ↔ podzemí do ustálení: kolo = odtoky tůní +
+    podzemí (`_apply_drains`) → povrch po proudu; konec, když se `extra` / `src2` nezmění o víc než `p68_tol` (l/s), nejvýš
+    `p68_kola` kol. Vrací počet kol, poslední změnu, `ustaleno`.
+  - lokální přepočet: `tok60.update` s parametry `KOLA` / `TOL` (statické proměnné jako `FAST_POND`; výchozí 4 / 0 = beze změny).
+  - `bilance(st)`: povrch (Σ zdroje + Σ prameny z podzemí = okraj + ponory + odtoky tůní), podzemí (vstup = výstupy +
+    průsak + `lost_deep`), svět (zdroje = okraj + ponory + výstupy ve stěně + průsak do hloubky). Chyba svět / povrch / spoj.
+  - `otisk(st)`: hash `fill`, `eff`, `to`, `extra`, `src2` a seřazených `under`.
+  - `udalosti(st)`: události plnění tůní (`fill_events`) seřazené podle času (pevné pořadí).
+- **Test smyčky (`tools/e68.gd`):** malá mísa: zdroj na svahu → tůň na dně nad polopropustnou vrstvou → zvodeň (písek)
+  vychází na svah nad tůní → pramen teče zpět do tůně; přelivem tůně voda odtéká k okraji mapy. Měří se: počet kol do
+  ustálení, chyba bilance po 4 kolech a po ustálení, analytická kontrola (ustálený přeliv = zdroj − ztráty), otisk mezi
+  běhy. Varianty: E58 (auto) a E67 (pretok, K+P).
+- **Ostrov (prototyp `tools/voda_e66.gd`):** před / po (vypnuto / zapnuto): Σ průtok přes okraj, mokrá koryta, tůně,
+  prameny, výstupy podzemí, objem, kola, bilance, čas plného výpočtu, čas výkopu, neshody proti plnému výpočtu, otisk
+  ve dvou pořadích výkopů a dvou bězích.
+- **Hypotéza:** ostrov má smyčku (stará E58: pramen 29,27 m nad tůní, E67 poznámka „4 volání → 2“); po 4 kolech zbude
+  chyba bilance, ustálení potřebuje víc kol. Každé kolo s jiným průtokem je nové registrované volání podzemí → výkop
+  opravuje víc volání (riziko času). Výchozí zapnout jen při 0 neshod, přesné bilanci a rozumném čase.
+
+## E71 výsledky (2026-11-19 22:40, větev `e71-kapacita-dolu` z `e70-harmonicky-prumer`, do main až po schválení Janem)
+- **Co je nového (`ug67.gd`, studie i prototyp, CLI `--bp.p71_*`):**
+  - `p71_kapacita` (K): dolů nejvýš `K · A · 1000 · p71_cas` l/s na rozhraní, K = 10^(6·perm − 9) m/s (mapování tabulky v4),
+    K_eff = K spodní vrstvy (`p70_prumer = pomer`) nebo harmonický průměr K obou. Pořadí v pásmu: dolů (do kapacity) →
+    výstup ve výšce dna → do stran → past. V pasti jsou svislé spoje dolů průsak (ne práh): přítok se dělí po skupinách
+    klíče floodu (nejníž první, uvnitř skupiny poměrně), pak průsak do okolí, zbytek přetéká. Dna pastí ve stejné výšce se
+    zakládají až po ostatních pásmech té výšky (jinak plochá vrstva závisí na id pásem – nesymetrie 0,014 l/s, opraveno).
+    Výstupy ve stejném sloupci v různé výšce se drží zvlášť. Pásmo se do haldy vkládá jen jednou (bez toho test plochy
+    narazil na pojistku kroků a ztratil 0,89 l/s – opraveno, `cut67` se teď v E69 hlásí).
+  - `p71_prusak` (P): protékané pásmo nad polopropustným materiálem (ne těleso, wq > 0) ztratí průsak dnem `wq · A`.
+  - Výchozí: **K zapnuto, P zapnuto, p70 pomer**; vše platí jen pro E67 pretok (`p67_rezim = "pretok"`), výchozí hra / studie
+    bez pretok je bitově beze změny (testy studie `tools/test.gd` beze změny kromě časů, otisk staré varianty `23b823aa710c9942`).
+- **(1) Referenční sloupec (1 sloupec, zkušební vrstvy s kapacitou 1,0 / 0,8 / 0,6 / 0,4 / 0,2 l/s, nepropustné podloží, 1 l/s):**
+
+  | vrstva | L1 | L2 | L3 | L4 | L5 |
+  |---|---|---|---|---|---|
+  | bez K (E70) | 1,0 | 0 | 0 | 0 | 0 |
+  | **K, pomer** | **0,200** | **0,200** | **0,200** | **0,200** | **0,200** |
+  | K, harmonicky | 0,111 | 0,203 | 0,206 | 0,213 | 0,267 |
+
+- **(2) Testy E69 (21 × 21, plocha / kupole / mísa, se slučováním i bez):** symetrie 0 a bilance ≤ 2e-12 l/s ve všech
+  kombinacích K, K + harmonicky, P (ponor 0,3), K + P, i s referenčními kapacitami. Kupole s vrstvami 1,0 … 0,2 (K): výstup
+  0,742 z L4 + 0,258 z L5 (dřív 1,0 z L5), harmonicky 0,515 / 0,485. **Průsak protékané vody (P, ponor 0,3) kupole: 0 →
+  0,045 l/s se slučováním, 0,163 bez slučování (E58 0,176)**; mísa beze změny 0,162 (průsak pasti už byl).
+- **(3) Startovní ostrov (`tools/e67.gd`, pretok + O, Σ 4,10 l/s – zachováno ve všech variantách):**
+
+  | | mokrá | pod hladinou | pasti | výstupy (okraj + povrch) | z vážené průtokem | výstupů < 0,02 l/s | objem | podzemí ms | výkop ms (prům. / max) |
+  |---|---|---|---|---|---|---|---|---|---|
+  | E70 (K, P vyp.) | 791 | 414 | 31 | 85 + 1 | 18,34 m | 8 | 7,0 m³ | 79 | 46 / 50 |
+  | P | 791 | 414 | 31 | 85 + 1 | – | – | 7,0 | 84 | 51 / 57 |
+  | **K (+ P, výchozí)** | **1225** | **478** | **37** | **148 + 2** | **17,74 m** | **119** | **7,0** | **94–100** | **63–74 / 85–107** |
+  | K + harmonicky | 1165 | 472 | 38 | 149 + 2 | 17,67 m | 121 | 7,0 | 86 | 61 / 64 |
+
+  Výkopy: 0 neshod s plným výpočtem a obě pořadí stejný otisk ve všech variantách (K `e704e819891f87e7`). P na ostrově nic
+  nemění: v ostrovních horninách není polopropustné netěleso (0 < perm < 0,3 jen kras, a ten je těleso).
+- **Prototyp (`voda_e66 --bp.voda_e67=true`, 12 výkopů):** souhrn beze změny (5 pramenů, 8 vodopádů, 5 na okraji 9,65 l/s,
+  0 neshod); výstupy podzemí E70: 2 × 0,081 l/s (18,09 a 12,53 m), K: 0,081 (18,09 m) + 0,079 / 0,002 / < 0,0001 (12,5 m).
+  Plný výpočet vody 426–500 ms obojí (šum).
+- **Rozhodnutí:** K zapnout (splní referenci přesně, symetrie a bilance přesné, výkopy přesné, čas +20–40 % v podzemí, stále
+  < 0,1 s), P zapnout (opravuje negativum E69 a nic nerozbije). `p70_prumer` nechat `pomer`: K spodní vrstvy odpovídá
+  gravitačnímu průsaku vrstvou při spádu 1 (definice reference), harmonicky ostrov skoro nemění a referenci posune.
+- **Negativa a otevřené:**
+  - **Hypotéza „voda vyteče výš“ neplatí:** průměrná výška výstupů klesla 18,34 → 17,74 m. Hlavní vliv má pořadí „nejdřív dolů“:
+    dřív vzal výstup ve stěně celý průtok hned v prvním pásmu u stěny, teď písek (≈ 3,6 l/s na sloupec) pustí ukázkové zdroje
+    0,02 l/s dolů a zastaví je až pískovec / spraš (≈ 0,004 l/s) a vápenec (≈ 0,001 l/s).
+  - Drobení: výstupů 86 → 150, z toho 119 pod 0,02 l/s (kreslení je skryje, `p67_min_vytok_render`); průsaky pastí se dělí
+    poměrně a slučování `p67_prune` je zatím nezná. Kandidát: slučovat i průsaky pastí.
+  - Plochá vrstva rozdělí průsak pasti poměrně po celé vrstvě (degenerovaný případ, symetrický, ale nefyzikální).
+  - P závisí na slučování (sloučené větve = méně mokrých pásem → menší průsak: 0,045 vs 0,163 l/s).
+  - Jednotky toku vs. čas hry (`p71_cas` = 144) jsou předpoklad; při 1 by kapacity byly 144× menší.
+  - Do stran kapacita není (jen poměr), čas průchodu se nepočítá.
+
+## E71 omezení průtoku dolů podle propustnosti vrstvy, průsak z protékané vody (plán, zapsáno před pokusem 2026-11-19 22:15; negativa E69, TODO Voda, Jan 21:3x „V ToDo máš úkoly půst se do nich…“)
+- **Problém (E69):** E67 pretok pošle dolů vždy celý průtok, dokud pod pásmem je těleso; propustnosti mění jen dělení do
+  stran. Referenční test (1 l/s, vrstvy 1,0 / 0,8 / 0,6 / 0,4 / 0,2, nepropustné podloží) proto dá 1 l/s až z nejspodnější
+  vrstvy. Druhé negativum: protékaná (mokrá) pásma nad polopropustnou vrstvou neprosakují (kupole 0 vs E58 0,176 l/s).
+- **Varianta K (`p71_kapacita`, výchozí podle výsledků; vypnuto = bitově E70):** kapacita rozhraní dolů (pásmo → pásmo
+  tělesa těsně pod ním) podle Darcyho při jednotkovém spádu: `Q = K_eff · A · 1 · 1000 · p71_cas` (l/s), A = plocha sloupce,
+  K z propustnosti tabulky přesně podle mapování tabulky (`perm = (log10 K + 9) / 6` → K = 10^(6·perm − 9) m/s, sdílená
+  `sdilene/materialy_voda.json` v4), `p71_cas = 144` (`cas_faktor` tabulky: 1 herní den = 10 min). K_eff: `p70_prumer`
+  `pomer` = K přijímající (spodní) vrstvy, `harmonicky` = harmonický průměr K obou vrstev.
+  - Sestup: nejdřív dolů nejvýš zbývající kapacita (využití se pamatuje po pásmech), zbytek jako dosud: výstup ve výšce dna
+    (pramen / stěna), jinak do stran, jinak past (zavěšená voda nad pomalou vrstvou).
+  - Past: svislé spoje členů pasti dolů nejsou práh, ale průsak pasti do pásma pod ní (voda pokračuje sestupem, neztrácí
+    se). Rozdělení přítoku pasti: skupiny členů podle klíče floodu (nejníž první, uvnitř skupiny poměrně → symetrie),
+    pak dosavadní průsak do okolí, zbytek přetéká výstupem / prahem. Spojení pastí přenese už odeslané průsaky.
+- **Varianta P (`p71_prusak`, protékaná voda prosakuje):** mokré pásmo, pod kterým je polopropustný materiál (ne těleso,
+  0 < perm < ponor_perm), ztratí průsak dnem `wq · A` (stejný vzorec jako dno pasti v `_leak` / E58), nejvýš průtok pásma;
+  jen v krocích výstup / do stran (dno pasti už průsak má).
+- **Ověření:** (1) referenční jeden sloupec (`tools/e71.gd`), zkušební vrstvy s kapacitou přesně 1,0 / 0,8 / 0,6 / 0,4 / 0,2 l/s
+  (propustnost dopočtená z kapacity): očekávání pomer = z každé vrstvy vyteče 0,2 l/s; (2) testy E69 (symetrie D4,
+  bilance) s K, P, K+P, K+harmonicky; (3) startovní ostrov `tools/e67.gd` (Σ průtok, objem, mokrá, výstupy, výkopy 0 neshod,
+  dvě pořadí) a prototyp `voda_e66 --bp.voda_e67=true` (prameny, vodopády); (4) čas.
+- **Hypotéza:** reference přesně 5 × 0,2 l/s; symetrie a bilance zůstanou přesné. Na ostrově se změní hodně: písek (K 1e-4)
+  propustí ~3,6 l/s na sloupec 0,5 × 0,5 m, ale pískovec / spraš (K 1e-7) jen ~0,004 l/s a vápenec (3e-8) ~0,001 l/s, takže
+  ukázkové zdroje 0,02 l/s se nad nimi zastaví, rozlijí do stran a vytečou výš (víc pramenů / výstupů ve stěně výš).
+  Riziko: jednotky toku řešiče vs. čas hry (p71_cas) – laditelné.
+
+## E70 výsledky (2026-11-19 22:10, větev `e70-harmonicky-prumer` z `e69-symetrie-test`, do main až po schválení Janem)
+- **Co je nového:** `p70_prumer = "pomer"` (výchozí, beze změny) | `"harmonicky"`: v kroku 3 sestupu `ug67.gd` váha souseda
+  `H(k₁, k₂) × překryv`, H = 2·k₁·k₂ / (k₁ + k₂), k₁ = pásmo, odkud voda teče, k₂ = soused (podlaha 0,01 jako dosud).
+  Stejná váha jde do slučování (`p67_prune`). Prototyp přes `port_studie.py`, CLI `--bp.p70_prumer`, `tools/e67.gd --prumer= --prune=`
+  (nově i otisk rozdělení výstupů `vystupy_otisk`, nejen součty), `tools/e69.gd --prumer=`, nový `tools/e70.gd`.
+- **(b) malý případ `tools/e70.gd`** (řada 5 sloupců, zdroj 1 l/s uprostřed, sousedé o 0,25 m níž; podíl západ / východ):
+
+  | střed | západ | východ | poměr | harmonicky |
+  |---|---|---|---|---|
+  | písek | písek | písek | 0,50 / 0,50 | 0,50 / 0,50 |
+  | písek | písek | jíl 0,05 | 0,943 / 0,057 | **0,898 / 0,102** |
+  | jíl | písek | jíl | 0,943 / 0,057 | **0,654 / 0,346** |
+  | vápenec 0,246 | písek | vápenec | 0,772 / 0,228 | **0,607 / 0,393** |
+  | písek | písek | vápenec | 0,772 / 0,228 | 0,687 / 0,313 |
+
+  Bilance chyba 0 ve všech případech. Zamýšlený efekt platí jen napůl: voda **v jílu** (nebo vápenci) už není tolik
+  „vysávaná“ sousedním pískem (písek je brzděn jílem, 94 → 65 %). Voda **v písku** ale pošle do jílu víc než dřív
+  (5,7 → 10,2 %): harmonický průměr rozdíly propustností vždy zmenšuje a dělení je normované (Σ = 1), takže skutečné
+  zpomalení nebo menší průtok model bez času a kapacity vyjádřit neumí. Fyzikálně to odpovídá Darcyho vodivosti
+  rozhraní, ale ne představě „jíl brzdí“.
+- **(a) testy E69:** pomer bitově jako E69; harmonicky symetrie 0, bilance ≤ 1e-12 l/s (rozdíly proti poměru jen 1e-17 –
+  v testu E69 mají sousedé do stran vždy stejný materiál, H(k, k) = k).
+- **(c) startovní ostrov (`tools/e67.gd`, pretok + O, Σ 4,10 l/s):**
+  - se slučováním (výchozí 0,1 l/s): **bitově beze změny** – mokrá 791, pod hladinou 414, pasti 31, výstupy 85 okraj
+    3,95 + 1 povrch 0,15 l/s, objem 7,0 m³, otisk výkopů `beac247bf8881952`, výkopy 0 neshod, obě pořadí stejně;
+    totéž kras jen perm ≥ 0,3 (731 / 444 / 28 / 83 + 1 / 8,8 m³). Zdroje 0,02 l/s jsou pod prahem slučování, rozhoduje
+    jen nejsilnější větev a ta se nezmění (H je pro dané k₁ rostoucí v k₂).
+  - bez slučování: mokrá 1548 → 1559, výstupy 94 + 14 beze změny, objem 7,1 m³, přesune se 0,0089 l/s z 4,1 (0,2 %,
+    max 0,0035 l/s na výstup); výkopy 0 neshod, obě pořadí stejný otisk.
+  - prototyp (`voda_e66 --bp.voda_e67=true`, 12 výkopů): souhrn beze změny (5 pramenů, 5 vodopádů na okraji 9,65 l/s), 0 neshod.
+- **(d) čas:** bez měřitelného rozdílu (šum ±10 %): studie pretok + O 71 / 72 ms poměr vs 67 / 74 ms harmonicky, výkop
+  ~43–48 ms obojí; prototyp plný výpočet 459 / 432 ms vs 468 / 429 ms.
+- **Rozhodnutí: výchozí zůstává `pomer` (harmonický průměr jen jako přepínač).** Důvody: na startovním ostrově se nic
+  nezmění; cíl „jíl brzdí i sousední písek“ splní jen pro vodu, která už je v jílu, opačným směrem pošle do jílu víc;
+  skutečné brzdění potřebuje čas průchodu nebo svislou / boční kapacitu (navazuje na negativum E69: chybí kapacita vrstev).
+  Až bude kapacita nebo Darcy dolů, má smysl zapnout harmonický průměr spolu s ní (pak je konzistentní).
+- **Negativa:** v tělese jsou jen pásma perm ≥ 0,3, kras 0,246 a rozpustné s perm 0 (podlaha 0,01) – skutečný jíl (perm 0)
+  není tělesem, takže „jíl vedle písku“ ve hře do dělení vůbec nevstupuje; test používá zkušební těleso perm 0,05.
+
+## E70 harmonický průměr propustností pro dělení do stran v E67 (plán, zapsáno před pokusem 2026-11-19 21:50; TODO Voda, Jan 21:3x „V ToDo máš úkoly půst se do nich…“)
+- **Zadání (TODO):** dělení vody do stran v E67 (`ug67.gd`, krok 3 sestupu) dnes váží sousední pásmo `perm(cíl) × překryv`
+  (prostý poměr propustností cílů). Návrh: propustnost rozhraní = harmonický průměr obou materiálů
+  `2·k₁·k₂ / (k₁ + k₂)` (k₁ = pásmo, ze kterého voda teče, k₂ = soused), aby jíl brzdil i sousední písek.
+- **Varianta (příznak, výchozí zatím „pomer“ → parita):** `p70_prumer = "pomer" | "harmonicky"` (studie `scripts/bp/params.gd`,
+  kontext `prumer70`, prototyp přes `port_studie.py`, CLI `--bp.p70_prumer`). Váha se použije i ve slučování (`p67_prune`).
+- **Očekávání z rozboru:** dělení je normované (Σ váh = 1), takže absolutní „brzdění“ (zpomalení, menší průtok) model bez
+  času a kapacity neumí; mění se jen poměr mezi směry. Pro zdroj v písku se harmonický průměr k jílu *zvýší* proti poměru
+  (H(0,833; 0,05) = 0,094 > 0,05 → jíl dostane víc), pro zdroj v jílu se rozdíl mezi pískem a jílem zmenší (písek už
+  vodu „nevysaje“: poměr 94 / 6 %, harmonicky 65 / 35 %). Ve hře jsou tělesem jen pásma s perm ≥ 0,3, kras (0,246) a
+  rozpustné s perm 0 (podlaha 0,01), takže efekt čekám malý – hlavně rozhraní kras / písek.
+- **Ověření:** (a) testy E69 (symetrie, bilance) beze změny; (b) malý případ `tools/e70.gd`: řada sloupců, zdroj uprostřed,
+  vlevo / vpravo různé materiály (písek / jíl jako zkušební tělesa, a skutečné vápenec / písek) – podíl vody na stranách
+  pomer vs harmonicky; (c) startovní ostrov `tools/e67.gd` (Σ průtok, objem, mokrá pásma, výstupy, výkopy 0 neshod, obě
+  pořadí) a prototyp `voda_e66 --bp.voda_e67=true`; (d) čas řešení (ms).
+- **Rozhodnutí:** zapnout výchozí jen tehdy, když (a) i (c) zůstanou v pořádku a (b) ukáže zamýšlený efekt bez vedlejších
+  škod; jinak nechat vypnuté a zapsat proč.
+
+## E69 výsledky (2026-11-19 21:50, větev `e69-symetrie-test` z `e67-podzemi-okraje`, do main až po schválení Janem)
+- **Nástroj:** `tools/e69.gd` (`./run.sh e69 [--n=21 --t=1 --sklon=0.25 --q=1 --ponor=0.1 --remizy=1 …]`), výsledky
+  `shots/e69/vysledky_pred*.json` (před opravou) a `vysledky*.json` (po). Čtverec 21 × 21 v prstenci zdi, zdroj 1 l/s
+  do vrstvy 1,0 prostředního sloupce, 5 vrstev po 1 m, nepropustné podloží, sklon 0,25 m/m.
+- **Bilance (všechny tvary a řešiče, před i po):** vstup 1 l/s = výstupy + průsak, chyba ≤ 1e-12 l/s. **Voda se neztrácí**
+  (ani slučováním větví, ani v pastech). Se zkušebním `ponor=0,3` (vrstva 0,2 není těleso, jen průsak): pretok mísa
+  0,838 výstup + 0,162 průsak, E58 0,8236 + 0,1764, chyba 0.
+- **Symetrie před opravou (max rozdíl po sloupcích přes 7 transformací D4):**
+
+  | tvar | pretok + O (slučování 0,1) | pretok + O bez slučování | E58 A+B+C / base + O |
+  |---|---|---|---|
+  | plocha | výstup 1,0 l/s v 1 rohu (nesym.) | totéž | 1 výstup (roh −10,−10) |
+  | kupole | **tok 0,50 l/s, 97 nesym. položek; výstupy 0,127 l/s (8)** | **symetrické (0)**, 76 výstupů | 1 výstup (roh) |
+  | mísa | výstup 1,0 l/s v 1 bodě okraje mísy | totéž | 1 výstup (−10, 0) |
+
+  Hladiny (`wt`) a objemy symetrické všude (mísa 7,0355 m, 78,48 m³; E58 i E67 shodně).
+- **Příčiny (chyba = remízy rozhodované podle id pásma):**
+  1. `p67_prune`: slabé větve se přičtou do „nejsilnější“ – při stejné váze vyhraje první (nejmenší id) → celý tok šel
+     jedním směrem (kupole: 0,5 l/s na jedné straně, nic na druhé).
+  2. `_pit_fill`: past bere první výstup z haldy – při více výstupech ve stejné výšce (plochá vrstva, okraj mísy) vyteče
+     všechno v jednom (sloupec s nejmenším id).
+- **Oprava (`p69_remizy`, výchozí true, false = chování E67b; studie i prototyp přes `port_studie.py`):** (1) přebytek
+  sloučených větví se dělí rovným dílem mezi všechny větve se stejnou největší vahou; (2) past po prvním výstupu dobere
+  z haldy všechny výstupy ve stejné výšce (± 1e-6 m) a přetok dělí rovným dílem. Hmota se nemění.
+- **Po opravě:** pretok + O je symetrický ve všech tvarech (chyba 0, i bez slučování), plocha 80 výstupů po 1/80 l/s, mísa
+  4 výstupy po 0,25 l/s, kupole 8 výstupů (se slučováním) / 76 (bez). Ověřeno i n = 15 / sklon 0,1 a n = 31 / sklon 0,4 /
+  vrstvy 0,5 m (s `--remizy=0` kupole znovu nesym. 0,065 l/s). `--remizy=0` dá bitově stejné výsledky jako před opravou.
+- **Dopad na startovní ostrov (`tools/e67.gd`, pretok + O, zdroje 0,02 l/s v minimech, Σ 4,10 l/s beze změny):** mokrá pásma
+  700 → 791, pod hladinou 376 → 414, pasti s vodou 26 → 31, výstupy 80 → 86 (okraj 3,94 → 3,95, povrch 0,16 → 0,15 l/s),
+  objem 7,0 m³ beze změny; výkopy 0 neshod, obě pořadí stejný otisk (nový `beac247bf8881952`, dřív `f1d92535cd350dcb`).
+  Remízy na skutečném terénu tedy nastávají (kvantovaná geometrie); skoro celý rozdíl dělá (1), (2) přidá 1 výstup.
+  Prototyp (`voda_e66 --bp.voda_e67=true`, 12 výkopů): souhrn beze změny (5 pramenů, 5 vodopádů na okraji 9,65 l/s), 0 neshod.
+- **E58 A+B+C (main):** bilance přesná, hladina a objem symetrické; výstup je z konstrukce jeden (rozhraní `out`), takže
+  u symetrického terénu leží v jednom z rovnocenných bodů (nejmenší vzdálenost / id). To není chyba výpočtu, ale omezení
+  modelu „jedna hladina, jeden výstup“; neopravoval jsem (E67 už vrací všechny výstupy).
+- **Negativa a otevřené:**
+  - **Referenční profil vrstev 1,0 / 0,8 / 0,6 / 0,4 / 0,2 se neprojeví:** řešič nemá svislou kapacitu vrstvy, dolů jde
+    vždy celý průtok, dokud pod pásmem je těleso. Celý 1 l/s projde až do nejspodnější vrstvy a vyteče z ní (L5 okraj 1,0);
+    propustnosti mění jen dělení do stran mezi sousedními pásmy. „Kapacitní“ referenci (každá vrstva propustí dolů jen svou
+    kapacitu, zbytek do stran) E67 z konstrukce nesplní – návrh na samostatný úkol (svislá kapacita / Darcy dolů).
+  - Pretok nepočítá průsak z protékaných (mokrých) pásem nad polopropustnou vrstvou, jen z pastí: kupole s `ponor=0,3`
+    průsak 0 (E58 0,176 l/s). Bilance sedí, ale model průsak podhodnocuje.
+  - Oprava (1) nechá stejně silné slabé větve rozdělené (symetrie má přednost před sloučením) → na ostrově +13 % mokrých
+    pásem a +6 výstupů pod prahem 0,1 l/s; prahy kreslení (`p67_min_*_render`) je dál skryjí.
+  - Remízy prahů pasti (víc prahů ve stejné výšce) zatím berou první; v testech se neprojevily.
+
+## E69 test symetrie a referenční test podzemí (plán, zapsáno před pokusem 2026-11-19 21:45; TODO Voda, Jan 21:3x „V ToDo máš úkoly půst se do nich, ověř je…“)
+- **Zadání (TODO):** zdroj 1 l/s nad sloupcem, propustné vrstvy 1,0 / 0,8 / 0,6 / 0,4 / 0,2, nepropustné podloží; symetrický
+  terén musí dát symetrický výsledek a voda se nesmí ztratit. Na řešič E67 / E67b (`p67_rezim = "pretok"`, `ug67.gd`) a, pokud
+  to jde snadno, na E58 A+B+C (`ug58.gd`, režim auto, jedna hladina na těleso).
+- **Postup (nástroj `tools/e69.gd`, `./run.sh e69`, vše laditelné `--klic=hodnota`):** syntetický kontext přímo nad pásmy
+  `ug_funkce` (`_new` → sloupce [spodek, vršek, materiál] → `_finish`), bez generátoru bloků. Čtverec N × N (výchozí 21)
+  uvnitř prstence zdi (stěna = výstup „okraj“, `p67_okraj`), zdroj 1 l/s do vstupního pásma prostředního sloupce.
+  Vrstvy shora: 1,0 / 0,8 / 0,6 / 0,4 / 0,2 (zkušební materiály s touto propustností vložené do tabulky jen v testu,
+  `ponor_perm` testu 0,1, aby všech 5 bylo tělesem), pod nimi nepropustné podloží (perm 0). Tvary (všechny symetrické
+  podle grupy čtverce D4 kolem středu, hranice závisí jen na r² = dx² + dy²):
+  1. **plocha** – vodorovné vrstvy (degenerovaný případ: všechna dna stejně vysoko),
+  2. **kupole** – vrstvy klesají od středu (voda musí téct do stran),
+  3. **mísa** – vrstvy stoupají od středu (past ve středu, plnění a přeliv přes okraj mísy).
+  Varianty řešiče: pretok + O se slučováním (E67b výchozí), pretok + O bez slučování, E58 A+B+C (auto) + O, E58 base.
+- **Metriky:**
+  - *Symetrie:* pro každou z 8 transformací D4 rozdíl veličin po sloupcích (průtok mokrými pásmy podle vrstvy, výstupy
+    podle sloupce, hladina `wt`): max |f(s) − f(T s)| v l/s (resp. m) a počet nesymetrických sloupců.
+  - *Bilance:* vstup 1 l/s = Σ výstupů + průsak pastí (min(přítok, průsak)) + zbytek; chyba |vstup − výstup| (l/s).
+  - *Referenční profil:* kolik vody vyteče z které vrstvy a kolik projde dolů do další vrstvy (výsledek pro TODO tabulku).
+- **Hypotéza:** bilance přesně (chyba < 1e-9 l/s), slučování ani pasti hmotu neztrácejí. Symetrie: kupole bez slučování
+  symetrická (dělení perm × překryv je symetrické); se slučováním (`p67_prune`, nejsilnější větev = při shodě nejmenší id
+  pásma) a v plochém / mísovém případě (výstup pasti = jeden, při shodě výšky nejmenší id) čekám nesymetrii z rozhodování
+  remíz podle id. Řešič nemá svislou kapacitu vrstvy (dolů jde celý průtok), takže propustnosti 1,0 … 0,2 se projeví jen
+  v dělení do stran – referenční „kapacitní“ profil (každá vrstva propustí dolů jen svou kapacitu) E67 nesplní z konstrukce.
+- **Když test najde chybu:** minimální oprava na větvi `e69-symetrie-test`, znovu změřit, čísla před / po sem.
+
+## E67b prahy: slučování slabých větví a prahy kreslení (2026-11-19, větev `e67-podzemi-okraje`; Jan 16:21 → oprava 16:22, 16:23, 16:25)
+
+- **Zadání:** malé výstupy se ze simulace NEZAHAZUJÍ (hmota beze změny), práh jen pro kreslení; stovky drobných větví přetoku:
+  (a) práh kreslení, (b) slučování v simulaci `p67_prune` – **zapnuto** (Jan 16:23: „deci-/centilitry v přetocích neřešíme“), práh
+  v řádu desetin litru za sekundu, slabá větev se přičte do nejsilnější sousední cesty (zachová hmotu). Všechny prahy laditelné (16:25).
+- **Parametry (bp `scripts/bp/params.gd`, prototyp `HRA` v `ostrov_teren.gd`, CLI `--bp.<klíč>`, ladicí panel „Voda E67“):**
+  `p67_prune = true`, `p67_prune_min = 0.1` l/s (jednotka toku řešiče = l/s; 0,1 l/s ≈ 6 l/min, menší větev hráč neuvidí a nevyužije),
+  `p67_min_vytok_render = 0.02` l/s, `p67_min_tok_render = 0.02` l/s (= jeden ukázkový zdroj 0,02 l/s; slabší je jen odštěpek).
+- **Histogram výstupů (ostrov 4 bloky, ukázkové zdroje 0,02 l/s v každém místním minimu, součet 4,10 l/s):**
+
+  | q (l/s) | <0,001 | 0,001–0,005 | 0,005–0,01 | 0,01–0,02 | 0,02–0,05 | 0,05–0,1 | 0,1–1 | ≥1 |
+  |---|---|---|---|---|---|---|---|---|
+  | bez slučování | 13 | 4 | 5 | 7 | 68 | 3 | 6 | 1 |
+  | slučování 0,1 | 0 | 0 | 0 | 0 | 69 | 3 | 7 | 1 |
+
+  Zbylo kreslených výstupů při prahu kreslení 0,01 / 0,02 / 0,05 / 0,1: bez slučování 85 / 78 / 10 / 7 ze 107, se slučováním 80 / 80 / 11 / 8 z 80.
+  Tůně hry (1 výstup 0,153 l/s) se nemění.
+- **Vliv slučování (b), ukázkové zdroje:**
+
+  | p67_prune_min | výstupů | Σ q l/s | protékaných pásem | stojatých vod | podzemí ms |
+  |---|---|---|---|---|---|
+  | vypnuto | 107 | 4,100 | 1548 | 46 | 74 |
+  | 0,01 | 86 | 4,100 | 813 | 31 | 51 |
+  | 0,05 | 81 | 4,100 | 743 | 30 | 51 |
+  | **0,1** | **80** | **4,100** | **700** | **26** | **56** |
+  | 0,2 | 80 | 4,100 | 698 | 26 | 51 |
+
+  Hra (`voda_e66 --bp.voda_e67=true`, 12 výkopů): plný výpočet podzemí 271 → 248 ms, výkop podzemí max 114 → 91 ms, průměr 53 → 48 ms,
+  neshod s plným výpočtem 0, souhrn (5 pramenů, 5 vodopádů na okraji 9,64 l/s) beze změny. Studie `tools/e67.gd`: neshod 0, obě pořadí stejný otisk.
+- **Závěr:** slučování ubere ~55 % protékaných pásem a čtvrtinu výstupů bez ztráty hmoty; nad 0,05 l/s se už skoro nic nemění, 0,1 je
+  bezpečně „litrový“ řád podle Jana. Se zapnutým slučováním pod 0,02 l/s nic nezbude, prahy kreslení jsou pojistka pro `p67_prune=false`.
+  Jediná větev slabší než práh, která nemá souseda, se neslučuje (teče dál celá) – proto zůstávají výstupy 0,02 l/s z jednotlivých zdrojů.
+- **Obrázky:** `godot-prototyp/shots/rez/e67/po_minima/prehled.png`, `po_hra/prehled.png`, pro srovnání `po_minima_bez_prune/prehled.png`.
+
+## E67 výsledky (2026-11-19 16:40, větev `e67-podzemi-okraje`, do main až po schválení Janem)
+- **Co je nového** (výchozí vypnuto, parita):
+  - `scripts/podzemi52/ug67.gd`: režim `p67_rezim = "pretok"` – sestup od zdroje (halda: dno sestupně, id vzestupně) dolů,
+    jinak do stran do pásem s nižším dnem podle perm × výšky překryvu; výstup ve výšce dna bere celý průtok; dno pasti →
+    priority-flood (stejný klíč i `_outs` jako preliv) do výstupu nebo prahu; vzájemný přeliv dvou pastí a „práh, který steče
+    zpět“ se spojí (sonda `_probe` po hranách sestupu); stopa `_fp67` (sloupce navštívených pásem).
+  - `p67_okraj` (O): výstup „okraj“ i u zdi (stěna ostrova) ve výšce dna pásma – v `_outs`, `_solve_nadrz`, `ug58._cands_b`.
+  - `p67_kras` (výchozí true = beze změny): false → rozpustná hornina je tělesem jen s perm ≥ `ponor_perm`. Tabulka materiálů beze změny.
+  - `ug58._one` / `ug58.edit`: při pretok plný výpočet volání; výkop přepočítá jen volání, jejichž stopa obsahuje sloupec
+    výkopu nebo jeho 4 sousedy (výsledek čte jen tato data → jinak bitově stejný). `tok60`: když výsledek nese `outs67`,
+    přidá všechny prameny (ne jen jeden).
+  - Nástroj `tools/e67.gd` (startovní ostrov 4 bloky bp jako prototyp, zdroje = místní minima povrchu 0,02 l/s, po tělesech),
+    výsledky `shots/e67/ostrov.json`, testy `shots/e67/testy/`.
+- **Studie, startovní ostrov, zdroje v místních minimech (1 volání, 4,1 l/s)** – mokrá = pásma, kudy voda opravdu teče:
+
+  | varianta | těles / největší (pásem) | stojatá voda (pásem pod hladinou) | mokrá (protékající) | hladiny | výstupy (počet, l/s) | objem m³ | ms |
+  |---|---|---|---|---|---|---|---|
+  | stará (auto, preliv) | 30 / 7690 | 6137 | – | 1: 19,24 m | 1 pramen 4,1 | 179,9 | 467 |
+  | stará + O | 30 / 7690 | 0 | – | 1: 12,33 m (= dno pánve u stěny) | 1 okraj 4,1 | 0,0 | 180 |
+  | **pretok + O** | 30 / 7690 | **506** | **1548** | **46 pastí** (18,11 / 18,39 / 21,6 … m), všechny „vana po práh“ | **93 okraj 3,95 + 14 pramenů 0,15** | 7,1 | 91 |
+  | pretok bez O | 30 / 7690 | 6151 | 1993 | 6 (hlavní 19,24 m, 6137 pásem) | 15 pramenů 4,1 | 180,1 | 4442 |
+  | stará, kras jen perm ≥ 0,3 | **224 / 4228** | 2677 | – | 1: 19,24 m | 1 pramen 4,1 | 153,1 | 33 |
+  | pretok + O, kras jen perm ≥ 0,3 | 224 / 4228 | 502 | 1111 | 35 | 88 okraj 3,94 + 14 pramenů 0,15 | 9,4 | 58 |
+
+  - **Dosažená pásma vs. těleso:** pretok + O zasáhne 1548 + 506 = 2054 ze 7690 pásem tělesa (27 %), stojatá voda jen 506
+    (6,6 %, stará 6137 = 80 %); objem stojaté vody 7,1 m³ místo 179,9 m³.
+  - **Kontrola smyslu:** pretok bez O dá znovu přesně starou vanu (19,2435 m, 6137 pásem, 179,9 m³) – bez výstupu ve stěně je
+    celý ostrov uzavřená miska (sloupce mimo ostrov jsou zeď), takže se vana tvoří správně jen tam, kde má (Jan 16:00).
+- **Prototyp (`--bp.voda_e67=true` = O + pretok; `--bp.p67_okraj=true` samotné O s E64 K+I+P+R), skutečné tůně hry,
+  `tools/voda_e66.gd --vykopu=12`, logy `godot-prototyp/shots/67/`:**
+
+  | | plný výpočet vody | podzemí při výkopu (ms) | kroky R | neshod s plným výpočtem |
+  |---|---|---|---|---|
+  | stará | 2,6 s | 277–906 (průměr ~670) | 22–66, max krok 474 ms | 0 |
+  | O (E64 K+I+P+R) | 1,07 s | 2–11 | 0–11, max 13 ms | 0 |
+  | **E67 (O + pretok)** | **0,77 s** | **0,2–114** (bez zásahu stopy 0,2) | 0 | **0** |
+
+  - Hra: stará = 1 těleso, hladina 19,56 m přes 1024 sloupců (6746 pásem, 210 m³), pramen 29,27. E67: tůň u stěny (0,18)
+    vyteče hned ve stěně ve 18,19 m (vodopád do mlhy, 0,153 l/s), stojatá voda 2 pásma (0,01 m³), mokrá 3 pásma.
+    Do podzemí jde 0,153 místo 0,173 l/s: dřív pramen 29,27 vracel vodu na povrch a ta zčásti znovu tekla do podzemí (4 volání → 2).
+- **Parita:** hashe testů studie (v1, sled46, svet8, voda, voda_b, voda_b --b) beze změny (`shots/e67/testy/` = `shots/e64/testy/`).
+  O ve světech bez zdí (svet64 8 × 8) nemá vliv z konstrukce (`wedge` je vždy false); záznam alg64 jsem znovu nepouštěl.
+- **Důkazy E64:** O mění jen množinu výstupů floodu (čte sloupec + 4 sousedy, zeď se výkopem nemění) → K, I, P, R platí beze
+  změny; potvrzeno 0 neshod u 12 výkopů s K+I+P+R. Pretok lokální opravu I / kroky R **nepoužívá**: výkop = plný přepočet
+  dotčených volání, výsledek je čistá funkce dat ve stopě → přesnost i nezávislost na pořadí výkopů triviálně (studie: 2 pořadí
+  12 výkopů → stejný otisk, 0 neshod; prototyp 0 neshod). Lokální oprava pro pretok zatím není.
+- **Negativa a otevřené:**
+  - Bez O je pretok pomalý (4,4 s): opakovaná spojování pastí se sondou `_probe` (velká vana přes celý ostrov). S O 58–91 ms.
+  - Rozdělení do stran je jen váha perm × překryv (ne Darcy); dolů jde vždy celý průtok, když pod pásmem je těleso.
+  - Výstupy po stovkách drobných větví (93 vodopádů na okraji, 14 pramenů, další < 1 ml/s) – pro hru asi sloučit / prahovat.
+  - Mokrá pásma = film 0,5 m u dna (`p67_film_m`), jen pro zobrazení; čas průchodu se nepočítá (jen časy plnění pastí).
+  - Kras vždy propustný: vypnutí (p67_kras=false) rozpadne 1 těleso na 224 (největší 4228 pásem), ale vana tělesa ve staré
+    variantě zůstane (19,24 m); s pretok skoro beze změny výstupů. Výchozí ponecháno (tabulka materiálů nezměněna).
+  - `rez_gif.sh` vodu nekreslí (jen tělesa), GIF před / po je stejný; vizuály jsou svislé řezy.
+- **Obrázky:** `godot-prototyp/shots/rez/e67/` – `pred_hra/`, `po_hra/` (tůně hry), `pred_minima/`, `po_minima/` (ukázkové zdroje
+  v místních minimech, `--zdroje=minima`), každý s `prehled.png`; srovnání `pred_po_minima_x12.png`, `pred_po_hra_x12.png`.
+
+## E67 podzemní voda vytéká z vrstev na okraji, zavěšená voda, přetoky ve 3D (plán, zapsáno před pokusem 2026-11-19 16:00; Jan 15:54 „Ano voda na krajích bloku měla vytékat z vrstev kam se dostane.“, 15:56 přetoky ve 3D)
+- **Problém (E66b, řezy `godot-prototyp/shots/rez/profil_ostrov/`):** startovní ostrov má jedno těleso s vodou a jednu hladinu
+  19,56 m přes celý ostrov („vana“): voda z tůní se v režimu auto/preliv rozlije do nejnižšího dosažitelného pásma celého
+  souvislého tělesa a hladina stoupá, dokud nenarazí na nejnižší výchoz na povrchu (pramen 29,27). Tři příčiny v kódu:
+  1. **Okraj ostrova není výstup.** `_outs`, `_solve_nadrz` a `ug58._cands_b` znají jen okraj řídicí mřížky světa (x = 0 / W−1)
+     a nižší povrch souseda; sloupce mimo ostrov jsou zeď (`wall`), takže stěna ostrova nikdy nepustí vodu ven.
+  2. **Žádná zavěšená voda.** Preliv bere jako pánev globálně nejnižší dosažitelné pásmo a plní jen ji; mezilehlé nepropustné
+     čočky (misky) se nenaplní a nepřetečou, nevznikne víc hladin.
+  3. **Okamžité „rozlití“:** sestup s kapacitou (cap) navštíví vše, co je pod hladinou vstupu, ne cestu, kudy voda skutečně teče.
+- **Cíl (Jan):** podzemní voda se chová jako povrchové přetoky, ale ve 3D: od zdroje nejdřív **dolů**, pak dolů a do stran
+  podle propustnosti vrstev; v pastech na nepropustném dně se drží (zavěšená voda), po naplnění přeteče do další; mokré jsou
+  jen pásma, kam voda opravdu doteče; ven vyteče z odkryté vrstvy na okraji (stěna ostrova → vodopád do mlhy) nebo v prameni,
+  ve výšce té vrstvy (na nepropustném dně, nejnižší odkryté místo vrstvy). Událostně / předpočítaně, ne simulace po krocích.
+- **Varianty (příznaky v parametrech, výchozí vypnuto → parita):**
+  - **O (`p67_okraj`):** výstup „okraj“ i tam, kde soused pásma je zeď (mimo ostrov): z = spodek pásma (voda sedí na dně
+    vrstvy a vyteče ve stěně). Stejně v `_outs`, `_solve_nadrz` a `ug58._cands_b`, takže platí pro preliv, nádrž i uzly B
+    a celé E64 (K+I+P+R) beze změny: sestup O nečte, flood čte výstupy jen ze sloupce a 4 sousedů a zeď se výkopem nemění.
+  - **Z (`p67_rezim = "pretok"`, nový režim podzemí, soubor `scripts/podzemi52/ug67.gd`):** přetoky ve 3D nad stejnými pásmy:
+    1. *Sestup (tok):* pásma v pořadí spodku shora dolů (halda: lo sestupně, id vzestupně). Pásmo s vodou pošle průtok
+       **dolů**, když se ho dotýká pásmo tělesa pod ním ve stejném sloupci; jinak **do stran** do sousedních pásem s nižším dnem,
+       rozdělené vahou perm × výška překryvu (jako D∞ na povrchu). Výstup ve výšce dna (okraj / nižší povrch souseda ≤ dno)
+       vezme celý průtok pásma (vývěr ve stěně / prameni). Mokrá = navštívená pásma (film u dna).
+    2. *Past:* pásmo bez cesty dolů a bez výstupu = dno pasti. Priority-flood z ní (stejný jako preliv: klíč max(hladina,
+       spodek překryvu), výstupy `_outs`): hladina stoupá, dokud (a) nenarazí na výstup → vyteče, nebo (b) nenarazí na pásmo,
+       jehož dno je pod hladinou a které do pasti nepatří (přeliv přes práh) → past je plná na hladině prahu (zavěšená voda),
+       přebytek (průtok − průsak) teče sestupem dál z toho pásma.
+    3. *Spojení (fill-spill-merge [Barnes]):* když hladina pozdější pasti dosáhne hladiny dřívější sousední pasti, spojí se
+       v jedno jezero a hladina stoupá dál.
+    4. *Ustálený stav:* každá past na cestě, do které teče víc než průsak, je plná po práh; časy plnění = objem / čistý průtok
+       (události po 0,5 m jako dosud). Výsledek: pasti (hladina, pásma, práh / výstup), mokrá pásma sestupu, všechny výstupy
+       s průtokem; `out` = výstup s největším průtokem (rozhraní tok60 beze změny), `outs67` = všechny (tok60 je přidá, když existují).
+  - **Kras (`p67_kras`):** dnes je rozpustná hornina tělesem vždy (`UG._soluble`, i sádrovec s perm 0). Změřit vliv, kdyby
+    kras musel mít perm ≥ `ponor_perm`; tabulku materiálů neměnit (jen pokusný přepínač, výchozí beze změny).
+- **Hypotéza:**
+  1. O: na startovním ostrově vyteče voda ve stěně ostrova pod úrovní 19,56 m (dno pískovce / vápence ~13–16 m);
+     hladina klesne o metry, objem v tělese řádově klesne; pramen 29,27 zmizí nebo zeslábne.
+  2. Z: mokrá pásma ≪ velikost tělesa (řádově jednotky až desítky % ze 7690 pásem); víc hladin (zavěšená voda nad čočkami);
+     výstupy hlavně „okraj“ na stěně ostrova.
+  3. Parita: O i Z vypnuté → hashe testů studie a prototypu beze změny; O ve světech bez zdí (svet64 8 × 8) beze změny výsledků.
+  4. Výkop: O nemění E64 důkazy (K, I, P, R). Z zatím bez lokální opravy: výkop = plný přepočet registrovaných volání
+     (čistá funkce stavu → přesnost i nezávislost na pořadí triviálně), odhad pod současných 0,45–0,95 s, protože navštíví
+     jen mokrou část místo celého tělesa.
+- **Metriky:** počet těles, pasti s vodou, hladiny, výstupy (pramen / okraj) a průtoky, mokrá pásma vs. velikost tělesa,
+  objem, čas řešení a výkopu (ms), parita (hashe testů, shoda se starým výsledkem při vypnutí), vliv krasu na tělesa.
+  Obrázky: `tools/rez_profil.sh` a `tools/rez_gif.sh` před / po (`prehled.png`).
+
 ## E66b podzemní těleso, bok ostrova, řezy GIF (2026-11-19 15:45; Jan 15:20 „Proč je tam velké podzemní těleso? Skryj texturu na boku dlaždice.“, 15:26 GIF řezů)
 - **Proč jedno velké těleso (diagnostika `godot-prototyp/tools/teleso_e66.gd`, obrázek `shots/66b_teleso.png`):**
   - Startovní ostrov (4 bloky, 1024 sloupců, 18886 pásem): 30 těles, z toho **jedno má 7690 pásem ve všech 1024 sloupcích**

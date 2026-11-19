@@ -1,0 +1,567 @@
+{
+ "n": 21,
+ "perm": [
+  1.0,
+  0.8,
+  0.6,
+  0.4,
+  0.2
+ ],
+ "ponor": "0.1",
+ "q": 1.0,
+ "sklon": 0.25,
+ "t": 1.0,
+ "vysledky": [
+  {
+   "bilance": {
+    "chyba": 0.0,
+    "prusak": 0.0,
+    "vstup": 1.0,
+    "vystupy": 1.0
+   },
+   "mokrych": 885,
+   "ms": 114.19,
+   "objem_m3": 0.0,
+   "oriznuto": false,
+   "pasti": [
+    {
+     "dolu": 0.931951256,
+     "hladina": 6.5355,
+     "objem_m3": 0.0,
+     "pasem": 441,
+     "prusak": 0.0,
+     "q_in": 0.931951256,
+     "typ": "nenaplni"
+    },
+    {
+     "dolu": 0.063755158,
+     "hladina": 5.5355,
+     "objem_m3": 0.0,
+     "pasem": 441,
+     "prusak": 0.0,
+     "q_in": 0.063755158,
+     "typ": "nenaplni"
+    },
+    {
+     "dolu": 0.0,
+     "hladina": 4.5355,
+     "objem_m3": 0.0,
+     "pasem": 441,
+     "prusak": 0.0,
+     "q_in": 0.81896247,
+     "typ": "vystup"
+    }
+   ],
+   "prusak_tok": 0.0,
+   "symetrie": {
+    "hladina_m": {
+     "max": 0.0,
+     "nesym": 0,
+     "polozek": 0
+    },
+    "tok_lps": {
+     "max": 0.0,
+     "nesym": 0,
+     "polozek": 885
+    },
+    "vystupy_lps": {
+     "max": 0.0,
+     "nesym": 0,
+     "polozek": 80
+    }
+   },
+   "tvar": "plocha",
+   "varianta": "pretok+O",
+   "vstup_pasmo": "L1",
+   "vystupu": 80,
+   "vystupy_po_vrstvach": {
+    "L5 okraj": 1.0
+   }
+  },
+  {
+   "bilance": {
+    "chyba": 0.0,
+    "prusak": 0.0,
+    "vstup": 1.0,
+    "vystupy": 1.0
+   },
+   "mokrych": 885,
+   "ms": 103.68,
+   "objem_m3": 0.0,
+   "oriznuto": false,
+   "pasti": [
+    {
+     "dolu": 0.931951256,
+     "hladina": 6.5355,
+     "objem_m3": 0.0,
+     "pasem": 441,
+     "prusak": 0.0,
+     "q_in": 0.931951256,
+     "typ": "nenaplni"
+    },
+    {
+     "dolu": 0.063755158,
+     "hladina": 5.5355,
+     "objem_m3": 0.0,
+     "pasem": 441,
+     "prusak": 0.0,
+     "q_in": 0.063755158,
+     "typ": "nenaplni"
+    },
+    {
+     "dolu": 0.0,
+     "hladina": 4.5355,
+     "objem_m3": 0.0,
+     "pasem": 441,
+     "prusak": 0.0,
+     "q_in": 0.81896247,
+     "typ": "vystup"
+    }
+   ],
+   "prusak_tok": 0.0,
+   "symetrie": {
+    "hladina_m": {
+     "max": 0.0,
+     "nesym": 0,
+     "polozek": 0
+    },
+    "tok_lps": {
+     "max": 0.0,
+     "nesym": 0,
+     "polozek": 885
+    },
+    "vystupy_lps": {
+     "max": 0.0,
+     "nesym": 0,
+     "polozek": 80
+    }
+   },
+   "tvar": "plocha",
+   "varianta": "pretok+O bez slucovani",
+   "vstup_pasmo": "L1",
+   "vystupu": 80,
+   "vystupy_po_vrstvach": {
+    "L5 okraj": 1.0
+   }
+  },
+  {
+   "bilance": {
+    "chyba": 0.0,
+    "prusak": 0.0,
+    "vstup": 1.0,
+    "vystupy": 1.0
+   },
+   "hladina": 4.5355,
+   "ms": 41.32,
+   "objem_m3": 0.0,
+   "rezim_tel": "preliv",
+   "symetrie": {
+    "hladina_m": {
+     "max": 0.0,
+     "nesym": 0,
+     "polozek": 0
+    },
+    "tok_lps": {
+     "max": 0.0,
+     "nesym": 0,
+     "polozek": 0
+    },
+    "vystupy_lps": {
+     "max": 1.0,
+     "nesym": 1,
+     "polozek": 1
+    }
+   },
+   "tvar": "plocha",
+   "uzavreno": false,
+   "varianta": "E58 ABC+O",
+   "vstup_pasmo": "L1",
+   "vystup": {
+    "pasmo": "L5",
+    "sloupec": "-10,-10",
+    "typ": "okraj",
+    "z": 4.5355
+   },
+   "vystupu": 1,
+   "vystupy_po_vrstvach": {}
+  },
+  {
+   "bilance": {
+    "chyba": 0.0,
+    "prusak": 0.0,
+    "vstup": 1.0,
+    "vystupy": 1.0
+   },
+   "hladina": 4.5355,
+   "ms": 41.3,
+   "objem_m3": 0.0,
+   "rezim_tel": "preliv",
+   "symetrie": {
+    "hladina_m": {
+     "max": 0.0,
+     "nesym": 0,
+     "polozek": 0
+    },
+    "tok_lps": {
+     "max": 0.0,
+     "nesym": 0,
+     "polozek": 0
+    },
+    "vystupy_lps": {
+     "max": 1.0,
+     "nesym": 1,
+     "polozek": 1
+    }
+   },
+   "tvar": "plocha",
+   "uzavreno": false,
+   "varianta": "E58 base+O",
+   "vstup_pasmo": "L1",
+   "vystup": {
+    "pasmo": "L5",
+    "sloupec": "-10,-10",
+    "typ": "okraj",
+    "z": 4.5355
+   },
+   "vystupu": 1,
+   "vystupy_po_vrstvach": {}
+  },
+  {
+   "bilance": {
+    "chyba": 0.0,
+    "prusak": 0.0,
+    "vstup": 1.0,
+    "vystupy": 1.0
+   },
+   "mokrych": 245,
+   "ms": 7.72,
+   "objem_m3": 0.0,
+   "oriznuto": false,
+   "pasti": [],
+   "prusak_tok": 0.0,
+   "symetrie": {
+    "hladina_m": {
+     "max": 0.0,
+     "nesym": 0,
+     "polozek": 0
+    },
+    "tok_lps": {
+     "max": 0.000000000000000111022302462516,
+     "nesym": 0,
+     "polozek": 245
+    },
+    "vystupy_lps": {
+     "max": 0.0000000000000000555111512312578,
+     "nesym": 0,
+     "polozek": 16
+    }
+   },
+   "tvar": "kupole",
+   "varianta": "pretok+O",
+   "vstup_pasmo": "L1",
+   "vystupu": 16,
+   "vystupy_po_vrstvach": {
+    "L4 okraj": 0.51482484,
+    "L5 okraj": 0.48517516
+   }
+  },
+  {
+   "bilance": {
+    "chyba": 0.0,
+    "prusak": 0.0,
+    "vstup": 1.0,
+    "vystupy": 1.0
+   },
+   "mokrych": 625,
+   "ms": 15.37,
+   "objem_m3": 0.0,
+   "oriznuto": false,
+   "pasti": [],
+   "prusak_tok": 0.0,
+   "symetrie": {
+    "hladina_m": {
+     "max": 0.0,
+     "nesym": 0,
+     "polozek": 0
+    },
+    "tok_lps": {
+     "max": 0.0000000000000000277555756156289,
+     "nesym": 0,
+     "polozek": 625
+    },
+    "vystupy_lps": {
+     "max": 0.00000000000000000693889390390723,
+     "nesym": 0,
+     "polozek": 76
+    }
+   },
+   "tvar": "kupole",
+   "varianta": "pretok+O bez slucovani",
+   "vstup_pasmo": "L1",
+   "vystupu": 76,
+   "vystupy_po_vrstvach": {
+    "L5 okraj": 0.999999996
+   }
+  },
+  {
+   "bilance": {
+    "chyba": 0.0,
+    "prusak": 0.0,
+    "vstup": 1.0,
+    "vystupy": 1.0
+   },
+   "hladina": 1.0,
+   "ms": 48.5,
+   "objem_m3": 0.0,
+   "rezim_tel": "preliv",
+   "symetrie": {
+    "hladina_m": {
+     "max": 0.0,
+     "nesym": 0,
+     "polozek": 0
+    },
+    "tok_lps": {
+     "max": 0.0,
+     "nesym": 0,
+     "polozek": 0
+    },
+    "vystupy_lps": {
+     "max": 1.0,
+     "nesym": 1,
+     "polozek": 1
+    }
+   },
+   "tvar": "kupole",
+   "uzavreno": false,
+   "varianta": "E58 ABC+O",
+   "vstup_pasmo": "L1",
+   "vystup": {
+    "pasmo": "L5",
+    "sloupec": "-10,-10",
+    "typ": "okraj",
+    "z": 1.0
+   },
+   "vystupu": 1,
+   "vystupy_po_vrstvach": {}
+  },
+  {
+   "bilance": {
+    "chyba": 0.0,
+    "prusak": 0.0,
+    "vstup": 1.0,
+    "vystupy": 1.0
+   },
+   "hladina": 1.0,
+   "ms": 37.4,
+   "objem_m3": 0.0,
+   "rezim_tel": "preliv",
+   "symetrie": {
+    "hladina_m": {
+     "max": 0.0,
+     "nesym": 0,
+     "polozek": 0
+    },
+    "tok_lps": {
+     "max": 0.0,
+     "nesym": 0,
+     "polozek": 0
+    },
+    "vystupy_lps": {
+     "max": 1.0,
+     "nesym": 1,
+     "polozek": 1
+    }
+   },
+   "tvar": "kupole",
+   "uzavreno": false,
+   "varianta": "E58 base+O",
+   "vstup_pasmo": "L1",
+   "vystup": {
+    "pasmo": "L5",
+    "sloupec": "-10,-10",
+    "typ": "okraj",
+    "z": 1.0
+   },
+   "vystupu": 1,
+   "vystupy_po_vrstvach": {}
+  },
+  {
+   "bilance": {
+    "chyba": 0.0,
+    "prusak": 0.0,
+    "vstup": 1.0,
+    "vystupy": 1.0
+   },
+   "mokrych": 13,
+   "ms": 14.59,
+   "objem_m3": 78.4826,
+   "oriznuto": false,
+   "pasti": [
+    {
+     "dolu": 0.0,
+     "hladina": 7.0355,
+     "objem_m3": 78.4826,
+     "pasem": 443,
+     "prusak": 0.0,
+     "q_in": 1.0,
+     "typ": "vystup"
+    }
+   ],
+   "prusak_tok": 0.0,
+   "symetrie": {
+    "hladina_m": {
+     "max": 0.0,
+     "nesym": 0,
+     "polozek": 305
+    },
+    "tok_lps": {
+     "max": 0.0,
+     "nesym": 0,
+     "polozek": 13
+    },
+    "vystupy_lps": {
+     "max": 0.0,
+     "nesym": 0,
+     "polozek": 4
+    }
+   },
+   "tvar": "misa",
+   "varianta": "pretok+O",
+   "vstup_pasmo": "L1",
+   "vystupu": 4,
+   "vystupy_po_vrstvach": {
+    "past okraj": 1.0
+   }
+  },
+  {
+   "bilance": {
+    "chyba": 0.0,
+    "prusak": 0.0,
+    "vstup": 1.0,
+    "vystupy": 1.0
+   },
+   "mokrych": 21,
+   "ms": 14.46,
+   "objem_m3": 78.4826,
+   "oriznuto": false,
+   "pasti": [
+    {
+     "dolu": 0.0,
+     "hladina": 7.0355,
+     "objem_m3": 78.4826,
+     "pasem": 443,
+     "prusak": 0.0,
+     "q_in": 1.0,
+     "typ": "vystup"
+    }
+   ],
+   "prusak_tok": 0.0,
+   "symetrie": {
+    "hladina_m": {
+     "max": 0.0,
+     "nesym": 0,
+     "polozek": 305
+    },
+    "tok_lps": {
+     "max": 0.00000000000000000693889390390723,
+     "nesym": 0,
+     "polozek": 21
+    },
+    "vystupy_lps": {
+     "max": 0.0,
+     "nesym": 0,
+     "polozek": 4
+    }
+   },
+   "tvar": "misa",
+   "varianta": "pretok+O bez slucovani",
+   "vstup_pasmo": "L1",
+   "vystupu": 4,
+   "vystupy_po_vrstvach": {
+    "past okraj": 1.0
+   }
+  },
+  {
+   "bilance": {
+    "chyba": 0.0,
+    "prusak": 0.0,
+    "vstup": 1.0,
+    "vystupy": 1.0
+   },
+   "hladina": 7.0355,
+   "ms": 64.67,
+   "objem_m3": 78.4826,
+   "rezim_tel": "preliv",
+   "symetrie": {
+    "hladina_m": {
+     "max": 0.0,
+     "nesym": 0,
+     "polozek": 305
+    },
+    "tok_lps": {
+     "max": 0.0,
+     "nesym": 0,
+     "polozek": 0
+    },
+    "vystupy_lps": {
+     "max": 1.0,
+     "nesym": 1,
+     "polozek": 1
+    }
+   },
+   "tvar": "misa",
+   "uzavreno": false,
+   "varianta": "E58 ABC+O",
+   "vstup_pasmo": "L1",
+   "vystup": {
+    "pasmo": "L5",
+    "sloupec": "-10,0",
+    "typ": "okraj",
+    "z": 7.0355
+   },
+   "vystupu": 1,
+   "vystupy_po_vrstvach": {}
+  },
+  {
+   "bilance": {
+    "chyba": 0.0,
+    "prusak": 0.0,
+    "vstup": 1.0,
+    "vystupy": 1.0
+   },
+   "hladina": 7.0355,
+   "ms": 59.18,
+   "objem_m3": 78.4826,
+   "rezim_tel": "preliv",
+   "symetrie": {
+    "hladina_m": {
+     "max": 0.0,
+     "nesym": 0,
+     "polozek": 305
+    },
+    "tok_lps": {
+     "max": 0.0,
+     "nesym": 0,
+     "polozek": 0
+    },
+    "vystupy_lps": {
+     "max": 1.0,
+     "nesym": 1,
+     "polozek": 1
+    }
+   },
+   "tvar": "misa",
+   "uzavreno": false,
+   "varianta": "E58 base+O",
+   "vstup_pasmo": "L1",
+   "vystup": {
+    "pasmo": "L5",
+    "sloupec": "-10,0",
+    "typ": "okraj",
+    "z": 7.0355
+   },
+   "vystupu": 1,
+   "vystupy_po_vrstvach": {}
+  }
+ ]
+}

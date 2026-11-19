@@ -16,6 +16,39 @@ func _arg(k: String, d: String) -> String:
 		if s.begins_with("--" + k + "="): return s.split("=", true, 1)[1]
 	return d
 
+## testovací zdroje podzemí (jako blueprint-studie/tools/e67.gd): místní minima povrchu řídicí mřížky → F.entry, po tělesech
+func _minima_calls(c: Dictionary) -> Array:
+	var UGF = load("res://scripts/voda/podzemi/ug_funkce.gd")
+	var U = load("res://scripts/voda/podzemi/ug58.gd")
+	var W: int = c.W; var H: int = c.H
+	var r: int = int(c.get("r", 1)); var Ws: int = int(c.get("Ws", W))
+	var by := {}
+	for cc in W * H:
+		if c.wall[cc] == 1: continue
+		var x := cc / H; var y := cc % H; var hh: float = c.h[cc]; var low := true; var lower := false
+		for d in 4:
+			var qx: int = x + [1, -1, 0, 0][d]; var qy: int = y + [0, 0, 1, -1][d]
+			if qx < 0 or qy < 0 or qx >= W or qy >= H: continue
+			var c2 := qx * H + qy
+			if c.wall[c2] == 1: continue
+			if float(c.h[c2]) < hh - 1e-9: low = false
+			if float(c.h[c2]) > hh + 1e-9: lower = true
+		if not (low and lower): continue
+		var e: int = UGF.entry(c, (x * r + r / 2) * Ws + y * r + r / 2)
+		if e < 0: continue
+		var k: int = c.comp[e]
+		if not by.has(k): by[k] = PackedInt32Array()
+		by[k].append(e)
+	var ks := by.keys(); ks.sort()
+	var res := []
+	var calls := []
+	for k in ks:
+		var ents: PackedInt32Array = by[k]; ents.sort()
+		calls.append({"ents": ents, "q": 0.02 * ents.size(), "excl": {}, "x": [], "ex": {}, "final": true})
+	var st := {"exact": 0, "fallback": 0, "skipped": 0}
+	for ci in calls.size(): res.append(U._one(c, calls, ci, false, false, false, 0.0625, st))
+	return res
+
 func _init() -> void:
 	BlockGen.gen_version = "bp"
 	T.reset()
@@ -92,31 +125,65 @@ func _init() -> void:
 			var UGF = load("res://scripts/voda/podzemi/ug_funkce.gd")
 			var c2: Dictionary = v.ug
 			var bodies: Array = v.st.get("ug_bodies", [])
-			var fill := {}   # sloupec řídicí mřížky → [[lo, top, index tělesa]]
-			for bi in bodies.size():
-				var r: Dictionary = bodies[bi]
+			if _arg("zdroje", "hra") == "minima":   # ukázka: zdroj v každém místním minimu povrchu (0,02 l/s), seskupené po tělesech
+				var t67 := Time.get_ticks_usec()
+				bodies = _minima_calls(c2)
+				out.ms_podzemi = (Time.get_ticks_usec() - t67) / 1000.0
+				out.zdroje = "minima"
+			var fill := {}   # sloupec řídicí mřížky → [[lo, top, index hladiny]]
+			var film := {}   # E67 pretok: protékající voda (mokrá pásma sestupu) → [[lo, lo + film]]
+			var fm := float(c2.get("film67", 0.5))
+			var hl := []; var vy := []
+			for r in bodies:
+				if r.has("pits67"):   # E67: stojatá voda jen v pastech (vana po práh / jezero do výstupu)
+					for pt in r.pits67:
+						if float(pt.objem_m3) <= 0.0: continue
+						var hi_ := hl.size()
+						hl.append({"hladina": snappedf(float(pt.hladina), 0.001), "typ": "vana" if String(pt.typ) == "prah" else ("do vystupu" if String(pt.typ) == "vystup" else String(pt.typ)),
+							"pasem": int(pt.pasem), "objem_m3": snappedf(float(pt.objem_m3), 0.01)})
+						for bb in pt.bands:
+							var top := minf(float(c2.hi[bb]), float(pt.hladina))
+							if top - float(c2.lo[bb]) <= 0.0001: continue
+							var cc0: int = c2.bcol[bb]
+							if not fill.has(cc0): fill[cc0] = []
+							fill[cc0].append([snappedf(c2.lo[bb], 0.001), snappedf(top, 0.001), hi_])
+					var wq: PackedFloat64Array = r.get("wetq67", PackedFloat64Array())
+					for iw in r.wet67.size():
+						var bb: int = r.wet67[iw]
+						var cc1: int = c2.bcol[bb]
+						if not film.has(cc1): film[cc1] = []
+						film[cc1].append([snappedf(c2.lo[bb], 0.001), snappedf(minf(float(c2.hi[bb]), float(c2.lo[bb]) + fm), 0.001), snappedf(wq[iw] if iw < wq.size() else 0.0, 0.00001)])
+					for o in r.outs67:
+						var s7: int = int(o[2])
+						var g7 := Vector2i(s7 / v.H, s7 % v.H) - T.OFF * 16
+						vy.append([g7.x, g7.y, snappedf(float(o[0]), 0.001), String(o[1]), snappedf(float(o[3]), 0.0001)])
+					continue
 				var L: float = float(r.z_out)
-				for b in r.comp_ids:
-					var top := minf(float(c2.hi[b]), L)
-					if top - float(c2.lo[b]) <= 0.0001: continue
-					var cc: int = c2.bcol[b]
-					if not fill.has(cc): fill[cc] = []
-					fill[cc].append([snappedf(c2.lo[b], 0.001), snappedf(top, 0.001), bi])
-				var o := {"hladina": snappedf(L, 0.001), "uzavrene": bool(r.closed), "nenaplni": bool(r.never_fills),
-					"q_in": snappedf(float(r.q_in), 0.0001), "out_q": snappedf(float(r.out_q), 0.0001), "objem_m3": snappedf(float(r.volume_m3), 0.1),
-					"pasem": r.comp_ids.size(), "typ": "", "vystup": [], "rezim": String(r.get("rezim_tel", "")),
-					"prusak_q": snappedf(float(r.leak), 0.0001)}
+				var hi2 := hl.size()
+				hl.append({"hladina": snappedf(L, 0.001), "typ": "teleso (" + String(r.get("rezim_tel", "")) + ")", "pasem": r.comp_ids.size(), "objem_m3": snappedf(float(r.volume_m3), 0.01)})
+				for bb in r.comp_ids:
+					var top2 := minf(float(c2.hi[bb]), L)
+					if top2 - float(c2.lo[bb]) <= 0.0001: continue
+					var cc2: int = c2.bcol[bb]
+					if not fill.has(cc2): fill[cc2] = []
+					fill[cc2].append([snappedf(c2.lo[bb], 0.001), snappedf(top2, 0.001), hi2])
 				if not r.out.is_empty():
 					var s_: int = int(r.out[4])
 					var g3 := Vector2i(s_ / v.H, s_ % v.H) - T.OFF * 16
-					o.typ = String(r.out[3]); o.vystup = [g3.x, g3.y, snappedf(float(r.out[0]), 0.001)]
-				tv.append(o)
+					vy.append([g3.x, g3.y, snappedf(float(r.out[0]), 0.001), String(r.out[3]), snappedf(float(r.out_q), 0.0001)])
+				tv.append({"hladina": snappedf(L, 0.001), "rezim": String(r.get("rezim_tel", "")), "uzavrene": bool(r.closed)})
+			vy.sort_custom(func(a1, b1): return float(a1[4]) > float(b1[4]))
+			var gf := {}
 			for i in v.W * v.H:
 				if v.island[i] == 0: continue
-				var cc2: int = UGF.col_of(c2, i)
-				if not fill.has(cc2): continue
+				var cc3: int = UGF.col_of(c2, i)
 				var g2 := Vector2i(i / v.H, i % v.H) - T.OFF * 16
-				gw["%d,%d" % [g2.x, g2.y]] = fill[cc2]
+				if fill.has(cc3): gw["%d,%d" % [g2.x, g2.y]] = fill[cc3]
+				if film.has(cc3): gf["%d,%d" % [g2.x, g2.y]] = film[cc3]
+			out.protok_voda = gf; out.hladiny_voda = hl; out.vystupy_voda = vy
+			out.rezim_vody = "pretok" if String(c2.get("rezim67", "")) == "pretok" else "auto"
+			out.okraj67 = bool(c2.get("okraj67", false))
+			out.render67 = {"min_vytok": float(T.p.get("p67_min_vytok_render", 0.0)), "min_tok": float(T.p.get("p67_min_tok_render", 0.0)), "prune": bool(T.p.get("p67_prune", true)), "prune_min": float(T.p.get("p67_prune_min", 0.1))}
 		out.podzemni_voda = gw; out.telesa_voda = tv
 		v.dispose()
 	var path := _arg("out", "/tmp/rez_data.json")

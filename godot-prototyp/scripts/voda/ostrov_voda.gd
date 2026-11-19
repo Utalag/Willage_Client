@@ -15,6 +15,7 @@ const TOK60 = preload("res://scripts/voda/povrch/tok60.gd")
 const PRM = preload("res://scripts/voda/prameny.gd")
 const V64 = preload("res://scripts/teren/svet64/voda64.gd")
 const UGO = preload("res://scripts/voda/podzemi_ostrov.gd")
+const H68 = preload("res://scripts/voda/hydro68.gd")   # E68: jednotný krok povrch ↔ podzemí do ustálení (p68_hydro)
 const BS := 16
 const ROCK := 6   # materiál příkopu pro tok (žula, nepropustná)
 
@@ -98,10 +99,19 @@ func build(bl: Dictionary) -> void:
 		st.ug = ug
 	ms["podzemí: pásma"] = (Time.get_ticks_usec() - t1) / 1000.0
 	t1 = Time.get_ticks_usec()
-	TOK.route(st)
+	_route(st)
 	ms["povrch + podzemí: plný výpočet"] = (Time.get_ticks_usec() - t1) / 1000.0
 	_falls()
 	ms["celkem"] = (Time.get_ticks_usec() - t0) / 1000.0
+
+## E68: plný výpočet – p68_hydro = smyčka povrch ↔ podzemí do ustálení (nejvýš p68_kola, tolerance p68_tol), jinak tok.route
+func _route(s: Dictionary) -> void:
+	if bool(p.get("p68_hydro", false)): H68.full(s, int(p.get("p68_kola", 64)), float(p.get("p68_tol", 1e-9)), true, bool(p.get("p73_zrychleni", false)))
+	else: TOK.route(s)
+
+func _update(ch: PackedInt32Array, hh: PackedFloat64Array, src_new: PackedFloat64Array) -> Dictionary:
+	if bool(p.get("p68_hydro", false)): return H68.update(st, ch, hh, src_new, int(p.tok_margin), int(p.get("p68_kola", 64)), float(p.get("p68_tol", 1e-9)), true, bool(p.get("p73_zrychleni", false)))
+	return TOK60.update(st, ch, hh, src_new, int(p.tok_margin))
 
 ## podzemí se staví z funkcí vrstev (původní povrch) → dřívější výkopy (hm < hm_gen) se do něj přehrají
 func _replay_digs(u: Dictionary) -> void:
@@ -157,7 +167,7 @@ func edit(s: Vector2i, lx: int, ly: int, new_h: int) -> Dictionary:
 			break
 	var ch := PackedInt32Array([gi]); var hh := PackedFloat64Array([hv])
 	if out.has("ug") and bool(out.ug.changed): _add_drains(ch, hh)
-	var r := TOK60.update(st, ch, hh, src_new, int(p.tok_margin))
+	var r := _update(ch, hh, src_new)
 	out.surf_ms = (Time.get_ticks_usec() - t1) / 1000.0
 	out.surf = r
 	_falls()
@@ -186,7 +196,7 @@ func step() -> bool:
 		var gi: int = last_edit.gi
 		var ch := PackedInt32Array([gi]); var hh := PackedFloat64Array([st.hm[gi]])
 		_add_drains(ch, hh)
-		TOK60.update(st, ch, hh, st.src, int(p.tok_margin))
+		_update(ch, hh, st.src)
 		_falls()
 	return more
 
@@ -198,7 +208,7 @@ func check_full() -> Dictionary:
 		var u2 := UGO.make(T.world, T.fine(blocks), p, W, st2.hm, wall, float(p.voda_cell_m))
 		for d in ug._digs: UGO.F.touched(u2, {}, PackedInt32Array([d[0]]), PackedFloat64Array([d[1]]))
 		st2.ug = u2
-	TOK.route(st2)
+	_route(st2)
 	if st2.has("ug"): st2.ug.clear()   # cyklus Members.ctx (viz dispose)
 	var bad := {"fill": 0, "eff": 0, "to": 0}
 	for i in n:
@@ -224,3 +234,8 @@ func summary() -> Dictionary:
 		if String(u.typ) != "okraj": outs += 1
 	return {"prameny": springs.size(), "koryto_sloupcu": wet, "tun_sloupcu": pond, "vodopady": nf, "vodopady_okraj": ne, "okraj_lps": edge_q,
 		"podzemni_telesa": bodies.size(), "vyvery": outs, "volani_podzemi": (ug._calls.size() if not ug.is_empty() else 0)}
+
+## E68: společná bilance, otisk stavu a kola posledního přepočtu (jen hlášení, nic nemění)
+func hydro() -> Dictionary:
+	if st.is_empty(): return {}
+	return {"bilance": H68.bilance(st), "otisk": H68.otisk(st), "kolo": st.get("kolo68", {})}

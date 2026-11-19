@@ -17,7 +17,7 @@ $G --headless --path . -s res://tools/voda_e66.gd -- --vykopu=12   # voda ostrov
 python3 tools/port_studie.py [--check]                         # znovu přenést moduly studie (nebo jen ověřit, že kopie sedí)
 tools/rez_gif.sh [--oblast=vse|x,y] [--krok=2] [--ms=750] [--pohled=izo|shora] [--smer=nahoru|dolu] [--out=shots/rez/x.gif] [--podzemi=1] [--bloky="0,0:louka:101;..."]
                                                                # řezy → animovaný GIF (bez GPU, ~3–4 s): výchozí izometrie odspodu po řez, materiály, česká legenda, podzemní tělesa
-tools/rez_profil.sh [--oblast=vse|x,y] [--out=shots/rez/profil_x_y/] [--podzemi=1] [--voda=1] [--px=N] [--bloky=...]
+tools/rez_profil.sh [--oblast=vse|x,y] [--out=shots/rez/profil_x_y/] [--podzemi=1] [--voda=1] [--zdroje=hra|minima] [--px=N] [--bloky=...] [--bp.voda_e67=true]
                                                                # svislé řezy (~5 s): 3 kolmo na X a 3 kolmo na Y v 1/4, 1/2, 3/4 + řez přes výstup tělesa + prehled.png
 xvfb-run -a -s "-screen 0 1280x800x24" $G --rendering-driver opengl3 --path . -- --e66b-bok   # bok ostrova před / po -> ../blueprint-studie/shots/66b_bok.png
 $G --headless --path . -s res://tools/teleso_e66.gd && python3 tools/teleso_obrazek.py   # diagnostika podzemního tělesa -> 66b_teleso.png
@@ -230,7 +230,23 @@ Plán a výsledky: `../blueprint-studie/PROP.md` (E66). Moduly studie jsou **kop
   (1 m = stejně px vodorovně i svisle, bez převýšení) + přehled 2 × 3 s půdorysem. Rozlišuje: **šrafa** = rozsah podzemního tělesa
   (propustná hornina / kras, sama o sobě suchá), **sytá modrá** = skutečná podzemní voda ze stavu řešiče podzemí (`ostrov_voda.gd`,
   pásma tělesa po hladinu), **čárkovaně** hladina tělesa, **▼** výstup (pramen / vodopád na okraji), **tyrkysová** = povrchová voda;
-  když výstup neleží na žádném řezu, přidá se řez přes něj (`rez_vystup_telesa_N.png`).
+  když výstup neleží na žádném řezu, přidá se řez přes něj (`rez_vystup_N.png`, nejvýš 2 nejsilnější).
+- **E67 (jen větev `e67-podzemi-okraje`, čeká na Jana):** `--bp.voda_e67=true` zapne podzemí jako přetoky ve 3D (voda teče od tůně
+  dolů a do stran podle propustnosti, stojí jen v uzavřených miskách po práh, vyteče z vrstvy ve stěně ostrova = vodopád do mlhy
+  nebo v prameni); `--bp.p67_okraj=true` samotný výstup ve stěně se starým podzemím. Řezy: světle modrá = protékající voda.
+  Měření a obrázky: `blueprint-studie/PROP.md` (E67), `shots/67/`, `shots/rez/e67/`.
+  **Prahy E67b (všechny laditelné, CLI `--bp.<klíč>=hodnota`, ladicí panel `-- --dev` → „Voda E67 (podzemí, prahy)“,
+  zdroj `scripts/voda/voda_e67_params.gd`, hodnoty v `T.p` / `HRA` v `scripts/teren/ostrov_teren.gd`):**
+
+  | klíč | výchozí | co dělá |
+  |---|---|---|
+  | `p67_prune` | `true` | simulace: slabé větve přetoku se sloučí do nejsilnější sousední cesty (hmota beze změny) |
+  | `p67_prune_min` | `0.1` l/s | práh slučování větví (Jan 16:23: deci-/centilitry neřešíme) |
+  | `p67_min_vytok_render` | `0.02` l/s | jen kreslení: slabší výstup (vodopád ve stěně / pramen) se nekreslí; v řezech obrys ▽ |
+  | `p67_min_tok_render` | `0.02` l/s | jen kreslení: slabší protékající větev se v řezech nekreslí |
+
+  Simulační prahy se projeví při dalším plném výpočtu vody, prahy kreslení při další stavbě sítě vody / řezu.
+  `tools/rez_profil.py --min_vytok= --min_tok=` přepíše prahy kreslení jen pro obrázek.
 
 ## gen-v3 v prototypu (Jan 20:14, `scripts/gen3/`)
 - **Volba:** `BlockGen.gen_version` = `"v3"` (výchozí) nebo `"proto"`, CLI `-- --gen=proto|v3`. Tvar povrchu, transformace, dorovnání stran,

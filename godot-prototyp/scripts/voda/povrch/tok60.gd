@@ -4,6 +4,72 @@ extends RefCounted
 const T = preload("res://scripts/voda/tok.gd")
 static var PR := {}
 static var M0 := 0   # E60: počáteční okraj okna (0 = margin jako tok.gd); okno se samo zvětší, když okraj neodvádí
+static var KOLA := 4      # E68: nejvýš kol povrch ↔ podzemí v update (4 = dosavadní)
+static var TOL := 0.0     # E68: konec smyčky, když se extra / src2 změní nejvýš o TOL l/s (0 = jen bitová shoda, dosavadní)
+static var KOLO := {}     # E68: poslední update: {"kola", "zmena", "ustaleno", "cyklus"}
+static var CYKLUS := false   # E68: smyčka se opakuje (stejný stav odtoků jako v dřívějším kole) → skončit v kanonickém členu cyklu
+
+static var ACC := false      # E73 p73_zrychleni: skok smyčky podle posledních dvou přírůstků výtoků pramenů (src2)
+
+## E73: zrychlení smyčky povrch ↔ podzemí. x = src2 na nenulových výtocích po kole; d1 = x_k − x_{k−1}, d2 = x_{k−1} − x_{k−2}.
+## d1 = r · d2 na všech buňkách (stejné buňky): r < 1 → geometrická řada, skok na limitu x + d1 · r / (1 − r); r ≈ 1
+## (lineární růst do kapacity) → skok x + d1 · J (J = 2, 4, 8 … do 1024). Vrací buňky, kde se src2 změnilo (pak se povrch
+## dopočítá); další kolo spočítá skutečný stav ze skoku, konec až při bitové shodě (pevný bod).
+static func acc_step(st: Dictionary, h: Dictionary) -> PackedInt32Array:
+	var out := PackedInt32Array()
+	var ks: Array = []
+	for i in st.get("_xn", {}):
+		if st.src2[i] != 0.0: ks.append(i)
+	ks.sort()
+	var x := PackedFloat64Array()
+	for i in ks: x.append(st.src2[i])
+	if h.has("x2") and h.k1 == ks and h.k2 == ks and not ks.is_empty():
+		var x1: PackedFloat64Array = h.x1; var x2: PackedFloat64Array = h.x2
+		var n2 := 0.0; var dd := 0.0; var n1 := 0.0
+		for k in ks.size():
+			var d1 := x[k] - x1[k]; var d2 := x1[k] - x2[k]
+			n2 += d2 * d2; dd += d1 * d2; n1 += d1 * d1
+		if n2 > 1e-24 and n1 > 1e-24:
+			var r := dd / n2; var res := 0.0
+			for k in ks.size():
+				var e := (x[k] - x1[k]) - r * (x1[k] - x2[k]); res += e * e
+			if r > 0.0 and res <= 1e-12 * n1:
+				var f := 0.0
+				if r < 1.0 - 1e-6: f = r / (1.0 - r)
+				else: f = float(h.get("J", 2.0)); h.J = minf(f * 2.0, 1024.0)
+				for k in ks.size():
+					var i: int = ks[k]
+					st.src2[i] = maxf(x[k] + (x[k] - x1[k]) * f, 0.0); out.append(i)
+				h.erase("x1"); h.erase("x2"); h.skoky = int(h.get("skoky", 0)) + 1
+				return out
+	if h.has("x1"): h.x2 = h.x1; h.k2 = h.k1
+	h.x1 = x; h.k1 = ks
+	return out
+
+## E68: otisk stavu odtoků tůní a výtoků z podzemí (extra / src2 na nenulových indexech)
+static func sig(st: Dictionary) -> String:
+	var ks: Array = st.get("_xn", {}).keys(); ks.sort()
+	var a := PackedFloat64Array(); var ix := PackedInt32Array()
+	for i in ks: ix.append(i); a.append(st.extra[i]); a.append(st.src2[i])
+	var h := HashingContext.new(); h.start(HashingContext.HASH_SHA256)
+	h.update("xn".to_utf8_buffer())
+	if not ix.is_empty(): h.update(ix.to_byte_array()); h.update(a.to_byte_array())
+	return h.finish().hex_encode().substr(0, 16)
+
+## E68: hlídání cyklu; vrací true = skončit (stav je kanonický člen cyklu: nejmenší otisk)
+static func cyc_step(st: Dictionary, cs: Dictionary) -> bool:
+	var sg := sig(st)
+	if cs.has("min"):
+		return sg == String(cs.min)
+	if cs.seen.has(sg):
+		var j: int = cs.seen[sg]
+		var m := sg
+		for k in range(j, cs.list.size()):
+			if String(cs.list[k]) < m: m = String(cs.list[k])
+		cs.min = m; cs.perioda = cs.list.size() - j
+		return sg == m
+	cs.seen[sg] = cs.list.size(); cs.list.append(sg)
+	return false
 static var FAST_POND := true   # E60: stejná tůň (stejné buňky) → propustnost dna (drain) se nepočítá znovu, materiály se výkopem nemění
 
 ## E60: jako tok._pond_dict(events = false) pro nezměněný tvar tůně; drain z minulého slovníku (stejné buňky, stejné pořadí součtu)
@@ -15,9 +81,14 @@ static func _pond_dict_soft(st: Dictionary, comp: PackedInt32Array, old: Diction
 		q = maxf(q, a); lo = minf(lo, hm[i]); hi = maxf(hi, fill[i])
 		if a > amax: amax = a; outlet = i
 	var dr: float = old.drain_lps
+	var vy := []
+	if bool(st.L.get("q73", false)):   # E73 p73_pritok: přítok = součet výtokových buněk (jako tok._pond_dict)
+		var r73 := T._vyt73(st, comp); q = r73[0]; outlet = r73[1]; vy = r73[2]
 	var um := float(st.L.get("u_m", 0.5))
-	return {"cells": comp, "q_lps": q, "drain_lps": dr, "hloubka_m": (hi - lo) * um, "objem_m3": 0.0, "udalosti": [], "suchá": q <= 0.0,
+	var d := {"cells": comp, "q_lps": q, "drain_lps": dr, "hloubka_m": (hi - lo) * um, "objem_m3": 0.0, "udalosti": [], "suchá": q <= 0.0,
 		"nenaplni_se": q > 0.0 and dr >= q, "podzemi_lps": minf(dr, q), "preliv_lps": maxf(q - dr, 0.0), "outlet": outlet, "dno": lo}
+	if not vy.is_empty(): d.vyt = vy
+	return d
 
 static var FAST_FLOOD := true   # E60: flood okna s haldou v packed polích (pořadí (fill, index) stejné jako reky.gd → stejný výsledek)
 
@@ -107,6 +178,7 @@ static func update(st: Dictionary, ch: PackedInt32Array, hv: PackedFloat64Array,
 		# jen fill změněných buněk (aby příští porovnání sedělo), tok beze změny
 		for i in ch: st.fill[i] = maxf(st.fill[i], st.hm[i])
 		if st.has("_pend"): st._pend.append_array(ch)   # E51b: tůně kolem se dopočítají při příštím přepočtu
+		KOLO = {"kola": 0, "zmena": 0.0, "ustaleno": true, "cyklus": 0}
 		return {"touched": 0, "window": 0, "expanded": 0, "ms": (Time.get_ticks_usec() - t0) / 1000.0, "dry": true, "cells": PackedInt32Array()}
 	var x0 := W; var x1 := 0; var y0 := H; var y1 := 0
 	for i in region:
@@ -220,10 +292,20 @@ static func update(st: Dictionary, ch: PackedInt32Array, hv: PackedFloat64Array,
 		if dlt > 1e-9 and st.to[i] >= 0: queued.erase(st.to[i]); T.RK._push(heap, -st.fill[st.to[i]], st.to[i])
 	PR.po_proudu = Time.get_ticks_usec()
 	# odtoky tůní: změněné přelivy přepočítat po proudu
-	for it in 4:
+	var kol := 0; var zm := 0.0; var ust := false
+	var cs := {"seen": {}, "list": []}
+	var ah := {}
+	for it in KOLA:
+		var ox := {}
+		for i in st.get("_xn", {}): ox[i] = [st.extra[i], st.src2[i]]
 		var chg := _apply_drains(st, dirty)
+		kol += 1
 		dirty = PackedInt32Array()
-		if chg.is_empty(): break
+		if chg.is_empty(): ust = true; zm = 0.0; break
+		zm = 0.0
+		for i in chg:
+			var o: Array = ox.get(i, [0.0, 0.0])
+			zm = maxf(zm, maxf(absf(st.extra[i] - float(o[0])), absf(st.src2[i] - float(o[1]))))
 		for i in chg: T.RK._push(heap, -st.fill[i], i)
 		queued = {}
 		while not heap.is_empty():
@@ -232,6 +314,20 @@ static func update(st: Dictionary, ch: PackedInt32Array, hv: PackedFloat64Array,
 			queued[i] = true; touched[i] = true; dirty.append(i)
 			var dlt := T._cell(st, i)
 			if dlt > 1e-9 and st.to[i] >= 0: queued.erase(st.to[i]); T.RK._push(heap, -st.fill[st.to[i]], st.to[i])
+		if TOL > 0.0 and zm <= TOL: ust = true; break
+		if CYKLUS and cyc_step(st, cs): break
+		if ACC:   # E73: skok smyčky → povrch po proudu od změněných výtoků
+			var jc := acc_step(st, ah)
+			if not jc.is_empty():
+				for i in jc: T.RK._push(heap, -st.fill[i], i)
+				queued = {}
+				while not heap.is_empty():
+					var e := T.RK._pop(heap); var i: int = e[1]
+					if queued.has(i): continue
+					queued[i] = true; touched[i] = true; dirty.append(i)
+					var dlt := T._cell(st, i)
+					if dlt > 1e-9 and st.to[i] >= 0: queued.erase(st.to[i]); T.RK._push(heap, -st.fill[st.to[i]], st.to[i])
+	KOLO = {"kola": kol, "zmena": zm, "ustaleno": ust, "cyklus": int(cs.get("perioda", 0)), "skoky": int(ah.get("skoky", 0))}
 	PR.odtoky = Time.get_ticks_usec()
 	_ponds_cached(st, dirty)   # pw a seznam tůní kolem posledních změn
 	PR.tune = Time.get_ticks_usec()
@@ -381,6 +477,7 @@ static func _apply_drains(st: Dictionary, dirty = null) -> PackedInt32Array:
 	var oldv := {}
 	for i in prev:
 		oldv[i] = [st.extra[i], st.src2[i]]; st.extra[i] = 0.0; st.src2[i] = 0.0
+	var prev_under: Array = st.get("under", [])   # E73 p73_vyver: výstupy minulého kola
 	st.under = []; st.ug_bodies = []; st.lost_deep = 0.0
 	var wr := PackedInt32Array()   # zapsané indexy
 	if float(st.L.get("pit_q", 0.0)) > 0.0:
@@ -391,7 +488,7 @@ static func _apply_drains(st: Dictionary, dirty = null) -> PackedInt32Array:
 		PR.pc = float(PR.get("pc", 0.0)) + (Time.get_ticks_usec() - t_a) / 1000.0; PR.np = wetp.size()
 		if st.get("ug") == null:   # E47c: podzemím k nejbližšímu okraji
 			for x in wetp:
-				st.extra[x.outlet] = x.drain_lps; wr.append(x.outlet)
+				T._set_drain(st, x, wr)
 				var o: int = x.outlet; var best := -1; var bd := 1e9
 				if not st.has("_bl"):   # okrajové sloupce vzestupně (stejné pořadí jako průchod celou mřížkou)
 					var bl := PackedInt32Array()
@@ -408,6 +505,7 @@ static func _apply_drains(st: Dictionary, dirty = null) -> PackedInt32Array:
 				st.under.append({"from": o, "exit": best, "q": x.podzemi_lps, "z": x.dno - 4.0, "typ": "okraj"})
 		else:   # E47d: po propustné vrstvě (podzemi.gd)
 			var ents := []   # [v, pond]
+			var fed: Dictionary = T._fed_map(st, prev_under, wetp) if bool(st.L.get("v73", false)) else {}
 			for x in wetp:
 				var cols := Array(x.cells); cols.sort_custom(func(a, b): return st.hm[a] < st.hm[b])
 				var v := -1
@@ -415,7 +513,7 @@ static func _apply_drains(st: Dictionary, dirty = null) -> PackedInt32Array:
 					v = _ugi(st).entry(st.ug, c)
 					if v >= 0: break
 				if v < 0:
-					st.extra[x.outlet] = x.drain_lps; wr.append(x.outlet); st.lost_deep += x.podzemi_lps   # pod tůní není propustné těleso → do hloubky (nemodeluje se)
+					T._set_drain(st, x, wr); st.lost_deep += x.podzemi_lps   # pod tůní není propustné těleso → do hloubky (nemodeluje se)
 				else: ents.append([v, x])
 			var done := {}
 			for k in ents.size():
@@ -430,17 +528,24 @@ static func _apply_drains(st: Dictionary, dirty = null) -> PackedInt32Array:
 				var vs := PackedInt32Array(); var q := 0.0; var excl := {}
 				for j in grp:
 					vs.append(ents[j][0]); q += ents[j][1].podzemi_lps
+					if T._fed73(st, ents[j][1], r0, fed): continue   # E73 p73_vyver: tůň zavodněná pramenem tohoto tělesa – pramen v ní smí zůstat
 					for c in ents[j][1].cells: excl[c] = true
 				var sk := "s%s|%.9f|%d" % [str(vs), q, excl.hash()]
 				if not st.ug_cache.has(sk): st.ug_cache[sk] = _ugi(st).solve(st.ug, vs, q, excl)
 				var r: Dictionary = st.ug_cache[sk].duplicate()
 				for j in grp:
 					var x: Dictionary = ents[j][1]
-					if not r.closed: st.extra[x.outlet] = x.drain_lps; wr.append(x.outlet)   # uzavřené plné těleso nic nepřijímá → vše přeteče po povrchu
-				if not r.closed and r.out_q > 0.0:
+					if not r.closed: T._set_drain(st, x, wr)   # uzavřené plné těleso nic nepřijímá → vše přeteče po povrchu
+				if not r.closed and r.out_q > 0.0 and r.has("outs67"):   # E67 pretok: víc výstupů (prameny / okraj) s vlastním průtokem
+					for o in r.outs67:
+						var col67: int = o[2]
+						if float(o[3]) <= 0.0: continue
+						if o[1] == "povrch": st.src2[col67] += float(o[3]); wr.append(col67)
+						st.under.append({"v0": ents[grp[0]][0], "from": ents[grp[0]][1].outlet, "exit": col67, "q": float(o[3]), "z": float(o[0]), "typ": o[1]})
+				elif not r.closed and r.out_q > 0.0:
 					var col: int = r.out[4]
 					if r.out[3] == "povrch": st.src2[col] += r.out_q; wr.append(col)
-					st.under.append({"from": ents[grp[0]][1].outlet, "exit": col, "q": r.out_q, "z": float(r.out[0]), "typ": r.out[3]})
+					st.under.append({"v0": ents[grp[0]][0], "from": ents[grp[0]][1].outlet, "exit": col, "q": r.out_q, "z": float(r.out[0]), "typ": r.out[3]})
 				r.erase("members"); r.entries = vs; r.cache_key = sk
 				st.ug_bodies.append(r)
 	var chg := PackedInt32Array()

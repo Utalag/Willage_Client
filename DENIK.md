@@ -216,6 +216,42 @@ Skupiny: 1 Prototyp a buildy · 2 Terén a tvar · 3 Rozlišení bloku · 4 Ská
 - **Komplikace:** koryta jsou krátké úseky (malý svět, malá povodí). Krasová vyvěračka 0. Hráz na svahu tůň nevytvořila (potok ji obtekl). Podzemní tok vede zatím zjednodušeně k nejbližšímu okraji.
 - **Další krok:** Jan rozhodne, jak daleko vést podzemní tok (sledovat propustnou vrstvu?) a jestli má mít krasová vyvěračka vlastní pravidlo. Starší otevřené otázky (eroze po blocích vs hrubý svět, jádro hory přes šev, minerály z hrubého světa) zůstávají.
 
+### 🔄 Blueprint v3 / E73: opravy nálezů E68 (2026-11-19 23:45 · `blueprint-studie/scripts/voda/tok.gd`, `alg60/tok60.gd`, `hydro68/hydro68.gd`, `podzemi52/ug67.gd`, příznaky `p73_vyver`, `p73_pritok`, `p73_zrychleni`, `p73_prusak_tok`, větev `e73-nalezy-e68`)
+- **Směr:** TODO Voda: pramen ve vlastní tůni, přítok tůně jako součet, zrychlení pomalé smyčky, E67 „vše prosákne“ ≠ uzavřené.
+- **Zlepšení:** ostrov bez cyklu, bilance přesně 0 (dřív −0,02 l/s), 3 kola místo 4, výkop ⌀ 1,1 → 0,76 s, 0 neshod, stejný otisk v obou pořadích. Test smyčky 68 → 17 kol, pretok = auto. Opravena chyba plného výpočtu (chyběly prameny E67). Výchozí zapnuto.
+- **Komplikace:** první pravidlo pro vývěrovou tůň kmitalo (zamítnuto). Pramen ve vlastní tůni potřebuje i přítok jako součet. Zrychlení na ostrově nic nezrychlí (smyčky jsou krátké).
+- **Další krok:** Jan schválí výchozí hodnoty a sloučení; dál `p72_prusak` a limit vzdálenosti slučování.
+
+### 🔄 Blueprint v3 / E68: jednotný krok hydrologie povrch + podzemí (2026-11-19 23:10 · `blueprint-studie/scripts/hydro68/hydro68.gd`, prototyp `scripts/voda/hydro68.gd`, příznak `p68_hydro`, větev `e68-orchestrator`)
+- **Směr:** TODO Voda E68: jedno místo pro smyčku povrch ↔ podzemí, společná bilance, otisk, kola do ustálení.
+- **Zlepšení:** smyčka tůň → průsak → pramen → tůň se dopočítá do ustálení (test: chyba bilance 61 % → 0, 13 kol). Opakující se stav se pozná (cyklus). Na ostrově stejný výsledek i čas, 0 neshod, stejný otisk v obou pořadích výkopů. Výchozí zapnuto.
+- **Komplikace:** na ostrově pramen přeskakuje mezi dvěma prohlubněmi (cyklus perioda 2, bilance −0,02 l/s) – nevyřešeno, jen nahlášeno. Pomalé smyčky potřebují desítky kol.
+- **Další krok:** pravidlo pro pramen v prohlubni, kterou sám zavodní; přítok tůně jako součet přítoků.
+
+### 🔗 Blueprint v3 / E72: slučování drobných výstupů a průsaků podzemí pod prahem (2026-11-19 22:35 · `blueprint-studie/scripts/podzemi52/ug67.gd` příznaky `p72_slucovat`, `p72_prusak`, větev `e68-orchestrator`)
+- **Směr:** Jan 22:24: drobné průsaky a přelivy pod prahem slučovat (stávající `p67_prune_min` 0,1 l/s), nejen skrýt při kreslení.
+- **Zlepšení:** ostrov 150 → 6 výstupů (119 drobných → 0), Σ 4,10 l/s, bilance a symetrie přesné, výkopy 0 neshod, o 10–20 % rychlejší. Nalezena a opravena chyba E71: past znovu dělila už odeslaný průsak (+0,317 l/s navíc ve variantě bez okraje).
+- **Komplikace:** průsak protékané vody (E71 P) je na pásmo vždy pod prahem, takže se slučováním zmizí (kupole 0,045 → 0). Výstupy se slučují až přes 19 sloupců.
+- **Další krok:** Jan rozhodne o `p72_prusak` a o omezení vzdálenosti slučování.
+
+### 🪨 Blueprint v3 / E71: kapacita průtoku dolů podle vrstvy a průsak protékané vody (2026-11-19 22:40 · `blueprint-studie/scripts/podzemi52/ug67.gd` příznaky `p71_kapacita`, `p71_prusak`, větev `e71-kapacita-dolu`)
+- **Směr:** negativa E69: vrstvy propouštěly dolů vše, protékaná voda neprosakovala.
+- **Zlepšení:** referenční sloupec 1 l/s s vrstvami 1,0 … 0,2 l/s dá přesně 0,2 l/s z každé vrstvy. Symetrie a bilance přesné, výkopy 0 neshod. Průsak protékané vody v kupoli 0 → 0,045–0,163 l/s (E58 0,176). Výchozí zapnuto (jen E67 pretok).
+- **Komplikace:** voda na ostrově vytéká v průměru níž (18,34 → 17,74 m), výstupů 86 → 150 (119 drobných pod 0,02 l/s). Podzemí +20–40 % času (< 0,1 s). Dvě chyby nalezené testem opraveny (pojistka kroků, plochá vrstva podle id).
+- **Další krok:** slučovat i drobné průsaky pastí; Jan rozhodne o jednotkách času (p71_cas).
+
+### 🧮 Blueprint v3 / E70: harmonický průměr propustností pro dělení do stran, jen přepínač (2026-11-19 22:10 · `blueprint-studie/tools/e70.gd`, `scripts/podzemi52/ug67.gd` příznak `p70_prumer`, větev `e70-harmonicky-prumer`)
+- **Směr:** úkol z TODO (Voda): aby jíl brzdil i sousední písek.
+- **Zlepšení:** přepínač `pomer | harmonicky`, symetrie a bilance beze změny, čas beze změny. Voda v jílu už není tolik vysávaná pískem (94 → 65 %).
+- **Komplikace:** opačným směrem (z písku) jde do jílu víc (5,7 → 10,2 %); normované dělení neumí skutečné brzdění. Startovní ostrov bitově beze změny (zdroje pod prahem slučování), bez slučování přesun 0,2 % vody.
+- **Další krok:** výchozí zůstává `pomer`; zapnout spolu se svislou kapacitou vrstev / Darcy, až bude.
+
+### ⚖️ Blueprint v3 / E69: test symetrie a bilance podzemí, oprava remíz (2026-11-19 21:50 · `blueprint-studie/tools/e69.gd`, `scripts/podzemi52/ug67.gd` příznak `p69_remizy`, větev `e69-symetrie-test`)
+- **Směr:** úkol z TODO (Voda): zdroj 1 l/s, vrstvy 1,0 / 0,8 / 0,6 / 0,4 / 0,2, nepropustné podloží, symetrický terén → symetrický výsledek, voda se neztratí.
+- **Zlepšení:** bilance přesná všude (chyba ≤ 1e-12 l/s). Nesymetrie E67 z remíz podle id (slučování větví: kupole 0,5 l/s jedním směrem; past s výstupy ve stejné výšce: vše v jednom bodě) opravena dělením rovným dílem → symetrie 0 ve všech tvarech.
+- **Komplikace:** propustnosti vrstev se v E67 projeví jen do stran (dolů jde vždy vše), referenční „kapacitní“ profil nesplní. Na ostrově +13 % mokrých pásem (remízy tam nastávají). E58 má z konstrukce jeden výstup.
+- **Další krok:** Jan rozhodne o odškrtnutí v TODO a zda chce svislou kapacitu vrstev jako nový úkol.
+
 ### 🧱 Blueprint v3 / E64: sestup bez závislosti na pořadí, oprava se zárukou shody, kroky R, P z paměti (2026-11-19 13:50 · `blueprint-studie/scripts/alg64/`, shot `64_podzemi.png`)
 - **Směr:** Jan 12:36 „Jon určitě to zkus.“ Vychází z rešerše Gemini. K = halda (hodnota, id), ostrá zlepšení bez ε.
   I = oprava přes všechny hrany do S. R = kroky po počtu operací. M = test více hráčů. V = komprese sloupců.

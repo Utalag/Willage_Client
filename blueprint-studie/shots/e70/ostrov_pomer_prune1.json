@@ -1,0 +1,1293 @@
+{
+ "gen_ms": 894.356,
+ "varianty": [
+  {
+   "hladiny_stare": [
+    19.24
+   ],
+   "mokra_pasma": 0,
+   "ms": 496.9,
+   "nejvetsi_teleso_pasem": 7690,
+   "objem_m3": 179.9,
+   "pasem_teles": 7732,
+   "pasma_pod_hladinou": 6137,
+   "pasti": [],
+   "pasti_s_vodou": 0,
+   "teles": 30,
+   "varianta": "stara (auto)",
+   "volani": 1,
+   "vystupy": {
+    "okraj": 0,
+    "povrch": 1
+   },
+   "vystupy_otisk": "4f53cda18c2baa0c",
+   "vystupy_q": [],
+   "vystupy_q_lps": {
+    "okraj": 0.0,
+    "povrch": 4.1
+   }
+  },
+  {
+   "hladiny_stare": [
+    12.33
+   ],
+   "mokra_pasma": 0,
+   "ms": 165.2,
+   "nejvetsi_teleso_pasem": 7690,
+   "objem_m3": 0.0,
+   "pasem_teles": 7732,
+   "pasma_pod_hladinou": 0,
+   "pasti": [],
+   "pasti_s_vodou": 0,
+   "teles": 30,
+   "varianta": "stara + O",
+   "volani": 1,
+   "vystupy": {
+    "okraj": 1,
+    "povrch": 0
+   },
+   "vystupy_otisk": "4f53cda18c2baa0c",
+   "vystupy_q": [],
+   "vystupy_q_lps": {
+    "okraj": 4.1,
+    "povrch": 0.0
+   }
+  },
+  {
+   "hladiny_stare": [],
+   "mokra_pasma": 791,
+   "ms": 67.1,
+   "nejvetsi_teleso_pasem": 7690,
+   "objem_m3": 7.0,
+   "pasem_teles": 7732,
+   "pasma_pod_hladinou": 414,
+   "pasti": [
+    {
+     "dno": 17.77,
+     "hladina": 18.11,
+     "objem_m3": 3.7,
+     "pasem": 115,
+     "typ": "prah"
+    },
+    {
+     "dno": 17.75,
+     "hladina": 18.39,
+     "objem_m3": 2.7,
+     "pasem": 114,
+     "typ": "prah"
+    },
+    {
+     "dno": 21.09,
+     "hladina": 21.6,
+     "objem_m3": 0.1,
+     "pasem": 6,
+     "typ": "prah"
+    },
+    {
+     "dno": 18.01,
+     "hladina": 18.26,
+     "objem_m3": 0.1,
+     "pasem": 12,
+     "typ": "prah"
+    },
+    {
+     "dno": 18.37,
+     "hladina": 18.49,
+     "objem_m3": 0.1,
+     "pasem": 15,
+     "typ": "prah"
+    },
+    {
+     "dno": 17.11,
+     "hladina": 17.14,
+     "objem_m3": 0.0,
+     "pasem": 2,
+     "typ": "prah"
+    },
+    {
+     "dno": 16.36,
+     "hladina": 16.43,
+     "objem_m3": 0.0,
+     "pasem": 2,
+     "typ": "prah"
+    },
+    {
+     "dno": 17.84,
+     "hladina": 18.09,
+     "objem_m3": 0.0,
+     "pasem": 2,
+     "typ": "prah"
+    },
+    {
+     "dno": 16.03,
+     "hladina": 16.04,
+     "objem_m3": 0.0,
+     "pasem": 4,
+     "typ": "prah"
+    },
+    {
+     "dno": 14.63,
+     "hladina": 14.83,
+     "objem_m3": 0.0,
+     "pasem": 5,
+     "typ": "prah"
+    },
+    {
+     "dno": 12.78,
+     "hladina": 12.81,
+     "objem_m3": 0.0,
+     "pasem": 2,
+     "typ": "prah"
+    },
+    {
+     "dno": 12.77,
+     "hladina": 12.79,
+     "objem_m3": 0.0,
+     "pasem": 2,
+     "typ": "prah"
+    }
+   ],
+   "pasti_s_vodou": 31,
+   "teles": 30,
+   "varianta": "pretok + O",
+   "volani": 1,
+   "vystupy": {
+    "okraj": 85,
+    "povrch": 1
+   },
+   "vystupy_otisk": "3dd7f2677cb7f7a7",
+   "vystupy_q": [
+    [
+     6192,
+     "okraj",
+     0.04
+    ],
+    [
+     6193,
+     "okraj",
+     0.0145833333333333
+    ],
+    [
+     6194,
+     "okraj",
+     0.010625
+    ],
+    [
+     6195,
+     "okraj",
+     0.0053125
+    ],
+    [
+     6196,
+     "okraj",
+     0.279479166666667
+    ],
+    [
+     6198,
+     "okraj",
+     0.02
+    ],
+    [
+     6203,
+     "okraj",
+     0.02
+    ],
+    [
+     6204,
+     "okraj",
+     0.02
+    ],
+    [
+     6205,
+     "okraj",
+     0.02
+    ],
+    [
+     6209,
+     "okraj",
+     0.01
+    ],
+    [
+     6210,
+     "okraj",
+     0.02
+    ],
+    [
+     6211,
+     "okraj",
+     0.02
+    ],
+    [
+     6212,
+     "okraj",
+     0.03
+    ],
+    [
+     6213,
+     "okraj",
+     0.02
+    ],
+    [
+     6214,
+     "okraj",
+     0.02
+    ],
+    [
+     6215,
+     "okraj",
+     0.02
+    ],
+    [
+     6216,
+     "okraj",
+     0.06
+    ],
+    [
+     6217,
+     "okraj",
+     0.02
+    ],
+    [
+     6218,
+     "okraj",
+     0.02
+    ],
+    [
+     6219,
+     "okraj",
+     0.02
+    ],
+    [
+     6220,
+     "okraj",
+     0.02
+    ],
+    [
+     6221,
+     "okraj",
+     0.02
+    ],
+    [
+     6222,
+     "okraj",
+     0.02
+    ],
+    [
+     6351,
+     "okraj",
+     0.02
+    ],
+    [
+     6448,
+     "okraj",
+     0.065
+    ],
+    [
+     6479,
+     "okraj",
+     0.02
+    ],
+    [
+     6576,
+     "okraj",
+     0.02
+    ],
+    [
+     6607,
+     "okraj",
+     0.02
+    ],
+    [
+     6735,
+     "okraj",
+     0.02
+    ],
+    [
+     6832,
+     "okraj",
+     0.01
+    ],
+    [
+     6960,
+     "okraj",
+     0.02
+    ],
+    [
+     6991,
+     "okraj",
+     0.02
+    ],
+    [
+     7088,
+     "okraj",
+     0.02
+    ],
+    [
+     7119,
+     "okraj",
+     0.02
+    ],
+    [
+     7216,
+     "okraj",
+     0.12
+    ],
+    [
+     7247,
+     "okraj",
+     0.04
+    ],
+    [
+     7344,
+     "okraj",
+     0.02
+    ],
+    [
+     7375,
+     "okraj",
+     0.02
+    ],
+    [
+     7503,
+     "okraj",
+     0.02
+    ],
+    [
+     7631,
+     "okraj",
+     0.02
+    ],
+    [
+     7759,
+     "okraj",
+     0.02
+    ],
+    [
+     8368,
+     "okraj",
+     0.015
+    ],
+    [
+     8399,
+     "okraj",
+     0.01
+    ],
+    [
+     8527,
+     "okraj",
+     1.26
+    ],
+    [
+     8624,
+     "okraj",
+     0.01
+    ],
+    [
+     9008,
+     "okraj",
+     0.02
+    ],
+    [
+     9009,
+     "povrch",
+     0.15
+    ],
+    [
+     9136,
+     "okraj",
+     0.15
+    ],
+    [
+     9167,
+     "okraj",
+     0.02
+    ],
+    [
+     9264,
+     "okraj",
+     0.02
+    ],
+    [
+     9295,
+     "okraj",
+     0.02
+    ],
+    [
+     9392,
+     "okraj",
+     0.02
+    ],
+    [
+     9423,
+     "okraj",
+     0.02
+    ],
+    [
+     9520,
+     "okraj",
+     0.02
+    ],
+    [
+     9551,
+     "okraj",
+     0.02
+    ],
+    [
+     9648,
+     "okraj",
+     0.02
+    ],
+    [
+     9679,
+     "okraj",
+     0.02
+    ],
+    [
+     9776,
+     "okraj",
+     0.02
+    ],
+    [
+     9904,
+     "okraj",
+     0.02
+    ],
+    [
+     10032,
+     "okraj",
+     0.02
+    ],
+    [
+     10161,
+     "okraj",
+     0.02
+    ],
+    [
+     10162,
+     "okraj",
+     0.02
+    ],
+    [
+     10163,
+     "okraj",
+     0.02
+    ],
+    [
+     10164,
+     "okraj",
+     0.02
+    ],
+    [
+     10165,
+     "okraj",
+     0.02
+    ],
+    [
+     10166,
+     "okraj",
+     0.02
+    ],
+    [
+     10167,
+     "okraj",
+     0.02
+    ],
+    [
+     10168,
+     "okraj",
+     0.02
+    ],
+    [
+     10169,
+     "okraj",
+     0.02
+    ],
+    [
+     10170,
+     "okraj",
+     0.02
+    ],
+    [
+     10171,
+     "okraj",
+     0.02
+    ],
+    [
+     10172,
+     "okraj",
+     0.02
+    ],
+    [
+     10174,
+     "okraj",
+     0.194055739256502
+    ],
+    [
+     10175,
+     "okraj",
+     0.106305463705082
+    ],
+    [
+     10176,
+     "okraj",
+     0.106305463705082
+    ],
+    [
+     10177,
+     "okraj",
+     0.02
+    ],
+    [
+     10178,
+     "okraj",
+     0.02
+    ],
+    [
+     10179,
+     "okraj",
+     0.02
+    ],
+    [
+     10180,
+     "okraj",
+     0.02
+    ],
+    [
+     10181,
+     "okraj",
+     0.02
+    ],
+    [
+     10182,
+     "okraj",
+     0.02
+    ],
+    [
+     10183,
+     "okraj",
+     0.02
+    ],
+    [
+     10185,
+     "okraj",
+     0.113333333333333
+    ],
+    [
+     10187,
+     "okraj",
+     0.02
+    ],
+    [
+     10189,
+     "okraj",
+     0.03
+    ],
+    [
+     10190,
+     "okraj",
+     0.03
+    ]
+   ],
+   "vystupy_q_lps": {
+    "okraj": 3.95,
+    "povrch": 0.15
+   }
+  },
+  {
+   "hladiny_stare": [],
+   "mokra_pasma": 1267,
+   "ms": 5339.5,
+   "nejvetsi_teleso_pasem": 7690,
+   "objem_m3": 180.1,
+   "pasem_teles": 7732,
+   "pasma_pod_hladinou": 6145,
+   "pasti": [
+    {
+     "dno": 18.74,
+     "hladina": 19.24,
+     "objem_m3": 179.9,
+     "pasem": 6137,
+     "typ": "vystup"
+    },
+    {
+     "dno": 21.09,
+     "hladina": 21.6,
+     "objem_m3": 0.1,
+     "pasem": 6,
+     "typ": "prah"
+    },
+    {
+     "dno": 21.52,
+     "hladina": 22.0,
+     "objem_m3": 0.0,
+     "pasem": 2,
+     "typ": "prah"
+    }
+   ],
+   "pasti_s_vodou": 3,
+   "teles": 30,
+   "varianta": "pretok bez O",
+   "volani": 1,
+   "vystupy": {
+    "okraj": 0,
+    "povrch": 2
+   },
+   "vystupy_otisk": "f1ade445e0ea5fe5",
+   "vystupy_q": [
+    [
+     6466,
+     "povrch",
+     3.95
+    ],
+    [
+     9009,
+     "povrch",
+     0.15
+    ]
+   ],
+   "vystupy_q_lps": {
+    "okraj": 0.0,
+    "povrch": 4.1
+   }
+  },
+  {
+   "hladiny_stare": [
+    19.24
+   ],
+   "mokra_pasma": 0,
+   "ms": 30.8,
+   "nejvetsi_teleso_pasem": 4228,
+   "objem_m3": 153.1,
+   "pasem_teles": 4579,
+   "pasma_pod_hladinou": 2677,
+   "pasti": [],
+   "pasti_s_vodou": 0,
+   "teles": 224,
+   "varianta": "stara, kras jen perm>=0.3",
+   "volani": 1,
+   "vystupy": {
+    "okraj": 0,
+    "povrch": 1
+   },
+   "vystupy_otisk": "4f53cda18c2baa0c",
+   "vystupy_q": [],
+   "vystupy_q_lps": {
+    "okraj": 0.0,
+    "povrch": 4.096556
+   }
+  },
+  {
+   "hladiny_stare": [],
+   "mokra_pasma": 731,
+   "ms": 38.6,
+   "nejvetsi_teleso_pasem": 4228,
+   "objem_m3": 8.8,
+   "pasem_teles": 4579,
+   "pasma_pod_hladinou": 444,
+   "pasti": [
+    {
+     "dno": 17.77,
+     "hladina": 18.11,
+     "objem_m3": 3.7,
+     "pasem": 115,
+     "typ": "prah"
+    },
+    {
+     "dno": 17.75,
+     "hladina": 18.39,
+     "objem_m3": 2.7,
+     "pasem": 114,
+     "typ": "prah"
+    },
+    {
+     "dno": 15.08,
+     "hladina": 15.8,
+     "objem_m3": 1.0,
+     "pasem": 42,
+     "typ": "prah"
+    },
+    {
+     "dno": 13.99,
+     "hladina": 15.42,
+     "objem_m3": 0.7,
+     "pasem": 41,
+     "typ": "prah"
+    },
+    {
+     "dno": 21.09,
+     "hladina": 21.6,
+     "objem_m3": 0.1,
+     "pasem": 6,
+     "typ": "prah"
+    },
+    {
+     "dno": 14.63,
+     "hladina": 14.98,
+     "objem_m3": 0.1,
+     "pasem": 7,
+     "typ": "prah"
+    },
+    {
+     "dno": 18.37,
+     "hladina": 18.49,
+     "objem_m3": 0.1,
+     "pasem": 15,
+     "typ": "prah"
+    },
+    {
+     "dno": 18.01,
+     "hladina": 18.26,
+     "objem_m3": 0.1,
+     "pasem": 12,
+     "typ": "prah"
+    },
+    {
+     "dno": 13.9,
+     "hladina": 14.27,
+     "objem_m3": 0.0,
+     "pasem": 2,
+     "typ": "vystup"
+    },
+    {
+     "dno": 14.9,
+     "hladina": 15.02,
+     "objem_m3": 0.0,
+     "pasem": 2,
+     "typ": "vystup"
+    },
+    {
+     "dno": 16.03,
+     "hladina": 16.04,
+     "objem_m3": 0.0,
+     "pasem": 4,
+     "typ": "prah"
+    },
+    {
+     "dno": 17.84,
+     "hladina": 18.09,
+     "objem_m3": 0.0,
+     "pasem": 2,
+     "typ": "prah"
+    }
+   ],
+   "pasti_s_vodou": 28,
+   "teles": 224,
+   "varianta": "pretok + O, kras jen perm>=0.3",
+   "volani": 1,
+   "vystupy": {
+    "okraj": 83,
+    "povrch": 1
+   },
+   "vystupy_otisk": "38c72077bc96c4e7",
+   "vystupy_q": [
+    [
+     6192,
+     "okraj",
+     0.04
+    ],
+    [
+     6193,
+     "okraj",
+     0.0145833333333333
+    ],
+    [
+     6194,
+     "okraj",
+     0.010625
+    ],
+    [
+     6195,
+     "okraj",
+     0.0053125
+    ],
+    [
+     6196,
+     "okraj",
+     0.279479166666667
+    ],
+    [
+     6198,
+     "okraj",
+     0.02
+    ],
+    [
+     6199,
+     "okraj",
+     0.0599855811340792
+    ],
+    [
+     6203,
+     "okraj",
+     0.02
+    ],
+    [
+     6204,
+     "okraj",
+     0.02
+    ],
+    [
+     6205,
+     "okraj",
+     0.02
+    ],
+    [
+     6209,
+     "okraj",
+     0.01
+    ],
+    [
+     6210,
+     "okraj",
+     0.02
+    ],
+    [
+     6211,
+     "okraj",
+     0.02
+    ],
+    [
+     6212,
+     "okraj",
+     0.03
+    ],
+    [
+     6213,
+     "okraj",
+     0.02
+    ],
+    [
+     6214,
+     "okraj",
+     0.02
+    ],
+    [
+     6215,
+     "okraj",
+     0.02
+    ],
+    [
+     6216,
+     "okraj",
+     0.06
+    ],
+    [
+     6217,
+     "okraj",
+     0.02
+    ],
+    [
+     6218,
+     "okraj",
+     0.02
+    ],
+    [
+     6219,
+     "okraj",
+     0.02
+    ],
+    [
+     6220,
+     "okraj",
+     0.02
+    ],
+    [
+     6221,
+     "okraj",
+     0.02
+    ],
+    [
+     6222,
+     "okraj",
+     0.02
+    ],
+    [
+     6351,
+     "okraj",
+     0.02
+    ],
+    [
+     6448,
+     "okraj",
+     0.02
+    ],
+    [
+     6479,
+     "okraj",
+     0.02
+    ],
+    [
+     6576,
+     "okraj",
+     0.02
+    ],
+    [
+     6607,
+     "okraj",
+     0.02
+    ],
+    [
+     6735,
+     "okraj",
+     0.02
+    ],
+    [
+     6832,
+     "okraj",
+     0.01
+    ],
+    [
+     6960,
+     "okraj",
+     0.02
+    ],
+    [
+     6991,
+     "okraj",
+     0.02
+    ],
+    [
+     7088,
+     "okraj",
+     0.02
+    ],
+    [
+     7119,
+     "okraj",
+     0.02
+    ],
+    [
+     7216,
+     "okraj",
+     0.12
+    ],
+    [
+     7247,
+     "okraj",
+     0.04
+    ],
+    [
+     7344,
+     "okraj",
+     0.02
+    ],
+    [
+     7375,
+     "okraj",
+     0.02
+    ],
+    [
+     7503,
+     "okraj",
+     0.02
+    ],
+    [
+     7631,
+     "okraj",
+     0.02
+    ],
+    [
+     7759,
+     "okraj",
+     0.02
+    ],
+    [
+     8399,
+     "okraj",
+     0.01
+    ],
+    [
+     8527,
+     "okraj",
+     1.26
+    ],
+    [
+     8624,
+     "okraj",
+     0.01
+    ],
+    [
+     9008,
+     "okraj",
+     0.02
+    ],
+    [
+     9009,
+     "povrch",
+     0.15
+    ],
+    [
+     9136,
+     "okraj",
+     0.15
+    ],
+    [
+     9167,
+     "okraj",
+     0.386352056736586
+    ],
+    [
+     9264,
+     "okraj",
+     0.02
+    ],
+    [
+     9295,
+     "okraj",
+     0.02
+    ],
+    [
+     9392,
+     "okraj",
+     0.02
+    ],
+    [
+     9423,
+     "okraj",
+     0.02
+    ],
+    [
+     9520,
+     "okraj",
+     0.02
+    ],
+    [
+     9551,
+     "okraj",
+     0.02
+    ],
+    [
+     9648,
+     "okraj",
+     0.02
+    ],
+    [
+     9679,
+     "okraj",
+     0.02
+    ],
+    [
+     9776,
+     "okraj",
+     0.02
+    ],
+    [
+     9904,
+     "okraj",
+     0.02
+    ],
+    [
+     10032,
+     "okraj",
+     0.02
+    ],
+    [
+     10161,
+     "okraj",
+     0.02
+    ],
+    [
+     10162,
+     "okraj",
+     0.02
+    ],
+    [
+     10163,
+     "okraj",
+     0.02
+    ],
+    [
+     10164,
+     "okraj",
+     0.02
+    ],
+    [
+     10165,
+     "okraj",
+     0.02
+    ],
+    [
+     10166,
+     "okraj",
+     0.02
+    ],
+    [
+     10167,
+     "okraj",
+     0.02
+    ],
+    [
+     10168,
+     "okraj",
+     0.02
+    ],
+    [
+     10169,
+     "okraj",
+     0.02
+    ],
+    [
+     10170,
+     "okraj",
+     0.02
+    ],
+    [
+     10171,
+     "okraj",
+     0.02
+    ],
+    [
+     10172,
+     "okraj",
+     0.02
+    ],
+    [
+     10174,
+     "okraj",
+     0.04
+    ],
+    [
+     10177,
+     "okraj",
+     0.02
+    ],
+    [
+     10178,
+     "okraj",
+     0.02
+    ],
+    [
+     10179,
+     "okraj",
+     0.02
+    ],
+    [
+     10180,
+     "okraj",
+     0.02
+    ],
+    [
+     10181,
+     "okraj",
+     0.02
+    ],
+    [
+     10182,
+     "okraj",
+     0.02
+    ],
+    [
+     10183,
+     "okraj",
+     0.02
+    ],
+    [
+     10185,
+     "okraj",
+     0.113333333333333
+    ],
+    [
+     10187,
+     "okraj",
+     0.02
+    ],
+    [
+     10189,
+     "okraj",
+     0.03
+    ],
+    [
+     10190,
+     "okraj",
+     0.03
+    ]
+   ],
+   "vystupy_q_lps": {
+    "okraj": 3.949670971204,
+    "povrch": 0.15
+   }
+  }
+ ],
+ "vykopy": {
+  "poradi_stejny_otisk": true,
+  "pretok_O": {
+   "max": 43.3,
+   "ms": [
+    42.9,
+    42.5,
+    42.8,
+    43.3,
+    42.8,
+    42.7,
+    42.2,
+    41.4,
+    41.3,
+    40.8,
+    37.5,
+    36.8
+   ],
+   "neshod": 0,
+   "otisk": "beac247bf8881952",
+   "prepocteno_volani": 12,
+   "preskoceno_volani": 0,
+   "prumer": 41.4
+  },
+  "pretok_O_obracene": {
+   "max": 43.3,
+   "ms": [
+    43.3,
+    43.0,
+    42.7,
+    42.4,
+    36.9,
+    36.8,
+    37.2,
+    36.9,
+    37.2,
+    37.7,
+    37.4,
+    37.2
+   ],
+   "neshod": 0,
+   "otisk": "beac247bf8881952",
+   "prepocteno_volani": 12,
+   "preskoceno_volani": 0,
+   "prumer": 39.1
+  },
+  "sloupce": [
+   6198,
+   6199,
+   6326,
+   6197,
+   6203,
+   6204,
+   6331,
+   6202,
+   6205,
+   6332,
+   6206,
+   6333
+  ],
+  "stara_base": {
+   "max": 56.6,
+   "ms": [
+    55.4,
+    56.6,
+    55.0,
+    54.9,
+    55.9,
+    56.1,
+    56.1,
+    54.7,
+    55.6,
+    55.0,
+    56.4,
+    54.7
+   ],
+   "neshod": 0,
+   "otisk": "23b823aa710c9942",
+   "prepocteno_volani": 12,
+   "preskoceno_volani": 0,
+   "prumer": 55.5
+  }
+ }
+}
