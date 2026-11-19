@@ -15,8 +15,8 @@ xvfb-run -a -s "-screen 0 1280x800x24" $G --rendering-driver opengl3 --path . --
 $G --headless --path . -s res://tools/parita_e66.gd -- --test=vse   # parita přenesených modulů se studií (6 hashů E61)
 $G --headless --path . -s res://tools/voda_e66.gd -- --vykopu=12   # voda ostrova bez scény: výkopy + kontrola -> shots/66_parita/voda_e66.json
 python3 tools/port_studie.py [--check]                         # znovu přenést moduly studie (nebo jen ověřit, že kopie sedí)
-tools/rez_gif.sh [--oblast=vse|x,y] [--krok=2] [--ms=750] [--out=shots/rez/x.gif] [--podzemi=1] [--bloky="0,0:louka:101;..."]
-                                                               # řezy po vrstvách → animovaný GIF (bez GPU, ~3 s): materiály, česká legenda, podzemní tělesa
+tools/rez_gif.sh [--oblast=vse|x,y] [--krok=2] [--ms=750] [--pohled=izo|shora] [--smer=nahoru|dolu] [--out=shots/rez/x.gif] [--podzemi=1] [--bloky="0,0:louka:101;..."]
+                                                               # řezy → animovaný GIF (bez GPU, ~3–4 s): výchozí izometrie odspodu po řez, materiály, česká legenda, podzemní tělesa
 xvfb-run -a -s "-screen 0 1280x800x24" $G --rendering-driver opengl3 --path . -- --e66b-bok   # bok ostrova před / po -> ../blueprint-studie/shots/66b_bok.png
 $G --headless --path . -s res://tools/teleso_e66.gd && python3 tools/teleso_obrazek.py   # diagnostika podzemního tělesa -> 66b_teleso.png
 $G --headless --path . -- --export-vectors                     # vektory -> vectors/vectors.json (proto), veg_vectors.json, gen_v3_vectors.json
@@ -222,7 +222,8 @@ Plán a výsledky: `../blueprint-studie/PROP.md` (E66). Moduly studie jsou **kop
   `fog_side` (výchozí vypnuto) vrací vrstvy mlhy ve slotech kolem ostrova – ty dělaly na boku rozmazané kosočtverce.
   V rentgenu a v řezu se kreslí skutečné materiály. Obojí je v ladicím okně (Povrch).
 - **Řezy jako GIF:** `tools/rez_gif.sh` (data `tools/rez_data.gd` headless, obrázky `tools/rez_gif.py` přes Pillow): vodorovné řezy
-  po `--krok` buňkách odspodu, barvy plných id ze sdílené tabulky, legenda česky, šrafa = pásmo podzemního tělesa.
+  po `--krok` buňkách odspodu; výchozí `--pohled=izo` (izometrické voxely do výšky řezu, horní stěna = plocha řezu, `--smer=dolu`
+  = od řezu po povrch), `--pohled=shora` = plochý řez; barvy plných id ze sdílené tabulky, legenda česky, modrý nádech = podzemní těleso.
 
 ## gen-v3 v prototypu (Jan 20:14, `scripts/gen3/`)
 - **Volba:** `BlockGen.gen_version` = `"v3"` (výchozí) nebo `"proto"`, CLI `-- --gen=proto|v3`. Tvar povrchu, transformace, dorovnání stran,
