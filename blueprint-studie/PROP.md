@@ -293,6 +293,45 @@ Výchozí: 800 kapek na blok, `ero_cap` 1,0, `ero_erode` 0,1, `ero_deposit_rate`
 - **Hypotéza:** parita bit po bitu (kopie se mění jen v cestách). Vložení bloku bp ≈ 0,25–0,4 s jako E49 detail
   (+ povrch a tráva prototypu ~0,4 s), voda ostrova 7 bloků (≈ 112 × 112 sloupců) plně < 1 s, kopání u vody desítky ms.
 
+## E70 výsledky (2026-11-19 22:10, větev `e70-harmonicky-prumer` z `e69-symetrie-test`, do main až po schválení Janem)
+- **Co je nového:** `p70_prumer = "pomer"` (výchozí, beze změny) | `"harmonicky"`: v kroku 3 sestupu `ug67.gd` váha souseda
+  `H(k₁, k₂) × překryv`, H = 2·k₁·k₂ / (k₁ + k₂), k₁ = pásmo, odkud voda teče, k₂ = soused (podlaha 0,01 jako dosud).
+  Stejná váha jde do slučování (`p67_prune`). Prototyp přes `port_studie.py`, CLI `--bp.p70_prumer`, `tools/e67.gd --prumer= --prune=`
+  (nově i otisk rozdělení výstupů `vystupy_otisk`, nejen součty), `tools/e69.gd --prumer=`, nový `tools/e70.gd`.
+- **(b) malý případ `tools/e70.gd`** (řada 5 sloupců, zdroj 1 l/s uprostřed, sousedé o 0,25 m níž; podíl západ / východ):
+
+  | střed | západ | východ | poměr | harmonicky |
+  |---|---|---|---|---|
+  | písek | písek | písek | 0,50 / 0,50 | 0,50 / 0,50 |
+  | písek | písek | jíl 0,05 | 0,943 / 0,057 | **0,898 / 0,102** |
+  | jíl | písek | jíl | 0,943 / 0,057 | **0,654 / 0,346** |
+  | vápenec 0,246 | písek | vápenec | 0,772 / 0,228 | **0,607 / 0,393** |
+  | písek | písek | vápenec | 0,772 / 0,228 | 0,687 / 0,313 |
+
+  Bilance chyba 0 ve všech případech. Zamýšlený efekt platí jen napůl: voda **v jílu** (nebo vápenci) už není tolik
+  „vysávaná“ sousedním pískem (písek je brzděn jílem, 94 → 65 %). Voda **v písku** ale pošle do jílu víc než dřív
+  (5,7 → 10,2 %): harmonický průměr rozdíly propustností vždy zmenšuje a dělení je normované (Σ = 1), takže skutečné
+  zpomalení nebo menší průtok model bez času a kapacity vyjádřit neumí. Fyzikálně to odpovídá Darcyho vodivosti
+  rozhraní, ale ne představě „jíl brzdí“.
+- **(a) testy E69:** pomer bitově jako E69; harmonicky symetrie 0, bilance ≤ 1e-12 l/s (rozdíly proti poměru jen 1e-17 –
+  v testu E69 mají sousedé do stran vždy stejný materiál, H(k, k) = k).
+- **(c) startovní ostrov (`tools/e67.gd`, pretok + O, Σ 4,10 l/s):**
+  - se slučováním (výchozí 0,1 l/s): **bitově beze změny** – mokrá 791, pod hladinou 414, pasti 31, výstupy 85 okraj
+    3,95 + 1 povrch 0,15 l/s, objem 7,0 m³, otisk výkopů `beac247bf8881952`, výkopy 0 neshod, obě pořadí stejně;
+    totéž kras jen perm ≥ 0,3 (731 / 444 / 28 / 83 + 1 / 8,8 m³). Zdroje 0,02 l/s jsou pod prahem slučování, rozhoduje
+    jen nejsilnější větev a ta se nezmění (H je pro dané k₁ rostoucí v k₂).
+  - bez slučování: mokrá 1548 → 1559, výstupy 94 + 14 beze změny, objem 7,1 m³, přesune se 0,0089 l/s z 4,1 (0,2 %,
+    max 0,0035 l/s na výstup); výkopy 0 neshod, obě pořadí stejný otisk.
+  - prototyp (`voda_e66 --bp.voda_e67=true`, 12 výkopů): souhrn beze změny (5 pramenů, 5 vodopádů na okraji 9,65 l/s), 0 neshod.
+- **(d) čas:** bez měřitelného rozdílu (šum ±10 %): studie pretok + O 71 / 72 ms poměr vs 67 / 74 ms harmonicky, výkop
+  ~43–48 ms obojí; prototyp plný výpočet 459 / 432 ms vs 468 / 429 ms.
+- **Rozhodnutí: výchozí zůstává `pomer` (harmonický průměr jen jako přepínač).** Důvody: na startovním ostrově se nic
+  nezmění; cíl „jíl brzdí i sousední písek“ splní jen pro vodu, která už je v jílu, opačným směrem pošle do jílu víc;
+  skutečné brzdění potřebuje čas průchodu nebo svislou / boční kapacitu (navazuje na negativum E69: chybí kapacita vrstev).
+  Až bude kapacita nebo Darcy dolů, má smysl zapnout harmonický průměr spolu s ní (pak je konzistentní).
+- **Negativa:** v tělese jsou jen pásma perm ≥ 0,3, kras 0,246 a rozpustné s perm 0 (podlaha 0,01) – skutečný jíl (perm 0)
+  není tělesem, takže „jíl vedle písku“ ve hře do dělení vůbec nevstupuje; test používá zkušební těleso perm 0,05.
+
 ## E70 harmonický průměr propustností pro dělení do stran v E67 (plán, zapsáno před pokusem 2026-11-19 21:50; TODO Voda, Jan 21:3x „V ToDo máš úkoly půst se do nich…“)
 - **Zadání (TODO):** dělení vody do stran v E67 (`ug67.gd`, krok 3 sestupu) dnes váží sousední pásmo `perm(cíl) × překryv`
   (prostý poměr propustností cílů). Návrh: propustnost rozhraní = harmonický průměr obou materiálů

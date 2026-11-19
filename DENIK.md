@@ -216,6 +216,12 @@ Skupiny: 1 Prototyp a buildy · 2 Terén a tvar · 3 Rozlišení bloku · 4 Ská
 - **Komplikace:** koryta jsou krátké úseky (malý svět, malá povodí). Krasová vyvěračka 0. Hráz na svahu tůň nevytvořila (potok ji obtekl). Podzemní tok vede zatím zjednodušeně k nejbližšímu okraji.
 - **Další krok:** Jan rozhodne, jak daleko vést podzemní tok (sledovat propustnou vrstvu?) a jestli má mít krasová vyvěračka vlastní pravidlo. Starší otevřené otázky (eroze po blocích vs hrubý svět, jádro hory přes šev, minerály z hrubého světa) zůstávají.
 
+### 🧮 Blueprint v3 / E70: harmonický průměr propustností pro dělení do stran, jen přepínač (2026-11-19 22:10 · `blueprint-studie/tools/e70.gd`, `scripts/podzemi52/ug67.gd` příznak `p70_prumer`, větev `e70-harmonicky-prumer`)
+- **Směr:** úkol z TODO (Voda): aby jíl brzdil i sousední písek.
+- **Zlepšení:** přepínač `pomer | harmonicky`, symetrie a bilance beze změny, čas beze změny. Voda v jílu už není tolik vysávaná pískem (94 → 65 %).
+- **Komplikace:** opačným směrem (z písku) jde do jílu víc (5,7 → 10,2 %); normované dělení neumí skutečné brzdění. Startovní ostrov bitově beze změny (zdroje pod prahem slučování), bez slučování přesun 0,2 % vody.
+- **Další krok:** výchozí zůstává `pomer`; zapnout spolu se svislou kapacitou vrstev / Darcy, až bude.
+
 ### ⚖️ Blueprint v3 / E69: test symetrie a bilance podzemí, oprava remíz (2026-11-19 21:50 · `blueprint-studie/tools/e69.gd`, `scripts/podzemi52/ug67.gd` příznak `p69_remizy`, větev `e69-symetrie-test`)
 - **Směr:** úkol z TODO (Voda): zdroj 1 l/s, vrstvy 1,0 / 0,8 / 0,6 / 0,4 / 0,2, nepropustné podloží, symetrický terén → symetrický výsledek, voda se neztratí.
 - **Zlepšení:** bilance přesná všude (chyba ≤ 1e-12 l/s). Nesymetrie E67 z remíz podle id (slučování větví: kupole 0,5 l/s jedním směrem; past s výstupy ve stejné výšce: vše v jednom bodě) opravena dělením rovným dílem → symetrie 0 ve všech tvarech.
