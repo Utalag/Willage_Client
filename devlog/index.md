@@ -28,12 +28,6 @@ Rozhodnuto je, že kopání a úpravy probíhají přímo na ostrově a doly jso
 
 → [Koncept](koncept.md)
 
-### Vzhled: referenční obrázky
-
-Náměty, které se Janovi líbí: plovoucí ostrov s vodopády, řez blokem s jeskyní, krystalový důl, low-poly krajina a srovnání velikosti voxelů. Jen inspirace, ne náš render.
-
-→ [Vzhled: reference](vzhled-reference.md)
-
 ## 2. Architektura
 
 ### Generování na klientovi, server ukládá a validuje
