@@ -216,6 +216,12 @@ Skupiny: 1 Prototyp a buildy · 2 Terén a tvar · 3 Rozlišení bloku · 4 Ská
 - **Komplikace:** koryta jsou krátké úseky (malý svět, malá povodí). Krasová vyvěračka 0. Hráz na svahu tůň nevytvořila (potok ji obtekl). Podzemní tok vede zatím zjednodušeně k nejbližšímu okraji.
 - **Další krok:** Jan rozhodne, jak daleko vést podzemní tok (sledovat propustnou vrstvu?) a jestli má mít krasová vyvěračka vlastní pravidlo. Starší otevřené otázky (eroze po blocích vs hrubý svět, jádro hory přes šev, minerály z hrubého světa) zůstávají.
 
+### 🪨 Blueprint v3 / E71: kapacita průtoku dolů podle vrstvy a průsak protékané vody (2026-11-19 22:40 · `blueprint-studie/scripts/podzemi52/ug67.gd` příznaky `p71_kapacita`, `p71_prusak`, větev `e71-kapacita-dolu`)
+- **Směr:** negativa E69: vrstvy propouštěly dolů vše, protékaná voda neprosakovala.
+- **Zlepšení:** referenční sloupec 1 l/s s vrstvami 1,0 … 0,2 l/s dá přesně 0,2 l/s z každé vrstvy. Symetrie a bilance přesné, výkopy 0 neshod. Průsak protékané vody v kupoli 0 → 0,045–0,163 l/s (E58 0,176). Výchozí zapnuto (jen E67 pretok).
+- **Komplikace:** voda na ostrově vytéká v průměru níž (18,34 → 17,74 m), výstupů 86 → 150 (119 drobných pod 0,02 l/s). Podzemí +20–40 % času (< 0,1 s). Dvě chyby nalezené testem opraveny (pojistka kroků, plochá vrstva podle id).
+- **Další krok:** slučovat i drobné průsaky pastí; Jan rozhodne o jednotkách času (p71_cas).
+
 ### 🧮 Blueprint v3 / E70: harmonický průměr propustností pro dělení do stran, jen přepínač (2026-11-19 22:10 · `blueprint-studie/tools/e70.gd`, `scripts/podzemi52/ug67.gd` příznak `p70_prumer`, větev `e70-harmonicky-prumer`)
 - **Směr:** úkol z TODO (Voda): aby jíl brzdil i sousední písek.
 - **Zlepšení:** přepínač `pomer | harmonicky`, symetrie a bilance beze změny, čas beze změny. Voda v jílu už není tolik vysávaná pískem (94 → 65 %).

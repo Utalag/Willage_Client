@@ -293,6 +293,58 @@ Výchozí: 800 kapek na blok, `ero_cap` 1,0, `ero_erode` 0,1, `ero_deposit_rate`
 - **Hypotéza:** parita bit po bitu (kopie se mění jen v cestách). Vložení bloku bp ≈ 0,25–0,4 s jako E49 detail
   (+ povrch a tráva prototypu ~0,4 s), voda ostrova 7 bloků (≈ 112 × 112 sloupců) plně < 1 s, kopání u vody desítky ms.
 
+## E71 výsledky (2026-11-19 22:40, větev `e71-kapacita-dolu` z `e70-harmonicky-prumer`, do main až po schválení Janem)
+- **Co je nového (`ug67.gd`, studie i prototyp, CLI `--bp.p71_*`):**
+  - `p71_kapacita` (K): dolů nejvýš `K · A · 1000 · p71_cas` l/s na rozhraní, K = 10^(6·perm − 9) m/s (mapování tabulky v4),
+    K_eff = K spodní vrstvy (`p70_prumer = pomer`) nebo harmonický průměr K obou. Pořadí v pásmu: dolů (do kapacity) →
+    výstup ve výšce dna → do stran → past. V pasti jsou svislé spoje dolů průsak (ne práh): přítok se dělí po skupinách
+    klíče floodu (nejníž první, uvnitř skupiny poměrně), pak průsak do okolí, zbytek přetéká. Dna pastí ve stejné výšce se
+    zakládají až po ostatních pásmech té výšky (jinak plochá vrstva závisí na id pásem – nesymetrie 0,014 l/s, opraveno).
+    Výstupy ve stejném sloupci v různé výšce se drží zvlášť. Pásmo se do haldy vkládá jen jednou (bez toho test plochy
+    narazil na pojistku kroků a ztratil 0,89 l/s – opraveno, `cut67` se teď v E69 hlásí).
+  - `p71_prusak` (P): protékané pásmo nad polopropustným materiálem (ne těleso, wq > 0) ztratí průsak dnem `wq · A`.
+  - Výchozí: **K zapnuto, P zapnuto, p70 pomer**; vše platí jen pro E67 pretok (`p67_rezim = "pretok"`), výchozí hra / studie
+    bez pretok je bitově beze změny (testy studie `tools/test.gd` beze změny kromě časů, otisk staré varianty `23b823aa710c9942`).
+- **(1) Referenční sloupec (1 sloupec, zkušební vrstvy s kapacitou 1,0 / 0,8 / 0,6 / 0,4 / 0,2 l/s, nepropustné podloží, 1 l/s):**
+
+  | vrstva | L1 | L2 | L3 | L4 | L5 |
+  |---|---|---|---|---|---|
+  | bez K (E70) | 1,0 | 0 | 0 | 0 | 0 |
+  | **K, pomer** | **0,200** | **0,200** | **0,200** | **0,200** | **0,200** |
+  | K, harmonicky | 0,111 | 0,203 | 0,206 | 0,213 | 0,267 |
+
+- **(2) Testy E69 (21 × 21, plocha / kupole / mísa, se slučováním i bez):** symetrie 0 a bilance ≤ 2e-12 l/s ve všech
+  kombinacích K, K + harmonicky, P (ponor 0,3), K + P, i s referenčními kapacitami. Kupole s vrstvami 1,0 … 0,2 (K): výstup
+  0,742 z L4 + 0,258 z L5 (dřív 1,0 z L5), harmonicky 0,515 / 0,485. **Průsak protékané vody (P, ponor 0,3) kupole: 0 →
+  0,045 l/s se slučováním, 0,163 bez slučování (E58 0,176)**; mísa beze změny 0,162 (průsak pasti už byl).
+- **(3) Startovní ostrov (`tools/e67.gd`, pretok + O, Σ 4,10 l/s – zachováno ve všech variantách):**
+
+  | | mokrá | pod hladinou | pasti | výstupy (okraj + povrch) | z vážené průtokem | výstupů < 0,02 l/s | objem | podzemí ms | výkop ms (prům. / max) |
+  |---|---|---|---|---|---|---|---|---|---|
+  | E70 (K, P vyp.) | 791 | 414 | 31 | 85 + 1 | 18,34 m | 8 | 7,0 m³ | 79 | 46 / 50 |
+  | P | 791 | 414 | 31 | 85 + 1 | – | – | 7,0 | 84 | 51 / 57 |
+  | **K (+ P, výchozí)** | **1225** | **478** | **37** | **148 + 2** | **17,74 m** | **119** | **7,0** | **94–100** | **63–74 / 85–107** |
+  | K + harmonicky | 1165 | 472 | 38 | 149 + 2 | 17,67 m | 121 | 7,0 | 86 | 61 / 64 |
+
+  Výkopy: 0 neshod s plným výpočtem a obě pořadí stejný otisk ve všech variantách (K `e704e819891f87e7`). P na ostrově nic
+  nemění: v ostrovních horninách není polopropustné netěleso (0 < perm < 0,3 jen kras, a ten je těleso).
+- **Prototyp (`voda_e66 --bp.voda_e67=true`, 12 výkopů):** souhrn beze změny (5 pramenů, 8 vodopádů, 5 na okraji 9,65 l/s,
+  0 neshod); výstupy podzemí E70: 2 × 0,081 l/s (18,09 a 12,53 m), K: 0,081 (18,09 m) + 0,079 / 0,002 / < 0,0001 (12,5 m).
+  Plný výpočet vody 426–500 ms obojí (šum).
+- **Rozhodnutí:** K zapnout (splní referenci přesně, symetrie a bilance přesné, výkopy přesné, čas +20–40 % v podzemí, stále
+  < 0,1 s), P zapnout (opravuje negativum E69 a nic nerozbije). `p70_prumer` nechat `pomer`: K spodní vrstvy odpovídá
+  gravitačnímu průsaku vrstvou při spádu 1 (definice reference), harmonicky ostrov skoro nemění a referenci posune.
+- **Negativa a otevřené:**
+  - **Hypotéza „voda vyteče výš“ neplatí:** průměrná výška výstupů klesla 18,34 → 17,74 m. Hlavní vliv má pořadí „nejdřív dolů“:
+    dřív vzal výstup ve stěně celý průtok hned v prvním pásmu u stěny, teď písek (≈ 3,6 l/s na sloupec) pustí ukázkové zdroje
+    0,02 l/s dolů a zastaví je až pískovec / spraš (≈ 0,004 l/s) a vápenec (≈ 0,001 l/s).
+  - Drobení: výstupů 86 → 150, z toho 119 pod 0,02 l/s (kreslení je skryje, `p67_min_vytok_render`); průsaky pastí se dělí
+    poměrně a slučování `p67_prune` je zatím nezná. Kandidát: slučovat i průsaky pastí.
+  - Plochá vrstva rozdělí průsak pasti poměrně po celé vrstvě (degenerovaný případ, symetrický, ale nefyzikální).
+  - P závisí na slučování (sloučené větve = méně mokrých pásem → menší průsak: 0,045 vs 0,163 l/s).
+  - Jednotky toku vs. čas hry (`p71_cas` = 144) jsou předpoklad; při 1 by kapacity byly 144× menší.
+  - Do stran kapacita není (jen poměr), čas průchodu se nepočítá.
+
 ## E71 omezení průtoku dolů podle propustnosti vrstvy, průsak z protékané vody (plán, zapsáno před pokusem 2026-11-19 22:15; negativa E69, TODO Voda, Jan 21:3x „V ToDo máš úkoly půst se do nich…“)
 - **Problém (E69):** E67 pretok pošle dolů vždy celý průtok, dokud pod pásmem je těleso; propustnosti mění jen dělení do
   stran. Referenční test (1 l/s, vrstvy 1,0 / 0,8 / 0,6 / 0,4 / 0,2, nepropustné podloží) proto dá 1 l/s až z nejspodnější
