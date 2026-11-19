@@ -28,7 +28,7 @@ Nejdřív se dořeší všechno s vodou, pak další bloky. V rámci bloku se ne
 - [x] **Odtok tůně ze součtu všech přítoků** – E73 (`p73_pritok`).
 - [x] **Zrychlit pomalé smyčky** – E73 (`p73_zrychleni`), 68 → 17 kol.
 - [x] **E67: rozlišit „zavřené“ a „vše prosákne“** – E73 (`p73_prusak_tok`).
-  - E73: tag `e73-nalezy`, větev `e73-nalezy-e68`, výchozí zapnuto, čeká na Janovo schválení a sloučení. Opravena i chyba: plný výpočet bral z E67 jen hlavní výstup.
+  - E73: tag `e73-nalezy`, větev `e73-nalezy-e68`, výchozí zapnuto, sloučeno do main (Jan 2026-11-20 00:10). Opravena i chyba: plný výpočet bral z E67 jen hlavní výstup.
 - [ ] **Měřit objem vody v `voda_e66`** (drobnost z E73).
 - [ ] **Jan rozhodne:** slučovat i průsak tekoucí vody (`p72_prusak`)? omezit vzdálenost slučování výstupů (dnes až 19 sloupců)?
 
