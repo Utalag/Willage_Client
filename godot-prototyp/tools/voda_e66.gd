@@ -2,7 +2,7 @@ extends SceneTree
 ## E66 test vody ostrova bez scény: vygeneruje startovní bloky gen bp (jako Island.generate_start), postaví vodu
 ## (scripts/voda/ostrov_voda.gd), pak provede výkopy u vody (lokální přepočet + kroky R) a po každém porovná se
 ## čerstvým plným výpočtem (check_full). Volby: --vykopu=N, --hloubka=N buněk, --kontrola=0|1, --bloky=kind:seed,... ,
-## --bp.<param>=hodnota (parametry studie). Výstup: shots/66_parita/voda_e66.json.
+## --bp.<param>=hodnota (parametry studie), --out=cesta (výchozí shots/66_parita/voda_e66.json).
 const Block = preload("res://scripts/block.gd")
 const BlockGen = preload("res://scripts/block_gen.gd")
 const T = preload("res://scripts/teren/ostrov_teren.gd")
@@ -66,7 +66,7 @@ func _init() -> void:
 		print("výkop %d sloupec %d %d→%d: %.1f ms (povrch %.1f, podzemí %.1f), kroků R %d (max %.1f ms)%s" % [k + 1, gi, h0, nh, r.ms, r.surf_ms, e.ug_ms, steps, smax, (" neshod %s" % str(e.neshod)) if chk else ""])
 	var out := {"bloky_ms": gen, "voda_ms": v.ms, "souhrn": v.summary(), "vykopy": edits, "neshod_celkem": bad_tot, "souhrn_po": v.summary(), "ug_stats": (v.ug._st if not v.ug.is_empty() else {})}
 	DirAccess.make_dir_recursive_absolute(ProjectSettings.globalize_path("res://shots/66_parita"))
-	FileAccess.open(ProjectSettings.globalize_path("res://shots/66_parita/voda_e66.json"), FileAccess.WRITE).store_string(JSON.stringify(out, " "))
+	FileAccess.open(ProjectSettings.globalize_path(_arg("out", "res://shots/66_parita/voda_e66.json")), FileAccess.WRITE).store_string(JSON.stringify(out, " "))
 	print("souhrn po výkopech: ", out.souhrn_po)
 	print("podzemí počítadla: ", out.ug_stats)
 	print("neshod s plným výpočtem celkem: ", bad_tot)

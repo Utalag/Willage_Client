@@ -25,7 +25,10 @@ L = max(W, H)
 px = a.px or max(8, min(40, 640 // L))
 pv = px / 2.0                       # buňka 0,5 m vysoká → bez převýšení
 SKY = (236, 240, 246); WATER = (40, 190, 215)          # povrchová voda: tyrkysová
-GW = (20, 50, 190, 150)                                 # podzemní voda: sytá modrá, poloprůhledná
+GW = (20, 50, 190, 150)                                 # stojatá podzemní voda: sytá modrá, poloprůhledná
+FLOW = (110, 190, 255, 170)                             # protékající podzemní voda (E67 pretok): světle modrá
+RED = (230, 40, 40)
+def onm(typ): return "pramen" if typ == "povrch" else "vodopád na okraji"
 HATCH = {1: (255, 255, 255, 150), 2: (255, 255, 255, 90)}   # šrafa tělesa (největší / jiné)
 ML, MT, MB, LW = 56, 64, 40, 370    # okraje: vlevo osa z, nahoře titulek, dole osa polohy, vpravo legenda
 pw, ph = int(L * px), int(NZv * pv)
@@ -49,7 +52,7 @@ def render(osa, k, lab, fname, popis=None):
     dr = ImageDraw.Draw(im)
     ov = Image.new("RGBA", im.size, (0, 0, 0, 0)); do = ImageDraw.Draw(ov)
     dr.rectangle([ML, MT, ML + pw, MT + ph], fill=SKY)
-    has_gw = False; gw_lv = []
+    has_gw = False; gw_lv = []; has_fl = [False]
     cnt = {}; has_w = False; has_c = False; has_b = False
     for t in range(m_along):
         x, y = (k, t) if osa == "X" else (t, k)
@@ -70,8 +73,13 @@ def render(osa, k, lab, fname, popis=None):
                 has_b = True
                 hatch(do, X0, Y1 - pv, px, pv, HATCH[b])
             cnt[v] = cnt.get(v, 0) + 1
-        # podzemní voda: pásma tělesa od spodku po hladinu (stav řešiče), oříznuté terénem
         zt = (top + 1) * 0.5
+        for lo, hi in D.film.get("%d,%d" % (D.x0 + x, D.y0 + y), []):   # protékající voda: film u dna mokrého pásma
+            hi = min(hi, zt)
+            if hi - lo <= 1e-3: continue
+            ya, yb = MT + ph - hi * 2 * pv, MT + ph - lo * 2 * pv - 1
+            do.rectangle([ML + t * px, ya, ML + t * px + px - 1, max(ya, yb)], fill=FLOW); has_fl[0] = True
+        # stojatá podzemní voda: pásma od spodku po hladinu (stav řešiče), oříznuté terénem
         for lo, hi, bi in (gwc or []):
             hi = min(hi, zt)
             if hi - lo <= 1e-3: continue
@@ -86,29 +94,28 @@ def render(osa, k, lab, fname, popis=None):
             if y_top - y_w < 3: y_w = y_top - 3           # koryto: tenká vrstva, aspoň 3 px
             dr.rectangle([ML + t * px, y_w, ML + t * px + px - 1, y_top - 1], fill=WATER); has_w = True
     im.paste(Image.alpha_composite(im.convert("RGBA"), ov).convert("RGB")); dr = ImageDraw.Draw(im)
-    # hladina každého tělesa (čárkovaně přes sloupce, kde těleso v řezu drží vodu) a jeho výstup (pramen / okraj)
+    # hladina každé stojaté vody (čárkovaně přes sloupce, kde v řezu drží vodu) a výstupy (pramen / vodopád na okraji)
     notes = []
-    for bi, tb in enumerate(D.tv):
-        ts = sorted({t for (b2, t) in gw_lv if b2 == bi})
-        yl_ = MT + ph - tb["hladina"] * 2 * pv
-        for t in ts:
+    per = {}
+    for (bi, t) in gw_lv: per.setdefault(bi, set()).add(t)
+    for n_, (bi, ts) in enumerate(sorted(per.items(), key=lambda e: -len(e[1]))):
+        hl = D.hl[bi]; yl_ = MT + ph - hl["hladina"] * 2 * pv
+        for t in sorted(ts):
             for xx in range(ML + t * px, ML + t * px + px, 8):
                 dr.line([xx, yl_, min(xx + 4, ML + t * px + px - 1), yl_], fill=(0, 20, 120), width=2)
-        if ts:
-            dr.text((ML + ts[0] * px + 3, yl_ - 15), "hladina tělesa %d: %.2f m" % (bi + 1, tb["hladina"]), font=fs, fill=(0, 20, 120))
-        vx = tb.get("vystup") or []
-        if vx:
-            ox, oy, oz = vx; nm = "pramen" if tb["typ"] == "povrch" else "vodopád na okraji"
-            on = (ox == D.x0 + k) if osa == "X" else (oy == D.y0 + k)
-            tt = (oy - D.y0) if osa == "X" else (ox - D.x0)
-            if on and 0 <= tt < m_along:
-                cx = ML + tt * px + px / 2; cy = MT + ph - oz * 2 * pv
-                dr.polygon([(cx, cy - 2), (cx - 8, cy - 16), (cx + 8, cy - 16)], fill=(230, 40, 40), outline=(90, 0, 0))
-                dr.text((cx, cy - 30), nm, font=fs, fill=(150, 0, 0), anchor="ma")
-                notes.append("▼ výstup tělesa %d v řezu: %s (%d, %d) ve %.2f m" % (bi + 1, nm, ox, oy, oz))
-            elif ts:
-                notes.append("výstup tělesa %d mimo řez: %s na (%d, %d) ve %.2f m, režim %s" % (bi + 1, nm, ox, oy, oz, tb.get("rezim", "?")))
-    for i, nt in enumerate(notes[:2]):
+        if n_ < 3:
+            dr.text((ML + min(ts) * px + 3, yl_ - 15), "%.2f m (%s)" % (hl["hladina"], hl["typ"]), font=fs, fill=(0, 20, 120))
+    off = 0
+    for (ox, oy, oz, typ, oq) in D.vy:
+        on = (ox == D.x0 + k) if osa == "X" else (oy == D.y0 + k)
+        tt = (oy - D.y0) if osa == "X" else (ox - D.x0)
+        if on and 0 <= tt < m_along:
+            cx = ML + tt * px + px / 2; cy = MT + ph - oz * 2 * pv
+            dr.polygon([(cx, cy - 2), (cx - 7, cy - 14), (cx + 7, cy - 14)], fill=RED, outline=(90, 0, 0))
+            if len(notes) < 3: notes.append("▼ %s (%d, %d) ve %.2f m, %.3f l/s" % (onm(typ), ox, oy, oz, oq))
+        else: off += 1
+    if off and D.vy: notes.append("dalších %d výstupů mimo řez (%s)" % (off, "pretok, E67" if D.rezim == "pretok" else "staré podzemí"))
+    for i, nt in enumerate(notes[:4]):
         dr.text((ML + 4, MT + 4 + i * 15), nt, font=fs, fill=(150, 0, 0) if nt.startswith("▼") else (0, 20, 120))
     # švy bloků, osy
     for s in range(0, m_along + 1, RS.BS):
@@ -125,7 +132,7 @@ def render(osa, k, lab, fname, popis=None):
         dr.line([xx, MT + ph, xx, MT + ph + 5], fill=(40, 40, 50)); dr.text((xx, MT + ph + 7), "%d" % (a0 + t), font=fs, fill=(40, 40, 50), anchor="ma")
     dr.text((ML + pw // 2, MT + ph + 22), "%s (souřadnice ostrova, m)" % ("y" if osa == "X" else "x"), font=fs, fill=(40, 40, 50), anchor="ma")
     kc = (D.x0 if osa == "X" else D.y0) + k
-    kde = ("v %s %s" % (lab, "bloku" if a.oblast != "vse" else "ostrova")) if lab else "přes výstup tělesa"
+    kde = ("v %s %s" % (lab, "bloku" if a.oblast != "vse" else "ostrova")) if lab else "přes výstup podzemní vody"
     dr.text((8, 8), "Řez %s kolmo na osu %s %s: %s = %d, profil podél %s" % (D.title, osa, kde, osa.lower(), kc, "Y" if osa == "X" else "X"),
             font=fb, fill=(20, 20, 30))
     dr.text((8, 30), "stejné měřítko všech 6 řezů: 1 m = %d px vodorovně i svisle (buňka 1 × 0,5 m), bez převýšení" % px, font=fs, fill=(90, 90, 100))
@@ -147,11 +154,13 @@ def render(osa, k, lab, fname, popis=None):
     if has_b:
         yl = sw(yl, "h1", "šrafa = podzemní těleso (největší)", "propustná hornina / kras, kudy voda může téct – NE voda")
         yl = sw(yl, "h2", "slabší šrafa = jiné podzemní těleso")
-    if D.gw:
-        yl = sw(yl, "gw", "sytá modrá = podzemní voda",
-                "skutečná výplň tělesa ze stavu řešiče, po hladinu" if has_gw else "v tomto řezu žádná (stav řešiče podzemí)")
-        yl = sw(yl, (0, 20, 120), "čárkovaně = hladina tělesa")
-        yl = sw(yl, (230, 40, 40), "▼ výstup: pramen / vodopád na okraji")
+    if D.gw or D.film or D.vy:
+        yl = sw(yl, "gw", "sytá modrá = stojatá podzemní voda",
+                ("vana jen v uzavřené misce, po práh / do výstupu" if D.rezim == "pretok" else "výplň tělesa po hladinu (staré podzemí)") if has_gw else "v tomto řezu žádná (stav řešiče podzemí)")
+        if D.rezim == "pretok":
+            yl = sw(yl, FLOW, "světle modrá = protékající podzemní voda", "jen pásma, kudy voda opravdu teče (film u dna)" if has_fl[0] else "v tomto řezu žádná")
+        yl = sw(yl, (0, 20, 120), "čárkovaně = hladina stojaté vody")
+        yl = sw(yl, RED, "▼ výstup: pramen / vodopád na okraji", "vodopád = vývěr ve stěně ostrova do mlhy")
     else:
         yl = sw(yl, (200, 200, 200), "podzemní voda: stav řešiče není k dispozici", "(spusť s --voda=1 a --podzemi=1)")
     if has_w or D.voda: yl = sw(yl, WATER, "tyrkysová = povrchová voda (tůň / koryto)", None if has_w else "v tomto řezu žádná")
@@ -167,13 +176,14 @@ for osa in ("X", "Y"):
         paths.append(render(osa, min(n * p // q, n - 1), lab, "rez_%s_%s.png" % (osa.lower(), lab.replace("/", ""))))
 # výstupy těles (pramen / vodopád na okraji), které neleží na žádném z 6 řezů → navíc řez kolmo na X přes výstup
 extra_paths = []
-for bi, tb in enumerate(D.tv):
-    vx = tb.get("vystup") or []
-    if not vx: continue
-    ox, oy = vx[0] - D.x0, vx[1] - D.y0
-    if not (0 <= ox < W and 0 <= oy < H): continue
-    if ox in [min(W * p // q, W - 1) for (p, q, _) in frac] or oy in [min(H * p // q, H - 1) for (p, q, _) in frac]: continue
-    extra_paths.append(render("X", ox, None, "rez_vystup_telesa_%d.png" % (bi + 1)))
+cutx = [min(W * p // q, W - 1) for (p, q, _) in frac]; cuty = [min(H * p // q, H - 1) for (p, q, _) in frac]
+done_x = set()
+for (ox, oy, oz, typ, oq) in D.vy:          # nejsilnější výstupy (nejvýš 2), které neleží na žádném z 6 řezů
+    if len(extra_paths) >= 2: break
+    ox -= D.x0; oy -= D.y0
+    if not (0 <= ox < W and 0 <= oy < H) or ox in cutx or oy in cuty or ox in done_x: continue
+    done_x.add(ox)
+    extra_paths.append(render("X", ox, None, "rez_vystup_%d.png" % (len(extra_paths) + 1)))
 # přehled 2 × 3 (řádek X, řádek Y) + třetí řádek: půdorys (řezy, výstupy těles) a řezy přes výstupy
 def pudorys(size):
     c = max(2, (size - 64) // max(W, H))
@@ -193,15 +203,12 @@ def pudorys(size):
         d.text((X0 + kx * c + c // 2, Y0 - 14), "X " + lab, font=fs, fill=(200, 0, 120), anchor="ma")
         d.line([X0, Y0 + ky * c + c // 2, X0 + W * c, Y0 + ky * c + c // 2], fill=(120, 0, 200), width=2)
         d.text((X0 - 4, Y0 + ky * c + c // 2), "Y " + lab, font=fs, fill=(120, 0, 200), anchor="rm")
-    for bi, tb in enumerate(D.tv):
-        vx = tb.get("vystup") or []
-        if not vx: continue
-        ox, oy = vx[0] - D.x0, vx[1] - D.y0
-        if 0 <= ox < W and 0 <= oy < H:
-            cx, cy = X0 + ox * c + c / 2, Y0 + oy * c + c / 2
-            d.polygon([(cx, cy + 4), (cx - 9, cy - 12), (cx + 9, cy - 12)], fill=(230, 40, 40), outline=(90, 0, 0))
-            d.text((cx, cy + 8), "%s %d" % ("pramen" if tb["typ"] == "povrch" else "okraj", bi + 1), font=fs, fill=(150, 0, 0), anchor="ma")
-    d.text((X0, size - 16), "půdorys (x →, y ↓): čáry = řezy, ▼ = výstup tělesa", font=fs, fill=(40, 40, 50))
+    for n_, (ox, oy, oz, typ, oq) in enumerate(D.vy):
+        ox -= D.x0; oy -= D.y0
+        if not (0 <= ox < W and 0 <= oy < H): continue
+        cx, cy = X0 + ox * c + c / 2, Y0 + oy * c + c / 2; r_ = 7 if n_ < 3 else 4
+        d.polygon([(cx, cy + 3), (cx - r_, cy - 2 * r_), (cx + r_, cy - 2 * r_)], fill=RED if typ == "povrch" else (255, 150, 0), outline=(90, 0, 0))
+    d.text((X0, size - 16), "půdorys (x →, y ↓): čáry = řezy, ▼ červená = pramen, oranžová = vodopád na okraji", font=fs, fill=(40, 40, 50))
     return im
 ims = [Image.open(p) for p in paths]
 cw = a.prehled_sirka // 3
@@ -211,8 +218,13 @@ row3 = [pudorys(min(cw, max(chh, 300)))] + [Image.open(p_) for p_ in extra_paths
 r3h = max(chh, row3[0].height)
 ov = Image.new("RGB", (cw * 3, chh * 2 + 36 + r3h), (250, 250, 252))
 dov = ImageDraw.Draw(ov)
-gwi = "; ".join("těleso %d: hladina %.2f m, výstup %s (%d, %d), režim %s" % (i + 1, t["hladina"], "pramen" if t["typ"] == "povrch" else "okraj",
-                t["vystup"][0], t["vystup"][1], t.get("rezim", "?")) for i, t in enumerate(D.tv) if t.get("vystup"))
+npr = sum(1 for v in D.vy if v[3] == "povrch"); nok = len(D.vy) - npr
+qpr = sum(v[4] for v in D.vy if v[3] == "povrch"); qok = sum(v[4] for v in D.vy if v[3] != "povrch")
+vany = [h_ for h_ in D.hl if h_["objem_m3"] > 0]
+gwi = ("[ukázkové zdroje: 0,02 l/s v každém místním minimu povrchu] " if D.zdroje == "minima" else "") + "%s: %d stojatých vod (největší %s), výstupy: %d pramenů %.2f l/s, %d vodopádů na okraji %.2f l/s" % (
+    "přetoky ve 3D (E67)" if D.rezim == "pretok" else "staré podzemí (vana tělesa)", len(vany),
+    ", ".join("%.2f m %s %.1f m³" % (h_["hladina"], h_["typ"], h_["objem_m3"]) for h_ in sorted(vany, key=lambda e: -e["objem_m3"])[:2]) or "–",
+    npr, qpr, nok, qok) + (" (+%d slabších < 1 ml/s)" % D.vy_slabe if D.vy_slabe else "")
 dov.text((8, 4), "Svislé řezy – %s: nahoře kolmo na X (1/4, 1/2, 3/4), uprostřed kolmo na Y, dole půdorys%s" % (D.title, " a řez přes výstup" if extra_paths else ""), font=fb, fill=(20, 20, 30))
 dov.text((8, 22), "podzemní voda (stav řešiče): " + (gwi or "žádné těleso s vodou"), font=fs, fill=(0, 20, 120))
 for i, im in enumerate(ims):
