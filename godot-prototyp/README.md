@@ -17,6 +17,8 @@ $G --headless --path . -s res://tools/voda_e66.gd -- --vykopu=12   # voda ostrov
 python3 tools/port_studie.py [--check]                         # znovu přenést moduly studie (nebo jen ověřit, že kopie sedí)
 tools/rez_gif.sh [--oblast=vse|x,y] [--krok=2] [--ms=750] [--pohled=izo|shora] [--smer=nahoru|dolu] [--out=shots/rez/x.gif] [--podzemi=1] [--bloky="0,0:louka:101;..."]
                                                                # řezy → animovaný GIF (bez GPU, ~3–4 s): výchozí izometrie odspodu po řez, materiály, česká legenda, podzemní tělesa
+tools/rez_profil.sh [--oblast=vse|x,y] [--out=shots/rez/profil_x_y/] [--podzemi=1] [--voda=1] [--px=N] [--bloky=...]
+                                                               # svislé řezy (~5 s): 3 kolmo na X a 3 kolmo na Y v 1/4, 1/2, 3/4 + řez přes výstup tělesa + prehled.png
 xvfb-run -a -s "-screen 0 1280x800x24" $G --rendering-driver opengl3 --path . -- --e66b-bok   # bok ostrova před / po -> ../blueprint-studie/shots/66b_bok.png
 $G --headless --path . -s res://tools/teleso_e66.gd && python3 tools/teleso_obrazek.py   # diagnostika podzemního tělesa -> 66b_teleso.png
 $G --headless --path . -- --export-vectors                     # vektory -> vectors/vectors.json (proto), veg_vectors.json, gen_v3_vectors.json
@@ -224,6 +226,11 @@ Plán a výsledky: `../blueprint-studie/PROP.md` (E66). Moduly studie jsou **kop
 - **Řezy jako GIF:** `tools/rez_gif.sh` (data `tools/rez_data.gd` headless, obrázky `tools/rez_gif.py` přes Pillow): vodorovné řezy
   po `--krok` buňkách odspodu; výchozí `--pohled=izo` (izometrické voxely do výšky řezu, horní stěna = plocha řezu, `--smer=dolu`
   = od řezu po povrch), `--pohled=shora` = plochý řez; barvy plných id ze sdílené tabulky, legenda česky, modrý nádech = podzemní těleso.
+- **Svislé řezy (profily):** `tools/rez_profil.sh` (společný kód `tools/rez_spolecne.py`, `tools/rez_profil.py`): 6 řezů v jednom měřítku
+  (1 m = stejně px vodorovně i svisle, bez převýšení) + přehled 2 × 3 s půdorysem. Rozlišuje: **šrafa** = rozsah podzemního tělesa
+  (propustná hornina / kras, sama o sobě suchá), **sytá modrá** = skutečná podzemní voda ze stavu řešiče podzemí (`ostrov_voda.gd`,
+  pásma tělesa po hladinu), **čárkovaně** hladina tělesa, **▼** výstup (pramen / vodopád na okraji), **tyrkysová** = povrchová voda;
+  když výstup neleží na žádném řezu, přidá se řez přes něj (`rez_vystup_telesa_N.png`).
 
 ## gen-v3 v prototypu (Jan 20:14, `scripts/gen3/`)
 - **Volba:** `BlockGen.gen_version` = `"v3"` (výchozí) nebo `"proto"`, CLI `-- --gen=proto|v3`. Tvar povrchu, transformace, dorovnání stran,
