@@ -45,6 +45,7 @@ static func solve(c: Dictionary, entries: PackedInt32Array, q: float, ex: Dictio
 	var qtot := {}               # celkový průtok mokrým pásmem (pro práh vykreslení větví)
 	var prune := bool(c.get("prune67", true)) and not trace
 	var pmin := float(c.get("prune67_min", 0.1))
+	var remizy := bool(c.get("remizy69", true))
 	var guard := 0
 	var gmax := 40 * NB + 1000
 	while down.size() > 0 and guard < gmax:
@@ -82,10 +83,14 @@ static func solve(c: Dictionary, entries: PackedInt32Array, q: float, ex: Dictio
 				var bi := 0
 				for i in cand.size():
 					if float(cand[i][1]) > float(cand[bi][1]): bi = i
+				var top := {bi: true}
+				if remizy:   # E69: větve se stejnou (největší) vahou jsou rovnocenné → přebytek rovným dílem všem (symetrie)
+					for i in cand.size():
+						if float(cand[i][1]) >= float(cand[bi][1]) * (1.0 - 1e-12): top[i] = true
 				var moved := 0.0
 				for i in cand.size():
-					if i != bi and f * float(cand[i][1]) / ws < pmin: moved += float(cand[i][1]); cand[i][1] = 0.0
-				cand[bi][1] = float(cand[bi][1]) + moved
+					if not top.has(i) and f * float(cand[i][1]) / ws < pmin: moved += float(cand[i][1]); cand[i][1] = 0.0
+				for i in top: cand[i][1] = float(cand[i][1]) + moved / top.size()
 			for e in cand:
 				var b2: int = e[0]
 				if float(e[1]) <= 0.0: continue
@@ -131,6 +136,11 @@ static func _out_add(outs: Dictionary, o: Array, f: float, b: int) -> void:
 	if not outs.has(k): outs[k] = [float(o[0]), String(o[1]), int(o[2]), 0.0, b]
 	outs[k][3] = float(outs[k][3]) + f
 
+## průtok z pasti do jejího výstupu; E69: při remíze výstupů (p.outs) rovným dílem
+static func _pit_out(outs: Dictionary, p: Dictionary, f: float) -> void:
+	var ol: Array = p.get("outs", [p.out])
+	for o in ol: _out_add(outs, o, f / ol.size(), -1)
+
 ## další průtok do už vyřešené pasti: přebytek nad průsakem jde za práh / do výstupu
 static func _pit_add(c: Dictionary, pits: Array, i: int, f: float, qb: Dictionary, down, outs: Dictionary) -> void:
 	var p: Dictionary = pits[i]
@@ -139,7 +149,7 @@ static func _pit_add(c: Dictionary, pits: Array, i: int, f: float, qb: Dictionar
 	var dlt := maxf(float(p.q_in) - float(p.leak), 0.0) - old
 	if dlt <= 1e-12: return
 	if p.typ == "nenaplni": p.typ = String(p.get("typ_full", "uzavrena"))
-	if not p.out.is_empty(): _out_add(outs, p.out, dlt, -1)
+	if not p.out.is_empty(): _pit_out(outs, p, dlt)
 	elif int(p.tgt) >= 0:
 		var g: int = p.tgt
 		qb[g] = float(qb.get(g, 0.0)) + dlt; down.push(float(c.lo[g]), g)
@@ -159,7 +169,16 @@ static func _pit_fill(c: Dictionary, pits: Array, pit_of: Dictionary, b: int, f:
 		var key := -h.top_v()
 		var id := h.pop()
 		if id >= NB:
-			p.out = od[id - NB]; L = maxf(L, key); p.typ = "vystup"; break
+			p.out = od[id - NB]; L = maxf(L, key); p.typ = "vystup"
+			if bool(c.get("remizy69", true)):   # E69: další výstupy ve stejné výšce (remíza) → přebytek se dělí rovným dílem
+				var seen := {"%s|%d" % [String(p.out[1]), int(p.out[2])]: true}
+				p.outs = [p.out]
+				while h.size() > 0 and -h.top_v() <= key + E:
+					var id2 := h.pop()
+					if id2 < NB: continue
+					var o2: Array = od[id2 - NB]; var k2 := "%s|%d" % [String(o2[1]), int(o2[2])]
+					if not seen.has(k2): seen[k2] = true; p.outs.append(o2)
+			break
 		if inp.has(id): continue
 		if pit_of.has(id):
 			var j := _root(pits, int(pit_of[id]))
@@ -212,7 +231,7 @@ static func _pit_fill(c: Dictionary, pits: Array, pit_of: Dictionary, b: int, f:
 	p.leak = lk
 	var over := maxf(float(p.q_in) - lk, 0.0)
 	if over <= 0.0: p.typ_full = p.typ; p.typ = "nenaplni"; return
-	if not p.out.is_empty(): _out_add(outs, p.out, over, -1)
+	if not p.out.is_empty(): _pit_out(outs, p, over)
 	elif int(p.tgt) >= 0:
 		var g: int = p.tgt
 		qb[g] = float(qb.get(g, 0.0)) + over; down.push(float(c.lo[g]), g)

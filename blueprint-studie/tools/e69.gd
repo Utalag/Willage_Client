@@ -6,7 +6,7 @@ extends SceneTree
 ## mísa (dna stoupají od středu). Řešiče: E67 pretok (+ O, se / bez slučování), E58 A+B+C a base (auto, jedna hladina).
 ## Měří: symetrii (8 transformací, max rozdíl po sloupcích a vrstvách), bilanci vstup = výstupy + průsak, profil po vrstvách.
 ## Parametry --n=21 --t=1.0 --sklon=0.25 --q=1.0 --ponor=0.1 --perm=1.0,0.8,0.6,0.4,0.2 --por=0.3 --tvary=plocha,kupole,misa
-## --varianty=... Výstup shots/e69/vysledky.json.
+## --remizy=1 (E69 oprava remíz, 0 = chování E67b) --varianty=... Výstup shots/e69/vysledky.json.
 const PR = preload("res://scripts/bp/params.gd")
 const F = preload("res://scripts/podzemi52/ug_funkce.gd")
 const U = preload("res://scripts/alg58/ug58.gd")
@@ -30,6 +30,7 @@ func _tab() -> void:
 func _ctx(shape: String, extra: Dictionary) -> Dictionary:
 	var p := PR.defaults()
 	p.ponor_perm = float(_arg("ponor", "0.1")); p.p52_rezim = "auto"; p.ug_hloubka_m = 2.0 * T
+	p.p69_remizy = _arg("remizy", "1") == "1"
 	p.merge(extra, true)
 	var W := N + 2; var m := W / 2; var nl := PERM.size()
 	var c := F._new(W, W, 1.0, p)
