@@ -69,6 +69,26 @@ static func build(v, slice_z := -1, mlha_m := 6.0) -> Dictionary:
 					var s := 0.8 + 0.5 * k; var yy := y1 + 0.6 * k
 					_quad(sm, Vector3(c.x - s, yy, c.y - s), Vector3(c.x + s, yy, c.y - s), Vector3(c.x + s, yy, c.y + s), Vector3(c.x - s, yy, c.y + s))
 					nm += 1
+		# E67: vývěry podzemní vody ve stěně ostrova (výstup „okraj“) = vodopád ze stěny do mlhy; slabší než
+		# p67_min_vytok_render se nekreslí (voda v simulaci zůstává, jen se nezobrazí)
+		var vmin := float(TT.p.get("p67_min_vytok_render", 0.0))
+		for u in v.st.get("under", []):
+			if String(u.typ) != "okraj" or float(u.q) < vmin: continue
+			var gi: int = u.exit
+			var y0 := float(u.z)
+			if slice_z >= 0 and y0 / CELL_H > slice_z: continue
+			var p := _pos(v, gi)
+			var od := Vector2.ZERO
+			for dd in [Vector2i(1, 0), Vector2i(-1, 0), Vector2i(0, 1), Vector2i(0, -1)]:
+				var j: int = gi + dd.x * v.H + dd.y
+				if j >= 0 and j < v.W * v.H and v.island[j] == 0: od = Vector2(dd); break
+			var c := p + Vector2(0.5, 0.5) + od * 0.52
+			var n := Vector2(-od.y, od.x) * clampf(0.08 + 0.6 * sqrt(float(u.q)), 0.08, 0.4)
+			_quad(sf, Vector3(c.x - n.x, y0, c.y - n.y), Vector3(c.x + n.x, y0, c.y + n.y), Vector3(c.x + n.x, -mlha_m, c.y + n.y), Vector3(c.x - n.x, -mlha_m, c.y - n.y))
+			nf += 1
+			var s := 0.8
+			_quad(sm, Vector3(c.x - s, -mlha_m, c.y - s), Vector3(c.x + s, -mlha_m, c.y - s), Vector3(c.x + s, -mlha_m, c.y + s), Vector3(c.x - s, -mlha_m, c.y + s))
+			nm += 1
 	var out := {"n_voda": nw, "n_vodopad": nf, "n_mlha": nm}
 	for e in [["voda", sw, nw], ["vodopad", sf, nf], ["mlha", sm, nm]]:
 		if e[2] > 0:

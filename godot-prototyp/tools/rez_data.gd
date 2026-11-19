@@ -126,7 +126,9 @@ func _init() -> void:
 			var c2: Dictionary = v.ug
 			var bodies: Array = v.st.get("ug_bodies", [])
 			if _arg("zdroje", "hra") == "minima":   # ukázka: zdroj v každém místním minimu povrchu (0,02 l/s), seskupené po tělesech
+				var t67 := Time.get_ticks_usec()
 				bodies = _minima_calls(c2)
+				out.ms_podzemi = (Time.get_ticks_usec() - t67) / 1000.0
 				out.zdroje = "minima"
 			var fill := {}   # sloupec řídicí mřížky → [[lo, top, index hladiny]]
 			var film := {}   # E67 pretok: protékající voda (mokrá pásma sestupu) → [[lo, lo + film]]
@@ -145,10 +147,12 @@ func _init() -> void:
 							var cc0: int = c2.bcol[bb]
 							if not fill.has(cc0): fill[cc0] = []
 							fill[cc0].append([snappedf(c2.lo[bb], 0.001), snappedf(top, 0.001), hi_])
-					for bb in r.wet67:
+					var wq: PackedFloat64Array = r.get("wetq67", PackedFloat64Array())
+					for iw in r.wet67.size():
+						var bb: int = r.wet67[iw]
 						var cc1: int = c2.bcol[bb]
 						if not film.has(cc1): film[cc1] = []
-						film[cc1].append([snappedf(c2.lo[bb], 0.001), snappedf(minf(float(c2.hi[bb]), float(c2.lo[bb]) + fm), 0.001)])
+						film[cc1].append([snappedf(c2.lo[bb], 0.001), snappedf(minf(float(c2.hi[bb]), float(c2.lo[bb]) + fm), 0.001), snappedf(wq[iw] if iw < wq.size() else 0.0, 0.00001)])
 					for o in r.outs67:
 						var s7: int = int(o[2])
 						var g7 := Vector2i(s7 / v.H, s7 % v.H) - T.OFF * 16
@@ -179,6 +183,7 @@ func _init() -> void:
 			out.protok_voda = gf; out.hladiny_voda = hl; out.vystupy_voda = vy
 			out.rezim_vody = "pretok" if String(c2.get("rezim67", "")) == "pretok" else "auto"
 			out.okraj67 = bool(c2.get("okraj67", false))
+			out.render67 = {"min_vytok": float(T.p.get("p67_min_vytok_render", 0.0)), "min_tok": float(T.p.get("p67_min_tok_render", 0.0)), "prune": bool(T.p.get("p67_prune", true)), "prune_min": float(T.p.get("p67_prune_min", 0.1))}
 		out.podzemni_voda = gw; out.telesa_voda = tv
 		v.dispose()
 	var path := _arg("out", "/tmp/rez_data.json")

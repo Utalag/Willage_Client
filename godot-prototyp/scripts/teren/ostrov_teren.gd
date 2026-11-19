@@ -44,6 +44,8 @@ const HRA := {
 	"voda_prikop_sklon": 0.01,           # sklon příkopu k okraji mapy (buněk na sloupec)
 	"voda_r_kroku": 1,                   # kroků R podzemí na snímek
 	"voda_e67": false,                   # E67 (studie, jen větev e67): podzemí jako přetoky ve 3D + výstup ve stěně ostrova
+	"p67_min_vytok_render": 0.02,        # E67b: vývěr podzemní vody ve stěně / pramen slabší než tolik l/s se nekreslí (simulace beze změny)
+	"p67_min_tok_render": 0.02,          # E67b: protékající větev podzemní vody slabší než tolik l/s se v řezech nekreslí
 }
 
 static func params() -> Dictionary:

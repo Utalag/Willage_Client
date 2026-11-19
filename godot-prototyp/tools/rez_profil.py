@@ -16,8 +16,12 @@ ap.add_argument("data"); ap.add_argument("out", help="adresář výstupu")
 ap.add_argument("--oblast", default="vse"); ap.add_argument("--podzemi", type=int, default=1)
 ap.add_argument("--px", type=int, default=0, help="pixelů na 1 m vodorovně (0 = automaticky; svisle 0,5 m = px/2)")
 ap.add_argument("--prehled_sirka", type=int, default=1500, help="šířka přehledu 2 × 3 v px")
+ap.add_argument("--min_vytok", type=float, default=None, help="E67b: výstupy slabší než l/s nekreslit (výchozí p67_min_vytok_render z dat)")
+ap.add_argument("--min_tok", type=float, default=None, help="E67b: protékající větve slabší než l/s nekreslit (výchozí p67_min_tok_render)")
 a = ap.parse_args()
 D = RS.Data(a.data, a.oblast, bool(a.podzemi))
+D.set_render(a.min_vytok, a.min_tok)
+MT_ = D.render67.get("min_tok", 0.0)
 fn, fb = RS.fonts(); fs, _ = RS.fonts(11)
 S, B = D.grid()
 W, H, NZv = D.W, D.H, D.zmax + 1
@@ -74,7 +78,9 @@ def render(osa, k, lab, fname, popis=None):
                 hatch(do, X0, Y1 - pv, px, pv, HATCH[b])
             cnt[v] = cnt.get(v, 0) + 1
         zt = (top + 1) * 0.5
-        for lo, hi in D.film.get("%d,%d" % (D.x0 + x, D.y0 + y), []):   # protékající voda: film u dna mokrého pásma
+        for e_ in D.film.get("%d,%d" % (D.x0 + x, D.y0 + y), []):   # protékající voda: film u dna mokrého pásma
+            lo, hi = e_[0], e_[1]
+            if len(e_) > 2 and e_[2] < MT_: continue                  # slabá větev: nekreslí se (simulace beze změny)
             hi = min(hi, zt)
             if hi - lo <= 1e-3: continue
             ya, yb = MT + ph - hi * 2 * pv, MT + ph - lo * 2 * pv - 1
@@ -114,6 +120,12 @@ def render(osa, k, lab, fname, popis=None):
             dr.polygon([(cx, cy - 2), (cx - 7, cy - 14), (cx + 7, cy - 14)], fill=RED, outline=(90, 0, 0))
             if len(notes) < 3: notes.append("▼ %s (%d, %d) ve %.2f m, %.3f l/s" % (onm(typ), ox, oy, oz, oq))
         else: off += 1
+    for (ox, oy, oz, typ, oq) in D.vy_skryte:   # skryté (pod prahem kreslení): jen slabý obrys
+        on = (ox == D.x0 + k) if osa == "X" else (oy == D.y0 + k)
+        tt = (oy - D.y0) if osa == "X" else (ox - D.x0)
+        if on and 0 <= tt < m_along:
+            cx = ML + tt * px + px / 2; cy = MT + ph - oz * 2 * pv
+            dr.polygon([(cx, cy - 2), (cx - 4, cy - 9), (cx + 4, cy - 9)], outline=(170, 120, 120))
     if off and D.vy: notes.append("dalších %d výstupů mimo řez (%s)" % (off, "pretok, E67" if D.rezim == "pretok" else "staré podzemí"))
     for i, nt in enumerate(notes[:4]):
         dr.text((ML + 4, MT + 4 + i * 15), nt, font=fs, fill=(150, 0, 0) if nt.startswith("▼") else (0, 20, 120))
@@ -161,6 +173,8 @@ def render(osa, k, lab, fname, popis=None):
             yl = sw(yl, FLOW, "světle modrá = protékající podzemní voda", "jen pásma, kudy voda opravdu teče (film u dna)" if has_fl[0] else "v tomto řezu žádná")
         yl = sw(yl, (0, 20, 120), "čárkovaně = hladina stojaté vody")
         yl = sw(yl, RED, "▼ výstup: pramen / vodopád na okraji", "vodopád = vývěr ve stěně ostrova do mlhy")
+        if D.vy_skryte or MT_ > 0:
+            yl = sw(yl, (235, 225, 225), "▽ obrys = výstup pod prahem kreslení", "nekreslí se < %.3g l/s (výstup), < %.3g l/s (větev)" % (D.render67.get("min_vytok", 0), MT_))
     else:
         yl = sw(yl, (200, 200, 200), "podzemní voda: stav řešiče není k dispozici", "(spusť s --voda=1 a --podzemi=1)")
     if has_w or D.voda: yl = sw(yl, WATER, "tyrkysová = povrchová voda (tůň / koryto)", None if has_w else "v tomto řezu žádná")
@@ -224,7 +238,8 @@ vany = [h_ for h_ in D.hl if h_["objem_m3"] > 0]
 gwi = ("[ukázkové zdroje: 0,02 l/s v každém místním minimu povrchu] " if D.zdroje == "minima" else "") + "%s: %d stojatých vod (největší %s), výstupy: %d pramenů %.2f l/s, %d vodopádů na okraji %.2f l/s" % (
     "přetoky ve 3D (E67)" if D.rezim == "pretok" else "staré podzemí (vana tělesa)", len(vany),
     ", ".join("%.2f m %s %.1f m³" % (h_["hladina"], h_["typ"], h_["objem_m3"]) for h_ in sorted(vany, key=lambda e: -e["objem_m3"])[:2]) or "–",
-    npr, qpr, nok, qok) + (" (+%d slabších < 1 ml/s)" % D.vy_slabe if D.vy_slabe else "")
+    npr, qpr, nok, qok) + (" (+%d pod prahem kreslení %.3g l/s, %.3f l/s)" % (len(D.vy_skryte), D.render67.get("min_vytok", 0), sum(v[4] for v in D.vy_skryte)) if D.vy_skryte else "") + (
+    "; slabé větve < %.3g l/s sloučeny do nejsilnější (p67_prune)" % D.render67.get("prune_min", 0) if D.rezim == "pretok" and D.render67.get("prune") else "")
 dov.text((8, 4), "Svislé řezy – %s: nahoře kolmo na X (1/4, 1/2, 3/4), uprostřed kolmo na Y, dole půdorys%s" % (D.title, " a řez přes výstup" if extra_paths else ""), font=fb, fill=(20, 20, 30))
 dov.text((8, 22), "podzemní voda (stav řešiče): " + (gwi or "žádné těleso s vodou"), font=fs, fill=(0, 20, 120))
 for i, im in enumerate(ims):
