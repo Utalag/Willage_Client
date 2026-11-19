@@ -23,7 +23,8 @@ static func _soluble(m: int) -> bool:
 
 ## ztráty L = {thr, cap (kras naráz), inf (propustná · perm na sloupec), perm_min}
 static func losses(p: Dictionary, springs: bool) -> Dictionary:
-	if springs: return {"thr": float(p.strz_thr_q), "cap": float(p.ponor_cap_q), "inf": float(p.ponor_inf_q), "perm_min": float(p.ponor_perm), "springs": true, "pit_q": float(p.pit_drain_q), "cell_m2": pow(float(p.get("voda_cell_m", 0.5)), 2.0), "u_m": float(p.get("voda_cell_m", 0.5))}
+	if springs: return {"thr": float(p.strz_thr_q), "cap": float(p.ponor_cap_q), "inf": float(p.ponor_inf_q), "perm_min": float(p.ponor_perm), "springs": true, "pit_q": float(p.pit_drain_q), "cell_m2": pow(float(p.get("voda_cell_m", 0.5)), 2.0), "u_m": float(p.get("voda_cell_m", 0.5)),
+		"q73": bool(p.get("p73_pritok", false)), "v73": bool(p.get("p73_vyver", false))}
 	return {"thr": float(p.strz_thr), "cap": float(p.ponor_cap), "inf": float(p.ponor_inf), "perm_min": float(p.ponor_perm), "springs": false, "pit_q": 0.0}
 
 static func make(hm: PackedFloat64Array, W: int, H: int, wall: PackedByteArray, mats: PackedInt32Array, src: PackedFloat64Array, L: Dictionary, edge_out: bool) -> Dictionary:
@@ -405,6 +406,54 @@ static func fill_events(st: Dictionary, comp: PackedInt32Array, lo: float, hi: f
 static func _ugi(st: Dictionary):
 	return st.ug.get("impl", UG)
 
+## E73 (p73_pritok): výtokové buňky tůně (D8 cíl mimo tůň) → [Q = Σ ain, buňka s největším ain, [[buňka, ain]]]
+static func _vyt73(st: Dictionary, comp: PackedInt32Array) -> Array:
+	var Q := 0.0; var outlet := -1; var amax := -1.0; var vyt := []
+	for i in comp:
+		var j: int = st.to[i]
+		if j >= 0 and st.wall[j] == 0 and st.fill[j] > st.hm[j] + 0.01: continue   # cíl v tůni (souvislá složka) → není výtok
+		var a: float = st.ain[i]
+		Q += a; vyt.append([i, a])
+		if a > amax: amax = a; outlet = i
+	return [Q, outlet, vyt]
+
+## odtok tůně do podzemí: E73 p73_pritok → kapacita rozdělená na výtokové buňky poměrem přítoku, jinak celá na přelivu
+static func _set_drain(st: Dictionary, x: Dictionary, wr: PackedInt32Array) -> void:
+	if x.has("vyt"):
+		var Q: float = x.q_lps
+		for e in x.vyt:
+			var i: int = e[0]
+			var d: float = float(x.drain_lps) * float(e[1]) / Q if Q > 0.0 else 0.0
+			if d > 0.0: st.extra[i] += d; wr.append(i)
+		return
+	st.extra[x.outlet] = x.drain_lps; wr.append(x.outlet)
+
+## E73 (p73_vyver): tůně napájené pramenem z minulého kola (výtok pramene teče po D8 do tůně) → {přeliv tůně: [vstup v0 tělesa]}
+static func _fed_map(st: Dictionary, prev_under: Array, wetp: Array) -> Dictionary:
+	var cellp := {}
+	for x in wetp:
+		for c in x.cells: cellp[c] = int(x.outlet)
+	var out := {}
+	for u in prev_under:
+		if String(u.typ) != "povrch" or not u.has("v0"): continue
+		var i: int = int(u.exit); var g := 0
+		while i >= 0 and g < 1000000:
+			if cellp.has(i):
+				var k: int = cellp[i]
+				if not out.has(k): out[k] = []
+				if not out[k].has(int(u.v0)): out[k].append(int(u.v0))
+				break
+			i = st.to[i]; g += 1
+	return out
+
+## E73: tůň x napájí pramen tělesa r0 (pramen z minulého kola vyšel z tělesa se vstupem v0 ∈ členové r0) → její buňky se
+## z výstupů nevylučují (vývěr zůstává v tůni, kterou sám zavodnil; voda z tůně zároveň prosakuje zpět)
+static func _fed73(st: Dictionary, x: Dictionary, r0: Dictionary, fed: Dictionary) -> bool:
+	if fed.is_empty() or not fed.has(int(x.outlet)): return false
+	for v0 in fed[int(x.outlet)]:
+		if r0.members.has(int(v0)): return true
+	return false
+
 static func _apply_drains(st: Dictionary, dirty = null) -> PackedInt32Array:
 	var W: int = st.W; var H: int = st.H
 	# E51b: extra / src2 jsou nenulové jen na přelivech tůní a výtocích z podzemí → pamatují se jejich indexy
@@ -417,13 +466,14 @@ static func _apply_drains(st: Dictionary, dirty = null) -> PackedInt32Array:
 	var oldv := {}
 	for i in prev:
 		oldv[i] = [st.extra[i], st.src2[i]]; st.extra[i] = 0.0; st.src2[i] = 0.0
+	var prev_under: Array = st.get("under", [])   # E73 p73_vyver: výstupy minulého kola
 	st.under = []; st.ug_bodies = []; st.lost_deep = 0.0
 	var wr := PackedInt32Array()   # zapsané indexy
 	if float(st.L.get("pit_q", 0.0)) > 0.0:
 		var wetp := _ponds_cached(st, dirty).filter(func(x): return not x["suchá"] and x.outlet >= 0 and x.drain_lps > 0.0)
 		if st.get("ug") == null:   # E47c: podzemím k nejbližšímu okraji
 			for x in wetp:
-				st.extra[x.outlet] = x.drain_lps; wr.append(x.outlet)
+				_set_drain(st, x, wr)
 				var o: int = x.outlet; var best := -1; var bd := 1e9
 				if not st.has("_bl"):   # okrajové sloupce vzestupně (stejné pořadí jako průchod celou mřížkou)
 					var bl := PackedInt32Array()
@@ -440,6 +490,7 @@ static func _apply_drains(st: Dictionary, dirty = null) -> PackedInt32Array:
 				st.under.append({"from": o, "exit": best, "q": x.podzemi_lps, "z": x.dno - 4.0, "typ": "okraj"})
 		else:   # E47d: po propustné vrstvě (podzemi.gd)
 			var ents := []   # [v, pond]
+			var fed: Dictionary = _fed_map(st, prev_under, wetp) if bool(st.L.get("v73", false)) else {}
 			for x in wetp:
 				var cols := Array(x.cells); cols.sort_custom(func(a, b): return st.hm[a] < st.hm[b])
 				var v := -1
@@ -447,7 +498,7 @@ static func _apply_drains(st: Dictionary, dirty = null) -> PackedInt32Array:
 					v = _ugi(st).entry(st.ug, c)
 					if v >= 0: break
 				if v < 0:
-					st.extra[x.outlet] = x.drain_lps; wr.append(x.outlet); st.lost_deep += x.podzemi_lps   # pod tůní není propustné těleso → do hloubky (nemodeluje se)
+					_set_drain(st, x, wr); st.lost_deep += x.podzemi_lps   # pod tůní není propustné těleso → do hloubky (nemodeluje se)
 				else: ents.append([v, x])
 			var done := {}
 			for k in ents.size():
@@ -462,17 +513,24 @@ static func _apply_drains(st: Dictionary, dirty = null) -> PackedInt32Array:
 				var vs := PackedInt32Array(); var q := 0.0; var excl := {}
 				for j in grp:
 					vs.append(ents[j][0]); q += ents[j][1].podzemi_lps
+					if _fed73(st, ents[j][1], r0, fed): continue   # E73 p73_vyver: tůň zavodněná pramenem tohoto tělesa – pramen v ní smí zůstat
 					for c in ents[j][1].cells: excl[c] = true
 				var sk := "s%s|%.9f|%d" % [str(vs), q, excl.hash()]
 				if not st.ug_cache.has(sk): st.ug_cache[sk] = _ugi(st).solve(st.ug, vs, q, excl)
 				var r: Dictionary = st.ug_cache[sk].duplicate()
 				for j in grp:
 					var x: Dictionary = ents[j][1]
-					if not r.closed: st.extra[x.outlet] = x.drain_lps; wr.append(x.outlet)   # uzavřené plné těleso nic nepřijímá → vše přeteče po povrchu
-				if not r.closed and r.out_q > 0.0:
+					if not r.closed: _set_drain(st, x, wr)   # uzavřené plné těleso nic nepřijímá → vše přeteče po povrchu
+				if not r.closed and r.out_q > 0.0 and r.has("outs67"):   # E67 pretok: víc výstupů (prameny / okraj) s vlastním průtokem (E73: jako tok60)
+					for o in r.outs67:
+						var col67: int = o[2]
+						if float(o[3]) <= 0.0: continue
+						if o[1] == "povrch": st.src2[col67] += float(o[3]); wr.append(col67)
+						st.under.append({"v0": ents[grp[0]][0], "from": ents[grp[0]][1].outlet, "exit": col67, "q": float(o[3]), "z": float(o[0]), "typ": o[1]})
+				elif not r.closed and r.out_q > 0.0:
 					var col: int = r.out[4]
 					if r.out[3] == "povrch": st.src2[col] += r.out_q; wr.append(col)
-					st.under.append({"from": ents[grp[0]][1].outlet, "exit": col, "q": r.out_q, "z": float(r.out[0]), "typ": r.out[3]})
+					st.under.append({"v0": ents[grp[0]][0], "from": ents[grp[0]][1].outlet, "exit": col, "q": r.out_q, "z": float(r.out[0]), "typ": r.out[3]})
 				r.erase("members"); r.entries = vs; r.cache_key = sk
 				st.ug_bodies.append(r)
 	var chg := PackedInt32Array()
@@ -529,8 +587,13 @@ static func _pond_dict(st: Dictionary, comp: PackedInt32Array, cell_m2: float, u
 	var dr := drain(st, comp); var outlet := -1; var amax := -1.0
 	for i in comp:
 		if st.ain[i] > amax: amax = st.ain[i]; outlet = i
+	var vy := []
+	if bool(st.L.get("q73", false)):   # E73 p73_pritok: přítok = součet výtokových buněk
+		var r73 := _vyt73(st, comp); q = r73[0]; outlet = r73[1]; vy = r73[2]
 	var ev := fill_events(st, comp, lo, hi, q, dr, cell_m2, u_m, q_to_m3) if events else []
 	var vol := 0.0
 	for e in ev: vol = e.objem_m3
-	return {"cells": comp, "q_lps": q, "drain_lps": dr, "hloubka_m": (hi - lo) * u_m, "objem_m3": vol, "udalosti": ev, "suchá": q <= 0.0,
+	var d := {"cells": comp, "q_lps": q, "drain_lps": dr, "hloubka_m": (hi - lo) * u_m, "objem_m3": vol, "udalosti": ev, "suchá": q <= 0.0,
 		"nenaplni_se": q > 0.0 and dr >= q, "podzemi_lps": minf(dr, q), "preliv_lps": maxf(q - dr, 0.0), "outlet": outlet, "dno": lo}
+	if not vy.is_empty(): d.vyt = vy
+	return d

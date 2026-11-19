@@ -106,11 +106,11 @@ func build(bl: Dictionary) -> void:
 
 ## E68: plný výpočet – p68_hydro = smyčka povrch ↔ podzemí do ustálení (nejvýš p68_kola, tolerance p68_tol), jinak tok.route
 func _route(s: Dictionary) -> void:
-	if bool(p.get("p68_hydro", false)): H68.full(s, int(p.get("p68_kola", 64)), float(p.get("p68_tol", 1e-9)), true)
+	if bool(p.get("p68_hydro", false)): H68.full(s, int(p.get("p68_kola", 64)), float(p.get("p68_tol", 1e-9)), true, bool(p.get("p73_zrychleni", false)))
 	else: TOK.route(s)
 
 func _update(ch: PackedInt32Array, hh: PackedFloat64Array, src_new: PackedFloat64Array) -> Dictionary:
-	if bool(p.get("p68_hydro", false)): return H68.update(st, ch, hh, src_new, int(p.tok_margin), int(p.get("p68_kola", 64)), float(p.get("p68_tol", 1e-9)), true)
+	if bool(p.get("p68_hydro", false)): return H68.update(st, ch, hh, src_new, int(p.tok_margin), int(p.get("p68_kola", 64)), float(p.get("p68_tol", 1e-9)), true, bool(p.get("p73_zrychleni", false)))
 	return TOK60.update(st, ch, hh, src_new, int(p.tok_margin))
 
 ## podzemí se staví z funkcí vrstev (původní povrch) → dřívější výkopy (hm < hm_gen) se do něj přehrají
