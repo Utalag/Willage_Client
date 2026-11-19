@@ -40,3 +40,13 @@ Podnět: čtvrtá odpověď ChatGPT 2026-11-19, popis je v [devlog/model-sveta.m
 - [ ] **Přechod mezi funkcí, vzorkovanou buňkou a trvalou změnou po kopání:** definice zůstane, změny hráče jako překryv. Ujasnit vztah k WVB1, který dnes ukládá celé pole bloku. Malý experiment: vykopat chodbu, uložit jen překryv, znovu načíst a porovnat hash.
 - [ ] **Kde končí funkce a pásma:** kritérium, kdy změna (převis, oblouk, nepravidelná jeskyně) potřebuje lokální oblast s plnými buňkami, a jak takovou oblast uložit (řídký objem, octree, komprimované intervaly).
 - [ ] **Rešerše implicitního geologického modelování:** jak do vrstev doplnit nepravidelné útvary (žíly, pegmatity, skarny, krasové dutiny) bez plných voxelů. Výchozí zdroj: [A Review of Digital Terrain Modeling](https://doi.org/10.1111/cgf.13657).
+
+## Měřítko
+
+Podnět: odpověď ChatGPT 2026-11-19 o měřítku. Nic z toho není rozhodnuté. Dosavadní hypotézy (postava ~2 m, buňka 0,5 m, blok vesnice 128 × 128 m) jsou v [devlog/svet-a-meritko.md](devlog/svet-a-meritko.md).
+
+- [ ] **Rozhodnout charakter krajiny** (kompaktní, vyvážená, velkolepá). Od toho se odvodí výšky kopců a hor na ostrově a ve světě výprav.
+- [ ] **Základní herní jednotka 0,25 m** (hypotéza): postava 1,75 m = 7 jednotek, dveře 2 m = 8, schod a stěna 0,25 m = 1. Hierarchie: 1 m hrubý svět, 0,5 m řídicí mřížka geologie (zůstává), 0,25 m herní prostor, 0,125 m kopání a jemná geometrie (ověřeno v E50). Porovnat s dosavadní hypotézou „postava 2 m = 4 buňky po 0,5 m“.
+- [ ] **Velikost bloku osobního ostrova nezávisle na chunku světa výprav.** Ostrov 4 × 4 bloky: 8 m dá 32 × 32 m, 32 m dá 128 × 128 m, 128 m dá 512 × 512 m. Do studie přidat variantu 32 × 32 m.
+- [ ] **Test měřítka v izometrické kameře:** jedna postava, modelový dům, kopec a hora ve stejné scéně, pro každou variantu jednotky a bloku. Porovnat podle snímků.
+- [ ] **Oddělené typy jednotek v kódu:** metry pro fyziku a vodu (m, s, l/s), herní jednotky po 0,25 m, hustota vzorkování a celočíselné souřadnice mřížky. Hydrauliku nepřevádět na herní jednotky.
