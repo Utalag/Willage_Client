@@ -17,7 +17,7 @@ ROOTS = [
     # terén: funkce vrstev, navázání, minerály, dutiny
     "bp/pipeline.gd", "bp/geo_fn.gd", "bp/params.gd", "bp/world.gd", "bp/blueprint.gd",
     # voda: prameny, koryto, strže, tůně, podzemí auto, E58/E60/E64, eroze E51, dohnání E54
-    "voda/prameny.gd", "voda/strze.gd", "voda/tok.gd", "alg60/tok60.gd", "podzemi52/ug_funkce.gd", "hydro68/hydro68.gd",
+    "voda/prameny.gd", "voda/strze.gd", "voda/tok.gd", "alg60/tok60.gd", "podzemi52/ug_funkce.gd", "hydro68/hydro68.gd", "kras75/kras75.gd",
     "alg58/ug58.gd", "alg58/rec58.gd", "alg64/ug64.gd", "alg64/sestup64.gd", "alg64/pre64.gd", "alg64/heap64.gd",
     "eroze51/mech.gd", "eroze51/hydro.gd", "eroze51/halda.gd", "svet64/voda64.gd", "podzemi52/cache.gd",
     # test parity (stejné testy jako ve studii)
@@ -29,7 +29,7 @@ TEST_ONLY = {"bp/tests.gd", "bp/tests_horniny.gd", "bp/naive.gd", "bp/metrics.gd
              "dohnani54/beh54.gd", "eroze51/beh51.gd", "eroze51/scenare.gd", "podzemi52/testy52.gd", "podzemi52/beh52.gd"}
 DIRMAP = {"bp": "teren", "kopie": "teren/zaklad", "svet8": "teren/svet", "svah56": "teren/svet", "svet64": "teren/svet64",
           "voda": "voda", "alg60": "voda/povrch", "alg58": "voda/podzemi", "alg64": "voda/podzemi", "podzemi52": "voda/podzemi",
-          "eroze51": "voda/eroze", "dohnani54": "voda/eroze", "hydro68": "voda"}
+          "eroze51": "voda/eroze", "dohnani54": "voda/eroze", "hydro68": "voda", "kras75": "voda/podzemi"}
 TEST_DIR = "studie_testy"
 RX = re.compile(r'res://scripts/([a-z0-9_]+)/([A-Za-z0-9_]+\.gd)')
 
