@@ -36,9 +36,29 @@ Skupiny: 1 Vlastnosti a těžba · 2 Zpracování, znalosti a recepty
 - **Komplikace:** rozsahy UCS jsou široké, typická hodnota může přehodit třídu (gabro vs žula). Jakost rudných buněk je herní abstrakce, ne průměr ložiska [8][9][23]. Historický čas po × 144 je u tvrdé skály na streamu dlouhý, proto je v tabulce i kratší návrh. Ve hře se nic nezkoušelo.
 - **Další krok:** Jan vybere otevřené otázky v návrhu (dvoukrok, čas, recepty, Mineralogie).
 
+
+### 🧪 Strom hornin: složení, výnosy a další rozklad surovin (2026-11-19 14:19–14:35, T02, Jan 14:19)
+- **Směr:** jeden datový strom — hornina → typické minerály a výchozí suroviny (základní výnos je vždy známý) → další zpracování na výrobky a prvky. Skupiny: vyvřeliny, přeměněné, usazené, rudy, zeminy. Dovednosti u kroků podle T01.
+- **Zlepšení:** vše je v `data/strom_rozkladu.json`; skript `tools/strom02.py` kontroluje součet 1000 ‰, základní výnos, existující vstupy a cykly (povolený je jen vápenný). Obrázky a mermaid se generují z dat, ne kreslí ručně.
+- **Komplikace:** Graphviz (`dot`) nejde nainstalovat. Typické složení je jen střed rozsahů [29]–[38]. Zlato v buňce a směs Li-Sn-Ta jsou hrubé. Olovo a rumělka v tabulce hornin nejsou.
+- **Další krok:** Jan se podívá na strom a otevřené otázky v README (15–18).
+
+### 🧪 Čitelnost detailů stromu (2026-11-19 14:37, T02, recenze Jana)
+- **Směr:** detaily musí jít číst na telefonu — pruhy zleva doprava, bez chumle křížících se hran a bez hubů jako uzlů.
+- **Zlepšení:** layout v matplotlib (nejdelší cesta, barycenter, adaptivní výška pruhu). Huby na hraně. Rozdělení velkých skupin. `krizeni_celkem=0`.
+- **Komplikace:** `apt` graphviz nenajde, `pip` bez `dot` nepomůže.
+- **Další krok:** snímky jsou k nahlédnutí v `shots/T02_strom_*.png`.
+
 ## 2 Zpracování, znalosti a recepty
 
 (Rozhodnutí 13:23, 13:31 a hypotézy 13:27–13:39 jsou zapsané výše u T01, protože vznikly společně s návrhem vlastností.)
+
+### 🧪 Strom zpracování surovin navázaný na katalog (2026-11-19 14:35, T02)
+- **Směr:** ze surovin, které skupina opravdu těží, vedou operace (drcení, pálení, tavení, destilace, loužení, broušení…) na výrobky v `katalog-materialu.md`. Spoluvstupy zvenku (soda, dřevěné uhlí) se jen ukážou, palivo samo nespouští tavení cizí rudy.
+- **Zlepšení:** detaily zleva doprava, jeden pruh na surovinu; huby jen jako popisek hrany. Rudy po kovech (měď+bronz, železo+ocel, cín, zlato, vzácné, uhlí, drahokamy); přeměněné a usazené zvlášť stavba a oheň. 24 snímků, na každém 0 křížení hran.
+- **Komplikace:** výtěžky tavení jsou herní. Hnědé uhlí nemá větev na koks. Pigmenty jsou v datech, na obrázku kovů nejsou hlavní větví. Složení a výnosy kreslí sourozence v řadě (vypadá to jako řetězec, čitelnost ale zůstává).
+- **Další krok:** stejný jako u stromu v oddíle 1.
+
 
 ---
 

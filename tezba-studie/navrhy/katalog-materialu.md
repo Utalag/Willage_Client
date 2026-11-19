@@ -1,5 +1,7 @@
 # Katalog materiálů a výrobků (návrh)
 
+Strom, odkud suroviny berou (horniny → minerály → výrobky), je v [strom-hornin.md](strom-hornin.md) (T02).
+
 Stav: **hypotéza** (Jan 19. 11. 2026 13:36 a 13:39), hrubý přehled. Bez herních čísel. Čeká na Jana.
 
 Datum: 19. 11. 2026, Europe/Berlin (CET). Navazuje na [vlastnosti a těžbu hornin](horniny-vlastnosti-tezba.md) a tabulku `data/horniny_tezba_navrh.json` (T01, dříve E65). Zdroje jsou značky [n] podle `ZDROJE.md` této studie.

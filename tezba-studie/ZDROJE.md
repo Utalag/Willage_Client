@@ -33,3 +33,16 @@ Značky [10], [38]–[41] v textu T01 odkazují na `../blueprint-studie/ZDROJE.m
 | 26 | https://en.wikipedia.org/wiki/Salt_mining | Dobývání kamenné soli a čištění katalog |
 | 27 | https://en.wikipedia.org/wiki/Brick | Cihly z formovaného, sušeného a páleného jílu katalog, ladění výpalu |
 | 28 | https://en.wikipedia.org/wiki/Cementation_process | Nacementování železa uhlíkem na ocel, kalení a popouštění jako navazující kroky katalog |
+
+Čísla [29]–[38] přibyla v T02 (typické minerální složení a rudní minerály).
+
+| 29 | https://en.wikipedia.org/wiki/Granite | Typické minerály žuly: křemen, draselný živec, plagioklas, slída (orientační podíly ve stromu jsou středy rozsahů, ne herní zákon) |
+| 30 | https://en.wikipedia.org/wiki/Basalt | Čedič: plagioklas, pyroxen, olivín, oxidy Fe-Ti (magnetit) |
+| 31 | https://en.wikipedia.org/wiki/Gabbro | Gabro / norit: plagioklas, pyroxen, olivín, magnetit; hostitel titanomagnetitu |
+| 32 | https://en.wikipedia.org/wiki/Peridotite | Peridotit (olivín, pyroxen, spinel); příbuzně kimberlit a serpentinit (hadec) |
+| 33 | https://en.wikipedia.org/wiki/Gneiss | Rula (křemen, živce, slída, amfibol); viz též svor a fylit jako více usměrněné přeměněné horniny |
+| 34 | https://en.wikipedia.org/wiki/Sandstone | Pískovec převážně křemen + tmel; analogicky jílovité sedimenty a minerální příměs (popel) v uhlí |
+| 35 | https://en.wikipedia.org/wiki/Limestone | Vápenec převážně kalcit; dolomit, evapority (halit, sádrovec, anhydrit) |
+| 36 | https://en.wikipedia.org/wiki/Malachite | Malachit jako měděná ruda i zelený pigment; magnetit a ilmenit jako Fe / Fe-Ti rudy (viz Magnetite, Ilmenite) |
+| 37 | https://en.wikipedia.org/wiki/Gold_mining | Ryzí zlato v žilách je typicky v g/t, ne v procentech; 20 ‰ ve složení buňky je herní abstrakce koncentrátu |
+| 38 | https://en.wikipedia.org/wiki/Spodumene | Spodumen (Li), kasiterit (Sn) a kolumbit-tantalit (Nb-Ta) v pegmatitech; ve hře zatím jedna surovina `ruda_vzacne` |
