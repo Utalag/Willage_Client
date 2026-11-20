@@ -43,7 +43,7 @@ const SEZNAM := [
 	{"k": "p85_blok2", "g": "Geologie", "t": "b", "cil": "teren", "n": "E85 vše z Bloku 2 najednou",
 		"tip": "E85: zapne naráz E85 jemné, okraj, vrstvy i voda (jednotlivé přepínače pak nic nemění).\nCena: přestavba ~{teren} s (nejpomalejší kvůli jemné mřížce).\nVedlejší účinky: mění vodu i buňky; u chodeb je lokální přepočet pomalejší než plný."},
 	{"k": "p87_jadro_hory", "g": "Geologie", "t": "b", "cil": "teren", "n": "E87 jádro hory přes bloky",
-		"tip": "E87: vyzdvižená hora je jedna funkce masivu ve světových metrech – šev mezi horami nespadne do sedla a jádro se u okraje bloku neutne.\nCena: přestavba ~{teren} s.\nVedlejší účinky: týká se jen bloků „hora vyzdvižená“ (na startovním ostrově žádná není → po přegenerování beze změny, projeví se u nových bloků hory); masiv vedle louky dá stěnu 5–6 m, jiná voda."},
+		"tip": "E87: vyzdvižená hora je jedna funkce masivu ve světových metrech – šev mezi horami nespadne do sedla a jádro se u okraje bloku neutne.\nCena: přestavba ~{teren} s.\nVedlejší účinky: týká se jen bloků „hora vyzdvižená“ (v panelu se proto startovní hora vygeneruje jako vyzdvižená); masiv vedle louky dá stěnu 5–6 m, jiná voda."},
 	{"k": "p87_amp", "g": "Geologie", "t": "f", "min": 4.0, "max": 30.0, "krok": 1.0, "rodic": "p87_jadro_hory", "cil": "teren", "n": "výška masivu (buňky)",
 		"tip": "E87: amplituda masivu nad základem v buňkách 0,5 m (výchozí 18).\nCena: přestavba ~{teren} s."},
 	# ------------------------------------------------------------------ výřez

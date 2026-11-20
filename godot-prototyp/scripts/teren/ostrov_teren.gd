@@ -90,6 +90,7 @@ static func islot(ws: Vector2i) -> Vector2i:
 ## blueprint bloku: tvar podle typu, seed, minerály; každý třetí seed jeskyně, každý pátý rezervoár (nejvýš jedna dutina)
 static func blueprint(b) -> Dictionary:
 	var shape: String = SHAPE.get(b.kind, "louka")
+	if shape == "hora_zvrasnena" and bool(over.get("p87_jadro_hory", false)): shape = "hora_vyzdvizena"   # E95 panel: E87 platí jen pro vyzdviženou horu (vegetace dál „hora“)
 	var mins: Dictionary = MINERALS.get(shape, {C: 10}).duplicate()
 	if b.ore_bonus > 0.0:
 		for k in mins.keys(): mins[k] = int(round(mins[k] * 1.5))
