@@ -315,6 +315,25 @@ Výchozí: 800 kapek na blok, `ero_cap` 1,0, `ero_erode` 0,1, `ero_deposit_rate`
 - **Očekávání / riziko:** chodba pod povrchem nemění výšku sloupce → lokální přepočet vody ji nevidí, plný přepočet ano
   (dutina z buněk) → živá voda se může lišit od načtené. Bez backendu: WVB1 jen jako návrh změny.
 
+## E79 chodby a voda: lokální přepočet vidí změnu dutin (plán, zapsáno před pokusem 2026-11-20 01:11; nález E78, větev z `e78-prekryv`)
+- **Nález E78:** chodba se vstupem z povrchu → lokální přepočet vody (`ostrov_voda.edit` po sloupcích se změněnou výškou)
+  proti plnému 153 buněk jiný `eff`, 1 `to`, jiný otisk. Příčina: podzemí bere dutiny z buněk (`ug_funkce.from_world`,
+  pásmo vzduchu pod povrchem sloupce), ale `edit` mění jen výšku sloupce (`UGO.dig`), pásmo dutiny nepřibude.
+- **Oprava (příznak `p79_chodby`, výchozí vypnuto, zapnout jen když lokální = plný a výchozí hra beze změny):**
+  `ostrov_voda.edit79(slot, sloupce)` po dávce změn buněk 0,25 m (`prekryv78.sync79` vrátí sloupce se změnou buněk).
+  Podpis dutiny sloupce (počet, spodek, vršek vzduchu pod povrchem jako ve `from_world`) se porovná s uloženým; když se
+  změnil, pásma podzemí se postaví znovu (funkční pásma z mezipaměti, znovu jen dutiny a `_finish`), přehrají se výkopy,
+  smaže se mezipaměť řešení a do lokálního přepočtu E68 (`hydro68.update`) jdou změněné sloupce + odtoky a vývěry
+  (`_add_drains`), jako u vložení bloku E76. Bez změny dutin zůstává stará cesta (`UGO.dig` po sloupcích).
+  Materiály pro ztráty u změněných sloupců stejně jako plný výpočet.
+- **Měření:** scénáře E78 (chodba se šachtou, dlouhá uzavřená, 1/10/100/1000 buněk) + chodba přes zvodnělou vrstvu
+  (těleso s vodou, šachta z povrchu) + šachta z povrchu do dna tůně; obě pořadí (šachta → chodba, chodba → šachta).
+  Neshody lokální proti plnému (buňky `fill/eff/to`, otisk vody), chyba bilance, čas lokálně proti plně. Výchozí hra:
+  otisky d7aedf3a6d9d10e8 / 63d7b89a91385a79 (E76 A), E66 výkopy.
+- **Riziko:** přestavba podzemí je pro celý ostrov (jen bez funkcí), lokální přepočet nemusí být o moc rychlejší než
+  plný. Dutina sloupce je jedno pásmo od nejnižšího po nejvyšší vzduch (dvě chodby nad sebou se spojí) – stejné jako plný
+  výpočet, neopravuji. Buňka 0,5 m je dutina, jen když je vykopaných všech 8 buněk 0,25 m.
+
 ## E78 výsledky (zapsáno 2026-11-20 01:08; `godot-prototyp/tools/prekryv_e78.gd -- --bp.p76_prameny=true`, `shots/e78/vysledky.json`, `vystup.txt`)
 - **Přechod definice → buňky:** buňky 0,5 m → 0,25 m → 0,5 m beze změny a výška = `hm` z generátoru u všech 4 bloků.
 - **Shoda po načtení:** ve všech 6 scénářích otisk buněk 0,25 m i 0,5 m po načtení = živý stav a voda po načtení
