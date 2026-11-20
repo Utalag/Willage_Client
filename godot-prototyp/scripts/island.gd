@@ -17,6 +17,7 @@ const TerenBP = preload("res://scripts/teren/ostrov_teren.gd")
 const TerenTridy = preload("res://scripts/teren/tridy.gd")
 const OstrovVoda = preload("res://scripts/voda/ostrov_voda.gd")
 const OstrovVodaRender = preload("res://scripts/voda/ostrov_voda_render.gd")
+const VodaAsync = preload("res://scripts/voda/async95.gd")   # E95 p95_async_voda
 const BS := 16
 const CELL_H := 0.5
 const SURF_Y := 32 * CELL_H       # výchozí povrch (střed výšky)
@@ -60,6 +61,8 @@ var textured := false
 var bevel := false
 ## E66 gen bp: voda ostrova ze studie (prameny, koryta, tůně, vodopády, podzemí); null u jiných generátorů
 var voda = null
+var voda_async = null             # E95: async95 (vlákno vlastní model vody); null = synchronně jako dřív
+var voda_tik := 0                 # E95: tik vody (počet volání water_step = snímků)
 var voda_mi := {}                 # "voda" / "vodopad" / "mlha" → MeshInstance3D
 var voda_mats := {}
 var voda_batch := false           # generate_start: voda se spočítá jednou po vložení všech bloků
@@ -432,14 +435,17 @@ func rebuild_water() -> void:
 		if blocks[s].gen == "bp": any = true
 	if not any:
 		return
+	_async_stop()   # E95: plný výpočet jen s modelem v hlavním vlákně
 	if voda == null:
 		voda = OstrovVoda.new()
 	voda.build(blocks)
+	_async_start()
 	if voda_log:
 		print("E66 voda: ", voda.ms, " ", voda.summary())
 	render_water()
 
 func _exit_tree() -> void:
+	_async_stop()
 	if voda != null:
 		voda.dispose()
 		voda = null
@@ -450,7 +456,7 @@ func render_water() -> void:
 		return
 	if voda_mats.is_empty():
 		voda_mats = OstrovVodaRender.mats()
-	var m: Dictionary = OstrovVodaRender.build(voda, slice_z)
+	var m: Dictionary = OstrovVodaRender.build(voda_async.front if voda_async != null else voda, slice_z)   # E95: pohled, model patří vláknu
 	for k in ["voda", "vodopad", "mlha"]:
 		if not voda_mi.has(k):
 			var mi := MeshInstance3D.new()
@@ -464,12 +470,22 @@ func render_water() -> void:
 func water_edit(sl: Vector2i, lx: int, ly: int) -> Dictionary:
 	if voda == null or not blocks.has(sl) or blocks[sl].gen != "bp":
 		return {}
+	if voda_async != null:   # E95: výkop hned, voda ve vlákně; převezme se v water_step po p95_zpozdeni tikách
+		var t0 := Time.get_ticks_usec()
+		var id: int = voda_async.submit(voda_tik, sl, lx, ly, blocks[sl].hm[lx * BS + ly])
+		render_water()   # okamžité doplnění u výkopu (jen pohled)
+		return {"async": id, "ms": (Time.get_ticks_usec() - t0) / 1000.0}
 	var r: Dictionary = voda.edit(sl, lx, ly, blocks[sl].hm[lx * BS + ly])
 	render_water()
 	return r
 
 ## E66: kroky R podzemí po snímcích (pevný počet operací na krok); po dokončení se síť vody obnoví
 func water_step(n := 1) -> bool:
+	if voda_async != null:   # E95: převzít hotové výsledky v jejich tiku
+		voda_tik += 1
+		var pr: Dictionary = voda_async.poll(voda_tik)
+		if pr.zmena: render_water()
+		return voda_async.busy()
 	if voda == null or not voda.pending():
 		return false
 	var more := true
@@ -483,10 +499,27 @@ func water_step(n := 1) -> bool:
 ## E66: dokončit rozpracované kroky (před další změnou terénu; výsledek nezávisí na snímcích)
 func water_finish() -> void:
 	if voda == null: return
+	if voda_async != null: return   # E95: před výkopem se nečeká (fronta úloh drží pořadí); dokončit = water_finish_async()
 	var any := false
 	while voda.pending():
 		voda.step(); any = true
 	if any: render_water()
+
+## E95: počkat na vlákno a převzít všechno (uložení, vložení bloku, testy)
+func water_finish_async() -> void:
+	if voda_async != null:
+		voda_async.finish_all()
+		render_water()
+
+func _async_start() -> void:
+	if voda_async == null and voda != null and bool(TerenBP.p.get("p95_async_voda", false)):
+		voda_async = VodaAsync.new(voda, String(TerenBP.p.get("p95_rezim", "fronta")), int(TerenBP.p.get("p95_zpozdeni", 30)))
+
+func _async_stop() -> void:
+	if voda_async != null:
+		voda_async.finish_all()
+		voda_async.stop()
+		voda_async = null
 
 ## jen síť volné vody z dat (náhled běžícího toku po kopání, levné na snímek)
 func remesh_water(s: Vector2i) -> void:

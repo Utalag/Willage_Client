@@ -46,6 +46,9 @@ const HRA := {
 	"voda_e67": false,                   # E67 (studie, jen větev e67): podzemí jako přetoky ve 3D + výstup ve stěně ostrova
 	"p67_min_vytok_render": 0.02,        # E67b: vývěr podzemní vody ve stěně / pramen slabší než tolik l/s se nekreslí (simulace beze změny)
 	"p67_min_tok_render": 0.02,          # E67b: protékající větev podzemní vody slabší než tolik l/s se v řezech nekreslí
+	"p95_async_voda": false,             # E95: voda po kopání ve vlákně na pozadí (scripts/voda/async95.gd), výsledek po p95_zpozdeni tikách
+	"p95_zpozdeni": 30,                  # E95: tiků (snímků) od výkopu do převzetí výsledku vody (deterministicky; nehotové = počkat)
+	"p95_rezim": "fronta",               # E95: "fronta" (každý výkop zvlášť, = synchronně) nebo "slouceni" (jen měření)
 }
 
 static func params() -> Dictionary:

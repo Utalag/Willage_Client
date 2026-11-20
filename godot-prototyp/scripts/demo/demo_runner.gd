@@ -13,6 +13,7 @@ const MODES := [
 	[["--genv3-shots", "--genv3-bench"], "res://scripts/demo/genv3_demo.gd"],       # gen-v3 v prototypu: snímky 41_* / měření
 	[["--flow-shots", "--flow-bench"], "res://scripts/demo/flow_demo.gd"],          # tok vody po kopání: snímky 42_* / měření
 	[["--e66-shots", "--e66-bench", "--e66b-bok"], "res://scripts/demo/e66_demo.gd"],             # E66 terén a voda ze studie: snímky 66_* / měření
+	[["--e95-bench"], "res://scripts/demo/e95_demo.gd"],                          # E95 asynchronní voda po kopání (měření ve hře)
 	[["--skryti-shots", "--skryti-bench"], "res://scripts/demo/skryti_demo.gd"],    # skrytí podzemí na bocích a řezech
 	[["--napojeni-shots", "--napojeni-bench"], "res://scripts/demo/napojeni_demo.gd"],  # povrch louka/písek/voda
 	[["--grass-shots", "--grass-bench"], "res://scripts/demo/grass_demo.gd"],       # tráva C
