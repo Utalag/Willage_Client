@@ -66,7 +66,15 @@ Značení: „rozhodnuto (datum)“ = Jan už rozhodl. ⚠ = novější měřen�
 
 **Otázka pro Jana.** Necháme definici terénu po 0,5 m a jemných 0,25 m jen tam, kde hráč kope? Tím se mění tvoje rozhodnutí z 03:26 „0,25 m z funkcí“.
 
-**Platí:**
+**Platí:** *rozhodnuto (2026-11-20 20:09–20:14, Jan t799u, t800u)*; mění rozhodnutí 2026-11-20 03:26 „0,25 m z funkcí všude“
+
+- **Procedurální svět:** terén se negeneruje celý dopředu, generuje se z funkce světa podle potřeby.
+- Pohled je izometrický, výhled je omezený. Generuje a vykresluje se jen **zorné pole plus pár polí okraje** kvůli plynulému pohybu a dokreslování.
+- Vykresluje se jen to, co je **obnažené vzduchem**. U otevřené průhledné vody se vykreslí i dno.
+- Generuje se jen **slupka 2–3 buněk** pod povrchem (hloubka je parametr). V ní se jemná mřížka **0,25 m počítá přímo z funkce světa** (varianta B), protože jde jen o tenkou vrstvu, ne o celý blok.
+- Hlubší buňky se **donačtou až při odkrytí** (kopání, voda). Uložená data obsahují jen to, co už bylo vygenerované nebo změněné.
+- **Podzemní voda** se počítá jako funkce (propustnost a hladina z funkce světa) bez uložených buněk. Kde se vzduchem obnaží, vykreslí se.
+
 
 ---
 
