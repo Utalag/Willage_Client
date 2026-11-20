@@ -19,11 +19,14 @@ const VYSKA_M := {Veg.DECIDUOUS: 3.5, Veg.CONIFER: 4.0, Veg.BUSH: 1.0, Veg.CACTU
 const MODEL_VYSKA_M := {Veg.DECIDUOUS: 2.3, Veg.CONIFER: 2.25, Veg.BUSH: 0.84, Veg.CACTUS: 1.3}
 static var proti := Vector3.ONE   # protiměřítko ostrova (nastaví Island._ready)
 static var metry := false         # scéna v metrech (p89_meritko)
+static var meritko_veg := 1.0     # E94b: p94_meritko_veg (nastaví Island._ready, jen ve scéně v metrech)
 
 ## měřítko modelu druhu s: v metrech z VYSKA_M, jinak dnešní RENDER_SCALE
 static func meritko_druhu(s: int) -> float:
 	if metry and VYSKA_M.has(s):
-		return float(VYSKA_M[s]) / float(MODEL_VYSKA_M[s])
+		return float(VYSKA_M[s]) / float(MODEL_VYSKA_M[s]) * meritko_veg
+	if metry:
+		return RENDER_SCALE.get(s, 1.0) * meritko_veg   # trsy, květiny, mech, suchá tráva stejně
 	return RENDER_SCALE.get(s, 1.0)
 
 static var _meshes := {}
