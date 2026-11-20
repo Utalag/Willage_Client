@@ -2556,3 +2556,30 @@ a `surface.adapt(real)` se bez nových vstupů neprojeví.
 
 Těžba a rozklad hornin jsou samostatná studie. Návrh E65 je teď **T01 (dříve E65)** v `../tezba-studie/` (`README.md`, `PROP.md`, `DENIK.md`, `ZDROJE.md` [1]–[28], tabulka v `data/horniny_tezba_navrh.json`).
 Zdroje [45]–[72] níže v tomto souboru zůstávají jen jako zástupné číslo, aby se neposunulo číslování blueprint-studie.
+
+## E91 Průhlednost překážek v izometrii (plán, zapsáno před pokusem 2026-11-20 07:32)
+
+- **Zadání (TODO, Jan 2026-11-19 21:03):** při cestování nebo kopání za překážkou zprůhlednit (nebo nevykreslit) buňky
+  v kuželu mezi kamerou a postavou. V podzemí řez do výšky: terén nad úrovní postavy se skryje (styl Dwarf Fortress /
+  The Sims). Navázat na skrývání vrstev a xray přepínač v prototypu.
+- **Co použiju:** hlavní scénu prototypu (`main.tscn`: ostrov louka 101, hora 202, kopec 303, louka 404), kameru
+  `camera_rig.gd` (ortografická izometrie, yaw 45°, pitch −35°), řez `island.set_slice` (mesher `slice_z`), skrytí
+  podzemí a xray (`hide_undiscovered`, `xray`). Postava = kapsle (v prototypu žádná není). Chodba = buňky vzduchu
+  vyřezané do hory z boku (jako chodby E79, jen bez vody; větev E79 není na main).
+- **Tři přístupy (+ jeden levný doplněk):**
+  - **A válec v shaderu:** fragment ve válci kolem paprsku postava → kamera (poloměr R, měkký okraj) se zahodí
+    sítem 4 × 4 (dither, bez řazení průhlednosti). Stejný kód pro terén z kostek, duální povrch, vegetaci a domky.
+  - **B řez rovinou v shaderu:** v podzemí se zahodí vše nad výškou postavy + strop (v kruhu kolem postavy nebo všude).
+    Odvrácené stěny (vnitřek hory) se kreslí jako plochá barva „víka“, aby řez nevypadal dutý.
+  - **C řez sítí na CPU (stávající `set_slice`):** přestavba sítí všech bloků se skutečnými víky. Doplněk **C2:**
+    skrýt celé sítě bloků, které paprsek k postavě protíná nad její výškou (jen přepnutí `visible`).
+- **Měření:** čas snímku (xvfb + opengl3, software llvmpipe na boxu, 120 snímků, průměr a medián, render CPU/GPU
+  z `viewport_get_measured_render_time`), čas přepnutí (přestavba sítí u C), počet zahozených pixelů postavy
+  (zakrytí postavy na snímku: podíl viditelných pixelů kapsle), složitost shaderu (řádky a operace navíc).
+- **Snímky před / po:** postava za kopcem (hora), postava v chodbě v hoře; každá metoda.
+- **Příznak `p91_pruhlednost`** (výchozí vyp) v novém modulu `scripts/game/pruhlednost91.gd`. Shadery se nemění na disku:
+  modul při zapnutí vyrobí kopii shaderu s vloženým kódem. Výchozí hra beze změny → `voda_e66` d7aedf3a6d9d10e8 →
+  63d7b89a91385a79, `port_studie --check` 0 změn.
+- **Negativa předem:** software GPU na boxu → časy snímku nejsou telefon. Dither je zrnitý (bez TAA). Řez shaderem
+  nemá skutečné víko (jen barva odvrácených stěn). C je drahé (přestavba všech sítí). C2 skryje celý blok 16 × 16,
+  tedy i zem pod postavou. Stíny a obrysy (`next_pass`) se musí ořezat stejně, jinak zůstanou „duchové“.
