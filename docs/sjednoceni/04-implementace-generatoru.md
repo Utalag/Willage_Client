@@ -337,7 +337,7 @@ Nic z toho není rozhodnutí. Jde o návrhy úprav textu nebo otázky pro Jana. 
    - Návrh: přeškrtnout nebo označit „nahrazeno (t801u–t803u)“, aby se při implementaci nečetla stará verze.
 5. **Napojení švů: funkce, nebo dorovnání?** `01` 1.4: „prolnutí švů je funkce sousedů“, ale v téže kapitole „sousedé na ostrově se napojují dorovnáním okrajů, ne funkcí“. Návrh: sjednotit na „dorovnání podle režimu 5.2 (Auto výchozí)“.
 6. **Blend v 5.2: klín 1/16 bloku, nebo 1–4 buňky?** **Rozhodnuto (Jan 2026-11-21 00:24):** dvě nezávislá nastavení. Napojení povrchu je rampa na 1–4 buňkách, napojení podzemních vrstev je klín, výchozí 1/16 bloku (1.7.1).
-7. **Auto „6 buněk“ a „3 buňky“** pochází z prototypu s buňkou 0,5 m (3 m a 1,5 m). Bod 1 je rozhodnutý (buňka 0,25 m); pořád chybí, jestli Auto zůstane 6 a 3 buňky (teď 1,5 m a 0,75 m), nebo 3 m a 1,5 m (12 a 6 buněk).
+7. **Auto „6 buněk“ a „3 buňky“** pochází z prototypu s buňkou 0,5 m (3 m a 1,5 m). Bod 1 je rozhodnutý (buňka 0,25 m); *rozhodnuto (Jan 2026-11-21 00:35):* zachovat metry, tedy 3 m a 1,5 m (12 a 6 buněk po 0,25 m).
 8. **Eroze jako posun výšky (4.1) a kras.** **Rozhodnuto (Jan 2026-11-21 00:24):** posun eroze smí být kladný (usazování, náplavy, delty). Kras během hry se ukládá cestou offsetu, stejně jako eroze, ne jako vzduch v překryvu buněk. Jan: „Zkusíme jít cestou offsetu.“ V kroku 7 se ověří, jestli offset stačí i pro podzemní dutiny.
 9. **Mlha, nebo oblaka?** `01` 1.8: „voda padá jako vodopád do mlhy“; 1.13.1 **Platí:** „Voda z okraje dál padá do oblak“. Návrh: sjednotit na oblaka.
 10. **Vegetace: s blokem, nebo jen ve slupce?** `01` 1.12: „Základní vegetace se generuje s blokem ze seedu“; `02` 2.6: „Vyhodnocuje se jen ve slupce“. Návrh: v 1.12 doplnit odkaz na 2.6.
@@ -362,4 +362,4 @@ Nic z toho není rozhodnutí. Jde o návrhy úprav textu nebo otázky pro Jana. 
 3. **7.1** – 2D, nebo 3D: odloženo. Datový model na tom nezávisí.
 4. **1.5** – přepočet světa při nové verzi generátoru: odloženo (t726u).
 5. **1.11** – datový rozpočet: přeskočeno (t738u).
-6. Velikost buňky dat (A.1 bod 1) je rozhodnutá (0,25 m, Jan 2026-11-21 00:19). Kras cestou offsetu a kladný posun eroze (A.1 bod 8) i dvě nastavení Blendu (A.1 bod 6) jsou rozhodnuté (Jan 2026-11-21 00:24); kras se v kroku 7 ověří. Auto 6 / 3 buňky (A.1 bod 7) a krok vody 1 l při maximu 15,625 l zůstávají otevřené.
+6. Velikost buňky dat (A.1 bod 1) je rozhodnutá (0,25 m, Jan 2026-11-21 00:19). Kras cestou offsetu a kladný posun eroze (A.1 bod 8) i dvě nastavení Blendu (A.1 bod 6) jsou rozhodnuté (Jan 2026-11-21 00:24); kras se v kroku 7 ověří. Auto v metrech (A.1 bod 7, Jan 00:35: 3 m a 1,5 m) a přepočet propustností `materialy.csv` × 1/4 v kroku 3 (Jan 00:35) jsou rozhodnuté. Krok vody 1 l při maximu 15,625 l zůstává otevřený.

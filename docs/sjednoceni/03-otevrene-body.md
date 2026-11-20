@@ -162,7 +162,7 @@ Otočení hotových dat je změřené (0 neshod, ~5 ms). Skok vrstev 1,8–2,7 m
 
 **Otázka pro Jana.** Má být výchozí napojení švu při vložení blueprintu Blend (klín na 1/16 bloku podle 1.7.1) a Keep jen na výslovnou volbu?
 
-**Platí:** (Jan, hovor 20. 11. 2026) Výchozí režim je **Auto**. Auto se rozhoduje podle rozdílu výšek v každém sloupci zvlášť: rozdíl do 6 buněk vyhladí rampou na 3 buňkách, větší rozdíl nechá jako útes. Blend a Keep zůstávají jako volitelné alternativy. Počty 6 a 3 buněk pocházejí z prototypu s buňkou 0,5 m (3 m a 1,5 m). Po sjednocení buňky na 0,25 m (2026-11-21 00:19) není rozhodnuté, jestli zůstanou počty buněk, nebo vzdálenosti v metrech.
+**Platí:** (Jan, hovor 20. 11. 2026) Výchozí režim je **Auto**. Auto se rozhoduje podle rozdílu výšek v každém sloupci zvlášť: rozdíl do 6 buněk vyhladí rampou na 3 buňkách, větší rozdíl nechá jako útes. Blend a Keep zůstávají jako volitelné alternativy. Počty 6 a 3 buněk pocházejí z prototypu s buňkou 0,5 m (3 m a 1,5 m). Po sjednocení buňky na 0,25 m se zachovávají vzdálenosti v metrech (Jan 2026-11-21 00:35): rozdíl do 3 m (12 buněk) vyhladí rampou na 1,5 m (6 buněk), větší rozdíl zůstane útesem.
 - **Doplněno (Jan 2026-11-21 00:24):** Blend má **dvě nezávislá nastavení**. Napojení povrchu je rampa na 1–4 buňkách. Napojení podzemních vrstev je klín, výchozí 1/16 bloku (1.7.1).
 
 ---
