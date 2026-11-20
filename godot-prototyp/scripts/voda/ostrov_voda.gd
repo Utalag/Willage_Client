@@ -174,13 +174,17 @@ func place76(b) -> Dictionary:
 		if not ug.is_empty(): ug.clear()
 		ug = UGO.make(T.world, T.fine(blocks), p, W, st.hm, wall, float(p.voda_cell_m))
 		_replay_digs(ug)
+		if bool(p.get("p75_kras", false)) and not kras.is_empty(): K75.apply(ug, kras)   # sloučení E75 + E76: dutiny krasu i v novém podzemí
 		st.ug = ug
 		st.ug_cache = {}
 	ms_ug = (Time.get_ticks_usec() - t1) / 1000.0
 	var t2 := Time.get_ticks_usec()
 	_add_drains(ch, hh)
 	var r := _update(ch, hh, src_new)
+	_claim_update(-1)   # sloučení E74 + E76: obsazení výtoků po vložení (napojení na koryto / tůň)
 	_falls()
+	_gw()
+	_kras_rates()
 	var out := {"podzemi_ms": ms_ug, "povrch_ms": (Time.get_ticks_usec() - t2) / 1000.0, "celkem_ms": (Time.get_ticks_usec() - t0) / 1000.0,
 		"zmenene_sloupce": ch.size(), "okno": r.get("window", 0)}
 	ms["E76 vložení lokálně"] = out.celkem_ms
