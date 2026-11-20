@@ -38,7 +38,8 @@ Nejdřív se dořeší všechno s vodou, pak další bloky. V rámci bloku se ne
 
 Podnět: druhá odpověď ChatGPT 2026-11-19 (Jan ji poslal do chatu). Jde o návrhy k posouzení, ne o rozhodnutí.
 
-- [ ] **Datový kontrakt mezi generováním světa, geologií, vodou a změnami od hráčů.** Kdo vlastní která data, kdo je smí měnit a jak se změny šíří. Týká se i serveru, takže ve spolupráci s Willage-backend.
+- [x] **Datový kontrakt mezi generováním světa, geologií, vodou a změnami od hráčů.** Kdo vlastní která data, kdo je smí měnit a jak se změny šíří. Týká se i serveru, takže ve spolupráci s Willage-backend.
+  - 📐 Návrh E88 (tag `e88-navrh`, větev `e88-kontrakt-navrh`, nesloučeno, jen návrh, s Willage-backend neprojednáno): `navrhy/navrh-terrainsource-kontrakt.md`. Vlastnictví dat, události změn napojené na E68 (+ `BlockPlaced`, `GeneratorVersionChanged`), hashe (buňky a překryv bitově, voda s tolerancí), co ověřuje server. Otázky v Rozhodnutí Jana.
   - Funkce vrstev zůstávají jediným zdrojem pravdy o geologii. Buňky, kolize a vykreslování jsou z nich jen vzorkované. Stav vody, eroze a událostí je odvozený stav, který nemusí znovu vyhodnocovat geologické funkce.
   - Místo přímých volání mezi systémy typy změn (`SurfaceChanged`, `LayerBoundaryChanged`, `MaterialChanged`, `CavityCreated`, `CavityRemoved`, `HydraulicConnectivityChanged`) a resolver závislostí: každý systém deklaruje, na které změny reaguje. Navazuje na E68.
 - [x] **Determinismus celého světa, nejen jednoho bloku.** Ujasnit `Hash(seed, změny, pořadí)`: u kterých operací pořadí nesmí hrát roli a u kterých ano (vykopat a zasypat). Navazování bloků je rozhodnuté (Jan 2026-11-17): sousedé se nikdy nemění, přizpůsobuje se jen nový blok. Pořadí pokládání tedy výsledek ovlivňuje záměrně; platí jen, že stejný výřez, transformace a sousedé dají stejný výsledek.
@@ -46,7 +47,8 @@ Podnět: druhá odpověď ChatGPT 2026-11-19 (Jan ji poslal do chatu). Jde o ná
   - [ ] Jan: zapnout `p76_prameny` + `p79_chodby` jako výchozí (p76 už zapnutý při sloučení vody, p79 je na větvi E79)?
   - [ ] Jan: otisk vody – surové bity (shoda jen na stejné platformě), nebo zaokrouhlit kvůli serveru a telefonu?
   - [ ] Jan: má server opakovat buňky klienta bitově přesně? „Stejní sousedé“ jen 4 hrany, nebo i rohy?
-- [ ] **Jádro vyzdvižené hory přes více bloků:** geologická kontinuita masivu přes švy.
+- [x] **Jádro vyzdvižené hory přes více bloků:** geologická kontinuita masivu přes švy.
+  - 🧪 E87 (tag `e87-jadro`, větev `e87-jadro-hory`, nesloučeno, `p87_jadro_hory` vypnutý): masiv jako funkce ve světových metrech. Dnes každý šev hor na 20 m (sedlo) a jádro se u okraje utne (3–3,6 m). S p87 šev 47,5–52,6 U, skoky na švu jako uvnitř, pořadí 0 neshod, 0,25 m po sousedech 0 změn, bilance 0. Negativ: masiv vedle kopce / louky = stěna 5–6 m, hladší plošina bez teras, jiná voda (2 × 2: prameny 9 → 3).
 - [x] **Tenké vrstvy a převzorkování mezi rozlišeními:** vrstva tenčí než buňka nesmí zmizet nebo se objevovat podle rozlišení.
   - 🧪 E81 (tag `e81-tenke`, nesloučeno, příznak `p81_tenke` vypnutý): vrstva > 0,05 m dostane aspoň jednu buňku. Chybění 60 % → 7,6 % (0,5 m), 48 % → 2,3 % (0,25 m); díry v nepropustné 64 % → 8 %. Vady: nafouknutí na celou buňku, 3 tenké vrstvy v jedné buňce 0,5 m (206 konfliktů).
   - [x] Jan rozhodl (2026-11-20 03:26): v blueprintu zakázat vrstvy tenčí než 25 cm.
@@ -57,8 +59,10 @@ Podnět: druhá odpověď ChatGPT 2026-11-19 (Jan ji poslal do chatu). Jde o ná
 
 Podnět: třetí odpověď ChatGPT 2026-11-19. Dva světy se společnou geologií a vodou: velký průzkumný svět po chunkech a osobní ostrov (začíná na 4 blocích, nejvýš asi 16), který hráč rozšiřuje výřezy z průzkumného světa.
 
-- [ ] **Výřez terénu jako samostatný přenositelný datový objekt:** `TerrainSource` (původní definice), `TerrainTransform` (otočení, svislý posun), `TerrainPlacement` (místo na ostrově), `TerrainInstance` (výsledek po napojení na sousedy). Navázat na formát bloku WVB1 a blueprint, ve spolupráci s Willage-backend.
-- [ ] **Otočení výřezu po 90°:** ověřit, že funkce vrstev, minerály a dutiny se otočí bez rozdílu proti vygenerování na místě.
+- [x] **Výřez terénu jako samostatný přenositelný datový objekt:** `TerrainSource` (původní definice), `TerrainTransform` (otočení, svislý posun), `TerrainPlacement` (místo na ostrově), `TerrainInstance` (výsledek po napojení na sousedy). Navázat na formát bloku WVB1 a blueprint, ve spolupráci s Willage-backend.
+  - 📐 Návrh E88 (tag `e88-navrh`, větev `e88-kontrakt-navrh`): čtyři objekty a rozvržení WTI1. Instance neukládá řídicí mřížku (8,7–35 kB po deflate), jen hashe, prameny a překryv E78; blok bez změn ~400–450 B. Otázky v Rozhodnutí Jana.
+- [x] **Otočení výřezu po 90°:** ověřit, že funkce vrstev, minerály a dutiny se otočí bez rozdílu proti vygenerování na místě.
+  - 🧪 E86 (tag `e86-otoceni`, větev `e86-otoceni-90`, nesloučeno, `p86_otoceni` vypnutý): otočení hotových dat přesné (0 neshod, ~5 ms), lokální vložení = plné, bilance 0. Vygenerovat znovu otočené nejde (vrstvy až 2,1–3,4 m, 19–25 % buněk jinak, minerály a dutiny jinde) → přenášet hotová data + otočení, přepočty v souřadnicích původu. Negativ: vrstvy přes šev přeneseného výřezu skáčou o 1,8–2,7 m.
 - [x] **Voda se nepřenáší hotová:** přenesou se zdroje, materiály a geometrie, stav vody se po vložení přepočítá v novém okolí a z ustáleného stavu se znovu naplánují události (příchod vody, plnění tůní, eroze).
   - 🧪 Ověřeno v E76 (tag `e76-prenos`, větev `e76-voda-po-prenosu`, nesloučeno): lokální vložení = plný výpočet (0 neshod, bilance 0) i s posunem ±4; přeplánování událostí jen dotčených sloupců 61–104 ms; uložení 4 bloků + 12 výkopů 524 B.
   - [x] Jan rozhodl (2026-11-20 03:26): zapnout `p76_prameny` a sloučit E74–E77 do main.
@@ -115,3 +119,7 @@ Podnět: odpověď ChatGPT 2026-11-19 o měřítku. Nic z toho není rozhodnuté
   - [ ] Jan (zbývá rozhodnout): vyklínit jíl nad vápencem a přepnout podzemí na E67?
 - 2026-11-20 03:26: E72 `p72_prusak` zapnout + limit slučování 8 m; E76 `p76_prameny` zapnout + sloučit E74–E77 do main; mřížka 0,25 m z funkcí (přepočítávat i staré bloky); zákaz prokopání dna i okraje ostrova; v blueprintu zakázat vrstvy < 25 cm; E82 mince pro jeskynní i hluboký vápenec a dolomit v hloubce 2 m.
   - [x] Hotovo ve větvi `voda-e74-e77-slouceni`: E72 limit 8 m (`p72_dosah_m`), `p72_prusak` zapnutý (už od E72), `p76_prameny` zapnutý, E74–E77 sloučené. Zbytek (mřížka 0,25 m, zákaz prokopání, vrstvy < 25 cm, E82 mince pro další vápence) čeká na implementaci.
+- 2026-11-20 (Blok 3, E86–E88) – čeká na Jana:
+  - [ ] E86: zapnout `p86_otoceni`? Jak napojit vrstvy přeneseného výřezu na nové sousedy (skok 1,8–2,7 m na švu)? Zrcadlení povolit, nebo zahodit?
+  - [ ] E87: zapnout `p87_jadro_hory` hned, nebo až po podhůří? Podhůří udělat ve funkci masivu (útlum k 20 m), nebo širší pás? Jak velký a vysoký má masiv být? Vrátit terasy a útesy? Je jiná voda masivu v pořádku (méně pramenů, víc tůní)? Opravit chybějící `hora_vyzdvizena` v `veg.gd` (DENSITY)?
+  - [ ] E88 (návrh kontraktu): (1) průzkumný svět jen z čistých funkcí, nebo hash sousedů původu ve zdroji? (2) řídicí mřížku neukládat, jen hashe? (3) prameny po nové verzi generátoru nechat, nebo najít znovu? (4) snímek buněk 0,5 m pro server a původní materiál v položce překryvu? (5) otisk vody zaokrouhlit, nebo serveru neposílat? (6) jen 4 hrany, nebo i rohy? (7) erozi E51 zapisovat do překryvu? (8) práh pro plný přepočet vody místo lokálního? (9) zrcadlení rezervovat, nebo zahodit? (10) klín vrstev u švu přeneseného výřezu? (11) verze generátoru jako číslo, nebo profil příznaků?
