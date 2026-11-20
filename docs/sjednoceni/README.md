@@ -36,8 +36,8 @@ Upřesnění od Jana:
 3. **1.4 Zdroj pravdy o terénu:** herní svět ze spojité funkce bez vlastních bloků, blueprint řezáním, segmenty ukládají buňky; výchozí velikost 3 × 3 bloky, maximum 4096 × 4096 m (parametr), ostrov se rozšiřuje vkládáním – *rozhodnuto 2026-11-20 (t718u, t719u), doplněno (t744u–t749u, t761u–t762u)*.
 4. **1.2 Jednotky a jemná mřížka:** definice 0,5 m a 0,25 m jen u kopání (přehodnocení 03:26).
 5. **1.5 Verze generátoru:** *odloženo 2026-11-20 (t726u)*, dokud nebude jeden funkční generátor.
-6. **1.9 Přepočet vody:** lokální = plný, výřez na povodí + asynchronně na pozadí, prodleva 2 s / strop 10 s – *rozhodnuto 2026-11-20 (t734u, t735u)*.
-7. **1.8 Voda jako data:** obsah buňky v m³, povrch priority-flood + D8, výchozí podzemí E67, čas 1 den = 1 h; vsakování: propustnost X v l/s herního času při spádu 1, skutečný tok = X × spád včetně výšky vody, min dvou materiálů; artéská voda (funkce, materializace až po obnažení) – *rozhodnuto 2026-11-20 (t732u), doplněno (t765u–t775u)*.
+6. **1.9 Přepočet vody:** lokální = plný, výřez na povodí + asynchronně na pozadí, prodleva 2 s / strop 10 s; testovací scénář „dva hráči“ (postupné odtékání po zastavení přítoku) – *rozhodnuto 2026-11-20 (t734u, t735u), doplněno (t776u–t778u)*.
+7. **1.8 Voda jako data:** obsah buňky v m³, povrch priority-flood + D8, výchozí podzemí E67, čas 1 den = 1 h; vsakování: propustnost X v l/s herního času při spádu 1, skutečný tok = X × spád včetně výšky vody, min dvou materiálů; artéská voda (funkce, materializace až po obnažení); pramen jako zvláštní buňka (ucpání / vykopání a přenos) – *rozhodnuto 2026-11-20 (t732u), doplněno (t765u–t778u)*.
 8. **1.11 Datový rozpočet:** *přeskočeno 2026-11-20 (t738u)*.
 9. **1.6 Materiály:** jedna tabulka, jedno id – *rozhodnuto 2026-11-20 (t727u)*, návrh `materialy.csv`.
 10. **1.7 Geologie:** útvary jako funkce světa přes švy, vrstvy podle terénu, vyklínění; skladba vrstev, mapa složení na maximální ploše (hrubé body ze seedu, interpolace), 1–3 zástupci v pásmu, min. 1 buňka, švy 1/16 bloku – *rozhodnuto 2026-11-20 (t732u), doplněno (t750u–t763u)*.

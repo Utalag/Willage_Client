@@ -299,7 +299,7 @@ Pojmy: **blueprint** = otisk světa o velikosti bloku. To, čemu se ve studiích
 
 **Otázka pro Jana.** Přepneme výchozí podzemí z E58 na E67 (výtok z okrajů vrstev, kras funguje)?
 
-**Platí:** *rozhodnuto (2026-11-20, Jan t732u); doplněno (2026-11-20, Jan t765u–t775u)*
+**Platí:** *rozhodnuto (2026-11-20, Jan t732u); doplněno (2026-11-20, Jan t765u–t778u)*
 
 - **Voda je obsah buňky.** Ukládá se v **m³ na buňku**, s jedním převodem z litrů [8].
 - **Povrchová voda** používá priority-flood + D8 [17].
@@ -308,7 +308,9 @@ Pojmy: **blueprint** = otisk světa o velikosti bloku. To, čemu se ve studiích
 - **Na okraji ostrova** voda padá jako vodopád do mlhy a dál se nesimuluje [21].
 - **Kras** vzniká ze dvou zdrojů: z generátoru (mince E82) a přirozeně erozí E75 během hry [9].
 - **Déšť je událost** (plocha × intenzita × doba), ne trvalý stav.
-- **Prameny** jsou nasazené na mapě ze seedu. Pramen je zvláštní typ buňky. Síla pramene určuje, kolik pramenných buněk pokrývá výtok.
+- **Prameny** jsou nasazené na mapě ze seedu. Pramen je zvláštní typ buňky, která sama vytváří vodu. Síla pramene určuje, kolik pramenných buněk pokrývá výtok.
+  - Když ho hráč ucpe nepropustným materiálem, přestane téct; po otevření teče znovu.
+  - Když ho hráč vykope, stane se předmětem, který lze přenést a položit jinde, kde znovu vytváří vodu (hra má přednost před realitou, volba Jana, t776u–t778u).
 - **Mince E82:** u jeskynního a hlubokého vápence a dolomitu semínko 50/50 rozhodne, jestli se vrstva zvedne až 2 m pod hladinu podzemní vody. Tím je propustná a může v ní vznikat kras [9].
 - **Jíl nad zvednutou vápencovou vrstvou vyklíní** (ztenčí se a místy chybí), takže tam voda prosakuje do vápence a kras vzniká přirozeně.
 - **Propustnost vápence = 0,246** (skutečná hodnota). Staré pravidlo „vápenec 0“ se ruší [27][28].
@@ -364,7 +366,7 @@ Pojmy: **blueprint** = otisk světa o velikosti bloku. To, čemu se ve studiích
 
 **Otázka pro Jana.** Platí pravidlo „lokální přepočet = plný výpočet, jinak je to chyba“ a opravíme to před dalšími studiemi? Bereme frontu ve vlákně s převzetím v tiku jako cíl?
 
-**Platí:** *rozhodnuto (2026-11-20, Jan t734u, t735u)*
+**Platí:** *rozhodnuto (2026-11-20, Jan t734u, t735u); doplněno (2026-11-20, Jan t776u–t778u)*
 
 - **Pravidlo:** výsledek lokálního přepočtu musí být stejný jako výsledek plného výpočtu.
 - **Dnešní problém, který to řeší:** lokální přepočet, který vidí jen výřez, se liší od plného výpočtu, protože přeliv a podzemní tok jdou přes okraj výřezu (pozorováno v 5 větvích) [8][9][18].
@@ -375,6 +377,11 @@ Pojmy: **blueprint** = otisk světa o velikosti bloku. To, čemu se ve studiích
 - **Horní strop:** při souvislém kopání začne přepočet nejpozději po stropu.
 - Kopání během běžícího výpočtu ten výpočet nezahodí; nové výkopy se zařadí do fronty na další běh.
 - **Parametry:** výchozí prodleva 2 s reálného času, strop 10 s.
+- **Testovací scénář „dva hráči“:** hráč A upravuje koryto potoka níž po proudu, zatímco hráč B pramen ucpe nebo vykope.
+  - Voda nesmí zmizet naráz: zastaví se jen přítok. Po prodlevě (debounce) vznikne událost „přítok skončil“ a voda v korytě postupně odtéká od pramene dolů, jako vodní události v herním čase.
+  - Tůně po cestě zůstanou, dokud se nevšaknou nebo nevypaří.
+  - Hráč A si toho všimne až po čase daném délkou toku a rychlostí proudu.
+  - Přepočet pokrývá celé zasažené povodí, včetně segmentů a bloků jiných hráčů.
 
 ---
 
