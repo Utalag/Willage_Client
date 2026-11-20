@@ -379,7 +379,7 @@ Jen datová strana: generování, voda, kopání, paměť, CPU. Vykreslování j
 
 **Otázka pro Jana.** Jaký telefon je cíl a jaký rozpočet (tabulka)? Spustíš bench APK z E93?
 
-**Platí:**
+**Platí:** **Přeskočeno (2026-11-20, Jan t738u).**
 
 ---
 
