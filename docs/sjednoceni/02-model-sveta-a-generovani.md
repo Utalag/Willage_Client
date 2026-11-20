@@ -62,7 +62,7 @@ Minerály, žíly, kras i dutiny jsou útvary funkce světa (1.7), ne krok „po
   5. vegetace ze seedu jako pravidlo nad povrchem a vodou,
   6. vzorek jen ve slupce (1.2) a uložení jen rozdílu proti funkci (1.4).
 - Validátor gen-v3 zůstává kontrolou, ne zdrojem tvaru.
-- *Otevřené:* minerály, žíly, kras a dutiny ve funkci světa, nebo až při vzorkování slupky.
+- **Minerály, žíly, kras a dutiny** jsou útvary **ve funkci světa** (1.7), ne krok při vzorkování slupky. Dutina tak vypadá stejně, ať se k ní hráč prokope odkudkoli (Jan t815u, 20:50).
 
 
 ---
