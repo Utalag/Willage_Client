@@ -4,7 +4,7 @@ Stav: **kostra**, 2026-11-20 14:20 SEČ. Každý bod obsahuje současný stav, v
 
 Rozsah (Jan t710u): jen **datový model světa**. Vykreslování, LOD, průhlednost, shadery, draw calls a velikost modelů jsou prezentační vrstva, která data jen čte (viz `00-mapa-vetvi.md` §5). Datový model nesmí záviset na tom, jestli bude pohled 2D, nebo 3D.
 
-Značení: „rozhodnuto (datum)“ = Jan už rozhodl. ⚠ = novější měření to zpochybňuje. K1–K12 = konflikty z mapy větví. Body jsou seřazené v pořadí, ve kterém je navrhuju procházet: nejdřív to, na čem závisí nejvíc ostatních.
+Značení: „rozhodnuto (datum)“ = Jan už rozhodl. ⚠ = novější měření to zpochybňuje. K1–K12 = konflikty z mapy větví. Body jsou seřazené podle tématu. Pořadí, ve kterém je navrhuju s Janem procházet (nejdřív to, na čem závisí nejvíc ostatních), je v `README.md`.
 
 ---
 
