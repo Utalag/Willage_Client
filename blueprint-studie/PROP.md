@@ -334,6 +334,35 @@ Výchozí: 800 kapek na blok, `ero_cap` 1,0, `ero_erode` 0,1, `ero_deposit_rate`
   plný. Dutina sloupce je jedno pásmo od nejnižšího po nejvyšší vzduch (dvě chodby nad sebou se spojí) – stejné jako plný
   výpočet, neopravuji. Buňka 0,5 m je dutina, jen když je vykopaných všech 8 buněk 0,25 m.
 
+## E84 implicitní geologie: žíly, pegmatity, skarny, kras bez plných voxelů (plán, zapsáno před pokusem 2026-11-20 04:17; TODO Blok 2: „Rešerše implicitního geologického modelování: jak do vrstev doplnit nepravidelné útvary (žíly, pegmatity, skarny, krasové dutiny) bez plných voxelů. Výchozí zdroj: https://doi.org/10.1111/cgf.13657“; větev z `e83-determinismus`)
+- **Co už je (kód):** `geo_fn` = vrstvy jako 2D pole hranic (řídicí mřížka 0,5 m, bilineárně přes šev) + tělesa
+  `_bodies` jako implicitní test bodu: komín (kužel), kupole, žíla pegmatitu (deska kolem roviny s tvrdým koncem
+  `|q| < extent`), skarn (jen SVISLÁ vzdálenost od granitoidu ve stejném sloupci). Středy těles z hashe světové mřížky
+  (`G2._centers`) → spojité přes šev. Dutiny (`cavity_one`) ale rostou po BUŇKÁCH v bloku (náhodné pokusy o střed,
+  φ + šum, jedna souvislá oblast) → závisí na rozlišení a na hranici bloku. Kras E75 = objem v pásmu (`ug_funkce.bands`
+  = zásobník intervalů [lo, hi, mat] na sloupec), buňky až při prokopání. Překryv E78 = rozdíl proti definici 0,5 m
+  zjemněné 2 × 2 × 2.
+- **Zdroje (ověřit stažením, citovat jen ověřené):** Galin a kol. 2019 (CGF 38(2), doi 10.1111/cgf.13657, HAL);
+  GemPy 1.0 (GMD 2019), LoopStructural 1.0 (GMD 2021), Hillier a kol. 2014 (RBF), Paris a kol. 2021 (jeskyně jako
+  SDF strom), Quilez (SDF primitiva, operace, warping).
+- **Pokus (`godot-prototyp/tools/implicit_e84.gd`, samostatný nástroj, hra se nemění):** útvary nad `geo_fn.material`
+  ostrova START, středy z hashe světové mřížky:
+  - **R0 dnes:** `_bodies` + `cavity_one` (jak je).
+  - **R1 SDF bod po bodu:** procedurální vzdálenostní funkce (float64, jen + − × ÷ sqrt floor, vlastní hashový šum
+    místo FastNoiseLite): žíla = deska s plynulým zúžením a mírným warpem, pegmatit = čočka (elipsoid), skarn = pás
+    kolem intruze podle vzdálenosti po NORMÁLE hranice (svislá vzdálenost × cos sklonu), kras = řetěz kapslí po
+    horizontu + komora. Ořez podle obálky (AABB) útvaru na blok.
+  - **R2 intervaly sloupce:** tytéž funkce převedené na intervaly [lo, hi) v každém sloupci (krokování podle meze
+    Lipschitz + půlení) → stejný tvar jako pásma vody; buňky z intervalů při libovolném rozlišení.
+- **Měřit:** čas na blok při 0,5 m a 0,25 m (R0 / R1 / R2, i čistě geo_fn bez útvarů); paměť (bajty na útvar,
+  na blok, intervaly na sloupec) proti plným buňkám (16 384 B / 131 072 B); spojitost přes šev (stejný bod z obou bloků,
+  řez útvaru na hranici bloku); determinismus (2× v procesu, 2 procesy, float32 proti float64 – kolik buněk se změní);
+  souhra s překryvem E78 (definice 0,5 m proti 0,25 m z funkcí → kolik položek překryvu by vzniklo jen z útvarů)
+  a s pásmy vody (kolik pásem přibude, propustnost dutiny).
+- **Negativa předem:** nejde o geologickou interpolaci z dat (GemPy / LoopStructural řeší jiný problém – data → pole);
+  sítě krasu podle Paris 2021 (nejkratší cesty) se nestaví, jen geometrie kanálu. Útvary se do výchozí hry nezapojí;
+  výchozí otisky zůstávají. Jiná platforma (C#, ARM) se netestuje – jen float32 a audit operací.
+
 ## E83 determinismus: blok, překryv, voda, pořadí vložení (plán, zapsáno před pokusem 2026-11-20 03:31; TODO Architektura světa: „Determinismus celého světa, nejen jednoho bloku. Ujasnit Hash(seed, změny, pořadí)… Pořadí pokládání tedy výsledek ovlivňuje záměrně; platí jen, že stejný výřez, transformace a sousedé dají stejný výsledek.“; větev z `e82-vapenec-hladina`)
 - **Co už je:** hashe jsou vlastní (`stable_hash`: SplitMix64 + FNV-1a, celá čísla mod 2^64), náhoda generátoru je
   `Ore.Rng` (SplitMix64) a `FastNoiseLite` se seedem z hashe. `RandomNumberGenerator` je jen ve vzhledu (tráva),
