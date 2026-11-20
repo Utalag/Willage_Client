@@ -22,7 +22,6 @@ Značení: [n] = zdroj na konci. K1–K12 = konflikty z `00-mapa-vetvi.md`. Čas
 8. **7.1** Pohled 2D (dlaždice), nebo 3D (modely)?
 9. **7.2** LOD prezentační vrstvy.
 10. **7.3** Průhlednost a řez v izometrii (E91).
-11. **8.1** Pořadí slučování větví do hry.
 
 ---
 
@@ -351,28 +350,6 @@ Z rozhodnutí vyplývá výchozí chování; při stavbě modelu se přepínače
 - Do main jen s Janovým ano; každé sloučení má PROP a kontrolu výchozí hry, nebo novou referenci, když se výchozí hra mění záměrně.
 
 E95 (vlákno vody) a E96 (blok 128 m) spolu nikdy neběžely [14]. Zkušební větev `zkusebni-vse` nemá E95 ani E96 a její „E95“ je jiný pokus než `e95-async-voda` (při sloučení přečíslovat na Z1) [14].
-
-### 8.1 Pořadí slučování
-
-**Téma.** V jakém pořadí se po dokončení dokumentu slučují větve a zapíná rozhodnuté chování.
-
-**Současný stav.** Nic z E78–E96 není v main. Merge-base je ve třech generacích. Výchozí hra se dnes hlídá otisky `voda_e66` (E58, ostrov 8 m). Po přepnutí na E67 a blok 128 m bude potřeba nová reference [14].
-
-**Doporučení.** Toto pořadí, každé s PROP a kontrolou otisků:
-
-1. **Opravy kódu, které nemění výchozí pravidla hry**, jen je srovnají s 1.8: zrušit násobitel `p71_cas` × 24, počítat spád včetně výšky vody (ne natvrdo 1), minimum dvou materiálů, `e51_k = 1,5`. Viz úkoly implementace.
-2. **Podzemí E67 jako výchozí** a oprava K5 (lokální = plný na povodí, včetně `p79` + `p85_voda`). Nová reference výchozí hry, protože E58 končí.
-3. **Jednotky a formát:** metr ve scéně, sloupec 128 m, segment 8 m, překryv E78, inverzní transformace vložení.
-4. **Funkce světa** (biomy, geologie, sopka, slupka 0,25 m, vegetace na m²). Až tu je jeden generátor, lze se vrátit k odloženému 1.5.
-5. **Voda asynchronně** na povodí (E95) až poté, co K5 drží na bloku 128 m. E95 a blok 128 m poprvé spustit spolu a změřit.
-6. **Prezentace** (LOD, řez, 2D/3D) až nad stabilními daty.
-7. **Do main** jen po povinném testu 2.7 a s Janovým ano.
-
-**Otázka pro Jana.** Souhlasíš s tímto pořadím slučování (opravy 1.8 → E67 a K5 → formát → funkce světa → asynchronní voda → prezentace) a s tím, že do main to půjde až po testu 2.7 a tvém ano?
-
-**Platí:**
-
----
 
 ## Úkoly implementace (ne rozhodnutí)
 

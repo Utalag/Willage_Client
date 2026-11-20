@@ -63,7 +63,6 @@ Upřesnění od Jana:
 8. **7.1** Pohled 2D (dlaždice), nebo 3D (modely)?
 9. **7.2** LOD prezentační vrstvy.
 10. **7.3** Průhlednost a řez v izometrii (E91).
-11. **8.1** Pořadí slučování větví do hry.
 
 Odložené (teď se neptám): přepočet při nové verzi generátoru (1.5) včetně E88 č. 3; datový rozpočet 1.11. Úkoly implementace jsou na konci `03-otevrene-body.md`, nejsou to rozhodnutí.
 
