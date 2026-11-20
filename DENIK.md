@@ -510,6 +510,12 @@ Skupiny: 1 Prototyp a buildy · 2 Terén a tvar · 3 Rozlišení bloku · 4 Ská
 
 ## 3 Rozlišení bloku
 
+### 🧪 E81: tenké vrstvy a převzorkování (2026-11-20 01:48 · prototyp `tools/tenke_e81.gd`, `geo_fn.keep_thin`, příznak `p81_tenke`, větev `e81-tenke-vrstvy`)
+- **Směr:** TODO Architektura světa: vrstva tenčí než buňka nesmí zmizet nebo se objevovat podle rozlišení. Konzervativní vzorkování: vrstva z funkce (> 0,05 m) bez buňky dostane jednu buňku, pod prahem žádnou.
+- **Zlepšení:** chybějící tenké vrstvy 60 % → 7,6 % (0,5 m), 48 % → 2,3 % (0,25 m); kusů 221 → 114 a 669 → 152 (funkce 87 / 60); díry v tenké nepropustné vrstvě 64 % → 8 %. Výchozí hra beze změny, švy nejsou horší než vnitřek.
+- **Komplikace:** tenká vrstva nafouknutá na buňku; tři tenké vrstvy nad sebou se do 0,5 m nevejdou; tělesa vody z buněk 34 → 48 (funkce 30); konec klínu se liší o sloupec; zapnutí mění 2,3 % buněk a otisk vody.
+- **Další krok (Jan):** zapnout jen s verzí generátoru u bloku; pravidlo pro vrstvy < 0,25 m v blueprintu; práh.
+
 ### 🧪 E80: kde končí funkce a pásma (2026-11-20 01:39 · prototyp `tools/hranice_e80.gd`, oprava mezí `prekryv78.op`, větev `e80-hranice-funkci`)
 - **Směr:** TODO Model světa a kopání: kritérium, kdy změna potřebuje plné buňky, a jak je uložit. Ověřena hranice funkce → buňka 0,5 m → zjemnění 0,25 m → překryv: rozlišení, švy, pořadí vložení, nová verze funkcí pod překryvem, okraje a dno ostrova.
 - **Zlepšení:** švy bez skoku, pořadí vložení nemění buňky (0 při 0,5 i 0,25 m). Kritérium: pásma vody nestačí při víc dutinách ve sloupci 0,5 m nebo změně jemnější než 0,5 m; jinde stačí. Uložení: klíče + deflate stačí, octree jen u velkých objemů. Opraven přetok indexu z = 128.

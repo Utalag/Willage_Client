@@ -334,6 +334,60 @@ Výchozí: 800 kapek na blok, `ero_cap` 1,0, `ero_erode` 0,1, `ero_deposit_rate`
   plný. Dutina sloupce je jedno pásmo od nejnižšího po nejvyšší vzduch (dvě chodby nad sebou se spojí) – stejné jako plný
   výpočet, neopravuji. Buňka 0,5 m je dutina, jen když je vykopaných všech 8 buněk 0,25 m.
 
+## E81 tenké vrstvy a převzorkování (plán, zapsáno před pokusem 2026-11-20 01:41; TODO Architektura světa: „vrstva tenčí než buňka nesmí zmizet nebo se objevovat podle rozlišení“; větev z `e80-hranice-funkci`)
+- **Co už je:** `geo_fn.material` vybere vrstvu podle středu buňky (Z < bs[k]). Vrstva tenčí než buňka je ve sloupci vidět,
+  jen když na ni padne střed buňky → mizí a objevuje se po sloupcích, podle rozlišení i místa. Klíny (vyklínění do ~3 m
+  od švu, v2.1) tvoří tenké konce vrstev. Podzemí vody bere pásma přímo z funkcí (`ug_funkce.bands`), takže vodu sampling
+  netrápí – ale buňky (vykreslení, kopání, hostitelé minerálů, materiál pro ztráty `_mat_d`) ano. Dřív (E52) „tenké
+  propustné vrstvy se v hrubých buňkách spojí“.
+- **Pokus (`godot-prototyp/tools/tenke_e81.gd`, ostrov 4 bloky):**
+  1. *Soupis:* pro každou vrstvu mocnost v řídicích bodech; sloupce s 0 < t < 0,25 m, < 0,5 m; konce vyklínění.
+  2. *Výskyt:* vrstva podle funkce (t > t_min) proti buňkám při 0,5 a 0,25 m: shoda sloupců, plocha, počet kusů
+     (souvislé oblasti přes celý ostrov, tedy i přes švy), rozdíl na švu proti uvnitř.
+  3. *Voda:* podzemí z buněk (`ug_funkce.from_cells`) při 0,5 a 0,25 m proti podzemí z funkcí: počet těles, pokrytí tenké
+     nepropustné vrstvy (díry = voda projde), rozpad tenké propustné vrstvy. Plus otisk vody ostrova s opravou a bez.
+  4. *Minerály:* hostitelské buňky a schodek rud při 0,5 / 0,25 m s opravou a bez.
+- **Oprava (příznak `p81_tenke`, výchozí vypnuto):** konzervativní vzorkování v `geo_fn.sample`: vrstva, která je ve
+  sloupci podle funkce (mocnost > `p81_min_m`, výchozí 0,05 m), ale nepadl na ni žádný střed buňky, dostane jednu buňku
+  (tu, kde leží střed vrstvy), pokud tam funkce opravdu dává tuto vrstvu (ne kryt, ne těleso). Konec vyklínění je pak
+  určen funkcí (t = t_min), ne rozlišením. Konflikty (dvě tenké vrstvy v jedné buňce) se spočítají.
+- **Riziko / negativa předem:** vrstva se nafoukne na celou buňku (objem roste, tenké vrstvy 0,5 m místo 0,1 m), změní se
+  počty hornin v souhrnu (validátor WVB1 počítá materiály), výchozí 0,5 m pipeline se změní jen se zapnutým příznakem.
+  Voda (pásma z funkcí) se nezmění, změní se jen `_mat_d` a hostitelé.
+
+## E81 výsledky (zapsáno 2026-11-20 01:48; `godot-prototyp/tools/tenke_e81.gd`, `shots/e81/`, ostrov 4 bloky START)
+- **Soupis:** z 20 vrstev má 7 průměrnou mocnost pod 0,8 m: fe_ti_zone 0,12 m, siltstone 0,16, conglomerate 0,17,
+  gypsum 0,17, dolomite 0,63, gravel_sand 0,73, loess 0,73. Sloupců, kde je vrstva tenčí než buňka: 2679 při 0,5 m
+  (mřížka 32 × 32 × 20 vrstev), 6986 při 0,25 m. Pravda = pásma z funkcí (`ug_funkce.bands`), jen kde funkce
+  materiálu vrstvu opravdu dává (ne těleso, ne kryt), práh t_min 0,05 m.
+- **Bez opravy:** tenká vrstva v buňkách chybí v 1599 z 2679 sloupců (60 %) při 0,5 m a 3383 z 6986 (48 %) při 0,25 m.
+  Vrstva se rozpadá: 221 kusů při 0,5 m a 669 při 0,25 m, funkce dává 87 a 60. Navíc (buňka má vrstvu, funkce < 0,05 m):
+  62 a 689. Výskyt podle rozlišení nesouhlasí v 6081 dvojicích (jemný sloupec × vrstva); vodorovné vzorkování funkce
+  samo dává 1892 (spodní mez).
+- **S opravou `p81_tenke`:** chybí 203 (7,6 %) a 163 (2,3 %), navíc 25 a 273, kusů 114 a 152, nesoulad rozlišení 2820.
+  Přidáno 1460 / 3390 buněk (345 / 703 posunuto o buňku), konflikty 206 / 117, odebráno pod prahem 60 / 659.
+  Zbytek chybění = tři tenké vrstvy nad sebou (siltstone, conglomerate, gypsum, dohromady ~0,5 m) se do buňky 0,5 m
+  nevejdou, a spraš (loess) těsně pod půdou.
+- **Švy:** výskyt se mění přes šev ve 1,9 % dvojic, uvnitř bloku v 7,8 % (0,5 m bez opravy), 7,1 % s opravou; při 0,25 m
+  5,2 % → 3,1 % (funkce 2,5 %). Šev není horší než vnitřek, chyba je ve svislém vzorkování, ne na švu.
+- **Voda:** hra bere pásma z funkcí, takže tenké vrstvy ve vodě nemizí. Rozdíl je jen u podzemí z buněk (`from_cells`):
+  tenká nepropustná vrstva (0,05 m < t < buňka) má díru v 932 z 1451 sloupců (64 %) při 0,5 m, 2054 z 4029 (51 %)
+  při 0,25 m; s opravou 109 a 65. Tělesa: funkce 30, buňky 34, s opravou 48 (0,25 m: 137 / 185 / 192) – oprava těles
+  NEZLEPŠÍ, nafouklé přepážky (celá buňka) přeruší vodorovná spojení. Objem těles 1323 m³ / 1217 / 1260.
+- **Ostrov z pipeline:** příznak vypnut = geo d3ff4d43…, otisk vody d7aedf3a… (stejné jako kód E80, výchozí hra beze
+  změny). Zapnut = 1524 buněk z 65 536 (2,3 %) jiných, otisk vody c3f579ee… (ztráty tůní čtou materiál buněk `_mat_d`).
+- **Minerály:** schodek 0 ve všech variantách (hostitelů je dost). Hostitelé při 0,5 m: železná ruda −5,0 %, měď −3,1 %,
+  jeskyně −1,8 %, uhlí +1,3 %, granáty +2,5 %; při 0,25 m ±2 %. Výnos se nemění, mění se poloha.
+- **Čas:** vzorkování 4 bloků 0,5 m 170 → 238 ms (+40 %), 0,25 m 1451 → 1720 ms (+19 %).
+- **Negativa:** tenká vrstva se nafoukne na celou buňku (fe_ti_zone 0,12 m → 0,5 m, 4×); tělesa vody z buněk horší; tři
+  tenké vrstvy nad sebou se při 0,5 m nevejdou; vodorovný konec vyklínění se pořád liší o sloupec (1892 dvojic, oprava
+  to neřeší); 273 „navíc“ při 0,25 m (vrstva z jiného zdroje než pásma, hlavně tělesa); zapnutí mění svět = nová verze
+  generátoru.
+- **Doporučení:** zapnout `p81_tenke` až s rozhodnutím o verzi generátoru u bloku (E80). Mřížku 0,25 m ze zjemnění 0,5 m
+  oprava nezlepší – platí jen při vzorkování z funkcí (rozhodnutí E80). Vodu dál brát z funkcí, ne z buněk.
+- **Pro Jana:** (1) zapnout jako výchozí (nový svět jiný o 2,3 % buněk)? (2) tři tenké vrstvy nad sebou při 0,5 m: jedna
+  vyhraje (teď nejtenčí), sloučit, nebo v blueprintu zakázat vrstvy < 0,25 m? (3) práh 0,05 m.
+
 ## E80 kde končí funkce a pásma (plán, zapsáno před pokusem 2026-11-20 01:33; TODO Model světa a kopání: „kritérium, kdy změna (převis, oblouk, nepravidelná jeskyně) potřebuje lokální oblast s plnými buňkami, a jak takovou oblast uložit (řídký objem, octree, komprimované intervaly)“; větev z `e79-chodby-voda`)
 - **Co už je (průzkum kódu):** `geo_fn` = spojité funkce v metrech světa (povrch `hm_f`, hranice `bs[k]` na řídicí mřížce
   0,5 m, bilineárně přes švy; materiál bodu; tělesa). `pipeline` vzorkuje při n = 16 (středy buněk = řídicí body), pak
@@ -355,27 +409,6 @@ Výchozí: 800 kapek na blok, `ero_cap` 1,0, `ero_erode` 0,1, `ero_deposit_rate`
 - **Očekávání / riziko:** při 0,25 m z funkcí závisí buňky u švu na pozdějším sousedovi (bilineární interpolace) → proti
   pravidlu „sousedé se nemění“. Minerály a dutiny nejsou funkce (výběr buněk) → při jiném rozlišení jiná místa. Změna
   verze funkcí pod překryvem bez pravidla rozbije výkopy. Bez rozhodnutí Jana jen návrh.
-
-## E81 tenké vrstvy a převzorkování (plán, zapsáno před pokusem 2026-11-20 01:41; TODO Architektura světa: „vrstva tenčí než buňka nesmí zmizet nebo se objevovat podle rozlišení“; větev z `e80-hranice-funkci`)
-- **Co už je:** `geo_fn.material` vybere vrstvu podle středu buňky (Z < bs[k]). Vrstva tenčí než buňka je ve sloupci vidět,
-  jen když na ni padne střed buňky → mizí a objevuje se po sloupcích, podle rozlišení i místa. Klíny (vyklínění do ~3 m
-  od švu, v2.1) tvoří tenké konce vrstev. Podzemí vody bere pásma přímo z funkcí (`ug_funkce.bands`), takže vodu sampling
-  netrápí – ale buňky (vykreslení, kopání, hostitelé minerálů, materiál pro ztráty `_mat_d`) ano. Dřív (E52) „tenké
-  propustné vrstvy se v hrubých buňkách spojí“.
-- **Pokus (`godot-prototyp/tools/tenke_e81.gd`, ostrov 4 bloky):**
-  1. *Soupis:* pro každou vrstvu mocnost v řídicích bodech; sloupce s 0 < t < 0,25 m, < 0,5 m; konce vyklínění.
-  2. *Výskyt:* vrstva podle funkce (t > t_min) proti buňkám při 0,5 a 0,25 m: shoda sloupců, plocha, počet kusů
-     (souvislé oblasti přes celý ostrov, tedy i přes švy), rozdíl na švu proti uvnitř.
-  3. *Voda:* podzemí z buněk (`ug_funkce.from_cells`) při 0,5 a 0,25 m proti podzemí z funkcí: počet těles, pokrytí tenké
-     nepropustné vrstvy (díry = voda projde), rozpad tenké propustné vrstvy. Plus otisk vody ostrova s opravou a bez.
-  4. *Minerály:* hostitelské buňky a schodek rud při 0,5 / 0,25 m s opravou a bez.
-- **Oprava (příznak `p81_tenke`, výchozí vypnuto):** konzervativní vzorkování v `geo_fn.sample`: vrstva, která je ve
-  sloupci podle funkce (mocnost > `p81_min_m`, výchozí 0,05 m), ale nepadl na ni žádný střed buňky, dostane jednu buňku
-  (tu, kde leží střed vrstvy), pokud tam funkce opravdu dává tuto vrstvu (ne kryt, ne těleso). Konec vyklínění je pak
-  určen funkcí (t = t_min), ne rozlišením. Konflikty (dvě tenké vrstvy v jedné buňce) se spočítají.
-- **Riziko / negativa předem:** vrstva se nafoukne na celou buňku (objem roste, tenké vrstvy 0,5 m místo 0,1 m), změní se
-  počty hornin v souhrnu (validátor WVB1 počítá materiály), výchozí 0,5 m pipeline se změní jen se zapnutým příznakem.
-  Voda (pásma z funkcí) se nezmění, změní se jen `_mat_d` a hostitelé.
 
 ## E80 výsledky (zapsáno 2026-11-20 01:39; `godot-prototyp/tools/hranice_e80.gd -- --bp.p76_prameny=true --bp.p79_chodby=true`, `shots/e80/`)
 - **Hranice (jak to je v kódu):** zdroj pravdy = funkce v metrech světa (`geo_fn`: povrch, hranice vrstev na řídicí mřížce

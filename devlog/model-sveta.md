@@ -58,6 +58,8 @@ Funkce `bs[k](x, y)` dává pro každé místo jednu výšku. Sama proto neumí 
 
 Pokus E80 (2026-11-20 01:39, větev `e80-hranice-funkci`): funkce jsou zdrojem pravdy jen do buňky 0,5 m. Tam jsou buňky přesné vzorky funkcí, přes švy bez skoku a nezávislé na pořadí vložení. Minerály a dutiny z generátoru už jsou výběr buněk. Mřížka 0,25 m pro kopání je zjemnění buněk 0,5 m; vzorek funkcí při 0,25 m se od ní liší v 7,8 % buněk. Plné buňky tvoří překryv hráče, a ten stačí uložit jako seřazené klíče s kompresí. Octree pomůže jen u velkých souvislých výkopů. Pásma přestanou stačit jen vodě: když má sloupec 0,5 m víc dutin pod sebou nebo změnu jemnější než 0,5 m (nepravidelná jeskyně 109 sloupců, dvě chodby nad sebou 32).
 
+Pokus E81 (2026-11-20 01:48, větev `e81-tenke-vrstvy`): vrstva se do buňky dostane, jen když na ni padne střed buňky. Tenké vrstvy (7 z 20 mají v průměru pod 0,8 m) proto v buňkách chybějí v polovině sloupců, kde jsou tenčí než buňka, a rozpadají se na kusy jinak při 0,5 a 0,25 m. Voda to v hře necítí, protože bere pásma přímo z funkcí. Oprava za příznakem `p81_tenke` dává vrstvě nad 0,05 m aspoň jednu buňku a vrstvu pod prahem vynechá. Chybění klesne na 2–8 %, kusy skoro na počet z funkce. Za to je tenká vrstva nafouklá na celou buňku a tři tenké vrstvy nad sebou se do 0,5 m nevejdou.
+
 ## Změny od hráče
 
 **Hypotéza:** definice zůstává nedotčená a změny se ukládají zvlášť jako překryv:
