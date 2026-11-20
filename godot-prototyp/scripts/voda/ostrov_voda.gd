@@ -17,6 +17,7 @@ const V64 = preload("res://scripts/teren/svet64/voda64.gd")
 const UGO = preload("res://scripts/voda/podzemi_ostrov.gd")
 const H68 = preload("res://scripts/voda/hydro68.gd")   # E68: jednotný krok povrch ↔ podzemí do ustálení (p68_hydro)
 const GW = preload("res://scripts/voda/podzemi/gw74.gd")   # E74: hladina podzemní vody jako plocha gw(x, y) (p74_gw)
+const K75 = preload("res://scripts/voda/podzemi/kras75.gd")   # E75: kras – eroze v podzemí po tělesech (p75_kras)
 const BS := 16
 const ROCK := 6   # materiál příkopu pro tok (žula, nepropustná)
 
@@ -37,6 +38,7 @@ var gw := {}                      # E74: plocha podzemní vody (p74_gw), jinak p
 var full_otisk := ""              # E74: otisk posledního čerstvého plného výpočtu (check_full)
 var full_gw := {}                 # E74: plocha z čerstvého plného výpočtu
 var claims := {}                  # E74: obsazené výtoky (sloupec povrchu), přežijí přestavbu (p74_vyzvednout)
+var kras := {}                    # E75: stav krasu (rozpuštěný objem a dutiny po pásmech), přežije přestavbu
 
 func gi_of(s: Vector2i, x: int, y: int) -> int:
 	var ws := T.wslot(s)
@@ -102,6 +104,9 @@ func build(bl: Dictionary) -> void:
 	if bool(p.get("podzemi_vrstva", true)) and not blocks.is_empty():
 		ug = UGO.make(T.world, T.fine(blocks), p, W, st.hm, wall, float(p.voda_cell_m))
 		_replay_digs(ug)
+		if bool(p.get("p75_kras", false)):
+			if kras.is_empty(): kras = K75.make(p)
+			K75.apply(ug, kras)
 		st.ug = ug
 	ms["podzemí: pásma"] = (Time.get_ticks_usec() - t1) / 1000.0
 	t1 = Time.get_ticks_usec()
@@ -111,6 +116,7 @@ func build(bl: Dictionary) -> void:
 		_route(st); nc = _claims(-1)
 	ms["povrch + podzemí: plný výpočet"] = (Time.get_ticks_usec() - t1) / 1000.0
 	_gw()
+	_kras_rates()
 	_falls()
 	ms["celkem"] = (Time.get_ticks_usec() - t0) / 1000.0
 
@@ -167,6 +173,9 @@ func edit(s: Vector2i, lx: int, ly: int, new_h: int) -> Dictionary:
 	var out := {"gi": gi}
 	var t0 := Time.get_ticks_usec()
 	if not ug.is_empty() and hv < st.hm[gi]:
+		if not kras.is_empty():   # E75: dopočítat do teď, vynulovat odpočet pásem sloupce, materializovat buňky dutin
+			var cc: int = UGO.F.col_of(ug, gi)
+			out.kras = K75.on_dig(kras, float(kras.now), cc, float(ug.h[cc]), hv * float(ug.cm_s))
 		out.ug = UGO.dig(ug, gi, hv)
 	var t1 := Time.get_ticks_usec()
 	var src_new: PackedFloat64Array = st.src
@@ -186,6 +195,7 @@ func edit(s: Vector2i, lx: int, ly: int, new_h: int) -> Dictionary:
 		out.gw_ms = (Time.get_ticks_usec() - tg) / 1000.0
 	out.surf = r
 	_falls()
+	if not pending(): _kras_rates()
 	out.ms = (Time.get_ticks_usec() - t0) / 1000.0
 	last_edit = out
 	return out
@@ -215,6 +225,7 @@ func step() -> bool:
 		_claim_update(gi)
 		_falls()
 		_gw()
+	if not more: _kras_rates()
 	return more
 
 ## E74 p74_vyzvednout: nové obsazení výtoků – výkop vedle (Chebyshev ≤ 1, dug ≥ 0) nebo napojení na koryto / tůň
@@ -265,6 +276,39 @@ func _gw() -> void:
 	if not bool(p.get("p74_gw", false)) or ug.is_empty(): gw = {}; return
 	gw = GW.build(ug, st.get("ug_bodies", []))
 
+## E75: rychlosti rozpouštění z aktuálních těles
+func _kras_rates() -> void:
+	if kras.is_empty() or ug.is_empty(): return
+	K75.rates(ug, st.get("ug_bodies", []), kras)
+
+## E75: kras do herního času t_end (s) nebo nejvýš max_ev událostí; každá událost → dutina +1 buňka, zpětná vazba do pásem
+## a lokální přepočet (znovu vyřešit volání podzemí, E68 update kolem vstupů a výstupů). Vrací seznam událostí.
+func kras_run(t_end: float, max_ev: int) -> Array:
+	var evs := []
+	if kras.is_empty(): return evs
+	while evs.size() < max_ev:
+		var ev := K75.next_event(kras)
+		if float(ev[0]) > t_end or int(ev[1]) < 0: K75.advance(kras, t_end); break
+		K75.advance(kras, float(ev[0]))
+		K75.fire(kras, int(ev[1]))
+		var t0 := Time.get_ticks_usec()
+		var chb := K75.apply(ug, kras)
+		_kras_local()
+		evs.append({"t_s": float(ev[0]), "pasmo": int(ev[1]), "mat": int(kras.mat.get(int(ev[1]), -1)), "dutina_m3": float(kras.dut[int(ev[1])]), "zmenena_pasma": chb.size(), "ms": (Time.get_ticks_usec() - t0) / 1000.0})
+	return evs
+
+func _kras_local() -> void:
+	for i in ug._calls.size():
+		ug._res[i] = UGO.U._one(ug, ug._calls, i, UGO.U.has_flag(ug._var, "A"), UGO.U.has_flag(ug._var, "B"), UGO.U.has_flag(ug._var, "C"), ug._dz, ug._st)
+	st.ug_cache = {}
+	var ch := PackedInt32Array(); var hh := PackedFloat64Array()
+	_add_drains(ch, hh)
+	if ch.is_empty(): return
+	_update(ch, hh, st.src)
+	_falls()
+	_gw()   # E74 + E75: dutina mění tělesa → plocha znovu
+	_kras_rates()
+
 ## kontrola: stav po lokálních přepočtech = čerstvý plný výpočet (stejné výkopy přehrané do čerstvého podzemí). Vrací počet neshod.
 func check_full() -> Dictionary:
 	var n := W * H
@@ -273,6 +317,7 @@ func check_full() -> Dictionary:
 	if not ug.is_empty():
 		var u2 := UGO.make(T.world, T.fine(blocks), p, W, st2.hm, wall, float(p.voda_cell_m))
 		for d in ug._digs: UGO.F.touched(u2, {}, PackedInt32Array([d[0]]), PackedFloat64Array([d[1]]))
+		if not kras.is_empty(): K75.apply(u2, kras)
 		st2.ug = u2
 	_route(st2)
 	full_otisk = H68.otisk(st2)   # E74: přísnější kontrola (i extra, src2, výstupy podzemí)
