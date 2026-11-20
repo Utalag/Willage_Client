@@ -359,9 +359,28 @@ Jen data. Velikost modelů je prezentace (`p94_meritko_veg`, Jan 11:39).
 
 ---
 
-## 1.13 Profil ostrova
+## 1.13 Profil a členitost terénu
 
-**Téma.** Půdorys ostrova shora a tvar spodku a okrajů z boku: útesy, kužel pod ostrovem, vodopády z okraje do mlhy.
+**Pojem.** „Profil“ znamená **členitost (zvrásněnost) terénu**, tedy jak hrbolatý a hornatý je povrch. Nejde o obrys ostrova shora (Jan t720u). Obrys a spodek ostrova zůstávají otevřené v pododdílu 1.13.1.
+
+**Současný stav.** Funkce světa E90/E96 má reliéf × 4 / × 1 (blok 128 m 16–30 m, vrchol uříznutý sloupcem 32 m) a sklon p50 9°, p95 28°. Tůně zabírají 22 % plochy (ploché louky se schodem 0,5 m) [5]. Charakter krajiny (Blok 5) Jan dřív nerozhodl [3].
+
+**Platí:** *rozhodnuto (2026-11-20 15:13–15:18, Jan t720u, t721u)*
+
+- Členitost terénu je **nastavitelná parametry funkce světa**:
+  - **převýšení reliéfu** (m): jak vysoké jsou kopce a hory,
+  - **vlnová délka** (m): jak daleko od sebe jsou tvary,
+  - **drsnost**: podíl drobných nerovností na velkých tvarech,
+  - **podíl ploch** rovin / pahorkatin / hor,
+  - **strop přirozeného sklonu** (°).
+- Hodnoty jsou vstupní data světa (spolu se seedem), ne konstanty v kódu.
+- **Pojmenované profily** (např. nížina, pahorkatina, hornatina) lze přidat později jako hotové sady parametrů.
+- **Testovací svět:** pro simulace se použije jedna pevná sada parametrů + seed pro svět 3 × 3 bloky, ve kterém je velká hora (nejvyšší bod), kopec, rovinatá nížina a vodní plocha. Hledá ji studie E97 („Testovací svět“), výsledek bude uložen jako soubor presetu.
+- Největší hora je zároveň **sopka**, viz 1.14.
+
+### 1.13.1 Obrys, bok a spodek ostrova (otevřené)
+
+**Téma (původní kostra).** Půdorys ostrova shora a tvar spodku a okrajů z boku: útesy, kužel pod ostrovem, vodopády z okraje do mlhy.
 
 **Současný stav (z paměti a studií)**
 - Ostrov na začátku je zhruba kruhový, 4 připravené bloky, zbytek je mlha. Mlha je zvláštní materiál: nedá se v ní kopat ani stavět a mizí jen vložením nového bloku. Odemkne se vždy jen jeden blok sousedící s ostrovem [1].
@@ -372,7 +391,7 @@ Jen data. Velikost modelů je prezentace (`p94_meritko_veg`, Jan 11:39).
 - E66b: Jan chtěl skrýt texturu na boku dlaždice ostrova (prezentace) [22].
 - Spodek ostrova (kužel, skála pod ostrovem) dnes v datech není. Ostrov končí plochým dnem sloupce. Po rozhodnutí 1.3 je dno 64 m pod neutrální úrovní.
 
-**Varianty (k rozhodnutí)**
+**Varianty (k rozhodnutí, obrys a spodek)**
 
 | | A: hranol (dnes) | B: hranol + kužel / skalní spodek pod ostrovem | C: B + útesy na okraji z funkce světa |
 |---|---|---|---|
@@ -383,6 +402,14 @@ Jen data. Velikost modelů je prezentace (`p94_meritko_veg`, Jan 11:39).
 **Doporučení.** Spodek ostrova je funkce půdorysu (vzdálenost od okraje ostrova), ne data bloku. Blueprint ho nenese a po vložení bloku se přepočítá. Okraj zůstává nekopatelný. Voda z okraje padá do mlhy (dnešní model) a výtok vrstev na boku (E67) se kreslí jako vodopád ze stěny. Vzhled spodku (kužel, skála) je prezentace, datově stačí tvar.
 
 **Otázka pro Jana.** Jak má ostrov vypadat z boku: svislá stěna, nebo útesy a zužující se skalní spodek (kužel)? Má spodek patřit k datům (kolize, voda), nebo jen k vykreslení?
+
+**Platí:**
+
+---
+
+## 1.14 Sopka
+
+**Téma.** Největší hora testovacího i herního světa je zároveň sopka (Jan t721u). Samostatný bod: kráter, láva / magma jako materiál, vliv na geologii, vodu a teplotu, aktivita v čase.
 
 **Platí:**
 

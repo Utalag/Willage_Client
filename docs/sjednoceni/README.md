@@ -42,7 +42,8 @@ Upřesnění od Jana:
 10. **1.7 Geologie:** útvary jako funkce světa přes švy.
 11. **1.12 Objektová vrstva:** vegetace na m² ve světových metrech.
 12. **1.10 Kontrakt:** WTI1 a jednání s Willage-backend.
-13. **1.13 Profil ostrova:** půdorys, bok a spodek, vodopády do mlhy.
+13. **1.13 Profil a členitost terénu:** parametry členitosti (rozhodnuto); obrys, bok a spodek ostrova otevřené.
+14. **1.14 Sopka:** největší hora je sopka (kostra).
 
 ## Legenda
 
