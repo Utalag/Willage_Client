@@ -16,6 +16,7 @@ const E := 1e-6
 static func _perm(c: Dictionary, b: int, t: Dictionary) -> float:
 	var m: int = c.mat[b]
 	if m == 0: return 1.0
+	if c.has("perm75") and c.perm75.has(b): return maxf(float(c.perm75[b]), maxf(float(t.get(m, [0.0])[0]), 0.01))   # E75: krasová dutina v pásmu
 	return maxf(float(t.get(m, [0.0])[0]), 0.01)
 
 ## pásmo tělesa přímo pod b ve stejném sloupci (dotýká se dna b), nejvyšší; -1 = žádné

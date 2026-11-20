@@ -592,6 +592,65 @@ Výchozí: 800 kapek na blok, `ero_cap` 1,0, `ero_erode` 0,1, `ero_deposit_rate`
 - **Rozhodnutí:** `p76_prameny` zůstává vypnutý; měřeně správný a první postavení se nemění, ale mění chování po
   vložení bloku (prameny jinde zůstanou) → rozhodne Jan.
 
+## E75 eroze v podzemí po tělesech – kras (plán, zapsáno před pokusem 2026-11-20 00:25; TODO Model světa, Jan 2026-11-19 20:53, hypotéza)
+- **Co už je:** E51 eroze jako události v haldě (odpočet, předpočítané časy, kopání / položení vynuluje odpočet sloupce);
+  tělesa a průtoky E58 (jedna nádrž, vstup → výstup) a E67 (mokrá pásma s průtokem `wetq67`, pasti); dutiny blueprintu
+  jsou buňky vzduchu, v podzemí pásma `ug_funkce` se z nich stane pásmo mat 0 s objemem; sdílená tabulka materiálů.
+- **Rozpustnost (sdílená tabulka, nové pole `rozp_kg_m3` = rozpuštěná hornina na m³ vody v rovnováze, `hustota_kg_m3`):**
+  vápence (5, 44, 56) 0,2 kg/m³ (krasová voda 50–300 mg/l CaCO₃), dolomit (49) 0,15 kg/m³, sádrovec (48)
+  2,5 kg/m³ (2,531 g/l při 20 °C), kamenná sůl (47) 360 kg/m³. Ostatní 0 (průsak pórovitou vrstvou zanedbatelný).
+  Kontrola řádu: Corbelův vzorec D = I · c / ρ dává pro vápenec desítky mm za 1000 let (sedí s měřeními 0,03–0,08 mm/rok).
+- **Model (`scripts/kras75/kras75.gd`, přepínač `p75_kras`, výchozí vyp):** voda vstupuje do tělesa nenasycená; podél hlavní
+  cesty tělesa (E58: nejkratší cesta pásem od vstupu k výstupu, E67: mokrá pásma s průtokem) se nasycuje exponenciálně
+  s délkou λ (`p75_delka_m`). Rozpustné pásmo b dostane rychlost r_b = Q · s · (e^(−d_in/λ) − e^(−d_out/λ)), s = rozp / hustota
+  (m³ horniny na m³ vody) → součet po cestě ≤ Q · s. Hodnota u tělesa: rozpuštěný objem po pásmech. Odpočet do prahu
+  (`p75_prah_m3` = jedna herní buňka 0,25³ m) jako událost v haldě (čas = zbytek / r_b, remíza podle pásma). Událost →
+  dutina v pásmu u hladiny (shora od min(vršek pásma, hladina), 4 buňky 0,25 m na vrstvu sloupce 0,5 m), roste po buňkách.
+  Zpětná vazba: pórovitost pásma + objem dutiny, propustnost dutiny 1 → přepočet vody (E68) a nové rychlosti. Kopání /
+  položení: postup se dopočítá do teď, odpočet pásem v prokopaném sloupci se vynuluje, buňky dutiny se materializují.
+- **Čas:** průtoky jsou v l/s herního času; 1 herní den = 10 min (`p71_cas` 144).
+- **Měření:** rychlosti rozpouštění po materiálech, čas do první dutiny (herní dny, reálný čas), cena výpočtu (stavba,
+  událost, přepočet), otisk stavu krasu (dvě pořadí výkopů, plný přepočet proti postupnému), ostrov E58 a E67.
+- **Otázky:** kde dutina vzniká (vstup / hlavní cesta / výstup / hladina) – volba λ; propojení pásem dutinou se nemodeluje.
+- Beze změny: `p71_cas` 144, `p72_prusak`, vzdálenost slučování.
+
+### E75 výsledky (2026-11-20 00:40, větev `e75-kras`, `tools/e75.gd`, prototyp `tools/kras_e75.gd`, souhrn `tools/e75_souhrn.py`)
+- **Ostrov (prototyp, E58 i E67, 6 výkopů, obě pořadí): 0 rozpustných pásem na cestě → 0 rozpouštění, žádná dutina.**
+  Hladina tělesa (E58 L ≈ 19,5 m) leží v půdě a písku; vápenec, dolomit a sádrovec jsou v tělese hlouběji a voda k nim
+  nedojde. V E67 teče voda tráva → hlína → písek → spraš → okraj. Výkopy na tom nic nezmění. Otisk krasu v obou pořadích
+  stejný, 0 neshod s plným výpočtem. To je fyzikálně správně (kras potřebuje vodu ve vápenci), ale na ostrově se teď
+  nedá kras vidět. **Negativ.**
+- **První verze cesty E58 (nejkratší cesta pásem bez omezení) šla přes 2 pásma trávy nad hladinou** → opraveno: cesta jen
+  nasycenou zónou (dno pásma pod hladinou L). Na ostrově to nepomohlo (viz výše).
+- **Syntetický test (mísa z `tools/e68.gd`, těleso z rozpustné horniny pod krycí vrstvou, tůň → těleso → pramen,
+  průtok 0,742 l/s):**
+
+| hornina | režim | pásem | m³/herní den | 1. dutina (herní dny) | reálně | lokální přepočet | plný | neshod |
+|---|---|---|---|---|---|---|---|---|
+| vápenec (5) | E58 | 4 | 1,9e-4 | 331 | 55 h | 15 ms | 78 ms | 0 |
+| vápenec (5) | E67 | 169 | 9,2e-5 | 329 | 55 h | 9 ms | 46 ms | 0 |
+| dolomit (49) | E58 | 4 | 1,3e-4 | 465 | 78 h | 14 ms | 77 ms | 0 |
+| sádrovec (48) | E58 | 4 | 2,7e-3 | 22,5 | 3,8 h | 13 ms | 68 ms | 0 |
+| sůl (47) | E58 | 4 | 0,42 | 0,15 | 1,5 min | 14 ms | 75 ms | 0 |
+
+  Strop Q · s (všechna voda nasycená) pro vápenec 5,5e-8 m³/s ≈ 1,7 m³ za herní rok – řádově sedí s reálným
+  odnosem krasového pramene (0,74 l/s · 200 mg/l ≈ 4,7 t/rok). λ = 100 m, cesta v tělese je krátká → využije se jen
+  ~4 % stropu. Výpočet rychlostí 0,9–1,6 ms. Dutina roste u hladiny ve výstupním pásmu (E58: pásma 280, 277, 274, 272,
+  pak znovu 280 – další buňka dalších ~330 dní). Prameny se dutinou nezměnily (0,704 l/s), objem tělesa roste o
+  objem dutiny. Výkopy v čase 0 ve dvou pořadích: stejný otisk krasu i vody ve všech testech.
+- **Vápenec pod krycí vrstvou, která patří do tělesa (`--ponor=0.2`):** E58 vede vodu u hladiny v krycí vrstvě → 0 pásem
+  (stejný negativ jako ostrov). E67: 169 pásem, ale jen 0,1 l/s, první dutina za 74 350 herních dní (≈ 516 dní hraní).
+  **Lokální přepočet (E68 update) dal po každé události jiné bity než plný výpočet (6 z 6), rozdíl ≤ 9e-17 ve 3 buňkách
+  `eff`** (pořadí sčítání při jiném startu iterace). S tolerancí 1e-12 0 neshod. Negativ pro bitový otisk.
+- **Výchozí hra beze změny** (`p75_kras` vyp): prototyp `voda_e66` otisk 63d7b89a91385a79 a d7aedf3a6d9d10e8 jako main,
+  0 neshod; test smyčky `tools/e68.gd` stejné otisky jako main (55c9e488…, add3c201…, a4159783…). `ug67._perm` se mění
+  jen s `perm75`.
+- **Co nefunguje / chybí:** propojení pásem dutinou (nové spojení dvou těles) se nemodeluje, jen pórovitost a propustnost
+  pásma. Reálné rychlosti jsou pro hru pomalé u vápence (dny až roky hry na jednu buňku) – přidán násobič
+  `p75_zrychleni` (výchozí 1 = reálně), Jan rozhodne. Materializace buněk dutiny při kopání je v `on_dig` (počet buněk),
+  vzhled ve scéně ne.
+- **Rozhodnutí:** `p75_kras` zůstává vypnutý (na ostrově nic nedělá, bitová shoda jen bez krycí vrstvy v tělese).
+
 ## E73 nálezy E68: pramen ve vlastní tůni, přítok tůně jako součet, zrychlení smyčky, E67 „vše prosákne“ (plán, zapsáno před pokusem 2026-11-19 23:15; TODO Voda, Jan: nejdřív dodělat vodu)
 - **1. Pramen v prohlubni, kterou sám zavodní (`p73_vyver`):** cyklus ostrova s periodou 2 (E68) vzniká tím, že
   zavodněná prohlubeň se v dalším kole stane vstupem téhož tělesa a její buňky se vyloučí z výstupů (`excl`). Pravidlo:

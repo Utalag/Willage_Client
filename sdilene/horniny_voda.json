@@ -3,6 +3,7 @@
  "version": 2,
  "extends": "materialy_voda.json",
  "perm_leak": 0.05,
+ "_rozp75": "E75 (2026-11-20): rozp_kg_m3 = rozpuštěná hornina v rovnováze na m³ vody (kras), hustota_kg_m3 = hustota horniny. Řády: vápenec 0,05–0,3 (krasová voda 50–300 mg/l CaCO3, Dreybrodt / Gabrovšek, Acta Carsologica), dolomit o něco méně, sádrovec 2,531 g/l při 20 °C (Klimchouk, Int. J. Speleol. 25(3)), kamenná sůl 360 g/l. Bez pole = nerozpustná (0).",
  "materials": {
   "peridotite": {
    "id": 20,
@@ -390,6 +391,8 @@
   },
   "deep_limestone": {
    "id": 44,
+   "rozp_kg_m3": 0.2,
+   "hustota_kg_m3": 2700,
    "perm": 0.246,
    "por": 0.05,
    "res": 0.1,
@@ -438,6 +441,8 @@
   },
   "rock_salt": {
    "id": 47,
+   "rozp_kg_m3": 360.0,
+   "hustota_kg_m3": 2160,
    "perm": 0.0,
    "por": 0.01,
    "res": 0.1,
@@ -454,6 +459,8 @@
   },
   "gypsum": {
    "id": 48,
+   "rozp_kg_m3": 2.5,
+   "hustota_kg_m3": 2300,
    "perm": 0.0,
    "por": 0.01,
    "res": 0.1,
@@ -470,6 +477,8 @@
   },
   "dolomite": {
    "id": 49,
+   "rozp_kg_m3": 0.15,
+   "hustota_kg_m3": 2850,
    "perm": 0.246,
    "por": 0.05,
    "res": 0.1,
@@ -584,6 +593,8 @@
   },
   "limestone_outcrop": {
    "id": 56,
+   "rozp_kg_m3": 0.2,
+   "hustota_kg_m3": 2700,
    "perm": 0.246,
    "por": 0.05,
    "res": 0.15,

@@ -1,0 +1,158 @@
+{
+ "cas_konec_dni": 365.0,
+ "dutiny": {},
+ "hydro68": {
+  "bilance": {
+   "chyba_dolu": 0.0000000000000000832667268468867,
+   "chyba_nahoru": 0.0,
+   "chyba_podzemi": 0.0,
+   "chyba_povrch": 0.000000000000000666133814775094,
+   "chyba_svet": 0.000000000000000749400541621981,
+   "do_hloubky": 0.0,
+   "konec_jinde": 0.0,
+   "odtok_tuni": 0.15318,
+   "okraj": 9.64358,
+   "podzemi_prameny": 0.0,
+   "podzemi_prusak": 0.0,
+   "podzemi_stena": 0.15318,
+   "podzemi_vstup": 0.15318,
+   "ponory": 0.203239999999999,
+   "prameny_z_podzemi": 0.0,
+   "zavrena_telesa": 0,
+   "zdroje": 10.0
+  },
+  "kolo": {
+   "cyklus": 0,
+   "kola": 2,
+   "skoky": 0,
+   "ustaleno": true,
+   "zmena": 0.0
+  },
+  "otisk": "86a2a3ca0c6d4d8d"
+ },
+ "hydro68_po": {
+  "bilance": {
+   "chyba_dolu": 0.0000000000000000832667268468867,
+   "chyba_nahoru": 0.0,
+   "chyba_podzemi": 0.0,
+   "chyba_povrch": 0.000000000000000666133814775094,
+   "chyba_svet": 0.000000000000000749400541621981,
+   "do_hloubky": 0.0,
+   "konec_jinde": 0.0,
+   "odtok_tuni": 0.15318,
+   "okraj": 9.64358,
+   "podzemi_prameny": 0.0,
+   "podzemi_prusak": 0.0,
+   "podzemi_stena": 0.15318,
+   "podzemi_vstup": 0.15318,
+   "ponory": 0.203239999999999,
+   "prameny_z_podzemi": 0.0,
+   "zavrena_telesa": 0,
+   "zdroje": 10.0
+  },
+  "kolo": {
+   "cyklus": 0,
+   "kola": 1,
+   "skoky": 0,
+   "ustaleno": true,
+   "zmena": 0.0
+  },
+  "otisk": "c49efbc192d3b94e"
+ },
+ "neshod_celkem": 0,
+ "otisk_kras": "7e31419afd6c5cdc",
+ "otisk_kras_po_vykopech": "65fac307deabaffc",
+ "otisk_neshod": 0,
+ "otisk_voda": "c49efbc192d3b94e",
+ "pasem": 0,
+ "pruttok_l_s": 0.15318,
+ "rates_ms": 1.043,
+ "rychlost": {
+  "celkem_m3_s": 0.0,
+  "m3_za_herni_den": 0.0,
+  "pasmo": -1,
+  "po_materialech": {},
+  "prvni_udalost_dni": 1e99999,
+  "prvni_udalost_realne_min": 1e99999
+ },
+ "rychlost_po_vykopech": {},
+ "souhrn": {
+  "koryto_sloupcu": 27,
+  "okraj_lps": 9.64358,
+  "podzemni_telesa": 1,
+  "prameny": 5,
+  "tun_sloupcu": 159,
+  "vodopady": 8,
+  "vodopady_okraj": 5,
+  "volani_podzemi": 2,
+  "vyvery": 0
+ },
+ "souhrn_po": {
+  "koryto_sloupcu": 27,
+  "okraj_lps": 9.64358,
+  "podzemni_telesa": 1,
+  "prameny": 5,
+  "tun_sloupcu": 159,
+  "vodopady": 8,
+  "vodopady_okraj": 5,
+  "volani_podzemi": 6,
+  "vyvery": 0
+ },
+ "udalosti": [],
+ "voda_ms": {
+  "celkem": 743.933,
+  "podzemí: pásma": 239.182,
+  "povrch + podzemí: plný výpočet": 491.043,
+  "prameny": 8.813
+ },
+ "vykopy": [
+  {
+   "gi": 7751,
+   "kras": {
+    "bunek_dutiny": 0,
+    "vynulovano": 0
+   },
+   "ms": 28.98
+  },
+  {
+   "gi": 6450,
+   "kras": {
+    "bunek_dutiny": 0,
+    "vynulovano": 0
+   },
+   "ms": 1.568
+  },
+  {
+   "gi": 7611,
+   "kras": {
+    "bunek_dutiny": 0,
+    "vynulovano": 0
+   },
+   "ms": 69.184
+  },
+  {
+   "gi": 8910,
+   "kras": {
+    "bunek_dutiny": 0,
+    "vynulovano": 0
+   },
+   "ms": 101.325
+  },
+  {
+   "gi": 8385,
+   "kras": {
+    "bunek_dutiny": 0,
+    "vynulovano": 0
+   },
+   "ms": 94.431
+  },
+  {
+   "gi": 7612,
+   "kras": {
+    "bunek_dutiny": 0,
+    "vynulovano": 0
+   },
+   "ms": 68.431
+  }
+ ]
+}
