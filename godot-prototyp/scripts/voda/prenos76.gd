@@ -135,7 +135,7 @@ static func _arrival(v) -> Dictionary:
 			var dx := 1.4142 if (j / v.H != i / v.H and j % v.H != i % v.H) else 1.0
 			var dist: float = dx * HY.CELL   # sloupec i buňka 0,5 m
 			var s_ := maxf((float(st.hm[i]) - float(st.hm[j])) * HY.CELL / dist, float(v.p.get("e51_s_min", 0.005)))
-			var vel: float = HY.manning(maxf(float(st.eff[i]), 1e-6) / 1000.0, s_, v.p).v
+			var vel: float = HY.manning(maxf(float(st.eff[i]), 1e-6) / J.L_NA_M3, s_, v.p).v
 			t += dist / maxf(vel, 1e-6)
 			tmax = maxf(tmax, t)
 			i = j

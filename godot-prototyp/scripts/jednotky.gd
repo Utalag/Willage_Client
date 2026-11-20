@@ -13,7 +13,8 @@ const U_M := 0.5             # řídicí mřížka geologie (= geo_fn.U)
 const HJ_M := 0.25           # herní jednotka (Jan 2026-11-19 20:12)
 const HJ_NA_BLOK := 32       # 8 m / 0,25 m
 const N_RIDICI := 16         # hustota řídicí mřížky
-const L_NA_M3 := 1000.0      # 1 m³ = 1000 l
+const LI = preload("res://scripts/voda/litry.gd")   # E94: jediný převod l → m³ (kopie studie)
+const L_NA_M3 := LI.L_NA_M3  # 1 m³ = 1000 l
 const POSTAVA_HJ := 7        # 1,75 m
 const DVERE_HJ := 8
 
@@ -84,8 +85,8 @@ static func bunka_m3(n: int) -> float:
 	var c := bunka_m(n)
 	return c * c * c
 
-static func lps_na_m3s(q_lps: float) -> float:
-	return q_lps / L_NA_M3
+static func lps_na_m3s(q_lps: float) -> float:   # = LI.m3 (E94: dělení, ne násobení 0,001)
+	return LI.m3(q_lps)
 
 static func m3_na_l(v_m3: float) -> float:
 	return v_m3 * L_NA_M3
