@@ -2620,3 +2620,22 @@ Zdroje [45]–[72] níže v tomto souboru zůstávají jen jako zástupné čís
   (2) převést konstanty `BS` / `BH` / `CELL_H` na modul postupně (soubor po souboru, kontrola otisků)? (3) sjednotit l → m³
   na jeden tvar (`* 0.001` nebo `/ 1000`), i když se změní poslední bity vody a otisky? (4) vegetace a stavby: měřit
   v metrech (nezávisle na buňce), nebo v herních jednotkách?
+
+## E94 metry ve scéně a převod na jednotky.gd (plán, zapsáno před pokusem 2026-11-20 11:20; Jan 2026-11-20 11:04 k E89: „Souhlasím s návrhy a sjednocením a optimalizacemi.“; větev `e94-metry` z main 0e8aa00 + sloučená `e89-jednotky`)
+- **Co se má stát (E89 otázky 1–4 = ano):**
+  1. *Scéna 1 jednotka = 1 m.* Dnes se buňka kreslí 1 × 1 × 0,5 (vodorovně natažená 2×). Ostrov dostane měřítko (0,5, 1, 0,5)
+     jako v náhledu `p89_meritko`, data a voda zůstanou v buňkách. `p89_meritko` bude na větvi výchozí zap, staré chování
+     zůstane dosažitelné přes `--surface.p89_meritko=false`.
+  2. *Převod konstant na `jednotky.gd` postupně, soubor po souboru.* Jen vlastní skripty prototypu (kopie studií mění jen
+     `port_studie.py`). Po každém kroku: `voda_e66` (d7aedf3a6d9d10e8 → 63d7b89a91385a79), `port_studie --check` 0 změn,
+     test `jednotky_e89.gd` a nový `tools/meritko_e94.gd` (otisky buněk, sítí, odkrytí a vegetace musí zůstat stejné).
+  3. *Jeden tvar l → m³.* Ve studii vznikne jedna funkce (`voda/litry.gd`), voda ji přebere přes `port_studie`. Zvolený tvar je
+     dělení `/ 1000` (IEEE dělení je správně zaokrouhlené, násobení 0,001 zaokrouhluje dvakrát). Ve vnitřních smyčkách se
+     použije stejný výraz s konstantou modulu. **Mění se poslední bity vody a otisky vody** (starý a nový otisk zapíšu).
+  4. *Stromy, stavby, kamera, cesty a mlha v metrech.* Vegetace a stavby se v ostrově s měřítkem vyrovnají (×2 vodorovně),
+     rozměry modelů se zadají v metrech, půdorysy staveb v metrech → buňky. Kamera, zoom a mlha přepočtené na metry.
+     Hora START: zkusím volitelné převýšení hory (`p94_hora_k`, výchozí 1 = beze změny), protože mění terén i vodu.
+  5. *Rychlost.* Ve vnitřních smyčkách jen konstanty modulu (žádné volání po buňkách). Měřím před a po (`meritko_e94.gd`:
+     generování, síť, odkrytí, vegetace, smyčka literál / konstanta / funkce; `voda_e66` časy).
+- **Negativa předem:** hora v bloku 8 m nemůže být vysoká bez útesu (strop 32 m výšky a 8 m šířky). Cesty zůstanou po
+  buňkách (šířka 0,5 m), jejich šířka v metrech je herní rozhodnutí. Sjednocení l → m³ změní otisky i ve studii.
