@@ -1,0 +1,949 @@
+{
+ "B": {
+  "(-1, 1)": {
+   "16": {
+    "kontrola_ulozene": {
+     "kategorie": {},
+     "neshod": 0,
+     "pary": {}
+    },
+    "kontrola_ulozene_svet": {
+     "kategorie": {},
+     "neshod": 0,
+     "pary": {}
+    },
+    "ms_vzorek": 67.376,
+    "rot": {
+     "1": {
+      "bunek": 16384,
+      "mineraly_dutiny_neshod": 208,
+      "vse": {
+       "kategorie": {
+        "mineral": 88,
+        "vzduch_dutina": 120
+       },
+       "neshod": 208,
+       "pary": {
+        "0→42": 26,
+        "0→6": 30,
+        "104→52": 14,
+        "26→0": 21,
+        "51→104": 19,
+        "7→0": 35
+       }
+      },
+      "zaklad": {
+       "kategorie": {},
+       "neshod": 0,
+       "pary": {}
+      }
+     },
+     "2": {
+      "bunek": 16384,
+      "mineraly_dutiny_neshod": 187,
+      "vse": {
+       "kategorie": {
+        "mineral": 67,
+        "vzduch_dutina": 120
+       },
+       "neshod": 187,
+       "pary": {
+        "0→42": 26,
+        "0→6": 29,
+        "26→0": 19,
+        "7→0": 36,
+        "7→9": 12,
+        "9→7": 12
+       }
+      },
+      "zaklad": {
+       "kategorie": {},
+       "neshod": 0,
+       "pary": {}
+      }
+     },
+     "3": {
+      "bunek": 16384,
+      "mineraly_dutiny_neshod": 204,
+      "vse": {
+       "kategorie": {
+        "mineral": 80,
+        "teleso_contact": 4,
+        "vzduch_dutina": 120
+       },
+       "neshod": 204,
+       "pary": {
+        "0→42": 26,
+        "0→6": 30,
+        "52→104": 18,
+        "7→0": 47,
+        "7→9": 14,
+        "9→7": 14
+       }
+      },
+      "zaklad": {
+       "kategorie": {},
+       "neshod": 0,
+       "pary": {}
+      }
+     }
+    }
+   },
+   "32": {
+    "ms_vzorek": 584.202,
+    "rot": {
+     "1": {
+      "bunek": 131072,
+      "mineraly_dutiny_neshod": 1653,
+      "vse": {
+       "kategorie": {
+        "mineral": 696,
+        "vzduch_dutina": 957
+       },
+       "neshod": 1653,
+       "pary": {
+        "0→42": 184,
+        "0→6": 237,
+        "104→52": 123,
+        "26→0": 157,
+        "51→104": 160,
+        "7→0": 284
+       }
+      },
+      "zaklad": {
+       "kategorie": {},
+       "neshod": 0,
+       "pary": {}
+      }
+     },
+     "2": {
+      "bunek": 131072,
+      "mineraly_dutiny_neshod": 1524,
+      "vse": {
+       "kategorie": {
+        "mineral": 564,
+        "vzduch_dutina": 960
+       },
+       "neshod": 1524,
+       "pary": {
+        "0→42": 184,
+        "0→6": 231,
+        "26→0": 149,
+        "7→0": 293,
+        "7→9": 110,
+        "9→7": 110
+       }
+      },
+      "zaklad": {
+       "kategorie": {},
+       "neshod": 0,
+       "pary": {}
+      }
+     },
+     "3": {
+      "bunek": 131072,
+      "mineraly_dutiny_neshod": 1610,
+      "vse": {
+       "kategorie": {
+        "mineral": 625,
+        "teleso_contact": 25,
+        "vzduch_dutina": 960
+       },
+       "neshod": 1610,
+       "pary": {
+        "0→42": 184,
+        "0→6": 237,
+        "52→104": 137,
+        "7→0": 356,
+        "7→9": 108,
+        "9→7": 108
+       }
+      },
+      "zaklad": {
+       "kategorie": {},
+       "neshod": 0,
+       "pary": {}
+      }
+     }
+    }
+   },
+   "seed": 505,
+   "typ": "louka"
+  },
+  "(0, 0)": {
+   "16": {
+    "kontrola_ulozene": {
+     "kategorie": {},
+     "neshod": 0,
+     "pary": {}
+    },
+    "kontrola_ulozene_svet": {
+     "kategorie": {},
+     "neshod": 0,
+     "pary": {}
+    },
+    "ms_vzorek": 66.548,
+    "rot": {
+     "1": {
+      "bunek": 16384,
+      "mineraly_dutiny_neshod": 156,
+      "vse": {
+       "kategorie": {
+        "hornina_hor": 45,
+        "mineral": 155,
+        "teleso_contact": 1
+       },
+       "neshod": 201,
+       "pary": {
+        "104→51": 17,
+        "36→8": 21,
+        "52→104": 20,
+        "66→64": 17,
+        "8→36": 17,
+        "9→5": 16
+       }
+      },
+      "zaklad": {
+       "kategorie": {
+        "hornina_hor": 45
+       },
+       "neshod": 45,
+       "pary": {
+        "63→64": 5,
+        "63→70": 1,
+        "64→63": 4,
+        "64→66": 15,
+        "66→64": 17,
+        "70→63": 3
+       }
+      }
+     },
+     "2": {
+      "bunek": 16384,
+      "mineraly_dutiny_neshod": 156,
+      "vse": {
+       "kategorie": {
+        "hornina_hor": 33,
+        "mineral": 152,
+        "teleso_contact": 4
+       },
+       "neshod": 189,
+       "pary": {
+        "104→51": 17,
+        "36→8": 17,
+        "52→104": 17,
+        "5→9": 15,
+        "8→36": 17,
+        "9→5": 16
+       }
+      },
+      "zaklad": {
+       "kategorie": {
+        "hornina_hor": 33
+       },
+       "neshod": 33,
+       "pary": {
+        "63→64": 6,
+        "64→63": 5,
+        "64→66": 13,
+        "66→64": 6,
+        "70→63": 3
+       }
+      }
+     },
+     "3": {
+      "bunek": 16384,
+      "mineraly_dutiny_neshod": 154,
+      "vse": {
+       "kategorie": {
+        "hornina_hor": 42,
+        "mineral": 149,
+        "teleso_contact": 5
+       },
+       "neshod": 196,
+       "pary": {
+        "104→51": 17,
+        "52→104": 18,
+        "5→9": 19,
+        "6→8": 17,
+        "8→36": 17,
+        "9→5": 16
+       }
+      },
+      "zaklad": {
+       "kategorie": {
+        "hornina_hor": 42
+       },
+       "neshod": 42,
+       "pary": {
+        "63→64": 5,
+        "64→63": 3,
+        "64→66": 16,
+        "66→64": 14,
+        "70→63": 4
+       }
+      }
+     }
+    }
+   },
+   "32": {
+    "ms_vzorek": 487.371,
+    "rot": {
+     "1": {
+      "bunek": 131072,
+      "mineraly_dutiny_neshod": 1226,
+      "vse": {
+       "kategorie": {
+        "hornina_hor": 222,
+        "mineral": 1221,
+        "teleso_contact": 5
+       },
+       "neshod": 1448,
+       "pary": {
+        "104→51": 127,
+        "36→8": 167,
+        "52→104": 160,
+        "8→36": 130,
+        "8→6": 91,
+        "9→5": 114
+       }
+      },
+      "zaklad": {
+       "kategorie": {
+        "hornina_hor": 222
+       },
+       "neshod": 222,
+       "pary": {
+        "63→64": 23,
+        "63→70": 23,
+        "64→63": 25,
+        "64→66": 75,
+        "66→64": 56,
+        "70→63": 20
+       }
+      }
+     },
+     "2": {
+      "bunek": 131072,
+      "mineraly_dutiny_neshod": 1232,
+      "vse": {
+       "kategorie": {
+        "hornina_hor": 262,
+        "mineral": 1195,
+        "teleso_contact": 37
+       },
+       "neshod": 1494,
+       "pary": {
+        "104→51": 127,
+        "36→8": 130,
+        "52→104": 147,
+        "6→8": 110,
+        "8→36": 138,
+        "9→5": 106
+       }
+      },
+      "zaklad": {
+       "kategorie": {
+        "hornina_hor": 262
+       },
+       "neshod": 262,
+       "pary": {
+        "63→64": 39,
+        "63→70": 35,
+        "64→63": 28,
+        "64→66": 89,
+        "66→64": 52,
+        "70→63": 19
+       }
+      }
+     },
+     "3": {
+      "bunek": 131072,
+      "mineraly_dutiny_neshod": 1232,
+      "vse": {
+       "kategorie": {
+        "hornina_hor": 256,
+        "mineral": 1196,
+        "teleso_contact": 36
+       },
+       "neshod": 1488,
+       "pary": {
+        "104→51": 127,
+        "52→104": 147,
+        "5→9": 141,
+        "6→8": 136,
+        "8→36": 132,
+        "9→5": 114
+       }
+      },
+      "zaklad": {
+       "kategorie": {
+        "hornina_hor": 256
+       },
+       "neshod": 256,
+       "pary": {
+        "63→64": 39,
+        "63→70": 25,
+        "64→63": 28,
+        "64→66": 74,
+        "66→64": 71,
+        "70→63": 19
+       }
+      }
+     }
+    }
+   },
+   "seed": 808,
+   "typ": "hora"
+  },
+  "(0, 1)": {
+   "16": {
+    "kontrola_ulozene": {
+     "kategorie": {},
+     "neshod": 0,
+     "pary": {}
+    },
+    "kontrola_ulozene_svet": {
+     "kategorie": {},
+     "neshod": 0,
+     "pary": {}
+    },
+    "ms_vzorek": 60.245,
+    "rot": {
+     "1": {
+      "bunek": 16384,
+      "mineraly_dutiny_neshod": 156,
+      "vse": {
+       "kategorie": {
+        "hornina_hor": 13,
+        "mineral": 155,
+        "teleso_contact": 1
+       },
+       "neshod": 169,
+       "pary": {
+        "104→51": 22,
+        "52→104": 26,
+        "6→8": 19,
+        "7→9": 15,
+        "8→6": 18,
+        "9→7": 12
+       }
+      },
+      "zaklad": {
+       "kategorie": {
+        "hornina_hor": 13
+       },
+       "neshod": 13,
+       "pary": {
+        "55→60": 6,
+        "60→55": 7
+       }
+      }
+     },
+     "2": {
+      "bunek": 16384,
+      "mineraly_dutiny_neshod": 160,
+      "vse": {
+       "kategorie": {
+        "hornina_hor": 8,
+        "mineral": 157,
+        "teleso_contact": 3
+       },
+       "neshod": 168,
+       "pary": {
+        "104→51": 22,
+        "51→104": 27,
+        "6→8": 20,
+        "7→9": 16,
+        "8→6": 18,
+        "9→7": 12
+       }
+      },
+      "zaklad": {
+       "kategorie": {
+        "hornina_hor": 8
+       },
+       "neshod": 8,
+       "pary": {
+        "55→60": 2,
+        "60→55": 6
+       }
+      }
+     },
+     "3": {
+      "bunek": 16384,
+      "mineraly_dutiny_neshod": 160,
+      "vse": {
+       "kategorie": {
+        "hornina_hor": 6,
+        "mineral": 160
+       },
+       "neshod": 166,
+       "pary": {
+        "104→51": 22,
+        "51→104": 19,
+        "6→8": 20,
+        "7→9": 18,
+        "8→6": 18,
+        "9→7": 12
+       }
+      },
+      "zaklad": {
+       "kategorie": {
+        "hornina_hor": 6
+       },
+       "neshod": 6,
+       "pary": {
+        "60→55": 6
+       }
+      }
+     }
+    }
+   },
+   "32": {
+    "ms_vzorek": 488.406,
+    "rot": {
+     "1": {
+      "bunek": 131072,
+      "mineraly_dutiny_neshod": 1238,
+      "vse": {
+       "kategorie": {
+        "hornina_hor": 100,
+        "mineral": 1231,
+        "teleso_contact": 7
+       },
+       "neshod": 1338,
+       "pary": {
+        "104→51": 171,
+        "52→104": 191,
+        "6→8": 159,
+        "7→9": 110,
+        "8→6": 137,
+        "9→7": 100
+       }
+      },
+      "zaklad": {
+       "kategorie": {
+        "hornina_hor": 100
+       },
+       "neshod": 100,
+       "pary": {
+        "55→60": 35,
+        "60→55": 65
+       }
+      }
+     },
+     "2": {
+      "bunek": 131072,
+      "mineraly_dutiny_neshod": 1278,
+      "vse": {
+       "kategorie": {
+        "hornina_hor": 71,
+        "mineral": 1258,
+        "teleso_contact": 20
+       },
+       "neshod": 1349,
+       "pary": {
+        "104→51": 171,
+        "51→104": 230,
+        "6→8": 160,
+        "7→9": 125,
+        "8→6": 137,
+        "9→7": 100
+       }
+      },
+      "zaklad": {
+       "kategorie": {
+        "hornina_hor": 71
+       },
+       "neshod": 71,
+       "pary": {
+        "55→60": 19,
+        "60→55": 52
+       }
+      }
+     },
+     "3": {
+      "bunek": 131072,
+      "mineraly_dutiny_neshod": 1278,
+      "vse": {
+       "kategorie": {
+        "hornina_hor": 71,
+        "mineral": 1278
+       },
+       "neshod": 1349,
+       "pary": {
+        "104→51": 171,
+        "51→104": 159,
+        "6→8": 160,
+        "7→9": 152,
+        "8→6": 137,
+        "9→7": 99
+       }
+      },
+      "zaklad": {
+       "kategorie": {
+        "hornina_hor": 71
+       },
+       "neshod": 71,
+       "pary": {
+        "55→60": 12,
+        "60→55": 59
+       }
+      }
+     }
+    }
+   },
+   "seed": 707,
+   "typ": "kopec"
+  },
+  "(1, 0)": {
+   "16": {
+    "kontrola_ulozene": {
+     "kategorie": {},
+     "neshod": 0,
+     "pary": {}
+    },
+    "kontrola_ulozene_svet": {
+     "kategorie": {},
+     "neshod": 0,
+     "pary": {}
+    },
+    "ms_vzorek": 78.803,
+    "rot": {
+     "1": {
+      "bunek": 16384,
+      "mineraly_dutiny_neshod": 266,
+      "vse": {
+       "kategorie": {
+        "mineral": 84,
+        "teleso_contact": 20,
+        "vzduch_dutina": 162
+       },
+       "neshod": 266,
+       "pary": {
+        "0→42": 41,
+        "0→44": 27,
+        "104→52": 20,
+        "51→0": 42,
+        "51→104": 20,
+        "5→0": 29
+       }
+      },
+      "zaklad": {
+       "kategorie": {},
+       "neshod": 0,
+       "pary": {}
+      }
+     },
+     "2": {
+      "bunek": 16384,
+      "mineraly_dutiny_neshod": 268,
+      "vse": {
+       "kategorie": {
+        "mineral": 86,
+        "teleso_contact": 18,
+        "vzduch_dutina": 164
+       },
+       "neshod": 268,
+       "pary": {
+        "0→42": 41,
+        "0→44": 27,
+        "104→52": 20,
+        "44→0": 17,
+        "51→0": 17,
+        "5→0": 40
+       }
+      },
+      "zaklad": {
+       "kategorie": {},
+       "neshod": 0,
+       "pary": {}
+      }
+     },
+     "3": {
+      "bunek": 16384,
+      "mineraly_dutiny_neshod": 268,
+      "vse": {
+       "kategorie": {
+        "mineral": 88,
+        "teleso_contact": 19,
+        "vzduch_dutina": 161
+       },
+       "neshod": 268,
+       "pary": {
+        "0→42": 41,
+        "0→44": 27,
+        "104→52": 20,
+        "42→0": 19,
+        "51→0": 34,
+        "5→0": 34
+       }
+      },
+      "zaklad": {
+       "kategorie": {},
+       "neshod": 0,
+       "pary": {}
+      }
+     }
+    }
+   },
+   "32": {
+    "ms_vzorek": 746.093,
+    "rot": {
+     "1": {
+      "bunek": 131072,
+      "mineraly_dutiny_neshod": 2133,
+      "vse": {
+       "kategorie": {
+        "mineral": 660,
+        "teleso_contact": 122,
+        "vzduch_dutina": 1351
+       },
+       "neshod": 2133,
+       "pary": {
+        "0→42": 325,
+        "0→44": 223,
+        "104→52": 149,
+        "51→0": 356,
+        "51→104": 160,
+        "5→0": 274
+       }
+      },
+      "zaklad": {
+       "kategorie": {},
+       "neshod": 0,
+       "pary": {}
+      }
+     },
+     "2": {
+      "bunek": 131072,
+      "mineraly_dutiny_neshod": 2135,
+      "vse": {
+       "kategorie": {
+        "mineral": 686,
+        "teleso_contact": 138,
+        "vzduch_dutina": 1311
+       },
+       "neshod": 2135,
+       "pary": {
+        "0→42": 325,
+        "0→44": 223,
+        "104→52": 149,
+        "44→0": 126,
+        "51→0": 145,
+        "5→0": 317
+       }
+      },
+      "zaklad": {
+       "kategorie": {},
+       "neshod": 0,
+       "pary": {}
+      }
+     },
+     "3": {
+      "bunek": 131072,
+      "mineraly_dutiny_neshod": 2144,
+      "vse": {
+       "kategorie": {
+        "mineral": 692,
+        "teleso_contact": 189,
+        "vzduch_dutina": 1263
+       },
+       "neshod": 2144,
+       "pary": {
+        "0→42": 325,
+        "0→44": 223,
+        "104→52": 149,
+        "42→0": 177,
+        "51→0": 279,
+        "5→0": 242
+       }
+      },
+      "zaklad": {
+       "kategorie": {},
+       "neshod": 0,
+       "pary": {}
+      }
+     }
+    }
+   },
+   "seed": 909,
+   "typ": "louka"
+  },
+  "(1, 1)": {
+   "16": {
+    "kontrola_ulozene": {
+     "kategorie": {},
+     "neshod": 0,
+     "pary": {}
+    },
+    "kontrola_ulozene_svet": {
+     "kategorie": {},
+     "neshod": 0,
+     "pary": {}
+    },
+    "ms_vzorek": 100.046,
+    "rot": {
+     "1": {
+      "bunek": 16384,
+      "mineraly_dutiny_neshod": 356,
+      "vse": {
+       "kategorie": {
+        "mineral": 166,
+        "teleso_contact": 22,
+        "vzduch_dutina": 168
+       },
+       "neshod": 356,
+       "pary": {
+        "0→5": 32,
+        "0→51": 50,
+        "12→4": 24,
+        "51→0": 32,
+        "51→105": 26,
+        "5→0": 23
+       }
+      },
+      "zaklad": {
+       "kategorie": {},
+       "neshod": 0,
+       "pary": {}
+      }
+     },
+     "2": {
+      "bunek": 16384,
+      "mineraly_dutiny_neshod": 378,
+      "vse": {
+       "kategorie": {
+        "mineral": 181,
+        "teleso_contact": 17,
+        "vzduch_dutina": 180
+       },
+       "neshod": 378,
+       "pary": {
+        "0→5": 36,
+        "0→51": 50,
+        "105→4": 33,
+        "12→4": 30,
+        "51→0": 52,
+        "5→0": 32
+       }
+      },
+      "zaklad": {
+       "kategorie": {},
+       "neshod": 0,
+       "pary": {}
+      }
+     },
+     "3": {
+      "bunek": 16384,
+      "mineraly_dutiny_neshod": 378,
+      "vse": {
+       "kategorie": {
+        "mineral": 195,
+        "teleso_contact": 9,
+        "vzduch_dutina": 174
+       },
+       "neshod": 378,
+       "pary": {
+        "0→5": 35,
+        "0→51": 50,
+        "105→4": 33,
+        "12→4": 30,
+        "49→0": 43,
+        "4→12": 30
+       }
+      },
+      "zaklad": {
+       "kategorie": {},
+       "neshod": 0,
+       "pary": {}
+      }
+     }
+    }
+   },
+   "32": {
+    "ms_vzorek": 644.82,
+    "rot": {
+     "1": {
+      "bunek": 131072,
+      "mineraly_dutiny_neshod": 2839,
+      "vse": {
+       "kategorie": {
+        "mineral": 1315,
+        "teleso_contact": 167,
+        "vzduch_dutina": 1357
+       },
+       "neshod": 2839,
+       "pary": {
+        "0→5": 236,
+        "0→51": 413,
+        "12→4": 185,
+        "51→0": 287,
+        "51→105": 206,
+        "5→0": 192
+       }
+      },
+      "zaklad": {
+       "kategorie": {},
+       "neshod": 0,
+       "pary": {}
+      }
+     },
+     "2": {
+      "bunek": 131072,
+      "mineraly_dutiny_neshod": 3022,
+      "vse": {
+       "kategorie": {
+        "mineral": 1474,
+        "teleso_contact": 108,
+        "vzduch_dutina": 1440
+       },
+       "neshod": 3022,
+       "pary": {
+        "0→5": 264,
+        "0→51": 413,
+        "105→4": 268,
+        "12→4": 240,
+        "51→0": 413,
+        "5→0": 247
+       }
+      },
+      "zaklad": {
+       "kategorie": {},
+       "neshod": 0,
+       "pary": {}
+      }
+     },
+     "3": {
+      "bunek": 131072,
+      "mineraly_dutiny_neshod": 3002,
+      "vse": {
+       "kategorie": {
+        "mineral": 1561,
+        "teleso_contact": 60,
+        "vzduch_dutina": 1381
+       },
+       "neshod": 3002,
+       "pary": {
+        "0→5": 253,
+        "0→51": 408,
+        "105→4": 268,
+        "49→0": 380,
+        "4→12": 240,
+        "51→105": 268
+       }
+      },
+      "zaklad": {
+       "kategorie": {},
+       "neshod": 0,
+       "pary": {}
+      }
+     }
+    }
+   },
+   "seed": 606,
+   "typ": "piscina"
+  }
+ }
+}

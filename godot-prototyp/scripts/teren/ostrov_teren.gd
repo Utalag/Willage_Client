@@ -46,6 +46,7 @@ const HRA := {
 	"voda_e67": false,                   # E67 (studie, jen větev e67): podzemí jako přetoky ve 3D + výstup ve stěně ostrova
 	"p67_min_vytok_render": 0.02,        # E67b: vývěr podzemní vody ve stěně / pramen slabší než tolik l/s se nekreslí (simulace beze změny)
 	"p67_min_tok_render": 0.02,          # E67b: protékající větev podzemní vody slabší než tolik l/s se v řezech nekreslí
+	"p86_otoceni": false,                # E86: podzemí otočeného výřezu bere šum hornin v souřadnicích původu (inverzní rotace)
 }
 
 static func params() -> Dictionary:

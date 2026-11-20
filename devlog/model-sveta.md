@@ -84,6 +84,8 @@ Pokus E78 (2026-11-20 01:08, větev `e78-prekryv`): překryv v buňkách 0,25 m 
 
 Průzkumný svět (velký, po chunkách) a osobní ostrov (začíná na 4 blocích, nejvýš asi 16) sdílí stejnou geologii a vodu. Hráč přenese výřez s celou geologickou definicí, otočí ho, posune ho do výšky a připojí ho. Existující bloky se nemění, přizpůsobí se jen nový. Voda se nepřenáší hotová, po vložení se přepočítá v novém okolí. Otevřené body jsou v [`TODO.md`](../TODO.md).
 
+Pokus E86 (2026-11-20 06:41, větev `e86-otoceni-90`): otočení výřezu po 90° je přesná permutace sloupců. Pole, buňky, dutiny i prameny se otočí bez jediné neshody a voda na ostrově se po vložení otočeného výřezu spočítá stejně lokálně i plně. Znovu vygenerovat výřez v otočené orientaci ale nejde bez rozdílů, protože regionální vrstvy, šum hornin hor a ložiska minerálů jsou ve světových souřadnicích. Přenáší se tedy hotová data s transformací a všechno, co se z funkcí počítá znovu, se vyhodnocuje v souřadnicích původu. Otevřené zůstává napojení vrstev přeneseného výřezu na nové sousedy (skok 1,8–2,7 m na švu).
+
 ## Zdroje
 
 - [Svět a měřítko](svet-a-meritko.md) (E49, E50)
