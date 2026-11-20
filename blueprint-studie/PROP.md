@@ -2556,3 +2556,36 @@ a `surface.adapt(real)` se bez nových vstupů neprojeví.
 
 Těžba a rozklad hornin jsou samostatná studie. Návrh E65 je teď **T01 (dříve E65)** v `../tezba-studie/` (`README.md`, `PROP.md`, `DENIK.md`, `ZDROJE.md` [1]–[28], tabulka v `data/horniny_tezba_navrh.json`).
 Zdroje [45]–[72] níže v tomto souboru zůstávají jen jako zástupné číslo, aby se neposunulo číslování blueprint-studie.
+
+## E95 asynchronní voda po kopání (plán, zapsáno před pokusem 2026-11-20 11:40)
+
+- **Zadání (Jan 2026-11-20 11:32):** „Co kdyby se oddělil výpočet vody od kopání? Asynchronní výpočet? Voda stejně počítá
+  události a změny nejsou hned.“ → „Jo zkus to.“ Cíl: zbavit se trhnutí 1,1–1,5 s při výkopu na telefonu (odhad E93).
+- **Dnešní stav (main 0e8aa00):** `digging.dig` → `island.water_finish()` (dopočítá rozpracované kroky R, blokuje) → změna buňky →
+  `island.water_edit` = `ostrov_voda.edit` (podzemí E64 + lokální přepočet E68 `H68.update`, blokuje) → kroky R po snímcích.
+  Na boxu výkop 726–818 ms průměr, max 1,2–1,3 s (E93), vše v hlavním vlákně.
+- **Návrh `p95_async_voda` (výchozí vypnuto):** výkop se v hlavním vlákně provede hned (buňka, síť terénu). Model vody
+  (`ostrov_voda`) patří po dobu výpočtu jen pracovnímu vláknu (`Thread` + `Semaphore` + `Mutex`, vlastnictví místo hluboké kopie:
+  hlavní vlákno na model nesahá). Úloha = `edit` + všechny kroky R + `_falls`/`_gw`. Na konci vlákno udělá **pohled**
+  (`fill`, `eff`, `hm`, `to`, `under`, vodopády – jen to, co čte vykreslení) a ten hlavní vlákno převezme v deterministickém
+  tiku `t_kopu + p95_zpozdeni` (pevné číslo tiků; když výsledek ještě není, hlavní vlákno počká = měřené trhnutí).
+- **Verze úloh – dvě varianty, změřit obě:** (A) **fronta**: každý výkop je úloha, zpracují se v pořadí (stejně jako dnešní
+  `water_finish` před dalším výkopem → stejný výsledek jako synchronní verze). (B) **sloučení/zrušení**: nový výkop během
+  výpočtu přeruší rozpracované kroky R starého a hned zavolá `edit` (zbytek se dopočítá jednou). Ověřit, jestli je konečný stav
+  stejný (pak je B levnější), nebo závisí na načasování (pak je B nedeterministická a nehodí se pro server).
+- **Okamžitý krok:** levné místní doplnění v pohledu (vykopaný sloupec sousedí s tůní / korytem s hladinou nad novým dnem →
+  v pohledu dostane hladinu souseda). Jen vzhled, přepíše ho výsledek úlohy. Změřit čas a kolik případů zachytí.
+- **Testy (nový `tools/async_e95.gd`, headless):** stejné bloky jako `voda_e66`; posloupnosti výkopů: S1 = výkopy `voda_e66`
+  (seed 66, 12), S2 = obrácené pořadí, S3 = jiný seed (95) s výkopy u pramenů, S4 = dávka výkopů hned po sobě (každý tik),
+  S5 = výkop během běžícího výpočtu (přítok vody) a opakovaný výkop stejného sloupce. Pro každou: synchronně vs asynchronně
+  (A, B), otisk `H68.otisk` + hash `fill/eff/to` po každém převzetí a na konci, `check_full` na konci.
+- **Měření:** blokování hlavního vlákna při výkopu (před/po), čas do výsledku vody (reálný čas i tiky), paměť pohledu
+  (bajty polí) a fronty, chování na 1 jádře (`taskset -c 0`) a na 8 jádrech: délka simulovaného snímku (zátěž hlavního vlákna
+  8 ms/snímek při 60 tikách/s) během výpočtu na pozadí.
+- **Výchozí hra beze změny:** `voda_e66` d7aedf3a6d9d10e8 → 63d7b89a91385a79, `port_studie --check` 0 změn (81 souborů).
+- **Negativa předem:** GDScript nemá zámek celého jazyka, ale ani záruky pro souběžný přístup ke stejným slovníkům → nutné přísné
+  vlastnictví (hlavní vlákno model nesmí číst). Na 1 jádře vlákno nic nezrychlí, jen rozloží práci do snímků (OS přepíná vlákna,
+  snímek se může protáhnout). Během výpočtu hra ukazuje starou vodu (až p95_zpozdeni tiků). Server musí převzít výsledek ve
+  stejném tiku jako klient, jinak se stav vody na chvíli rozejde.
+- **Bublina pro panel (cs):** „Asynchronní voda: po výkopu se voda dopočítá ve vlákně na pozadí, hra se nezasekne. Nová voda se
+  ukáže o chvilku později (pevně po N tikách, stejně na serveru i klientovi). Výsledek je stejný jako bez přepínače.“
