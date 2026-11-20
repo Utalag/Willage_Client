@@ -439,6 +439,7 @@ func part_kriterium() -> Array:
 	return out
 
 func _init() -> void:
+	if get_script().resource_path != "res://tools/hranice_e80.gd": return   # E81 nástroj dědí pomocné funkce
 	var out := {}
 	var parts := _arg("casti", "rozliseni,svy,prekryv,okraje,kriterium").split(",")
 	if "rozliseni" in parts: out.rozliseni = part_res()
