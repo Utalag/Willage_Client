@@ -5,12 +5,13 @@ extends Node3D
 ## Demo / screenshoty / měření (-- --demo, --video, --*-shots, --*-bench, --res-test, --export-vectors) běží
 ## ve scéně demo.tscn (scripts/demo/demo_runner.gd); Main na ni při takovém přepínači přesměruje.
 
+const J = preload("res://scripts/jednotky.gd")   # E94: mřížka a metry z jednoho místa
 const Mat = preload("res://scripts/mat.gd")
 const Block = preload("res://scripts/block.gd")
 const BlockGen = preload("res://scripts/block_gen.gd")
 const Toon = preload("res://scripts/toon.gd")
 const DemoRunner = preload("res://scripts/demo/demo_runner.gd")
-const BS := 16
+const BS := J.BS
 
 @onready var world = $World
 @onready var island = $Island
