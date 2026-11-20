@@ -1,0 +1,14 @@
+Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+WARNING: Could not set V-Sync mode, as changing V-Sync mode is not supported by the graphics driver.
+     at: set_use_vsync (platform/linuxbsd/x11/gl_manager_x11.cpp:372)
+OpenGL API 4.5 (Core Profile) Mesa 25.0.7-2+deb13u1 - Compatibility - Using Device: Mesa - llvmpipe (LLVM 19.1.7, 256 bits)
+
+blok Start: louka louka seed 101 slot (0, 0): generování 216.6 ms, mesh 69.4 ms
+blok Start: hora hora seed 202 slot (1, 0): generování 240.4 ms, mesh 77.9 ms
+blok Start: kopec kopec seed 303 slot (0, 1): generování 264.4 ms, mesh 60.7 ms
+blok Start: louka louka seed 404 slot (1, 1): generování 207.8 ms, mesh 46.7 ms
+E66 voda: { "prameny": 8.15, "podzemí: pásma": 221.058, "povrch + podzemí: plný výpočet": 2271.497, "celkem": 2529.803 } { "prameny": 5, "koryto_sloupcu": 27, "tun_sloupcu": 159, "vodopady": 8, "vodopady_okraj": 5, "okraj_lps": 9.64358, "podzemni_telesa": 1, "vyvery": 1, "volani_podzemi": 4 }
+uloženo shots/89_meritko_vyp_ostrov.png
+uloženo shots/89_meritko_vyp_detail.png
+uloženo shots/89_meritko_vyp_hora_bok.png
+E89 paprsek středem na postavu: sloupec (24, 24) (čekám (24, 24))

@@ -216,6 +216,12 @@ Skupiny: 1 Prototyp a buildy · 2 Terén a tvar · 3 Rozlišení bloku · 4 Ská
 - **Komplikace:** koryta jsou krátké úseky (malý svět, malá povodí). Krasová vyvěračka 0. Hráz na svahu tůň nevytvořila (potok ji obtekl). Podzemní tok vede zatím zjednodušeně k nejbližšímu okraji.
 - **Další krok:** Jan rozhodne, jak daleko vést podzemní tok (sledovat propustnou vrstvu?) a jestli má mít krasová vyvěračka vlastní pravidlo. Starší otevřené otázky (eroze po blocích vs hrubý svět, jádro hory přes šev, minerály z hrubého světa) zůstávají.
 
+### 📏 Blok 4 / E89: oddělené typy jednotek (2026-11-20 07:19 · `godot-prototyp/scripts/jednotky.gd`, `tools/jednotky_e89.py` + `.gd`, příznak `p89_meritko`, větev `e89-jednotky`, data `blueprint-studie/shots/e89/`)
+- **Směr:** TODO Blok 4, první bod: metry pro fyziku a vodu, herní jednotky 0,25 m, hustota vzorkování a celočíselná mřížka na jednom místě. Hydraulika zůstává v m, s, l/s.
+- **Zjištění:** konstanty bloku rozepsané (BS 33×, BH 18×, CELL_H 9×), dvě konvence os indexu (stejná čísla), l → m³ dvakrát jinak (13 % průtoků jiný poslední bit), `ug_cell_m3` s výchozí 0,125 i 1,0. Scéna kreslí buňku 1 × 1 × 0,5 → vodorovně natažená 2×.
+- **Výsledek:** modul bez chyb (tam a zpět, vnoření, index pro 16–128), volání 3–4× dražší než výraz. `p89_meritko` ukáže scénu v metrech, výchozí hra beze změny.
+- **Další krok (Jan):** scéna v metrech? postupný převod konstant? jeden tvar l → m³? vegetace a stavby v metrech?
+
 ### 🔄 Voda E74–E77 sloučena, přepínače podle Jana (2026-11-20 04:08 · větev `voda-e74-e77-slouceni`, tag `voda-e74-e77-ready`, `tok.solve74`, `ug67._merge_outs72d`, `ostrov_voda.place76`, data `blueprint-studie/shots/voda_e74_e77/`)
 - **Směr:** Jan 2026-11-20 01:49 a 03:26: sloučit E74–E77, zapnout obsazování pramenů s hladinou, uložené prameny, slučování do 8 m; E75 a těžba na `cas_hry.gd`.
 - **Zlepšení:** výchozí ostrov beze změny otisku (63d7b89a91385a79), 0 neshod, chyba 0 ve všech testech, druhý běh bitově stejný; neobsazený pramen už vodu ze světa nepouští; nové postavení a načtení ostrova = lokální stav; slučování nejdál 8 m.
