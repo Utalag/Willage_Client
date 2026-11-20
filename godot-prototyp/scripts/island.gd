@@ -20,6 +20,7 @@ const OstrovVodaRender = preload("res://scripts/voda/ostrov_voda_render.gd")
 const J = preload("res://scripts/jednotky.gd")   # E89
 const Grass = preload("res://scripts/grass.gd")
 const B96 = preload("res://scripts/teren/blok96.gd")   # E96: ostrov = blok 128 m z funkce světa (p96_blok128)
+const VegG = preload("res://scripts/veg.gd")   # E96: souhrn vegetace po odebrání rostlin ve vodě
 const BS := J.BS
 const CELL_H := J.CELL_M
 const SURF_Y := 32 * CELL_H       # výchozí povrch (střed výšky)
@@ -358,21 +359,84 @@ func _generate_b96(log: bool) -> void:
 	for s in blocks: surface.build_meshes(s)
 	ms96.povrch = (Time.get_ticks_usec() - t) / 1000.0
 	t = Time.get_ticks_usec()
+	rebuild_water()
+	ms96.voda = (Time.get_ticks_usec() - t) / 1000.0
+	t = Time.get_ticks_usec()
+	var wet := 0
 	for s in blocks:
+		if voda != null:   # rostliny nerostou v tůních a korytech (vegetace bloku vzniká před vodou)
+			var kept := []
+			for r in blocks[s].veg:
+				if voda.level(voda.gi_of(s, r.lx, r.ly)) < 0.0: kept.append(r)
+				else: wet += 1
+			blocks[s].veg = kept
+			blocks[s].veg_summary = VegG.summary(kept)
 		var vn := VegRender.build(veg_filtered(blocks[s]), blocks[s], occ_fn(blocks[s]), surface.field(s))
 		vn.position = slot_origin(s)
 		vn.visible = slice_z < 0
 		add_child(vn)
 		vegs[s] = vn
 	ms96.vegetace = (Time.get_ticks_usec() - t) / 1000.0
+	ms96.rostlin_ve_vode = wet
 	refresh_frames()
-	t = Time.get_ticks_usec()
-	rebuild_water()
-	ms96.voda = (Time.get_ticks_usec() - t) / 1000.0
 	spawn96 = B96.spawn(func(g: Vector2i) -> int: return col_h(g))
 	ms96.celkem = (Time.get_ticks_usec() - tt) / 1000.0
 	if log:
 		print("E96 blok 128 m: %d bloků, %s ms, start %s" % [blocks.size(), str(ms96), str(spawn96)])
+
+## E96 LOD přehledu (lod90 z E90: sloupce 1 m, boky jen kde je soused nižší): při oddálení nad p96_lod_zaber jedna síť
+## celého bloku 128 m místo 256 bloků × (kostky, duální povrch, voda povrchu) a bez vegetace. Data z aktuálních výšek
+## bloků (výkopy se projeví), barva = třída vrchní buňky. Staví se při každém přepnutí do přehledu (výkopy mezi tím).
+const L90 = preload("res://scripts/teren/lod90.gd")
+var lod96_mi: MeshInstance3D
+var lod96_on := false
+var lod96_ms := 0.0
+var lod96_tri := 0
+
+func lod96_build() -> void:
+	var t := Time.get_ticks_usec()
+	var n := B96.N * BS / 2   # sloupců 1 m na stranu
+	var top := PackedFloat32Array(); top.resize(n * n)
+	var col := PackedColorArray(); col.resize(n * n)
+	for i in n:
+		for j in n:
+			var hb := -1; var cb := Color(0.5, 0.5, 0.5)
+			for a in 2:
+				for c in 2:
+					var g := Vector2i(i * 2 + a, j * 2 + c)
+					var h := col_h(g)
+					if h > hb:
+						hb = h
+						var s := Vector2i(g.x / BS, g.y / BS)
+						if blocks.has(s) and h > 0: cb = Mat.COLORS[blocks[s].cells[((g.x % BS) * BS + g.y % BS) * 64 + h - 1]]
+			top[i * n + j] = hb * CELL_H; col[i * n + j] = cb
+	var V := PackedVector3Array(); var Nn := PackedVector3Array(); var C := PackedColorArray()
+	for i in n:
+		for j in n:
+			var x0 := i * 2.0; var y0 := j * 2.0; var tp := top[i * n + j]
+			L90._quad(V, Nn, C, Vector3(x0, tp, y0), Vector3(x0 + 2.0, tp, y0), Vector3(x0 + 2.0, tp, y0 + 2.0), Vector3(x0, tp, y0 + 2.0), Vector3.UP, col[i * n + j])
+			for d in 4:
+				var dv: Vector2i = L90.DIRS[d]
+				var ni := i + dv.x; var nj := j + dv.y
+				var bot := top[ni * n + nj] if ni >= 0 and nj >= 0 and ni < n and nj < n else 0.0
+				if bot < tp: L90._wall(V, Nn, C, x0, y0, 2.0, d, bot, tp, L90.BARVA_BOK)
+	if lod96_mi == null:
+		lod96_mi = MeshInstance3D.new()
+		lod96_mi.material_override = flat_mat
+		add_child(lod96_mi)
+	lod96_mi.mesh = L90.mesh({"V": V, "N": Nn, "C": C})
+	lod96_tri = V.size() / 3
+	lod96_ms = (Time.get_ticks_usec() - t) / 1000.0
+
+## přepnutí přehled (jedna síť 1 m) ↔ bloky; volá Main po změně záběru kamery
+func lod96_set(on: bool) -> void:
+	if on == lod96_on or blocks.size() != B96.N * B96.N: return
+	lod96_on = on
+	if on: lod96_build()
+	lod96_mi.visible = on
+	for s in meshes: meshes[s].visible = not on
+	for s in vegs: vegs[s].visible = not on and slice_z < 0
+	if surface: surface.set_enabled(not on and slice_z < 0)
 
 ## E96: výška povrchu globálního sloupce g (buňky), mimo ostrov 0
 func col_h(g: Vector2i) -> int:
