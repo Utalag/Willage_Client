@@ -9,12 +9,13 @@ extends RefCounted
 ## Svět studie: sloty ostrova posunuté o OFF do kladných souřadnic (regionální funkce jsou ve světových metrech).
 ## Parametry: výchozí studie (scripts/teren/params.gd), přepsatelné z příkazové řádky --bp.klic=hodnota (např. --bp.taper_m=4).
 
+const J = preload("res://scripts/jednotky.gd")   # E94: mřížka a metry z jednoho místa
 const PR = preload("res://scripts/teren/params.gd")
 const PL = preload("res://scripts/teren/pipeline.gd")
 const WD = preload("res://scripts/teren/world.gd")
 const BP = preload("res://scripts/teren/blueprint.gd")
 const TR = preload("res://scripts/teren/tridy.gd")
-const BS := 16
+const BS := J.BS
 
 static var OFF := Vector2i(3, 3)   # slot ostrova (0, 0) = slot světa (3, 3); ostrov má sloty −2..3
 static var SIZE := 8               # svět studie SIZE × SIZE slotů (ostrov −2..3 + prstenec mlhy)
