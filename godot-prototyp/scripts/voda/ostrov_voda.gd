@@ -359,6 +359,12 @@ func edit79(zm: Dictionary) -> Dictionary:
 			var i: int = int(u[k])
 			if i >= 0: st.extra[i] = 0.0; st.src2[i] = 0.0
 	var r := _update(ch, hh, src_new)
+	if bool(p.get("p85_blok2", false)) or bool(p.get("p85_voda", false)):   # E85: obsazení výtoků (E74) a plocha gw jako plný výpočet
+		var nc := _claims(-1)
+		out.obsazeno85 = nc.size()
+		while not nc.is_empty():   # nové obsazení mění povrch mimo okno → celé znovu jako build() (obsazení jen přibývá)
+			_fresh85(); _route(st); nc = _claims(-1)
+		_gw()
 	_falls()
 	_dry_to79(all)
 	out.povrch_ms = (Time.get_ticks_usec() - t2) / 1000.0
@@ -367,6 +373,17 @@ func edit79(zm: Dictionary) -> Dictionary:
 	out.ms = (Time.get_ticks_usec() - t0) / 1000.0
 	last_edit = {}
 	return out
+
+## E85: stav toku jako čerstvý TOK.make (H68.full začíná z extra / src2 předchozího stavu → jiný ustálený stav než plný
+## výpočet; klíč mezipaměti řešení obsazení výtoků neobsahuje)
+func _fresh85() -> void:
+	var n := W * H
+	for k in ["fill", "ain", "eff", "extra", "src2"]:
+		var a := PackedFloat64Array(); a.resize(n); st[k] = a
+	var t := PackedInt32Array(); t.resize(n); t.fill(-1); st.to = t
+	var sk := PackedByteArray(); sk.resize(n); st.sink = sk
+	for k in ["_xn", "under", "ug_bodies", "order"]: st.erase(k)
+	st.ug_cache = {}
 
 ## E79: tůně nad tělesy, kterých se změna dotkla (pásma změněných sloupců v novém podzemí), jdou do přepočtu celé:
 ## jejich odtok do podzemí a hladina (kapacita E71) závisí na tělese, i když leží mimo okno změny. Vrací počet buněk.
