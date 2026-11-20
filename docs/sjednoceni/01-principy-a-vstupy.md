@@ -408,16 +408,17 @@ Jen data. Velikost modelů je prezentace (`p94_meritko_veg`, Jan 11:39).
 
 **Otázka pro Jana.** Má vegetace být objektová vrstva ve světových metrech (hustota na m², pravidlo podle materiálu a vody) a ukládat se jen změny od hráče?
 
-**Platí:** *rozhodnuto (2026-11-20, Jan t739u, t740u)*
+**Platí:** *rozhodnuto (2026-11-20, Jan t739u, t740u); změněno (2026-11-20, Jan t741u–t743u)*
 
 - **Vrstvy jsou oddělené:** terén (materiály a voda), rostliny, stavby, cesty a později případně další. Blok nese jen materiály terénu.
 - **Rostliny** lze umístit jen na vhodný materiál. Základní vegetace se generuje s blokem ze seedu a ukládají se jen změny vůči seedu (vykácení, výsadba, stav růstu). Měřítko velikosti vegetace je zatím 0,5.
 - **Cesty** jsou vrstva nad terénem: hráč vybere stavby k propojení a volitelné průchozí body a hra najde trasu.
-- **Pravidlo ukládání:** hustá data po segmentech, řídká a velké objekty po blocích.
-  - Terén a voda se ukládají po segmentech (viz 1.10).
-  - Rostliny se ukládají po segmentech.
-  - Stavby a cesty se ukládají po blocích, jako seznam. Objekt má typ, pozici v metrech, natočení, velikost a stav a ví, do kterých segmentů zasahuje.
-- Objekty **nesmí překrývat hranici bloku**, aby šel blok otáčet a zrcadlit samostatně. Jan to přijímá jako malé omezení pro hráče (t740u).
+- **Terén (s vodou) a rostliny** se ukládají po segmentech a otáčejí a zrcadlí se spolu s blokem, protože pocházejí z blueprintu (viz 1.10).
+- **Stavby a cesty** jsou seznam na ostrově s pozicemi v souřadnicích ostrova (ne světa z 1.4) a smějí přecházet hranice bloků. Staví se jen na už položený terén.
+- Při vložení bloku se z blueprintu kopírují jen terén a vegetace, nikdy stavby. Sousedé se při vložení nemění, takže stavba na hranici se nerozbije.
+- Pokud by blueprint někdy nesl stavby (např. ruiny), započítají se jen ty, které leží celé uvnitř bloku.
+- Položený blok se nesmí dodatečně otočit, pokud přes jeho hranici přechází stavba (otáčení je ostatně jen při vkládání).
+- Toto uspořádání může v budoucnu přinést výhodu; v nejhorším zůstane nevyužitou částí struktury (Jan t743u).
 
 ---
 
