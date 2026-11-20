@@ -318,7 +318,7 @@ Pojmy: **blueprint** = otisk světa o velikosti bloku. To, čemu se ve studiích
 
 **Platí:** *rozhodnuto (2026-11-20, Jan t765u–t768u)*
 
-- **Propustnost materiálu** je zadaná jako **propustnost buňky**, v **l/s herního času**: maximální průtok buňkou. Počítá se z Darcyho K: K × plocha stěny 0,25 m² × spád (1 u svislého toku), převedeno na herní čas (1 herní den = 1 h, faktor 24, proto Q_herní = K × 0,25 × 1000 / 24). Buňka je krychle, takže stačí jedno číslo na materiál. Příklady (reálný čas, před převodem): písek K 1e-4 ≈ 0,025 l/s, plná buňka 125 l za ~80 s; tráva / hlína K 1e-5 ≈ 0,0025 l/s, asi 14 min.
+- **Propustnost materiálu** je zadaná jako **propustnost buňky**, v **l/s herního času**: maximální průtok buňkou. Fyzikální hodnota K × plocha stěny 0,25 m² × spád (1 u svislého toku) platí přímo na herní sekundu, protože fyzika běží v herním čase. Buňka je krychle, takže stačí jedno číslo na materiál. Příklady: písek K 1e-4 ≈ 0,025 l/s, plná buňka 125 l za ~80 herních s ≈ 3,5 reálných s; tráva / hlína K 1e-5 ≈ 0,0025 l/s, asi 14 herních min ≈ 35 reálných s. Zrychlení 24× (1 herní den = 1 h) se týká jen převodu na reálný čas: herní sekunda trvá 1/24 reálné sekundy.
 - **Boční tok** = propustnost krát skutečný spád.
 - Mezi dvěma materiály se bere **menší z obou hodnot** (přibližně harmonický průměr z E70). Počítá se za běhu a neukládá se.
 - **Tok dolů** jde jen do volné kapacity buňky pod ní (E71).

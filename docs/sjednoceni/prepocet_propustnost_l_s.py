@@ -1,10 +1,12 @@
 #!/usr/bin/env python3
 """Spočte sloupec propustnost_l_s_herni v materialy.csv z Darcyho K (1.8.1).
 
-Vzorec (Jan t765u–t768u):
-  Q_real  = K × 0,25 m² × 1 × 1000   l/s reálného času
-  Q_herni = Q_real / 24              l/s herního času
-                           (1 herní den = 1 h)
+Vzorec (Jan t765u–t768u; oprava převodu):
+  Q_herni = K × 0,25 m² × 1 × 1000   l/s herního času
+
+Fyzika běží v herním čase, hodnota platí přímo na herní sekundu.
+Zrychlení 24× (1 herní den = 1 h) se týká jen převodu na reálný čas:
+1 herní s = 1/24 reálné s.
 
 Hodnoty jsou přibližné. K „–“ → „–“. K s předponou „~“ zachová „~“.
 Skript přepíše jen tento sloupec; ostatní pole nechá beze změny.
@@ -19,7 +21,6 @@ from pathlib import Path
 PLOCHA_STENY_M2 = 0.25
 SPAD_SVISLE = 1.0
 LITRU_NA_M3 = 1000.0
-FAKTOR_HERNIHO_CASU = 24  # 1 herní den = 1 h
 SLOUPEC = "propustnost_l_s_herni"
 ZA_K = "K_m_s"
 
@@ -46,8 +47,7 @@ def format_q(q: float) -> str:
 
 
 def q_herni(k: float) -> float:
-    q_real = k * PLOCHA_STENY_M2 * SPAD_SVISLE * LITRU_NA_M3
-    return q_real / FAKTOR_HERNIHO_CASU
+    return k * PLOCHA_STENY_M2 * SPAD_SVISLE * LITRU_NA_M3
 
 
 def main() -> None:
