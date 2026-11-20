@@ -135,7 +135,15 @@ Minerály, žíly, kras i dutiny jsou útvary funkce světa (1.7), ne krok „po
 
 **Otázka pro Jana.** Platí, že obnažená buňka je ta, která sousedí se vzduchem nebo tvoří dno průhledné vody, a že okraj zorného pole je jen parametr (pár polí), aniž bychom slupku předem vzorkovali do hloubky celého sloupce?
 
-**Platí:**
+**Platí:** *rozhodnuto (2026-11-20 20:57–20:59, Jan t818u, t819u)*
+
+- **Obnažená buňka** sousedí se vzduchem, nebo tvoří dno otevřené průhledné vody.
+- **Viditelnou oblast určuje prezentace** podle zoomu a velikosti dlaždice (tilesetu). Datový model pevnou šířku zobrazení nezná, dostane jen obdélník světa, který je vidět.
+- Generátor k oblasti přidá **okraj** (parametr v metrech nebo buňkách, ne v dlaždicích) a vzorkuje **slupku 2–3 buněk** (1.2).
+- Při kopání nebo poklesu vody se nově obnažené buňky **donačtou z funkce**. Jednou uložený rozdíl se znovu nepočítá.
+- **Rozlišení 0,5 m je pro data a výpočty** (poměry, objemy, voda), ne pro zobrazení. Prezentace může kreslit jinak (2D dlaždice i 3D).
+- Šířku okraje a počty buněk slupky změřit v 2.7, nehádat.
+
 
 ---
 
