@@ -93,3 +93,8 @@ Podnět: odpověď ChatGPT 2026-11-19 o měřítku. Nic z toho není rozhodnuté
   - [ ] Propojení těles dutinou a zobrazení dutiny ve scéně při kopání.
 - [ ] **Plán vzorkování a LOD** (Jan 2026-11-19 20:58, hypotéza). Svět zůstává funkcí; vzorkuje se jen povrchová slupka (viditelné buňky + 1–2 vrstvy pod nimi), zbytek až při interakci. LOD podle vzdálenosti kamery: zblízka 0,25 m, dál 0,5 m, zdálky/oddálení 1 m, vše ze stejných funkcí. Vyřešit švy mezi úrovněmi (bez děr). Test: mapa 3 × 3 km (~550 bloků po 128 m) jen jako hrubá data a funkce, detail kolem několika hráčů; změřit paměť a čas.
 - [ ] **Průhlednost překážek v izometrii** (Jan 2026-11-19 21:03). Při cestování nebo kopání za překážkou zprůhlednit (nebo nevykreslit) buňky v kuželu mezi kamerou a postavou. V podzemí řez do výšky: terén nad úrovní postavy se skryje (styl Dwarf Fortress / The Sims). Navázat na skrývání vrstev a xray přepínač v prototypu.
+
+## Rozhodnutí Jana
+- 2026-11-20 01:49: neobsazený pramen zvedá hladinu svého tělesa (místo odtoku ze světa) a obsazování pramenů je zapnuté (pramen se jen kreslí, dokud ho hráč nevykope, nenapojí nebo nezachytí). Zapnout v E74 při sloučení do main.
+- 2026-11-20 01:55: rozpustnost a zrychlení krasu doladit až po konečné délce dne. Generátor dává vápenec k hladině zhruba v 50 % případů (náhodně podle seedu bloku).
+  - [ ] Implementovat 50/50 vápenec k hladině v generátoru (po E81).
