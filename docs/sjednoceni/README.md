@@ -40,7 +40,7 @@ Upřesnění od Jana:
 7. **1.8 Voda jako data:** obsah buňky v m³, povrch priority-flood + D8, výchozí podzemí E67, čas 1 den = 1 h – *rozhodnuto 2026-11-20 (t732u)*.
 8. **1.11 Datový rozpočet:** *přeskočeno 2026-11-20 (t738u)*.
 9. **1.6 Materiály:** jedna tabulka, jedno id – *rozhodnuto 2026-11-20 (t727u)*, návrh `materialy.csv`.
-10. **1.7 Geologie:** útvary jako funkce světa přes švy, vrstvy podle terénu, vyklínění; skladba vrstev, mapa složení na maximální ploše (hrubé body, interpolace), 1–3 zástupci v pásmu, min. 1 buňka, švy 1/16 bloku – *rozhodnuto 2026-11-20 (t732u), doplněno (t750u–t762u)*.
+10. **1.7 Geologie:** útvary jako funkce světa přes švy, vrstvy podle terénu, vyklínění; skladba vrstev, mapa složení na maximální ploše (hrubé body ze seedu, interpolace), 1–3 zástupci v pásmu, min. 1 buňka, švy 1/16 bloku – *rozhodnuto 2026-11-20 (t732u), doplněno (t750u–t763u)*.
 11. **1.12 Objektová vrstva:** terén a rostliny po segmentu (otáčejí se s blokem), stavby a cesty seznam na ostrově, smějí přes hranici bloku – *rozhodnuto 2026-11-20 (t739u, t740u), změněno (t741u–t743u)*.
 12. **1.10 Kontrakt:** WVB1 základ, data po segmentech, voda v litrech (1 B), server ukládá hotová data a namátkově kontroluje generátorem – *rozhodnuto 2026-11-20 (t736u, t737u)*.
 13. **1.13 Profil a členitost terénu:** parametry členitosti (rozhodnuto); obrys, bok a spodek ostrova otevřené.

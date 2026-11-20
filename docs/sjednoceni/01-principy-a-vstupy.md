@@ -243,7 +243,7 @@ Pojmy: **blueprint** = otisk světa o velikosti bloku. To, čemu se ve studiích
 
 **Otázka pro Jana.** Mají útvary (žíly, kras, jádro hory) být funkce celého světa, které jdou přes švy bloků (E84 + E87)?
 
-**Platí:** *rozhodnuto (2026-11-20, Jan t732u); doplněno (2026-11-20, Jan t750u–t760u, t761u–t762u)*
+**Platí:** *rozhodnuto (2026-11-20, Jan t732u); doplněno (2026-11-20, Jan t750u–t760u, t761u–t763u)*
 
 - **Útvary** jsou **funkce celého světa** (varianta B). Jdou přes švy bloků i segmentů. Měření: ~89 ms na segment [9].
 - Přístup **„jeden útvar na blok“** se ruší.
@@ -253,7 +253,7 @@ Pojmy: **blueprint** = otisk světa o velikosti bloku. To, čemu se ve studiích
 
 ### 1.7.1 Skladba vrstev
 
-**Platí:** *rozhodnuto (2026-11-20, Jan t750u–t760u); doplněno (2026-11-20, Jan t761u–t762u)*
+**Platí:** *rozhodnuto (2026-11-20, Jan t750u–t760u); doplněno (2026-11-20, Jan t761u–t763u)*
 
 - **Zdrojový seznam:** pořadí hornin v `poradi_hornin.json` (64 úrovní, 0 = spodek, 40 = úroveň nížiny / ornice, 41–63 pahorky až obloha) [15]. Jako vrstvy se používají jen úrovně **0–40** (ornice a pod ní). Úrovně **41–63** jsou pásma / tvary krajiny (patří k profilu terénu 1.13), ne vrstvy. Poznámka: v `materialy.csv` bude potřeba pásma krajiny (id 57–74) později odstranit nebo přemapovat.
 - **Hrubé členění na pásma**, každé s mocností (parametr):
@@ -265,7 +265,7 @@ Pojmy: **blueprint** = otisk světa o velikosti bloku. To, čemu se ve studiích
   | krystalinikum | 13–25 | ruly, žuly, svory, fylity, kvarcit |
   | spodní kůra a plášť | 0–12 | gabro, amfibolit, granulit, peridotit, magnetit |
 
-- **Mapa složení** pokrývá celou maximální plochu světa (1.4). Obsahuje jen hrubé řídicí body s hodnotami (koncentrace zástupců pásem). Mezi body se složení plynule interpoluje, bez deformace (např. na severu jiné složení než na jihu).
+- **Mapa složení** pokrývá celou maximální plochu světa (1.4). Obsahuje jen hrubé řídicí body s hodnotami (koncentrace zástupců pásem). Umístění i hodnoty bodů se generují ze seedu světa, takže každý svět je jiný (Jan t763u). Mezi body se složení plynule interpoluje, bez deformace (např. na severu jiné složení než na jihu).
 - V každém pásmu se na daném místě vyberou **1–3 zástupci** (výchozí počet, parametr). Světové funkce zástupců berou přítomnost a mocnost z mapy složení, takže složení se po světě mění plynule: některé vrstvy vyklíní a zmizí, jiné se objeví. Bloky se proto přirozeně liší a blueprint přebírá složení svého místa ve světě.
 - **Mocnost vrstvy:** minimum 1 buňka (0,5 m; nahrazuje dřívější zákaz vrstev < 25 cm), maximum 1/4 výšky od povrchu po spodní okraj.
 - **Deformace**, která vrstvu zvedne výš (např. vápenec a jíl, mince E82), je dovolená.
