@@ -516,6 +516,22 @@ Skupiny: 1 Prototyp a buildy · 2 Terén a tvar · 3 Rozlišení bloku · 4 Ská
 
 ## 3 Rozlišení bloku
 
+### 🧪 E84: implicitní útvary nad vrstvami bez plných voxelů (2026-11-20 04:35 · prototyp `tools/implicit_e84.gd`, `shots/e84/`, větev `e84-implicitni-geologie`, zdroje [33][73]–[79] blueprint-studie)
+- **Směr:** TODO Blok 2: žíly, pegmatity, skarny a kras doplnit do vrstev jako implicitní funkce (SDF z hashe světové mřížky), ne buňky.
+- **Zlepšení:**
+  - Švy: 0 rozdílů na švu, kras přes šev pokračuje (dnešní dutina zůstane v bloku).
+  - Determinismus: float32 mění 0 buněk, 2 procesy stejně.
+  - Paměť: útvar 176–296 B, nic se neukládá (dnes plné buňky 16 / 131 kB na blok).
+  - Čas: +51 ms (0,5 m) a +308 ms (0,25 m) na blok v GDScriptu.
+  - Překryv: navíc jen 0,3–0,4 % buněk 0,25 m.
+  - Pásma vody: +2,6 až +6,4 %, objem krasu z intervalů 23,39 m³ proti 24,0 / 23,78 v buňkách.
+- **Komplikace:**
+  - Buňky dutiny se mezi 0,5 a 0,25 m překrývají jen z 50–68 % (tenké kanály).
+  - Pásma dnes tělesa nevidí. Skarn se musí vyříznout před krasem, jinak je kras 2× větší.
+  - Uzly krasu berou výšku z FastNoiseLite (`zone_tops`).
+  - Vector3 je float32.
+- **Další krok (Jan):** zapnout útvary SDF za příznakem a nahradit jimi `cavity_one`? Tělesa do pásem vody? Skarn po normále?
+
 ### 🧪 E83: determinismus bloku, překryvu, vody a pořadí vložení (2026-11-20 03:34 · prototyp `tools/determinismus_e83.gd`, `tools/audit_e83.py`, oprava klíče mezipaměti v `tok` / `tok60`, větev `e83-determinismus`)
 - **Směr:** TODO Architektura světa: ujasnit Hash(seed, změny, pořadí) a ověřit bitovou shodu napříč běhy, procesy a pořadím.
 - **Zlepšení:** běhy i dva procesy bitově stejné; blok závisí jen na sousedech položených před ním (12/12, diagonála a vzdálený blok 0); překryv na různých buňkách nezávisí na pořadí; pořadí vložení mění 1,9 % buněk záměrně, 63–70 % u švu; klíč mezipaměti podzemí přesný, otisky beze změny.
