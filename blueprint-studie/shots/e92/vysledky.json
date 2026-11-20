@@ -1,0 +1,595 @@
+{
+ "blok128": {
+  "dlazdice": [
+   14,
+   5
+  ],
+  "prevyseni_4m": 42.94,
+  "s06": {
+   "ms": 35801.6,
+   "omezovac": {
+    "ms": 35549.4,
+    "passes": 1500,
+    "worst_cells": 0.193
+   },
+   "pata": {
+    "pata_m": 51.88,
+    "prevyseni_m": 42.97,
+    "vrchol_m": 50.0
+   },
+   "stats": {
+    "bodu": 66049,
+    "grad": {
+     "max": 44.7,
+     "nad_30_pct": 33.5,
+     "nad_45_pct": 0.0,
+     "p50": 18.8,
+     "p95": 33.7,
+     "strme_u_svu_pct": -1.0
+    },
+    "hist_10st": [
+     39.6,
+     13.6,
+     17.9,
+     28.9,
+     0.1,
+     0.0,
+     0.0,
+     0.0,
+     0.0
+    ],
+    "max_m": 50.0,
+    "min_m": 7.03,
+    "nad_30_pct": 29.0,
+    "nad_45_pct": 0.0,
+    "nad_60_pct": 0.0,
+    "relief_m": 42.97,
+    "schod_max_m": 0.63,
+    "sklon_max": 51.7,
+    "sklon_p50": 17.8,
+    "sklon_p90": 32.5,
+    "sklon_p95": 33.3
+   }
+  },
+  "s10": {
+   "ms": 17301.0,
+   "omezovac": {
+    "ms": 17060.0,
+    "passes": 736,
+    "worst_cells": 0.02
+   },
+   "pata": {
+    "pata_m": 52.56,
+    "prevyseni_m": 42.97,
+    "vrchol_m": 50.0
+   },
+   "stats": {
+    "bodu": 66049,
+    "grad": {
+     "max": 52.6,
+     "nad_30_pct": 24.2,
+     "nad_45_pct": 7.4,
+     "p50": 17.5,
+     "p95": 45.5,
+     "strme_u_svu_pct": -1.0
+    },
+    "hist_10st": [
+     40.3,
+     16.7,
+     22.5,
+     11.0,
+     9.4,
+     0.1,
+     0.0,
+     0.0,
+     0.0
+    ],
+    "max_m": 50.0,
+    "min_m": 7.03,
+    "nad_30_pct": 20.5,
+    "nad_45_pct": 5.9,
+    "nad_60_pct": 0.0,
+    "relief_m": 42.97,
+    "schod_max_m": 0.75,
+    "sklon_max": 56.3,
+    "sklon_p50": 16.4,
+    "sklon_p90": 39.4,
+    "sklon_p95": 45.2
+   }
+  },
+  "vyp": {
+   "ms": 189.2,
+   "omezovac": {},
+   "pata": {
+    "pata_m": 52.56,
+    "prevyseni_m": 42.97,
+    "vrchol_m": 50.0
+   },
+   "stats": {
+    "bodu": 66049,
+    "grad": {
+     "max": 53.3,
+     "nad_30_pct": 24.2,
+     "nad_45_pct": 5.5,
+     "p50": 17.5,
+     "p95": 45.5,
+     "strme_u_svu_pct": -1.0
+    },
+    "hist_10st": [
+     40.3,
+     16.7,
+     22.5,
+     11.7,
+     8.4,
+     0.5,
+     0.0,
+     0.0,
+     0.0
+    ],
+    "max_m": 50.0,
+    "min_m": 7.03,
+    "nad_30_pct": 20.5,
+    "nad_45_pct": 4.5,
+    "nad_60_pct": 0.0,
+    "relief_m": 42.97,
+    "schod_max_m": 0.65,
+    "sklon_max": 52.6,
+    "sklon_p50": 16.4,
+    "sklon_p90": 38.7,
+    "sklon_p95": 44.4
+   }
+  }
+ },
+ "ostrov_s06": {
+  "generovani_ms": 1383.7,
+  "hora_blok": {
+   "bodu": 256,
+   "grad": {
+    "max": 75.3,
+    "nad_30_pct": 92.9,
+    "nad_45_pct": 76.5,
+    "p50": 63.4,
+    "p95": 71.8,
+    "strme_u_svu_pct": -1.0
+   },
+   "hist_10st": [
+    3.5,
+    0.0,
+    0.0,
+    0.0,
+    28.1,
+    0.0,
+    35.2,
+    33.2,
+    0.0
+   ],
+   "max_m": 26.0,
+   "min_m": 20.0,
+   "nad_30_pct": 96.5,
+   "nad_45_pct": 68.4,
+   "nad_60_pct": 68.4,
+   "relief_m": 6.0,
+   "schod_max_m": 2.0,
+   "sklon_max": 76.0,
+   "sklon_p50": 63.4,
+   "sklon_p90": 71.6,
+   "sklon_p95": 71.6
+  },
+  "hora_pata": {
+   "pata_m": 1.5,
+   "prevyseni_m": 6.0,
+   "vrchol_m": 26.0
+  },
+  "omezovac": [
+   {
+    "passes": 11,
+    "worst_cells": 0.019681948814403
+   },
+   {
+    "passes": 200,
+    "worst_cells": 0.0274482347159847
+   },
+   {
+    "passes": 153,
+    "worst_cells": 0.0199021946773371
+   },
+   {
+    "passes": 11,
+    "worst_cells": 0.0195116317176854
+   }
+  ],
+  "ostrov": {
+   "bodu": 1024,
+   "grad": {
+    "max": 75.3,
+    "nad_30_pct": 37.7,
+    "nad_45_pct": 18.3,
+    "p50": 26.6,
+    "p95": 68.6,
+    "strme_u_svu_pct": 24.2
+   },
+   "hist_10st": [
+    44.2,
+    0.0,
+    0.0,
+    0.0,
+    38.2,
+    0.0,
+    9.3,
+    8.3,
+    0.0
+   ],
+   "max_m": 26.0,
+   "min_m": 19.5,
+   "nad_30_pct": 55.8,
+   "nad_45_pct": 17.6,
+   "nad_60_pct": 17.6,
+   "relief_m": 6.5,
+   "schod_max_m": 2.0,
+   "sklon_max": 76.0,
+   "sklon_p50": 45.0,
+   "sklon_p90": 63.4,
+   "sklon_p95": 71.6
+  },
+  "parametry": {
+   "p92_max_sklon": 0.6,
+   "p92_svah": true
+  },
+  "podzemi_vystupy": [],
+  "validator": [
+   true,
+   true,
+   true,
+   true
+  ],
+  "voda": {
+   "koryto_sloupcu": 28,
+   "okraj_lps": 9.7701,
+   "podzemni_telesa": 0,
+   "prameny": 5,
+   "tun_sloupcu": 118,
+   "vodopady": 1,
+   "vodopady_okraj": 5,
+   "volani_podzemi": 0,
+   "vyvery": 0
+  },
+  "voda_ms": 589.3
+ },
+ "ostrov_s06_hladit2": {
+  "generovani_ms": 1046.9,
+  "hora_blok": {
+   "bodu": 256,
+   "grad": {
+    "max": 75.3,
+    "nad_30_pct": 93.4,
+    "nad_45_pct": 76.0,
+    "p50": 63.4,
+    "p95": 71.8,
+    "strme_u_svu_pct": -1.0
+   },
+   "hist_10st": [
+    3.1,
+    0.0,
+    0.0,
+    0.0,
+    28.1,
+    0.0,
+    35.2,
+    33.6,
+    0.0
+   ],
+   "max_m": 26.0,
+   "min_m": 20.0,
+   "nad_30_pct": 96.9,
+   "nad_45_pct": 68.8,
+   "nad_60_pct": 68.8,
+   "relief_m": 6.0,
+   "schod_max_m": 2.0,
+   "sklon_max": 76.0,
+   "sklon_p50": 63.4,
+   "sklon_p90": 71.6,
+   "sklon_p95": 71.6
+  },
+  "hora_pata": {
+   "pata_m": 1.5,
+   "prevyseni_m": 6.0,
+   "vrchol_m": 26.0
+  },
+  "omezovac": [
+   {
+    "passes": 1,
+    "worst_cells": 0.0
+   },
+   {
+    "passes": 200,
+    "worst_cells": 0.0263281603712088
+   },
+   {
+    "passes": 149,
+    "worst_cells": 0.0199480446700463
+   },
+   {
+    "passes": 1,
+    "worst_cells": 0.0
+   }
+  ],
+  "ostrov": {
+   "bodu": 1024,
+   "grad": {
+    "max": 75.3,
+    "nad_30_pct": 37.8,
+    "nad_45_pct": 18.3,
+    "p50": 26.6,
+    "p95": 68.6,
+    "strme_u_svu_pct": 24.8
+   },
+   "hist_10st": [
+    47.4,
+    0.0,
+    0.0,
+    0.0,
+    35.0,
+    0.0,
+    9.3,
+    8.4,
+    0.0
+   ],
+   "max_m": 26.0,
+   "min_m": 19.5,
+   "nad_30_pct": 52.6,
+   "nad_45_pct": 17.7,
+   "nad_60_pct": 17.7,
+   "relief_m": 6.5,
+   "schod_max_m": 2.0,
+   "sklon_max": 76.0,
+   "sklon_p50": 45.0,
+   "sklon_p90": 63.4,
+   "sklon_p95": 71.6
+  },
+  "parametry": {
+   "p92_hladit": 2,
+   "p92_max_sklon": 0.6,
+   "p92_svah": true
+  },
+  "podzemi_vystupy": [],
+  "validator": [
+   true,
+   true,
+   true,
+   true
+  ],
+  "voda": {
+   "koryto_sloupcu": 31,
+   "okraj_lps": 9.81674,
+   "podzemni_telesa": 0,
+   "prameny": 5,
+   "tun_sloupcu": 110,
+   "vodopady": 2,
+   "vodopady_okraj": 4,
+   "volani_podzemi": 0,
+   "vyvery": 0
+  },
+  "voda_ms": 571.2
+ },
+ "ostrov_s10": {
+  "generovani_ms": 1132.7,
+  "hora_blok": {
+   "bodu": 256,
+   "grad": {
+    "max": 76.1,
+    "nad_30_pct": 98.0,
+    "nad_45_pct": 89.3,
+    "p50": 64.1,
+    "p95": 74.2,
+    "strme_u_svu_pct": -1.0
+   },
+   "hist_10st": [
+    3.1,
+    0.0,
+    0.0,
+    0.0,
+    27.7,
+    0.0,
+    28.9,
+    40.2,
+    0.0
+   ],
+   "max_m": 27.5,
+   "min_m": 20.0,
+   "nad_30_pct": 96.9,
+   "nad_45_pct": 69.1,
+   "nad_60_pct": 69.1,
+   "relief_m": 7.5,
+   "schod_max_m": 2.0,
+   "sklon_max": 76.0,
+   "sklon_p50": 63.4,
+   "sklon_p90": 71.6,
+   "sklon_p95": 76.0
+  },
+  "hora_pata": {
+   "pata_m": 1.8,
+   "prevyseni_m": 7.5,
+   "vrchol_m": 27.5
+  },
+  "omezovac": [
+   {
+    "passes": 1,
+    "worst_cells": 0.0
+   },
+   {
+    "passes": 174,
+    "worst_cells": 0.0199694279609162
+   },
+   {
+    "passes": 62,
+    "worst_cells": 0.0198079789167096
+   },
+   {
+    "passes": 1,
+    "worst_cells": 0.0
+   }
+  ],
+  "ostrov": {
+   "bodu": 1024,
+   "grad": {
+    "max": 76.1,
+    "nad_30_pct": 41.2,
+    "nad_45_pct": 24.8,
+    "p50": 26.6,
+    "p95": 69.6,
+    "strme_u_svu_pct": 20.2
+   },
+   "hist_10st": [
+    36.1,
+    0.0,
+    0.0,
+    0.0,
+    45.1,
+    0.0,
+    8.7,
+    10.1,
+    0.0
+   ],
+   "max_m": 27.5,
+   "min_m": 19.5,
+   "nad_30_pct": 63.9,
+   "nad_45_pct": 18.8,
+   "nad_60_pct": 18.8,
+   "relief_m": 8.0,
+   "schod_max_m": 2.0,
+   "sklon_max": 76.0,
+   "sklon_p50": 45.0,
+   "sklon_p90": 71.6,
+   "sklon_p95": 71.6
+  },
+  "parametry": {
+   "p92_max_sklon": 1.0,
+   "p92_svah": true
+  },
+  "podzemi_vystupy": [],
+  "validator": [
+   true,
+   true,
+   true,
+   true
+  ],
+  "voda": {
+   "koryto_sloupcu": 23,
+   "okraj_lps": 9.7801,
+   "podzemni_telesa": 0,
+   "prameny": 5,
+   "tun_sloupcu": 133,
+   "vodopady": 5,
+   "vodopady_okraj": 5,
+   "volani_podzemi": 0,
+   "vyvery": 0
+  },
+  "voda_ms": 880.9
+ },
+ "ostrov_vyp": {
+  "generovani_ms": 911.8,
+  "hora_blok": {
+   "bodu": 256,
+   "grad": {
+    "max": 83.0,
+    "nad_30_pct": 85.7,
+    "nad_45_pct": 80.1,
+    "p50": 71.8,
+    "p95": 81.1,
+    "strme_u_svu_pct": -1.0
+   },
+   "hist_10st": [
+    10.2,
+    0.0,
+    0.0,
+    0.0,
+    10.5,
+    0.0,
+    8.2,
+    36.7,
+    34.4
+   ],
+   "max_m": 29.0,
+   "min_m": 19.5,
+   "nad_30_pct": 89.8,
+   "nad_45_pct": 79.3,
+   "nad_60_pct": 79.3,
+   "relief_m": 9.5,
+   "schod_max_m": 4.0,
+   "sklon_max": 82.9,
+   "sklon_p50": 76.0,
+   "sklon_p90": 81.9,
+   "sklon_p95": 82.9
+  },
+  "hora_pata": {
+   "pata_m": 1.58,
+   "prevyseni_m": 9.5,
+   "vrchol_m": 29.0
+  },
+  "omezovac": [
+   {},
+   {},
+   {},
+   {}
+  ],
+  "ostrov": {
+   "bodu": 1024,
+   "grad": {
+    "max": 83.0,
+    "nad_30_pct": 37.9,
+    "nad_45_pct": 26.4,
+    "p50": 26.6,
+    "p95": 78.5,
+    "strme_u_svu_pct": 23.5
+   },
+   "hist_10st": [
+    38.0,
+    0.0,
+    0.0,
+    0.0,
+    35.3,
+    0.0,
+    4.5,
+    13.7,
+    8.6
+   ],
+   "max_m": 29.0,
+   "min_m": 19.0,
+   "nad_30_pct": 62.0,
+   "nad_45_pct": 26.8,
+   "nad_60_pct": 26.8,
+   "relief_m": 10.0,
+   "schod_max_m": 4.0,
+   "sklon_max": 82.9,
+   "sklon_p50": 45.0,
+   "sklon_p90": 78.7,
+   "sklon_p95": 80.5
+  },
+  "parametry": {},
+  "podzemi_vystupy": [
+   [
+    "povrch",
+    19.47,
+    0.1732
+   ]
+  ],
+  "validator": [
+   true,
+   true,
+   true,
+   true
+  ],
+  "voda": {
+   "koryto_sloupcu": 27,
+   "okraj_lps": 9.64358,
+   "podzemni_telesa": 1,
+   "prameny": 5,
+   "tun_sloupcu": 159,
+   "vodopady": 8,
+   "vodopady_okraj": 5,
+   "volani_podzemi": 4,
+   "vyvery": 1
+  },
+  "voda_ms": 2568.0
+ }
+}

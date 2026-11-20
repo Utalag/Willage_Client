@@ -241,6 +241,11 @@ Skupiny: 1 Prototyp a buildy · 2 Terén a tvar · 3 Rozlišení bloku · 4 Ská
 - **Zlepšení:** A (válec 3 m s ditherem v shaderu) ukáže postavu za kopcem z 67 % a v chodbě ze 100 %, přepnutí 0,45 ms. B (řez shaderem) 53 % a 87 %. Výchozí hashe beze změny.
 - **Komplikace:** C (řez sítí) 38 % a 73 %, ~200 ms na přestavbu. C2 (skrytí bloků) 0 %. Překlad upravených shaderů 4 s. Čas snímku na software GPU +3 až +14 % (na hraně šumu). Díra je jen tmavá barva víka.
 - **Další krok:** Jan rozhodne: A na povrchu + B v podzemí? poloměr válce, výška řezu, víko barvou nebo skutečné řezy, co s vegetací a vodopády.
+### 🧪 E92: test měřítka v izometrii a mírnější svahy ostrova (2026-11-20 08:11 · větev a tag `e92-meritko`, `scripts/teren/svah92.gd`, `tools/meritko_e92*.gd`, shots `blueprint-studie/shots/e92/`)
+- **Směr:** TODO Blok 4 „test měřítka v izometrii a blok 128 m“; Jan 21:12: strop sklonu, měkčí reliéf, širší paty. E56 (hrubý svět) se neopakuje; nově omezovač na herním ostrově (`p92_svah`, výchozí vyp), voda a blok 128 m z funkce E90.
+- **Zlepšení:** blok 128 m z funkce E90 je mírný už sám (p50 17,5°, nad 45° 5,5 %, převýšení 43 m, pata 53 m); strop 0,6 → nad 45° 0 %, p95 46 → 34°. Snímky s postavou 1,75 m a domem 4 × 4 × 3 m: ostrov dnes / v metrech / s omezovačem, blok 128 m před / po. Výchozí hashe beze změny.
+- **Komplikace:** na ostrově 8 m omezovač skoro nepomůže (nad 45° 26 → 18 %), hora se jen sníží 9,5 → 6 m, pata zůstane 1,5 m. Voda se změní: podzemní těleso a vývěr zmizí, vodopády 8 → 1–5, tůně 159 → 110–133 sloupců.
+- **Další krok:** Jan rozhodne: blok ostrova 128 m (mírné svahy z funkce) místo šablon 8 m? strop sklonu 0,6? scéna v metrech (E89)?
 
 ### 🔄 Voda E74–E77 sloučena, přepínače podle Jana (2026-11-20 04:08 · větev `voda-e74-e77-slouceni`, tag `voda-e74-e77-ready`, `tok.solve74`, `ug67._merge_outs72d`, `ostrov_voda.place76`, data `blueprint-studie/shots/voda_e74_e77/`)
 - **Směr:** Jan 2026-11-20 01:49 a 03:26: sloučit E74–E77, zapnout obsazování pramenů s hladinou, uložené prameny, slučování do 8 m; E75 a těžba na `cas_hry.gd`.

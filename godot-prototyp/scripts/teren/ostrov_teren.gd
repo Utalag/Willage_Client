@@ -14,6 +14,7 @@ const PL = preload("res://scripts/teren/pipeline.gd")
 const WD = preload("res://scripts/teren/world.gd")
 const BP = preload("res://scripts/teren/blueprint.gd")
 const TR = preload("res://scripts/teren/tridy.gd")
+const S92 = preload("res://scripts/teren/svah92.gd")
 const BS := 16
 
 static var OFF := Vector2i(3, 3)   # slot ostrova (0, 0) = slot světa (3, 3); ostrov má sloty −2..3
@@ -47,6 +48,11 @@ const HRA := {
 	"p67_min_vytok_render": 0.02,        # E67b: vývěr podzemní vody ve stěně / pramen slabší než tolik l/s se nekreslí (simulace beze změny)
 	"p67_min_tok_render": 0.02,          # E67b: protékající větev podzemní vody slabší než tolik l/s se v řezech nekreslí
 	"p86_otoceni": false,                # E86: podzemí otočeného výřezu bere šum hornin v souřadnicích původu (inverzní rotace)
+	"p92_svah": false,                   # E92: omezovač sklonu povrchu šablony (výchozí vypnuto → hra beze změny)
+	"p92_max_sklon": 1.0,                # E92: největší sklon m/m (1,0 = 45°, 0,6 = 31°)
+	"p92_pasy": 200,                     # E92: nejvýš průchodů omezovače
+	"p92_hladit": 0,                     # E92: průchodů vyhlazení 3 × 3 před omezovačem
+	"p92_hladit_w": 0.5,
 }
 
 static func params() -> Dictionary:
@@ -98,6 +104,7 @@ static func build(b) -> void:
 	while i < st.size():
 		var t1 := Time.get_ticks_usec()
 		st[i][1].call()
+		if st[i][0] == "povrch: šablona blueprintu": S92.apply(ctx, pp)   # E92 (p92_svah, výchozí vyp)
 		var key: String = st[i][0].split(":")[0]
 		ctx.ms[key] = ctx.ms.get(key, 0.0) + (Time.get_ticks_usec() - t1) / 1000.0
 		i += 1
