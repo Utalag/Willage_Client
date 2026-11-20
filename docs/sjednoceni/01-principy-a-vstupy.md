@@ -343,7 +343,16 @@ Pojmy: **blueprint** = otisk světa o velikosti bloku. To, čemu se ve studiích
 
 **Otázka pro Jana.** Ukládat a posílat jen definici + změny hráče (WTI1) místo celého pole buněk? A smí se to projednat s Willage-backend?
 
-**Platí:**
+**Platí:** *rozhodnuto (2026-11-20, Jan t736u, t737u)*
+
+- **Základ:** klient generuje a simuluje, server ukládá, načítá a validuje [19]. Základem je formát **WVB1**: vrstva materiálu u8, volitelná vrstva vody, komprese deflate, SHA-256, kontrola zachování materiálu a port generátoru do C# ověřený testovacími vektory [2].
+- **Změny vůči WVB1:**
+  1. **Výška sloupce** není natvrdo 32 m, ale výčet **32 / 64 / 128 m** (viz 1.3).
+  2. Data se ukládají a posílají **po segmentech**. Velikost segmentu je parametr **8 / 16 / 32 m**; optimální hodnota se změří, až bude dokument hotový.
+  3. **Voda v buňce** je celé číslo litrů (pevný krok 1 l), rozsah 0–125 u buňky 0,5 m, v 1 bytu. Důvody: deterministické SHA-256 napříč zařízeními a velikost; simulace počítá v celých litrech. Záloha: 2 byty (krok ~2 ml), pokud by 1 l byl příliš hrubý.
+- **Přenos dat** je kombinovaná varianta: server ukládá a posílá **hotová data segmentu** (komprimované buňky). Generátor si server nechává jen pro **namátkovou kontrolu**: občas znovu vygeneruje segment ze seedu + změn a porovná hash. Je to pojistka proti chybám i podvádění.
+- Kontrolu generátorem na serveru lze **vypnout přepínačem**; server pak jen ukládá a kontroluje bilanci materiálu.
+- **Zamítnuté varianty:** jen seed + změny (každá změna generátoru by se musela dělat dvakrát a bitově přesně); jen hotová data bez jakékoli kontroly.
 
 ---
 
