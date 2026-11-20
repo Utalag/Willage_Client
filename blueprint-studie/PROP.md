@@ -2687,3 +2687,13 @@ Zdroje [45]–[72] níže v tomto souboru zůstávají jen jako zástupné čís
 - **Pro Jana:** (1) sloučit E94 do main (scéna v metrech výchozí, přepínač zatím nechat)? (2) výšky stromů 3,5 / 4 m, nebo menší /
   řidší vegetace na m²? (3) půdorysy staveb (domek 3,5 m)? (4) cesty 1 m (2 buňky)? (5) hora: `p94_hora_k` 1,5, nebo počkat na
   E87 / E92? (6) opravit nález 162 neshod lokálního přepočtu u vyšší hory (blok vody)?
+
+### E94b měřítko rostlin (Jan 2026-11-20 11:39, „velikost vegetace 0,5“; zapsáno před úpravou 11:40, výsledky 11:45)
+- **Plán:** nový parametr `p94_meritko_veg` (surface_params, výchozí 0,5) násobí výšky rostlin ve scéně v metrech. Hustota
+  zůstává (proředění podle plochy je pozdější téma). Bez `p89_meritko` se nepoužije, takže výchozí kontrola musí zůstat stejná.
+- **Výsledek:** listnáč 3,5 → 1,75 m, jehličnan 4 → 2 m, keř 1 → 0,5 m, kaktus 1,5 → 0,75 m (×0,8–1,2 z dat). Trsy, květiny, mech
+  a suchá tráva z VegRender taky ×0,5. Trávu C (`grass.gd`) to nemění. Postava 1,75 m je na detailu vidět (`94_vegm05_zap_detail.png`),
+  stromy jsou zhruba stejně vysoké jako ona. `voda_e66` d7aedf3a6d9d10e8 → 63d7b89a91385a79, 0 neshod, `port_studie` 0 změn,
+  otisky buněk, sítí, odkrytí a vegetace stejné (631c754f…, 3452e4cd…, db706a1c…, 483dc33f…).
+- **Negativum:** stromy 1,75–2 m jsou spíš keře nebo mladé stromky. Jsou menší než domek (3 m) a skutečné stromy. Je to herní volba.
+- **Snímky:** `94_vegm05_zap_{ostrov,detail,hra_kamera}.png` (+ `_hora`, `_hora_bok`).
