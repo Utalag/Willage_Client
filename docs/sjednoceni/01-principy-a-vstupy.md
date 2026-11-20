@@ -568,7 +568,7 @@ Jen data. Velikost modelů je prezentace (`p94_meritko_veg`, Jan 11:39).
   - **přibližná rozteč** mezi nimi (výchozí kolem 3 bloků, 384 m).
   Polohy určí seed. Sopka je součást funkce světa a může přesahovat přes hranice bloků (blueprint z ní vyřízne jen svůj díl).
 - **Vnitřek:** *upřesněno (2026-11-20 19:54–19:56, Jan t794u–t796u)*
-  - **průduch** (vent, materiál id 75) je svislý útvar uprostřed sopky, od kráteru dolů,
+  - **průduch** (vent, materiál id 75) je svislý útvar uprostřed sopky, od kráteru **až k nejnižšímu bodu sloupce** (dno, z = 0) (Jan t797u); těleso sopky tedy prochází celým sloupcem,
   - kolem průduchu jsou **kuželovité vrstvy lávy a popela**, vnořené do sebe jako slupky, se sklonem podle svahu (útvary podle 1.7),
   - celé těleso sopky funguje podle principu **skalního jádra** (E87), ale běžné vrstvy z 1.7.1 neohýbá: **propíchne se jimi**. Vrstvy u sopky končí nebo se jen mírně zvednou a pod jejím tělesem nepokračují.
 
