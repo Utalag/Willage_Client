@@ -19,6 +19,7 @@ const Grass = preload("res://scripts/grass.gd")
 var k_sc := 1.0
 const ZOOM_MIN := 18.0
 const ZOOM_MAX := 160.0
+var zoom_max_k := 1.0   # E96: blok 128 m → oddálení až na celý blok (1 = beze změny)
 
 @onready var cam: Camera3D = $Camera
 var ui: CanvasLayer
@@ -82,7 +83,7 @@ func _unhandled_input(e: InputEvent) -> void:
 	elif e is InputEventMouseButton and e.pressed:
 		match e.button_index:
 			MOUSE_BUTTON_WHEEL_UP: cam.size = maxf(cam.size * 0.9, ZOOM_MIN * k_sc); place()
-			MOUSE_BUTTON_WHEEL_DOWN: cam.size = minf(cam.size * 1.1, ZOOM_MAX * k_sc); place()
+			MOUSE_BUTTON_WHEEL_DOWN: cam.size = minf(cam.size * 1.1, ZOOM_MAX * k_sc * zoom_max_k); place()
 			MOUSE_BUTTON_MIDDLE, MOUSE_BUTTON_RIGHT: dragging = true
 	elif e is InputEventMouseButton and not e.pressed:
 		if e.button_index in [MOUSE_BUTTON_MIDDLE, MOUSE_BUTTON_RIGHT]:

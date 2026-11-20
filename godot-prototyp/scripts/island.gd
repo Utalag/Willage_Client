@@ -19,6 +19,7 @@ const OstrovVoda = preload("res://scripts/voda/ostrov_voda.gd")
 const OstrovVodaRender = preload("res://scripts/voda/ostrov_voda_render.gd")
 const J = preload("res://scripts/jednotky.gd")   # E89
 const Grass = preload("res://scripts/grass.gd")
+const B96 = preload("res://scripts/teren/blok96.gd")   # E96: ostrov = blok 128 m z funkce světa (p96_blok128)
 const BS := J.BS
 const CELL_H := J.CELL_M
 const SURF_Y := 32 * CELL_H       # výchozí povrch (střed výšky)
@@ -66,6 +67,8 @@ var voda_mi := {}                 # "voda" / "vodopad" / "mlha" → MeshInstance
 var voda_mats := {}
 var voda_batch := false           # generate_start: voda se spočítá jednou po vložení všech bloků
 var voda_log := true
+var ms96 := {}                    # E96: časy generování bloku 128 m (bloky, pole, sítě, vegetace, voda)
+var spawn96 := {}                 # E96: místo startu {dum, postava} (globální sloupce)
 func set_bevel(on: bool) -> void:
 	bevel = on
 	toon_mat.set_shader_parameter("use_bevel", on)
@@ -258,6 +261,9 @@ func cell_at_ray(origin: Vector3, dir: Vector3):
 	return null
 
 func _init() -> void:
+	if not Engine.is_editor_hint() and B96.on():
+		slots = B96.slots()   # E96: 16 × 16 bloků + prstenec mlhy
+		return
 	for sx in range(-3, 5):
 		for sz in range(-3, 5):
 			if Vector2(sx + 0.5, sz + 0.5).distance_to(CENTER) <= RADIUS:
@@ -299,6 +305,9 @@ static func make_block(kind: String, seed: int, title: String, category := "bě�
 
 ## vygeneruje a vloží startovní bloky (pořadí = pořadí vkládání, každý se napojí na už vložené sousedy)
 func generate_start(log := true) -> void:
+	if not Engine.is_editor_hint() and B96.on():
+		_generate_b96(log)
+		return
 	voda_batch = true
 	for i in start_slots.size():
 		var kind: String = start_kinds[i] if i < start_kinds.size() else "louka"
@@ -310,6 +319,66 @@ func generate_start(log := true) -> void:
 			log_block(b)
 	voda_batch = false
 	rebuild_water()
+
+## E96: blok 128 m = 16 × 16 bloků z funkce světa. Data všech bloků nejdřív (každý se napojí na už vložené sousedy ve
+## světě studie), pak jednou pole povrchu, odkrytí, sítě a vegetace (place() by okolí 3 × 3 přestavoval po každém bloku 9×).
+func _generate_b96(log: bool) -> void:
+	var tt := Time.get_ticks_usec()
+	var t := tt
+	var spec := B96.start(TerenBP.p)
+	ms96.funkce = (Time.get_ticks_usec() - t) / 1000.0
+	t = Time.get_ticks_usec()
+	for e in spec:
+		var b := make_block(e.kind, e.seed, "Blok 128 m: " + e.kind)
+		b.slot = e.slot
+		b.set_meta("p96_hm", e.hm)
+		BlockGen.build(b, [null, null, null, null])
+		blocks[b.slot] = b
+		TerenBP.commit(b)
+		if fogs.has(b.slot):
+			fogs[b.slot].queue_free()
+			fogs.erase(b.slot)
+		var mi := MeshInstance3D.new()
+		mi.material_override = terrain_mat
+		mi.position = slot_origin(b.slot)
+		add_child(mi)
+		meshes[b.slot] = mi
+		gen_times.append(b.gen_ms)
+	ms96.bloky = (Time.get_ticks_usec() - t) / 1000.0
+	t = Time.get_ticks_usec()
+	for s in blocks: surface.build_fields(s)
+	ms96.pole = (Time.get_ticks_usec() - t) / 1000.0
+	t = Time.get_ticks_usec()
+	for s in blocks: refresh_discovered(s)
+	ms96.odkryti = (Time.get_ticks_usec() - t) / 1000.0
+	t = Time.get_ticks_usec()
+	for s in blocks: _remesh(s)
+	ms96.kostky = (Time.get_ticks_usec() - t) / 1000.0
+	t = Time.get_ticks_usec()
+	for s in blocks: surface.build_meshes(s)
+	ms96.povrch = (Time.get_ticks_usec() - t) / 1000.0
+	t = Time.get_ticks_usec()
+	for s in blocks:
+		var vn := VegRender.build(veg_filtered(blocks[s]), blocks[s], occ_fn(blocks[s]), surface.field(s))
+		vn.position = slot_origin(s)
+		vn.visible = slice_z < 0
+		add_child(vn)
+		vegs[s] = vn
+	ms96.vegetace = (Time.get_ticks_usec() - t) / 1000.0
+	refresh_frames()
+	t = Time.get_ticks_usec()
+	rebuild_water()
+	ms96.voda = (Time.get_ticks_usec() - t) / 1000.0
+	spawn96 = B96.spawn(func(g: Vector2i) -> int: return col_h(g))
+	ms96.celkem = (Time.get_ticks_usec() - tt) / 1000.0
+	if log:
+		print("E96 blok 128 m: %d bloků, %s ms, start %s" % [blocks.size(), str(ms96), str(spawn96)])
+
+## E96: výška povrchu globálního sloupce g (buňky), mimo ostrov 0
+func col_h(g: Vector2i) -> int:
+	var s := Vector2i(floori(g.x / float(BS)), floori(g.y / float(BS)))
+	if not blocks.has(s): return 0
+	return blocks[s].hm[(g.x - s.x * BS) * BS + (g.y - s.y * BS)]
 
 func log_block(b: Block) -> void:
 	gen_times.append(b.gen_ms)
@@ -336,6 +405,8 @@ func _editor_rebuild() -> void:
 	print("Island: náhled v editoru %d bloků za %d ms (%s)" % [blocks.size(), Time.get_ticks_msec() - t, generator])
 
 func setup() -> void:
+	if not Engine.is_editor_hint() and B96.on():
+		TerenBP.reset(B96.OFF, B96.SIZE)   # E96: svět studie 18 × 18 slotů (blok 128 m + prstenec příkopu)
 	flat_mat = StandardMaterial3D.new()
 	flat_mat.vertex_color_use_as_albedo = true
 	flat_mat.vertex_color_is_srgb = true
