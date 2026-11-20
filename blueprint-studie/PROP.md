@@ -2579,3 +2579,16 @@ Zdroje [45]–[72] níže v tomto souboru zůstávají jen jako zástupné čís
   a studie se nemění → `voda_e66` d7aedf3a6d9d10e8 → 63d7b89a91385a79 a `port_studie --check` 0 změn.
 - **Negativa předem:** GDScript bez slučování stěn (greedy) → hodně trojúhelníků. Krychle 8 m daleko vypadají schodovitě.
   Materiál není geologie. Jen Linux x86_64, ne telefon. Kamera a výběr úrovně podle hráče, ne podle kamery.
+
+
+### E90 výsledky (2026-11-20 07:30)
+- **Funkce světa:** `h_m(x, y)` = vzorec E49 (`hruby_teren`, s ořezem 28–60), natažený ×8 vodorovně a reliéf ×3 kolem 20 m. Shoda s E49 0/4096 bodů. Mapa 24 × 24 dlaždic po 128 m = 3072 m.
+- **Test:** 4 hráči (700,700), (760,730), (2200,900), (1500,2400). 3 × 3 dlaždice kolem hráče po kouscích 16 m: ≤1 kousek 0,25 m, ≤3 kousky 0,5 m, jinak 1 m. Ostatní dlaždice 8 m sloupce, svisle 1 m. Slupka 3 × u8 na sloupec.
+- **Celkem:** 2277 kousků (36 × 0,25 m, 145 × 0,5 m, 1547 × 1 m, 549 daleko), 832 512 sloupců, 2 271 992 trojúhelníků. Stavba 4,9 s, plán 4,8 ms. RSS 125 → 270 MB. Data + síť 265,6 MB, z toho síť ≈ 260 MB, výšky a slupka ≈ 5,8 MB.
+- **Po úrovních (trojúhelníky / síť MB / max odchylka):** 0,25 m 370 722 / 44,5 / 0,2 m; 0,5 m 370 440 / 44,5 / 0,5 m; 1 m 954 834 / 114,6 / 1 m; daleko 575 996 / 69,1 / 1 m.
+- **Švy bez sešití:** 6982 z 239 616 úseků s dírou, 1387,75 m², max 5 m. Jen mezi různými úrovněmi (0-1 max 0,5 m, 1-2 max 1 m, 2-daleko max 5 m). Stejná úroveň 0 děr.
+- **Švy se sešitím (stěna dolů k nejnižšímu sousedovi):** 0 děr. Skok výšky max 0,5 / 1 / 7 m, daleko-daleko 10 m.
+- **Krok hráče 16 m:** 15 změněných kousků + 35 sousedů kvůli sešití, 296 ms, 158 398 trojúhelníků.
+- **Odhad 1 m všude:** 9,44 M sloupců, ≈ 57 s, 22,75 M trojúhelníků, ≈ 2,6 GB sítě.
+- **Výchozí hra beze změny:** `voda_e66` d7aedf3a6d9d10e8 → 63d7b89a91385a79, 0 neshod; `port_studie --check` 0 změn.
+- **Negativa:** bez slučování stěn; síť ≈ 94 % paměti. Snímky jen s vypnutým odstraňováním odvrácených stěn (orientace trojúhelníků nesjednocená). Daleko schodovité 8 m sloupce. T-spoje zůstávají. Úroveň podle hráče, ne kamery. Sešití nutí přestavět sousedy. Jen Linux x86_64. Natažení a reliéf jsou předpoklad testu.

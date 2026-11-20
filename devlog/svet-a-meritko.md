@@ -12,6 +12,8 @@ E49 to vyzkoušelo na světě 8 × 8 bloků. Hrubá fáze trvala asi 0,6 s, cel�
 
 E50 vzalo stejný svět a navzorkovalo každý blok v 64 × 64 × 256 buňkách (buňka 0,125 m, svět 512 × 512 × 256 = 67 milionů buněk). Blok ve studii zůstává 8 × 8 × 32 m, mění se jen hustota vzorků. Minerály a dutiny drží objem: cíl × (n/16)³. Hrubý svět je stejný jako v E49 (~0,55 s). Celé generování na boxu v GDScriptu na jednom vlákně trvalo 515 s, švy povrchu u jemných buněk 0,00. Čísla fází jsou na stránce [Výkon a mobil](vykon-a-mobil.md).
 
+E90 (2026-11-20 07:30) zkusilo LOD na mapě 3 × 3 km (24 × 24 bloků po 128 m). Výška je funkce E49 natažená ×8 a s reliéfem ×3; nezávisí na rozlišení. Kolem 4 hráčů se 3 × 3 bloky vzorkují po kouscích 16 m: nejbližší 0,25 m, do 48 m 0,5 m, dál 1 m; zbytek mapy 8 m sloupce. Celkem 2,27 M trojúhelníků, stavba 4,9 s, 270 MB RSS, síť je ≈ 94 % paměti. Bez sešití vznikají díry jen mezi různými úrovněmi (max 5 m), se stěnou dolů k sousedovi 0 děr. Posun hráče o 16 m přestaví 15 kousků + 35 sousedů za 296 ms. 1 m všude by stálo ≈ 57 s a 2,6 GB. Je to hypotéza, Jan nerozhodl.
+
 ## Hypotézy (ne rozhodnutí)
 
 - **Proporční svět** (Jan 18:35–18:53): výška kolem 3000 m (hora ~1000 m, podzemí ~2000 m), postava ~2 m (4 buňky po 0,5 m). Šířka hory se stejnou výškou a základnou ~2000 m (sklon ~45°).
