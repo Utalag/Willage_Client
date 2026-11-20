@@ -3480,3 +3480,18 @@ E90 LOD by trojúhelníky snížil, na `main` ale zatím není.
 
 **Kontroly:** `port_studie --check` „souborů 81 (78 skriptů), změněno 0“. `voda_e66` d7aedf3a6d9d10e8 → 63d7b89a91385a79, neshod 0.
 Výchozí hra se nezměnila. Výsledky jsou v `shots/e93/`: `bench_box_*.json`, `93_bench_telefon_box.png`, `cpu/`, `cpu_limit_souhrn.json`.
+
+## E95 zkušební větev se všemi přepínači Bloků 2–4 a panel na obrazovce (plán, zapsáno před pokusem 2026-11-20 11:50; Jan 2026-11-20 11:23: „Udělej jednu zkušební se všemi. A přepínače mi dej do panelu na obrazovku. K přepínačům dej vyskakovací okno/bublinu co to má dělat.“; Jan 11:25: posuvník „Svislý řez“ ostrovem; větev `zkusebni-vse` z main 0e8aa00)
+- **Sloučení:** e85-blok2-rozhodnuti (obsahuje E78–E83), e84-implicitni-geologie (jen nástroj a texty), e86-otoceni-90, e87-jadro-hory,
+  e89-jednotky, e90-lod, e91-pruhlednost, e92-meritko, e93-telefon. E88 (jen dokument) a E94 (běží jinde) ne. Konflikty v textech
+  sloučit obě strany, v kódu zachovat obě funkce; kopie studie znovu přenést `port_studie.py`.
+- **Panel:** skupiny Voda / Geologie / Výřez / Měřítko a zobrazení; CheckBox pro příznak, posuvník / SpinBox pro číselné parametry,
+  bublina česky (co dělá, z jakého pokusu, cena, vedlejší účinky). Příznaky terénu a vody se zapíšou do `ostrov_teren.over`
+  (prázdné = beze změny) a ostrov se přegeneruje znovu načtením scény. E89 mění měřítko uzlu ostrova, E91 a svislý řez jsou shadery
+  za běhu, E90 staví LOD krajinu okolo ostrova. „Vše vypnout“.
+- **Svislý řez:** rovina X nebo Z přes celý ostrov, vše na straně kamery se v shaderu zahodí (terén, voda, objekty). Řez se kreslí
+  barvou materiálu z 3D textury buněk bloků (paprsek od kamery protne rovinu řezu), jinak tmavě. Bez přegenerování.
+- **Testy:** výchozí stav = `voda_e66` d7aedf3a6d9d10e8 → 63d7b89a91385a79, `port_studie --check` 0 změn (81 souborů). Headless
+  každý příznak zapnout a vypnout, změřit čas přestavby, po vypnutí stejný otisk vody jako na startu; dvojice příznaků hledat pády.
+- **Negativa předem:** přestavba = ztráta kopání a staveb (ostrov se generuje znovu); E90 je jiná funkce světa než ostrov (jen
+  náhled pásem LOD); E89 je náhled (stromy, kamera a mlha nejsou v metrech); řez ukáže jen buňky 0,5 m dat bloku, ne překryv 0,25 m.
