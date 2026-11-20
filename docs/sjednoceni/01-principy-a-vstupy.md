@@ -299,7 +299,7 @@ Pojmy: **blueprint** = otisk světa o velikosti bloku. To, čemu se ve studiích
 
 **Otázka pro Jana.** Přepneme výchozí podzemí z E58 na E67 (výtok z okrajů vrstev, kras funguje)?
 
-**Platí:** *rozhodnuto (2026-11-20, Jan t732u); doplněno (2026-11-20, Jan t765u–t773u)*
+**Platí:** *rozhodnuto (2026-11-20, Jan t732u); doplněno (2026-11-20, Jan t765u–t775u)*
 
 - **Voda je obsah buňky.** Ukládá se v **m³ na buňku**, s jedním převodem z litrů [8].
 - **Povrchová voda** používá priority-flood + D8 [17].
@@ -316,7 +316,7 @@ Pojmy: **blueprint** = otisk světa o velikosti bloku. To, čemu se ve studiích
 
 ### 1.8.1 Vsakování a průsaky
 
-**Platí:** *rozhodnuto (2026-11-20, Jan t765u–t768u); doplněno (2026-11-20, Jan t769u–t773u)*
+**Platí:** *rozhodnuto (2026-11-20, Jan t765u–t768u); doplněno (2026-11-20, Jan t769u–t775u)*
 
 - **Propustnost materiálu** je zadaná jako **propustnost buňky** X, v **l/s herního času**: průtok buňkou **při spádu 1**. Fyzikální hodnota K × plocha stěny 0,25 m² platí přímo na herní sekundu (čistě K × A, bez dalšího násobitele). Buňka je krychle, takže stačí jedno číslo na materiál. Příklady při spádu 1: písek K 1e-4 ≈ 0,025 l/s, plná buňka 125 l za ~80 herních s ≈ 3,5 reálných s; tráva / hlína K 1e-5 ≈ 0,0025 l/s, asi 14 herních min ≈ 35 reálných s. Zrychlení 24× (1 herní den = 1 h) se týká jen převodu na reálný čas: herní sekunda trvá 1/24 reálné sekundy. Při změně časového měřítka se tok upraví sám (t773u).
 - **Skutečný tok** = X × spád, svisle i do stran. Spád je Darcyho hydraulický spád a **zahrnuje výšku vody nad buňkou**: svisle (výška vody + tloušťka vrstvy) / tloušťka vrstvy; bočně skutečný spád hladiny.
@@ -328,6 +328,12 @@ Pojmy: **blueprint** = otisk světa o velikosti bloku. To, čemu se ve studiích
 - **Přednostní cesty:** soustředění vody do prostřední buňky (Geminiho „dynamická“ varianta) se **zamítá**. Přednostní cesta smí být později vlastností buňky (např. trhlina s vyšší propustností).
 - **Čas je událostový** (herní čas, 1 herní den = 1 h).
 - Sloupec `propustnost_l_s_herni` v [`materialy.csv`](materialy.csv) má přibližné hodnoty X při spádu 1, spočtené z K skriptem [`prepocet_propustnost_l_s.py`](prepocet_propustnost_l_s.py).
+- **Artéská voda** (přidat, jen pokud to model zvládne; ověřit při zpracování, t774u–t775u): propustná vrstva sevřená mezi dvěma nepropustnými, doplňovaná výše (tam, kde vystupuje na povrch), nese vodu pod tlakem. Tlaková výška se rovná výšce oblasti doplňování.
+  - **Výpočet:** tlak v sevřené vrstvě je jen funkce / algoritmus (odvozený z geologie B a výšky doplňování). Neukládá se jako voda v buňkách.
+  - **Materializace:** teprve když hráč vrstvu obnaží (prokope se do ní), stane se voda skutečným obsahem buněk. Stoupne až k tlakové výšce (nad povrch, pokud je výška vyšší — jako artéská studna) a dál teče podle běžných pravidel (X × spád včetně výšky vody).
+- Janův referenční obrázek podzemní vody (hladina podzemní vody, zavěšená voda, pramen, jezero, potok, artéská studna) [29]. Ostatní jevy na obrázku už pokrývá stávající model (E67, zavěšená voda, prameny E74, geologie B).
+
+  ![Schéma podzemní vody: hladina, zavěšená voda, pramen, jezero, potok, artéská studna](obrazky/podzemni-voda-varianty.jpg)
 
 **Rozdíly oproti současnému kódu** (opravit při zpracování dokumentu):
 
@@ -559,3 +565,4 @@ Jen data. Velikost modelů je prezentace (`p94_meritko_veg`, Jan 11:39).
 26. `blueprint-studie/data/mineraly_hostitele.json`, `godot-prototyp/scripts/teren/tridy.gd` (main).
 27. `DENIK.md` 2026-11-17 19:18 „Jedna tabulka vlastností vody… vápenec nepropustný“, `voda-studie/README.md` (tabulka chování materiálů).
 28. `DENIK.md` E61 (2026-11-19 04:50, pokyn Jana 04:39): `materialy_voda.json` v4, vápenec perm 0,246.
+29. Schéma podzemní vody (hladina podzemní vody, zavěšená voda, pramen, jezero, potok, artéská studna), GotBooks.MiraCosta.edu.
