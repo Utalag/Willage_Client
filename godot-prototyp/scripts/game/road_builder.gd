@@ -52,7 +52,7 @@ func click(g) -> void:
 	mat.albedo_color = Color(1.0, 0.55, 0.75) if road_pts.size() == 1 else Color(1.0, 0.85, 0.4)
 	sm.material = mat
 	m.mesh = sm
-	m.position = Vector3(g.x + 0.5, Roads.height(island, g) * 0.5 + 0.4, g.y + 0.5)
+	m.position = Vector3(g.x + 0.5, Roads.height(island, g) * Roads.CELL_H + 0.4, g.y + 0.5)
 	island.add_child(m)
 	road_marks.append(m)
 	hint_changed.emit()
