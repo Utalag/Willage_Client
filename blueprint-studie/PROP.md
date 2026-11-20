@@ -2556,3 +2556,29 @@ a `surface.adapt(real)` se bez nových vstupů neprojeví.
 
 Těžba a rozklad hornin jsou samostatná studie. Návrh E65 je teď **T01 (dříve E65)** v `../tezba-studie/` (`README.md`, `PROP.md`, `DENIK.md`, `ZDROJE.md` [1]–[28], tabulka v `data/horniny_tezba_navrh.json`).
 Zdroje [45]–[72] níže v tomto souboru zůstávají jen jako zástupné číslo, aby se neposunulo číslování blueprint-studie.
+
+## E89 oddělené typy jednotek v kódu (plán, zapsáno před pokusem 2026-11-20 07:02; TODO Blok 4 „Oddělené typy jednotek v kódu: metry pro fyziku a vodu (m, s, l/s), herní jednotky po 0,25 m, hustota vzorkování a celočíselné souřadnice mřížky. Hydrauliku nepřevádět na herní jednotky.“; větev `e89-jednotky` z main 8d4d809)
+- **Co už je (průzkum kódu):**
+  - Geologie: `geo_fn.U` = 0,5 m (řídicí mřížka a délková jednotka tabulek), `BW` 8 m, `BHT` 32 m. Index `(x*16+y)*64+z`, z je výška.
+  - Hra a vykreslení: `block.gd`, `mesher.gd`, `island.gd`, `veg_render.gd`, `shore_fields.gd` mají každý svoje `BS` 16,
+    `BH` 64, `CELL_H` 0,5. Index `(x*BS+z)*BH+y`, y je výška (osa Godotu). Buňka se kreslí 1 × 1 × 0,5 jednotky scény
+    (Jan 17. 11.), takže vodorovně 1 jednotka scény = 0,5 m, svisle 1 = 1 m. Scéna je vodorovně natažená 2×.
+  - Voda: metry, sekundy, l/s (`voda_cell_m` 0,5, `cell_m2`, `u_m`, `q_to_m3` 0,001, `cm_s`, `cas_hry.gd`). Výchozí hodnoty
+    parametrů jsou rozepsané po souborech (`p.get("ug_cell_m3", 0.125)` i `p.get("ug_cell_m3", 1.0)`).
+  - Herní jednotka 0,25 m (Jan 19. 11. 20:12) v main zatím v kódu není (`prekryv78` je jen na větvích).
+- **Pokus:**
+  1. *Audit (`tools/jednotky_e89.py`):* opakované konstanty geometrie, dvě konvence indexu buňky, klíče parametrů s jednotkou
+     v názvu a bez ní, stejný klíč s různou výchozí hodnotou v různých souborech, místa převodu metrů a buněk.
+  2. *Modul `scripts/jednotky.gd`:* jedno místo pro metry, herní jednotky 0,25 m, hustotu vzorkování n (16 / 32 / 64 / 128
+     na blok), celočíselné souřadnice mřížky (blok, sloupec, buňka) a převod os geologie ↔ Godot. Hydraulika zůstává v m, s, l/s.
+     Nic z dnešního kódu ho nepoužívá. Výchozí hra se nemůže změnit.
+  3. *Test (`tools/jednotky_e89.gd`):* tam a zpět pro všechny hustoty, vnoření 0,5 ⊃ 0,25 (8 buněk), svět ↔ (slot, místní),
+     shoda s dnešními konstantami (`geo_fn.U`, `Block.CELL_H`, `voda_cell_m`, `ug` objem buňky), cena volání funkce proti
+     výrazu v kódu (ns na převod; hra na telefonu).
+  4. *Měřítko scény (příznak `p89_meritko`, výchozí vyp, `surface_params`):* ostrov se vykreslí v metrech (vodorovně ×0,5),
+     paprsky myši se převedou do místních souřadnic ostrova. Snímky vyp / zap se stejnou postavou 1,75 m a domem
+     (`shots/89_*`). Jen zobrazení, data a voda beze změny.
+  5. *Výchozí hra:* `voda_e66` (d7aedf3a6d9d10e8 → 63d7b89a91385a79) a `port_studie --check` 0 změn.
+- **Negativa předem:** GDScript nemá vlastní typy čísel (newtype), typ jednotky se tedy hlídá jen názvem a auditem, ne
+  překladačem. Volání statické funkce bude pomalejší než výraz. Měřítko scény mění vzhled svahů (2× strmější) a všechny
+  rozměry staveb a cest v buňkách. Hra ani demo ho nepoužívají, dokud Jan nerozhodne.
