@@ -239,7 +239,14 @@ Minerály, žíly, kras i dutiny jsou útvary funkce světa (1.7), ne krok „po
 
 **Otázka pro Jana.** Platí, že základní vegetace se z funkce seedu vyhodnotí až ve slupce (hustota na m², ne v tůni) a na disk půjdou jen změny (vykácení, výsadba, růst)?
 
-**Platí:**
+**Platí:** *rozhodnuto (2026-11-20 21:39–21:42, Jan t827u)*
+
+- Vegetace je **samostatná programová vrstva nad terénem** (1.12). Dá se nezávisle upravovat i **vypnout**, terén na ní nezávisí.
+- Základní porost je **funkce** seedu, souřadnic původu, materiálu, sklonu povrchu a výchozí vody. Vyhodnocuje se **jen ve slupce**.
+- Hustota se počítá **na m²**, ne na sloupec. V tůních se nevysazuje.
+- **Každý biom má pravidlo hustoty**, aby se neopakovala holá vyzdvižená hora (`hora_vyzdvizena`).
+- Ukládají se **jen změny** proti funkci (vykácení, výsadba, růst).
+
 
 ---
 
