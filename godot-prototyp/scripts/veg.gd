@@ -3,9 +3,10 @@ extends RefCounted
 ## Vegetace: samostatná vrstva nad buňkami terénu. Základní porost se generuje deterministicky ze seedu bloku
 ## (účel "VEG"), každý druh má skóre a smí jen na vhodný povrchový materiál. Hráč bude sázet sám (později).
 
+const J = preload("res://scripts/jednotky.gd")   # E94: mřížka a metry z jednoho místa
 const Mat = preload("res://scripts/mat.gd")
 const H = preload("res://scripts/stable_hash.gd")
-const BS := 16
+const BS := J.BS
 
 enum { NONE, TUFT, FLOWERS, BUSH, CONIFER, DECIDUOUS, CACTUS, DRY_GRASS, MOSS }
 const COUNT := 9
