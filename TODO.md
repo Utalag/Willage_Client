@@ -66,7 +66,10 @@ Podnět: čtvrtá odpověď ChatGPT 2026-11-19, popis je v [devlog/model-sveta.m
   - [ ] Zrychlit lokální přepočet (E79 jen o 10–35 % rychlejší než plný, ~1,1–1,5 s): přestavba pásem jen v dotčených sloupcích, menší okno přepočtu, přeskočit dutinu nesousedící s tělesem ani povrchem, přepočet po dávkách za herní tik.
   - [ ] Kopání v prototypu převést na 0,25 m přes `prekryv78` + `edit79`, pak zapnout `p79_chodby`.
   - [ ] Návrh pro WVB1 (Willage-backend): definice bloku + kanonický překryv místo celého pole, hash přes obojí, vodu neukládat.
-- [ ] **Kde končí funkce a pásma:** kritérium, kdy změna (převis, oblouk, nepravidelná jeskyně) potřebuje lokální oblast s plnými buňkami, a jak takovou oblast uložit (řídký objem, octree, komprimované intervaly).
+- [x] **Kde končí funkce a pásma:** kritérium, kdy změna (převis, oblouk, nepravidelná jeskyně) potřebuje lokální oblast s plnými buňkami, a jak takovou oblast uložit (řídký objem, octree, komprimované intervaly).
+  - 🧪 E80 (tag `e80-hranice`, nesloučeno): funkce platí do buňky 0,5 m, jemnější = překryv hráče. Uložení: seřazené klíče + komprese (nejmenší nebo ≤1,6×), octree/řídký objem zatím ne. Švy bez skoku, pořadí bloků nic nemění.
+  - [ ] Voda: víc dutin v jednom sloupci jako víc pásem, případně podzemí po 0,25 m kolem výkopů (pásma nestačí u dvou dutin nad sebou a změn jemnějších než 0,5 m).
+  - [ ] Jan: mřížka 0,25 m z funkcí, nebo rozdělením 0,5 m? Blok drží svou verzi generátoru (`gen_ver`)? Kopání na dno / bokem ven a odtok vody z ostrova?
 - [ ] **Rešerše implicitního geologického modelování:** jak do vrstev doplnit nepravidelné útvary (žíly, pegmatity, skarny, krasové dutiny) bez plných voxelů. Výchozí zdroj: [A Review of Digital Terrain Modeling](https://doi.org/10.1111/cgf.13657).
 
 ## Měřítko
