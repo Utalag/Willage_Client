@@ -62,7 +62,7 @@ Oprava K5 (lokální ≠ plný v pěti větvích) a zrychlení podzemí jsou imp
 
 **Otázka pro Jana.** Slučovat drobné výstupy v dosahu 8 m i mezi sebou do největšího ze skupiny, když silný výstup není blízko?
 
-**Platí:**
+**Platí:** (Jan, hovor 20. 11. 2026) Práh je 0,025 l/s. Výtoky pod tímto prahem se slučují s jiným výtokem v dosahu 8 m, a to i mezi sebou, když poblíž není silný výstup.
 
 ---
 
