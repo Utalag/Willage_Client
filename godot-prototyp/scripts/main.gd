@@ -11,6 +11,7 @@ const Block = preload("res://scripts/block.gd")
 const BlockGen = preload("res://scripts/block_gen.gd")
 const Toon = preload("res://scripts/toon.gd")
 const DemoRunner = preload("res://scripts/demo/demo_runner.gd")
+const SP96 = preload("res://scripts/surface/surface_params.gd")   # E96: LOD přehledu bloku 128 m
 const BS := J.BS
 
 @onready var world = $World
@@ -70,6 +71,9 @@ func _start_b96() -> void:
 	add_child(postava96)
 	rig.center = top
 	rig.zoom_max_k = 2.0   # 160 × 0,5 × 2 = 160 m záběr: celý blok 128 m
+	var lz := float(SP96.inst().p96_lod_zaber)
+	if lz > 0.0:   # LOD přehledu: nad lz m záběru jedna síť 1 m bez vegetace (E90)
+		rig.placed.connect(func(sz: float): island.lod96_set(sz > lz))
 
 ## demo / testy: zastaví vše, co běží po snímcích (kamera WASD, tok vody, čas větru)
 func set_game_process(on: bool) -> void:

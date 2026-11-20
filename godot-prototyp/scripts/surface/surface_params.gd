@@ -37,6 +37,8 @@ static func inst():
 ## E96 (Jan 2026-11-20 11:48): ostrov = jeden blok 128 × 128 m z funkce světa (16 × 16 bloků po 8 m, buňka 0,5 m) místo
 ## čtyř šablon 8 m. Výchozí vyp. Projeví se při startu hry (`--surface.p96_blok128=true`).
 @export var p96_blok128 := false
+## E96: LOD přehledu bloku 128 m – při záběru kamery nad tolik metrů jedna síť sloupců 1 m bez vegetace (0 = vyp)
+@export_range(0.0, 200.0, 4.0) var p96_lod_zaber := 64.0
 
 @export_group("Duální mřížka")
 @export var dual_enabled := true                       ## duální mřížka pro povrch louky, písku a vody
