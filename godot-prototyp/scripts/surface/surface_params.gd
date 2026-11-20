@@ -32,6 +32,9 @@ static func inst():
 ## Na větvi e94-metry výchozí zap (Jan 2026-11-20 11:04); na zkušební větvi zkusebni-vse (E95) výchozí VYP, zapíná se v panelu
 ## „Metry (E94)“ nebo `--surface.p89_meritko=true`; vyp = dnešní buňka 1 × 1 × 0,5.
 @export var p89_meritko := false
+## E94b (Jan 2026-11-20 11:39): měřítko modelů rostlin ve scéně v metrech (× výšky VYSKA_M; 0,5 → listnáč 1,75 m,
+## jehličnan 2 m, keř 0,5 m, kaktus 0,75 m). Hustota beze změny; bez p89_meritko se nepoužije.
+@export_range(0.1, 2.0, 0.05) var p94_meritko_veg := 0.5
 
 @export_group("Duální mřížka")
 @export var dual_enabled := true                       ## duální mřížka pro povrch louky, písku a vody

@@ -271,6 +271,7 @@ func _ready() -> void:
 	# E94: objekty (stromy, tráva, stavby) mají rozměry v metrech → v ostrově s měřítkem se vyrovnají (×2 vodorovně)
 	VegRender.proti = protiskala()
 	VegRender.metry = scale != Vector3.ONE
+	VegRender.meritko_veg = float(SurfaceParamsS.inst().p94_meritko_veg) if VegRender.metry else 1.0   # E94b
 	Grass.proti = protiskala()
 
 ## E94: měřítko, které vrátí objekt v ostrově na metry (ostrov vodorovně ×0,5 → objekt ×2); bez p89_meritko jedničky

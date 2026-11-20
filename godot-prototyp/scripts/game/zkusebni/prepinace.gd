@@ -9,6 +9,7 @@ extends RefCounted
 ##            "meritko", "lod", "pruhl", "rez" → za běhu (uzel ostrova, LOD krajina, shadery)
 ##   rodic    číselný parametr se zobrazí pod svým přepínačem (a projeví se, jen když je přepínač zapnutý)
 ##   tip      bublina (česky): co dělá, z jakého pokusu, cena, vedlejší účinky
+## p89_meritko a p94_meritko_veg jsou v SurfaceParams (načtou se při startu scény → znovu načtení scény).
 ## Výchozí hodnoty bere panel z ostrov_teren.params() (tedy totéž co výchozí hra), u E89–E91 a řezu z jejich modulů.
 
 const SKUPINY := ["Voda", "Geologie", "Výřez", "Měřítko a zobrazení"]
@@ -52,6 +53,8 @@ const SEZNAM := [
 	# ------------------------------------------------------------------ měřítko a zobrazení
 	{"k": "p89_meritko", "g": "Měřítko a zobrazení", "t": "b", "cil": "teren", "n": "Metry (E94)",
 		"tip": "E89 + E94 (Jan 11:04): scéna v metrech – 1 jednotka = 1 m, buňka 0,5 × 0,5 × 0,5 m (dnes 1 × 1 × 0,5, tedy vodorovně natažená 2×). Stromy, stavby, kamera, tráva a mlha jsou v metrech.\nCena: znovu načtení scény ~{teren} s (data ostrova a voda se nemění, otisky vody stejné).\nVedlejší účinky: ostrov vypadá menší a hora strmější; stromy 3,5–4 m zakryjí louku. Na větvi e94-metry je výchozí zap, tady vyp."},
+	{"k": "p94_meritko_veg", "g": "Měřítko a zobrazení", "t": "f", "min": 0.25, "max": 1.5, "krok": 0.05, "rodic": "p89_meritko", "cil": "teren", "n": "E94b měřítko vegetace",
+		"tip": "E94b (Jan 11:39): měřítko velikosti vegetace ve scéně v metrech (× skutečné výšky; 0,5 → listnáč 1,75 m, jehličnan 2 m, keř 0,5 m). Hustota se nemění. Jan ji bude ladit.\nCena: znovu načtení scény ~{teren} s (data ostrova a voda beze změny).\nVedlejší účinky: jen vzhled; platí jen se zapnutými Metry (E94)."},
 	{"k": "p94_hora_k", "g": "Měřítko a zobrazení", "t": "f", "min": 1.0, "max": 2.5, "krok": 0.1, "cil": "teren", "n": "E94 výška hory ×",
 		"tip": "E94: převýšení hory nad její patou (1 = beze změny). Startovní hora je v bloku 8 m jen ~9 m nad loukou; 1,5 dá vrchol ~10,5 m (strop sloupce 61 buněk = 30,5 m).\nCena: přegenerování ostrova ~{teren} s.\nVedlejší účinky: mění terén hory i vodu; s vyšší horou má lokální přepočet vody neshody (stará chyba vody, i na main)."},
 	{"k": "p92_svah", "g": "Měřítko a zobrazení", "t": "b", "cil": "teren", "n": "E92 omezovač sklonu",
@@ -87,7 +90,7 @@ const SEZNAM := [
 ]
 
 ## výchozí hodnoty mimo ostrov_teren.params()
-const VYCHOZI_JINE := {"p90_lod": false, "p90_okoli": 1, "p90_slupka": 3, "p90_daleko_m": 8.0, "p90_barvy": true,
+const VYCHOZI_JINE := {"p89_meritko": false, "p94_meritko_veg": 0.5, "p90_lod": false, "p90_okoli": 1, "p90_slupka": 3, "p90_daleko_m": 8.0, "p90_barvy": true,
 	"p91_pruhlednost": false, "p91_mode": 1, "p91_r": 3.0, "p91_cut_r": 10.0, "p91_ceil": 1.25, "zk_rez": 0, "zk_rez_pos": 0.5}
 
 static func zaznam(k: String) -> Dictionary:

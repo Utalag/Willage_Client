@@ -14,6 +14,7 @@ const SP = preload("res://scripts/surface/surface_params.gd")
 const CENY := {"teren": "4–6", "lod": "1–3", "pruhl": "1–4", "rez": "1–4"}
 const CASY := {}
 
+const SURF := ["p89_meritko", "p94_meritko_veg"]   # klíče SurfaceParams (ne ostrov_teren)
 static var stav := {}          # klíč → hodnota (jen to, co se liší od výchozí hry)
 static var sbaleno := false
 static var regen_t0 := 0       # µs; > 0 = probíhá přestavba (znovu načtení scény)
@@ -47,7 +48,6 @@ func _init() -> void:
 # ---------------------------------------------------------------- hodnoty
 static func vychozi(k: String):
 	if P.VYCHOZI_JINE.has(k): return P.VYCHOZI_JINE[k]
-	if k == "p89_meritko": return false
 	var d: Dictionary = T.PR.defaults()
 	d.merge(T.HRA, true)
 	return d.get(k)
@@ -59,8 +59,12 @@ static func _sync_over() -> void:
 	var o := {}
 	for k in stav:
 		var e := P.zaznam(k)
-		if e.get("cil", "") in ["teren", "zive"] and k != "p89_meritko": o[k] = stav[k]
+		if e.get("cil", "") in ["teren", "zive"] and not (k in SURF): o[k] = stav[k]
 	T.over = o
+
+static func _sync_surf() -> void:
+	SP.inst().p89_meritko = bool(hodnota("p89_meritko"))
+	SP.inst().p94_meritko_veg = float(hodnota("p94_meritko_veg"))
 
 static func _rodic_on(e: Dictionary) -> bool:
 	if not e.has("rodic"): return true
@@ -77,7 +81,7 @@ func _ready() -> void:
 	rig = main.get_node("CameraRig")
 	cam = rig.get_node("Camera")
 	_build_ui()
-	SP.inst().p89_meritko = bool(hodnota("p89_meritko"))
+	_sync_surf()
 	if not kamera.is_empty() and bool(kamera.get("metry")) == bool(hodnota("p89_meritko")):
 		rig.center = kamera.center; rig.yaw = kamera.yaw; cam.size = kamera.size; rig.place()
 	_apply_live()
@@ -242,7 +246,7 @@ func nastav(k: String, v, hned := false) -> void:
 	_refresh()
 	match e.cil:
 		"teren":
-			if k == "p89_meritko": SP.inst().p89_meritko = bool(v)
+			if k in SURF: _sync_surf()
 			_sync_over()
 			if not _rodic_on(e): return
 			if e.t == "b" or hned: prestavba(k)
@@ -263,7 +267,7 @@ func vse_vypnout() -> void:
 	for k in stav:
 		if P.zaznam(k).get("cil", "") == "teren": regen = true
 	stav.clear()
-	SP.inst().p89_meritko = false
+	_sync_surf()
 	T.over = {}
 	T.ensure()
 	var d: Dictionary = T.PR.defaults(); d.merge(T.HRA, true)
