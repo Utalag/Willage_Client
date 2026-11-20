@@ -299,7 +299,7 @@ Pojmy: **blueprint** = otisk světa o velikosti bloku. To, čemu se ve studiích
 
 **Otázka pro Jana.** Přepneme výchozí podzemí z E58 na E67 (výtok z okrajů vrstev, kras funguje)?
 
-**Platí:** *rozhodnuto (2026-11-20, Jan t732u); doplněno (2026-11-20, Jan t765u–t782u)*
+**Platí:** *rozhodnuto (2026-11-20, Jan t732u); doplněno (2026-11-20, Jan t765u–t785u)*
 
 - **Voda je obsah buňky.** Ukládá se v **m³ na buňku**, s jedním převodem z litrů [8].
 - **Povrchová voda** používá priority-flood + D8 [17].
@@ -319,6 +319,7 @@ Pojmy: **blueprint** = otisk světa o velikosti bloku. To, čemu se ve studiích
 - **Jíl nad zvednutou vápencovou vrstvou vyklíní** (ztenčí se a místy chybí), takže tam voda prosakuje do vápence a kras vzniká přirozeně.
 - **Propustnost vápence = 0,246** (skutečná hodnota). Staré pravidlo „vápenec 0“ se ruší [27][28].
 - Vsakování a průsaky viz 1.8.1.
+- Eroze viz 1.8.2.
 
 ### 1.8.1 Vsakování a průsaky
 
@@ -330,7 +331,7 @@ Pojmy: **blueprint** = otisk světa o velikosti bloku. To, čemu se ve studiích
 - **Dolní limit** je limit průtoku rozhraní v l/s (E71), ne volný objem buňky pod ní.
 - **E72:** 8 m je vzdálenost, na kterou se slučují drobné výtoky / prameny, ne dosah průsaku.
 - **Zavěšená voda** se drží nad jílem a nepropustnou skálou.
-- **Eroze:** rychlost průsaku v pórech erozi nespouští. Eroze je jen u povrchového / volného toku (Manning, E51, práh `ero_v`). Kras (E75) vzniká rozpouštěním z průtoku, ne z rychlosti.
+- **Eroze:** rychlost průsaku v pórech erozi nespouští. Eroze je jen u povrchového / volného toku; pravidla viz 1.8.2.
 - **Přednostní cesty:** soustředění vody do prostřední buňky (Geminiho „dynamická“ varianta) se **zamítá**. Přednostní cesta smí být později vlastností buňky (např. trhlina s vyšší propustností).
 - **Čas je událostový** (herní čas, 1 herní den = 1 h).
 - Sloupec `propustnost_l_s_herni` v [`materialy.csv`](materialy.csv) má přibližné hodnoty X při spádu 1, spočtené z K skriptem [`prepocet_propustnost_l_s.py`](prepocet_propustnost_l_s.py).
@@ -347,6 +348,17 @@ Pojmy: **blueprint** = otisk světa o velikosti bloku. To, čemu se ve studiích
 - Kapacita se násobí `p71_cas` / `cas_hry.FAKTOR` (= 24). Tento násobitel se zruší; tok má být čistě K × A v l/s herního času.
 - Spojení dvou materiálů je výchozí „pomer“ (K / perm spodní buňky nebo souseda), volitelně harmonický průměr; má být minimum obou.
 - Boční tok se dělí zbytkem po svislé kapacitě vahou perm × výška překryvu, ne jako X × skutečný spád hladiny.
+
+### 1.8.2 Eroze
+
+**Platí:** *rozhodnuto (2026-11-20, Jan t783u–t785u)*
+
+- Eroze začne, když rychlost proudu překročí `ero_v` materiálu na povrchu. Rychlost v korytě je z Manningova vzorce (z průtoku, sklonu a průřezu koryta); v tůni je to průtok / průřez. Pod `sed_v` se materiál usazuje.
+- Odnesené množství za sekundu = průtok × (rychlost / práh)^k, výchozí k = 1,5 (parametr). Rychlejší tok nad prahem odnáší materiál rychleji, takže tlakový výtok rychle rozšiřuje otvor.
+- V dnešním kódu je `e51_k = 0` (jen průtok); při zpracování dokumentu se změní na 1,5.
+- Čas běží jako události v herních sekundách; kopání nebo položení odpočet vynuluje.
+- Kras E75 se rozpouští podle průtoku, ne podle rychlosti.
+- Průsak v pórech erozi nespouští (viz 1.8.1 a prameny v 1.8).
 
 ---
 
