@@ -231,6 +231,11 @@ Skupiny: 1 Prototyp a buildy · 2 Terén a tvar · 3 Rozlišení bloku · 4 Ská
 - **Zjištění:** konstanty bloku rozepsané (BS 33×, BH 18×, CELL_H 9×), dvě konvence os indexu (stejná čísla), l → m³ dvakrát jinak (13 % průtoků jiný poslední bit), `ug_cell_m3` s výchozí 0,125 i 1,0. Scéna kreslí buňku 1 × 1 × 0,5 → vodorovně natažená 2×.
 - **Výsledek:** modul bez chyb (tam a zpět, vnoření, index pro 16–128), volání 3–4× dražší než výraz. `p89_meritko` ukáže scénu v metrech, výchozí hra beze změny.
 - **Další krok (Jan):** scéna v metrech? postupný převod konstant? jeden tvar l → m³? vegetace a stavby v metrech?
+### 🧪 E90: LOD a test 3 × 3 km (2026-11-20 07:30 · větev a tag `e90-lod`, `scripts/teren/lod90.gd`, `tools/lod_e90.gd`, shots `blueprint-studie/shots/e90/`)
+- **Směr:** Jan: svět = funkce nezávislé na rozlišení, povrchová slupka se vzorkuje pro zobrazení, LOD 0,25 m blízko, 0,5 m středně, 1 m daleko. Za příznakem `p90_lod` (výchozí vyp).
+- **Zlepšení:** mapa 3072 m, 4 hráči: 2277 kousků, 2,27 M trojúhelníků, stavba 4,9 s, RSS 270 MB. Se sešitím 0 děr ve švech. Krok hráče 16 m za 296 ms. Výchozí hashe beze změny.
+- **Komplikace:** bez sešití 6982 úseků s dírou (max 5 m). Síť ≈ 94 % paměti. Snímky jen s vypnutým cullingem. Daleko schodovité 8 m sloupce. 1 m všude by bylo ≈ 57 s a 2,6 GB.
+- **Další krok:** Jan rozhodne: LOD podle hráče nebo kamery, poloměry pásem, daleko 8 m nebo 1 m, slučování stěn nebo síť z výškové mapy, sešití stěnami, měřítko reliéfu, měření na telefonu.
 
 ### 🔄 Voda E74–E77 sloučena, přepínače podle Jana (2026-11-20 04:08 · větev `voda-e74-e77-slouceni`, tag `voda-e74-e77-ready`, `tok.solve74`, `ug67._merge_outs72d`, `ostrov_voda.place76`, data `blueprint-studie/shots/voda_e74_e77/`)
 - **Směr:** Jan 2026-11-20 01:49 a 03:26: sloučit E74–E77, zapnout obsazování pramenů s hladinou, uložené prameny, slučování do 8 m; E75 a těžba na `cas_hry.gd`.

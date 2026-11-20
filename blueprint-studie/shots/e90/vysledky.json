@@ -1,0 +1,242 @@
+{
+ "parametry": {
+  "p90_lod": true,
+  "p90_seed": 49,
+  "p90_dlazdic": 24,
+  "p90_dlazdice_m": 128.0,
+  "p90_kousek_m": 16.0,
+  "p90_natazeni": 8.0,
+  "p90_relief": 3.0,
+  "p90_daleko_m": 8.0,
+  "p90_daleko_svisle_m": 1.0,
+  "p90_r0": 1,
+  "p90_r1": 3,
+  "p90_okoli": 1,
+  "p90_seti": true,
+  "p90_slupka": 3
+ },
+ "shoda_e49": {
+  "bodu": 4096,
+  "jinak": 0,
+  "max_bunky": 0.0
+ },
+ "hraci": [
+  [
+   700.0,
+   700.0
+  ],
+  [
+   760.0,
+   730.0
+  ],
+  [
+   2200.0,
+   900.0
+  ],
+  [
+   1500.0,
+   2400.0
+  ]
+ ],
+ "uroven": {
+  "0,25 m": {
+   "ploch": 36,
+   "sloupcu": 147456,
+   "tri": 370722,
+   "vrcholu": 1112166,
+   "ms_fn": 419.013,
+   "ms_sit": 338.508,
+   "ms_mesh": 77.602,
+   "B_vysky": 589824,
+   "B_slupka": 442368,
+   "B_sit": 44486640,
+   "max_odchylka_m": 0.249798357486725
+  },
+  "0,5 m": {
+   "ploch": 145,
+   "sloupcu": 148480,
+   "tri": 370440,
+   "vrcholu": 1111320,
+   "ms_fn": 441.172,
+   "ms_sit": 369.784,
+   "ms_mesh": 72.311,
+   "B_vysky": 593920,
+   "B_slupka": 445440,
+   "B_sit": 44452800,
+   "max_odchylka_m": 0.499725520610809
+  },
+  "1 m": {
+   "ploch": 1547,
+   "sloupcu": 396032,
+   "tri": 954834,
+   "vrcholu": 2864502,
+   "ms_fn": 1330.432,
+   "ms_sit": 1206.867,
+   "ms_mesh": 203.513,
+   "B_vysky": 1584128,
+   "B_slupka": 1188096,
+   "B_sit": 114580080,
+   "max_odchylka_m": 0.999572604894638
+  },
+  "daleko 8 m": {
+   "ploch": 549,
+   "sloupcu": 140544,
+   "tri": 575996,
+   "vrcholu": 1727988,
+   "ms_fn": 490.286,
+   "ms_sit": 557.803000000001,
+   "ms_mesh": 120.311,
+   "B_vysky": 562176,
+   "B_slupka": 421632,
+   "B_sit": 69119520,
+   "max_odchylka_m": 0.99605126876093
+  }
+ },
+ "celkem": {
+  "ploch": 2277,
+  "sloupcu": 832512,
+  "tri": 2271992,
+  "MB_data_a_sit": 265.566467285156,
+  "ms_plan": 5.693,
+  "ms_stavba": 5651.557,
+  "rss_pred_mb": 259.1484375,
+  "rss_po_mb": 407.21484375,
+  "peak_mb": 407.21484375,
+  "detail_dlazdic": 27,
+  "kousku": 1728
+ },
+ "svy": {
+  "bez_seseti": {
+   "useku": 239616,
+   "s_dirou": 6982,
+   "plocha_m2": 1387.75,
+   "max_m": 5.0,
+   "skok_max_m": 10.0,
+   "ruzne_urovne": 27648,
+   "pary": {
+    "2-2": {
+     "useku": 185728,
+     "s_dirou": 0,
+     "plocha_m2": 0.0,
+     "skok_max_m": 2.0,
+     "dira_max_m": 0.0
+    },
+    "1-2": {
+     "useku": 6144,
+     "s_dirou": 2808,
+     "plocha_m2": 362.25,
+     "skok_max_m": 1.0,
+     "dira_max_m": 1.0
+    },
+    "2-3": {
+     "useku": 18432,
+     "s_dirou": 2940,
+     "plocha_m2": 946.0,
+     "skok_max_m": 7.0,
+     "dira_max_m": 5.0
+    },
+    "1-1": {
+     "useku": 13952,
+     "s_dirou": 0,
+     "plocha_m2": 0.0,
+     "skok_max_m": 1.0,
+     "dira_max_m": 0.0
+    },
+    "0-1": {
+     "useku": 3072,
+     "s_dirou": 1234,
+     "plocha_m2": 79.5,
+     "skok_max_m": 0.5,
+     "dira_max_m": 0.5
+    },
+    "0-0": {
+     "useku": 3072,
+     "s_dirou": 0,
+     "plocha_m2": 0.0,
+     "skok_max_m": 0.25,
+     "dira_max_m": 0.0
+    },
+    "3-3": {
+     "useku": 9216,
+     "s_dirou": 0,
+     "plocha_m2": 0.0,
+     "skok_max_m": 10.0,
+     "dira_max_m": 0.0
+    }
+   }
+  },
+  "se_sesitim": {
+   "useku": 239616,
+   "s_dirou": 0,
+   "plocha_m2": 0.0,
+   "max_m": 0.0,
+   "skok_max_m": 10.0,
+   "ruzne_urovne": 27648,
+   "pary": {
+    "2-2": {
+     "useku": 185728,
+     "s_dirou": 0,
+     "plocha_m2": 0.0,
+     "skok_max_m": 2.0,
+     "dira_max_m": 0.0
+    },
+    "1-2": {
+     "useku": 6144,
+     "s_dirou": 0,
+     "plocha_m2": 0.0,
+     "skok_max_m": 1.0,
+     "dira_max_m": 0.0
+    },
+    "2-3": {
+     "useku": 18432,
+     "s_dirou": 0,
+     "plocha_m2": 0.0,
+     "skok_max_m": 7.0,
+     "dira_max_m": 0.0
+    },
+    "1-1": {
+     "useku": 13952,
+     "s_dirou": 0,
+     "plocha_m2": 0.0,
+     "skok_max_m": 1.0,
+     "dira_max_m": 0.0
+    },
+    "0-1": {
+     "useku": 3072,
+     "s_dirou": 0,
+     "plocha_m2": 0.0,
+     "skok_max_m": 0.5,
+     "dira_max_m": 0.0
+    },
+    "0-0": {
+     "useku": 3072,
+     "s_dirou": 0,
+     "plocha_m2": 0.0,
+     "skok_max_m": 0.25,
+     "dira_max_m": 0.0
+    },
+    "3-3": {
+     "useku": 9216,
+     "s_dirou": 0,
+     "plocha_m2": 0.0,
+     "skok_max_m": 10.0,
+     "dira_max_m": 0.0
+    }
+   }
+  },
+  "ms": 6707.536
+ },
+ "krok_16m": {
+  "zmenenych_ploch": 15,
+  "sousedu_k_preseti": 35,
+  "ms": 346.325,
+  "tri": 158398
+ },
+ "odhad_1m_vsude": {
+  "sloupcu": 9437184.0,
+  "us_na_sloupec": 6.920683177117,
+  "s": 65.3117605481577,
+  "tri": 22753070.8312864,
+  "MB_sit": 2603.8823125404
+ }
+}
