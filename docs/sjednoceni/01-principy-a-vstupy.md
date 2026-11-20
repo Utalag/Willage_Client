@@ -168,7 +168,7 @@ Pojmy: **blueprint** = otisk světa o velikosti bloku. To, čemu se ve studiích
 
 **Otázka pro Jana.** Při nové verzi generátoru přepočítat jen bloky, do kterých hráč nezasáhl, a ostatní nechat na staré verzi?
 
-**Platí:**
+**Platí:** **Odloženo (2026-11-20, Jan t726u):** neřešit, dokud nemáme jeden funkční generátor.
 
 ---
 
@@ -194,7 +194,22 @@ Pojmy: **blueprint** = otisk světa o velikosti bloku. To, čemu se ve studiích
 
 **Otázka pro Jana.** Sloučíme vodní, těžební a herní vlastnosti do jedné tabulky materiálů s jedním číslem id?
 
-**Platí:**
+**Platí:** *rozhodnuto (2026-11-20, Jan t727u)*
+
+- Zatím **jedna tabulka**, případně několik propojených tabulek. **Jeden materiál = jedno číselné id.** Další parametry se k němu přidávají novými sloupci nebo vedlejšími tabulkami se stejným id.
+- Grafová nebo vektorová databáze pro vztahy (tavení, co na čem roste, podobnost materiálů) je možnost pro později. Teď ne.
+- **Návrh tabulky:** [`materialy.csv`](materialy.csv), 78 materiálů. Sloučené seznamy: `sdilene/materialy_voda.json` + `horniny_voda.json` (voda, eroze) [13], `tezba-studie/data/horniny_tezba_navrh.json` (hustota, tvrdost, vzácnost, nástroj) [14], `mat.gd` (herní třídy, barvy, skóre rarity) a `poradi_hornin.json` (horniny, barvy) [15], `veg.gd` (povrchy pro vegetaci) [16], `mineraly_hostitele.json` a `tridy.gd` (minerály, převod na herní třídu) [26].
+  - Sloupce: id, název, skupina (soil / rock / ore / water / other), propustnost 0–1 = (log10 K + 9) / 6, K v m/s (Darcy), pórovitost, odpor povrchu, eroze (kritická rychlost proudu `ero_v` a třída), hustota kg/m³, tvrdost (Mohs, třída, nejslabší nástroj), vzácnost (+ skóre rarity), vegetace (podle `veg.gd` přes herní třídu), barva hex, poznámka.
+  - Hodnoty jsou z dat. Doplněné odhady mají `~` a zdroj [23]–[25]. „–“ znamená, že se na materiál nevztahuje.
+  - Zachovaná pravidla: písek vodu neudrží a trochu zpomalí, tráva hodně zpomalí, jíl a pevná skála vodu drží, pórovitá hornina trochu prosakuje [27]. **Vápenec perm 0** je napsaný podle pravidla z 2026-11-17 19:18 [27]. ⚠ Data v4 mají od pokynu Jana 2026-11-19 04:39 (E61) vápenec 0,246 podle skutečné K [28] a kras (E75, E82) na propustném vápenci stojí. Rozhodne Jan.
+  - Voda není materiál, ale stav buňky. V tabulce je jen id 250 (dutina s vodou z `tridy.gd`).
+- **Konflikty mezi starými seznamy** (k vyřešení při stavbě tabulky):
+  1. Stejné id, jiný materiál: 2 hlína / ornice, 3 písek / štěrk, 4 jíl / zvětralá břidlice, 5 vápenec / jeskynní vápenec, 7 čedič / diabas, 10 sníh / věčný sníh. Barvy těchto id se v `mat.gd` a `poradi_hornin.json` liší.
+  2. Id 0 má v `poradi_hornin.json` dva klíče (`cloud_line`, `map_ceiling`). Klíč `lignite` má vrstva 53 i minerál 105. Vrstva 53 chybí ve vodní i těžební tabulce.
+  3. Hra zná jen 13 herních tříd. `tridy.gd` mapuje 78 id na třídy hrubě: všechny rudy a drahokamy včetně uhlí → „měděná ruda“, černé uhlí a kimberlit → čedič. Vegetace a rarita proto horniny nevidí.
+  4. Nosnost: `mat.gd LOAD` (vápenec −1 = neomezeně) proti `load` ve vodní tabulce a v `poradi_hornin.json` (vápenec 80).
+  5. Hustota byla jen u 5 hornin ve vodní tabulce, úplná je jen v návrhu T01. Zlato má 3200 kg/m³ jako rudnina, ne jako kov.
+  6. Kopie `/workspace/willage-ideas/sdilene/` je zastaralá (čas × 144, bez rozpustnosti) a `materialy_voda_navrh.json` (E59) je nahrazený v4.
 
 ---
 
@@ -439,3 +454,9 @@ Jen data. Velikost modelů je prezentace (`p94_meritko_veg`, Jan 11:39).
 20. PROP E93 (`e93-telefon` 7cbcf68), `shots/e93/cpu_limit_souhrn.json`.
 21. `devlog/voda.md`, `blueprint-studie/README.md` (E47b/c okraj ostrova), main.
 22. `blueprint-studie/PROP.md` „E66b podzemní těleso, bok ostrova“ (main).
+23. Freeze & Cherry 1979: Groundwater, kap. 2, tab. 2.2 (rozsahy K), https://fc79.gw-project.org/english/chapter-2/ (citováno i v `blueprint-studie/ZDROJE.md` [38]).
+24. Hjulströmův diagram (kritická rychlost eroze podle zrnitosti), https://en.wikipedia.org/wiki/Hjulstr%C3%B6m_curve.
+25. Lignit: hustota ~1100–1300 kg/m³, měkký, https://en.wikipedia.org/wiki/Lignite.
+26. `blueprint-studie/data/mineraly_hostitele.json`, `godot-prototyp/scripts/teren/tridy.gd` (main).
+27. `DENIK.md` 2026-11-17 19:18 „Jedna tabulka vlastností vody… vápenec nepropustný“, `voda-studie/README.md` (tabulka chování materiálů).
+28. `DENIK.md` E61 (2026-11-19 04:50, pokyn Jana 04:39): `materialy_voda.json` v4, vápenec perm 0,246.
