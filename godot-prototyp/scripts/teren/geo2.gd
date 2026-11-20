@@ -74,6 +74,42 @@ static func zone_tops(wx: float, wy: float, p: Dictionary) -> Array:
 ## hora zvrásněná (Janova skica [11] vpravo) = antiklinála: všechny vrstvy se klenou nahoru celé (nic se neztenčí),
 ##   amplituda a_j · u klesá s hloubkou (horní vrstvy kopírují povrch, hluboké se klenou málo);
 ## sopka: všechny hranice se ke kráteru strmě zvedají a sbíhají pod vrchol (váha w(r) = (1 − r/R)^γ), uprostřed sopouch.
+## E82 (Jan 2026-11-20 01:55): vápenec k hladině zhruba v p82_podil bloků, náhodně podle seedu bloku (stabilní hash).
+static func coin82(seed: int, p: Dictionary) -> bool:
+	return float(H.mix(seed, "P82_VAPENEC", 0) & 0xFFFF) / 65536.0 < float(p.get("p82_podil", 0.5))
+
+## E82: cíl vršku vrstvy p82_vrstva (jeskynní vápenec) se zvedne na odhad hladiny = vyhlazený povrch − p82_pod_m (2 m: nad vápencem zůstane propustný kryt pro vsak);
+## vrstvy nad ní, které by ležely pod tímto vrškem, se vyklíní (vršek = vršek vápence), pořadí zůstává. S p82_tesneni
+## se vyklíní i nepropustné vrstvy nad vápencem (jílovec, jíl), aby voda z propustného krytu došla do vápence. Vrací počet
+## zvednutých řídicích bodů. t = výstup targets (vršky všech vrstev v jednotkách U, pořadí HR.pool).
+static func lift82(t: Array, hm_f: PackedFloat64Array, p: Dictionary) -> int:
+	var id := HR.id_of(str(p.get("p82_vrstva", "cave_limestone")))
+	var pool := HR.pool(p)
+	var k5 := -1
+	for k in pool.size():
+		if int(pool[k].id) == id: k5 = k
+	if k5 < 0 or k5 >= t.size(): return 0
+	var hs := uplift(hm_f, 0.0, 1)
+	var d := float(p.get("p82_pod_m", 1.0)) / U
+	var seal := {}
+	if bool(p.get("p82_tesneni", true)):   # nepropustné vrstvy nad vápencem (perm ≤ 0) se v bloku „ano“ vyklíní celé
+		const VP = preload("res://scripts/teren/zaklad/voda_params.gd")
+		var tab: Dictionary = VP.load_shared_table()
+		for key in tab.materials:
+			var e: Dictionary = tab.materials[key]
+			if float(e.perm) <= 0.0: seal[int(e.id)] = true
+	var n := 0
+	for i in 256:
+		var top := hs[i] - d
+		if t[k5][i] < top:
+			t[k5][i] = top; n += 1
+			for j in range(k5 + 1, t.size()):
+				t[j][i] = maxf(t[j][i], top)
+		if seal.is_empty(): continue
+		for j in range(k5 + 1, t.size()):
+			if seal.has(int(pool[j].id)): t[j][i] = t[j - 1][i]   # mocnost 0, místo dostane vrstva nad ní
+	return n
+
 static func targets(slot: Vector2i, hm_f: PackedFloat64Array, shape: String, seed: int, p: Dictionary, sub := {}) -> Array:
 	var kind := kind_of(shape)
 	var ref := float(p.surf_ref)
