@@ -9,6 +9,7 @@ extends RefCounted
 ##   je teď součástí louky (žádný zvláštní velký trs). Mech, keře, stromy a kaktusy beze změny (veg_render.gd).
 ## - Jeden sdílený materiál; postavičky volají touch(), hra jednou za snímek tick(dt).
 
+const J = preload("res://scripts/jednotky.gd")   # E94: mřížka a metry z jednoho místa
 const Par = preload("res://scripts/grass_params.gd")
 const Trail = preload("res://scripts/grass_trail.gd")
 const Veg = preload("res://scripts/veg.gd")
@@ -16,8 +17,8 @@ const Mat = preload("res://scripts/mat.gd")
 const H = preload("res://scripts/stable_hash.gd")
 const Toon = preload("res://scripts/toon.gd")
 const SurfPar = preload("res://scripts/surface/surface_params.gd")
-const BS := 16
-const CELL_H := 0.5
+const BS := J.BS
+const CELL_H := J.CELL_M
 const FLOWER_COLORS := [Color(1.0, 0.62, 0.78), Color(1.0, 0.92, 0.45), Color(0.98, 0.98, 1.0), Color(0.75, 0.62, 1.0)]
 enum { GREEN, DRY, FLOWER }
 
