@@ -2727,3 +2727,62 @@ Zdroje [45]–[72] níže v tomto souboru zůstávají jen jako zástupné čís
 - **Bublina pro zkušební panel (`p96_blok128`):** „Blok 128 m (E96): ostrov je jeden velký blok 128 × 128 m z funkce světa
   místo čtyř šablon 8 m. Buňka 0,5 m, vrstvy, voda, kopání a vegetace jako dnes. Načítání trvá déle (desítky sekund).
   Změna se projeví až po novém spuštění hry.“
+
+### E96 výsledky (2026-11-20 13:01)
+- **Co funguje** (`--surface.p96_blok128=true`, výchozí vyp): ostrov 16 × 16 bloků = 128 × 128 m, 256 × 256 sloupců po 0,5 m,
+  povrch z `lod90.h_m` (natažení 4, reliéf 1, dlaždice (7, 4)). Výšky 16–30 m (32–60 buněk). Typy bloků (jen geologie):
+  louka 181, kopec 34, hora 35, prohlubeň 6. Vrstvy, minerály a dutiny jdou stávající pipeline (cesta `base_hm`), voda
+  `ostrov_voda` / E68 (povrch + podzemí), kopání `Digging`, vegetace, kamera (zoom až na celý blok). Start = nejrovnější okno
+  9 × 9 do 24 m od středu: domek (144, 162), postava (značka 1,75 m, hra postavu nemá) na zemi ve výšce 23 m, kamera na ní.
+  Rostliny v tůních a korytech se nevysadí (8 640 rostlin, jen s příznakem). **LOD přehledu** (E90 `lod90`): nad záběrem
+  `p96_lod_zaber` 64 m jedna síť sloupců 1 m bez vegetace (49 860 trojúhelníků, stavba 79–88 ms).
+- **Měření** (box, binárka editoru, llvmpipe; `shots/e96/*.json`, snímky `/workspace/willage-ideas/shots-e96/`):
+
+| | ostrov START (2 × 2 bloky) | blok 128 m | poměr |
+|---|---|---|---|
+| sloupců | 1 024 | 65 536 | 64× |
+| generování bloků | 0,9 s | 58–61 s (224 ms / blok, lineární) | 67× |
+| pole povrchu / kostky / duální povrch / vegetace | – | 7,3 / 8,4 / 2,8 / 9,6 s | |
+| plná voda (prameny / podzemí: pásma / povrch + podzemí) | 2,6 s | 49–53 s (0,3 / 15 / 33 s) | ~20× |
+| načtení celkem | ~4 s | 138–142 s | ~35× |
+| výkop ve hře (Digging + voda + přestavba) | 1,6 s | 27 / 31 / 35 / 41 s (roste) | 17–25× |
+| z toho podzemí / povrch (nástroj, 3 výkopy) | | 22–27 s / 0,2–4,9 s | |
+| RSS / Godot statická / video | 675 / 83 / 65 MB | 2 510 / 1 149 / 287 MB | 3,7× / 14× / 4,4× |
+| herní kamera 33 m: trojúhelníky / draw calls / snímek | 240 k / 178 / 115 ms | 5,16 M / 3 556 / 903 ms | 21× / 20× |
+| přehled celku bez LOD | 266 k / 175 / 142 ms | 9,8 M / 7 721 / 1 596 ms | |
+| přehled celku s LOD | – | 139 k / 35 / 64 ms | |
+| přehled bez vegetace / jen terén | 87 k / 46 | 4,27 M / 1 051 · 4,24 M / 1 048 | |
+| detail 16 m | 292 k / 175 | 2,86 M / 2 053 | |
+
+- **Voda na bloku:** 10 pramenů, koryto 360 sloupců, **tůně 14 719 sloupců (22 % plochy)**, 0 vodopádů uvnitř, 4 vodopády přes
+  okraj (20,2 l/s, nejvyšší 19 m), 1 podzemní těleso, 1 vývěr, 6 volání podzemí.
+- **Podzemní voda na celém bloku (jen měřeno, neřeším; E95 hlásí 1,5–3,8 min):** pásma při plném výpočtu 15 s, plný výpočet
+  povrch + podzemí 33 s. Po výkopu přepočet podzemí 22–27 s v jednom kuse: oprava I spadne na přesný přepočet (`fallback` 10,
+  `exact` 10) celého velkého volání; kroky R 0 (rozpočet se nepoužije). Vlastní měření je jiný běh než E95 (jiná mřížka).
+- **Telefon (odhad E93, střední třída 1,6–1,9× pomaleji než box):** načtení 3,7–4,5 min, plná voda 1,3–1,7 min, výkop 43–78 s.
+  Vykreslení: herní kamera 3 556 draw calls (doporučený strop OpenGL ES < 500 [77]) a 5,2 M trojúhelníků (telefon 0,2–1 M [78][79])
+  → nehratelné. Přehled s LOD (35 draw calls, 139 k) je v rozpočtu.
+- **Úzká místa a návrhy (bez přehánění):**
+  1. **Výkop 27–41 s:** podzemí (přesný přepočet velkého volání) + povrch přes obří tůně (okno až 33 066 sloupců). → asynchronně
+     (E95), velikost těles / tůní omezit po oblastech, výkop přepočítat jen v tělese, kterého se týká.
+  2. **Tůně 22 % plochy:** ploché kvantované louky (schod 0,5 m) dělají uzavřené prohlubně. → minimální hloubka tůně, nebo tůně jen
+     v pánvích funkce (E49 jezera).
+  3. **Vykreslení:** vegetace 57 % trojúhelníků a 86 % draw calls (MultiMesh po blocích a druzích). → vegetace po kouscích 32 m
+     (4 × 4 bloky) jedním MultiMesh na druh, drobné rostliny jen zblízka. Terén 256 bloků × 4 sítě → slučovat po 32 m. I detail
+     16 m kreslí 2 053 draw calls → nejspíš stíny celého ostrova; omezit vzdálenost stínů.
+  4. **Načtení 140 s:** lineární v počtu bloků. → nejdřív 3 × 3 bloky u startu (~2 s), zbytek ve vlákně na pozadí; uložit
+     vygenerovaná data místo generování při každém startu.
+  5. **Paměť 1,15 GB statické:** hlavně scéna (pole povrchu, sítě; logika bez scény jen 345 MB). → pole povrchu a sítě jen pro
+     viditelné kousky.
+- **Výchozí hra beze změny:** `voda_e66` d7aedf3a6d9d10e8 → 63d7b89a91385a79, 0 neshod; `port_studie --check` 82 souborů, 0 změn;
+  otisky E94 (buňky 631c754f…, sítě 3452e4cd…, odkrytí db706a1c…, vegetace 483dc33f…) stejné.
+- **Negativa:**
+  - Výška se do sloupce 32 m nevejde: reliéf funkce E90 × 3 (7–50 m) jsem musel snížit na × 1 (16–30 m) a natažení na × 4. Vrchol
+    hory je plošina 30 m (ořez E49). Skutečně vysoká hora potřebuje vyšší sloupec (BH 64 → 128), to je samostatná změna.
+  - Svahy jsou mírné (p50 9°, p95 28°, vzorky 4 m), vodopády uvnitř žádné; voda teče hlavně do tůní a přes okraj.
+  - Vrcholy hor jsou bílé (třída sníh z geologie hory) a v buňkách 0,5 m schodovité.
+  - Výkop se s dalšími výkopy zpomaluje (27 → 41 s), příčinu jsem nehledal.
+  - LOD přehledu: boky sloupců jsou tmavé (orientace trojúhelníků lod90 není sjednocená, kreslí se bez odstraňování odvrácených
+    stěn); přechod při 64 m je skokový (vegetace zmizí); po výkopu se přehled staví znovu při dalším oddálení (~80 ms).
+  - Modelový dům 4 × 4 × 3 m stojí těsně u domku hry. Tráva C a vegetace se po výkopu přestavují po blocích (beze změny).
+  - Všechna čísla vykreslení jsou z llvmpipe, telefon jen odhad.
