@@ -422,7 +422,9 @@ func lod96_build() -> void:
 				if bot < tp: L90._wall(V, Nn, C, x0, y0, 2.0, d, bot, tp, L90.BARVA_BOK)
 	if lod96_mi == null:
 		lod96_mi = MeshInstance3D.new()
-		lod96_mi.material_override = flat_mat
+		var lm: StandardMaterial3D = flat_mat.duplicate()
+		lm.cull_mode = BaseMaterial3D.CULL_DISABLED   # lod90 nemá sjednocenou orientaci trojúhelníků (E90)
+		lod96_mi.material_override = lm
 		add_child(lod96_mi)
 	lod96_mi.mesh = L90.mesh({"V": V, "N": Nn, "C": C})
 	lod96_tri = V.size() / 3
