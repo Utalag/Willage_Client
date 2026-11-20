@@ -37,6 +37,7 @@ Značení: „rozhodnuto (datum)“ = Jan už rozhodl. ⚠ = novější měřen�
 - **Pravidlo:** velikost bloku, segmentu i buňky jsou parametry a v buňkách musí být mocninou 2. Blok se musí beze zbytku dělit na segmenty a segment na buňky. Blok 100 m tedy nejde, 64, 128 nebo 256 m ano.
 - **Proč:** indexy jdou bitovými posuny, přehledy a LOD se půlí až na jednu buňku, quadtree slouží pro načítání a slučované vykreslování, a velikosti sedí na 2D tilesety 16/32/64 px (Jan t714u).
 - **Důsledek:** dnešní „blok“ 8 m v kódu (`BS` 16, WVB1 `dims`, `veg.gd`, E88) je od teď segment. Vkládání, zrcadlení, rotace, recept a sousedé patří bloku. „Dlaždice“ zůstává pro svět výprav.
+- **Data a zobrazení (Jan t715u, 2026-11-20):** datový model je v metrech a o pixelech nic neví. Se zobrazením ho spojuje jen pravidlo **buňka 0,5 m = 1 dlaždice (tile)**. Segment i blok jsou celé násobky buňky, což zaručují mocniny 2 (segment 8 m = 16 × 16 dlaždic, blok 128 m = 256 × 256). Zobrazení převádí jedním faktorem (např. 1 m = 64 px, tedy dlaždice 32 px). Výměna tilesetu ani přechod mezi 2D a 3D data nemění.
 
 ---
 
@@ -86,7 +87,22 @@ Paměť je výpočet (256 × 256 × výška × 1 B), ne měření. Skutečná pa
 
 **Otázka pro Jana.** Zvětšíme sloupec na 64 m? Nebo nejdřív rozhodneme charakter krajiny?
 
-**Platí:**
+**Platí:** *rozhodnuto (2026-11-20, Jan t716u, t717u)*
+
+- **Výška sloupce** je celá výška bloku od dna ostrova po nejvyšší bod: podloží, vrstvy, jeskyně, podzemní voda i hory.
+- Je to **parametr jako výčet mocnin 2: 32 / 64 / 128 m**, výchozí **128 m** (256 buněk po 0,5 m).
+- **Neutrální úroveň terénu je v polovině výšky.** Při 128 m je pod ní 64 m pro podloží a kopání a nad ní 64 m pro hory.
+- **Proč:** vejde se i největší hora a hezky se vykreslí (Jan t717u).
+- **Důsledek – velikost dat (odhad, ne měření):** buňka u8 (materiál). Vzduch nad terénem se neukládá, takže pevné buňky jsou zhruba po neutrální úroveň a do výšky hor.
+
+  | výška | buněk ve sloupci | segment 8 m (16 × 16) plný sloupec | segment, jen pod neutrální úrovní | blok 128 m (256 segmentů), jen pod neutrální úrovní |
+  |---|---|---|---|---|
+  | 32 m | 64 | 16 kB | 8 kB | 2 MB |
+  | 64 m | 128 | 32 kB | 16 kB | 4 MB |
+  | 128 m | 256 | 64 kB | 32 kB | 8 MB |
+
+  Jsou to nekomprimované buňky v paměti při generování. Na disk a na server jde jen definice + překryv (1.10), který na výšce skoro nezávisí. Voda (u16) jen v buňkách, kde je. Index buňky 0,25 m v segmentu 8 m (32 × 32 × 512) má při 128 m 19 bitů (dnes 17).
+- **Důsledek – co změnit při stavbě modelu:** 32 m (64 buněk) je dnes natvrdo ve WVB1 (`dims` 16, 16, 64), v E88 / WTI1 (souřadnice 16 × 16 × 64, index 17 bitů) a v `jednotky.gd` (`BH` 64). Musí to být parametr podle tohoto výčtu.
 
 ---
 

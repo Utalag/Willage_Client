@@ -31,7 +31,7 @@ Upřesnění od Jana:
 ## Pořadí bodů kapitoly 1 k projití s Janem
 
 1. **1.1 Pojmy:** ostrov, blok, segment, buňka – *rozhodnuto 2026-11-20 (t713u, t714u)*.
-2. **1.3 Výška sloupce:** 32 / 64 / 128 m.
+2. **1.3 Výška sloupce:** výčet 32 / 64 / 128 m, výchozí 128 m, neutrální úroveň v polovině – *rozhodnuto 2026-11-20 (t716u, t717u)*.
 3. **1.4 Zdroj pravdy o terénu:** jedna funkce světa + recept, nebo šablony; hora jen jednou.
 4. **1.2 Jednotky a jemná mřížka:** definice 0,5 m a 0,25 m jen u kopání (přehodnocení 03:26).
 5. **1.5 Verze generátoru:** přepočítat vše, nebo jen nedotčené bloky (přehodnocení 03:26).
