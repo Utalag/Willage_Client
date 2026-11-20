@@ -2556,3 +2556,26 @@ a `surface.adapt(real)` se bez nových vstupů neprojeví.
 
 Těžba a rozklad hornin jsou samostatná studie. Návrh E65 je teď **T01 (dříve E65)** v `../tezba-studie/` (`README.md`, `PROP.md`, `DENIK.md`, `ZDROJE.md` [1]–[28], tabulka v `data/horniny_tezba_navrh.json`).
 Zdroje [45]–[72] níže v tomto souboru zůstávají jen jako zástupné číslo, aby se neposunulo číslování blueprint-studie.
+
+## E90 plán vzorkování a LOD, test 3 × 3 km (plán, zapsáno před pokusem 2026-11-20 07:22; TODO Blok 4 „Plán vzorkování a LOD … Svět zůstává funkcí; vzorkuje se jen povrchová slupka (viditelné buňky + 1–2 vrstvy pod nimi), zbytek až při interakci. LOD podle vzdálenosti kamery: zblízka 0,25 m, dál 0,5 m, zdálky/oddálení 1 m, vše ze stejných funkcí. Vyřešit švy mezi úrovněmi (bez děr). Test: mapa 3 × 3 km (~550 bloků po 128 m) jen jako hrubá data a funkce, detail kolem několika hráčů; změřit paměť a čas.“; větev `e90-lod` z main 8d4d809)
+- **Co použiji z existujícího:** výšku světa ze vzorce E49 `svet/hruby_teren.gd` (šum v metrech: základ, hřbety, maska
+  pohoří, pánve jezer; bez sopky). Ověřím, že moje funkce dá v bodech 1 m stejné výšky jako `hruby_teren.run`. Měření času
+  a paměti z `svet64/mereni.gd` (RSS, peak). Masiv E87 (`massif87`) je jen na větvi `e87-jadro-hory`, do main nepatří, proto
+  ho nepoužiji. Funkce bloku `geo_fn` (E80) potřebují kontext bloku a sousedů, na 3 km je nepoužiji. Materiál povrchu
+  bude jednoduchá funkce výšky a sklonu (tráva / skála / sníh), ne geologie.
+- **Mapa:** 24 × 24 dlaždic po 128 m = 3 072 m (576 dlaždic, TODO „~550“). Funkce E49 natažená vodorovně 8× a reliéf 3×
+  (E49 má hory do ~10 m na 64 m mapě; 3 km by bez toho byly rovina). Obojí jsou parametry testu, ne návrh krajiny.
+- **LOD (Jan):** detail jen kolem hráčů. Dlaždice 3 × 3 kolem hráče se rozdělí na kousky 16 m. Kousek ve vzdálenosti
+  ≤ 1 kousek od hráče = 0,25 m, ≤ 3 = 0,5 m, jinak 1 m. Ostatní dlaždice jsou hrubá data po 8 m (svisle po 1 m).
+  4 hráči, dva blízko sebe (překryv), dva daleko. Sloupec = krychle buňky (svisle stejná velikost, daleko 1 m), povrch je
+  vrchní stěna, boky jen kde je soused nižší. Povrchová slupka = vrchní buňka + 2 pod ní (u8 materiál), do paměti se počítá.
+- **Švy:** bez sešití = každý kousek dělá boky jen proti sousedovi ve stejném rozlišení → na hranici úrovní díry. Spočítám
+  díry (počet úseků a plocha m²). Sešití = bok na okraji kousku sahá dolů k nejnižšímu skutečnému sousedovi přes hranici
+  (v jeho rozlišení). Čekám 0 děr. T-spoje (vrchol jemné strany uprostřed hrany hrubé) zůstanou, jen se změří.
+- **Měření:** čas (vzorkování funkce, stavba sítě) po úrovních a celkem, paměť (výšky, slupka, síť: vrcholy × 40 B,
+  RSS před a po), trojúhelníky po úrovních, skok výšky na hranici úrovní proti kvantizaci, přestavba po kroku hráče o 16 m
+  (kolik kousků a jak dlouho), snímky přes xvfb (celá mapa, okolí hráče barevně po úrovních, švy zblízka bez sešití a se sešitím).
+- **Příznak `p90_lod`** (výchozí vyp) v novém modulu `scripts/teren/lod90.gd`. Nástroj bez něj nic nestaví. Herní kód
+  a studie se nemění → `voda_e66` d7aedf3a6d9d10e8 → 63d7b89a91385a79 a `port_studie --check` 0 změn.
+- **Negativa předem:** GDScript bez slučování stěn (greedy) → hodně trojúhelníků. Krychle 8 m daleko vypadají schodovitě.
+  Materiál není geologie. Jen Linux x86_64, ne telefon. Kamera a výběr úrovně podle hráče, ne podle kamery.
