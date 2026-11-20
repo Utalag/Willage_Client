@@ -287,7 +287,7 @@ Pojmy: **blueprint** = otisk světa o velikosti bloku. To, čemu se ve studiích
 
 - **Mapa složení** pokrývá celou maximální plochu světa (1.4). Obsahuje jen hrubé řídicí body s hodnotami (koncentrace zástupců pásem). Umístění i hodnoty bodů se generují ze seedu světa, takže každý svět je jiný (Jan t763u). Mezi body se složení plynule interpoluje, bez deformace (např. na severu jiné složení než na jihu).
 - V každém pásmu se na daném místě vyberou **1–3 zástupci** (výchozí počet, parametr). Světové funkce zástupců berou přítomnost a mocnost z mapy složení, takže složení se po světě mění plynule: některé vrstvy vyklíní a zmizí, jiné se objeví. Bloky se proto přirozeně liší a blueprint přebírá složení svého místa ve světě.
-- **Mocnost vrstvy:** minimum 0,5 m (2 buňky; nahrazuje dřívější zákaz vrstev < 25 cm), maximum 1/4 výšky od povrchu po spodní okraj.
+- **Mocnost vrstvy:** minimum 1 buňka = 0,25 m (Jan 2026-11-21; nahrazuje dřívější zákaz vrstev < 25 cm), maximum 1/4 výšky od povrchu po spodní okraj.
 - **Deformace**, která vrstvu zvedne výš (např. vápenec a jíl, mince E82), je dovolená.
 - Pně, žíly, kontakty a dómy (kimberlit, pegmatit, skarn, sůl) se berou jako **útvary podle varianty B**, ne jako vrstvy.
 - **Švy na ostrově:** blueprinty bloků mohou pocházet z různých míst, takže pořadí vrstev na švu nemusí souhlasit. Vrstvy se do sebe zaklíní nebo napojí na úseku **1/16 bloku** (8 m při bloku 128 m); délka se škáluje s velikostí bloku. Toto je napojení podzemních vrstev a je nezávislé na napojení povrchu (Blend 1–4 buňky), viz 5.2 (Jan 2026-11-21 00:24).

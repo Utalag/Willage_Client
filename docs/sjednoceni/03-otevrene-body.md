@@ -345,7 +345,7 @@ Původní plán: pořadí slučování větví a zapnutí přepínačů.
 Z rozhodnutí vyplývá výchozí chování; při stavbě modelu se přepínače nahradí pravidlem, ne novým ptaním:
 
 - `p67_rezim = pretok` (E67) → 1.8; K9 se tím zavírá.
-- `p85_okraj` zap → 1.13.1; `p85_jemne` všude ne (jen slupka) → 1.2; zákaz vrstev < 25 cm se ruší (minimum 0,5 m, 2 buňky) → 1.7.1.
+- `p85_okraj` zap → 1.13.1; `p85_jemne` všude ne (jen slupka) → 1.2; zákaz vrstev < 25 cm se ruší (minimum 1 buňka = 0,25 m, Jan 2026-11-21) → 1.7.1.
 - `p79_chodby` + `p85_voda` jsou nutné k tomu, aby lokální přepočet viděl dutiny a výtoky (1.9, K5) [3][12].
 - Otočení a zrcadlení přes inverzní transformaci (`p86`) → 2.2; jádro hory ve funkci světa (`p87`) → 1.4, 1.7; blok 128 m z funkce (`p96`) → 1.1, 1.4.
 - Jedna funkce světa, bez `p94_hora_k` a omezovače E92 → 1.4 (K6, K7).
