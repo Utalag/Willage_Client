@@ -42,6 +42,9 @@ static func _rec(wf: Dictionary, s: Vector2i):
 static func _ctl(wf: Dictionary, home: Vector2i, k: int, gx: int, gy: int) -> float:
 	var s := Vector2i(floori(gx / 16.0), floori(gy / 16.0))
 	var r = _rec(wf, s)
+	if r == null and s != home:
+		var hr = _rec(wf, home)
+		if hr != null and hr.has("m87"): r = _virt87(wf, s, hr)   # E87: za okrajem masivu bez souseda čistá funkce masivu
 	if r == null or (k >= 0 and r.bs.size() <= k):
 		s = home; r = _rec(wf, home)
 		gx = clampi(gx, home.x * 16, home.x * 16 + 15); gy = clampi(gy, home.y * 16, home.y * 16 + 15)
@@ -49,6 +52,17 @@ static func _ctl(wf: Dictionary, home: Vector2i, k: int, gx: int, gy: int) -> fl
 	if k == -2:   # povrch PŘED erozí (E47); bez eroze = hm_f
 		return r.hm_pre[i] if r.has("hm_pre") else r.hm_f[i]
 	return r.hm_f[i] if k < 0 else r.bs[k][i]
+
+## E87: virtuální soused masivu (čistá funkce, jako by tam stál blok masivu bez dalších sousedů), v mezipaměti kontextu
+static func _virt87(wf: Dictionary, s: Vector2i, hr: Dictionary) -> Dictionary:
+	if not wf.has("v87"): wf["v87"] = {}
+	if wf.v87.has(s): return wf.v87[s]
+	var p: Dictionary = hr.m87.p
+	var base := G2.massif87_block(s, p)
+	var tg := G2.bounds87(G2.targets(s, base, String(hr.bp.shape), int(hr.bp.seed), p, {"on": hr.bp.get("rocks_on", []), "off": hr.bp.get("rocks_off", [])}))
+	var v := {"hm_f": base, "bs": tg, "m87": {"base": base, "tg": tg, "p": p}}
+	wf.v87[s] = v
+	return v
 
 static func _field(wf: Dictionary, home: Vector2i, k: int, X: float, Y: float) -> float:
 	var fx := X / U - 0.5; var fy := Y / U - 0.5
