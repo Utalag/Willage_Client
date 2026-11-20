@@ -1,0 +1,34 @@
+{
+ "A": {
+  "bilance_lokalne": 0.0,
+  "bilance_znovu": 0.0,
+  "check_full": {
+   "eff": 0,
+   "fill": 0,
+   "to": 0
+  },
+  "nacteni_ms": 1794.84,
+  "nacteni_neshod": {
+   "eff": 0,
+   "fill": 0,
+   "to": 0
+  },
+  "otisk_lokalne": "63d7b89a91385a79",
+  "otisk_nacteni": "63d7b89a91385a79",
+  "otisk_prvni": "d7aedf3a6d9d10e8",
+  "otisk_znovu": "63d7b89a91385a79",
+  "prameny_jinak": 0,
+  "prameny_lokalne": 5,
+  "prameny_prvni": 5,
+  "prameny_znovu": 5,
+  "ulozeno_bajtu": 524,
+  "vykopu": 12,
+  "vykopy_ms": 29323.425,
+  "znovu_ms": 1803.099,
+  "znovu_neshod": {
+   "eff": 0,
+   "fill": 0,
+   "to": 0
+  }
+ }
+}
