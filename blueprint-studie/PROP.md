@@ -334,6 +334,28 @@ Výchozí: 800 kapek na blok, `ero_cap` 1,0, `ero_erode` 0,1, `ero_deposit_rate`
   plný. Dutina sloupce je jedno pásmo od nejnižšího po nejvyšší vzduch (dvě chodby nad sebou se spojí) – stejné jako plný
   výpočet, neopravuji. Buňka 0,5 m je dutina, jen když je vykopaných všech 8 buněk 0,25 m.
 
+## E80 kde končí funkce a pásma (plán, zapsáno před pokusem 2026-11-20 01:33; TODO Model světa a kopání: „kritérium, kdy změna (převis, oblouk, nepravidelná jeskyně) potřebuje lokální oblast s plnými buňkami, a jak takovou oblast uložit (řídký objem, octree, komprimované intervaly)“; větev z `e79-chodby-voda`)
+- **Co už je (průzkum kódu):** `geo_fn` = spojité funkce v metrech světa (povrch `hm_f`, hranice `bs[k]` na řídicí mřížce
+  0,5 m, bilineárně přes švy; materiál bodu; tělesa). `pipeline` vzorkuje při n = 16 (středy buněk = řídicí body), pak
+  minerály a dutiny výběrem buněk podle φ (buňkový krok), vsakování. `tests_horniny.resolution` (v2.1, 18. 11.) měřil 16 proti
+  32: shoda 94,9 %, pevné/vzduch 99,7 %. `prekryv78` bere mřížku 0,25 m jako zjemnění buněk 0,5 m (ne z funkcí).
+  Podzemí (`ug_funkce`) = pásma z funkcí + jedno pásmo dutiny na sloupec 0,5 m.
+- **Pokus (`godot-prototyp/tools/hranice_e80.gd`, ostrov 4 bloky jako E78):**
+  1. *Rozlišení:* funkce při 0,5 m a 0,25 m (+ minerály) proti zjemnění 0,5 m (to bere překryv); rozdíl buněk, pevné/vzduch,
+     výška povrchu; čas.
+  2. *Švy:* spojitost povrchu a hranic vrstev přes šev (skok proti gradientu uvnitř), materiál přes šev; závislost na pořadí
+     vložení: blok sám proti bloku po vložení sousedů při 0,5 m a 0,25 m (počet jiných buněk).
+  3. *Překryv po převzorkování:* překryv E78 (chodba) uložený nad zjemněním 0,5 m, použitý nad funkcemi 0,25 m; a nad
+     novou verzí funkcí (jiná mocnost půdy, posun povrchu): položky beze smyslu (výkop ve vzduchu, položení do skály,
+     položka = nová definice), změna okolí chodby.
+  4. *Okraje a dno:* hranice indexu překryvu (z 0..127), dno ostrova z = 0, chodba ven bokem ostrova a díra dnem → voda.
+  5. *Kritérium a uložení:* scénáře chodba, dlouhá chodba, převis (podkopaný svah), oblouk (průchod hřbetem), nepravidelná
+     jeskyně (šum), 1000 náhodných buněk. Třídy sloupců: jen výška / intervaly (pásma) / víc dutin, než pásmo vody umí /
+     jemnější než 0,5 m. Uložení: klíče (E78 A), intervaly ve sloupcích (E78 B), řídký octree, husté cihly 8³; syrově a deflate.
+- **Očekávání / riziko:** při 0,25 m z funkcí závisí buňky u švu na pozdějším sousedovi (bilineární interpolace) → proti
+  pravidlu „sousedé se nemění“. Minerály a dutiny nejsou funkce (výběr buněk) → při jiném rozlišení jiná místa. Změna
+  verze funkcí pod překryvem bez pravidla rozbije výkopy. Bez rozhodnutí Jana jen návrh.
+
 ## E79 výsledky (zapsáno 2026-11-20 01:30; `godot-prototyp/tools/chodby_e79.gd -- --bp.p76_prameny=true --bp.p79_chodby=true`, `shots/e79/vysledky.json`, `vystup.txt`)
 - **Shoda lokálně = plně (otisk vody, `fill/eff/to` 0 neshod) po KAŽDÉ dávce ve všech 11 scénářích s `edit79`.** Stará cesta
   (E78, `edit` po sloupcích) nesedí v 6 z 11: chodba 153 / 102 `eff` (podle pořadí), zvodnělá vrstva a šachta do dna tůně
