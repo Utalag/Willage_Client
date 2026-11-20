@@ -1,0 +1,110 @@
+{
+ "bloku": 4,
+ "cas_ms": {},
+ "pamet": {
+  "buffery_mb": 11.0,
+  "godot_staticka_mb": 82.7,
+  "rss_mb": 675.43359375,
+  "uzlu": 576,
+  "video_mb": 64.5
+ },
+ "start": {
+  "dum": [
+   30,
+   18
+  ],
+  "postava": [
+   24,
+   24
+  ],
+  "vyska_m": 20.0
+ },
+ "voda": {
+  "koryto_sloupcu": 27,
+  "okraj_lps": 9.64358,
+  "podzemni_telesa": 1,
+  "prameny": 5,
+  "tun_sloupcu": 159,
+  "vodopady": 8,
+  "vodopady_okraj": 5,
+  "volani_podzemi": 4,
+  "vyvery": 1
+ },
+ "voda_detail": {
+  "info": "vodopád 4.0 l/s, výška 1.5 m",
+  "sloupec": [
+   24,
+   11
+  ]
+ },
+ "voda_ms": {
+  "celkem": 2605.187,
+  "podzemí: pásma": 210.669,
+  "povrch + podzemí: plný výpočet": 2358.563,
+  "prameny": 8.012
+ },
+ "vykop_hra_ms": [
+  1650.5,
+  1603.5,
+  1630.9,
+  1631.5
+ ],
+ "zabery": {
+  "96_start_cely_iso": {
+   "draw_calls": 175,
+   "objekty": 245,
+   "snimek_ms": 141.9,
+   "trojuhelniky": 265800,
+   "zaber_m": 24.0
+  },
+  "96_start_cely_iso_bez_veg": {
+   "draw_calls": 46,
+   "objekty": 156,
+   "snimek_ms": 54.8,
+   "trojuhelniky": 87422,
+   "zaber_m": 24.0
+  },
+  "96_start_cely_iso_jen_teren": {
+   "draw_calls": 44,
+   "objekty": 154,
+   "snimek_ms": 52.2,
+   "trojuhelniky": 87024,
+   "zaber_m": 24.0
+  },
+  "96_start_cely_shora": {
+   "draw_calls": 178,
+   "objekty": 236,
+   "snimek_ms": 189.7,
+   "trojuhelniky": 291768,
+   "zaber_m": 18.3999996185303
+  },
+  "96_start_detail": {
+   "draw_calls": 175,
+   "objekty": 307,
+   "snimek_ms": 195.5,
+   "trojuhelniky": 291862,
+   "zaber_m": 16.0
+  },
+  "96_start_detail_vykop": {
+   "draw_calls": 175,
+   "objekty": 241,
+   "snimek_ms": 226.8,
+   "trojuhelniky": 290987,
+   "zaber_m": 16.0
+  },
+  "96_start_hra_kamera": {
+   "draw_calls": 178,
+   "objekty": 276,
+   "snimek_ms": 115.2,
+   "trojuhelniky": 239966,
+   "zaber_m": 33.0
+  },
+  "96_start_voda": {
+   "draw_calls": 175,
+   "objekty": 265,
+   "snimek_ms": 150.3,
+   "trojuhelniky": 265840,
+   "zaber_m": 24.0
+  }
+ }
+}

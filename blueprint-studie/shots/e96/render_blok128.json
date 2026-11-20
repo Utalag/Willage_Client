@@ -1,0 +1,132 @@
+{
+ "bloku": 256,
+ "cas_ms": {
+  "bloky": 60406.949,
+  "celkem": 141624.535,
+  "funkce": 171.702,
+  "kostky": 8392.394,
+  "odkryti": 132.021,
+  "pole": 7306.778,
+  "povrch": 2789.094,
+  "rostlin_ve_vode": 8640,
+  "vegetace": 9557.514,
+  "voda": 52744.678
+ },
+ "lod96": {
+  "ms": 88.133,
+  "trojuhelniky": 49860
+ },
+ "pamet": {
+  "buffery_mb": 212.7,
+  "godot_staticka_mb": 1148.8,
+  "rss_mb": 2472.85546875,
+  "uzlu": 3890,
+  "video_mb": 290.5
+ },
+ "start": {
+  "dum": [
+   144,
+   162
+  ],
+  "postava": [
+   144,
+   169
+  ],
+  "vyska_m": 23.0
+ },
+ "voda": {
+  "koryto_sloupcu": 360,
+  "okraj_lps": 20.194277,
+  "podzemni_telesa": 1,
+  "prameny": 10,
+  "tun_sloupcu": 14719,
+  "vodopady": 0,
+  "vodopady_okraj": 4,
+  "volani_podzemi": 6,
+  "vyvery": 1
+ },
+ "voda_detail": {
+  "info": "vodopád 15.1 l/s, výška 19.1 m (přes okraj)",
+  "sloupec": [
+   255,
+   90
+  ]
+ },
+ "voda_ms": {
+  "celkem": 52633.834,
+  "podzemí: pásma": 15513.219,
+  "povrch + podzemí: plný výpočet": 35251.884,
+  "prameny": 380.113
+ },
+ "vykop_hra_ms": [
+  26925.0,
+  30663.9,
+  34754.9,
+  40716.9
+ ],
+ "zabery": {
+  "96_blok128_cely_iso": {
+   "draw_calls": 35,
+   "objekty": 113,
+   "snimek_ms": 63.8,
+   "trojuhelniky": 139230,
+   "zaber_m": 192.0
+  },
+  "96_blok128_cely_iso_bez_lod": {
+   "draw_calls": 7721,
+   "objekty": 7833,
+   "snimek_ms": 1595.8,
+   "trojuhelniky": 9802958,
+   "zaber_m": 192.0
+  },
+  "96_blok128_cely_iso_bez_veg": {
+   "draw_calls": 1051,
+   "objekty": 1165,
+   "snimek_ms": 719.9,
+   "trojuhelniky": 4267786,
+   "zaber_m": 192.0
+  },
+  "96_blok128_cely_iso_jen_teren": {
+   "draw_calls": 1048,
+   "objekty": 1162,
+   "snimek_ms": 697.8,
+   "trojuhelniky": 4237596,
+   "zaber_m": 192.0
+  },
+  "96_blok128_cely_shora": {
+   "draw_calls": 35,
+   "objekty": 101,
+   "snimek_ms": 69.2,
+   "trojuhelniky": 139206,
+   "zaber_m": 147.199996948242
+  },
+  "96_blok128_detail": {
+   "draw_calls": 2053,
+   "objekty": 2189,
+   "snimek_ms": 465.5,
+   "trojuhelniky": 2861660,
+   "zaber_m": 16.0
+  },
+  "96_blok128_detail_vykop": {
+   "draw_calls": 2053,
+   "objekty": 2123,
+   "snimek_ms": 512.0,
+   "trojuhelniky": 2860668,
+   "zaber_m": 16.0
+  },
+  "96_blok128_hra_kamera": {
+   "draw_calls": 3556,
+   "objekty": 3662,
+   "snimek_ms": 902.7,
+   "trojuhelniky": 5161639,
+   "zaber_m": 33.0
+  },
+  "96_blok128_voda": {
+   "draw_calls": 2496,
+   "objekty": 2616,
+   "snimek_ms": 533.2,
+   "trojuhelniky": 3633291,
+   "zaber_m": 24.0
+  }
+ }
+}
