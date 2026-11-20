@@ -510,6 +510,12 @@ Skupiny: 1 Prototyp a buildy · 2 Terén a tvar · 3 Rozlišení bloku · 4 Ská
 
 ## 3 Rozlišení bloku
 
+### 🧪 E79: voda po změně dutin – chodby a šachty v lokálním přepočtu (2026-11-20 01:30 · prototyp `ostrov_voda.edit79`, `ug_funkce.from_world` s mezipamětí, `prekryv78.sync79`, příznak `p79_chodby`, větev `e79-chodby-voda`)
+- **Směr:** nález E78: lokální přepočet vody neviděl chodbu se vstupem z povrchu. Po dávce změn buněk se při změně dutiny nebo výšky postaví podzemí znovu (funkční pásma z mezipaměti) a do lokálního přepočtu E68 jdou změněné sloupce, odtoky, vývěry a tůně dotčených těles.
+- **Zlepšení:** lokálně = plně po každé dávce ve všech 11 scénářích (chodba, zvodnělá vrstva, šachta do dna tůně, obě pořadí), bilance 0; stará cesta nesedí v 6. Uzavřená chodba vodu nemění. Výchozí hra beze změny.
+- **Komplikace:** lokální přepočet je jen o 10–35 % rychlejší než plný, u tůně pomalejší; uzavřená chodba stojí ~1,9 s zbytečně. Potřeba bylo i materiály, `to` v suchu, položení a smyčku tůň → pramen od nuly.
+- **Další krok:** kopání v prototypu po 0,25 m s dávkami; přeskočit dutiny bez souvislosti; přestavba pásem opravdu jen po sloupcích.
+
 ### 🧪 E78: překryv změn po kopání nad definicí bloku, buňka 0,25 m (2026-11-20 01:08 · prototyp `scripts/teren/prekryv78.gd`, `tools/prekryv_e78.gd`, záznam `tools/prenos_e76.gd`, větev `e78-prekryv`)
 - **Směr:** TODO Model světa a kopání: definice zůstává funkcí, změny hráče se ukládají jako překryv (buňka 0,25 m → materiál, konečný stav, položka rovná definici se maže). Záznam bloku E76 nese buňky místo výkopů po sloupcích.
 - **Zlepšení:** načtení (bloky z definice + překryv) = živý stav ve všech scénářích (buňky i voda po plném přepočtu). Překryv 1000 náhodných buněk 1,8 kB, chodba 70 m 244 B proti 13–17 kB deflate celého pole 0,25 m (WVB1). Pořadí je explicitní: hash z definice a překryvu.

@@ -334,6 +334,35 @@ Výchozí: 800 kapek na blok, `ero_cap` 1,0, `ero_erode` 0,1, `ero_deposit_rate`
   plný. Dutina sloupce je jedno pásmo od nejnižšího po nejvyšší vzduch (dvě chodby nad sebou se spojí) – stejné jako plný
   výpočet, neopravuji. Buňka 0,5 m je dutina, jen když je vykopaných všech 8 buněk 0,25 m.
 
+## E79 výsledky (zapsáno 2026-11-20 01:30; `godot-prototyp/tools/chodby_e79.gd -- --bp.p76_prameny=true --bp.p79_chodby=true`, `shots/e79/vysledky.json`, `vystup.txt`)
+- **Shoda lokálně = plně (otisk vody, `fill/eff/to` 0 neshod) po KAŽDÉ dávce ve všech 11 scénářích s `edit79`.** Stará cesta
+  (E78, `edit` po sloupcích) nesedí v 6 z 11: chodba 153 / 102 `eff` (podle pořadí), zvodnělá vrstva a šachta do dna tůně
+  jiný otisk (odtok tůně a pramen), šachta do tůně obráceně 4 `fill` + 2 `to`. Chyba bilance 0 všude (lokálně i plně).
+- **Pořadí:** šachta → chodba i chodba → šachta dají stejný konečný otisk (chodba cbe01a6bc9e2034e, zvodnělá 16bce7ccabe4910b,
+  tůň f31ffc35d0d9eb87). Uzavřená chodba je neutrální: otisk zůstane d7aedf3a6d9d10e8, dokud se neotevře (dlouhá chodba
+  9288 buněk i chodba bez šachty v obráceném pořadí).
+- **Čas (dávka, lokálně / plně):** chodba 1,06–1,46 s / 1,6–1,7 s; zvodnělá 1,09–1,37 s / 1,6–1,8 s; šachta do tůně 0,25–1,38 s
+  / 0,62–0,67 s; dlouhá uzavřená 1,93 s / 2,13 s; náhodné buňky (bez změny dutiny 0,5 m) 39–140 ms / 1,8–2,1 s. Přestavba
+  podzemí s mezipamětí ~0,2 s (bez ní celé `from_world`), zbytek je lokální přepočet E68 s větším oknem.
+- **Co bylo potřeba (kromě přestavby pásem):**
+  1. materiál pro ztráty u změněných sloupců jako plný výpočet (šachta vykope i buňku `hm_gen − 1 − dd`);
+  2. směr `to` v suchu kolem změny (tok60 v suchu `to` nepřepočítá; plný ano);
+  3. i položení na povrch musí podzemí postavit znovu (povrch podzemí `hs` a výkopy), jinak 102 `eff` po dávce položení;
+  4. tůně nad dotčenými tělesy jdou do okna celé (hladina podle kapacity E71 se jinak nezmění);
+  5. smyčka tůň → těleso → pramen začíná od nuly jako plný výpočet (jinak zůstal pramen 0,04 l/s, který živil sám sebe).
+- **Výchozí hra beze změny:** `voda_e66` (12 výkopů) d7aedf3a6d9d10e8 → 63d7b89a91385a79, 0 neshod, s `p79_chodby` vypnutým
+  i zapnutým (hra volá `edit`, ne `edit79`). Test smyčky E68 `from_world` nepoužívá.
+- **Negativa:**
+  - Lokální přepočet je jen o 10–35 % rychlejší než plný a u šachty do tůně 1,7× pomalejší (okno = všechny odtoky a tůně
+    dotčených těles). Kopat po buňce a přepočítat po každé by bylo drahé → dávkovat (např. jednou za tik / po dokončení
+    výkopu).
+  - Uzavřená chodba stojí ~1,9 s, i když vodu nezmění (dutina se změnila → přestavba). Šlo by přeskočit, kdyby se
+    poznalo, že dutina nesousedí s tělesem ani s povrchem.
+  - Přestavba podzemí je pořád pro celý ostrov (jen bez funkcí). Opravdu po sloupcích (vložit pásma do CSR, přečíslovat
+    tělesa) jsem nedělal.
+  - Dutina sloupce je dál jedno pásmo od nejnižšího po nejvyšší vzduch (dvě chodby nad sebou se spojí), stejně v plném.
+  - Příznak `p79_chodby` nechávám vypnutý: výsledek sedí, ale hra kopání po 0,25 m zatím nepoužívá a `edit79` nikdo nevolá.
+
 ## E78 výsledky (zapsáno 2026-11-20 01:08; `godot-prototyp/tools/prekryv_e78.gd -- --bp.p76_prameny=true`, `shots/e78/vysledky.json`, `vystup.txt`)
 - **Přechod definice → buňky:** buňky 0,5 m → 0,25 m → 0,5 m beze změny a výška = `hm` z generátoru u všech 4 bloků.
 - **Shoda po načtení:** ve všech 6 scénářích otisk buněk 0,25 m i 0,5 m po načtení = živý stav a voda po načtení
