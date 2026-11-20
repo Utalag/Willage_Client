@@ -1,0 +1,565 @@
+{
+  "cas": {
+    "bloky": [
+      {
+        "16": {
+          "hash_r1": "41b674abe61bbf0a",
+          "hash_r2": "41b674abe61bbf0a",
+          "intervalu": 86,
+          "ms_geo": 37.735,
+          "ms_r0_dutina": 38.2,
+          "ms_r1": 86.97,
+          "ms_r1_jen_skarn": 57.58,
+          "ms_r1_jen_utvary": 65.905,
+          "ms_r2_bunky": 57.115,
+          "ms_r2_intervaly": 89.858,
+          "r0_dutina_bunek": 60,
+          "r0_dutina_schodek": 0,
+          "r1_bunek": {
+            "cocka": 204,
+            "kras": 3,
+            "skarn": 174
+          },
+          "r2_jine_nez_r1": 0,
+          "skarn_r0": 114,
+          "skarn_r1": 174,
+          "skarn_r1_bez_sumu": 164,
+          "sloupcu_s_intervaly": 86,
+          "vyhodnoceni_sdf_r2": 19269
+        },
+        "32": {
+          "hash_r1": "afee926659bf9a39",
+          "hash_r2": "afee926659bf9a39",
+          "intervalu": 349,
+          "ms_geo": 325.383,
+          "ms_r0_dutina": 272.991,
+          "ms_r1": 623.445,
+          "ms_r1_jen_skarn": 381.198,
+          "ms_r1_jen_utvary": 477.185,
+          "ms_r2_bunky": 399.98,
+          "ms_r2_intervaly": 365.812,
+          "r0_dutina_bunek": 480,
+          "r0_dutina_schodek": 0,
+          "r1_bunek": {
+            "cocka": 1607,
+            "kras": 22,
+            "skarn": 1337
+          },
+          "r2_jine_nez_r1": 0,
+          "skarn_r0": 853,
+          "skarn_r1": 1337,
+          "skarn_r1_bez_sumu": 1283,
+          "sloupcu_s_intervaly": 349,
+          "vyhodnoceni_sdf_r2": 77538
+        },
+        "druhy": {
+          "cocka": 1,
+          "kras": 5,
+          "zila": 5
+        },
+        "dutina_05_proti_025": {
+          "r0_prunik_sjednoceni": [
+            343,
+            617
+          ],
+          "r1_prunik_sjednoceni": [
+            17,
+            29
+          ]
+        },
+        "slot": [
+          0,
+          0
+        ],
+        "utvaru": 11
+      },
+      {
+        "16": {
+          "hash_r1": "af6939387ed97216",
+          "hash_r2": "af6939387ed97216",
+          "intervalu": 102,
+          "ms_geo": 43.53,
+          "ms_r0_dutina": 37.829,
+          "ms_r1": 93.628,
+          "ms_r1_jen_skarn": 63.633,
+          "ms_r1_jen_utvary": 59.349,
+          "ms_r2_bunky": 64.143,
+          "ms_r2_intervaly": 310.338,
+          "r0_dutina_bunek": 60,
+          "r0_dutina_schodek": 0,
+          "r1_bunek": {
+            "kras": 39,
+            "skarn": 422,
+            "zila": 8
+          },
+          "r2_jine_nez_r1": 0,
+          "skarn_r0": 341,
+          "skarn_r1": 422,
+          "skarn_r1_bez_sumu": 446,
+          "sloupcu_s_intervaly": 86,
+          "vyhodnoceni_sdf_r2": 20048
+        },
+        "32": {
+          "hash_r1": "083ac3a35e9b9f02",
+          "hash_r2": "083ac3a35e9b9f02",
+          "intervalu": 413,
+          "ms_geo": 375.4,
+          "ms_r0_dutina": 296.634,
+          "ms_r1": 687.137,
+          "ms_r1_jen_skarn": 494.744,
+          "ms_r1_jen_utvary": 540.596,
+          "ms_r2_bunky": 488.076,
+          "ms_r2_intervaly": 1280.53,
+          "r0_dutina_bunek": 480,
+          "r0_dutina_schodek": 0,
+          "r1_bunek": {
+            "kras": 317,
+            "skarn": 3378,
+            "zila": 54
+          },
+          "r2_jine_nez_r1": 0,
+          "skarn_r0": 2740,
+          "skarn_r1": 3378,
+          "skarn_r1_bez_sumu": 3590,
+          "sloupcu_s_intervaly": 355,
+          "vyhodnoceni_sdf_r2": 80659
+        },
+        "druhy": {
+          "kras": 4,
+          "zila": 5
+        },
+        "dutina_05_proti_025": {
+          "r0_prunik_sjednoceni": [
+            382,
+            578
+          ],
+          "r1_prunik_sjednoceni": [
+            215,
+            414
+          ]
+        },
+        "slot": [
+          1,
+          0
+        ],
+        "utvaru": 9
+      },
+      {
+        "16": {
+          "hash_r1": "5f76c9104c71f29a",
+          "hash_r2": "5f76c9104c71f29a",
+          "intervalu": 200,
+          "ms_geo": 40.96,
+          "ms_r0_dutina": 29.902,
+          "ms_r1": 110.0,
+          "ms_r1_jen_skarn": 60.702,
+          "ms_r1_jen_utvary": 80.083,
+          "ms_r2_bunky": 63.815,
+          "ms_r2_intervaly": 632.856,
+          "r0_dutina_bunek": 60,
+          "r0_dutina_schodek": 0,
+          "r1_bunek": {
+            "kras": 192,
+            "skarn": 229,
+            "zila": 2
+          },
+          "r2_jine_nez_r1": 0,
+          "skarn_r0": 147,
+          "skarn_r1": 229,
+          "skarn_r1_bez_sumu": 223,
+          "sloupcu_s_intervaly": 169,
+          "vyhodnoceni_sdf_r2": 31978
+        },
+        "32": {
+          "hash_r1": "95312a0a4a2621a4",
+          "hash_r2": "95312a0a4a2621a4",
+          "intervalu": 806,
+          "ms_geo": 334.232,
+          "ms_r0_dutina": 270.778,
+          "ms_r1": 787.62,
+          "ms_r1_jen_skarn": 443.933,
+          "ms_r1_jen_utvary": 674.494,
+          "ms_r2_bunky": 460.852,
+          "ms_r2_intervaly": 2526.664,
+          "r0_dutina_bunek": 480,
+          "r0_dutina_schodek": 0,
+          "r1_bunek": {
+            "kras": 1522,
+            "skarn": 1815,
+            "zila": 16
+          },
+          "r2_jine_nez_r1": 0,
+          "skarn_r0": 1094,
+          "skarn_r1": 1815,
+          "skarn_r1_bez_sumu": 1733,
+          "sloupcu_s_intervaly": 683,
+          "vyhodnoceni_sdf_r2": 128340
+        },
+        "druhy": {
+          "kras": 5,
+          "zila": 2
+        },
+        "dutina_05_proti_025": {
+          "r0_prunik_sjednoceni": [
+            412,
+            548
+          ],
+          "r1_prunik_sjednoceni": [
+            1234,
+            1824
+          ]
+        },
+        "slot": [
+          0,
+          1
+        ],
+        "utvaru": 7
+      },
+      {
+        "16": {
+          "hash_r1": "e660690e2419340c",
+          "hash_r2": "e660690e2419340c",
+          "intervalu": 117,
+          "ms_geo": 43.443,
+          "ms_r0_dutina": 47.027,
+          "ms_r1": 91.412,
+          "ms_r1_jen_skarn": 65.052,
+          "ms_r1_jen_utvary": 56.939,
+          "ms_r2_bunky": 67.575,
+          "ms_r2_intervaly": 451.078,
+          "r0_dutina_bunek": 60,
+          "r0_dutina_schodek": 0,
+          "r1_bunek": {
+            "kras": 23,
+            "skarn": 357
+          },
+          "r2_jine_nez_r1": 0,
+          "skarn_r0": 258,
+          "skarn_r1": 357,
+          "skarn_r1_bez_sumu": 341,
+          "sloupcu_s_intervaly": 84,
+          "vyhodnoceni_sdf_r2": 20430
+        },
+        "32": {
+          "hash_r1": "f762580f4b75805d",
+          "hash_r2": "f762580f4b75805d",
+          "intervalu": 483,
+          "ms_geo": 390.226,
+          "ms_r0_dutina": 340.682,
+          "ms_r1": 674.846,
+          "ms_r1_jen_skarn": 504.932,
+          "ms_r1_jen_utvary": 472.642,
+          "ms_r2_bunky": 469.307,
+          "ms_r2_intervaly": 1838.305,
+          "r0_dutina_bunek": 480,
+          "r0_dutina_schodek": 0,
+          "r1_bunek": {
+            "kras": 158,
+            "skarn": 2885
+          },
+          "r2_jine_nez_r1": 0,
+          "skarn_r0": 2046,
+          "skarn_r1": 2885,
+          "skarn_r1_bez_sumu": 2815,
+          "sloupcu_s_intervaly": 346,
+          "vyhodnoceni_sdf_r2": 82201
+        },
+        "druhy": {
+          "kras": 4,
+          "zila": 2
+        },
+        "dutina_05_proti_025": {
+          "r0_prunik_sjednoceni": [
+            392,
+            568
+          ],
+          "r1_prunik_sjednoceni": [
+            114,
+            228
+          ]
+        },
+        "slot": [
+          1,
+          1
+        ],
+        "utvaru": 6
+      }
+    ],
+    "prumer_ms": {
+      "ms_geo_16": 41.417,
+      "ms_geo_32": 356.31025,
+      "ms_r0_dutina_16": 38.2395,
+      "ms_r0_dutina_32": 295.27125,
+      "ms_r1_16": 95.5025,
+      "ms_r1_32": 693.262,
+      "ms_r1_jen_skarn_16": 61.74175,
+      "ms_r1_jen_skarn_32": 456.20175,
+      "ms_r1_jen_utvary_16": 65.569,
+      "ms_r1_jen_utvary_32": 541.22925,
+      "ms_r2_bunky_16": 63.162,
+      "ms_r2_bunky_32": 454.55375,
+      "ms_r2_intervaly_16": 371.0325,
+      "ms_r2_intervaly_32": 1502.82775
+    },
+    "utvary": {
+      "cocka": {
+        "B": 176,
+        "pocet": 1
+      },
+      "kras": {
+        "B": 296,
+        "pocet": 6
+      },
+      "zila": {
+        "B": 192,
+        "pocet": 6
+      }
+    }
+  },
+  "det": {
+    "(0, 0)": {
+      "hash32": "afee926659bf9a39",
+      "stejne": true
+    },
+    "(0, 1)": {
+      "hash32": "95312a0a4a2621a4",
+      "stejne": true
+    },
+    "(1, 0)": {
+      "hash32": "083ac3a35e9b9f02",
+      "stejne": true
+    },
+    "(1, 1)": {
+      "hash32": "f762580f4b75805d",
+      "stejne": true
+    }
+  },
+  "f32": {
+    "(0, 0)": {
+      "16": {
+        "body_na_hrane_1e6": 0,
+        "f32_jinych_bunek": 0,
+        "testovano": 4802,
+        "z": 16384
+      },
+      "32": {
+        "body_na_hrane_1e6": 0,
+        "f32_jinych_bunek": 0,
+        "testovano": 38614,
+        "z": 131072
+      }
+    },
+    "(0, 1)": {
+      "16": {
+        "body_na_hrane_1e6": 0,
+        "f32_jinych_bunek": 0,
+        "testovano": 3861,
+        "z": 16384
+      },
+      "32": {
+        "body_na_hrane_1e6": 0,
+        "f32_jinych_bunek": 0,
+        "testovano": 30704,
+        "z": 131072
+      }
+    },
+    "(1, 0)": {
+      "16": {
+        "body_na_hrane_1e6": 0,
+        "f32_jinych_bunek": 0,
+        "testovano": 3306,
+        "z": 16384
+      },
+      "32": {
+        "body_na_hrane_1e6": 0,
+        "f32_jinych_bunek": 0,
+        "testovano": 25518,
+        "z": 131072
+      }
+    },
+    "(1, 1)": {
+      "16": {
+        "body_na_hrane_1e6": 0,
+        "f32_jinych_bunek": 0,
+        "testovano": 2805,
+        "z": 16384
+      },
+      "32": {
+        "body_na_hrane_1e6": 0,
+        "f32_jinych_bunek": 0,
+        "testovano": 22644,
+        "z": 131072
+      }
+    }
+  },
+  "pasma": {
+    "(0, 0)": {
+      "objem_bunky_025_m3": 0.34375,
+      "objem_bunky_05_m3": 0.375,
+      "objem_intervaly_m3": 0.437229620759825,
+      "pasem_bez": 4362,
+      "pasem_se_skarnem_a_krasem": 4475,
+      "sdf_vyhodnoceni": 41277,
+      "skarnovych_pasem": 225,
+      "z_toho_voda_m3": 0.437229620759825
+    },
+    "(0, 1)": {
+      "objem_bunky_025_m3": 23.78125,
+      "objem_bunky_05_m3": 24.0,
+      "objem_intervaly_m3": 23.3882895510006,
+      "pasem_bez": 4871,
+      "pasem_se_skarnem_a_krasem": 5182,
+      "sdf_vyhodnoceni": 60460,
+      "skarnovych_pasem": 212,
+      "z_toho_voda_m3": 14.9514908070299
+    },
+    "(1, 0)": {
+      "objem_bunky_025_m3": 4.953125,
+      "objem_bunky_05_m3": 4.875,
+      "objem_intervaly_m3": 4.72868628552476,
+      "pasem_bez": 5196,
+      "pasem_se_skarnem_a_krasem": 5448,
+      "sdf_vyhodnoceni": 54419,
+      "skarnovych_pasem": 475,
+      "z_toho_voda_m3": 3.59991702819097
+    },
+    "(1, 1)": {
+      "objem_bunky_025_m3": 2.46875,
+      "objem_bunky_05_m3": 2.875,
+      "objem_intervaly_m3": 2.40795148179582,
+      "pasem_bez": 4427,
+      "pasem_se_skarnem_a_krasem": 4608,
+      "sdf_vyhodnoceni": 55397,
+      "skarnovych_pasem": 465,
+      "z_toho_voda_m3": 2.40795148179582
+    }
+  },
+  "prekryv": {
+    "(0, 0)": {
+      "bunek_025": 131072,
+      "chodba_noop_uz_dutina": 0,
+      "chodba_op": 0,
+      "jine_geo_bez_utvaru": 7752,
+      "jine_s_utvary": 8034,
+      "navic_deflate_B": 1075,
+      "navic_jen_utvary": 481,
+      "navic_runs_B": 1850,
+      "prekryv_po_chodbe": 0
+    },
+    "(0, 1)": {
+      "bunek_025": 131072,
+      "chodba_noop_uz_dutina": 2,
+      "chodba_op": 32,
+      "jine_geo_bez_utvaru": 9765,
+      "jine_s_utvary": 9994,
+      "navic_deflate_B": 1260,
+      "navic_jen_utvary": 533,
+      "navic_runs_B": 2285,
+      "prekryv_po_chodbe": 30
+    },
+    "(1, 0)": {
+      "bunek_025": 131072,
+      "chodba_noop_uz_dutina": 4,
+      "chodba_op": 32,
+      "jine_geo_bez_utvaru": 14929,
+      "jine_s_utvary": 15018,
+      "navic_deflate_B": 1042,
+      "navic_jen_utvary": 401,
+      "navic_runs_B": 1785,
+      "prekryv_po_chodbe": 28
+    },
+    "(1, 1)": {
+      "bunek_025": 131072,
+      "chodba_noop_uz_dutina": 0,
+      "chodba_op": 0,
+      "jine_geo_bez_utvaru": 7637,
+      "jine_s_utvary": 7744,
+      "navic_deflate_B": 816,
+      "navic_jen_utvary": 384,
+      "navic_runs_B": 1490,
+      "prekryv_po_chodbe": 0
+    }
+  },
+  "svy": {
+    "(0, 0)|(0, 1)": {
+      "bodu": 16384,
+      "bodu_v_utvaru": 192,
+      "dutina_rez": {
+        "r0": {
+          "bunek_dutiny_u_svu": 0,
+          "dutina_bloku_A": 60,
+          "pokracuje_pres_sev": 0,
+          "stena_na_svu": 0
+        },
+        "r1": {
+          "bunek_dutiny_u_svu": 2,
+          "dutina_bloku_A": 3,
+          "pokracuje_pres_sev": 1,
+          "stena_na_svu": 1
+        }
+      },
+      "material_jinak": 256,
+      "utvar_jinak": 0
+    },
+    "(0, 0)|(1, 0)": {
+      "bodu": 16384,
+      "bodu_v_utvaru": 85,
+      "dutina_rez": {
+        "r0": {
+          "bunek_dutiny_u_svu": 0,
+          "dutina_bloku_A": 60,
+          "pokracuje_pres_sev": 0,
+          "stena_na_svu": 0
+        },
+        "r1": {
+          "bunek_dutiny_u_svu": 1,
+          "dutina_bloku_A": 3,
+          "pokracuje_pres_sev": 1,
+          "stena_na_svu": 0
+        }
+      },
+      "material_jinak": 256,
+      "utvar_jinak": 0
+    },
+    "(0, 1)|(1, 1)": {
+      "bodu": 16384,
+      "bodu_v_utvaru": 623,
+      "dutina_rez": {
+        "r0": {
+          "bunek_dutiny_u_svu": 0,
+          "dutina_bloku_A": 60,
+          "pokracuje_pres_sev": 0,
+          "stena_na_svu": 0
+        },
+        "r1": {
+          "bunek_dutiny_u_svu": 2,
+          "dutina_bloku_A": 192,
+          "pokracuje_pres_sev": 1,
+          "stena_na_svu": 1
+        }
+      },
+      "material_jinak": 256,
+      "utvar_jinak": 0
+    },
+    "(1, 0)|(1, 1)": {
+      "bodu": 16384,
+      "bodu_v_utvaru": 954,
+      "dutina_rez": {
+        "r0": {
+          "bunek_dutiny_u_svu": 0,
+          "dutina_bloku_A": 60,
+          "pokracuje_pres_sev": 0,
+          "stena_na_svu": 0
+        },
+        "r1": {
+          "bunek_dutiny_u_svu": 9,
+          "dutina_bloku_A": 39,
+          "pokracuje_pres_sev": 7,
+          "stena_na_svu": 2
+        }
+      },
+      "material_jinak": 256,
+      "utvar_jinak": 0
+    }
+  }
+}

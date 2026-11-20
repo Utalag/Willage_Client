@@ -397,6 +397,85 @@ Výchozí: 800 kapek na blok, `ero_cap` 1,0, `ero_erode` 0,1, `ero_deposit_rate`
 - **Pro Jana:** (1) zapnout `p85_okraj` a `p85_vrstvy` jako výchozí? (2) zapnout i `p85_jemne`, i když je 65–108×
   pomalejší? (3) zapnout `p85_voda` spolu s `p79_chodby`, aby lokální voda s E74 seděla po načtení? (4) počítat výřez E76
   taky z funkcí? (5) u chodeb počítat vodu plně, nebo nejdřív zrychlit lokální přepočet?
+## E84 implicitní geologie: žíly, pegmatity, skarny, kras bez plných voxelů (plán, zapsáno před pokusem 2026-11-20 04:17; TODO Blok 2: „Rešerše implicitního geologického modelování: jak do vrstev doplnit nepravidelné útvary (žíly, pegmatity, skarny, krasové dutiny) bez plných voxelů. Výchozí zdroj: https://doi.org/10.1111/cgf.13657“; větev z `e83-determinismus`)
+- **Co už je (kód):** `geo_fn` = vrstvy jako 2D pole hranic (řídicí mřížka 0,5 m, bilineárně přes šev) + tělesa
+  `_bodies` jako implicitní test bodu: komín (kužel), kupole, žíla pegmatitu (deska kolem roviny s tvrdým koncem
+  `|q| < extent`), skarn (jen SVISLÁ vzdálenost od granitoidu ve stejném sloupci). Středy těles z hashe světové mřížky
+  (`G2._centers`) → spojité přes šev. Dutiny (`cavity_one`) ale rostou po BUŇKÁCH v bloku (náhodné pokusy o střed,
+  φ + šum, jedna souvislá oblast) → závisí na rozlišení a na hranici bloku. Kras E75 = objem v pásmu (`ug_funkce.bands`
+  = zásobník intervalů [lo, hi, mat] na sloupec), buňky až při prokopání. Překryv E78 = rozdíl proti definici 0,5 m
+  zjemněné 2 × 2 × 2.
+- **Zdroje (ověřit stažením, citovat jen ověřené):** Galin a kol. 2019 (CGF 38(2), doi 10.1111/cgf.13657, HAL);
+  GemPy 1.0 (GMD 2019), LoopStructural 1.0 (GMD 2021), Hillier a kol. 2014 (RBF), Paris a kol. 2021 (jeskyně jako
+  SDF strom), Quilez (SDF primitiva, operace, warping).
+- **Pokus (`godot-prototyp/tools/implicit_e84.gd`, samostatný nástroj, hra se nemění):** útvary nad `geo_fn.material`
+  ostrova START, středy z hashe světové mřížky:
+  - **R0 dnes:** `_bodies` + `cavity_one` (jak je).
+  - **R1 SDF bod po bodu:** procedurální vzdálenostní funkce (float64, jen + − × ÷ sqrt floor, vlastní hashový šum
+    místo FastNoiseLite): žíla = deska s plynulým zúžením a mírným warpem, pegmatit = čočka (elipsoid), skarn = pás
+    kolem intruze podle vzdálenosti po NORMÁLE hranice (svislá vzdálenost × cos sklonu), kras = řetěz kapslí po
+    horizontu + komora. Ořez podle obálky (AABB) útvaru na blok.
+  - **R2 intervaly sloupce:** tytéž funkce převedené na intervaly [lo, hi) v každém sloupci (krokování podle meze
+    Lipschitz + půlení) → stejný tvar jako pásma vody; buňky z intervalů při libovolném rozlišení.
+- **Měřit:** čas na blok při 0,5 m a 0,25 m (R0 / R1 / R2, i čistě geo_fn bez útvarů); paměť (bajty na útvar,
+  na blok, intervaly na sloupec) proti plným buňkám (16 384 B / 131 072 B); spojitost přes šev (stejný bod z obou bloků,
+  řez útvaru na hranici bloku); determinismus (2× v procesu, 2 procesy, float32 proti float64 – kolik buněk se změní);
+  souhra s překryvem E78 (definice 0,5 m proti 0,25 m z funkcí → kolik položek překryvu by vzniklo jen z útvarů)
+  a s pásmy vody (kolik pásem přibude, propustnost dutiny).
+- **Negativa předem:** nejde o geologickou interpolaci z dat (GemPy / LoopStructural řeší jiný problém – data → pole);
+  sítě krasu podle Paris 2021 (nejkratší cesty) se nestaví, jen geometrie kanálu. Útvary se do výchozí hry nezapojí;
+  výchozí otisky zůstávají. Jiná platforma (C#, ARM) se netestuje – jen float32 a audit operací.
+
+## E84 výsledky (zapsáno 2026-11-20 04:35; `godot-prototyp/tools/implicit_e84.gd`, `shots/e84/`, zdroje [33][73]–[79])
+- **Co říkají zdroje (staženo a přečteno):**
+  - Galin 2019 [33][73]: vrstvy = uspořádané funkce mocností nebo zásobníky ve sloupci. Plné voxely jsou paměťově drahé (SVO, DAG).
+  - Hybrid *Arches* = svislé intervaly stálého materiálu, vzduch je jen další materiál.
+  - Implicitní povrch: konvoluce, warping (Gamito & Musgrave) a stromy primitiv (Génevaux).
+  - Galin: „objemové procedurální metody v literatuře skoro nejsou“.
+  - GemPy [74] a LoopStructural [75]: plochy = izoplochy skalárního pole. Pole se fituje na data (potenciál, ko-kriging, RBF [76], konečné diference). Mladší útvary se přidávají první a nesouhlasnost funguje jako maska.
+  - Paris 2021 [77]: kras = kostra sítě (nejkratší cesty po horizontech a puklinách) + strom SDF (sweep nebo koule, blending, warping).
+    Pole má být 1-Lipschitz, aby šel plochy rychle vyřadit.
+    10 m tunel jako jeden sweep < 1 kB, z tisíců koulí ≈ 100× víc.
+  - Quilez [78][79]: přesné SDF (koule, kapsle) a dolní mez (elipsoid).
+    Sjednocení min je přesné. Průnik a rozdíl jsou jen meze.
+    Warping f(p + h(p)) pole zkřiví, krok se musí zmenšit.
+- **Prototyp:** R0 dnes, R1 SDF bod po bodu, R2 intervaly ve sloupci. Ostrov START, 13 útvarů z hashe světové mřížky (6 žil, 1 čočka, 6 krasových kanálů) a skarn v každém bloku.
+  - *Čas na blok (GDScript):*
+    - geo_fn 38 ms / 346 ms (0,5 / 0,25 m).
+    - R1 vše 89 / 654 ms, tedy +51 / +308 ms. Z toho skarn po normále +28 / +84, žíly, čočky a kras +35 / +201.
+    - Vyřazení podle meze (bez šumu, d − A·√3·1,25) to zrychlilo 1,8× při stejných buňkách.
+    - R2 stavba intervalů 355 / 1477 ms, buňky z nich 61 / 435 ms. R2 = R1 v 100 % buněk.
+    - Dnešní `cavity_one` 38 / 297 ms.
+  - *Paměť:*
+    - Útvar 176–296 B.
+    - Blok 1,1–2,9 kB, ale nic se neukládá: útvary jdou znovu z hashe.
+    - Intervaly 86–200 na blok (sloupce 0,5 m).
+    - Plné buňky 16 / 131 kB.
+  - *Švy:* bod na švu z obou bloků 0 rozdílů (4 × 16 384 bodů). Kras přes šev pokračuje.
+    Dnešní dutina roste jen v bloku a přes šev nikdy nejde.
+    Materiál geo_fn se na švu liší v 256 bodech kvůli krytu půdy podle typu bloku. To je už dnes.
+  - *Determinismus:* 2× v procesu a 2 procesy stejně. float32 parametrů i bodů mění 0 buněk z 16 384 i 131 072. 0 bodů na hraně |d| < 1e-6 m.
+  - *Překryv E78:* útvary přidají jen 384–533 buněk 0,25 m (0,3–0,4 %) proti zjemněné definici 0,5 m. Detail E80 je 7 637–14 929.
+    Kopání do kanálu: buňka, která už je dutina, je no-op. Překryv zůstává kanonický.
+  - *Pásma vody:* +2,6 až +6,4 % pásem, z toho 212–475 skarnových.
+    Objem krasu z intervalů 23,39 m³ proti 24,0 (0,5 m) a 23,78 (0,25 m), voda 14,95 m³.
+    Skarn se musí z karbonátu vyříznout dřív než kras, jinak vyjde kras 2× větší než v buňkách. Dnes pásma tělesa nevidí.
+  - *Skarn po normále hranice:* o 23–58 % buněk víc než dnešní svislá vzdálenost. Na svazích je aureola svisle tlustší, kolmo stejná.
+- **Negativa:**
+  - Útvary v buňkách nejsou stálé mezi rozlišeními. Průnik / sjednocení buněk dutiny 0,5 m proti 0,25 m je u R1 50–68 %, u R0 56–75 %.
+    Tenký kanál (r 0,5–1,1 m) vzorek 0,5 m zčásti ztratí. Pravda je v intervalech, ne v buňkách.
+  - R2 je stavbou pomalejší než R1 (krok |d|/2 a půlení). Vyplatí se jen pro pásma vody a opakované vzorkování.
+  - Uzly krasu berou výšku z `G2.zone_tops` (FastNoiseLite, float32). Je to funkce světa, ale port ji musí mít stejnou.
+    Horizont z hranic bloků by závisel na sousedech, kteří ještě nejsou → porušil by pravidlo „sousedé se nemění“.
+  - Sítě krasu podle Paris (nejkratší cesty) ani interpolace z dat (GemPy) se nestavěly.
+  - Výchozí hra beze změny: nástroj je samostatný, `port_studie --check` 0 změn.
+- **Doporučení:**
+  1. Útvary jako strom SDF z hashe světové mřížky (R1). Pořadí od nejstaršího skarn → pegmatit → žíla → kras, poslední vyhrává.
+     Vyřazovat obálkou a mezí Lipschitz. Jen float64 skaláry, žádný Vector3 ani FastNoiseLite.
+  2. Dutiny E-kras přepsat z `cavity_one` (buňky, jen v bloku) na kapsle a komory přes šev.
+  3. Pro vodu převádět útvary na intervaly ve sloupci (R2 jen pro pásma). Tělesa vyříznout z pásem: skarn a pegmatit nerozpustné, dutina = pásmo vzduchu nebo vody.
+  4. Skarn po normále hranice.
+  5. Nic neukládat, definice zůstává 0,5 m.
 
 ## E83 determinismus: blok, překryv, voda, pořadí vložení (plán, zapsáno před pokusem 2026-11-20 03:31; TODO Architektura světa: „Determinismus celého světa, nejen jednoho bloku. Ujasnit Hash(seed, změny, pořadí)… Pořadí pokládání tedy výsledek ovlivňuje záměrně; platí jen, že stejný výřez, transformace a sousedé dají stejný výsledek.“; větev z `e82-vapenec-hladina`)
 - **Co už je:** hashe jsou vlastní (`stable_hash`: SplitMix64 + FNV-1a, celá čísla mod 2^64), náhoda generátoru je

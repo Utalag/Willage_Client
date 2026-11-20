@@ -66,6 +66,7 @@ Pokus E83 (2026-11-20 03:34, větev `e83-determinismus`): stejná definice, seed
 
 Pokus E85 (2026-11-20 06:20, větev `e85-blok2-rozhodnuti`): podle Janova rozhodnutí se mřížka 0,25 m umí počítat přímo z funkcí, dno a obvod ostrova se nesmějí prokopat a vrstva tenčí než 25 cm v blueprintu není. Vše je za příznaky a výchozí hra se nemění. Z funkcí se 0,25 m liší od zjemnění v 7,8 % buněk a výpočet je 65–108× pomalejší. Zákaz okraje nechá vnitřní švy volné. Po odstranění tenkých vrstev se změní 0,65 % buněk 0,5 m a švy zůstanou spojité. Aby lokální voda s obsazováním pramenů E74 seděla s plným výpočtem i po načtení, musí se obsazení výtoků uložit s blokem (`p85_voda`).
 
+Pokus E84 (2026-11-20 04:35, větev `e84-implicitni-geologie`): žíly, čočky pegmatitu, skarn a krasové kanály jako vzdálenostní funkce nad vrstvami geo_fn. Středy jsou z hashe světové mřížky, ořezávají se obálkou a mezí Lipschitz. Funkce útvaru je na švu z obou bloků stejná (0 rozdílů) a kras přes šev pokračuje. Dnešní dutina roste po buňkách jen uvnitř bloku. Útvar má 176–296 B a nic se neukládá. Na blok to stojí +51 ms při 0,5 m a +308 ms při 0,25 m v GDScriptu. float32 nezmění žádnou buňku. Pro vodu se útvary převádějí na intervaly ve sloupci, tedy na stejná pásma, jaká už máme. Objem krasu z intervalů je 23,4 m³, v buňkách 24,0 / 23,8. Tím se potvrzuje hypotéza o lokálních plných buňkách jen tam, kde je potřeba: pravda zůstává ve funkcích a buňky jsou vzorek. Tenký kanál ale vzorek 0,5 m zčásti ztratí.
 
 ## Změny od hráče
 

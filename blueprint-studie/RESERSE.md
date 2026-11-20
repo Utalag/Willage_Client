@@ -116,6 +116,13 @@ Implicitní povrch \(S=\{p\mid f(p)=0\}\), materiál znaménkem \(f\); výšku \
 
 **Doporučení: nechat** 2,5D funkce pro vrstvy. **Převzít** 3D SDF jen pro komíny, dómy, žíly a dutiny.
 
+### 3.8 E84: útvary nad vrstvami bez voxelů (2026-11-20)
+Paris a kol. 2021 staví kras jako kostru (nejkratší cesty po horizontech a puklinách) a z ní strom SDF ze sweepů nebo koulí s blendingem a warpingem. Pole drží 1-Lipschitz, aby šly plochy rychle vyřadit; sweep 10 m tunelu má < 1 kB [77]. Quilez: kapsle a koule jsou přesné SDF, elipsoid jen dolní mez, sjednocení min přesné, warping pole zkřiví [78][79]. LoopStructural: mladší útvary první, nesouhlasnost jako maska [75].
+
+**Pro nás:** prototyp E84 (`tools/implicit_e84.gd`, PROP E84) to ověřil na ostrově START: na švu 0 rozdílů, float32 0 buněk, +51 ms na blok při 0,5 m, útvar 176–296 B, intervaly ve sloupci = pásma vody.
+
+**Doporučení: převzít** útvary jako SDF z hashe světové mřížky (místo dutin po buňkách) a intervaly ve sloupci pro vodu. **Přeskočit** kostru sítě nejkratší cestou a interpolaci z dat.
+
 ## 4 Doporučení vůči naší cestě
 
 | Stav | Co | Proč |

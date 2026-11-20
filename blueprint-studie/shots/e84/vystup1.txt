@@ -1,0 +1,33 @@
+Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+čas (0, 0) n=16: geo 36 ms, R1 84 ms, R2 intervaly 85 ms + buňky 54 ms, R0 dutina 37 ms; útvary {"cocka":204,"kras":3,"skarn":174}; skarn R0 114 / R1 174; R2≠R1 0; intervalů 86
+čas (0, 0) n=32: geo 317 ms, R1 629 ms, R2 intervaly 352 ms + buňky 402 ms, R0 dutina 299 ms; útvary {"cocka":1607,"kras":22,"skarn":1337}; skarn R0 853 / R1 1337; R2≠R1 0; intervalů 349
+dutina 0,5 vs 0,25 m (0, 0): R0 [343, 617], R1 [17, 29]
+čas (1, 0) n=16: geo 43 ms, R1 94 ms, R2 intervaly 317 ms + buňky 70 ms, R0 dutina 41 ms; útvary {"kras":39,"skarn":422,"zila":8}; skarn R0 341 / R1 422; R2≠R1 0; intervalů 102
+čas (1, 0) n=32: geo 425 ms, R1 694 ms, R2 intervaly 1347 ms + buňky 510 ms, R0 dutina 361 ms; útvary {"kras":317,"skarn":3378,"zila":54}; skarn R0 2740 / R1 3378; R2≠R1 0; intervalů 413
+dutina 0,5 vs 0,25 m (1, 0): R0 [382, 578], R1 [215, 414]
+čas (0, 1) n=16: geo 39 ms, R1 103 ms, R2 intervaly 619 ms + buňky 62 ms, R0 dutina 30 ms; útvary {"kras":192,"skarn":229,"zila":2}; skarn R0 147 / R1 229; R2≠R1 0; intervalů 200
+čas (0, 1) n=32: geo 337 ms, R1 755 ms, R2 intervaly 2636 ms + buňky 433 ms, R0 dutina 271 ms; útvary {"kras":1522,"skarn":1815,"zila":16}; skarn R0 1094 / R1 1815; R2≠R1 0; intervalů 806
+dutina 0,5 vs 0,25 m (0, 1): R0 [412, 548], R1 [1234, 1824]
+čas (1, 1) n=16: geo 36 ms, R1 74 ms, R2 intervaly 397 ms + buňky 58 ms, R0 dutina 44 ms; útvary {"kras":23,"skarn":357}; skarn R0 258 / R1 357; R2≠R1 0; intervalů 117
+čas (1, 1) n=32: geo 303 ms, R1 537 ms, R2 intervaly 1571 ms + buňky 393 ms, R0 dutina 259 ms; útvary {"kras":158,"skarn":2885}; skarn R0 2046 / R1 2885; R2≠R1 0; intervalů 483
+dutina 0,5 vs 0,25 m (1, 1): R0 [392, 568], R1 [114, 228]
+průměr ms: {"ms_geo_16":38.46575,"ms_geo_32":345.53925,"ms_r0_dutina_16":38.1305,"ms_r0_dutina_32":297.4975,"ms_r1_16":88.768,"ms_r1_32":653.777,"ms_r1_jen_skarn_16":66.05525,"ms_r1_jen_skarn_32":429.1865,"ms_r1_jen_utvary_16":73.237,"ms_r1_jen_utvary_32":546.64975,"ms_r2_bunky_16":60.77875,"ms_r2_bunky_32":434.66425,"ms_r2_intervaly_16":354.59575,"ms_r2_intervaly_32":1476.564}
+útvary: {"cocka":{"B":176,"pocet":1},"kras":{"B":296,"pocet":6},"zila":{"B":192,"pocet":6}}
+šev (0, 0)|(1, 0): bodů 16384, útvar z obou stran jinak 0 (v útvaru 85), materiál R1 jinak 256, řez dutiny {"r0":{"bunek_dutiny_u_svu":0,"dutina_bloku_A":60,"pokracuje_pres_sev":0,"stena_na_svu":0},"r1":{"bunek_dutiny_u_svu":1,"dutina_bloku_A":3,"pokracuje_pres_sev":1,"stena_na_svu":0}}
+šev (0, 1)|(1, 1): bodů 16384, útvar z obou stran jinak 0 (v útvaru 623), materiál R1 jinak 256, řez dutiny {"r0":{"bunek_dutiny_u_svu":0,"dutina_bloku_A":60,"pokracuje_pres_sev":0,"stena_na_svu":0},"r1":{"bunek_dutiny_u_svu":2,"dutina_bloku_A":192,"pokracuje_pres_sev":1,"stena_na_svu":1}}
+šev (0, 0)|(0, 1): bodů 16384, útvar z obou stran jinak 0 (v útvaru 192), materiál R1 jinak 256, řez dutiny {"r0":{"bunek_dutiny_u_svu":0,"dutina_bloku_A":60,"pokracuje_pres_sev":0,"stena_na_svu":0},"r1":{"bunek_dutiny_u_svu":2,"dutina_bloku_A":3,"pokracuje_pres_sev":1,"stena_na_svu":1}}
+šev (1, 0)|(1, 1): bodů 16384, útvar z obou stran jinak 0 (v útvaru 954), materiál R1 jinak 256, řez dutiny {"r0":{"bunek_dutiny_u_svu":0,"dutina_bloku_A":60,"pokracuje_pres_sev":0,"stena_na_svu":0},"r1":{"bunek_dutiny_u_svu":9,"dutina_bloku_A":39,"pokracuje_pres_sev":7,"stena_na_svu":2}}
+det: {"(0, 0)":{"hash32":"afee926659bf9a39","stejne":true},"(0, 1)":{"hash32":"95312a0a4a2621a4","stejne":true},"(1, 0)":{"hash32":"083ac3a35e9b9f02","stejne":true},"(1, 1)":{"hash32":"f762580f4b75805d","stejne":true}}
+f32 (0, 0): {"16":{"body_na_hrane_1e6":0,"f32_jinych_bunek":0,"testovano":4802,"z":16384},"32":{"body_na_hrane_1e6":0,"f32_jinych_bunek":0,"testovano":38614,"z":131072}}
+f32 (1, 0): {"16":{"body_na_hrane_1e6":0,"f32_jinych_bunek":0,"testovano":3306,"z":16384},"32":{"body_na_hrane_1e6":0,"f32_jinych_bunek":0,"testovano":25518,"z":131072}}
+f32 (0, 1): {"16":{"body_na_hrane_1e6":0,"f32_jinych_bunek":0,"testovano":3861,"z":16384},"32":{"body_na_hrane_1e6":0,"f32_jinych_bunek":0,"testovano":30704,"z":131072}}
+f32 (1, 1): {"16":{"body_na_hrane_1e6":0,"f32_jinych_bunek":0,"testovano":2805,"z":16384},"32":{"body_na_hrane_1e6":0,"f32_jinych_bunek":0,"testovano":22644,"z":131072}}
+překryv (0, 0): {"bunek_025":131072,"chodba_noop_uz_dutina":0,"chodba_op":0,"jine_geo_bez_utvaru":7752,"jine_s_utvary":8034,"navic_deflate_B":1075,"navic_jen_utvary":481,"navic_runs_B":1850,"prekryv_po_chodbe":0}
+překryv (1, 0): {"bunek_025":131072,"chodba_noop_uz_dutina":4,"chodba_op":32,"jine_geo_bez_utvaru":14929,"jine_s_utvary":15018,"navic_deflate_B":1042,"navic_jen_utvary":401,"navic_runs_B":1785,"prekryv_po_chodbe":28}
+překryv (0, 1): {"bunek_025":131072,"chodba_noop_uz_dutina":2,"chodba_op":32,"jine_geo_bez_utvaru":9765,"jine_s_utvary":9994,"navic_deflate_B":1260,"navic_jen_utvary":533,"navic_runs_B":2285,"prekryv_po_chodbe":30}
+překryv (1, 1): {"bunek_025":131072,"chodba_noop_uz_dutina":0,"chodba_op":0,"jine_geo_bez_utvaru":7637,"jine_s_utvary":7744,"navic_deflate_B":816,"navic_jen_utvary":384,"navic_runs_B":1490,"prekryv_po_chodbe":0}
+pásma (0, 0): {"objem_bunky_025_m3":0.34375,"objem_bunky_05_m3":0.375,"objem_intervaly_m3":0.437229620759825,"pasem_bez":4362,"pasem_se_skarnem_a_krasem":4475,"sdf_vyhodnoceni":41277,"skarnovych_pasem":225,"z_toho_voda_m3":0.437229620759825}
+pásma (1, 0): {"objem_bunky_025_m3":4.953125,"objem_bunky_05_m3":4.875,"objem_intervaly_m3":4.72868628552476,"pasem_bez":5196,"pasem_se_skarnem_a_krasem":5448,"sdf_vyhodnoceni":54419,"skarnovych_pasem":475,"z_toho_voda_m3":3.59991702819097}
+pásma (0, 1): {"objem_bunky_025_m3":23.78125,"objem_bunky_05_m3":24.0,"objem_intervaly_m3":23.3882895510006,"pasem_bez":4871,"pasem_se_skarnem_a_krasem":5182,"sdf_vyhodnoceni":60460,"skarnovych_pasem":212,"z_toho_voda_m3":14.9514908070299}
+pásma (1, 1): {"objem_bunky_025_m3":2.46875,"objem_bunky_05_m3":2.875,"objem_intervaly_m3":2.40795148179582,"pasem_bez":4427,"pasem_se_skarnem_a_krasem":4608,"sdf_vyhodnoceni":55397,"skarnovych_pasem":465,"z_toho_voda_m3":2.40795148179582}
+celkem 56.9 s

@@ -104,3 +104,10 @@
 | 70 | — | Přesunuto do tezba-studie/ZDROJE.md jako [26] (T01, dříve E65). |
 | 71 | — | Přesunuto do tezba-studie/ZDROJE.md jako [27] (T01, dříve E65). |
 | 72 | — | Přesunuto do tezba-studie/ZDROJE.md jako [28] (T01, dříve E65). |
+| 73 | https://hal.science/hal-02097510 , https://perso.liris.cnrs.fr/eric.galin/Articles/2019-star.pdf (Galin, Guérin, Peytavie, Cordonnier, Cani, Benes, Gain 2019, CGF 38(2) 553–577, DOI 10.1111/cgf.13657) | E84: vrstvy jako zásobníky / funkce mocností, hybrid intervalů *Arches* (vzduch = materiál), voxely drahé (SVO, DAG), implicitní povrch konvolucí, warping Gamito & Musgrave, stromy primitiv Génevaux |
+| 74 | https://gmd.copernicus.org/articles/12/1/2019/ (de la Varga, Schaaf, Wellmann 2019, GemPy 1.0) | E84: otevřené implicitní modelování potenciálovým polem; zlomy, nesouhlasnosti, dómy |
+| 75 | https://gmd.copernicus.org/articles/14/3915/2021/ (Grose et al. 2021, LoopStructural 1.0) | E84: plochy = izohodnoty skalárního pole; znaménková vzdálenost vs. potenciál; interpolátory (tetraedry, konečné diference, RBF/SURFE, ko-kriging); mladší útvary první, nesouhlasnost jako maska |
+| 76 | https://doi.org/10.1007/s11004-014-9540-3 (Hillier, Schetselaar, de Kemp, Perron 2014, Math Geosci 46:931–953) | E84: zobecněná RBF interpolace geologických ploch (body, gradienty, nerovnosti, tečny) |
+| 77 | https://hal.science/hal-03331697 (Paris, Guérin, Peytavie, Collon, Galin 2021, CGF 40(7), DOI 10.1111/cgf.14420) | E84: kostra krasu nejkratší cestou (horizonty, pukliny, propustnost) + strom SDF (sweep / koule, blending, warping), pole 1-Lipschitz, sweep 10 m < 1 kB |
+| 78 | https://iquilezles.org/articles/distfunctions/ (Quilez) | E84: přesné SDF (koule, kapsle, rovina), elipsoid jako dolní mez; sjednocení přesné, průnik / rozdíl meze; deformace zkřiví pole |
+| 79 | https://iquilezles.org/articles/warp/ (Quilez) | E84: warping f(p + h(p)) šumem |
