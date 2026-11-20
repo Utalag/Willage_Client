@@ -157,7 +157,10 @@ Pojmy: **blueprint** = otisk světa o velikosti bloku. To, čemu se ve studiích
 - **Doplněno (Jan t744u–t749u, t761u–t762u):**
   - Herní svět je **velká mapa ze spojité funkce**. Vlastní bloky nemá; na blueprinty se dělí řezáním.
   - Segmenty uvnitř blueprintu vzorkují svou část funkce do buněk 0,5 m a ukládají výsledná data, ne funkci. Při vložení se buňky jen otočí nebo zrcadlí. Od té chvíle se data segmentu mění kopáním a vodou. Funkce zůstává zdrojem pro regeneraci a pro namátkovou kontrolu na serveru (1.10).
-  - Svět má maximální velikost **4096 × 4096 m** (32 × 32 bloky po 128 m, mocnina 2, parametr). Začíná na výchozí velikosti **3 × 3 bloky** (nastavitelný parametr, Jan t749u) a při potřebě se dogenerovává, ale jen do tohoto maxima (Jan t761u–t762u). Nové části uvnitř maxima navazují plynule.
+  - **Procedurální ostrov (Jan t801u–t803u, 2026-11-20 20:17–20:21):** svět je ze seedu, parametrů a verze generátoru plně opakovatelný. Ostrov zůstává procedurální, má jen jeden vstup navíc: **seznam vložení v pořadí**. Každé vložení nese souřadnice blueprintu ve světě, zrcadlení, otočení, výškový posun a režim napojení boků (Auto/Blend/Keep). Funkce bloku je funkce světa přepočtená do nové polohy, prolnutí švů je funkce sousedů (ti se při vložení nemění, proto stačí pořadí).
+  - Vložení nese i **seed a verzi generátoru svého světa**, aby šel vložit i blueprint z jiného světa (připravenost do budoucna).
+  - **Ukládá se jen rozdíl proti funkci:** změněné buňky terénu, vrstvy nad terénem (stavby, cesty, změny rostlin) a voda tam, kde se liší od výchozí funkce. Nezměněné buňky se neukládají, ani když už byly vygenerované (viz 1.2). Tím se mění předchozí bod „segmenty ukládají výsledná data“.
+- Svět má maximální velikost **4096 × 4096 m** (32 × 32 bloky po 128 m, mocnina 2, parametr). Začíná na výchozí velikosti **3 × 3 bloky** (nastavitelný parametr, Jan t749u) a při potřebě se dogenerovává, ale jen do tohoto maxima (Jan t761u–t762u). Nové části uvnitř maxima navazují plynule.
   - **Rozlišení rozšiřování:** rozšiřovat svět znamená nové blueprinty z funkce. Rozšiřovat ostrov znamená, že hráč vloží další blueprint jako blok. Ten blueprint může pocházet z jiného místa světa a být otočený, takže sousedé na ostrově se napojují dorovnáním okrajů, ne funkcí.
 
 ---
@@ -185,6 +188,8 @@ Pojmy: **blueprint** = otisk světa o velikosti bloku. To, čemu se ve studiích
 **Otázka pro Jana.** Při nové verzi generátoru přepočítat jen bloky, do kterých hráč nezasáhl, a ostatní nechat na staré verzi?
 
 **Platí:** **Odloženo (2026-11-20, Jan t726u):** neřešit, dokud nemáme jeden funkční generátor.
+
+- **Doplněno (2026-11-20 20:17–20:21, Jan t801u–t803u):** protože se ukládá jen rozdíl proti funkci, je **determinismus povinný**. Stejný seed, parametry a verze generátoru musí dát bitově stejný svět na všech zařízeních a na serveru. Uložené změny i každé vložení blueprintu proto nesou verzi generátoru. Jak přepočítat svět při nové verzi, zůstává odložené.
 
 ---
 
@@ -442,7 +447,8 @@ Pojmy: **blueprint** = otisk světa o velikosti bloku. To, čemu se ve studiích
   3. **Voda v buňce** je celé číslo litrů (pevný krok 1 l), rozsah 0–125 u buňky 0,5 m, v 1 bytu. Důvody: deterministické SHA-256 napříč zařízeními a velikost; simulace počítá v celých litrech. Záloha: 2 byty (krok ~2 ml), pokud by 1 l byl příliš hrubý.
 - **Přenos dat** je kombinovaná varianta: server ukládá a posílá **hotová data segmentu** (komprimované buňky). Generátor si server nechává jen pro **namátkovou kontrolu**: občas znovu vygeneruje segment ze seedu + změn a porovná hash. Je to pojistka proti chybám i podvádění.
 - Kontrolu generátorem na serveru lze **vypnout přepínačem**; server pak jen ukládá a kontroluje bilanci materiálu.
-- **Zamítnuté varianty:** jen seed + změny (každá změna generátoru by se musela dělat dvakrát a bitově přesně); jen hotová data bez jakékoli kontroly.
+- **Změněno (2026-11-20 20:17–20:21, Jan t801u–t803u):** nahrazuje odrážku „Přenos dat“ výše. Server ukládá a posílá **seed a parametry světa, verzi generátoru, seznam vložení blueprintů a rozdíl proti funkci** (změněné buňky, vrstvy nad terénem, odchylky vody), ne hotová data segmentů. Formát WVB1 slouží pro balík změn segmentu. Namátková kontrola generátorem na serveru zůstává a jde vypnout.
+- **Zamítnuté varianty:** jen hotová data bez jakékoli kontroly. *Původně zamítnutá varianta „jen seed + změny“ je tímto přijata.* Důvod zamítnutí (bitově přesný generátor i na serveru) platí jen při zapnuté namátkové kontrole.
 
 ---
 
