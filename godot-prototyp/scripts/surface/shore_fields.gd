@@ -13,10 +13,11 @@ extends RefCounted
 ##  - vzdálenostní pole (chamfer) k čáře vody, od okraje louky a k louce → textura pro shadery [15][21].
 ## Hladina vody: v datech prototypu voda není; sloupec louky/písku pod vrstvou water_lz se jen kreslí jako dno.
 
+const J = preload("res://scripts/jednotky.gd")   # E94: mřížka a metry z jednoho místa
 const Mat = preload("res://scripts/mat.gd")
-const BS := 16
-const BH := 64
-const CELL_H := 0.5
+const BS := J.BS
+const BH := J.BH
+const CELL_H := J.CELL_M
 enum { NONE, GRASS, SAND, BED, HARD }
 
 var slot := Vector2i.ZERO
