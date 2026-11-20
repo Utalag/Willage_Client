@@ -2556,3 +2556,9 @@ a `surface.adapt(real)` se bez nových vstupů neprojeví.
 
 Těžba a rozklad hornin jsou samostatná studie. Návrh E65 je teď **T01 (dříve E65)** v `../tezba-studie/` (`README.md`, `PROP.md`, `DENIK.md`, `ZDROJE.md` [1]–[28], tabulka v `data/horniny_tezba_navrh.json`).
 Zdroje [45]–[72] níže v tomto souboru zůstávají jen jako zástupné číslo, aby se neposunulo číslování blueprint-studie.
+
+## E88 návrh TerrainSource a datového kontraktu (2026-11-20 06:58; TODO Blok 3 „Výřez terénu jako samostatný přenositelný datový objekt“ a „Datový kontrakt mezi generováním světa, geologií, vodou a změnami od hráčů“)
+- Jen návrh, herní kód beze změny: `navrhy/navrh-terrainsource-kontrakt.md` (kopie `willage-ideas/navrhy/terrainsource-kontrakt.md`).
+- Nové měření (`shots/e88/velikosti_e88.gd`, `velikosti.json`): řídicí mřížka 5 376 hodnot = f64 30–35 kB, f32 15–17 kB,
+  pevná čárka 1/256 U 8,7–10,4 kB po deflate; buňky 0,5 m 1,4–2,2 kB. Mřížku neukládat, počítat znovu.
+- S Willage-backend se nejednalo; serverová část je k projednání.

@@ -216,6 +216,11 @@ Skupiny: 1 Prototyp a buildy · 2 Terén a tvar · 3 Rozlišení bloku · 4 Ská
 - **Komplikace:** koryta jsou krátké úseky (malý svět, malá povodí). Krasová vyvěračka 0. Hráz na svahu tůň nevytvořila (potok ji obtekl). Podzemní tok vede zatím zjednodušeně k nejbližšímu okraji.
 - **Další krok:** Jan rozhodne, jak daleko vést podzemní tok (sledovat propustnou vrstvu?) a jestli má mít krasová vyvěračka vlastní pravidlo. Starší otevřené otázky (eroze po blocích vs hrubý svět, jádro hory přes šev, minerály z hrubého světa) zůstávají.
 
+### 📐 Blueprint v3 / E88: návrh TerrainSource a datového kontraktu (2026-11-20 06:58 · `navrhy/navrh-terrainsource-kontrakt.md`, měření `blueprint-studie/shots/e88/`, větev `e88-kontrakt-navrh`)
+- **Jen návrh, kód hry beze změny.** Čtyři objekty (Source, Transform, Placement, Instance), kdo co vlastní, události změn napojené na E68, rozvržení WTI1, hashe, verze a kontroly serveru.
+- **Měření:** řídicí mřížka bloku (hm_f + 20 hranic) 8,7–35 kB po deflate, buňky 0,5 m 1,4–2,2 kB. Instance proto mřížku neukládá, jen hashe, prameny a překryv E78 (blok bez změn ~400–450 B).
+- **Otevřené (Jan, Willage-backend):** průzkumný svět z čistých funkcí, prameny po nové verzi, snímek buněk pro server, otisk vody, rohy, eroze v překryvu.
+
 ### 🔄 Voda E74–E77 sloučena, přepínače podle Jana (2026-11-20 04:08 · větev `voda-e74-e77-slouceni`, tag `voda-e74-e77-ready`, `tok.solve74`, `ug67._merge_outs72d`, `ostrov_voda.place76`, data `blueprint-studie/shots/voda_e74_e77/`)
 - **Směr:** Jan 2026-11-20 01:49 a 03:26: sloučit E74–E77, zapnout obsazování pramenů s hladinou, uložené prameny, slučování do 8 m; E75 a těžba na `cas_hry.gd`.
 - **Zlepšení:** výchozí ostrov beze změny otisku (63d7b89a91385a79), 0 neshod, chyba 0 ve všech testech, druhý běh bitově stejný; neobsazený pramen už vodu ze světa nepouští; nové postavení a načtení ostrova = lokální stav; slučování nejdál 8 m.
