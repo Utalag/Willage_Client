@@ -42,7 +42,7 @@ Upřesnění od Jana:
 9. **1.6 Materiály:** jedna tabulka, jedno id – *rozhodnuto 2026-11-20 (t727u)*, návrh `materialy.csv`.
 10. **1.7 Geologie:** útvary jako funkce světa přes švy, vrstvy podle terénu, vyklínění – *rozhodnuto 2026-11-20 (t732u)*.
 11. **1.12 Objektová vrstva:** vegetace na m² ve světových metrech.
-12. **1.10 Kontrakt:** WTI1 a jednání s Willage-backend.
+12. **1.10 Kontrakt:** WVB1 základ, data po segmentech, voda v litrech (1 B), server ukládá hotová data a namátkově kontroluje generátorem – *rozhodnuto 2026-11-20 (t736u, t737u)*.
 13. **1.13 Profil a členitost terénu:** parametry členitosti (rozhodnuto); obrys, bok a spodek ostrova otevřené.
 14. **1.14 Sopka:** největší hora je sopka (kostra).
 
