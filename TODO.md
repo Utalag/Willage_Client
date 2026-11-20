@@ -62,8 +62,9 @@ Podnět: čtvrtá odpověď ChatGPT 2026-11-19, popis je v [devlog/model-sveta.m
 
 - [x] **Přechod mezi funkcí, vzorkovanou buňkou a trvalou změnou po kopání:** definice zůstane, změny hráče jako překryv. Ujasnit vztah k WVB1, který dnes ukládá celé pole bloku. Malý experiment: vykopat chodbu, uložit jen překryv, znovu načíst a porovnat hash.
   - 🧪 Ověřeno v E78 (tag `e78-prekryv`, nesloučeno): `prekryv78.gd`, překryv = buňka 0,25 m → materiál, kanonický (rovno definici = smazat). Načtení = živý stav ve všech 6 scénářích. 1000 buněk 1,8 kB, chodba 70 m 244 B proti 13–17 kB pole. Poslední zápis na buňku vyhrává.
-  - [ ] Lokální přepočet vody nevidí chodbu se vstupem z povrchu (153 neshod) – přestavět pásma podzemí u dotčených sloupců.
-  - [ ] Kopání v prototypu převést na 0,25 m přes `prekryv78`.
+  - [x] Lokální přepočet vody nevidí chodbu se vstupem z povrchu – opraveno v E79 (tag `e79-chodby`, nesloučeno, příznak `p79_chodby` vypnutý): 0 neshod v 11 scénářích, bilance 0.
+  - [ ] Zrychlit lokální přepočet (E79 jen o 10–35 % rychlejší než plný, ~1,1–1,5 s): přestavba pásem jen v dotčených sloupcích, menší okno přepočtu, přeskočit dutinu nesousedící s tělesem ani povrchem, přepočet po dávkách za herní tik.
+  - [ ] Kopání v prototypu převést na 0,25 m přes `prekryv78` + `edit79`, pak zapnout `p79_chodby`.
   - [ ] Návrh pro WVB1 (Willage-backend): definice bloku + kanonický překryv místo celého pole, hash přes obojí, vodu neukládat.
 - [ ] **Kde končí funkce a pásma:** kritérium, kdy změna (převis, oblouk, nepravidelná jeskyně) potřebuje lokální oblast s plnými buňkami, a jak takovou oblast uložit (řídký objem, octree, komprimované intervaly).
 - [ ] **Rešerše implicitního geologického modelování:** jak do vrstev doplnit nepravidelné útvary (žíly, pegmatity, skarny, krasové dutiny) bez plných voxelů. Výchozí zdroj: [A Review of Digital Terrain Modeling](https://doi.org/10.1111/cgf.13657).
