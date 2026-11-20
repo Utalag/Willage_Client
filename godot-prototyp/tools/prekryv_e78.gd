@@ -236,6 +236,7 @@ func order_tests() -> Dictionary:
 	return res
 
 func _init() -> void:
+	if get_script().resource_path != "res://tools/prekryv_e78.gd": return   # E79 nástroj dědí pomocné funkce
 	var out := {"pravidla": "buňka 0,25 m, překryv = konečný stav, položka = definice se maže, poslední operace na buňce vyhrává, buňka 0,5 m plná dokud zbývá 1 z 8"}
 	out["poradi"] = order_tests()
 	var sc := []
