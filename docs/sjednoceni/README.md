@@ -21,7 +21,7 @@ Upřesnění od Jana:
 | [`00-mapa-vetvi.md`](00-mapa-vetvi.md) | všechny větve a studie, přepínače, čísla, rozhodnutí, konflikty K1–K12, prezentační vrstva | hotový podklad |
 | [`materialy.csv`](materialy.csv) | návrh jedné tabulky materiálů (78 id, přibližné hodnoty, `~` = odhad) | návrh k 1.6 |
 | [`01-principy-a-vstupy.md`](01-principy-a-vstupy.md) | kapitola 1: pojmy, jednotky, výška sloupce, funkce světa, determinismus a verze, materiály, geologie, voda, přepočet vody, kontrakt, datový rozpočet, objektová vrstva, profil ostrova | kostra, čeká na Jana |
-| `02-…` (plán) | model světa a generování bloku 128 m (pipeline, segmenty, pořadí vložení, recept) | po kapitole 1 |
+| [`02-model-sveta-a-generovani.md`](02-model-sveta-a-generovani.md) | kapitola 2: pořadí kroků generátoru, rozhraní funkce světa, slupka, segment a rozdíl, výchozí voda, vegetace, test 3 × 3 | kostra, čeká na Jana |
 | `03-…` (plán) | voda: jeden algoritmus podzemí, oprava lokálního přepočtu, vlákno | po 1.8–1.9 |
 | `04-…` (plán) | kopání a překryv 0,25 m, zákaz dna a okraje, ukládání | po 1.2 |
 | `05-…` (plán) | přenos výřezu: otočení, švy vrstev, prameny | po 1.4–1.5 |
@@ -45,6 +45,16 @@ Upřesnění od Jana:
 12. **1.10 Kontrakt:** WVB1 základ, data po segmentech, voda v litrech (1 B), server ukládá seed, parametry, verzi, seznam vložení a rozdíl proti funkci, namátkově kontroluje generátorem (vypínatelné) – *rozhodnuto 2026-11-20 (t736u, t737u), změněno (t801u–t803u)*.
 13. **1.13 Profil a členitost terénu:** parametry členitosti (rozhodnuto); bok ostrova jen prezentace: bloky s texturou 5 m pod nejnižší okrajovou buňkou, v té výšce oblaka, voda padá do oblak – *rozhodnuto 2026-11-20 (t805u–t807u)*.
 14. **1.14 Sopka:** neaktivní, události ji probudí a uspí; tvar mezi strato a štítovou (sklon 17°); větší 40 m / 2 bloky, nižší 20 m / 1 blok; vrchol aspoň 5 m pod okrajem sloupce; počet a rozteč jako parametry světa (2, 3 bloky); průduch id 75 a kuželovité vrstvy lávy a popela, těleso se propíchne běžnými vrstvami jako skalní jádro (rozhodnuto).
+
+## Pořadí bodů kapitoly 2
+
+1. **2.1 Pořadí kroků generátoru:** funkce světa (reliéf a sopky) → geologie a útvary (sopka vrstvy propíchne) → výchozí voda jako funkce → vegetace ze seedu; buňky až ve slupce; minerály a dutiny jako útvary funkce.
+2. **2.2 Rozhraní funkce světa:** dotaz na bod a sloupec v metrech, objekty E88 (Source / Transform / Placement / Instance), inverzní transformace vložení, řídicí mřížka se neukládá.
+3. **2.3 Slupka a líné generování:** obnažené buňky (vzduch, dno průhledné vody), okraj zorného pole jako parametr, donačtení při odkrytí.
+4. **2.4 Segment a rozdíl:** výchozí 8 m, formát E78 / WTI1, 16 / 32 m jen jako parametry k měření.
+5. **2.5 Výchozí voda:** zůstává funkcí, počítá se ve slupce nebo na povodí, ukládají se prameny a odchylky.
+6. **2.6 Vegetace:** funkce seedu (hustota na m²), ve slupce, na disk jen změny.
+7. **2.7 Testovací pipeline 3 × 3:** svět → 9 blueprintů → ostrov; měření slupky, rozdílu, vody a determinismu. Stavět až po rozhodnutí 2.1–2.6.
 
 ## Legenda
 
