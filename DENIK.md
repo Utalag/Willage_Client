@@ -226,6 +226,11 @@ Skupiny: 1 Prototyp a buildy · 2 Terén a tvar · 3 Rozlišení bloku · 4 Ská
 - **Zlepšení:** dnes každý šev mezi horami spadne na 20 m (sedlo 1,7–4 m pod průměrem) a jádro se u okraje utne (3–3,6 m v jednom sloupci). S p87 šev leží ve výšce masivu a skoky na švu jsou stejné jako uvnitř bloku; masiv nezávisí na pořadí (0 neshod), 0,25 m se po přidání sousedů nemění, bilance vody 0, dva běhy stejné. Výchozí hra beze změny.
 - **Komplikace:** masiv vedle kopce nebo louky dá stěnu 5–6 m v pásu 2 m; virtuální soused u nížiny nesedí (78–84 buněk 0,25 m); masiv je hladší bez teras; vzorek 0,25 m ~2× pomalejší; jiná voda (2 × 2: 9 → 3 prameny).
 - **Další krok (Jan):** zapnout p87; přechod masiv → nížina (podhůří ve funkci, nebo širší pás); vrátit terasy; jak velký má masiv být.
+### 📏 Blok 4 / E89: oddělené typy jednotek (2026-11-20 07:19 · `godot-prototyp/scripts/jednotky.gd`, `tools/jednotky_e89.py` + `.gd`, příznak `p89_meritko`, větev `e89-jednotky`, data `blueprint-studie/shots/e89/`)
+- **Směr:** TODO Blok 4, první bod: metry pro fyziku a vodu, herní jednotky 0,25 m, hustota vzorkování a celočíselná mřížka na jednom místě. Hydraulika zůstává v m, s, l/s.
+- **Zjištění:** konstanty bloku rozepsané (BS 33×, BH 18×, CELL_H 9×), dvě konvence os indexu (stejná čísla), l → m³ dvakrát jinak (13 % průtoků jiný poslední bit), `ug_cell_m3` s výchozí 0,125 i 1,0. Scéna kreslí buňku 1 × 1 × 0,5 → vodorovně natažená 2×.
+- **Výsledek:** modul bez chyb (tam a zpět, vnoření, index pro 16–128), volání 3–4× dražší než výraz. `p89_meritko` ukáže scénu v metrech, výchozí hra beze změny.
+- **Další krok (Jan):** scéna v metrech? postupný převod konstant? jeden tvar l → m³? vegetace a stavby v metrech?
 
 ### 🔄 Voda E74–E77 sloučena, přepínače podle Jana (2026-11-20 04:08 · větev `voda-e74-e77-slouceni`, tag `voda-e74-e77-ready`, `tok.solve74`, `ug67._merge_outs72d`, `ostrov_voda.place76`, data `blueprint-studie/shots/voda_e74_e77/`)
 - **Směr:** Jan 2026-11-20 01:49 a 03:26: sloučit E74–E77, zapnout obsazování pramenů s hladinou, uložené prameny, slučování do 8 m; E75 a těžba na `cas_hry.gd`.

@@ -3183,3 +3183,66 @@ Zdroje [45]–[72] níže v tomto souboru zůstávají jen jako zástupné čís
 - **Doporučení:** zapnout pro masiv; přechod masiv → nížina řešit podhůřím ve funkci masivu (útlum F k `surf_ref` podle
   vzdálenosti od okraje masivu, ne pás 2 m) nebo širším pásem jen pro tento šev; terasy vrátit jako detail ve světových
   souřadnicích; virtuálního souseda kešovat.
+## E89 oddělené typy jednotek v kódu (plán, zapsáno před pokusem 2026-11-20 07:02; TODO Blok 4 „Oddělené typy jednotek v kódu: metry pro fyziku a vodu (m, s, l/s), herní jednotky po 0,25 m, hustota vzorkování a celočíselné souřadnice mřížky. Hydrauliku nepřevádět na herní jednotky.“; větev `e89-jednotky` z main 8d4d809)
+- **Co už je (průzkum kódu):**
+  - Geologie: `geo_fn.U` = 0,5 m (řídicí mřížka a délková jednotka tabulek), `BW` 8 m, `BHT` 32 m. Index `(x*16+y)*64+z`, z je výška.
+  - Hra a vykreslení: `block.gd`, `mesher.gd`, `island.gd`, `veg_render.gd`, `shore_fields.gd` mají každý svoje `BS` 16,
+    `BH` 64, `CELL_H` 0,5. Index `(x*BS+z)*BH+y`, y je výška (osa Godotu). Buňka se kreslí 1 × 1 × 0,5 jednotky scény
+    (Jan 17. 11.), takže vodorovně 1 jednotka scény = 0,5 m, svisle 1 = 1 m. Scéna je vodorovně natažená 2×.
+  - Voda: metry, sekundy, l/s (`voda_cell_m` 0,5, `cell_m2`, `u_m`, `q_to_m3` 0,001, `cm_s`, `cas_hry.gd`). Výchozí hodnoty
+    parametrů jsou rozepsané po souborech (`p.get("ug_cell_m3", 0.125)` i `p.get("ug_cell_m3", 1.0)`).
+  - Herní jednotka 0,25 m (Jan 19. 11. 20:12) v main zatím v kódu není (`prekryv78` je jen na větvích).
+- **Pokus:**
+  1. *Audit (`tools/jednotky_e89.py`):* opakované konstanty geometrie, dvě konvence indexu buňky, klíče parametrů s jednotkou
+     v názvu a bez ní, stejný klíč s různou výchozí hodnotou v různých souborech, místa převodu metrů a buněk.
+  2. *Modul `scripts/jednotky.gd`:* jedno místo pro metry, herní jednotky 0,25 m, hustotu vzorkování n (16 / 32 / 64 / 128
+     na blok), celočíselné souřadnice mřížky (blok, sloupec, buňka) a převod os geologie ↔ Godot. Hydraulika zůstává v m, s, l/s.
+     Nic z dnešního kódu ho nepoužívá. Výchozí hra se nemůže změnit.
+  3. *Test (`tools/jednotky_e89.gd`):* tam a zpět pro všechny hustoty, vnoření 0,5 ⊃ 0,25 (8 buněk), svět ↔ (slot, místní),
+     shoda s dnešními konstantami (`geo_fn.U`, `Block.CELL_H`, `voda_cell_m`, `ug` objem buňky), cena volání funkce proti
+     výrazu v kódu (ns na převod; hra na telefonu).
+  4. *Měřítko scény (příznak `p89_meritko`, výchozí vyp, `surface_params`):* ostrov se vykreslí v metrech (vodorovně ×0,5),
+     paprsky myši se převedou do místních souřadnic ostrova. Snímky vyp / zap se stejnou postavou 1,75 m a domem
+     (`shots/89_*`). Jen zobrazení, data a voda beze změny.
+  5. *Výchozí hra:* `voda_e66` (d7aedf3a6d9d10e8 → 63d7b89a91385a79) a `port_studie --check` 0 změn.
+- **Negativa předem:** GDScript nemá vlastní typy čísel (newtype), typ jednotky se tedy hlídá jen názvem a auditem, ne
+  překladačem. Volání statické funkce bude pomalejší než výraz. Měřítko scény mění vzhled svahů (2× strmější) a všechny
+  rozměry staveb a cest v buňkách. Hra ani demo ho nepoužívají, dokud Jan nerozhodne.
+
+### E89 výsledky (2026-11-20 07:19, větev `e89-jednotky`, tag `e89-jednotky`, `scripts/jednotky.gd`, `tools/jednotky_e89.py` + `.gd`, `scripts/demo/meritko_demo.gd`, shots `shots/e89/`)
+- **Audit (`audit.md`, 1 soubor = 1 místo, regexy přibližné):**
+  - konstanty geometrie rozepsané po souborech: `BS` 16 na 33 místech, `BH` 64 na 18, `CELL_H` 0,5 na 9, `U` 0,5 na 3, `CELL` na 3
+    (0,25 ve `gw74` a `kras75`, 0,5 v `eroze/hydro`); násobení `* 0.5` / `* CELL_H` 103 míst;
+  - dvě konvence indexu buňky: hra (y nahoru, Godot) 18 míst v 7 souborech, geologie a voda (z nahoru) 66 míst ve 22 souborech.
+    Číselně je index stejný (16 384 / 16 384 buněk, 0 chyb), liší se jen jména os;
+  - voda převádí l → m³ dvakrát jinak: dělení 1000 na 12 místech, násobení 0,001 (`q_to_m3`) na 20. To není bitově
+    stejné: 133 127 z 1 000 000 náhodných průtoků (13,3 %) a 4 z 319 skutečných průtoků ostrova START se liší v posledním
+    bitu (relativně 2,2·10⁻¹⁶). Port (C#, telefon) musí použít stejný tvar jako GDScript, jinak otisk vody nesedí;
+  - `p.get` se 104 klíči, 2 s různou výchozí hodnotou: `ug_cell_m3` 0,125 (`podzemi.gd`) a 1,0 (`ug_funkce.from_cells`,
+    testy s buňkou 1 m; ostrov jde přes `from_world` s `geo_fn.U`, takže dnes bez dopadu) a `podzemi_vrstva` true / false;
+  - v `params.gd` 221 klíčů, jednotku v názvu (`_m`, `_s`, `_m3`, `_q`, `_ms`…) má 22.
+- **Modul `jednotky.gd` (test `test.json`):** shoda s kódem: `U_M` = `geo_fn.U`, `BLOK_M` = `BW`, `VYSKA_M` = `BHT`,
+  buňka 16 = `voda_cell_m` = `Block.CELL_H`, `nz(16)` = `Block.BH`, objem buňky 0,125 m³ = `podzemi.gd` (≠ 1,0 v `from_cells`).
+  Tam a zpět 0 chyb pro 16 / 32 / 64 / 128 (střed i spodní hrana), vnoření 0 chyb (každá buňka 0,25 m má rodiče 0,5 m),
+  index 0 chyb (16 384, 131 072, vzorky 10 811 a 86 481), 200 000 bodů světa → slot 0 mimo blok, 0 rozdílů proti herním
+  jednotkám (hustota 32 = 0,25 m). Postava 7 hj = 1,75 m, dveře 8 hj = 2,0 m.
+- **Cena:** volání statické funkce je 3,1–4,3× dražší než výraz: m → index 36 ns výraz proti 112–116 ns funkce, index buňky
+  41 ns proti 173–177 ns (1 000 000 převodů, Linux x86_64, GDScript). Ve vnitřních smyčkách (mesher, voda) se modul nemá volat
+  po buňkách, jen jako zdroj konstant.
+- **Měřítko scény (`p89_meritko`, výchozí vyp):** dnes se buňka kreslí 1 × 1 × 0,5 jednotky → vodorovně 1 jednotka = 0,5 m,
+  svisle 1 = 1 m, terén je vodorovně natažený 2× a svahy vypadají poloviční. S příznakem je ostrov 2 × 2 bloky 16 × 16 m
+  (dnes 32 × 32 jednotek), buňka 0,5 × 0,5 × 0,5. Paprsek středem obrazovky trefí stejný sloupec (24, 24) vyp i zap.
+  Snímky `89_meritko_{vyp,zap}_{ostrov,detail,hora_bok}.png` s postavou 1,75 m a domem 4 × 4 × 3 m v metrech.
+- **Výchozí hra beze změny:** `voda_e66` otisky d7aedf3a6d9d10e8 → 63d7b89a91385a79, 0 neshod (12 výkopů),
+  `port_studie --check` 81 souborů, změněno 0 (modul a příznak jsou jen v prototypu, studie se nemění).
+- **Negativa:**
+  - GDScript typ jednotky nehlídá. Je to jen pravidlo názvů (`_m`, `_s`, `_lps`, `_hj`, `_i`, `_sc`) a audit.
+  - Modul zatím nic v kódu nepoužívá. Převod 33 + 18 + 9 konstant a 103 násobení je samostatná práce s rizikem změny otisků.
+  - `p89_meritko` zmenší i vegetaci a stavby (jsou dětmi ostrova): stromy a domek hry jsou vodorovně o polovinu užší.
+    Kamera hry, náhledy vkládání, cesty a mlha počítají se starými jednotkami. Je to jen náhled pro test měřítka (Blok 4, bod 4).
+  - Ostrov 2 × 2 bloky v metrech je 16 × 16 m a 32 m vysoký sloup. Hora START je proti postavě nízká (asi 4–5 m nad loukou).
+  - Na x86 jsem neměřil ARM ani telefon. Ceny volání jsou jen pro tento počítač.
+- **Pro Jana:** (1) má být ve scéně 1 jednotka = 1 m (`p89_meritko`), nebo zůstat u 1 × 1 × 0,5 a převádět jen v datech?
+  (2) převést konstanty `BS` / `BH` / `CELL_H` na modul postupně (soubor po souboru, kontrola otisků)? (3) sjednotit l → m³
+  na jeden tvar (`* 0.001` nebo `/ 1000`), i když se změní poslední bity vody a otisky? (4) vegetace a stavby: měřit
+  v metrech (nezávisle na buňce), nebo v herních jednotkách?
