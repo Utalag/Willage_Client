@@ -9,6 +9,8 @@ const Mat = preload("res://scripts/mat.gd")
 const VegG = preload("res://scripts/veg.gd")
 const Block = preload("res://scripts/block.gd")
 const H = preload("res://scripts/stable_hash.gd")
+const TerenBP = preload("res://scripts/teren/ostrov_teren.gd")
+const FN = preload("res://scripts/teren/geo_fn.gd")
 const BS := 16
 
 @export var island_path: NodePath
@@ -74,6 +76,11 @@ func dig(g: Vector2i, place := false, mat := -1) -> String:
 		lz = h - 1; old = b.cells[(lx * BS + ly) * 64 + lz]; nw = Mat.AIR
 		if old == Mat.FOG or old == Mat.AIR:
 			return "nelze"
+		if FN.on85(TerenBP.p, "p85_okraj"):   # E85 (Jan 2026-11-20 03:26): dno a obvod ostrova se neprokopají, švy bloků ano
+			if lz == 0: return "dno ostrova: nelze"
+			if (lx == 0 and not island.blocks.has(sl + Vector2i(-1, 0))) or (lx == BS - 1 and not island.blocks.has(sl + Vector2i(1, 0))) \
+				or (ly == 0 and not island.blocks.has(sl + Vector2i(0, -1))) or (ly == BS - 1 and not island.blocks.has(sl + Vector2i(0, 1))):
+				return "okraj ostrova: nelze"
 		inventory[old] += 1
 		# gen-v3: pod vykopanou buňkou může být jeskyně – povrch sloupce klesne na její dno (jeskyně se tím odkryje)
 		var nh := h - 1

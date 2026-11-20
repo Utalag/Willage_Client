@@ -1,0 +1,8 @@
+Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+
+voda74 p79: lokálně 58c9d1d33c7cc07b plně cbe01a6bc9e2034e načteno cbe01a6bc9e2034e → false
+voda74 bez_gw: lokálně 58c9d1d33c7cc07b plně cbe01a6bc9e2034e načteno cbe01a6bc9e2034e → false
+voda74 bez_vyzvednout: lokálně cbe01a6bc9e2034e plně cbe01a6bc9e2034e načteno cbe01a6bc9e2034e → true
+voda74 bez_hladina: lokálně 069f6931420a2c4b plně cbe01a6bc9e2034e načteno cbe01a6bc9e2034e → false
+voda74 bez_prameny: lokálně 58c9d1d33c7cc07b plně 4a9d582e36651155 načteno 4a9d582e36651155 → false
+voda74 bez_p74: lokálně cbe01a6bc9e2034e plně cbe01a6bc9e2034e načteno cbe01a6bc9e2034e → true

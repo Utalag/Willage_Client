@@ -11,6 +11,7 @@ const T = preload("res://scripts/teren/ostrov_teren.gd")
 const OV = preload("res://scripts/voda/ostrov_voda.gd")
 const H68 = preload("res://scripts/voda/hydro68.gd")
 const P76 = preload("res://scripts/voda/prenos76.gd")
+const P78 = preload("res://scripts/teren/prekryv78.gd")
 const START := "0,0:louka:101;1,0:hora:202;0,1:kopec:303;1,1:louka:404"
 
 func _arg(k: String, d: String) -> String:
@@ -23,7 +24,7 @@ func gen_blocks(spec: String) -> Dictionary:
 	for e in spec.split(";"):
 		var a := e.split(":"); var xy := a[0].split(",")
 		var b := Block.new(); b.kind = a[1]; b.seed = int(a[2]); b.slot = Vector2i(int(xy[0]), int(xy[1]))
-		BlockGen.build(b, [null, null, null, null]); T.commit(b); blocks[b.slot] = b
+		BlockGen.build(b, [null, null, null, null]); T.commit(b); P78.attach(b); blocks[b.slot] = b
 	return blocks
 
 ## výkop: vrchní buňky sloupce pryč (jako voda_e66) + lokální přepočet a kroky R
@@ -51,30 +52,13 @@ static func spring_set(v) -> Array:
 	a.sort()
 	return a
 
-## uložení: jen to, co je potřeba k načtení (typ, seed, slot, posun, překryv výkopů, uložené prameny)
+## uložení a načtení: záznam bloku E78 (typ, seed, slot, posun, prameny, překryv buněk 0,25 m; výška sloupců se odvodí)
 static func save(blocks: Dictionary, order: Array) -> Array:
-	var out := []
-	for s in order:
-		var b = blocks[s]
-		var ov := []
-		for k in 256:
-			if b.hm[k] != b.hm_gen[k]: ov.append([k, int(b.hm[k])])
-		out.append({"kind": b.kind, "seed": b.seed, "slot": [s.x, s.y], "shift": b.shift, "vykopy": ov, "prameny76": b.prameny76})
-	return out
+	return P78.save(blocks, order)
 
 func load_blocks(data: Array) -> Dictionary:
 	T.reset()
-	var blocks := {}
-	for e in data:
-		var b := Block.new(); b.kind = e.kind; b.seed = int(e.seed); b.slot = Vector2i(int(e.slot[0]), int(e.slot[1])); b.shift = int(e.shift)
-		BlockGen.build(b, [null, null, null, null]); T.commit(b)
-		for o in e.vykopy:
-			var k: int = o[0]; var nh: int = o[1]
-			for z in range(nh, b.hm[k]): b.geo[k * 64 + z] = 0; b.cells[k * 64 + z] = 0
-			b.hm[k] = nh
-		b.prameny76 = e.prameny76
-		blocks[b.slot] = b
-	return blocks
+	return P78.load_into(data, Block, BlockGen, T)
 
 func part_a() -> Dictionary:
 	T.reset()

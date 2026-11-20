@@ -1,0 +1,92 @@
+{
+  "bloky": [
+    [
+      0,
+      0
+    ],
+    [
+      0,
+      1
+    ],
+    [
+      1,
+      0
+    ],
+    [
+      1,
+      1
+    ]
+  ],
+  "vypnuto": {
+    "blok": [
+      0,
+      0
+    ],
+    "obvod_x0": {
+      "h": 0,
+      "h0": 40,
+      "posledni": "vykopáno čedič (lz 0)",
+      "sloupec": [
+        0,
+        11
+      ],
+      "vykopano_bunek": 40
+    },
+    "sachta_stred": {
+      "h": 0,
+      "h0": 39,
+      "posledni": "vykopáno čedič (lz 0)",
+      "sloupec": [
+        8,
+        11
+      ],
+      "vykopano_bunek": 39
+    },
+    "vnitrni_sev_x15": {
+      "h": 0,
+      "h0": 40,
+      "posledni": "vykopáno čedič (lz 0)",
+      "sloupec": [
+        15,
+        11
+      ],
+      "vykopano_bunek": 40
+    }
+  },
+  "zapnuto": {
+    "blok": [
+      0,
+      0
+    ],
+    "obvod_x0": {
+      "h": 40,
+      "h0": 40,
+      "posledni": "okraj ostrova: nelze",
+      "sloupec": [
+        0,
+        3
+      ],
+      "vykopano_bunek": 0
+    },
+    "sachta_stred": {
+      "h": 1,
+      "h0": 41,
+      "posledni": "dno ostrova: nelze",
+      "sloupec": [
+        8,
+        3
+      ],
+      "vykopano_bunek": 40
+    },
+    "vnitrni_sev_x15": {
+      "h": 1,
+      "h0": 40,
+      "posledni": "dno ostrova: nelze",
+      "sloupec": [
+        15,
+        3
+      ],
+      "vykopano_bunek": 39
+    }
+  }
+}

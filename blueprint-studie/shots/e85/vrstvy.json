@@ -1,0 +1,29 @@
+{
+  "vrstvy": {
+    "bunky_jinak_025": 3614,
+    "bunky_jinak_05": 425,
+    "sev_hranic_jinak": 0,
+    "vypnuto": {
+      "bez_bunky_025": 14078,
+      "bez_bunky_05": 18400,
+      "min_viditelna_m": 0.00000152833012911913,
+      "otisk_geo": "d3ff4d43528ea357",
+      "sloupcu": 4096,
+      "tenkych_def": 17426,
+      "tenkych_viditelnych": 17229,
+      "vrstev_sloupec_prumer": 17.202392578125,
+      "vrstev_ve_sloupci": 70461
+    },
+    "zapnuto": {
+      "bez_bunky_025": 1701,
+      "bez_bunky_05": 4330,
+      "min_viditelna_m": 0.0000206310607815396,
+      "otisk_geo": "92d7d87bc44b3d4d",
+      "sloupcu": 4096,
+      "tenkych_def": 0,
+      "tenkych_viditelnych": 775,
+      "vrstev_sloupec_prumer": 13.402099609375,
+      "vrstev_ve_sloupci": 54895
+    }
+  }
+}

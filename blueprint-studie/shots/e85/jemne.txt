@@ -1,0 +1,7 @@
+Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+
+jemné (0, 0): z funkcí 442 ms, zjemnění 6.0 ms; jiné 7911 (6.04 %), bez minerálů a dutin 7717, pevné/vzduch 256; nedotčený: geo 0, hm 0, překryv 0
+jemné (1, 0): z funkcí 586 ms, zjemnění 8.1 ms; jiné 15125 (11.54 %), bez minerálů a dutin 14781, pevné/vzduch 1467; nedotčený: geo 0, hm 0, překryv 0
+jemné (0, 1): z funkcí 784 ms, zjemnění 7.3 ms; jiné 10032 (7.65 %), bez minerálů a dutin 9696, pevné/vzduch 688; nedotčený: geo 0, hm 0, překryv 0
+jemné (1, 1): z funkcí 474 ms, zjemnění 7.3 ms; jiné 7824 (5.97 %), bez minerálů a dutin 7614, pevné/vzduch 187; nedotčený: geo 0, hm 0, překryv 0
+jedna operace 0,25 m: buněk 0,5 m jinak 0, překryv 1

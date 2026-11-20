@@ -1,0 +1,356 @@
+{
+  "poradi": {
+    "ruzne_AB": {
+      "material_C": 4,
+      "operace_provedena": [
+        [
+          0,
+          true
+        ],
+        [
+          2,
+          true
+        ]
+      ],
+      "otisk": "81afcc8163c321c0",
+      "polozek": 2,
+      "puvodni": "9738601ffcf2f68b",
+      "puvodni_C": 4
+    },
+    "ruzne_BA": {
+      "material_C": 4,
+      "operace_provedena": [
+        [
+          2,
+          true
+        ],
+        [
+          0,
+          true
+        ]
+      ],
+      "otisk": "81afcc8163c321c0",
+      "polozek": 2,
+      "puvodni": "9738601ffcf2f68b",
+      "puvodni_C": 4
+    },
+    "vykopat_vratit_puvodni": {
+      "material_C": 4,
+      "operace_provedena": [
+        [
+          0,
+          true
+        ],
+        [
+          4,
+          true
+        ]
+      ],
+      "otisk": "9738601ffcf2f68b",
+      "polozek": 0,
+      "puvodni": "9738601ffcf2f68b",
+      "puvodni_C": 4
+    },
+    "vykopat_zasypat": {
+      "material_C": 2,
+      "operace_provedena": [
+        [
+          0,
+          true
+        ],
+        [
+          2,
+          true
+        ]
+      ],
+      "otisk": "baa91d749d392e05",
+      "polozek": 1,
+      "puvodni": "9738601ffcf2f68b",
+      "puvodni_C": 4
+    },
+    "zasypat_vykopat": {
+      "material_C": 0,
+      "operace_provedena": [
+        [
+          2,
+          false
+        ],
+        [
+          0,
+          true
+        ]
+      ],
+      "otisk": "83bc87cd4d063bc9",
+      "polozek": 1,
+      "puvodni": "9738601ffcf2f68b",
+      "puvodni_C": 4
+    }
+  },
+  "pravidla": "buňka 0,25 m, překryv = konečný stav, položka = definice se maže, poslední operace na buňce vyhrává, buňka 0,5 m plná dokud zbývá 1 z 8",
+  "scenare": [
+    {
+      "bunky_shoda": true,
+      "definice_tam_a_zpet_ok": true,
+      "jen_definice_ms": 1030.969,
+      "lokalne_vs_plne_neshod": {
+        "eff": 153,
+        "fill": 0,
+        "to": 1
+      },
+      "nacteni_bloky_ms": 1144.789,
+      "nacteni_voda_ms": 1692.868,
+      "op_ms": 9.93,
+      "otisk_nacteno": "2ac857ac2aab4f1f",
+      "otisk_nacteno_05": "7cc45613ae122aed",
+      "otisk_puvodni": "9738601ffcf2f68b",
+      "otisk_zive": "2ac857ac2aab4f1f",
+      "otisk_zive_05": "7cc45613ae122aed",
+      "scenar": "tunel",
+      "velikost": {
+        "a_def": 124,
+        "a_raw": 4421,
+        "b_def": 451,
+        "b_raw": 1300,
+        "kodovani_zpet_ok": true,
+        "polozek": 2175,
+        "wvb1_025_def": 13552,
+        "wvb1_025_raw": 524288,
+        "wvb1_05_def": 7186,
+        "wvb1_05_raw": 65536
+      },
+      "voda_nacteno": "cbe01a6bc9e2034e",
+      "voda_plne_ms": 1661.533,
+      "voda_puvodni": "d7aedf3a6d9d10e8",
+      "voda_shoda_lokalne": false,
+      "voda_shoda_plne": true,
+      "voda_zive_lokalne": "1c2292db8ec1a7da",
+      "voda_zive_plne": "cbe01a6bc9e2034e",
+      "zaznam_json_B": 636,
+      "zive": {
+        "ms": 3507.406,
+        "sloupcu": 8
+      },
+      "zmen_op": 2185
+    },
+    {
+      "bunky_shoda": true,
+      "definice_tam_a_zpet_ok": true,
+      "jen_definice_ms": 1007.06,
+      "lokalne_vs_plne_neshod": {
+        "eff": 0,
+        "fill": 0,
+        "to": 0
+      },
+      "nacteni_bloky_ms": 1186.802,
+      "nacteni_voda_ms": 2164.571,
+      "op_ms": 15.249,
+      "otisk_nacteno": "27a8d578d9221353",
+      "otisk_nacteno_05": "21dec2584cd1afd6",
+      "otisk_puvodni": "9738601ffcf2f68b",
+      "otisk_zive": "27a8d578d9221353",
+      "otisk_zive_05": "21dec2584cd1afd6",
+      "scenar": "dlouhy",
+      "velikost": {
+        "a_def": 244,
+        "a_raw": 18831,
+        "b_def": 1865,
+        "b_raw": 5920,
+        "kodovani_zpet_ok": true,
+        "polozek": 9288,
+        "wvb1_025_def": 13609,
+        "wvb1_025_raw": 524288,
+        "wvb1_05_def": 7223,
+        "wvb1_05_raw": 65536
+      },
+      "voda_nacteno": "d7aedf3a6d9d10e8",
+      "voda_plne_ms": 2281.441,
+      "voda_puvodni": "d7aedf3a6d9d10e8",
+      "voda_shoda_lokalne": true,
+      "voda_shoda_plne": true,
+      "voda_zive_lokalne": "d7aedf3a6d9d10e8",
+      "voda_zive_plne": "d7aedf3a6d9d10e8",
+      "zaznam_json_B": 813,
+      "zive": {
+        "ms": 156.406,
+        "sloupcu": 0
+      },
+      "zmen_op": 9288
+    },
+    {
+      "bunky_shoda": true,
+      "definice_tam_a_zpet_ok": true,
+      "jen_definice_ms": 1010.627,
+      "lokalne_vs_plne_neshod": {
+        "eff": 0,
+        "fill": 0,
+        "to": 0
+      },
+      "nacteni_bloky_ms": 1081.584,
+      "nacteni_voda_ms": 2150.838,
+      "op_ms": 0.055,
+      "otisk_nacteno": "3799c66d9d4a57d7",
+      "otisk_nacteno_05": "8683dc690c32eef7",
+      "otisk_puvodni": "9738601ffcf2f68b",
+      "otisk_zive": "3799c66d9d4a57d7",
+      "otisk_zive_05": "8683dc690c32eef7",
+      "scenar": "n1",
+      "velikost": {
+        "a_def": 40,
+        "a_raw": 8,
+        "b_def": 13,
+        "b_raw": 5,
+        "kodovani_zpet_ok": true,
+        "polozek": 1,
+        "wvb1_025_def": 13401,
+        "wvb1_025_raw": 524288,
+        "wvb1_05_def": 7107,
+        "wvb1_05_raw": 65536
+      },
+      "voda_nacteno": "d7aedf3a6d9d10e8",
+      "voda_plne_ms": 2096.87,
+      "voda_puvodni": "d7aedf3a6d9d10e8",
+      "voda_shoda_lokalne": true,
+      "voda_shoda_plne": true,
+      "voda_zive_lokalne": "d7aedf3a6d9d10e8",
+      "voda_zive_plne": "d7aedf3a6d9d10e8",
+      "zaznam_json_B": 489,
+      "zive": {
+        "ms": 38.532,
+        "sloupcu": 0
+      },
+      "zmen_op": 1
+    },
+    {
+      "bunky_shoda": true,
+      "definice_tam_a_zpet_ok": true,
+      "jen_definice_ms": 1030.506,
+      "lokalne_vs_plne_neshod": {
+        "eff": 0,
+        "fill": 0,
+        "to": 0
+      },
+      "nacteni_bloky_ms": 1138.241,
+      "nacteni_voda_ms": 1933.505,
+      "op_ms": 0.064,
+      "otisk_nacteno": "1138e934da5f8ad8",
+      "otisk_nacteno_05": "8683dc690c32eef7",
+      "otisk_puvodni": "9738601ffcf2f68b",
+      "otisk_zive": "1138e934da5f8ad8",
+      "otisk_zive_05": "8683dc690c32eef7",
+      "scenar": "n10",
+      "velikost": {
+        "a_def": 70,
+        "a_raw": 40,
+        "b_def": 82,
+        "b_raw": 50,
+        "kodovani_zpet_ok": true,
+        "polozek": 10,
+        "wvb1_025_def": 13455,
+        "wvb1_025_raw": 524288,
+        "wvb1_05_def": 7107,
+        "wvb1_05_raw": 65536
+      },
+      "voda_nacteno": "d7aedf3a6d9d10e8",
+      "voda_plne_ms": 2061.322,
+      "voda_puvodni": "d7aedf3a6d9d10e8",
+      "voda_shoda_lokalne": true,
+      "voda_shoda_plne": true,
+      "voda_zive_lokalne": "d7aedf3a6d9d10e8",
+      "voda_zive_plne": "d7aedf3a6d9d10e8",
+      "zaznam_json_B": 525,
+      "zive": {
+        "ms": 149.368,
+        "sloupcu": 0
+      },
+      "zmen_op": 10
+    },
+    {
+      "bunky_shoda": true,
+      "definice_tam_a_zpet_ok": true,
+      "jen_definice_ms": 946.638,
+      "lokalne_vs_plne_neshod": {
+        "eff": 0,
+        "fill": 0,
+        "to": 0
+      },
+      "nacteni_bloky_ms": 1113.527,
+      "nacteni_voda_ms": 1919.107,
+      "op_ms": 0.248,
+      "otisk_nacteno": "beae8ecf7e6faf55",
+      "otisk_nacteno_05": "8683dc690c32eef7",
+      "otisk_puvodni": "9738601ffcf2f68b",
+      "otisk_zive": "beae8ecf7e6faf55",
+      "otisk_zive_05": "8683dc690c32eef7",
+      "scenar": "n100",
+      "velikost": {
+        "a_def": 255,
+        "a_raw": 304,
+        "b_def": 481,
+        "b_raw": 500,
+        "kodovani_zpet_ok": true,
+        "polozek": 100,
+        "wvb1_025_def": 13935,
+        "wvb1_025_raw": 524288,
+        "wvb1_05_def": 7107,
+        "wvb1_05_raw": 65536
+      },
+      "voda_nacteno": "d7aedf3a6d9d10e8",
+      "voda_plne_ms": 1947.648,
+      "voda_puvodni": "d7aedf3a6d9d10e8",
+      "voda_shoda_lokalne": true,
+      "voda_shoda_plne": true,
+      "voda_zive_lokalne": "d7aedf3a6d9d10e8",
+      "voda_zive_plne": "d7aedf3a6d9d10e8",
+      "zaznam_json_B": 817,
+      "zive": {
+        "ms": 146.253,
+        "sloupcu": 0
+      },
+      "zmen_op": 100
+    },
+    {
+      "bunky_shoda": true,
+      "definice_tam_a_zpet_ok": true,
+      "jen_definice_ms": 950.931,
+      "lokalne_vs_plne_neshod": {
+        "eff": 0,
+        "fill": 0,
+        "to": 0
+      },
+      "nacteni_bloky_ms": 1164.552,
+      "nacteni_voda_ms": 1987.155,
+      "op_ms": 1.995,
+      "otisk_nacteno": "5eaa13c25dd250f0",
+      "otisk_nacteno_05": "8683dc690c32eef7",
+      "otisk_puvodni": "9738601ffcf2f68b",
+      "otisk_zive": "5eaa13c25dd250f0",
+      "otisk_zive_05": "8683dc690c32eef7",
+      "scenar": "n1000",
+      "velikost": {
+        "a_def": 1792,
+        "a_raw": 2779,
+        "b_def": 3341,
+        "b_raw": 4980,
+        "kodovani_zpet_ok": true,
+        "polozek": 1000,
+        "wvb1_025_def": 17432,
+        "wvb1_025_raw": 524288,
+        "wvb1_05_def": 7107,
+        "wvb1_05_raw": 65536
+      },
+      "voda_nacteno": "d7aedf3a6d9d10e8",
+      "voda_plne_ms": 1935.448,
+      "voda_puvodni": "d7aedf3a6d9d10e8",
+      "voda_shoda_lokalne": true,
+      "voda_shoda_plne": true,
+      "voda_zive_lokalne": "d7aedf3a6d9d10e8",
+      "voda_zive_plne": "d7aedf3a6d9d10e8",
+      "zaznam_json_B": 2869,
+      "zive": {
+        "ms": 139.427,
+        "sloupcu": 0
+      },
+      "zmen_op": 1000
+    }
+  ]
+}

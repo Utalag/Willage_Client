@@ -408,7 +408,8 @@ static func fill_events(st: Dictionary, comp: PackedInt32Array, lo: float, hi: f
 ## obsazeným pramenem nebo okrajem; jinak je těleso plné (uzavřené → tůně přetečou po povrchu). Přirozené výtoky z 1)
 ## zůstanou vykreslené (vyver74, q 0) a obsadí se jako v E74. Vrací [výsledek (kopie), klíč, [[sloupec, z]]].
 static func solve74(st: Dictionary, vs: PackedInt32Array, q: float, excl0: Dictionary) -> Array:
-	var sk := "s%s|%.9f|%d" % [str(vs), q, excl0.hash()]
+	var e00 := excl0.keys(); e00.sort()
+	var sk := "s%s|%s|%s" % [str(vs), PackedFloat64Array([q]).to_byte_array().hex_encode(), str(e00)]   # E83: přesný klíč (bity q, seřazené buňky), ne "%.9f" + 32bitový hash()
 	if not st.ug_cache.has(sk): st.ug_cache[sk] = _ugi(st).solve(st.ug, vs, q, excl0)
 	var r: Dictionary = st.ug_cache[sk]
 	if not (bool(st.L.get("v74", false)) and bool(st.L.get("h74", false))) or r.closed or float(r.out_q) <= 0.0: return [r.duplicate(), sk, []]

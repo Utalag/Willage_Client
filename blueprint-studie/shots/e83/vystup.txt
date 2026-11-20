@@ -1,0 +1,16 @@
+Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+
+běh START_vychozi: 2× v procesu stejné true, {"cells":"06eeb79af3a761f7","geo":"d3ff4d43528ea357","hm":"f2159c9887f0fcf9","nacteno":"2ac857ac2aab4f1f","prekryv":"2ac857ac2aab4f1f","prekryv_05":"7cc45613ae122aed","voda":"d7aedf3a6d9d10e8","voda_lokalne":"1c2292db8ec1a7da","voda_nacteno":"4a9d582e36651155","voda_plne":"4a9d582e36651155","zaznam":"1bb83b1035ffd8a5"}
+běh START_p76_p79: 2× v procesu stejné true, {"cells":"06eeb79af3a761f7","geo":"d3ff4d43528ea357","hm":"f2159c9887f0fcf9","nacteno":"2ac857ac2aab4f1f","prekryv":"2ac857ac2aab4f1f","prekryv_05":"7cc45613ae122aed","voda":"d7aedf3a6d9d10e8","voda_lokalne":"cbe01a6bc9e2034e","voda_nacteno":"cbe01a6bc9e2034e","voda_plne":"cbe01a6bc9e2034e","zaznam":"c2b04db52b8afcd5"}
+běh jine_vychozi: 2× v procesu stejné true, {"cells":"6636b3c7922a0b12","geo":"0284d4bb16f40e83","hm":"af57cdf0592bd5e9","nacteno":"378bf3690e62a0ec","prekryv":"378bf3690e62a0ec","prekryv_05":"538778f30445e9ab","voda":"10ba26125d15c826","voda_lokalne":"a6c4d3dc9e1a0d43","voda_nacteno":"fc33fcf162305913","voda_plne":"fc33fcf162305913","zaznam":"bac0b75f9ccc5ebe"}
+běh jine_p76_p79: 2× v procesu stejné true, {"cells":"6636b3c7922a0b12","geo":"0284d4bb16f40e83","hm":"af57cdf0592bd5e9","nacteno":"378bf3690e62a0ec","prekryv":"378bf3690e62a0ec","prekryv_05":"538778f30445e9ab","voda":"10ba26125d15c826","voda_lokalne":"6074dd4e044e77f4","voda_nacteno":"6074dd4e044e77f4","voda_plne":"6074dd4e044e77f4","zaznam":"ad27e5fd1442b036"}
+překryv (p79 false): různé buňky {"A":{"prekryv":"c77e74f0a41e0d23","uspesnych":400,"voda_lokalne":"bd0e9d5fb82c4dd4","voda_plne":"26673ee53ba170ca"},"B":{"prekryv":"c77e74f0a41e0d23","uspesnych":400,"voda_lokalne":"9bb90fabe55e7f13","voda_plne":"26673ee53ba170ca"}}, stejná buňka {"kopat_zasypat":{"bunka":2,"prekryv":"9738601ffcf2f68b"},"zasypat_kopat":{"bunka":0,"prekryv":"6678892a26fab299"}}
+překryv (p79 true): různé buňky {"A":{"prekryv":"c77e74f0a41e0d23","uspesnych":400,"voda_lokalne":"6ed8ebfcbbb56b82","voda_plne":"6ed8ebfcbbb56b82"},"B":{"prekryv":"c77e74f0a41e0d23","uspesnych":400,"voda_lokalne":"6ed8ebfcbbb56b82","voda_plne":"6ed8ebfcbbb56b82"}}, stejná buňka {"kopat_zasypat":{"bunka":2,"prekryv":"9738601ffcf2f68b"},"zasypat_kopat":{"bunka":0,"prekryv":"6678892a26fab299"}}
+citlivost +1e-12: {"16":{"jinych":2,"z":65536},"32":{"jinych":74,"z":524288}}
+citlivost -1e-12: {"16":{"jinych":5,"z":65536},"32":{"jinych":146,"z":524288}}
+citlivost +1e-09: {"16":{"jinych":2,"z":65536},"32":{"jinych":74,"z":524288}}
+citlivost -1e-09: {"16":{"jinych":5,"z":65536},"32":{"jinych":146,"z":524288}}
+citlivost +1e-06: {"16":{"jinych":3,"z":65536},"32":{"jinych":74,"z":524288}}
+citlivost -1e-06: {"16":{"jinych":5,"z":65536},"32":{"jinych":147,"z":524288}}
+citlivost +0.001: {"16":{"jinych":35,"z":65536},"32":{"jinych":365,"z":524288}}
+citlivost -0.001: {"16":{"jinych":27,"z":65536},"32":{"jinych":456,"z":524288}}

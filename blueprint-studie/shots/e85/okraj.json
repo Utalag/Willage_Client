@@ -1,0 +1,60 @@
+{
+  "okraj": {
+    "vypnuto": {
+      "bok": {
+        "sever": [
+          84,
+          0
+        ],
+        "zapad": [
+          84,
+          0
+        ]
+      },
+      "dno_der": 703,
+      "nahodne": {
+        "odmitnuto": 269,
+        "vykopano": 2731
+      },
+      "obvod_vykopano": 190,
+      "polozit_dno_sachty": true,
+      "sachta": {
+        "odmitnuto": 0,
+        "odmitnuto_dno": 0,
+        "vykopano": 1280
+      },
+      "vnitrni_sev": {
+        "odmitnuto": 4,
+        "vykopano": 44
+      }
+    },
+    "zapnuto": {
+      "bok": {
+        "sever": [
+          80,
+          4
+        ],
+        "zapad": [
+          80,
+          4
+        ]
+      },
+      "dno_der": 0,
+      "nahodne": {
+        "odmitnuto": 1088,
+        "vykopano": 1912
+      },
+      "obvod_vykopano": 0,
+      "polozit_dno_sachty": false,
+      "sachta": {
+        "odmitnuto": 16,
+        "odmitnuto_dno": 16,
+        "vykopano": 1264
+      },
+      "vnitrni_sev": {
+        "odmitnuto": 4,
+        "vykopano": 44
+      }
+    }
+  }
+}

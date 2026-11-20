@@ -56,6 +56,17 @@ Funkce `bs[k](x, y)` dává pro každé místo jednu výšku. Sama proto neumí 
 
 **Hypotéza:** tam, kde změna přestane jít popsat funkcemi a pásmy, vznikne lokální oblast s plnými buňkami, a jen tam. Celý ostrov kvůli jedné jeskyni do voxelů převádět nechceme.
 
+Pokus E80 (2026-11-20 01:39, větev `e80-hranice-funkci`): funkce jsou zdrojem pravdy jen do buňky 0,5 m. Tam jsou buňky přesné vzorky funkcí, přes švy bez skoku a nezávislé na pořadí vložení. Minerály a dutiny z generátoru už jsou výběr buněk. Mřížka 0,25 m pro kopání je zjemnění buněk 0,5 m; vzorek funkcí při 0,25 m se od ní liší v 7,8 % buněk. Plné buňky tvoří překryv hráče, a ten stačí uložit jako seřazené klíče s kompresí. Octree pomůže jen u velkých souvislých výkopů. Pásma přestanou stačit jen vodě: když má sloupec 0,5 m víc dutin pod sebou nebo změnu jemnější než 0,5 m (nepravidelná jeskyně 109 sloupců, dvě chodby nad sebou 32).
+
+Pokus E81 (2026-11-20 01:48, větev `e81-tenke-vrstvy`): vrstva se do buňky dostane, jen když na ni padne střed buňky. Tenké vrstvy (7 z 20 mají v průměru pod 0,8 m) proto v buňkách chybějí v polovině sloupců, kde jsou tenčí než buňka, a rozpadají se na kusy jinak při 0,5 a 0,25 m. Voda to v hře necítí, protože bere pásma přímo z funkcí. Oprava za příznakem `p81_tenke` dává vrstvě nad 0,05 m aspoň jednu buňku a vrstvu pod prahem vynechá. Chybění klesne na 2–8 %, kusy skoro na počet z funkce. Za to je tenká vrstva nafouklá na celou buňku a tři tenké vrstvy nad sebou se do 0,5 m nevejdou.
+
+Pokus E82 (2026-11-20 02:27, větev `e82-vapenec-hladina`): podle Janova rozhodnutí hází generátor u každého bloku minci ze seedu (495 z 1000 „ano“). V bloku „ano“ sahá jeskynní vápenec až 2 m pod povrch a jíl s jílovcem nad ním se vyklíní, jinak by voda k vápenci nedošla. Sousední blok se napojí stávajícím náběhem 3 m, funkce zůstanou spojité a bloky „ne“ se nezmění. Kras se ale ve výchozím podzemí E58 skoro nespustí, protože voda teče krytem nad vápencem. V podzemí E67 vznikne na 19 z 30 ostrovů (bez mince na 7).
+
+Pokus E83 (2026-11-20 03:34, větev `e83-determinismus`): stejná definice, seed a překryv dávají stejné buňky, překryv i otisky ve dvou bězích i ve dvou procesech. Blok závisí jen na sousedech, kteří leželi před ním. Proto pořadí vložení mění asi 2 % buněk, hlavně u švů, a to je záměr. Změny na různých buňkách nezávisí na pořadí, na stejné buňce ano. Jediná skutečná závislost na pořadí je výchozí lokální přepočet vody; s příznaky E76 a E79 zmizí. Mezi platformami půjde držet bitově buňky, ale ne vodu, protože počítá ve float64 s exp a pow.
+
+Pokus E85 (2026-11-20 06:20, větev `e85-blok2-rozhodnuti`): podle Janova rozhodnutí se mřížka 0,25 m umí počítat přímo z funkcí, dno a obvod ostrova se nesmějí prokopat a vrstva tenčí než 25 cm v blueprintu není. Vše je za příznaky a výchozí hra se nemění. Z funkcí se 0,25 m liší od zjemnění v 7,8 % buněk a výpočet je 65–108× pomalejší. Zákaz okraje nechá vnitřní švy volné. Po odstranění tenkých vrstev se změní 0,65 % buněk 0,5 m a švy zůstanou spojité. Aby lokální voda s obsazováním pramenů E74 seděla s plným výpočtem i po načtení, musí se obsazení výtoků uložit s blokem (`p85_voda`).
+
+
 ## Změny od hráče
 
 **Hypotéza:** definice zůstává nedotčená a změny se ukládají zvlášť jako překryv:
@@ -65,6 +76,8 @@ definice → vzorkování buněk → překryv změn → skutečný stav buňky
 ```
 
 U průzkumného světa to znamená generovat deterministicky ze stejných funkcí a ukládat jen změny. U osobního ostrova to navazuje na formát bloku WVB1, který dnes ukládá celé pole bloku. Jak se k sobě oba způsoby mají, je otevřené.
+
+Pokus E78 (2026-11-20 01:08, větev `e78-prekryv`): překryv v buňkách 0,25 m nad blokem z definice. Po načtení (bloky znovu z definice a překryv) sedí otisk buněk i vody s živým stavem. Překryv 1000 náhodných buněk má 1,8 kB, chodba 70 m 244 B. Celé pole 0,25 m ostrova po kompresi má 13–17 kB. Ukládá se konečný stav buňky, takže výsledek závisí na definici a překryvu, ne na historii. Na téže buňce rozhoduje poslední operace. Otevřené zůstává, že lokální přepočet vody nevidí novou chodbu pod povrchem.
 
 ## Dva světy a přenos terénu
 

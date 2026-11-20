@@ -1,0 +1,4 @@
+Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+okraje: meze {"polozit_z=127":true,"x=32":false,"z=-1":false,"z=128":false,"zmenenych_bunek":1}, dno plných sloupců z 256: {"(0, 0)":256,"(0, 1)":256,"(1, 0)":256,"(1, 1)":256}
+okraje voda dira: {"cesta":"dutiny","chyba_bilance":0.000000000000000749400541621981,"do_hloubky_po":0.0,"info":{"hm_2_21":0.0,"hm_2_22":0.0,"hm_3_21":0.0,"hm_3_22":0.0,"sx":4,"sy":42},"okraj_lps_po":9.64358,"okraj_lps_pred":9.64358,"plne":"5b76066f3b6e8adb","shoda":true,"stena_po":0.15318,"voda_po":"5b76066f3b6e8adb","voda_pred":"dc2cd69ff3ab7d02","voda_v_dire_sloupcu":4,"vystupu_okraj":1,"zmen":1344}
+okraje voda bok: zvodnělá vrstva nenalezena

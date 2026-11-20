@@ -1,0 +1,405 @@
+Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+podíl ano: seedy 1–1000 495, náhodné 499; START [["0,0:louka:101", true], ["1,0:hora:202", false], ["0,1:kopec:303", true], ["1,1:louka:404", true]]
+SCRIPT ERROR: Invalid access to property or key 'sopka' on a base object of type 'Dictionary'.
+          at: generate (res://scripts/veg.gd:42)
+          GDScript backtrace (most recent call first):
+              [0] generate (res://scripts/veg.gd:42)
+              [1] build (res://scripts/block_gen.gd:240)
+              [2] gen_blocks (res://tools/prekryv_e78.gd:25)
+              [3] part_bloky (res://tools/vapenec_e82.gd:56)
+              [4] _init (res://tools/vapenec_e82.gd:256)
+SCRIPT ERROR: Invalid access to property or key 'sopka' on a base object of type 'Dictionary'.
+          at: generate (res://scripts/veg.gd:42)
+          GDScript backtrace (most recent call first):
+              [0] generate (res://scripts/veg.gd:42)
+              [1] build (res://scripts/block_gen.gd:240)
+              [2] gen_blocks (res://tools/prekryv_e78.gd:25)
+              [3] part_bloky (res://tools/vapenec_e82.gd:56)
+              [4] _init (res://tools/vapenec_e82.gd:256)
+SCRIPT ERROR: Invalid access to property or key 'sopka' on a base object of type 'Dictionary'.
+          at: generate (res://scripts/veg.gd:42)
+          GDScript backtrace (most recent call first):
+              [0] generate (res://scripts/veg.gd:42)
+              [1] build (res://scripts/block_gen.gd:240)
+              [2] gen_blocks (res://tools/prekryv_e78.gd:25)
+              [3] part_bloky (res://tools/vapenec_e82.gd:56)
+              [4] _init (res://tools/vapenec_e82.gd:256)
+SCRIPT ERROR: Invalid access to property or key 'sopka' on a base object of type 'Dictionary'.
+          at: generate (res://scripts/veg.gd:42)
+          GDScript backtrace (most recent call first):
+              [0] generate (res://scripts/veg.gd:42)
+              [1] build (res://scripts/block_gen.gd:240)
+              [2] gen_blocks (res://tools/prekryv_e78.gd:25)
+              [3] part_bloky (res://tools/vapenec_e82.gd:56)
+              [4] _init (res://tools/vapenec_e82.gd:256)
+SCRIPT ERROR: Invalid access to property or key 'sopka' on a base object of type 'Dictionary'.
+          at: generate (res://scripts/veg.gd:42)
+          GDScript backtrace (most recent call first):
+              [0] generate (res://scripts/veg.gd:42)
+              [1] build (res://scripts/block_gen.gd:240)
+              [2] gen_blocks (res://tools/prekryv_e78.gd:25)
+              [3] part_bloky (res://tools/vapenec_e82.gd:56)
+              [4] _init (res://tools/vapenec_e82.gd:256)
+SCRIPT ERROR: Invalid access to property or key 'sopka' on a base object of type 'Dictionary'.
+          at: generate (res://scripts/veg.gd:42)
+          GDScript backtrace (most recent call first):
+              [0] generate (res://scripts/veg.gd:42)
+              [1] build (res://scripts/block_gen.gd:240)
+              [2] gen_blocks (res://tools/prekryv_e78.gd:25)
+              [3] part_bloky (res://tools/vapenec_e82.gd:56)
+              [4] _init (res://tools/vapenec_e82.gd:256)
+SCRIPT ERROR: Invalid access to property or key 'sopka' on a base object of type 'Dictionary'.
+          at: generate (res://scripts/veg.gd:42)
+          GDScript backtrace (most recent call first):
+              [0] generate (res://scripts/veg.gd:42)
+              [1] build (res://scripts/block_gen.gd:240)
+              [2] gen_blocks (res://tools/prekryv_e78.gd:25)
+              [3] part_bloky (res://tools/vapenec_e82.gd:56)
+              [4] _init (res://tools/vapenec_e82.gd:256)
+SCRIPT ERROR: Invalid access to property or key 'sopka' on a base object of type 'Dictionary'.
+          at: generate (res://scripts/veg.gd:42)
+          GDScript backtrace (most recent call first):
+              [0] generate (res://scripts/veg.gd:42)
+              [1] build (res://scripts/block_gen.gd:240)
+              [2] gen_blocks (res://tools/prekryv_e78.gd:25)
+              [3] part_bloky (res://tools/vapenec_e82.gd:56)
+              [4] _init (res://tools/vapenec_e82.gd:256)
+SCRIPT ERROR: Invalid access to property or key 'sopka' on a base object of type 'Dictionary'.
+          at: generate (res://scripts/veg.gd:42)
+          GDScript backtrace (most recent call first):
+              [0] generate (res://scripts/veg.gd:42)
+              [1] build (res://scripts/block_gen.gd:240)
+              [2] gen_blocks (res://tools/prekryv_e78.gd:25)
+              [3] part_bloky (res://tools/vapenec_e82.gd:56)
+              [4] _init (res://tools/vapenec_e82.gd:256)
+SCRIPT ERROR: Invalid access to property or key 'sopka' on a base object of type 'Dictionary'.
+          at: generate (res://scripts/veg.gd:42)
+          GDScript backtrace (most recent call first):
+              [0] generate (res://scripts/veg.gd:42)
+              [1] build (res://scripts/block_gen.gd:240)
+              [2] gen_blocks (res://tools/prekryv_e78.gd:25)
+              [3] part_bloky (res://tools/vapenec_e82.gd:56)
+              [4] _init (res://tools/vapenec_e82.gd:256)
+SCRIPT ERROR: Invalid access to property or key 'sopka' on a base object of type 'Dictionary'.
+          at: generate (res://scripts/veg.gd:42)
+          GDScript backtrace (most recent call first):
+              [0] generate (res://scripts/veg.gd:42)
+              [1] build (res://scripts/block_gen.gd:240)
+              [2] gen_blocks (res://tools/prekryv_e78.gd:25)
+              [3] part_bloky (res://tools/vapenec_e82.gd:56)
+              [4] _init (res://tools/vapenec_e82.gd:256)
+SCRIPT ERROR: Invalid access to property or key 'sopka' on a base object of type 'Dictionary'.
+          at: generate (res://scripts/veg.gd:42)
+          GDScript backtrace (most recent call first):
+              [0] generate (res://scripts/veg.gd:42)
+              [1] build (res://scripts/block_gen.gd:240)
+              [2] gen_blocks (res://tools/prekryv_e78.gd:25)
+              [3] part_bloky (res://tools/vapenec_e82.gd:56)
+              [4] _init (res://tools/vapenec_e82.gd:256)
+SCRIPT ERROR: Invalid access to property or key 'sopka' on a base object of type 'Dictionary'.
+          at: generate (res://scripts/veg.gd:42)
+          GDScript backtrace (most recent call first):
+              [0] generate (res://scripts/veg.gd:42)
+              [1] build (res://scripts/block_gen.gd:240)
+              [2] gen_blocks (res://tools/prekryv_e78.gd:25)
+              [3] part_bloky (res://tools/vapenec_e82.gd:56)
+              [4] _init (res://tools/vapenec_e82.gd:256)
+SCRIPT ERROR: Invalid access to property or key 'sopka' on a base object of type 'Dictionary'.
+          at: generate (res://scripts/veg.gd:42)
+          GDScript backtrace (most recent call first):
+              [0] generate (res://scripts/veg.gd:42)
+              [1] build (res://scripts/block_gen.gd:240)
+              [2] gen_blocks (res://tools/prekryv_e78.gd:25)
+              [3] part_bloky (res://tools/vapenec_e82.gd:56)
+              [4] _init (res://tools/vapenec_e82.gd:256)
+SCRIPT ERROR: Invalid access to property or key 'sopka' on a base object of type 'Dictionary'.
+          at: generate (res://scripts/veg.gd:42)
+          GDScript backtrace (most recent call first):
+              [0] generate (res://scripts/veg.gd:42)
+              [1] build (res://scripts/block_gen.gd:240)
+              [2] gen_blocks (res://tools/prekryv_e78.gd:25)
+              [3] part_bloky (res://tools/vapenec_e82.gd:56)
+              [4] _init (res://tools/vapenec_e82.gd:256)
+SCRIPT ERROR: Invalid access to property or key 'sopka' on a base object of type 'Dictionary'.
+          at: generate (res://scripts/veg.gd:42)
+          GDScript backtrace (most recent call first):
+              [0] generate (res://scripts/veg.gd:42)
+              [1] build (res://scripts/block_gen.gd:240)
+              [2] gen_blocks (res://tools/prekryv_e78.gd:25)
+              [3] part_bloky (res://tools/vapenec_e82.gd:56)
+              [4] _init (res://tools/vapenec_e82.gd:256)
+SCRIPT ERROR: Invalid access to property or key 'sopka' on a base object of type 'Dictionary'.
+          at: generate (res://scripts/veg.gd:42)
+          GDScript backtrace (most recent call first):
+              [0] generate (res://scripts/veg.gd:42)
+              [1] build (res://scripts/block_gen.gd:240)
+              [2] gen_blocks (res://tools/prekryv_e78.gd:25)
+              [3] part_bloky (res://tools/vapenec_e82.gd:56)
+              [4] _init (res://tools/vapenec_e82.gd:256)
+SCRIPT ERROR: Invalid access to property or key 'sopka' on a base object of type 'Dictionary'.
+          at: generate (res://scripts/veg.gd:42)
+          GDScript backtrace (most recent call first):
+              [0] generate (res://scripts/veg.gd:42)
+              [1] build (res://scripts/block_gen.gd:240)
+              [2] gen_blocks (res://tools/prekryv_e78.gd:25)
+              [3] part_bloky (res://tools/vapenec_e82.gd:56)
+              [4] _init (res://tools/vapenec_e82.gd:256)
+SCRIPT ERROR: Invalid access to property or key 'sopka' on a base object of type 'Dictionary'.
+          at: generate (res://scripts/veg.gd:42)
+          GDScript backtrace (most recent call first):
+              [0] generate (res://scripts/veg.gd:42)
+              [1] build (res://scripts/block_gen.gd:240)
+              [2] gen_blocks (res://tools/prekryv_e78.gd:25)
+              [3] part_bloky (res://tools/vapenec_e82.gd:56)
+              [4] _init (res://tools/vapenec_e82.gd:256)
+SCRIPT ERROR: Invalid access to property or key 'sopka' on a base object of type 'Dictionary'.
+          at: generate (res://scripts/veg.gd:42)
+          GDScript backtrace (most recent call first):
+              [0] generate (res://scripts/veg.gd:42)
+              [1] build (res://scripts/block_gen.gd:240)
+              [2] gen_blocks (res://tools/prekryv_e78.gd:25)
+              [3] part_bloky (res://tools/vapenec_e82.gd:56)
+              [4] _init (res://tools/vapenec_e82.gd:256)
+SCRIPT ERROR: Invalid access to property or key 'sopka' on a base object of type 'Dictionary'.
+          at: generate (res://scripts/veg.gd:42)
+          GDScript backtrace (most recent call first):
+              [0] generate (res://scripts/veg.gd:42)
+              [1] build (res://scripts/block_gen.gd:240)
+              [2] gen_blocks (res://tools/prekryv_e78.gd:25)
+              [3] part_bloky (res://tools/vapenec_e82.gd:56)
+              [4] _init (res://tools/vapenec_e82.gd:256)
+SCRIPT ERROR: Invalid access to property or key 'sopka' on a base object of type 'Dictionary'.
+          at: generate (res://scripts/veg.gd:42)
+          GDScript backtrace (most recent call first):
+              [0] generate (res://scripts/veg.gd:42)
+              [1] build (res://scripts/block_gen.gd:240)
+              [2] gen_blocks (res://tools/prekryv_e78.gd:25)
+              [3] part_bloky (res://tools/vapenec_e82.gd:56)
+              [4] _init (res://tools/vapenec_e82.gd:256)
+SCRIPT ERROR: Invalid access to property or key 'sopka' on a base object of type 'Dictionary'.
+          at: generate (res://scripts/veg.gd:42)
+          GDScript backtrace (most recent call first):
+              [0] generate (res://scripts/veg.gd:42)
+              [1] build (res://scripts/block_gen.gd:240)
+              [2] gen_blocks (res://tools/prekryv_e78.gd:25)
+              [3] part_bloky (res://tools/vapenec_e82.gd:56)
+              [4] _init (res://tools/vapenec_e82.gd:256)
+SCRIPT ERROR: Invalid access to property or key 'sopka' on a base object of type 'Dictionary'.
+          at: generate (res://scripts/veg.gd:42)
+          GDScript backtrace (most recent call first):
+              [0] generate (res://scripts/veg.gd:42)
+              [1] build (res://scripts/block_gen.gd:240)
+              [2] gen_blocks (res://tools/prekryv_e78.gd:25)
+              [3] part_bloky (res://tools/vapenec_e82.gd:56)
+              [4] _init (res://tools/vapenec_e82.gd:256)
+SCRIPT ERROR: Invalid access to property or key 'sopka' on a base object of type 'Dictionary'.
+          at: generate (res://scripts/veg.gd:42)
+          GDScript backtrace (most recent call first):
+              [0] generate (res://scripts/veg.gd:42)
+              [1] build (res://scripts/block_gen.gd:240)
+              [2] gen_blocks (res://tools/prekryv_e78.gd:25)
+              [3] part_bloky (res://tools/vapenec_e82.gd:56)
+              [4] _init (res://tools/vapenec_e82.gd:256)
+SCRIPT ERROR: Invalid access to property or key 'sopka' on a base object of type 'Dictionary'.
+          at: generate (res://scripts/veg.gd:42)
+          GDScript backtrace (most recent call first):
+              [0] generate (res://scripts/veg.gd:42)
+              [1] build (res://scripts/block_gen.gd:240)
+              [2] gen_blocks (res://tools/prekryv_e78.gd:25)
+              [3] part_bloky (res://tools/vapenec_e82.gd:56)
+              [4] _init (res://tools/vapenec_e82.gd:256)
+SCRIPT ERROR: Invalid access to property or key 'sopka' on a base object of type 'Dictionary'.
+          at: generate (res://scripts/veg.gd:42)
+          GDScript backtrace (most recent call first):
+              [0] generate (res://scripts/veg.gd:42)
+              [1] build (res://scripts/block_gen.gd:240)
+              [2] gen_blocks (res://tools/prekryv_e78.gd:25)
+              [3] part_bloky (res://tools/vapenec_e82.gd:56)
+              [4] _init (res://tools/vapenec_e82.gd:256)
+SCRIPT ERROR: Invalid access to property or key 'sopka' on a base object of type 'Dictionary'.
+          at: generate (res://scripts/veg.gd:42)
+          GDScript backtrace (most recent call first):
+              [0] generate (res://scripts/veg.gd:42)
+              [1] build (res://scripts/block_gen.gd:240)
+              [2] gen_blocks (res://tools/prekryv_e78.gd:25)
+              [3] part_bloky (res://tools/vapenec_e82.gd:56)
+              [4] _init (res://tools/vapenec_e82.gd:256)
+SCRIPT ERROR: Invalid access to property or key 'sopka' on a base object of type 'Dictionary'.
+          at: generate (res://scripts/veg.gd:42)
+          GDScript backtrace (most recent call first):
+              [0] generate (res://scripts/veg.gd:42)
+              [1] build (res://scripts/block_gen.gd:240)
+              [2] gen_blocks (res://tools/prekryv_e78.gd:25)
+              [3] part_bloky (res://tools/vapenec_e82.gd:56)
+              [4] _init (res://tools/vapenec_e82.gd:256)
+SCRIPT ERROR: Invalid access to property or key 'sopka' on a base object of type 'Dictionary'.
+          at: generate (res://scripts/veg.gd:42)
+          GDScript backtrace (most recent call first):
+              [0] generate (res://scripts/veg.gd:42)
+              [1] build (res://scripts/block_gen.gd:240)
+              [2] gen_blocks (res://tools/prekryv_e78.gd:25)
+              [3] part_bloky (res://tools/vapenec_e82.gd:56)
+              [4] _init (res://tools/vapenec_e82.gd:256)
+SCRIPT ERROR: Invalid access to property or key 'sopka' on a base object of type 'Dictionary'.
+          at: generate (res://scripts/veg.gd:42)
+          GDScript backtrace (most recent call first):
+              [0] generate (res://scripts/veg.gd:42)
+              [1] build (res://scripts/block_gen.gd:240)
+              [2] gen_blocks (res://tools/prekryv_e78.gd:25)
+              [3] part_bloky (res://tools/vapenec_e82.gd:56)
+              [4] _init (res://tools/vapenec_e82.gd:256)
+SCRIPT ERROR: Invalid access to property or key 'sopka' on a base object of type 'Dictionary'.
+          at: generate (res://scripts/veg.gd:42)
+          GDScript backtrace (most recent call first):
+              [0] generate (res://scripts/veg.gd:42)
+              [1] build (res://scripts/block_gen.gd:240)
+              [2] gen_blocks (res://tools/prekryv_e78.gd:25)
+              [3] part_bloky (res://tools/vapenec_e82.gd:56)
+              [4] _init (res://tools/vapenec_e82.gd:256)
+SCRIPT ERROR: Invalid access to property or key 'sopka' on a base object of type 'Dictionary'.
+          at: generate (res://scripts/veg.gd:42)
+          GDScript backtrace (most recent call first):
+              [0] generate (res://scripts/veg.gd:42)
+              [1] build (res://scripts/block_gen.gd:240)
+              [2] gen_blocks (res://tools/prekryv_e78.gd:25)
+              [3] part_bloky (res://tools/vapenec_e82.gd:56)
+              [4] _init (res://tools/vapenec_e82.gd:256)
+SCRIPT ERROR: Invalid access to property or key 'sopka' on a base object of type 'Dictionary'.
+          at: generate (res://scripts/veg.gd:42)
+          GDScript backtrace (most recent call first):
+              [0] generate (res://scripts/veg.gd:42)
+              [1] build (res://scripts/block_gen.gd:240)
+              [2] gen_blocks (res://tools/prekryv_e78.gd:25)
+              [3] part_bloky (res://tools/vapenec_e82.gd:56)
+              [4] _init (res://tools/vapenec_e82.gd:256)
+SCRIPT ERROR: Invalid access to property or key 'sopka' on a base object of type 'Dictionary'.
+          at: generate (res://scripts/veg.gd:42)
+          GDScript backtrace (most recent call first):
+              [0] generate (res://scripts/veg.gd:42)
+              [1] build (res://scripts/block_gen.gd:240)
+              [2] gen_blocks (res://tools/prekryv_e78.gd:25)
+              [3] part_bloky (res://tools/vapenec_e82.gd:56)
+              [4] _init (res://tools/vapenec_e82.gd:256)
+SCRIPT ERROR: Invalid access to property or key 'sopka' on a base object of type 'Dictionary'.
+          at: generate (res://scripts/veg.gd:42)
+          GDScript backtrace (most recent call first):
+              [0] generate (res://scripts/veg.gd:42)
+              [1] build (res://scripts/block_gen.gd:240)
+              [2] gen_blocks (res://tools/prekryv_e78.gd:25)
+              [3] part_bloky (res://tools/vapenec_e82.gd:56)
+              [4] _init (res://tools/vapenec_e82.gd:256)
+SCRIPT ERROR: Invalid access to property or key 'sopka' on a base object of type 'Dictionary'.
+          at: generate (res://scripts/veg.gd:42)
+          GDScript backtrace (most recent call first):
+              [0] generate (res://scripts/veg.gd:42)
+              [1] build (res://scripts/block_gen.gd:240)
+              [2] gen_blocks (res://tools/prekryv_e78.gd:25)
+              [3] part_bloky (res://tools/vapenec_e82.gd:56)
+              [4] _init (res://tools/vapenec_e82.gd:256)
+SCRIPT ERROR: Invalid access to property or key 'sopka' on a base object of type 'Dictionary'.
+          at: generate (res://scripts/veg.gd:42)
+          GDScript backtrace (most recent call first):
+              [0] generate (res://scripts/veg.gd:42)
+              [1] build (res://scripts/block_gen.gd:240)
+              [2] gen_blocks (res://tools/prekryv_e78.gd:25)
+              [3] part_bloky (res://tools/vapenec_e82.gd:56)
+              [4] _init (res://tools/vapenec_e82.gd:256)
+SCRIPT ERROR: Invalid access to property or key 'sopka' on a base object of type 'Dictionary'.
+          at: generate (res://scripts/veg.gd:42)
+          GDScript backtrace (most recent call first):
+              [0] generate (res://scripts/veg.gd:42)
+              [1] build (res://scripts/block_gen.gd:240)
+              [2] gen_blocks (res://tools/prekryv_e78.gd:25)
+              [3] part_bloky (res://tools/vapenec_e82.gd:56)
+              [4] _init (res://tools/vapenec_e82.gd:256)
+SCRIPT ERROR: Invalid access to property or key 'sopka' on a base object of type 'Dictionary'.
+          at: generate (res://scripts/veg.gd:42)
+          GDScript backtrace (most recent call first):
+              [0] generate (res://scripts/veg.gd:42)
+              [1] build (res://scripts/block_gen.gd:240)
+              [2] gen_blocks (res://tools/prekryv_e78.gd:25)
+              [3] part_bloky (res://tools/vapenec_e82.gd:56)
+              [4] _init (res://tools/vapenec_e82.gd:256)
+SCRIPT ERROR: Invalid access to property or key 'sopka' on a base object of type 'Dictionary'.
+          at: generate (res://scripts/veg.gd:42)
+          GDScript backtrace (most recent call first):
+              [0] generate (res://scripts/veg.gd:42)
+              [1] build (res://scripts/block_gen.gd:240)
+              [2] gen_blocks (res://tools/prekryv_e78.gd:25)
+              [3] part_bloky (res://tools/vapenec_e82.gd:56)
+              [4] _init (res://tools/vapenec_e82.gd:256)
+SCRIPT ERROR: Invalid access to property or key 'sopka' on a base object of type 'Dictionary'.
+          at: generate (res://scripts/veg.gd:42)
+          GDScript backtrace (most recent call first):
+              [0] generate (res://scripts/veg.gd:42)
+              [1] build (res://scripts/block_gen.gd:240)
+              [2] gen_blocks (res://tools/prekryv_e78.gd:25)
+              [3] part_bloky (res://tools/vapenec_e82.gd:56)
+              [4] _init (res://tools/vapenec_e82.gd:256)
+SCRIPT ERROR: Invalid access to property or key 'sopka' on a base object of type 'Dictionary'.
+          at: generate (res://scripts/veg.gd:42)
+          GDScript backtrace (most recent call first):
+              [0] generate (res://scripts/veg.gd:42)
+              [1] build (res://scripts/block_gen.gd:240)
+              [2] gen_blocks (res://tools/prekryv_e78.gd:25)
+              [3] part_bloky (res://tools/vapenec_e82.gd:56)
+              [4] _init (res://tools/vapenec_e82.gd:256)
+SCRIPT ERROR: Invalid access to property or key 'sopka' on a base object of type 'Dictionary'.
+          at: generate (res://scripts/veg.gd:42)
+          GDScript backtrace (most recent call first):
+              [0] generate (res://scripts/veg.gd:42)
+              [1] build (res://scripts/block_gen.gd:240)
+              [2] gen_blocks (res://tools/prekryv_e78.gd:25)
+              [3] part_bloky (res://tools/vapenec_e82.gd:56)
+              [4] _init (res://tools/vapenec_e82.gd:256)
+SCRIPT ERROR: Invalid access to property or key 'sopka' on a base object of type 'Dictionary'.
+          at: generate (res://scripts/veg.gd:42)
+          GDScript backtrace (most recent call first):
+              [0] generate (res://scripts/veg.gd:42)
+              [1] build (res://scripts/block_gen.gd:240)
+              [2] gen_blocks (res://tools/prekryv_e78.gd:25)
+              [3] part_bloky (res://tools/vapenec_e82.gd:56)
+              [4] _init (res://tools/vapenec_e82.gd:256)
+SCRIPT ERROR: Invalid access to property or key 'sopka' on a base object of type 'Dictionary'.
+          at: generate (res://scripts/veg.gd:42)
+          GDScript backtrace (most recent call first):
+              [0] generate (res://scripts/veg.gd:42)
+              [1] build (res://scripts/block_gen.gd:240)
+              [2] gen_blocks (res://tools/prekryv_e78.gd:25)
+              [3] part_bloky (res://tools/vapenec_e82.gd:56)
+              [4] _init (res://tools/vapenec_e82.gd:256)
+SCRIPT ERROR: Invalid access to property or key 'sopka' on a base object of type 'Dictionary'.
+          at: generate (res://scripts/veg.gd:42)
+          GDScript backtrace (most recent call first):
+              [0] generate (res://scripts/veg.gd:42)
+              [1] build (res://scripts/block_gen.gd:240)
+              [2] gen_blocks (res://tools/prekryv_e78.gd:25)
+              [3] part_bloky (res://tools/vapenec_e82.gd:56)
+              [4] _init (res://tools/vapenec_e82.gd:256)
+SCRIPT ERROR: Invalid access to property or key 'sopka' on a base object of type 'Dictionary'.
+          at: generate (res://scripts/veg.gd:42)
+          GDScript backtrace (most recent call first):
+              [0] generate (res://scripts/veg.gd:42)
+              [1] build (res://scripts/block_gen.gd:240)
+              [2] gen_blocks (res://tools/prekryv_e78.gd:25)
+              [3] part_bloky (res://tools/vapenec_e82.gd:56)
+              [4] _init (res://tools/vapenec_e82.gd:256)
+bloky: {"ano":{"bloku":43,"se_vapencem":10864,"u_hladiny":1806,"vrsek_m":2.00571705426357},"ano_jine_nez_bez":43,"bez_priznaku":{"se_vapencem":23621,"u_hladiny":0},"ms_bez":27213.476,"ms_s":28479.867,"ne":{"bloku":57,"se_vapencem":13522,"u_hladiny":0,"vrsek_m":5.61183654535732},"ne_jine_nez_bez":0,"nedeterministicke":0,"po_druzich":{"hora_ano":[9,524],"hora_ne":[8,0],"kopec_ano":[11,701],"kopec_ne":[22,0],"louka_ano":[14,243],"louka_ne":[20,0],"sopka_ano":[9,338],"sopka_ne":[7,0]}}
+švy 0,0:louka:500;1,0:kopec:503;0,1:louka:510;1,1:louka:511: skok 0 m (krok uvnitř 0.000), materiál šev 1.9 % / uvnitř 12.0 %, obráceně jiných 3662, znovu stejné true, bloky {"(0, 0)":{"se_vapencem":256,"u_hladiny":7,"vrsek_pod_povrchem_m":2.005859375},"(0, 1)":{"se_vapencem":187,"u_hladiny":1,"vrsek_pod_povrchem_m":4.36363636363636},"(1, 0)":{"se_vapencem":243,"u_hladiny":1,"vrsek_pod_povrchem_m":5.55555555555556},"(1, 1)":{"se_vapencem":243,"u_hladiny":4,"vrsek_pod_povrchem_m":3.17078189300412}}
+  profil x [gx, vršek vápence pod povrchem m, sloupců, ≤1,5 m]: [[0,3.34,28,0],[1,3.19,27,0],[2,3.13,27,0],[3,2.78,25,0],[4,2.75,26,0],[5,2.44,24,0],[6,2.35,24,2],[7,2.52,25,3],[8,2.48,24,0],[9,3.16,31,0],[10,3.19,32,0],[11,3.23,32,1],[12,3.3,32,0],[13,3.39,32,1],[14,3.28,30,1],[15,2.96,24,0],[16,2.96,24,0],[17,4.13,32,1],[18,4.3,32,0],[19,4.44,32,0],[20,4.66,32,0],[21,4.66,32,0],[22,4.72,32,0],[23,4.7,32,0],[24,4.8,32,0],[25,4.84,28,0],[26,4.64,28,1],[27,4.57,28,0],[28,4.43,29,1],[29,3.91,29,1],[30,3.98,32,1],[31,3.81,32,0]]
+švy 0,0:louka:500;1,0:kopec:503;0,1:louka:504;1,1:louka:510: skok 0 m (krok uvnitř 0.000), materiál šev 1.4 % / uvnitř 9.3 %, obráceně jiných 2513, znovu stejné true, bloky {"(0, 0)":{"se_vapencem":256,"u_hladiny":7,"vrsek_pod_povrchem_m":2.005859375},"(0, 1)":{"se_vapencem":256,"u_hladiny":20,"vrsek_pod_povrchem_m":1.98046875},"(1, 0)":{"se_vapencem":243,"u_hladiny":1,"vrsek_pod_povrchem_m":5.55555555555556},"(1, 1)":{"se_vapencem":216,"u_hladiny":0,"vrsek_pod_povrchem_m":4.83564814814815}}
+  profil x [gx, vršek vápence pod povrchem m, sloupců, ≤1,5 m]: [[0,2.0,32,0],[1,1.98,32,2],[2,2.03,32,0],[3,1.98,32,1],[4,2.0,32,0],[5,2.02,32,0],[6,1.98,32,2],[7,1.98,32,3],[8,1.98,32,2],[9,2.03,32,1],[10,2.02,32,1],[11,1.95,32,4],[12,1.94,32,4],[13,2.02,32,4],[14,1.97,32,3],[15,2.0,32,0],[16,2.0,32,0],[17,3.29,31,1],[18,4.23,32,0],[19,4.83,32,0],[20,5.41,32,0],[21,5.67,30,0],[22,6.05,29,0],[23,6.09,28,0],[24,6.29,26,0],[25,6.5,27,0],[26,6.43,22,0],[27,6.24,23,0],[28,6.02,25,0],[29,5.37,27,0],[30,5.31,32,0],[31,5.16,31,0]]
+švy 0,0:louka:101;1,0:hora:202;0,1:kopec:303;1,1:louka:404: skok 0 m (krok uvnitř 0.000), materiál šev 3.7 % / uvnitř 7.4 %, obráceně jiných 2276, znovu stejné true, bloky {"(0, 0)":{"se_vapencem":256,"u_hladiny":20,"vrsek_pod_povrchem_m":1.982421875},"(0, 1)":{"se_vapencem":256,"u_hladiny":42,"vrsek_pod_povrchem_m":1.96875},"(1, 0)":{"se_vapencem":246,"u_hladiny":0,"vrsek_pod_povrchem_m":6.76016260162602},"(1, 1)":{"se_vapencem":251,"u_hladiny":9,"vrsek_pod_povrchem_m":2.58565737051793}}
+  profil x [gx, vršek vápence pod povrchem m, sloupců, ≤1,5 m]: [[0,1.95,32,3],[1,2.03,32,4],[2,1.91,32,6],[3,1.95,32,4],[4,2.09,32,2],[5,1.97,32,5],[6,1.94,32,6],[7,2.0,32,2],[8,1.98,32,4],[9,2.03,32,1],[10,1.98,32,4],[11,1.97,32,5],[12,1.95,32,7],[13,1.84,32,9],[14,2.0,32,0],[15,2.0,32,0],[16,2.0,32,0],[17,3.08,32,1],[18,3.92,32,0],[19,4.36,32,0],[20,4.91,32,1],[21,5.0,32,0],[22,5.14,32,1],[23,5.17,32,0],[24,5.28,32,0],[25,5.32,30,0],[26,5.59,29,0],[27,5.54,28,0],[28,5.71,29,1],[29,5.43,29,3],[30,4.59,32,2],[31,3.81,32,0]]
+kras 0,0:louka:101;1,0:hora:202;0,1:kopec:303;1,1:louka:404: pásem 0, 0 m³/den, bloky {}, materiály {}, 1. dutina inf dne, těles 1, přítok 1.230 l/s, pramenů 6, voda 2186 ms
+kras 0,0:louka:500;1,0:kopec:503;0,1:louka:510;1,1:louka:511: pásem 0, 0 m³/den, bloky {}, materiály {}, 1. dutina inf dne, těles 1, přítok 0.088 l/s, pramenů 5, voda 7394 ms
+kras 0,0:louka:500;1,0:kopec:501;0,1:louka:502;1,1:louka:504: pásem 0, 0 m³/den, bloky {}, materiály {}, 1. dutina inf dne, těles 1, přítok 1.490 l/s, pramenů 3, voda 2398 ms
+kras 0,0:louka:503;1,0:kopec:510;0,1:louka:512;1,1:louka:513: pásem 0, 0 m³/den, bloky {}, materiály {}, 1. dutina inf dne, těles 1, přítok 0.022 l/s, pramenů 5, voda 1496 ms
+kras 0,0:louka:101;1,0:hora:202;0,1:kopec:303;1,1:louka:404: pásem 57, 0.00023688805278644547 m³/den, bloky {"(0, 1) ano":0.00023484367803744,"(1, 1) ano":0.00000204437474900574}, materiály {"cave_limestone":0.000150797284276001,"deep_limestone":0.0000860907685104444}, 1. dutina 857.0 dne, těles 1, přítok 1.080 l/s, pramenů 6, voda 756 ms
+kras 0,0:louka:500;1,0:kopec:503;0,1:louka:510;1,1:louka:511: pásem 0, 0 m³/den, bloky {}, materiály {}, 1. dutina inf dne, těles 1, přítok 0.003 l/s, pramenů 5, voda 729 ms
+kras 0,0:louka:500;1,0:kopec:501;0,1:louka:502;1,1:louka:504: pásem 204, 0.000726941203405942 m³/den, bloky {"(0, 1) ano":0.000285833826694533,"(1, 0) ano":0.00000141340509894082,"(1, 1) ano":0.000439693971612468}, materiály {"cave_limestone":0.000172138166713853,"deep_limestone":0.000359755901553913,"dolomite":0.000120605637686989,"gypsum":0.0000744414974511868}, 1. dutina 209.9 dne, těles 1, přítok 1.270 l/s, pramenů 3, voda 1316 ms
+kras 0,0:louka:503;1,0:kopec:510;0,1:louka:512;1,1:louka:513: pásem 0, 0 m³/den, bloky {}, materiály {}, 1. dutina inf dne, těles 1, přítok 0.022 l/s, pramenů 5, voda 773 ms
+ostrovy e58_bez: {"bloku_ano":63,"bloku_ano_s_krasem":0,"bloku_ne":57,"bloku_ne_s_krasem":0,"dutina_dni":[],"m3_den_ano":0.0,"m3_den_ne":0.0,"ostrovu_s_krasem":0,"pasem":0}
+ostrovy e58_s: {"bloku_ano":63,"bloku_ano_s_krasem":2,"bloku_ne":57,"bloku_ne_s_krasem":0,"dutina_dni":[601.1],"m3_den_ano":0.000102811918858935,"m3_den_ne":0.0,"ostrovu_s_krasem":1,"pasem":4}
+ostrovy e67_bez: {"bloku_ano":63,"bloku_ano_s_krasem":9,"bloku_ne":57,"bloku_ne_s_krasem":6,"dutina_dni":[2979.3,10649.3,3957.0,13203.9,14735.7,4809.4,1223.8],"m3_den_ano":0.000190842055077042,"m3_den_ne":0.000296763313661266,"ostrovu_s_krasem":7,"pasem":558}
+ostrovy e67_s: {"bloku_ano":63,"bloku_ano_s_krasem":27,"bloku_ne":57,"bloku_ne_s_krasem":13,"dutina_dni":[1238.3,1937.8,6444.4,6239.3,1318.7,5527.4,27250.4,1224.1,1292.1,190.1,1017.4,45174.0,18228.2,1507.5,2467.3,810.4,16132.5,2531.7,3233.3],"m3_den_ano":0.00170730669423732,"m3_den_ne":0.0013668264198921,"ostrovu_s_krasem":19,"pasem":1536}

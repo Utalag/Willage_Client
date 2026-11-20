@@ -293,6 +293,419 @@ Výchozí: 800 kapek na blok, `ero_cap` 1,0, `ero_erode` 0,1, `ero_deposit_rate`
 - **Hypotéza:** parita bit po bitu (kopie se mění jen v cestách). Vložení bloku bp ≈ 0,25–0,4 s jako E49 detail
   (+ povrch a tráva prototypu ~0,4 s), voda ostrova 7 bloků (≈ 112 × 112 sloupců) plně < 1 s, kopání u vody desítky ms.
 
+## E78 překryv změn po kopání: funkce → vzorkovaná buňka → trvalá změna (plán, zapsáno před pokusem 2026-11-20 00:59; TODO Model světa a kopání, devlog/model-sveta.md)
+- **Co už je:** blok `bp` se generuje deterministicky (typ, seed, posun, pořadí vložení = sousedé). Buňky prototypu jsou
+  0,5 m (16 × 16 × 64), kopání dnes mění buňku 0,5 m a výšku sloupce. Záznam bloku E76 (větev `e76-voda-po-prenosu`,
+  vzato do této větve sloučením) ukládá typ, seed, slot, posun, výkopy po sloupcích (`hm` proti `hm_gen`) a prameny.
+  WVB1 (návrh `willage-ideas/navrhy/format-bloku-wvb1.md`) ukládá celé pole materiálů bloku (u8 na buňku, deflate).
+- **Překryv (`scripts/teren/prekryv78.gd`):** herní mřížka 0,25 m (Jan 20:12) = 32 × 32 × 128 buněk na blok, vzorkovaná
+  z buněk 0,5 m (každá na 2 × 2 × 2). Překryv = mapa buňka 0,25 m → materiál (0 = vzduch) jen tam, kde se stav liší
+  od definice. Kanonický: položka rovná definici se smaže (vykopat a zasypat stejným materiálem = žádná změna).
+  Ukládá se konečný stav buňky, ne historie → operace na různých buňkách nezávisí na pořadí; na téže buňce rozhoduje
+  poslední operace (vykopat → zasypat hlínou = hlína; zasypat (plnou buňku nejde) → vykopat = vzduch), záměrně.
+- **Buňka 0,5 m pro vodu a vykreslení:** plná, dokud v ní zbývá aspoň jedna plná buňka 0,25 m (jako pravidlo 0,125 / 0,25),
+  materiál = nejčastější plný (remíza: nižší id). Z toho výška sloupce `hm`. Záznam E76 se rozšíří: místo výkopů po
+  sloupcích překryv buněk (výška sloupců se odvodí, nic se neukládá dvakrát), prameny zůstanou.
+- **Pokus:** ostrov 4 bloky; chodba (vstup z povrchu, 2 m vysoká, přes dva bloky), položení materiálu, zasypání vykopané
+  buňky; náhodné změny 1, 10, 100, 1000 buněk. Uložit jen překryv, načíst (bloky znovu z definice + překryv), porovnat
+  otisk buněk (0,25 i 0,5 m) a vody s živým stavem. Voda je odvozená: po načtení plný přepočet (s uloženými prameny E76).
+- **Měření:** velikost překryvu (syrově a deflate, dvě kódování: seřazené klíče, intervaly ve sloupcích) proti celému poli
+  WVB1 (0,5 m 16 kB a 0,25 m 128 kB na blok, syrově a deflate); čas načtení; shoda otisků; pořadí (vykopat → zasypat proti
+  zasypat → vykopat, operace na různých buňkách v obou pořadích); voda živě (lokální přepočet sloupců) proti načtení.
+- **Očekávání / riziko:** chodba pod povrchem nemění výšku sloupce → lokální přepočet vody ji nevidí, plný přepočet ano
+  (dutina z buněk) → živá voda se může lišit od načtené. Bez backendu: WVB1 jen jako návrh změny.
+
+## E79 chodby a voda: lokální přepočet vidí změnu dutin (plán, zapsáno před pokusem 2026-11-20 01:11; nález E78, větev z `e78-prekryv`)
+- **Nález E78:** chodba se vstupem z povrchu → lokální přepočet vody (`ostrov_voda.edit` po sloupcích se změněnou výškou)
+  proti plnému 153 buněk jiný `eff`, 1 `to`, jiný otisk. Příčina: podzemí bere dutiny z buněk (`ug_funkce.from_world`,
+  pásmo vzduchu pod povrchem sloupce), ale `edit` mění jen výšku sloupce (`UGO.dig`), pásmo dutiny nepřibude.
+- **Oprava (příznak `p79_chodby`, výchozí vypnuto, zapnout jen když lokální = plný a výchozí hra beze změny):**
+  `ostrov_voda.edit79(slot, sloupce)` po dávce změn buněk 0,25 m (`prekryv78.sync79` vrátí sloupce se změnou buněk).
+  Podpis dutiny sloupce (počet, spodek, vršek vzduchu pod povrchem jako ve `from_world`) se porovná s uloženým; když se
+  změnil, pásma podzemí se postaví znovu (funkční pásma z mezipaměti, znovu jen dutiny a `_finish`), přehrají se výkopy,
+  smaže se mezipaměť řešení a do lokálního přepočtu E68 (`hydro68.update`) jdou změněné sloupce + odtoky a vývěry
+  (`_add_drains`), jako u vložení bloku E76. Bez změny dutin zůstává stará cesta (`UGO.dig` po sloupcích).
+  Materiály pro ztráty u změněných sloupců stejně jako plný výpočet.
+- **Měření:** scénáře E78 (chodba se šachtou, dlouhá uzavřená, 1/10/100/1000 buněk) + chodba přes zvodnělou vrstvu
+  (těleso s vodou, šachta z povrchu) + šachta z povrchu do dna tůně; obě pořadí (šachta → chodba, chodba → šachta).
+  Neshody lokální proti plnému (buňky `fill/eff/to`, otisk vody), chyba bilance, čas lokálně proti plně. Výchozí hra:
+  otisky d7aedf3a6d9d10e8 / 63d7b89a91385a79 (E76 A), E66 výkopy.
+- **Riziko:** přestavba podzemí je pro celý ostrov (jen bez funkcí), lokální přepočet nemusí být o moc rychlejší než
+  plný. Dutina sloupce je jedno pásmo od nejnižšího po nejvyšší vzduch (dvě chodby nad sebou se spojí) – stejné jako plný
+  výpočet, neopravuji. Buňka 0,5 m je dutina, jen když je vykopaných všech 8 buněk 0,25 m.
+
+## E85 rozhodnutí Bloku 2: mřížka 0,25 m z funkcí, zákaz prokopání dna a okraje, vrstvy ≥ 25 cm (plán, zapsáno před pokusem 2026-11-20 04:40; Jan 2026-11-20 03:26: „mřížku 0,25 m počítat z funkcí a při nové verzi přepočítat i staré bloky; zakázat prokopání dna i okraje ostrova“, „v blueprintu zakázat vrstvy tenčí než 25 cm“; větev `e85-blok2-rozhodnuti` z `e83-determinismus` + sloučený `origin/main` 57c7dfb)
+- **Sloučení:** E83 (E78–E83) + main (E74–E77 zapnuté, E72 8 m). Konflikt `tok.gd` / `tok60.gd`: vzít volání `solve74` z main.
+  Jeho první klíč (`"%.9f"` + `excl0.hash()`) přepsat na přesný klíč E83. Parametry sloučit po klíčích (`p76_prameny` = true podle Jana).
+- **Příznaky (výchozí vypnuto, výchozí otisky beze změny):** `p85_blok2` zapne všechno. Jednotlivě: `p85_jemne`, `p85_okraj`,
+  `p85_vrstvy` (+ `p85_min_m` = 0,25).
+  1. *`p85_jemne`:* definice 0,25 m v `prekryv78` = vzorek funkcí `geo_fn` při 32 × 32 × 128 + minerály a dutina stejně jako
+     pipeline (počty × 8). Dnes je to zjemnění buněk 0,5 m. Buňka 0,5 m zůstane podle pipeline, dokud se jí žádná buňka
+     0,25 m nezmění proti definici (kanonické, bez historie). Jinak platí pravidlo E78 (nejčastější plný). Staré bloky se při
+     načtení přepočítají z funkcí, překryv se položí na novou definici (Jan: přepočítat i staré).
+     Výřez E76 (`prenos76`) zatím zjemněním. Měřit čas na blok a rozdíl proti zjemnění.
+  2. *`p85_okraj`:* `prekryv78.op` nesmí vykopat buňku ve vrstvě z = 0 ani v obvodových sloupcích ostrova (strana bez
+     souseda). Vnitřní švy kopat jde. Totéž v herním `digging.gd` (0,5 m: lz 0 a obvodový sloupec). Test: šachta na dno,
+     chodba ven bokem, chodba přes vnitřní šev.
+  3. *`p85_vrstvy`:* v `geo_fn.column` (jediné místo, odkud čtou hranice buňky, pásma vody i skarn) vrstva s mocností
+     < 0,25 m zmizí a místo dostane vrstva nad ní. Projít tabulky (mocnosti v U), zóny, klíny, vyklínění. Spočítat tenké
+     vrstvy před a po, co zbude (ořez povrchem a krytem) a jak se změní vyklínění (schod 0,25 m místo klínu do nuly).
+  4. *Voda:* kopání 0,25 m + `edit79` se zapnutými `p74_gw`, `p74_vyzvednout`, `p74_hladina`, `p76_prameny`: lokálně = plně,
+     po uložení a načtení stejně.
+- **Testy:** celá vodní sada (E66–E77) po sloučení proti výsledkům main. Nástroje E78–E83 a nový `tools/blok2_e85.gd`
+  s příznaky i bez.
+- **Negativa předem:** hra kope jen vršek sloupce po 0,5 m; zákaz v `digging.gd` je jen pro 0,5 m. Jemná mřížka z funkcí
+  je 6–9× pomalejší než zjemnění (E80). Vrstvy ≥ 25 cm dělají na konci vyklínění schod. Zmenšení na 0,5 m buňky
+  zůstane (vrstva 0,25–0,5 m nemusí dostat střed buňky). Main se neslučuje.
+
+## E85 výsledky (zapsáno 2026-11-20 06:20; `godot-prototyp/tools/blok2_e85.gd`, `okraj_hra_e85.gd`, `chodby_e79.gd`, `voda_e66.gd`, `port_studie.py --check`, `shots/e85/`)
+- **Příznaky (výchozí vypnuto):** `p85_blok2` zapne všechno (včetně `p85_voda`). Jednotlivě `p85_jemne`, `p85_okraj`,
+  `p85_vrstvy` (`p85_min_m` 0,25), `p85_voda`. Výchozí hra beze změny.
+- **Výchozí hra beze změny:** `port_studie.py --check` 81 souborů (78 skriptů), změněno 0. `voda_e66` (12 výkopů,
+  kontrola, příznaky p85 vyp): otisk d7aedf3a6d9d10e8 → 63d7b89a91385a79, 0 neshod, chyba světa 0, 5 pramenů, 1 vývěr,
+  Σ okraj 9,65 l/s, plný výpočet 2,45 s (za 61 s). Stejné otisky jako main po sloučení E74–E77.
+- **`p85_jemne` (mřížka 0,25 m z funkcí):** proti zjemnění buněk 0,5 m je jiných 40 892 z 524 288 buněk (7,80 %),
+  bez minerálů a dutin 39 808, pevné/vzduch 2 598. Po blocích 6,04 / 11,54 / 7,65 / 5,97 %. Čas na blok 442–784 ms
+  proti 6,0–8,1 ms (65–108× pomalejší; hora 586 ms / 11,5 %). Nedotčený blok po sync: geo 0, hm 0, překryv 0. Jedna
+  operace 0,25 m po opravě nemění materiál buňky 0,5 m (geo jinak 0, překryv 1). Výřez E76 (`prenos76` neprázdný) zůstává
+  zjemněním. Při načtení se stará definice 0,25 m spočítá z funkcí a překryv se položí na ni.
+- **`p85_okraj` (zákaz dna a obvodu, švy ano):** díry ve dně 703 → 0, výkop na obvodu 190 → 0, položení na dno šachty
+  neprojde. Šachta: odmítnuto 0 → 16 (vše dno), vykopáno 1 280 → 1 264. Vnitřní šev beze změny (44 vykopáno, 4 odmítnuto).
+  Chodba k boku: sever i západ 84/0 → 80/4 (odmítnuté jsou buňky obvodu). Náhodné kopání: odmítnuto 269 → 1 088,
+  vykopáno 2 731 → 1 912. V herním `digging.gd` (0,5 m): obvod 0 buněk („okraj ostrova: nelze“), šachta i vnitřní šev
+  skončí na lz 1 („dno ostrova: nelze“); bez příznaku dojdou na lz 0.
+- **`p85_vrstvy` (v blueprintu nejméně 0,25 m):** tenkých vrstev v definici 17 426 → 0, viditelných po ořezu 17 229 → 775,
+  vrstev ve sloupci 70 461 → 54 895 (průměr 17,20 → 13,40). Sloupců bez buňky tenké vrstvy 18 400 → 4 330 (0,5 m)
+  a 14 078 → 1 701 (0,25 m). Buňky jinak 425 / 65 536 (0,65 %) při 0,5 m a 3 614 / 524 288 (0,69 %) při 0,25 m; šev
+  hranic 0. Otisk geo d3ff4d43… → 92d7d87b…. Nejtenčí viditelná po ořezu klesne jen na 0,021 mm (ne na 0,25 m).
+- **Voda (výchozí p74/p76 zapnuté, chodba E78, uložení a načtení):** 2× stejné ve všech variantách. Překryv = načtený
+  vždy. Lokálně = plně = načtená jen s `p79_chodby` + (`p85_voda` nebo `p85_blok2`): otisk cbe01a6bc9e2034e (bez p85_blok2)
+  nebo 0072d4a1b9c80408 (s p85_blok2). Samotné `p79` nestačí (lokálně 58c9d1d3…, plně/načteno cbe01a6b…, plocha gw jiná,
+  obsazení po [8781] proti čerstvému [6455]). Bez `p74` nebo bez `p74_vyzvednout` stačí p79. `p85_voda` uloží obsazení
+  výtoků E74 s blokem; po změně dutin se povrch bere od čistého stavu a při novém obsazení i čerstvé podzemí.
+- **Chodby E79 s `p85_blok2`:** lokálně = plně ve všech 11 scénářích, 0 neshod fill/eff/to, bilance 0, obě pořadí stejný
+  konečný otisk (chodba 0072d4a1b9c80408, zvodnělá f774a73b41686ff6, tůň 2a6d3176bf159487). Uzavřená dlouhá chodba vodu
+  nemění (zůstane 958f9334f7d8a9ff). Startovní voda s p85_blok2 je 958f9334… (geo a vrstvy jiné než výchozí d7aedf3a…).
+- **Oprava po cestě:** kopání 0,25 m s `p85_jemne` nesmí změnit materiál buňky 0,5 m — podzemí by změnu bez dutiny
+  nevidělo (n1000 lokálně ≠ plně). Po opravě n1000 sedí (201 ms lokálně, 1 956 ms plně).
+- **Negativa:** (1) jemné z funkcí je 65–108× pomalejší, než čekalo E80 (6–9×), a mění 7,8 % buněk 0,25 m. (2) Výřez E76
+  se pořád počítá zjemněním. (3) Vrstvy ≥ 25 cm pořád nechají 775 viditelných tenkých zbytků po ořezu povrchem a 4 330
+  sloupců bez buňky při 0,5 m; zapnutí mění 0,65 % buněk 0,5 m. (4) Samotné p79 s výchozím E74 nestačí na lokálně = plně
+  = načtená — je k tomu `p85_voda`. (5) S `p85_blok2` je lokální přepočet u chodeb pomalejší než plný: tunel 12,6 s proti
+  1,6 s, šachta do tůně 8,2–8,3 s proti 1,7 s, zvodnělá 5,5–6,0 s proti 1,5–1,6 s; drobné změny sloupců (n1–n1000) zůstanou
+  rychlé (46–206 ms proti ~2 s). (6) Hra kope pořád jen vršek sloupce po 0,5 m; zákaz 0,25 m je v `prekryv78.op`.
+- **Pro Jana:** (1) zapnout `p85_okraj` a `p85_vrstvy` jako výchozí? (2) zapnout i `p85_jemne`, i když je 65–108×
+  pomalejší? (3) zapnout `p85_voda` spolu s `p79_chodby`, aby lokální voda s E74 seděla po načtení? (4) počítat výřez E76
+  taky z funkcí? (5) u chodeb počítat vodu plně, nebo nejdřív zrychlit lokální přepočet?
+
+## E83 determinismus: blok, překryv, voda, pořadí vložení (plán, zapsáno před pokusem 2026-11-20 03:31; TODO Architektura světa: „Determinismus celého světa, nejen jednoho bloku. Ujasnit Hash(seed, změny, pořadí)… Pořadí pokládání tedy výsledek ovlivňuje záměrně; platí jen, že stejný výřez, transformace a sousedé dají stejný výsledek.“; větev z `e82-vapenec-hladina`)
+- **Co už je:** hashe jsou vlastní (`stable_hash`: SplitMix64 + FNV-1a, celá čísla mod 2^64), náhoda generátoru je
+  `Ore.Rng` (SplitMix64) a `FastNoiseLite` se seedem z hashe. `RandomNumberGenerator` je jen ve vzhledu (tráva),
+  v testech a ve volbě bloku hráčem (`placement.gd`, to je vstup, ne výpočet). Vlákna se nepoužívají. Otisk vody
+  (`hydro68.otisk`) hashuje surové bity float64 → bitová shoda jen na stejné platformě. E78: překryv = konečný stav,
+  na pořadí operací na RŮZNÝCH buňkách nezáleží, na stejné buňce ano (vykopat / zasypat). E79: lokální = plný přepočet
+  vody v obou pořadích. Jan 2026-11-17: sousedé se nemění, přizpůsobí se jen nový blok.
+- **Pokus (`godot-prototyp/tools/determinismus_e83.gd`):**
+  1. *Běhy:* otisky (geo, cells, hm, překryv, voda před/po výkopech, uložený překryv → znovu načtený) dvakrát v jednom
+     procesu a ve dvou procesech; porovnat.
+  2. *Pořadí vložení:* 2 × 2 v pořadí A a obráceně: jiné buňky po blocích a podle vzdálenosti od švu s už položeným
+     sousedem. Test pravidla: blok postavený jen s jeho skutečnými sousedy (bez ostatních bloků) = stejný; diagonální
+     soused a vzdálený blok nemají vliv; mřížka 0,25 m z funkcí po příchodu souseda (E80).
+  3. *Operace překryvu:* náhodné změny na různých buňkách ve dvou pořadích → stejný překryv a hash.
+  4. *Citlivost na float:* posun řídicích hodnot o ±1e-9 m → kolik buněk se změní (riziko jiné platformy / ARM / C#).
+  5. *Audit kódu (`tools/audit_e83.py`):* exp / pow / sin / cos / log / sqrt, šum, `sort_custom`, iterace slovníků,
+     formátování floatů v klíčích a hashích, čas.
+- **Kandidát na opravu:** klíč mezipaměti podzemí v `tok.gd` / `tok60.gd` je `"%.9f" % q` + `excl.hash()` (32bitový hash
+  Godotu) → dvě různé hodnoty mohou dostat stejný výsledek z mezipaměti (výsledek závisí na historii). Oprava na přesné
+  bity q a seřazený seznam buněk; když se výchozí otisky nezmění, bez příznaku.
+- **Negativa předem:** jinou platformu (ARM, telefon, .NET) tu otestovat nejde – jen audit a citlivost. Pořadí vložení
+  ovlivňuje výsledek záměrně (Jan 2026-11-17).
+
+## E83 výsledky (zapsáno 2026-11-20 03:34; `godot-prototyp/tools/determinismus_e83.gd`, `tools/audit_e83.py`, `shots/e83/`)
+- **Hash(seed, změny, pořadí) – jak to je:**
+  - *Blok* = f(definice, seed, sousedé položení před ním). Pravidlo platí: blok postavený jen se svými skutečnými
+    sousedy (bez ostatních bloků) je bitově stejný ve 12 z 12 případů (3 pořadí × 4 bloky). Diagonální soused 0 buněk,
+    vzdálený blok 0. Vzorek 0,25 m z funkcí u prvního bloku se po příchodu sousedů nezmění (0), protože soused bere
+    okraj přesně z něj.
+  - *Pořadí vložení* mění výsledek záměrně (Jan 2026-11-17). START obráceně: 274–349 buněk na blok, celkem 1250 z 65 536
+    (1,9 %); 63–70 % do 1 sloupce od švu s už položeným sousedem, 26–39 % ve 2–5, 2–3 % dál. Výšky povrchu 0 rozdílů,
+    mění se jen hranice vrstev. Otisk vody jiný. To je nález E82 (1246–1275) – záměr, ne chyba.
+  - *Překryv* = konečný stav. 400 operací na různých buňkách ve dvou pořadích: stejný překryv i plný přepočet vody. Na
+    stejné buňce rozhoduje pořadí (vykopat → zasypat = hlína, zasypat → vykopat = vzduch, položení do plné buňky selže).
+  - *Voda* je odvozená. Plný přepočet = funkce buněk. **Výchozí lokální přepočet (bez `p79_chodby`) závisí na pořadí:
+    tytéž změny ve dvou pořadích → dva různé otisky, oba jiné než plný přepočet; po uložení a načtení je voda jiná než
+    živá.** S `p76_prameny` + `p79_chodby` je lokální = plný = po načtení a nezávisí na pořadí.
+- **Běhy a procesy:** 2 ostrovy × 2 nastavení, otisky geo, cells, hm, překryv, záznam, voda před, po výkopech, po
+  načtení: 2× v procesu stejné, ve dvou procesech stejné (proces1 = proces2). Vlákna kód nepoužívá. Jiná platforma tu
+  není (jen Linux x86_64 headless).
+- **Citlivost na float:** posun povrchu a hranic o ±1e-12 m změní 2–5 buněk z 65 536 při 0,5 m a 74–146 z 524 288 při
+  0,25 m; ±1e-9 a ±1e-6 m skoro stejně (2–5 / 74–147), ±1e-3 m 27–35 / 365–456. Jsou to přesné remízy: hloubka pod
+  povrchem d = h − Z přesně na prahu krytu (0,5 / 1,5 m), protože povrch i středy buněk jsou násobky 1/8 m. IEEE double
+  je dá všude stejně, ale port musí počítat h a Z stejným vzorcem (lerp a + (b − a)·t, žádný float32). Mimo remízy
+  posun 1e-6 m přidá nejvýš 1 buňku → ulp rozdíly šumu buňky skoro nemění.
+- **Audit (herní kód teren + voda):** exp/log/pow 26 míst, sin/cos 4, sqrt/délky 33, šum FastNoiseLite 125 (float32),
+  `sort_custom` 16, iterace slovníku bez řazení 5, float ve formátu klíče / hashe 4 (např. `hydro68.otisk` „%.12f“), `hash()`
+  Godotu 4 (mezipaměť podzemí – opraveno; `voda_sim` starého gen-v3), RandomNumberGenerator 0, čas 102 (jen měření, nic
+  na něm nezávisí). Celé tabulky v `shots/e83/audit.md`.
+- **Oprava (bez příznaku):** klíč mezipaměti podzemí v `tok.gd` / `tok60.gd` byl `"%.9f" % q` + 32bitový `excl.hash()`
+  → dva různé vstupy mohly sdílet výsledek. Teď přesné bity q a seřazené buňky. Všechny otisky beze změny (START
+  d7aedf3a…, voda_e66 63d7b89a…, běhy a překryv stejné jako před opravou). Kolize se v testech nestala, oprava je
+  preventivní.
+- **Rizika pro telefon / ARM / C# server:** (1) otisk vody hashuje surové bity float64 a voda používá exp/pow → mezi
+  platformami bitově stejná nebude (libm se liší v posledním bitu); (2) FastNoiseLite ve float32, na ARM může překladač
+  slučovat násobení a sčítání (FMA) → jiné poslední bity šumu, dopad na buňky malý (viz citlivost); (3) C# Dictionary
+  nemá pořadí vložení, GDScript ano → port musí řadit; (4) `sort_custom` je nestabilní → porovnání musí mít úplné
+  pořadí; (5) hashe jsou celá čísla mod 2^64 (C# `unchecked ulong`, popsáno v `stable_hash`).
+- **Negativa:** platformu ani počet vláken tu změnit nejde; doporučení pro telefon a server jsou z auditu, ne z měření.
+  Výchozí lokální voda je na pořadí závislá – oprava je E79 za příznakem (čeká na zapnutí).
+- **Doporučení:** zapnout `p76_prameny` + `p79_chodby` jako výchozí (jediná nalezená skutečná nedeterminističnost).
+  Pro server a jiné platformy: buňky a překryv lze držet bitově (celočíselné hashe, přesné remízy), vodu porovnávat
+  s tolerancí nebo hashovat zaokrouhlené hodnoty (např. pevná řádová čárka jako WVB1 u16).
+- **Pro Jana:** (1) zapnout p76 + p79 jako výchozí? (2) otisk vody: surové bity (jen stejná platforma), nebo zaokrouhlit
+  pro server / telefon? (3) má být „stejní sousedé“ jen 4 hrany (teď), nebo i rohy?
+
+## E82 vápenec k hladině v ~50 % bloků (plán, zapsáno před pokusem 2026-11-20 01:59; Rozhodnutí Jana 2026-11-20 01:55: „generátor dává vápenec k hladině zhruba v 50 % případů (náhodně podle seedu bloku)“; větev z `e81-tenke-vrstvy` + sloučený `e75-kras`)
+- **Co už je:** vrstvy v2 = zóny (plášť, krystalinikum, sedimenty), v zóně pořadí z tabulky hornin, mocnost a výskyt podle
+  šumu světa (`geo2.targets`). Pak navázání mocností na sousedy (`strata.continue_thick`, náběh `taper_m` 3 m, klíny),
+  hranice = součet mocností. Na ostrově START je hladina tělesa ~19,5 m (E75), těleso je ve štěrku a spraši nad jílem
+  (perm 0). Jeskynní vápenec (5) má vršek ~14–16 m pod jílovcem (51, perm 0), pískovcem a jílem → voda k němu nedojde,
+  kras E75 nic nedělá (0 rozpustných pásem na cestě).
+- **Návrh (`p82_vapenec`, výchozí vyp):** mince bloku `H.mix(bp.seed, "P82_VAPENEC", 0)` → ano s pravděpodobností
+  `p82_podil` (0,5). V bloku „ano“ se cíl vršku jeskynního vápence zvedne na odhad hladiny: povrch (vyhlazený) − `p82_pod_m`
+  (1,0 m, pod drnem a půdou). Vrstvy nad vápencem, které by ležely pod tímto vrškem (jílovec, pískovec, jíl…), se
+  vyklíní (mocnost 0), pořadí zůstává. Vápenec tak sahá od své spodní hranice až nad hladinu a těleso vody přes něj vede.
+  Blok „ne“ zůstává jako dnes (vápenec hluboko pod těsněním nebo chybí). Totéž zvednutí dostane i regionální základ
+  vlastního bloku (výchozí hodnota u okraje bez souseda), jinak by vápenec do 3 m od volného okraje zase klesl. Soused
+  s jinou mincí se napojí existujícím náběhem mocností (klín přes šev).
+- **Měření (`godot-prototyp/tools/vapenec_e82.gd`):** podíl „ano“ na 1000 seedech; z ~100 vygenerovaných bloků podíl
+  sloupců, kde je vápenec v hloubce hladiny (ano / ne); spojitost švů (E80 `part_svy` se zapnutým příznakem, skok
+  hranic na švu, pořadí vložení); determinismus (dvakrát stejný seed → stejný hash); kras E75 (`kras_e75`) na ostrovech
+  s bloky „ano“ a „ne“: rozpustná pásma na cestě, rychlost, první dutina; čas generování s příznakem a bez; výchozí hra
+  beze změny (otisky).
+- **Rizika / negativa předem:** odhad hladiny z povrchu není hladina z vody (ta vzniká až simulací); vyklínění těsnicích
+  vrstev zvětší těleso a změní prameny; mince na blok dělá skoky geologie po blocích (zmírní je jen náběh 3 m);
+  vápenec u povrchu změní minerály (hostitelé) a dutiny blueprintu; regionální základ s mincí = hodnota okraje závisí na
+  vlastním bloku (pro sousedy bez dat).
+
+## E82 výsledky (zapsáno 2026-11-20 02:27; `godot-prototyp/tools/vapenec_e82.gd -- --bp.p82_vapenec=true --n=100 --ostrovu=30`, `shots/e82/`)
+- **Změna proti plánu:** s `p82_pod_m` 1,0 m ležel vápenec hned pod půdou. Vápenec má perm 0,246 < `ponor_perm` 0,3, takže
+  pod ním nebyly ponory a na START nevzniklo žádné těleso (0 těles). Výchozí je proto 2,0 m (nad vápencem zůstane
+  propustný kryt). Přidáno `p82_tesneni` (výchozí zap): v bloku „ano“ se vyklíní i nepropustné vrstvy nad vápencem
+  (jílovec, jíl), jinak by voda z krytu do vápence nedošla.
+- **Podíl:** seedy 1–1000 → 495 „ano“, 1000 náhodných seedů → 499. START: 101 ano, 202 ne, 303 ano, 404 ano.
+- **Bloky (100 seedů, louka / kopec / hora / sopka, jeden blok):** 43 ano, 57 ne. Vršek vápence v bloku „ano“ v průměru
+  2,0 m pod povrchem, v bloku „ne“ 5,6 m. Bloky „ne“ jsou se zapnutým příznakem bitově stejné jako bez něj (57 z 57),
+  bloky „ano“ se liší (43 z 43). Determinismus: 0 rozdílů při druhém generování. Čas generování 272 → 285 ms na blok (+5 %).
+- **Švy:** skok hranic vrstev na švu 0 m (funkce dál spojité). Jiný materiál přes šev 1,4–3,7 %, uvnitř bloku 7–12 %.
+  Vápenec z bloku „ano“ (vršek 2,0 m) klesá v bloku „ne“ na 3,1–3,3 m hned za švem a na 4–6 m do 3 m (náběh `taper_m`).
+  Závislost na pořadí vložení roste: obrácené pořadí změní 2276–3662 buněk, bez příznaku 1246–1275 (rozhoduje, kdo je
+  první a od koho se náběh počítá).
+- **Kras E75 (30 ostrovů 2 × 2, 63 bloků ano / 57 ne, `p75_kras` zap):**
+
+| voda | příznak | ostrovů s krasem | bloky ano s krasem | bloky ne s krasem | m³/herní den ano / ne | 1. dutina (herní dny, nejkratší) |
+|---|---|---|---|---|---|---|
+| E58 (výchozí) | bez | 0 | 0 | 0 | 0 / 0 | – |
+| E58 (výchozí) | s | 1 | 2 | 0 | 1,0e-4 / 0 | 601 |
+| E67 (pretok) | bez | 7 | 9 | 6 | 1,9e-4 / 3,0e-4 | 1224 |
+| E67 (pretok) | s | 19 | 27 | 13 | 1,7e-3 / 1,4e-3 | 190 |
+
+  START s příznakem v E67: 57 pásem jen v blocích ano, 1. dutina za 857 dní; ostrov 4 × ano 204 pásem, 210 dní.
+- **Negativa:** ve výchozím režimu vody (E58) se kras skoro nespustí ani v blocích „ano“ (2 z 63). Cesta tělesa vede
+  krytem (štěrk, spraš) u hladiny, ne vápencem. V E67 se kras rozběhne, ale i v blocích „ne“ (13 z 57; voda z
+  vápence souseda teče do jejich hlubokého vápence a dolomitu), takže mince neurčuje kras čistě po blocích. Odhad hladiny
+  = povrch − 2 m, není to hladina z vody. Vyklínění těsnění mění tělesa a prameny (START: 3 → 6 pramenů, přítok
+  0 → 1,23 l/s v E58). Závislost na pořadí vložení se zdvojnásobí. Statistika „u hladiny“ v nástroji (okno 1–2 m)
+  po změně na 2,0 m skoro nic neukazuje, platí vršek vápence.
+- **Výchozí hra beze změny** (`p82_vapenec` vyp): geo d3ff4d43…, otisk vody d7aedf3a… a po výkopech 63d7b89a… (voda_e66),
+  stejně jako E75 / E81.
+- **Doporučení:** příznak zatím nezapínat. Kras potřebuje i cestu vody vápencem: buď E67 jako výchozí podzemí, nebo E58
+  s cestou přes celé nasycené těleso. Jinak mince sama nestačí.
+- **Pro Jana:** (1) má mince platit jen pro vápenec u hladiny (teď), nebo i pro hluboký vápenec a dolomit? (2) smí blok
+  „ano“ vyklínit jíl a jílovec nad vápencem (víc pramenů, jiná voda)? (3) hloubka vršku 2 m pod povrchem; (4) kras ve
+  výchozí vodě E58 nevzniká – přepnout podzemí na E67, nebo upravit cestu E58?
+
+## E81 tenké vrstvy a převzorkování (plán, zapsáno před pokusem 2026-11-20 01:41; TODO Architektura světa: „vrstva tenčí než buňka nesmí zmizet nebo se objevovat podle rozlišení“; větev z `e80-hranice-funkci`)
+- **Co už je:** `geo_fn.material` vybere vrstvu podle středu buňky (Z < bs[k]). Vrstva tenčí než buňka je ve sloupci vidět,
+  jen když na ni padne střed buňky → mizí a objevuje se po sloupcích, podle rozlišení i místa. Klíny (vyklínění do ~3 m
+  od švu, v2.1) tvoří tenké konce vrstev. Podzemí vody bere pásma přímo z funkcí (`ug_funkce.bands`), takže vodu sampling
+  netrápí – ale buňky (vykreslení, kopání, hostitelé minerálů, materiál pro ztráty `_mat_d`) ano. Dřív (E52) „tenké
+  propustné vrstvy se v hrubých buňkách spojí“.
+- **Pokus (`godot-prototyp/tools/tenke_e81.gd`, ostrov 4 bloky):**
+  1. *Soupis:* pro každou vrstvu mocnost v řídicích bodech; sloupce s 0 < t < 0,25 m, < 0,5 m; konce vyklínění.
+  2. *Výskyt:* vrstva podle funkce (t > t_min) proti buňkám při 0,5 a 0,25 m: shoda sloupců, plocha, počet kusů
+     (souvislé oblasti přes celý ostrov, tedy i přes švy), rozdíl na švu proti uvnitř.
+  3. *Voda:* podzemí z buněk (`ug_funkce.from_cells`) při 0,5 a 0,25 m proti podzemí z funkcí: počet těles, pokrytí tenké
+     nepropustné vrstvy (díry = voda projde), rozpad tenké propustné vrstvy. Plus otisk vody ostrova s opravou a bez.
+  4. *Minerály:* hostitelské buňky a schodek rud při 0,5 / 0,25 m s opravou a bez.
+- **Oprava (příznak `p81_tenke`, výchozí vypnuto):** konzervativní vzorkování v `geo_fn.sample`: vrstva, která je ve
+  sloupci podle funkce (mocnost > `p81_min_m`, výchozí 0,05 m), ale nepadl na ni žádný střed buňky, dostane jednu buňku
+  (tu, kde leží střed vrstvy), pokud tam funkce opravdu dává tuto vrstvu (ne kryt, ne těleso). Konec vyklínění je pak
+  určen funkcí (t = t_min), ne rozlišením. Konflikty (dvě tenké vrstvy v jedné buňce) se spočítají.
+- **Riziko / negativa předem:** vrstva se nafoukne na celou buňku (objem roste, tenké vrstvy 0,5 m místo 0,1 m), změní se
+  počty hornin v souhrnu (validátor WVB1 počítá materiály), výchozí 0,5 m pipeline se změní jen se zapnutým příznakem.
+  Voda (pásma z funkcí) se nezmění, změní se jen `_mat_d` a hostitelé.
+
+## E81 výsledky (zapsáno 2026-11-20 01:48; `godot-prototyp/tools/tenke_e81.gd`, `shots/e81/`, ostrov 4 bloky START)
+- **Soupis:** z 20 vrstev má 7 průměrnou mocnost pod 0,8 m: fe_ti_zone 0,12 m, siltstone 0,16, conglomerate 0,17,
+  gypsum 0,17, dolomite 0,63, gravel_sand 0,73, loess 0,73. Sloupců, kde je vrstva tenčí než buňka: 2679 při 0,5 m
+  (mřížka 32 × 32 × 20 vrstev), 6986 při 0,25 m. Pravda = pásma z funkcí (`ug_funkce.bands`), jen kde funkce
+  materiálu vrstvu opravdu dává (ne těleso, ne kryt), práh t_min 0,05 m.
+- **Bez opravy:** tenká vrstva v buňkách chybí v 1599 z 2679 sloupců (60 %) při 0,5 m a 3383 z 6986 (48 %) při 0,25 m.
+  Vrstva se rozpadá: 221 kusů při 0,5 m a 669 při 0,25 m, funkce dává 87 a 60. Navíc (buňka má vrstvu, funkce < 0,05 m):
+  62 a 689. Výskyt podle rozlišení nesouhlasí v 6081 dvojicích (jemný sloupec × vrstva); vodorovné vzorkování funkce
+  samo dává 1892 (spodní mez).
+- **S opravou `p81_tenke`:** chybí 203 (7,6 %) a 163 (2,3 %), navíc 25 a 273, kusů 114 a 152, nesoulad rozlišení 2820.
+  Přidáno 1460 / 3390 buněk (345 / 703 posunuto o buňku), konflikty 206 / 117, odebráno pod prahem 60 / 659.
+  Zbytek chybění = tři tenké vrstvy nad sebou (siltstone, conglomerate, gypsum, dohromady ~0,5 m) se do buňky 0,5 m
+  nevejdou, a spraš (loess) těsně pod půdou.
+- **Švy:** výskyt se mění přes šev ve 1,9 % dvojic, uvnitř bloku v 7,8 % (0,5 m bez opravy), 7,1 % s opravou; při 0,25 m
+  5,2 % → 3,1 % (funkce 2,5 %). Šev není horší než vnitřek, chyba je ve svislém vzorkování, ne na švu.
+- **Voda:** hra bere pásma z funkcí, takže tenké vrstvy ve vodě nemizí. Rozdíl je jen u podzemí z buněk (`from_cells`):
+  tenká nepropustná vrstva (0,05 m < t < buňka) má díru v 932 z 1451 sloupců (64 %) při 0,5 m, 2054 z 4029 (51 %)
+  při 0,25 m; s opravou 109 a 65. Tělesa: funkce 30, buňky 34, s opravou 48 (0,25 m: 137 / 185 / 192) – oprava těles
+  NEZLEPŠÍ, nafouklé přepážky (celá buňka) přeruší vodorovná spojení. Objem těles 1323 m³ / 1217 / 1260.
+- **Ostrov z pipeline:** příznak vypnut = geo d3ff4d43…, otisk vody d7aedf3a… (stejné jako kód E80, výchozí hra beze
+  změny). Zapnut = 1524 buněk z 65 536 (2,3 %) jiných, otisk vody c3f579ee… (ztráty tůní čtou materiál buněk `_mat_d`).
+- **Minerály:** schodek 0 ve všech variantách (hostitelů je dost). Hostitelé při 0,5 m: železná ruda −5,0 %, měď −3,1 %,
+  jeskyně −1,8 %, uhlí +1,3 %, granáty +2,5 %; při 0,25 m ±2 %. Výnos se nemění, mění se poloha.
+- **Čas:** vzorkování 4 bloků 0,5 m 170 → 238 ms (+40 %), 0,25 m 1451 → 1720 ms (+19 %).
+- **Negativa:** tenká vrstva se nafoukne na celou buňku (fe_ti_zone 0,12 m → 0,5 m, 4×); tělesa vody z buněk horší; tři
+  tenké vrstvy nad sebou se při 0,5 m nevejdou; vodorovný konec vyklínění se pořád liší o sloupec (1892 dvojic, oprava
+  to neřeší); 273 „navíc“ při 0,25 m (vrstva z jiného zdroje než pásma, hlavně tělesa); zapnutí mění svět = nová verze
+  generátoru.
+- **Doporučení:** zapnout `p81_tenke` až s rozhodnutím o verzi generátoru u bloku (E80). Mřížku 0,25 m ze zjemnění 0,5 m
+  oprava nezlepší – platí jen při vzorkování z funkcí (rozhodnutí E80). Vodu dál brát z funkcí, ne z buněk.
+- **Pro Jana:** (1) zapnout jako výchozí (nový svět jiný o 2,3 % buněk)? (2) tři tenké vrstvy nad sebou při 0,5 m: jedna
+  vyhraje (teď nejtenčí), sloučit, nebo v blueprintu zakázat vrstvy < 0,25 m? (3) práh 0,05 m.
+
+## E80 kde končí funkce a pásma (plán, zapsáno před pokusem 2026-11-20 01:33; TODO Model světa a kopání: „kritérium, kdy změna (převis, oblouk, nepravidelná jeskyně) potřebuje lokální oblast s plnými buňkami, a jak takovou oblast uložit (řídký objem, octree, komprimované intervaly)“; větev z `e79-chodby-voda`)
+- **Co už je (průzkum kódu):** `geo_fn` = spojité funkce v metrech světa (povrch `hm_f`, hranice `bs[k]` na řídicí mřížce
+  0,5 m, bilineárně přes švy; materiál bodu; tělesa). `pipeline` vzorkuje při n = 16 (středy buněk = řídicí body), pak
+  minerály a dutiny výběrem buněk podle φ (buňkový krok), vsakování. `tests_horniny.resolution` (v2.1, 18. 11.) měřil 16 proti
+  32: shoda 94,9 %, pevné/vzduch 99,7 %. `prekryv78` bere mřížku 0,25 m jako zjemnění buněk 0,5 m (ne z funkcí).
+  Podzemí (`ug_funkce`) = pásma z funkcí + jedno pásmo dutiny na sloupec 0,5 m.
+- **Pokus (`godot-prototyp/tools/hranice_e80.gd`, ostrov 4 bloky jako E78):**
+  1. *Rozlišení:* funkce při 0,5 m a 0,25 m (+ minerály) proti zjemnění 0,5 m (to bere překryv); rozdíl buněk, pevné/vzduch,
+     výška povrchu; čas.
+  2. *Švy:* spojitost povrchu a hranic vrstev přes šev (skok proti gradientu uvnitř), materiál přes šev; závislost na pořadí
+     vložení: blok sám proti bloku po vložení sousedů při 0,5 m a 0,25 m (počet jiných buněk).
+  3. *Překryv po převzorkování:* překryv E78 (chodba) uložený nad zjemněním 0,5 m, použitý nad funkcemi 0,25 m; a nad
+     novou verzí funkcí (jiná mocnost půdy, posun povrchu): položky beze smyslu (výkop ve vzduchu, položení do skály,
+     položka = nová definice), změna okolí chodby.
+  4. *Okraje a dno:* hranice indexu překryvu (z 0..127), dno ostrova z = 0, chodba ven bokem ostrova a díra dnem → voda.
+  5. *Kritérium a uložení:* scénáře chodba, dlouhá chodba, převis (podkopaný svah), oblouk (průchod hřbetem), nepravidelná
+     jeskyně (šum), 1000 náhodných buněk. Třídy sloupců: jen výška / intervaly (pásma) / víc dutin, než pásmo vody umí /
+     jemnější než 0,5 m. Uložení: klíče (E78 A), intervaly ve sloupcích (E78 B), řídký octree, husté cihly 8³; syrově a deflate.
+- **Očekávání / riziko:** při 0,25 m z funkcí závisí buňky u švu na pozdějším sousedovi (bilineární interpolace) → proti
+  pravidlu „sousedé se nemění“. Minerály a dutiny nejsou funkce (výběr buněk) → při jiném rozlišení jiná místa. Změna
+  verze funkcí pod překryvem bez pravidla rozbije výkopy. Bez rozhodnutí Jana jen návrh.
+
+## E80 výsledky (zapsáno 2026-11-20 01:39; `godot-prototyp/tools/hranice_e80.gd -- --bp.p76_prameny=true --bp.p79_chodby=true`, `shots/e80/`)
+- **Hranice (jak to je v kódu):** zdroj pravdy = funkce v metrech světa (`geo_fn`: povrch, hranice vrstev na řídicí mřížce
+  0,5 m, materiál bodu, tělesa) + seed bloku. Při 0,5 m jsou buňky přesně vzorky funkcí (16 = pipeline ve všech 4 blocích).
+  Minerály a dutiny z generátoru už funkce nejsou (výběr buněk podle φ), vsakování taky ne. Mřížka 0,25 m v `prekryv78` je
+  zjemnění buněk 0,5 m, ne vzorek funkcí. Překryv hráče je konečný stav buněk 0,25 m. Voda (podzemí) čte pásma z funkcí
+  + jednu dutinu na sloupec 0,5 m z buněk.
+- **Rozlišení:** funkce při 0,25 m proti zjemnění 0,5 m: jiné buňky 7,8 % (bez minerálů 7,5 %, jen geometrie 7,6 %),
+  pevné/vzduch 0,47 %, povrch Ø 0,05–0,36 m, max 0,5 m (louka) až 1,75 m (hora). Rozdíly jsou na hranicích vrstev a ve
+  strmém povrchu. Vzorek 0,25 m stojí 0,46–0,81 s na blok (0,5 m 58–94 ms).
+- **Švy:** povrch i hranice vrstev bez skoku (0 m), materiál se mění přes šev méně než uvnitř (3,4 % proti 11,2 % dvojic).
+  Pořadí vložení: první blok vzorkovaný sám a po vložení sousedů = 0 jiných buněk při 0,5 i 0,25 m (sousedé přebírají okraj).
+- **Překryv po převzorkování a nové verzi funkcí (chodba E78, 2175 položek):** položky zůstanou platné (0 výkopů ve
+  vzduchu, 0 položek = nové definici), ale okolí se změní: nad funkcemi 0,25 m 313 z 1787 sousedních buněk, půda +0,5 m
+  32, povrch +0,5 m 421 a 32 položení skončí uvnitř skály (bývala na povrchu). Stejná verze: 0.
+- **Okraje a dno:** dno ostrova (z = 0) je plné ve všech 1024 sloupcích. Díra dnem (šachta 1 × 1 m až na z = 0): voda v ní
+  stojí jako v tůni (4 sloupce mokré, `hm` 0), nevyteče ven, 0,04 l/s „do hloubky“. Chodba ze zvodnělé vrstvy (hladina
+  19,5 m, chodba 15–17 m) ven bokem ostrova: voda beze změny (otisk d7aedf3a…, 0 výstupů „okraj“) – bok ostrova podzemí
+  neotevírá (bez `p67_okraj`; s ním se zvodnělá vrstva nenašla, ostrov má jinou vodu). Lokálně = plně v obou.
+- **Kritérium (třídy sloupců 0,5 m pro vodu, změněné sloupce):** chodba 55 jedna dutina / 8 výška / 1 jemnější;
+  dlouhá 288 / 4 / 0; převis 11 / 5 / 4; oblouk 10 / 9 / 0; nepravidelná jeskyně 1 / 0 / **109 jemnější než 0,5 m**;
+  1000 náhodných **637 jemnějších**; dvě chodby nad sebou **32 víc dutin** (pásmo vody je spojí). Úseků změn na sloupec
+  0,25 m 1,0–1,14 (dvě chodby 2,0).
+- **Uložení (deflate, B; syrově v json):** klíče (E78) / intervaly / octree / cihly 8³:
+  chodba 124 / 451 / 241 / 342; dlouhá 244 / 1865 / **157** / 353; 1000 náhodných **1792** / 3341 / 2825 / 4894;
+  převis 66 / 165 / **60** / 63; oblouk 82 / 154 / **63** / 83; jeskyně **663** / 1256 / 744 / 865; dvě chodby 99 / 408 / 129 / 168.
+- **Závěr:** funkce končí u buňky 0,5 m. Plné buňky (= překryv) jsou potřeba všude, kde hráč něco změnil; vykreslení a
+  kolize to už umí. Problém je jen voda: sloupec 0,5 m, kde (a) víc než jedna dutina pod povrchem, nebo (b) změna jemnější
+  než 0,5 m, pásma vody nepopíšou. Uložení: klíče + deflate stačí (nejmenší nebo do 1,6× nejmenšího); octree je lepší jen u
+  velkých souvislých objemů, intervaly po deflate nejhorší. Řídký objem / octree zatím nedělat.
+- **Opraveno:** `prekryv78.op` nehlídal meze – z = 128 zapsal do sloupce vedle (index přetekl). Teď vrací false.
+- **Negativa / otevřené:**
+  - Mřížka 0,25 m není z funkcí (7,8 % buněk jinak). Sjednotit: buď 0,25 m z funkcí (pomalejší 6–9×, voda a pipeline jsou
+    na 0,5 m), nebo zůstat u zjemnění. Rozhodne Jan.
+  - Změna verze funkcí pod překryvem rozbije okolí výkopů a zasype položené buňky. Návrh: blok drží verzi generátoru, se
+    kterou vznikl (WVB1 má `gen_ver`), nová verze jen pro nové bloky. Rozhodne Jan.
+  - Díra dnem a chodba bokem: voda neodteče z ostrova. Model nezná otevřené dno ani bok. Rozhodne Jan, jestli kopat do z = 0
+    a ven bokem vůbec jde.
+  - Víc dutin ve sloupci a jemné změny < 0,5 m voda nevidí (jeskyně 109 sloupců, dvě chodby 32). Oprava = dutiny jako víc
+    pásem na sloupec (a vzorek 0,25 m pro vodu), nedělal jsem.
+  - Měřil jsem jen 4 bloky jednoho ostrova a jen dvě změny verze; 0,125 m jsem nezkoušel.
+
+## E79 výsledky (zapsáno 2026-11-20 01:30; `godot-prototyp/tools/chodby_e79.gd -- --bp.p76_prameny=true --bp.p79_chodby=true`, `shots/e79/vysledky.json`, `vystup.txt`)
+- **Shoda lokálně = plně (otisk vody, `fill/eff/to` 0 neshod) po KAŽDÉ dávce ve všech 11 scénářích s `edit79`.** Stará cesta
+  (E78, `edit` po sloupcích) nesedí v 6 z 11: chodba 153 / 102 `eff` (podle pořadí), zvodnělá vrstva a šachta do dna tůně
+  jiný otisk (odtok tůně a pramen), šachta do tůně obráceně 4 `fill` + 2 `to`. Chyba bilance 0 všude (lokálně i plně).
+- **Pořadí:** šachta → chodba i chodba → šachta dají stejný konečný otisk (chodba cbe01a6bc9e2034e, zvodnělá 16bce7ccabe4910b,
+  tůň f31ffc35d0d9eb87). Uzavřená chodba je neutrální: otisk zůstane d7aedf3a6d9d10e8, dokud se neotevře (dlouhá chodba
+  9288 buněk i chodba bez šachty v obráceném pořadí).
+- **Čas (dávka, lokálně / plně):** chodba 1,06–1,46 s / 1,6–1,7 s; zvodnělá 1,09–1,37 s / 1,6–1,8 s; šachta do tůně 0,25–1,38 s
+  / 0,62–0,67 s; dlouhá uzavřená 1,93 s / 2,13 s; náhodné buňky (bez změny dutiny 0,5 m) 39–140 ms / 1,8–2,1 s. Přestavba
+  podzemí s mezipamětí ~0,2 s (bez ní celé `from_world`), zbytek je lokální přepočet E68 s větším oknem.
+- **Co bylo potřeba (kromě přestavby pásem):**
+  1. materiál pro ztráty u změněných sloupců jako plný výpočet (šachta vykope i buňku `hm_gen − 1 − dd`);
+  2. směr `to` v suchu kolem změny (tok60 v suchu `to` nepřepočítá; plný ano);
+  3. i položení na povrch musí podzemí postavit znovu (povrch podzemí `hs` a výkopy), jinak 102 `eff` po dávce položení;
+  4. tůně nad dotčenými tělesy jdou do okna celé (hladina podle kapacity E71 se jinak nezmění);
+  5. smyčka tůň → těleso → pramen začíná od nuly jako plný výpočet (jinak zůstal pramen 0,04 l/s, který živil sám sebe).
+- **Výchozí hra beze změny:** `voda_e66` (12 výkopů) d7aedf3a6d9d10e8 → 63d7b89a91385a79, 0 neshod, s `p79_chodby` vypnutým
+  i zapnutým (hra volá `edit`, ne `edit79`). Test smyčky E68 `from_world` nepoužívá.
+- **Negativa:**
+  - Lokální přepočet je jen o 10–35 % rychlejší než plný a u šachty do tůně 1,7× pomalejší (okno = všechny odtoky a tůně
+    dotčených těles). Kopat po buňce a přepočítat po každé by bylo drahé → dávkovat (např. jednou za tik / po dokončení
+    výkopu).
+  - Uzavřená chodba stojí ~1,9 s, i když vodu nezmění (dutina se změnila → přestavba). Šlo by přeskočit, kdyby se
+    poznalo, že dutina nesousedí s tělesem ani s povrchem.
+  - Přestavba podzemí je pořád pro celý ostrov (jen bez funkcí). Opravdu po sloupcích (vložit pásma do CSR, přečíslovat
+    tělesa) jsem nedělal.
+  - Dutina sloupce je dál jedno pásmo od nejnižšího po nejvyšší vzduch (dvě chodby nad sebou se spojí), stejně v plném.
+  - Příznak `p79_chodby` nechávám vypnutý: výsledek sedí, ale hra kopání po 0,25 m zatím nepoužívá a `edit79` nikdo nevolá.
+
+## E78 výsledky (zapsáno 2026-11-20 01:08; `godot-prototyp/tools/prekryv_e78.gd -- --bp.p76_prameny=true`, `shots/e78/vysledky.json`, `vystup.txt`)
+- **Přechod definice → buňky:** buňky 0,5 m → 0,25 m → 0,5 m beze změny a výška = `hm` z generátoru u všech 4 bloků.
+- **Shoda po načtení:** ve všech 6 scénářích otisk buněk 0,25 m i 0,5 m po načtení = živý stav a voda po načtení
+  (plný přepočet, uložené prameny E76) = plný přepočet živého stavu. Bez `p76_prameny` u chodby taky.
+- **Velikost (ostrov 4 bloky, součet; A = seřazené klíče, B = úseky ve sloupcích; syrově / deflate):**
+
+| scénář | změn | položek | A | B | JSON záznam |
+|---|---|---|---|---|---|
+| 1 buňka | 1 | 1 | 8 / 40 B | 5 / 13 B | viz json |
+| 10 | 10 | 10 | 40 / 70 B | 50 / 82 B | |
+| 100 | 100 | 100 | 304 / 255 B | 500 / 481 B | |
+| 1000 | 1000 | 1000 | 2779 / 1792 B | 4980 / 3341 B | |
+| chodba 15 m + šachta + položení + zasypání | 2185 | 2175 | 4421 / 124 B | 1300 / 451 B | |
+| dlouhá chodba ~70 m přes 4 bloky | 9288 | 9288 | 18831 / 244 B | 5920 / 1865 B | |
+
+  Celé pole WVB1 pro tytéž 4 bloky: 0,5 m 65 536 B syrově / ~7,1–7,2 kB deflate; 0,25 m 524 288 B / 13,4–17,4 kB deflate
+  (roste s počtem náhodných změn). Překryv je i u 1000 náhodných buněk 4–10× menší než deflate celého pole, chodby 30–55×.
+- **Čas načtení:** bloky z definice ~0,95–1,03 s (4 bloky), překryv + převod na 0,5 m +0,07–0,19 s; voda (plný přepočet)
+  1,7–2,2 s. Lokální kroky vody po změně jen u sloupců se změněnou výškou.
+- **Pořadí:** vykopat → zasypat hlínou = hlína (1 položka), zasypat → vykopat = vzduch (zasypání plné buňky se neprovede),
+  otisky se liší, záměrně a vysvětlitelně. Vykopat a vrátit původní materiál = otisk definice, 0 položek. Dvě operace na
+  různých buňkách v obou pořadích = stejný otisk. Hash = f(definice, překryv), ne f(historie).
+- **Záznam E76 rozšířen:** `prenos_e76.gd` ukládá místo `vykopy` překryv buněk (`bunky`, `bunky_n`), výška se odvodí.
+  Část A E76 dává stejný otisk 63d7b89a91385a79 (0 neshod), záznam 644 B místo 524 B.
+- **Negativa:**
+  - Chodba se vstupem z povrchu: lokální přepočet vody ji nevidí (mění se jen výška sloupců), proti plnému přepočtu 153 buněk
+    jiný `eff` a 1 `to`, jiný otisk vody. Načtení odpovídá plnému přepočtu, ne živému lokálnímu stavu. Dutiny pod
+    povrchem musí lokálnímu přepočtu podzemí dát vědět (přestavět pásma dotčených sloupců), jinak hra a načtení nesedí.
+    Dlouhá uzavřená chodba (bez vstupu) vodu nemění, tam lokální = plný.
+  - Pro výkopy po sloupcích je překryv buněk větší než výšky sloupců (644 proti 524 B), jeden sloupec 0,5 m = 8 položek.
+  - Deflate se u malých překryvů nevyplatí (8 → 40 B); záznam proto komprimuje jen když je to menší.
+  - Kódování B (úseky) je lepší syrově u chodeb, ale po deflate horší než A; A s deflate vychází nejlépe všude kromě 1 buňky.
+  - Buňka 0,5 m zůstává plná, dokud v ní zbývá 1 z 8 jemných buněk: voda a kolize 0,5 m nevidí díru 0,25 m. Prototyp
+    sám dál kope po 0,5 m; mřížka 0,25 m je zatím jen v tomto pokusu.
+  - Načtení stojí hlavně generování bloků (~1 s) a plný přepočet vody (~2 s), ne překryv.
+
 ## Sloučení vody E74–E77 do main + přepínače podle Jana (plán, zapsáno před úpravami 2026-11-20 03:44; TODO Rozhodnutí Jana 2026-11-20 01:49 a 03:26, blok 1 Voda; větev `voda-e74-e77-slouceni` z `origin/main`)
 - **Sloučení:** `e74-gw-plocha`, `e75-kras`, `e76-voda-po-prenosu`, `e77-cas-hodina` postupně do větve z main (4 slučovací
   commity). Konflikty: parametry = sjednocení klíčů (3cestně, `p71_cas` 24 z E77), `ostrov_voda.gd` = E74 + E75 vedle sebe,
@@ -463,6 +876,7 @@ Výchozí: 800 kapek na blok, `ero_cap` 1,0, `ero_erode` 0,1, `ero_deposit_rate`
   test smyčky `tools/e68.gd` stejné otisky jako main.
 - **Rozhodnutí:** `p76_prameny` zůstává vypnutý; měřeně správný a první postavení se nemění, ale mění chování po
   vložení bloku (prameny jinde zůstanou) → rozhodne Jan.
+
 ## E75 eroze v podzemí po tělesech – kras (plán, zapsáno před pokusem 2026-11-20 00:25; TODO Model světa, Jan 2026-11-19 20:53, hypotéza)
 - **Co už je:** E51 eroze jako události v haldě (odpočet, předpočítané časy, kopání / položení vynuluje odpočet sloupce);
   tělesa a průtoky E58 (jedna nádrž, vstup → výstup) a E67 (mokrá pásma s průtokem `wetq67`, pasti); dutiny blueprintu

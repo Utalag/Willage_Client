@@ -88,6 +88,11 @@ static func steps_v2(ctx: Dictionary) -> Array:
 		var pr: Dictionary = ctx.p.duplicate(); pr.strata_noise = 0.0
 		# regionální základ = regionální funkce hranic (bez tvaru a šumu blueprintu) s podmnožinou hornin blueprintu
 		ctx.regional = G2.targets(ctx.slot, flat, "louka", 0, pr, sub_of(ctx.bp))
+		if bool(ctx.p.get("p82_vapenec", false)):   # E82: mince bloku – vápenec k hladině (~50 % bloků)
+			ctx.rep.vapenec82 = G2.coin82(int(ctx.bp.seed), ctx.p)
+			if ctx.rep.vapenec82:
+				ctx.rep.vapenec82_sloupcu = G2.lift82(ctx.targets, ctx.hm_f, ctx.p)
+				if bool(ctx.p.get("p82_kraj", true)): G2.lift82(ctx.regional, ctx.hm_f, ctx.p)
 		# výchozí hodnoty hranic na okrajích: funkce souseda v přiléhajícím řídicím bodě, jinak regionální základ
 		ctx.starts = []
 		ctx.real = []

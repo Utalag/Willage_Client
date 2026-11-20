@@ -118,10 +118,25 @@ static func column(wf: Dictionary, info: Dictionary, X: float, Y: float) -> Dict
 	var bs := PackedFloat64Array(); bs.resize(info.lay.size())
 	for k in bs.size():
 		bs[k] = boundary_m(wf, info.slot, k, X, Y)
+	if on85(info.p, "p85_vrstvy"): min85(bs, float(info.p.get("p85_min_m", 0.25)))
 	var col := {"h": surface_m(wf, info.slot, X, Y), "bs": bs}
 	var r = _rec(wf, info.slot)
 	col.h0 = _field(wf, info.slot, -2, X, Y) if r != null and r.has("hm_pre") else col.h
 	return col
+
+## E85: příznak bloku 2 (p85_blok2 zapne všechny části, jinak jednotlivě)
+static func on85(p: Dictionary, k: String) -> bool:
+	return bool(p.get("p85_blok2", false)) or bool(p.get(k, false))
+
+## E85 (Jan 2026-11-20 03:26, p85_vrstvy): vrstva tenčí než tmin (0,25 m) v blueprintu není. Zdola nahoru: mocnost
+## bs[k] − lo < tmin → bs[k] = lo (vrstva zmizí, místo dostane vrstva nad ní; nejvyšší vrstva → výplň nad hranicemi).
+## Počítá se v bodě z interpolovaných hranic, takže platí i mezi řídicími body a na švu je z obou stran stejné.
+## Vyklínění pak nekončí klínem do nuly, ale schodem tmin.
+static func min85(bs: PackedFloat64Array, tmin: float) -> void:
+	var lo := 0.0
+	for k in bs.size():
+		if bs[k] - lo < tmin: bs[k] = lo
+		else: lo = bs[k]
 
 static func _mountain_rock(info: Dictionary, X: float, Y: float, Z: float) -> int:
 	var rel: float = (Z / U - float(info.p.surf_ref)) / 21.0 + 0.06 * info.mnoise.get_noise_3d(X, Y, Z)
@@ -222,6 +237,66 @@ static func sample(wf: Dictionary, info: Dictionary, n: int, x0: int, x1: int, c
 			var base := (x * n + y) * nz
 			for z in nz:
 				cells[base + z] = material(info, col, X, Y, (z + 0.5) * c)
+			if bool(info.p.get("p81_tenke", false)): keep_thin(info, col, X, Y, c, nz, base, cells)
+
+## E81 (p81_tenke): konzervativní vzorkování tenkých vrstev. Vrstva, která je ve sloupci podle funkce (mocnost >
+## p81_min_m), ale nepadl na ni žádný střed buňky, dostane jednu buňku: tu, ve které leží bod vrstvy, kde funkce opravdu
+## dává tuto vrstvu (ne kryt půdy, ne těleso; zkouší se 9 bodů uvnitř vrstvy zdola). Když je buňka obsazená jinou tenkou vrstvou
+## nebo by tím zmizela jiná vrstva (její jediná buňka ve sloupci), zkusí se soused nad/pod podle polohy (pořadí vrstev
+## se zachová). Nejtenčí vrstvy mají přednost. Vrstva tenčí než p81_min_m se naopak do buněk nedá vůbec (buňka dostane
+## vrstvu nad ní). Konec vyklínění pak určuje funkce (t = p81_min_m), ne rozlišení.
+## Počty v info._k81 (pridano, posun = o buňku vedle, konflikt = nevešla se, kryt = funkce ji nikde nedává).
+static func keep_thin(info: Dictionary, col: Dictionary, X: float, Y: float, c: float, nz: int, base: int, cells: PackedByteArray) -> void:
+	var tmin := float(info.p.get("p81_min_m", 0.05))
+	var bs: PackedFloat64Array = col.bs
+	var top := float(col.h)
+	var have := {}
+	for zz in nz: have[cells[base + zz]] = true
+	var lo := 0.0
+	var cand := []
+	for k in bs.size():   # kandidát = vrstva s mocností > tmin, která ve sloupci buněk vůbec není
+		var hi: float = minf(bs[k], top)
+		if hi - lo > tmin and not have.has(int(info.lay[k])): cand.append([hi - lo, lo, hi, int(info.lay[k])])
+		elif hi - lo > 0.0 and hi - lo <= tmin:   # pod prahem: vrstva se v buňkách neobjeví (ani když na ni padne střed)
+			var m0 := int(info.lay[k])
+			for z in range(maxi(floori(lo / c - 0.5), 0), mini(ceili(hi / c), nz)):
+				var zc := (z + 0.5) * c
+				if zc < lo or zc >= hi or cells[base + z] != m0: continue
+				var rep := material(info, col, X, Y, hi + 1e-4) if hi + 1e-4 < top else material(info, col, X, Y, maxf(lo - 1e-4, 0.0))
+				if rep == m0 or rep == 0: continue
+				cells[base + z] = rep
+				if not info.has("_k81"): info._k81 = {"pridano": 0, "posun": 0, "konflikt": 0, "kryt": 0, "odebrano": 0}
+				info._k81.odebrano += 1
+		lo = maxf(lo, hi)
+	if cand.is_empty(): return
+	cand.sort_custom(func(a, b): return a[0] < b[0] or (a[0] == b[0] and a[1] < b[1]))
+	if not info.has("_k81"): info._k81 = {"pridano": 0, "posun": 0, "konflikt": 0, "kryt": 0, "odebrano": 0}
+	var taken := {}   # buňka → střed vrstvy, která ji dostala
+	for e in cand:
+		var m := int(e[3])
+		var Z := -1.0
+		for q in 9:   # zdola nahoru: u vrstvy těsně pod půdou je vidět jen spodek
+			var zq: float = lerpf(float(e[1]), float(e[2]), (q + 0.5) / 9.0)
+			if material(info, col, X, Y, zq) == m: Z = zq; break
+		if Z < 0.0: info._k81.kryt += 1; continue
+		if have.has(m): continue
+		var z0 := floori(Z / c)
+		var ref: float = taken.get(z0, (z0 + 0.5) * c)
+		var d := -1 if Z < ref else 1
+		var ok := false
+		for z in [z0, z0 + d, z0 - d]:
+			if z < 0 or z >= nz or taken.has(z): continue
+			var old := cells[base + z]
+			if old == 0 or old == m: continue
+			var only := true
+			for zz in nz:
+				if zz != z and cells[base + zz] == old: only = false; break
+			if only: continue
+			cells[base + z] = m; taken[z] = Z; have[m] = true; ok = true
+			info._k81.pridano += 1
+			if z != z0: info._k81.posun += 1
+			break
+		if not ok: info._k81.konflikt += 1
 
 static func sample_all(wf: Dictionary, info: Dictionary, n: int) -> PackedByteArray:
 	var cells := PackedByteArray(); cells.resize(n * n * 4 * n)

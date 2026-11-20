@@ -1,0 +1,9 @@
+Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+
+blok Start: louka louka seed 101 slot (0, 0): generování 233.9 ms, mesh 75.4 ms
+blok Start: hora hora seed 202 slot (1, 0): generování 267.2 ms, mesh 88.7 ms
+blok Start: kopec kopec seed 303 slot (0, 1): generování 249.4 ms, mesh 67.0 ms
+blok Start: louka louka seed 404 slot (1, 1): generování 234.9 ms, mesh 50.6 ms
+E66 voda: { "prameny": 8.794, "podzemí: pásma": 250.444, "povrch + podzemí: plný výpočet": 2536.359, "celkem": 2828.442 } { "prameny": 5, "koryto_sloupcu": 27, "tun_sloupcu": 159, "vodopady": 8, "vodopady_okraj": 5, "okraj_lps": 9.64358, "podzemni_telesa": 1, "vyvery": 1, "volani_podzemi": 4 }
+hra okraj vypnuto: {"blok":[0,0],"obvod_x0":{"h":0,"h0":40,"posledni":"vykopáno čedič (lz 0)","sloupec":[0,11],"vykopano_bunek":40},"sachta_stred":{"h":0,"h0":39,"posledni":"vykopáno čedič (lz 0)","sloupec":[8,11],"vykopano_bunek":39},"vnitrni_sev_x15":{"h":0,"h0":40,"posledni":"vykopáno čedič (lz 0)","sloupec":[15,11],"vykopano_bunek":40}}
+hra okraj zapnuto: {"blok":[0,0],"obvod_x0":{"h":40,"h0":40,"posledni":"okraj ostrova: nelze","sloupec":[0,3],"vykopano_bunek":0},"sachta_stred":{"h":1,"h0":41,"posledni":"dno ostrova: nelze","sloupec":[8,3],"vykopano_bunek":40},"vnitrni_sev_x15":{"h":1,"h0":40,"posledni":"dno ostrova: nelze","sloupec":[15,3],"vykopano_bunek":39}}

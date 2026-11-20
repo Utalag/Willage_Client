@@ -1,0 +1,987 @@
+{
+  "bloky": {
+    "ano": {
+      "bloku": 43,
+      "se_vapencem": 10864,
+      "u_hladiny": 1806,
+      "vrsek_m": 2.00571705426357
+    },
+    "ano_jine_nez_bez": 43,
+    "bez_priznaku": {
+      "se_vapencem": 23621,
+      "u_hladiny": 0
+    },
+    "ms_bez": 27213.476,
+    "ms_s": 28479.867,
+    "ne": {
+      "bloku": 57,
+      "se_vapencem": 13522,
+      "u_hladiny": 0,
+      "vrsek_m": 5.61183654535732
+    },
+    "ne_jine_nez_bez": 0,
+    "nedeterministicke": 0,
+    "po_druzich": {
+      "hora_ano": [
+        9,
+        524
+      ],
+      "hora_ne": [
+        8,
+        0
+      ],
+      "kopec_ano": [
+        11,
+        701
+      ],
+      "kopec_ne": [
+        22,
+        0
+      ],
+      "louka_ano": [
+        14,
+        243
+      ],
+      "louka_ne": [
+        20,
+        0
+      ],
+      "sopka_ano": [
+        9,
+        338
+      ],
+      "sopka_ne": [
+        7,
+        0
+      ]
+    }
+  },
+  "kras": {
+    "e58": {
+      "smiseny": {
+        "otisk_vody": "c95fcfdf63ee33d5",
+        "pasem": 0,
+        "po_blocich_m3_den": {},
+        "po_materialech_m3_den": {},
+        "pramenu": 5,
+        "pritok_l_s": 0.08829,
+        "prvni_dutina_dni": 1e99999,
+        "rychlost_m3_den": 0.0,
+        "spec": "0,0:louka:500;1,0:kopec:503;0,1:louka:510;1,1:louka:511",
+        "teles": 1,
+        "voda_ms": 7393.782
+      },
+      "start": {
+        "otisk_vody": "9050f199fa0b4b0a",
+        "pasem": 0,
+        "po_blocich_m3_den": {},
+        "po_materialech_m3_den": {},
+        "pramenu": 6,
+        "pritok_l_s": 1.22998,
+        "prvni_dutina_dni": 1e99999,
+        "rychlost_m3_den": 0.0,
+        "spec": "0,0:louka:101;1,0:hora:202;0,1:kopec:303;1,1:louka:404",
+        "teles": 1,
+        "voda_ms": 2185.634
+      },
+      "vse_ano": {
+        "otisk_vody": "3bbcf4e613dabdae",
+        "pasem": 0,
+        "po_blocich_m3_den": {},
+        "po_materialech_m3_den": {},
+        "pramenu": 3,
+        "pritok_l_s": 1.49,
+        "prvni_dutina_dni": 1e99999,
+        "rychlost_m3_den": 0.0,
+        "spec": "0,0:louka:500;1,0:kopec:501;0,1:louka:502;1,1:louka:504",
+        "teles": 1,
+        "voda_ms": 2397.899
+      },
+      "vse_ne": {
+        "otisk_vody": "b1746c0cc6382091",
+        "pasem": 0,
+        "po_blocich_m3_den": {},
+        "po_materialech_m3_den": {},
+        "pramenu": 5,
+        "pritok_l_s": 0.02165,
+        "prvni_dutina_dni": 1e99999,
+        "rychlost_m3_den": 0.0,
+        "spec": "0,0:louka:503;1,0:kopec:510;0,1:louka:512;1,1:louka:513",
+        "teles": 1,
+        "voda_ms": 1496.114
+      }
+    },
+    "e67": {
+      "smiseny": {
+        "otisk_vody": "b7b51f2dbe29fcce",
+        "pasem": 0,
+        "po_blocich_m3_den": {},
+        "po_materialech_m3_den": {},
+        "pramenu": 5,
+        "pritok_l_s": 0.00333,
+        "prvni_dutina_dni": 1e99999,
+        "rychlost_m3_den": 0.0,
+        "spec": "0,0:louka:500;1,0:kopec:503;0,1:louka:510;1,1:louka:511",
+        "teles": 1,
+        "voda_ms": 728.958
+      },
+      "start": {
+        "otisk_vody": "4419b7a2f66c7bfe",
+        "pasem": 57,
+        "po_blocich_m3_den": {
+          "(0, 1) ano": 0.00023484367803744,
+          "(1, 1) ano": 0.00000204437474900574
+        },
+        "po_materialech_m3_den": {
+          "cave_limestone": 0.000150797284276001,
+          "deep_limestone": 0.0000860907685104444
+        },
+        "pramenu": 6,
+        "pritok_l_s": 1.07998,
+        "prvni_dutina_dni": 856.963182886869,
+        "rychlost_m3_den": 0.000236888052786445,
+        "spec": "0,0:louka:101;1,0:hora:202;0,1:kopec:303;1,1:louka:404",
+        "teles": 1,
+        "voda_ms": 756.058
+      },
+      "vse_ano": {
+        "otisk_vody": "e8a329b059bd17cc",
+        "pasem": 204,
+        "po_blocich_m3_den": {
+          "(0, 1) ano": 0.000285833826694533,
+          "(1, 0) ano": 0.00000141340509894082,
+          "(1, 1) ano": 0.000439693971612468
+        },
+        "po_materialech_m3_den": {
+          "cave_limestone": 0.000172138166713853,
+          "deep_limestone": 0.000359755901553913,
+          "dolomite": 0.000120605637686989,
+          "gypsum": 0.0000744414974511868
+        },
+        "pramenu": 3,
+        "pritok_l_s": 1.27,
+        "prvni_dutina_dni": 209.896368759182,
+        "rychlost_m3_den": 0.000726941203405942,
+        "spec": "0,0:louka:500;1,0:kopec:501;0,1:louka:502;1,1:louka:504",
+        "teles": 1,
+        "voda_ms": 1315.809
+      },
+      "vse_ne": {
+        "otisk_vody": "58ca5ac323d58096",
+        "pasem": 0,
+        "po_blocich_m3_den": {},
+        "po_materialech_m3_den": {},
+        "pramenu": 5,
+        "pritok_l_s": 0.02165,
+        "prvni_dutina_dni": 1e99999,
+        "rychlost_m3_den": 0.0,
+        "spec": "0,0:louka:503;1,0:kopec:510;0,1:louka:512;1,1:louka:513",
+        "teles": 1,
+        "voda_ms": 773.115
+      }
+    }
+  },
+  "ostrovy": {
+    "e58_bez": {
+      "bloku_ano": 63,
+      "bloku_ano_s_krasem": 0,
+      "bloku_ne": 57,
+      "bloku_ne_s_krasem": 0,
+      "dutina_dni": [],
+      "m3_den_ano": 0.0,
+      "m3_den_ne": 0.0,
+      "ostrovu_s_krasem": 0,
+      "pasem": 0
+    },
+    "e58_s": {
+      "bloku_ano": 63,
+      "bloku_ano_s_krasem": 2,
+      "bloku_ne": 57,
+      "bloku_ne_s_krasem": 0,
+      "dutina_dni": [
+        601.1
+      ],
+      "m3_den_ano": 0.000102811918858935,
+      "m3_den_ne": 0.0,
+      "ostrovu_s_krasem": 1,
+      "pasem": 4
+    },
+    "e67_bez": {
+      "bloku_ano": 63,
+      "bloku_ano_s_krasem": 9,
+      "bloku_ne": 57,
+      "bloku_ne_s_krasem": 6,
+      "dutina_dni": [
+        2979.3,
+        10649.3,
+        3957.0,
+        13203.9,
+        14735.7,
+        4809.4,
+        1223.8
+      ],
+      "m3_den_ano": 0.000190842055077042,
+      "m3_den_ne": 0.000296763313661266,
+      "ostrovu_s_krasem": 7,
+      "pasem": 558
+    },
+    "e67_s": {
+      "bloku_ano": 63,
+      "bloku_ano_s_krasem": 27,
+      "bloku_ne": 57,
+      "bloku_ne_s_krasem": 13,
+      "dutina_dni": [
+        1238.3,
+        1937.8,
+        6444.4,
+        6239.3,
+        1318.7,
+        5527.4,
+        27250.4,
+        1224.1,
+        1292.1,
+        190.1,
+        1017.4,
+        45174.0,
+        18228.2,
+        1507.5,
+        2467.3,
+        810.4,
+        16132.5,
+        2531.7,
+        3233.3
+      ],
+      "m3_den_ano": 0.00170730669423732,
+      "m3_den_ne": 0.0013668264198921,
+      "ostrovu_s_krasem": 19,
+      "pasem": 1536
+    }
+  },
+  "p82": {
+    "kraj": true,
+    "pod_m": 2.0,
+    "podil": 0.5,
+    "vrstva": "cave_limestone",
+    "zapnuto": true
+  },
+  "podil": {
+    "nahodne_1000": 499,
+    "seedy_1_1000": 495,
+    "start": [
+      [
+        "0,0:louka:101",
+        true
+      ],
+      [
+        "1,0:hora:202",
+        false
+      ],
+      [
+        "0,1:kopec:303",
+        true
+      ],
+      [
+        "1,1:louka:404",
+        true
+      ]
+    ]
+  },
+  "svy": {
+    "ano_ne": {
+      "geo_hash": "bd626a942bc74ccc",
+      "material_sev_proc": 1.40625,
+      "material_uvnitr_proc": 9.296875,
+      "max_krok_0_25m_uvnitr_m": 0.00000439654087180941,
+      "mince": {
+        "0,0:louka:500": true,
+        "0,1:louka:504": true,
+        "1,0:kopec:503": false,
+        "1,1:louka:510": false
+      },
+      "obracene_poradi_jinych_bunek": 2513,
+      "profil_x": [
+        [
+          0,
+          2.0,
+          32,
+          0
+        ],
+        [
+          1,
+          1.98,
+          32,
+          2
+        ],
+        [
+          2,
+          2.03,
+          32,
+          0
+        ],
+        [
+          3,
+          1.98,
+          32,
+          1
+        ],
+        [
+          4,
+          2.0,
+          32,
+          0
+        ],
+        [
+          5,
+          2.02,
+          32,
+          0
+        ],
+        [
+          6,
+          1.98,
+          32,
+          2
+        ],
+        [
+          7,
+          1.98,
+          32,
+          3
+        ],
+        [
+          8,
+          1.98,
+          32,
+          2
+        ],
+        [
+          9,
+          2.03,
+          32,
+          1
+        ],
+        [
+          10,
+          2.02,
+          32,
+          1
+        ],
+        [
+          11,
+          1.95,
+          32,
+          4
+        ],
+        [
+          12,
+          1.94,
+          32,
+          4
+        ],
+        [
+          13,
+          2.02,
+          32,
+          4
+        ],
+        [
+          14,
+          1.97,
+          32,
+          3
+        ],
+        [
+          15,
+          2.0,
+          32,
+          0
+        ],
+        [
+          16,
+          2.0,
+          32,
+          0
+        ],
+        [
+          17,
+          3.29,
+          31,
+          1
+        ],
+        [
+          18,
+          4.23,
+          32,
+          0
+        ],
+        [
+          19,
+          4.83,
+          32,
+          0
+        ],
+        [
+          20,
+          5.41,
+          32,
+          0
+        ],
+        [
+          21,
+          5.67,
+          30,
+          0
+        ],
+        [
+          22,
+          6.05,
+          29,
+          0
+        ],
+        [
+          23,
+          6.09,
+          28,
+          0
+        ],
+        [
+          24,
+          6.29,
+          26,
+          0
+        ],
+        [
+          25,
+          6.5,
+          27,
+          0
+        ],
+        [
+          26,
+          6.43,
+          22,
+          0
+        ],
+        [
+          27,
+          6.24,
+          23,
+          0
+        ],
+        [
+          28,
+          6.02,
+          25,
+          0
+        ],
+        [
+          29,
+          5.37,
+          27,
+          0
+        ],
+        [
+          30,
+          5.31,
+          32,
+          0
+        ],
+        [
+          31,
+          5.16,
+          31,
+          0
+        ]
+      ],
+      "skok_hranic_na_svu_m": 0.0,
+      "spec": "0,0:louka:500;1,0:kopec:503;0,1:louka:504;1,1:louka:510",
+      "stats": {
+        "(0, 0)": {
+          "se_vapencem": 256,
+          "u_hladiny": 7,
+          "vrsek_pod_povrchem_m": 2.005859375
+        },
+        "(0, 1)": {
+          "se_vapencem": 256,
+          "u_hladiny": 20,
+          "vrsek_pod_povrchem_m": 1.98046875
+        },
+        "(1, 0)": {
+          "se_vapencem": 243,
+          "u_hladiny": 1,
+          "vrsek_pod_povrchem_m": 5.55555555555556
+        },
+        "(1, 1)": {
+          "se_vapencem": 216,
+          "u_hladiny": 0,
+          "vrsek_pod_povrchem_m": 4.83564814814815
+        }
+      },
+      "znovu_stejny_hash": true
+    },
+    "smiseny": {
+      "geo_hash": "70e9c64713b48aa1",
+      "material_sev_proc": 1.875,
+      "material_uvnitr_proc": 12.03125,
+      "max_krok_0_25m_uvnitr_m": 0.00000614822569566797,
+      "mince": {
+        "0,0:louka:500": true,
+        "0,1:louka:510": false,
+        "1,0:kopec:503": false,
+        "1,1:louka:511": true
+      },
+      "obracene_poradi_jinych_bunek": 3662,
+      "profil_x": [
+        [
+          0,
+          3.34,
+          28,
+          0
+        ],
+        [
+          1,
+          3.19,
+          27,
+          0
+        ],
+        [
+          2,
+          3.13,
+          27,
+          0
+        ],
+        [
+          3,
+          2.78,
+          25,
+          0
+        ],
+        [
+          4,
+          2.75,
+          26,
+          0
+        ],
+        [
+          5,
+          2.44,
+          24,
+          0
+        ],
+        [
+          6,
+          2.35,
+          24,
+          2
+        ],
+        [
+          7,
+          2.52,
+          25,
+          3
+        ],
+        [
+          8,
+          2.48,
+          24,
+          0
+        ],
+        [
+          9,
+          3.16,
+          31,
+          0
+        ],
+        [
+          10,
+          3.19,
+          32,
+          0
+        ],
+        [
+          11,
+          3.23,
+          32,
+          1
+        ],
+        [
+          12,
+          3.3,
+          32,
+          0
+        ],
+        [
+          13,
+          3.39,
+          32,
+          1
+        ],
+        [
+          14,
+          3.28,
+          30,
+          1
+        ],
+        [
+          15,
+          2.96,
+          24,
+          0
+        ],
+        [
+          16,
+          2.96,
+          24,
+          0
+        ],
+        [
+          17,
+          4.13,
+          32,
+          1
+        ],
+        [
+          18,
+          4.3,
+          32,
+          0
+        ],
+        [
+          19,
+          4.44,
+          32,
+          0
+        ],
+        [
+          20,
+          4.66,
+          32,
+          0
+        ],
+        [
+          21,
+          4.66,
+          32,
+          0
+        ],
+        [
+          22,
+          4.72,
+          32,
+          0
+        ],
+        [
+          23,
+          4.7,
+          32,
+          0
+        ],
+        [
+          24,
+          4.8,
+          32,
+          0
+        ],
+        [
+          25,
+          4.84,
+          28,
+          0
+        ],
+        [
+          26,
+          4.64,
+          28,
+          1
+        ],
+        [
+          27,
+          4.57,
+          28,
+          0
+        ],
+        [
+          28,
+          4.43,
+          29,
+          1
+        ],
+        [
+          29,
+          3.91,
+          29,
+          1
+        ],
+        [
+          30,
+          3.98,
+          32,
+          1
+        ],
+        [
+          31,
+          3.81,
+          32,
+          0
+        ]
+      ],
+      "skok_hranic_na_svu_m": 0.0,
+      "spec": "0,0:louka:500;1,0:kopec:503;0,1:louka:510;1,1:louka:511",
+      "stats": {
+        "(0, 0)": {
+          "se_vapencem": 256,
+          "u_hladiny": 7,
+          "vrsek_pod_povrchem_m": 2.005859375
+        },
+        "(0, 1)": {
+          "se_vapencem": 187,
+          "u_hladiny": 1,
+          "vrsek_pod_povrchem_m": 4.36363636363636
+        },
+        "(1, 0)": {
+          "se_vapencem": 243,
+          "u_hladiny": 1,
+          "vrsek_pod_povrchem_m": 5.55555555555556
+        },
+        "(1, 1)": {
+          "se_vapencem": 243,
+          "u_hladiny": 4,
+          "vrsek_pod_povrchem_m": 3.17078189300412
+        }
+      },
+      "znovu_stejny_hash": true
+    },
+    "start": {
+      "geo_hash": "00d23903d36d46a7",
+      "material_sev_proc": 3.671875,
+      "material_uvnitr_proc": 7.421875,
+      "max_krok_0_25m_uvnitr_m": 0.00000763448554508273,
+      "mince": {
+        "0,0:louka:101": true,
+        "0,1:kopec:303": true,
+        "1,0:hora:202": false,
+        "1,1:louka:404": true
+      },
+      "obracene_poradi_jinych_bunek": 2276,
+      "profil_x": [
+        [
+          0,
+          1.95,
+          32,
+          3
+        ],
+        [
+          1,
+          2.03,
+          32,
+          4
+        ],
+        [
+          2,
+          1.91,
+          32,
+          6
+        ],
+        [
+          3,
+          1.95,
+          32,
+          4
+        ],
+        [
+          4,
+          2.09,
+          32,
+          2
+        ],
+        [
+          5,
+          1.97,
+          32,
+          5
+        ],
+        [
+          6,
+          1.94,
+          32,
+          6
+        ],
+        [
+          7,
+          2.0,
+          32,
+          2
+        ],
+        [
+          8,
+          1.98,
+          32,
+          4
+        ],
+        [
+          9,
+          2.03,
+          32,
+          1
+        ],
+        [
+          10,
+          1.98,
+          32,
+          4
+        ],
+        [
+          11,
+          1.97,
+          32,
+          5
+        ],
+        [
+          12,
+          1.95,
+          32,
+          7
+        ],
+        [
+          13,
+          1.84,
+          32,
+          9
+        ],
+        [
+          14,
+          2.0,
+          32,
+          0
+        ],
+        [
+          15,
+          2.0,
+          32,
+          0
+        ],
+        [
+          16,
+          2.0,
+          32,
+          0
+        ],
+        [
+          17,
+          3.08,
+          32,
+          1
+        ],
+        [
+          18,
+          3.92,
+          32,
+          0
+        ],
+        [
+          19,
+          4.36,
+          32,
+          0
+        ],
+        [
+          20,
+          4.91,
+          32,
+          1
+        ],
+        [
+          21,
+          5.0,
+          32,
+          0
+        ],
+        [
+          22,
+          5.14,
+          32,
+          1
+        ],
+        [
+          23,
+          5.17,
+          32,
+          0
+        ],
+        [
+          24,
+          5.28,
+          32,
+          0
+        ],
+        [
+          25,
+          5.32,
+          30,
+          0
+        ],
+        [
+          26,
+          5.59,
+          29,
+          0
+        ],
+        [
+          27,
+          5.54,
+          28,
+          0
+        ],
+        [
+          28,
+          5.71,
+          29,
+          1
+        ],
+        [
+          29,
+          5.43,
+          29,
+          3
+        ],
+        [
+          30,
+          4.59,
+          32,
+          2
+        ],
+        [
+          31,
+          3.81,
+          32,
+          0
+        ]
+      ],
+      "skok_hranic_na_svu_m": 0.0,
+      "spec": "0,0:louka:101;1,0:hora:202;0,1:kopec:303;1,1:louka:404",
+      "stats": {
+        "(0, 0)": {
+          "se_vapencem": 256,
+          "u_hladiny": 20,
+          "vrsek_pod_povrchem_m": 1.982421875
+        },
+        "(0, 1)": {
+          "se_vapencem": 256,
+          "u_hladiny": 42,
+          "vrsek_pod_povrchem_m": 1.96875
+        },
+        "(1, 0)": {
+          "se_vapencem": 246,
+          "u_hladiny": 0,
+          "vrsek_pod_povrchem_m": 6.76016260162602
+        },
+        "(1, 1)": {
+          "se_vapencem": 251,
+          "u_hladiny": 9,
+          "vrsek_pod_povrchem_m": 2.58565737051793
+        }
+      },
+      "znovu_stejny_hash": true
+    }
+  }
+}

@@ -1,0 +1,836 @@
+[
+  {
+    "bunky": "803dcf04bf6e4108",
+    "chyba_bilance_lokalne": 0.0,
+    "chyba_bilance_plne": 0.0,
+    "davek": 4,
+    "davky": [
+      {
+        "cesta": "dutiny",
+        "edit79_ms": 4262.799,
+        "ms": 4315.931,
+        "neshod": {
+          "eff": 0,
+          "fill": 0,
+          "to": 0
+        },
+        "okno": 0,
+        "podzemi_ms": 161.282,
+        "shoda": true,
+        "voda": "a51396b1eb5c8f9f",
+        "voda_plne": "a51396b1eb5c8f9f"
+      },
+      {
+        "cesta": "dutiny",
+        "edit79_ms": 4380.372,
+        "ms": 4480.349,
+        "neshod": {
+          "eff": 0,
+          "fill": 0,
+          "to": 0
+        },
+        "okno": 0,
+        "podzemi_ms": 160.802,
+        "shoda": true,
+        "voda": "bbcfd79c2eee2620",
+        "voda_plne": "bbcfd79c2eee2620"
+      },
+      {
+        "cesta": "dutiny",
+        "edit79_ms": 1776.41,
+        "ms": 1828.186,
+        "neshod": {
+          "eff": 0,
+          "fill": 0,
+          "to": 0
+        },
+        "okno": 0,
+        "podzemi_ms": 161.414,
+        "shoda": true,
+        "voda": "0072d4a1b9c80408",
+        "voda_plne": "0072d4a1b9c80408"
+      },
+      {
+        "cesta": "dutiny",
+        "edit79_ms": 1875.599,
+        "ms": 1930.873,
+        "neshod": {
+          "eff": 0,
+          "fill": 0,
+          "to": 0
+        },
+        "okno": 0,
+        "podzemi_ms": 162.673,
+        "shoda": true,
+        "voda": "0072d4a1b9c80408",
+        "voda_plne": "0072d4a1b9c80408"
+      }
+    ],
+    "info": {},
+    "lokalne_ms": 12555.339,
+    "neshod": {
+      "eff": 0,
+      "fill": 0,
+      "to": 0
+    },
+    "plne_ms": 1624.188,
+    "pod_vstup_lokalne": 0.19651,
+    "pod_vstup_plne": 0.19651,
+    "prameny_lokalne": 0.19651,
+    "prameny_plne": 0.19651,
+    "rezim": "e79",
+    "rozdil": {
+      "eff": [],
+      "eff_n": 0,
+      "extra": [],
+      "extra_n": 0,
+      "fill": [],
+      "fill_n": 0,
+      "src2": [],
+      "src2_n": 0,
+      "to": [],
+      "to_n": 0,
+      "under_jen_lokalne": [],
+      "under_jen_plne": []
+    },
+    "scenar": "tunel",
+    "shoda": true,
+    "voda_lokalne": "0072d4a1b9c80408",
+    "voda_plne": "0072d4a1b9c80408",
+    "voda_puvodni": "958f9334f7d8a9ff",
+    "zmen": 2184
+  },
+  {
+    "bunky": "803dcf04bf6e4108",
+    "chyba_bilance_lokalne": 0.0,
+    "chyba_bilance_plne": 0.0,
+    "davek": 4,
+    "davky": [
+      {
+        "cesta": "dutiny",
+        "edit79_ms": 2015.252,
+        "ms": 2113.257,
+        "neshod": {
+          "eff": 0,
+          "fill": 0,
+          "to": 0
+        },
+        "okno": 0,
+        "podzemi_ms": 150.818,
+        "shoda": true,
+        "voda": "958f9334f7d8a9ff",
+        "voda_plne": "958f9334f7d8a9ff"
+      },
+      {
+        "cesta": "dutiny",
+        "edit79_ms": 2002.636,
+        "ms": 2051.942,
+        "neshod": {
+          "eff": 0,
+          "fill": 0,
+          "to": 0
+        },
+        "okno": 0,
+        "podzemi_ms": 159.233,
+        "shoda": true,
+        "voda": "958f9334f7d8a9ff",
+        "voda_plne": "958f9334f7d8a9ff"
+      },
+      {
+        "cesta": "dutiny",
+        "edit79_ms": 1932.257,
+        "ms": 1979.435,
+        "neshod": {
+          "eff": 0,
+          "fill": 0,
+          "to": 0
+        },
+        "okno": 0,
+        "podzemi_ms": 141.282,
+        "shoda": true,
+        "voda": "44a541d3fb858a90",
+        "voda_plne": "44a541d3fb858a90"
+      },
+      {
+        "cesta": "dutiny",
+        "edit79_ms": 3815.355,
+        "ms": 3863.141,
+        "neshod": {
+          "eff": 0,
+          "fill": 0,
+          "to": 0
+        },
+        "okno": 0,
+        "podzemi_ms": 151.658,
+        "shoda": true,
+        "voda": "0072d4a1b9c80408",
+        "voda_plne": "0072d4a1b9c80408"
+      }
+    ],
+    "info": {},
+    "lokalne_ms": 10007.775,
+    "neshod": {
+      "eff": 0,
+      "fill": 0,
+      "to": 0
+    },
+    "plne_ms": 1662.171,
+    "pod_vstup_lokalne": 0.19651,
+    "pod_vstup_plne": 0.19651,
+    "prameny_lokalne": 0.19651,
+    "prameny_plne": 0.19651,
+    "rezim": "e79",
+    "rozdil": {
+      "eff": [],
+      "eff_n": 0,
+      "extra": [],
+      "extra_n": 0,
+      "fill": [],
+      "fill_n": 0,
+      "src2": [],
+      "src2_n": 0,
+      "to": [],
+      "to_n": 0,
+      "under_jen_lokalne": [],
+      "under_jen_plne": []
+    },
+    "scenar": "tunel_obracene",
+    "shoda": true,
+    "voda_lokalne": "0072d4a1b9c80408",
+    "voda_plne": "0072d4a1b9c80408",
+    "voda_puvodni": "958f9334f7d8a9ff",
+    "zmen": 2184
+  },
+  {
+    "bunky": "e61633aaeb20cdeb",
+    "chyba_bilance_lokalne": 0.0,
+    "chyba_bilance_plne": 0.0,
+    "davek": 1,
+    "davky": [
+      {
+        "cesta": "dutiny",
+        "edit79_ms": 2232.84,
+        "ms": 2465.561,
+        "neshod": {
+          "eff": 0,
+          "fill": 0,
+          "to": 0
+        },
+        "okno": 0,
+        "podzemi_ms": 152.048,
+        "shoda": true,
+        "voda": "958f9334f7d8a9ff",
+        "voda_plne": "958f9334f7d8a9ff"
+      }
+    ],
+    "info": {},
+    "lokalne_ms": 2465.561,
+    "neshod": {
+      "eff": 0,
+      "fill": 0,
+      "to": 0
+    },
+    "plne_ms": 1999.145,
+    "pod_vstup_lokalne": 0.17316,
+    "pod_vstup_plne": 0.17316,
+    "prameny_lokalne": 0.17316,
+    "prameny_plne": 0.17316,
+    "rezim": "e79",
+    "rozdil": {
+      "eff": [],
+      "eff_n": 0,
+      "extra": [],
+      "extra_n": 0,
+      "fill": [],
+      "fill_n": 0,
+      "src2": [],
+      "src2_n": 0,
+      "to": [],
+      "to_n": 0,
+      "under_jen_lokalne": [],
+      "under_jen_plne": []
+    },
+    "scenar": "dlouhy",
+    "shoda": true,
+    "voda_lokalne": "958f9334f7d8a9ff",
+    "voda_plne": "958f9334f7d8a9ff",
+    "voda_puvodni": "958f9334f7d8a9ff",
+    "zmen": 8737
+  },
+  {
+    "bunky": "4ff6def7a0c1b1be",
+    "chyba_bilance_lokalne": 0.0,
+    "chyba_bilance_plne": 0.0,
+    "davek": 1,
+    "davky": [
+      {
+        "cesta": "sloupce",
+        "edit79_ms": 0.013,
+        "ms": 46.052,
+        "neshod": {
+          "eff": 0,
+          "fill": 0,
+          "to": 0
+        },
+        "okno": 0,
+        "podzemi_ms": 0.0,
+        "shoda": true,
+        "voda": "958f9334f7d8a9ff",
+        "voda_plne": "958f9334f7d8a9ff"
+      }
+    ],
+    "info": {},
+    "lokalne_ms": 46.052,
+    "neshod": {
+      "eff": 0,
+      "fill": 0,
+      "to": 0
+    },
+    "plne_ms": 2007.965,
+    "pod_vstup_lokalne": 0.17316,
+    "pod_vstup_plne": 0.17316,
+    "prameny_lokalne": 0.17316,
+    "prameny_plne": 0.17316,
+    "rezim": "e79",
+    "rozdil": {
+      "eff": [],
+      "eff_n": 0,
+      "extra": [],
+      "extra_n": 0,
+      "fill": [],
+      "fill_n": 0,
+      "src2": [],
+      "src2_n": 0,
+      "to": [],
+      "to_n": 0,
+      "under_jen_lokalne": [],
+      "under_jen_plne": []
+    },
+    "scenar": "n1",
+    "shoda": true,
+    "voda_lokalne": "958f9334f7d8a9ff",
+    "voda_plne": "958f9334f7d8a9ff",
+    "voda_puvodni": "958f9334f7d8a9ff",
+    "zmen": 1
+  },
+  {
+    "bunky": "48728adbc8e7ea54",
+    "chyba_bilance_lokalne": 0.0,
+    "chyba_bilance_plne": 0.0,
+    "davek": 1,
+    "davky": [
+      {
+        "cesta": "sloupce",
+        "edit79_ms": 0.023,
+        "ms": 205.742,
+        "neshod": {
+          "eff": 0,
+          "fill": 0,
+          "to": 0
+        },
+        "okno": 0,
+        "podzemi_ms": 0.0,
+        "shoda": true,
+        "voda": "958f9334f7d8a9ff",
+        "voda_plne": "958f9334f7d8a9ff"
+      }
+    ],
+    "info": {},
+    "lokalne_ms": 205.742,
+    "neshod": {
+      "eff": 0,
+      "fill": 0,
+      "to": 0
+    },
+    "plne_ms": 1911.177,
+    "pod_vstup_lokalne": 0.17316,
+    "pod_vstup_plne": 0.17316,
+    "prameny_lokalne": 0.17316,
+    "prameny_plne": 0.17316,
+    "rezim": "e79",
+    "rozdil": {
+      "eff": [],
+      "eff_n": 0,
+      "extra": [],
+      "extra_n": 0,
+      "fill": [],
+      "fill_n": 0,
+      "src2": [],
+      "src2_n": 0,
+      "to": [],
+      "to_n": 0,
+      "under_jen_lokalne": [],
+      "under_jen_plne": []
+    },
+    "scenar": "n10",
+    "shoda": true,
+    "voda_lokalne": "958f9334f7d8a9ff",
+    "voda_plne": "958f9334f7d8a9ff",
+    "voda_puvodni": "958f9334f7d8a9ff",
+    "zmen": 10
+  },
+  {
+    "bunky": "c727a1f4c81b39d1",
+    "chyba_bilance_lokalne": 0.0,
+    "chyba_bilance_plne": 0.0,
+    "davek": 1,
+    "davky": [
+      {
+        "cesta": "sloupce",
+        "edit79_ms": 0.03,
+        "ms": 195.942,
+        "neshod": {
+          "eff": 0,
+          "fill": 0,
+          "to": 0
+        },
+        "okno": 0,
+        "podzemi_ms": 0.0,
+        "shoda": true,
+        "voda": "958f9334f7d8a9ff",
+        "voda_plne": "958f9334f7d8a9ff"
+      }
+    ],
+    "info": {},
+    "lokalne_ms": 195.942,
+    "neshod": {
+      "eff": 0,
+      "fill": 0,
+      "to": 0
+    },
+    "plne_ms": 2448.88,
+    "pod_vstup_lokalne": 0.17316,
+    "pod_vstup_plne": 0.17316,
+    "prameny_lokalne": 0.17316,
+    "prameny_plne": 0.17316,
+    "rezim": "e79",
+    "rozdil": {
+      "eff": [],
+      "eff_n": 0,
+      "extra": [],
+      "extra_n": 0,
+      "fill": [],
+      "fill_n": 0,
+      "src2": [],
+      "src2_n": 0,
+      "to": [],
+      "to_n": 0,
+      "under_jen_lokalne": [],
+      "under_jen_plne": []
+    },
+    "scenar": "n100",
+    "shoda": true,
+    "voda_lokalne": "958f9334f7d8a9ff",
+    "voda_plne": "958f9334f7d8a9ff",
+    "voda_puvodni": "958f9334f7d8a9ff",
+    "zmen": 100
+  },
+  {
+    "bunky": "df928e3be13db629",
+    "chyba_bilance_lokalne": 0.0,
+    "chyba_bilance_plne": 0.0,
+    "davek": 1,
+    "davky": [
+      {
+        "cesta": "sloupce",
+        "edit79_ms": 0.03,
+        "ms": 201.292,
+        "neshod": {
+          "eff": 0,
+          "fill": 0,
+          "to": 0
+        },
+        "okno": 0,
+        "podzemi_ms": 0.0,
+        "shoda": true,
+        "voda": "958f9334f7d8a9ff",
+        "voda_plne": "958f9334f7d8a9ff"
+      }
+    ],
+    "info": {},
+    "lokalne_ms": 201.292,
+    "neshod": {
+      "eff": 0,
+      "fill": 0,
+      "to": 0
+    },
+    "plne_ms": 1955.617,
+    "pod_vstup_lokalne": 0.17316,
+    "pod_vstup_plne": 0.17316,
+    "prameny_lokalne": 0.17316,
+    "prameny_plne": 0.17316,
+    "rezim": "e79",
+    "rozdil": {
+      "eff": [],
+      "eff_n": 0,
+      "extra": [],
+      "extra_n": 0,
+      "fill": [],
+      "fill_n": 0,
+      "src2": [],
+      "src2_n": 0,
+      "to": [],
+      "to_n": 0,
+      "under_jen_lokalne": [],
+      "under_jen_plne": []
+    },
+    "scenar": "n1000",
+    "shoda": true,
+    "voda_lokalne": "958f9334f7d8a9ff",
+    "voda_plne": "958f9334f7d8a9ff",
+    "voda_puvodni": "958f9334f7d8a9ff",
+    "zmen": 1000
+  },
+  {
+    "bunky": "27b558aafef081e0",
+    "chyba_bilance_lokalne": 0.0,
+    "chyba_bilance_plne": 0.0,
+    "davek": 2,
+    "davky": [
+      {
+        "cesta": "dutiny",
+        "edit79_ms": 3765.132,
+        "ms": 3816.309,
+        "neshod": {
+          "eff": 0,
+          "fill": 0,
+          "to": 0
+        },
+        "okno": 0,
+        "podzemi_ms": 146.971,
+        "shoda": true,
+        "voda": "f774a73b41686ff6",
+        "voda_plne": "f774a73b41686ff6"
+      },
+      {
+        "cesta": "dutiny",
+        "edit79_ms": 1606.283,
+        "ms": 1655.707,
+        "neshod": {
+          "eff": 0,
+          "fill": 0,
+          "to": 0
+        },
+        "okno": 0,
+        "podzemi_ms": 146.07,
+        "shoda": true,
+        "voda": "f774a73b41686ff6",
+        "voda_plne": "f774a73b41686ff6"
+      }
+    ],
+    "info": {
+      "gx": 58,
+      "gy": 14,
+      "hladina_m": 19.468988686126,
+      "lo_m": 14.5158144575726,
+      "m": 2.8282813669775,
+      "mat": 5,
+      "q_in": 0.17316,
+      "teleso": 1,
+      "z0": 60,
+      "z1": 68
+    },
+    "lokalne_ms": 5472.016,
+    "neshod": {
+      "eff": 0,
+      "fill": 0,
+      "to": 0
+    },
+    "plne_ms": 1540.193,
+    "pod_vstup_lokalne": 0.19318,
+    "pod_vstup_plne": 0.19318,
+    "prameny_lokalne": 0.19318,
+    "prameny_plne": 0.19318,
+    "rezim": "e79",
+    "rozdil": {
+      "eff": [],
+      "eff_n": 0,
+      "extra": [],
+      "extra_n": 0,
+      "fill": [],
+      "fill_n": 0,
+      "src2": [],
+      "src2_n": 0,
+      "to": [],
+      "to_n": 0,
+      "under_jen_lokalne": [],
+      "under_jen_plne": []
+    },
+    "scenar": "zvodnela",
+    "shoda": true,
+    "voda_lokalne": "f774a73b41686ff6",
+    "voda_plne": "f774a73b41686ff6",
+    "voda_puvodni": "958f9334f7d8a9ff",
+    "zmen": 1433
+  },
+  {
+    "bunky": "27b558aafef081e0",
+    "chyba_bilance_lokalne": 0.0,
+    "chyba_bilance_plne": 0.0,
+    "davek": 2,
+    "davky": [
+      {
+        "cesta": "dutiny",
+        "edit79_ms": 2012.091,
+        "ms": 2059.987,
+        "neshod": {
+          "eff": 0,
+          "fill": 0,
+          "to": 0
+        },
+        "okno": 0,
+        "podzemi_ms": 148.574,
+        "shoda": true,
+        "voda": "958f9334f7d8a9ff",
+        "voda_plne": "958f9334f7d8a9ff"
+      },
+      {
+        "cesta": "dutiny",
+        "edit79_ms": 3883.076,
+        "ms": 3932.994,
+        "neshod": {
+          "eff": 0,
+          "fill": 0,
+          "to": 0
+        },
+        "okno": 0,
+        "podzemi_ms": 150.014,
+        "shoda": true,
+        "voda": "f774a73b41686ff6",
+        "voda_plne": "f774a73b41686ff6"
+      }
+    ],
+    "info": {
+      "gx": 58,
+      "gy": 14,
+      "hladina_m": 19.468988686126,
+      "lo_m": 14.5158144575726,
+      "m": 2.8282813669775,
+      "mat": 5,
+      "q_in": 0.17316,
+      "teleso": 1,
+      "z0": 60,
+      "z1": 68
+    },
+    "lokalne_ms": 5992.981,
+    "neshod": {
+      "eff": 0,
+      "fill": 0,
+      "to": 0
+    },
+    "plne_ms": 1642.759,
+    "pod_vstup_lokalne": 0.19318,
+    "pod_vstup_plne": 0.19318,
+    "prameny_lokalne": 0.19318,
+    "prameny_plne": 0.19318,
+    "rezim": "e79",
+    "rozdil": {
+      "eff": [],
+      "eff_n": 0,
+      "extra": [],
+      "extra_n": 0,
+      "fill": [],
+      "fill_n": 0,
+      "src2": [],
+      "src2_n": 0,
+      "to": [],
+      "to_n": 0,
+      "under_jen_lokalne": [],
+      "under_jen_plne": []
+    },
+    "scenar": "zvodnela_obracene",
+    "shoda": true,
+    "voda_lokalne": "f774a73b41686ff6",
+    "voda_plne": "f774a73b41686ff6",
+    "voda_puvodni": "958f9334f7d8a9ff",
+    "zmen": 1433
+  },
+  {
+    "bunky": "6680c480d87da297",
+    "chyba_bilance_lokalne": 0.0,
+    "chyba_bilance_plne": 0.0,
+    "davek": 3,
+    "davky": [
+      {
+        "cesta": "dutiny",
+        "edit79_ms": 4388.333,
+        "ms": 4436.492,
+        "neshod": {
+          "eff": 0,
+          "fill": 0,
+          "to": 0
+        },
+        "okno": 0,
+        "podzemi_ms": 151.704,
+        "shoda": true,
+        "voda": "2a6d3176bf159487",
+        "voda_plne": "2a6d3176bf159487"
+      },
+      {
+        "cesta": "dutiny",
+        "edit79_ms": 1823.923,
+        "ms": 1875.585,
+        "neshod": {
+          "eff": 0,
+          "fill": 0,
+          "to": 0
+        },
+        "okno": 0,
+        "podzemi_ms": 153.389,
+        "shoda": true,
+        "voda": "2a6d3176bf159487",
+        "voda_plne": "2a6d3176bf159487"
+      },
+      {
+        "cesta": "dutiny",
+        "edit79_ms": 1790.596,
+        "ms": 1844.886,
+        "neshod": {
+          "eff": 0,
+          "fill": 0,
+          "to": 0
+        },
+        "okno": 0,
+        "podzemi_ms": 158.776,
+        "shoda": true,
+        "voda": "2a6d3176bf159487",
+        "voda_plne": "2a6d3176bf159487"
+      }
+    ],
+    "info": {
+      "gi": 6466,
+      "hloubka_m": 1.001,
+      "pb": 76,
+      "px": 4,
+      "py": 36,
+      "sx": 4,
+      "sy": 42
+    },
+    "lokalne_ms": 8156.963,
+    "neshod": {
+      "eff": 0,
+      "fill": 0,
+      "to": 0
+    },
+    "plne_ms": 1693.349,
+    "pod_vstup_lokalne": 0.19318,
+    "pod_vstup_plne": 0.19318,
+    "prameny_lokalne": 0.19318,
+    "prameny_plne": 0.19318,
+    "rezim": "e79",
+    "rozdil": {
+      "eff": [],
+      "eff_n": 0,
+      "extra": [],
+      "extra_n": 0,
+      "fill": [],
+      "fill_n": 0,
+      "src2": [],
+      "src2_n": 0,
+      "to": [],
+      "to_n": 0,
+      "under_jen_lokalne": [],
+      "under_jen_plne": []
+    },
+    "scenar": "tun",
+    "shoda": true,
+    "voda_lokalne": "2a6d3176bf159487",
+    "voda_plne": "2a6d3176bf159487",
+    "voda_puvodni": "958f9334f7d8a9ff",
+    "zmen": 490
+  },
+  {
+    "bunky": "6680c480d87da297",
+    "chyba_bilance_lokalne": 0.0,
+    "chyba_bilance_plne": 0.0,
+    "davek": 3,
+    "davky": [
+      {
+        "cesta": "dutiny",
+        "edit79_ms": 2074.261,
+        "ms": 2123.397,
+        "neshod": {
+          "eff": 0,
+          "fill": 0,
+          "to": 0
+        },
+        "okno": 0,
+        "podzemi_ms": 151.388,
+        "shoda": true,
+        "voda": "958f9334f7d8a9ff",
+        "voda_plne": "958f9334f7d8a9ff"
+      },
+      {
+        "cesta": "dutiny",
+        "edit79_ms": 1980.892,
+        "ms": 2031.739,
+        "neshod": {
+          "eff": 0,
+          "fill": 0,
+          "to": 0
+        },
+        "okno": 0,
+        "podzemi_ms": 150.724,
+        "shoda": true,
+        "voda": "958f9334f7d8a9ff",
+        "voda_plne": "958f9334f7d8a9ff"
+      },
+      {
+        "cesta": "dutiny",
+        "edit79_ms": 4110.701,
+        "ms": 4159.335,
+        "neshod": {
+          "eff": 0,
+          "fill": 0,
+          "to": 0
+        },
+        "okno": 0,
+        "podzemi_ms": 147.214,
+        "shoda": true,
+        "voda": "2a6d3176bf159487",
+        "voda_plne": "2a6d3176bf159487"
+      }
+    ],
+    "info": {
+      "gi": 6466,
+      "hloubka_m": 1.001,
+      "pb": 76,
+      "px": 4,
+      "py": 36,
+      "sx": 4,
+      "sy": 42
+    },
+    "lokalne_ms": 8314.471,
+    "neshod": {
+      "eff": 0,
+      "fill": 0,
+      "to": 0
+    },
+    "plne_ms": 1725.877,
+    "pod_vstup_lokalne": 0.19318,
+    "pod_vstup_plne": 0.19318,
+    "prameny_lokalne": 0.19318,
+    "prameny_plne": 0.19318,
+    "rezim": "e79",
+    "rozdil": {
+      "eff": [],
+      "eff_n": 0,
+      "extra": [],
+      "extra_n": 0,
+      "fill": [],
+      "fill_n": 0,
+      "src2": [],
+      "src2_n": 0,
+      "to": [],
+      "to_n": 0,
+      "under_jen_lokalne": [],
+      "under_jen_plne": []
+    },
+    "scenar": "tun_obracene",
+    "shoda": true,
+    "voda_lokalne": "2a6d3176bf159487",
+    "voda_plne": "2a6d3176bf159487",
+    "voda_puvodni": "958f9334f7d8a9ff",
+    "zmen": 490
+  }
+]
