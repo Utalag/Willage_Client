@@ -27,8 +27,10 @@ static func inst():
 @export var wet_tint := true                          ## gen-v3: mokrá půda pod povrchem tmavší (jen viditelný materiál)
 @export var data_water := true                        ## gen-v3: kreslit volnou vodu z vrstvy vody bloku (jeskyně, jezírka)
 
-@export_group("Měřítko scény (E89)")
-@export var p89_meritko := false                      ## E89: scéna v metrech (vodorovně ×0,5, buňka 0,5 × 0,5 × 0,5 m); vyp = dnešní 1 × 1 × 0,5
+@export_group("Měřítko scény (E89, E94)")
+## E94: scéna v metrech (1 jednotka = 1 m, buňka 0,5 × 0,5 × 0,5 m; stromy, stavby, kamera a mlha v metrech).
+## Na větvi e94-metry výchozí zap (Jan 2026-11-20 11:04); vyp = dnešní buňka 1 × 1 × 0,5 (`--surface.p89_meritko=false`).
+@export var p89_meritko := true
 
 @export_group("Duální mřížka")
 @export var dual_enabled := true                       ## duální mřížka pro povrch louky, písku a vody
