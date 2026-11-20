@@ -55,7 +55,11 @@ static func steps(ctx: Dictionary) -> Array:
 static func preview_steps_v2(ctx: Dictionary) -> Array:
 	var s := []
 	s.append(["povrch: šablona blueprintu", func():
-		ctx.raw = BP.raw_height(ctx.bp, float(ctx.p.surface_shift))
+		if G2.is87(ctx.bp.shape, ctx.p):   # E87: masiv vyzdvižené hory = funkce světa (p87_jadro_hory)
+			ctx.raw = G2.massif87_block(ctx.slot, ctx.p)
+			ctx.m87 = {"base": ctx.raw.duplicate(), "p": ctx.p}
+		else:
+			ctx.raw = BP.raw_height(ctx.bp, float(ctx.p.surface_shift))
 		if ctx.p.erosion:
 			ctx.rep.erosion = ER.run(ctx.raw, ctx.bp.seed, ctx.p.droplets)])
 	s.append(["povrch: dorovnání okrajů na sousedy / regionální základ", func():
@@ -69,6 +73,18 @@ static func preview_steps_v2(ctx: Dictionary) -> Array:
 				if ctx.bp.has("base_hm"):
 					for t in 16:
 						var o := SD.own(d, t); r[t] = float(ctx.bp.base_hm[o.x * 16 + o.y])
+				e[d] = r
+		if ctx.has("m87"):
+			# E87: volná strana = funkce masivu (ne surf_ref); soused masivu předá ODCHYLKU od funkce, jiný soused výšku jako dřív
+			for d in 4:
+				var nb = ctx.world.neighbour(ctx.slot, d)
+				if nb != null and not nb.has("m87"): continue
+				var r := PackedFloat64Array(); r.resize(16)
+				for t in 16:
+					var o := SD.own(d, t)
+					r[t] = float(ctx.m87.base[o.x * 16 + o.y])
+					if nb != null:
+						var c := SD.nb(d, t); r[t] += float(nb.hm_f[c.x * 16 + c.y]) - float(nb.m87.base[c.x * 16 + c.y])
 				e[d] = r
 		var a := SF.adapt(ctx.raw, e, ctx.p.band, ctx.p, real)
 		ctx.hm = a.hm; ctx.hm_f = a.hm_f; ctx.hm_raw = a.hm_raw; ctx.changed = a.changed
@@ -89,6 +105,7 @@ static func steps_v2(ctx: Dictionary) -> Array:
 		# regionální základ = regionální funkce hranic (bez tvaru a šumu blueprintu) s podmnožinou hornin blueprintu
 		ctx.regional = G2.targets(ctx.slot, flat, "louka", 0, pr, sub_of(ctx.bp))
 		# výchozí hodnoty hranic na okrajích: funkce souseda v přiléhajícím řídicím bodě, jinak regionální základ
+		if ctx.has("m87"): ctx.m87.tg = G2.bounds87(ctx.targets)
 		ctx.starts = []
 		ctx.real = []
 		for d in 4:
@@ -98,10 +115,15 @@ static func steps_v2(ctx: Dictionary) -> Array:
 			for k in nl:
 				var e := PackedFloat64Array(); e.resize(16)
 				for t in 16:
-					if nb != null and nb.bs.size() == nl:
-						var c := SD.nb(d, t); e[t] = nb.bs[k][c.x * 16 + c.y]
+					var o := SD.own(d, t); var c := SD.nb(d, t)
+					if ctx.has("m87") and (nb == null or (nb.has("m87") and nb.bs.size() == nl)):
+						# E87: volná strana = vlastní cíl masivu (ne regionální rovina), soused masivu = přenos odchylky od cíle
+						e[t] = float(ctx.m87.tg[k][o.x * 16 + o.y])
+						if nb != null: e[t] += float(nb.bs[k][c.x * 16 + c.y]) - float(nb.m87.tg[k][c.x * 16 + c.y])
+					elif nb != null and nb.bs.size() == nl:
+						e[t] = nb.bs[k][c.x * 16 + c.y]
 					else:
-						var o := SD.own(d, t); e[t] = ctx.regional[k][o.x * 16 + o.y]
+						e[t] = ctx.regional[k][o.x * 16 + o.y]
 				arr.append(e)
 			ctx.starts.append(arr)
 		ctx.th = []
@@ -202,8 +224,10 @@ static func validate(ctx: Dictionary) -> Dictionary:
 	return {"ok": v.ok, "errors": v.errors, "minerals_exact": exact}
 
 static func record(ctx: Dictionary) -> Dictionary:
-	return {"bp": ctx.bp, "slot": ctx.slot, "hm": ctx.hm, "hm_f": ctx.hm_f, "hm_raw": ctx.hm_raw, "changed": ctx.changed,
+	var r := {"bp": ctx.bp, "slot": ctx.slot, "hm": ctx.hm, "hm_f": ctx.hm_f, "hm_raw": ctx.hm_raw, "changed": ctx.changed,
 		"bs": ctx.bs, "cells": ctx.cells, "water": ctx.water, "rep": ctx.rep, "ms": ctx.ms}
+	if ctx.has("m87"): r.m87 = ctx.m87   # E87: čistá funkce masivu (base povrch, tg hranice) pro sousedy a jemné vzorkování
+	return r
 
 ## naráz: provede kroky, změří čas každého a vloží blok do světa
 static func run_sync(world, slot: Vector2i, bp: Dictionary, p: Dictionary) -> Dictionary:
