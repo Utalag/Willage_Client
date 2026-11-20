@@ -1,0 +1,12 @@
+Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+pořadí vykopat_zasypat: otisk baa91d749d392e05 (původní 9738601ffcf2f68b), položek 1, operace [[0, true], [2, true]], C 2 (původně 4)
+pořadí zasypat_vykopat: otisk 83bc87cd4d063bc9 (původní 9738601ffcf2f68b), položek 1, operace [[2, false], [0, true]], C 0 (původně 4)
+pořadí vykopat_vratit_puvodni: otisk 9738601ffcf2f68b (původní 9738601ffcf2f68b), položek 0, operace [[0, true], [4, true]], C 4 (původně 4)
+pořadí ruzne_AB: otisk 81afcc8163c321c0 (původní 9738601ffcf2f68b), položek 2, operace [[0, true], [2, true]], C 4 (původně 4)
+pořadí ruzne_BA: otisk 81afcc8163c321c0 (původní 9738601ffcf2f68b), položek 2, operace [[2, true], [0, true]], C 4 (původně 4)
+tunel: 2185 změn (2175 položek překryvu), buňky true, voda plně true / lokálně false (neshod { "fill": 0, "eff": 153, "to": 1 }), A 4421/124 B, B 1300/451 B, WVB1 0,5 m 65536/7186, 0,25 m 524288/13552, načtení 1145 (z toho definice 1031) + voda 1693 ms
+dlouhy: 9288 změn (9288 položek překryvu), buňky true, voda plně true / lokálně true (neshod { "fill": 0, "eff": 0, "to": 0 }), A 18831/244 B, B 5920/1865 B, WVB1 0,5 m 65536/7223, 0,25 m 524288/13609, načtení 1187 (z toho definice 1007) + voda 2165 ms
+n1: 1 změn (1 položek překryvu), buňky true, voda plně true / lokálně true (neshod { "fill": 0, "eff": 0, "to": 0 }), A 8/40 B, B 5/13 B, WVB1 0,5 m 65536/7107, 0,25 m 524288/13401, načtení 1082 (z toho definice 1011) + voda 2151 ms
+n10: 10 změn (10 položek překryvu), buňky true, voda plně true / lokálně true (neshod { "fill": 0, "eff": 0, "to": 0 }), A 40/70 B, B 50/82 B, WVB1 0,5 m 65536/7107, 0,25 m 524288/13455, načtení 1138 (z toho definice 1031) + voda 1934 ms
+n100: 100 změn (100 položek překryvu), buňky true, voda plně true / lokálně true (neshod { "fill": 0, "eff": 0, "to": 0 }), A 304/255 B, B 500/481 B, WVB1 0,5 m 65536/7107, 0,25 m 524288/13935, načtení 1114 (z toho definice 947) + voda 1919 ms
+n1000: 1000 změn (1000 položek překryvu), buňky true, voda plně true / lokálně true (neshod { "fill": 0, "eff": 0, "to": 0 }), A 2779/1792 B, B 4980/3341 B, WVB1 0,5 m 65536/7107, 0,25 m 524288/17432, načtení 1165 (z toho definice 951) + voda 1987 ms
