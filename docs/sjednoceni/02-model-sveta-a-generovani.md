@@ -144,6 +144,7 @@ Minerály, žíly, kras i dutiny jsou útvary funkce světa (1.7), ne krok „po
 - **Rozlišení 0,5 m je pro data a výpočty** (poměry, objemy, voda), ne pro zobrazení. Prezentace může kreslit jinak (2D dlaždice i 3D).
 - Šířku okraje a počty buněk slupky změřit v 2.7, nehádat.
 - **Poznámka pro kapitolu 7 (Jan t820u–t822u, 21:03–21:08):** viditelný voxel je **0,25 m** (postava 1,75 m = 7 voxelů). **128 / 256 / 512 px** je rozlišení textury dlaždice podle kvality a monitoru (Full HD, 2K, 27"), ne velikost dlaždice na obrazovce. Kolik terénu je vidět, určuje zoom. Datový model to neomezuje. Obrázek: `obrazky/voxel-meritko.png`.
+- **Výchozí zoom (Jan t823u, t824u, 21:08–21:35):** v axonometrii kolem **64 dlaždic (voxelů 0,25 m) vodorovně**, tedy asi 16 m na šířku obrazovky (~30 px na voxel u Full HD, ~40 px u 2K).
 
 
 ---
@@ -173,7 +174,13 @@ Minerály, žíly, kras i dutiny jsou útvary funkce světa (1.7), ne krok „po
 
 **Otázka pro Jana.** Necháme segment 8 m jako výchozí jednotku práce a rozdílu (formát E78 / WTI1) a 16 / 32 m jen jako parametry k měření? Nebo chceš výchozí velikost změnit už teď, bez nového měření?
 
-**Platí:**
+**Platí:** *rozhodnuto (2026-11-20 21:08–21:35, Jan t823u, t824u)*
+
+- **Segment 8 m** je výchozí jednotka práce i uložení rozdílu. Při výchozím zoomu (~16 m na šířku) jsou vidět asi 2 segmenty, s okrajem generátor drží zhruba 3×3 až 4×4 segmentů.
+- **16 a 32 m** zůstávají parametry (1.1) a změří se v 2.7.
+- **Formát rozdílu** z E78 (kanonický překryv 0,25 m, klíče + deflate), **hlavička** z WTI1 (verze, transformace, pořadí, hashe).
+- Voda a vegetace v rozdílu jen tam, kde se liší od funkce (2.5, 2.6). Slučování sítí po 32 m patří do kapitoly 7.
+
 
 ---
 
