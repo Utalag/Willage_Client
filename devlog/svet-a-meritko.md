@@ -12,6 +12,8 @@ E49 to vyzkoušelo na světě 8 × 8 bloků. Hrubá fáze trvala asi 0,6 s, cel�
 
 E50 vzalo stejný svět a navzorkovalo každý blok v 64 × 64 × 256 buňkách (buňka 0,125 m, svět 512 × 512 × 256 = 67 milionů buněk). Blok ve studii zůstává 8 × 8 × 32 m, mění se jen hustota vzorků. Minerály a dutiny drží objem: cíl × (n/16)³. Hrubý svět je stejný jako v E49 (~0,55 s). Celé generování na boxu v GDScriptu na jednom vlákně trvalo 515 s, švy povrchu u jemných buněk 0,00. Čísla fází jsou na stránce [Výkon a mobil](vykon-a-mobil.md).
 
+E92 (2026-11-20 08:11) zkusilo test měřítka v izometrii s postavou 1,75 m a domem 4 × 4 × 3 m. Ostrov START (bloky 8 m) je proti postavě útesovitý: polovina bodů má sklon aspoň 26,6° (schod jedné buňky), 26 % přes 45°, hora je 9,5 m vysoká s patou 1,6 m. Omezovač sklonu z E56 použitý na ostrově to sníží jen na 18 %, horu sníží na 6 m a změní vodu (zmizí podzemní těleso, ubude vodopádů a tůní). Blok 128 m z funkce E90 je mírný už sám: převýšení 43 m, pata 53 m, medián 17,5°, nad 45° 5,5 %; strop 0,6 dá 0 %. Je to hypotéza, Jan nerozhodl.
+
 ## Hypotézy (ne rozhodnutí)
 
 - **Proporční svět** (Jan 18:35–18:53): výška kolem 3000 m (hora ~1000 m, podzemí ~2000 m), postava ~2 m (4 buňky po 0,5 m). Šířka hory se stejnou výškou a základnou ~2000 m (sklon ~45°).

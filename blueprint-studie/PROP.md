@@ -2582,3 +2582,47 @@ Zdroje [45]–[72] níže v tomto souboru zůstávají jen jako zástupné čís
 - **Negativa předem:** blok ostrova 8 m je na mírné svahy malý: hora 10+ m se do 8 m se sklonem 45° nevejde, okraje
   dorovnává `adapt` na sousedy, takže strmý pás se přesune na švy. Omezovač mění vodu (jiná koryta) → otisky se s příznakem
   změní (bez příznaku ne). Funkce E90 je jen test (natažení × 8, reliéf × 3).
+
+
+### E92 výsledky (2026-11-20 08:11)
+- **Ostrov START** (2 × 2 bloky po 8 m, buňka 0,5 m, sklon z centrálních rozdílů přes 1 m; schod 1 buňky = 26,6°):
+
+| | vyp | ≤ 1,0 (45°) | ≤ 0,6 (31°) | 0,6 + vyhlazení 2× |
+|---|---|---|---|---|
+| sklon p50 / p95 / max | 26,6° / 78,5° / 83° | 26,6 / 69,6 / 76 | 26,6 / 68,6 / 75 | 26,6 / 68,6 / 75 |
+| bodů nad 30° / nad 45° | 37,9 % / 26,4 % | 41,2 / 24,8 | 37,7 / 18,3 | 37,8 / 18,3 |
+| strmé u švů bloků (z bodů nad 45°) | 23,5 % | 20,2 | 24,2 | 24,8 |
+| největší schod / reliéf ostrova | 4 m / 10 m | 2 / 8 | 2 / 6,5 | 2 / 6,5 |
+| hora: vrchol / převýšení / pata | 29 / 9,5 / 1,6 m | 27,5 / 7,5 / 1,8 | 26 / 6 / 1,5 | 26 / 6 / 1,5 |
+| prameny / koryto / tůně (sloupců) | 5 / 27 / 159 | 5 / 23 / 133 | 5 / 28 / 118 | 5 / 31 / 110 |
+| vodopády (z toho přes okraj) | 8 (5) | 5 (5) | 1 (5) | 2 (4) |
+| odtok přes okraj | 9,64 l/s | 9,78 | 9,77 | 9,82 |
+| podzemní tělesa / vývěry | 1 / 1 (povrch 19,47 m, 0,17 l/s) | 0 / 0 | 0 / 0 | 0 / 0 |
+| validátor | 4/4 | 4/4 | 4/4 | 4/4 |
+
+- **Blok 128 m** (funkce E90, dlaždice (14, 5) s největším převýšením 43 m, vzorky 0,5 m; omezovač na 1 m mřížce):
+
+| | vyp | ≤ 1,0 | ≤ 0,6 |
+|---|---|---|---|
+| sklon p50 / p95 / max | 17,5° / 45,5° / 53° | 17,5 / 45,5 / 53 | 18,8 / 33,7 / 45 |
+| bodů nad 30° / nad 45° | 24,2 % / 5,5 % | 24,2 / 7,4 | 33,5 / 0,0 |
+| převýšení / pata hory | 43 m / 52,6 m | 43 / 52,6 | 43 / 51,9 |
+| omezovač | – | 736 průchodů, 17 s | 1500 průchodů (nedokonvergoval, 0,19 buňky), 36 s |
+
+- **Snímky** `shots/e92/`: `92_ostrov_{dnes,metry}_{vyp,s06}`, `92_hora_bok_{dnes,metry}_{vyp,s06}`, `92_blok128_{cely,detail,bok}_{vyp,s06}`,
+  srovnání `92_srovnani_*.png`. Postava 1,75 m (červená kapsle) a dům 4 × 4 × 3 m se střechou, v metrech.
+- **Výchozí hra beze změny:** `voda_e66` d7aedf3a6d9d10e8 → 63d7b89a91385a79, 0 neshod; `port_studie --check` 0 změn (hák je jen
+  v `ostrov_teren.gd`, který se z studie neportuje).
+- **Negativa:**
+  - Na ostrově 8 m omezovač skoro nepomůže: nad 45° 26 → 18 %, p95 78 → 69°. Hora se nerozšíří (pata ~1,5 m), jen sníží
+    (9,5 → 6 m), protože hmota nemá kam utéct z bloku 16 × 16 a okraje pak dorovná `adapt` na sousedy. Strmé body nejsou
+    hlavně na švech (20–25 % z nich, pás švů je ~31 % plochy) – jsou uvnitř šablon.
+  - Mediánem 26,6° je schod jedné buňky 0,5 m na 1 m: na ostrově 8 m je sklon hlavně kvantování výšky.
+  - Omezovač změní vodu: podzemní těleso a jeho vývěr zmizí (1 → 0), vodopády 8 → 1–5, tůně 159 → 110–133 sloupců.
+    Proč těleso zmizí, jsem nezkoumal (nejspíš se propustná vrstva po snížení hory už neprotne s povrchem).
+  - Omezovač E56 hlídá rozdíl ve směru souseda, ne velikost spádu: se stropem 1,0 vyjde na bloku 128 m víc bodů nad 45°
+    (5,5 → 7,4 %), protože na úhlopříčce smí být 45° v obou osách (spád až 54,7°). Strop 0,6 to schová.
+  - Jako u E56 se strmost rozprostře: nad 30° 24 → 34 % na bloku 128 m. Omezovač je pomalý (17–36 s pro 129² v GDScriptu).
+  - Vrchol bloku 128 m je ořez funkce E49 (50 m), proto se převýšení nemění. Natažení × 8 a reliéf × 3 jsou předpoklad E90.
+  - Vegetace a domek hry se v pohledu „v metrech“ zúží jako v E89. Postava v pohledu na horu z boku je malá a tmavá (proti světlu).
+  - Vodu na bloku 128 m jsem neměřil (voda ostrova umí jen bloky 16 × 16).
