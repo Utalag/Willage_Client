@@ -519,7 +519,7 @@ Jen data. Velikost modelů je prezentace (`p94_meritko_veg`, Jan 11:39).
 - Hodnoty jsou vstupní data světa (spolu se seedem), ne konstanty v kódu.
 - **Pojmenované profily** (např. nížina, pahorkatina, hornatina) lze přidat později jako hotové sady parametrů.
 - **Poznámka:** testovací svět 3 × 3 (velká hora, kopec, nížina, vodní plocha) – hledání hodnot odloženo na později (Jan t722u).
-- Největší hora je zároveň **sopka**, viz 1.14.
+- Sopky (počet a rozteč jako parametry světa) viz 1.14.
 
 ### 1.13.1 Obrys, bok a spodek ostrova (otevřené)
 
@@ -554,7 +554,23 @@ Jen data. Velikost modelů je prezentace (`p94_meritko_veg`, Jan 11:39).
 
 **Téma.** Největší hora testovacího i herního světa je zároveň sopka (Jan t721u). Samostatný bod: kráter, láva / magma jako materiál, vliv na geologii, vodu a teplotu, aktivita v čase.
 
-**Platí:**
+**Platí:** *rozhodnuto (2026-11-20 19:3x–19:53, Jan t786u–t793u)*
+
+- **Aktivita:** sopka je ve výchozím stavu **neaktivní**. Události ji umí **probudit** a zase **uspat**. Probuzená sopka je zdroj lávy, který se chová obdobně jako pramen (1.8): je to zvláštní buňka v kráteru se jmenovitým výkonem.
+- **Tvar:** něco mezi stratovulkánem a štítovou sopkou. Mírnější úpatí, strmější vrchol, na vrcholu kráter. **Sklon je parametr**, výchozí přibližně 17°.
+- **Velikost (parametry):**
+  - větší sopka: výška kolem 40 m nad okolím, průměr úpatí kolem 2 bloků (256 m),
+  - nižší sopka: výška kolem 20 m, průměr úpatí kolem 1 bloku (128 m),
+  - velikost každé sopky vybere seed v rozsahu mezi nižší a větší, takže se ve světě objeví obě.
+- **Strop výšky:** vrchol sopky je vždy **aspoň 5 m pod horním okrajem sloupce** (1.3). U výchozího sloupce 128 m to je nejvýš 123 m, tedy 59 m nad neutrální úrovní 64 m.
+- **Počet a rozmístění:** pro celý svět platí dva parametry:
+  - **počet sopek** (výchozí 2),
+  - **přibližná rozteč** mezi nimi (výchozí kolem 3 bloků, 384 m).
+  Polohy určí seed. Sopka je součást funkce světa a může přesahovat přes hranice bloků (blueprint z ní vyřízne jen svůj díl).
+- **Vnitřek:**
+  - **průduch** (vent, materiál id 75) je svislý útvar uprostřed sopky, od kráteru dolů,
+  - pod pláštěm jsou **šikmé vrstvy lávy a popela** jako útvary (1.7), které kopírují svah,
+  - běžné vrstvy podle 1.7.1 se do sopky zařezávají a pod ní pokračují.
 
 ---
 
