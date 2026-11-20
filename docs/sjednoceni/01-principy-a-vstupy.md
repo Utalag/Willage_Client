@@ -10,7 +10,7 @@ Značení: „rozhodnuto (datum)“ = Jan už rozhodl. ⚠ = novější měřen�
 
 ## 1.1 Pojmy: ostrov, blok, segment, buňka
 
-**Současný stav (před rozhodnutím).** „Blok“ měl tři významy (K1). Dnešní „blok blueprintu“ v kódu má 8 × 8 × 32 m (16 × 16 × 64 buněk), podle nových pojmů je to **segment**. Je jednotkou vkládání, receptu, seedu, rotace, sousedů i formátu WVB1 [1][2]. „Blok vesnice 128 m“ byl Janova preference z 2026-11-19 19:56 [3] a od 2026-11-20 11:48 je rozhodnuto „generovat celý blok 128 m“ [4]. E96 ho ale složilo z 16 × 16 bloků po 8 m [5]. Ostrov má podle konceptu začínat na 4 blocích a mít nejvýš ~16 [1]. TODO uvádí „4 × 4 bloky = 512 × 512 m“ [3].
+**Současný stav (před rozhodnutím).** „Blok“ měl tři významy (K1). Dnešní „blok“ v kódu (ve studiích „blok blueprintu“) má 8 × 8 × 32 m (16 × 16 × 64 buněk), podle nových pojmů je to **segment**. Je jednotkou vkládání, receptu, seedu, rotace, sousedů i formátu WVB1 [1][2]. „Blok vesnice 128 m“ byl Janova preference z 2026-11-19 19:56 [3] a od 2026-11-20 11:48 je rozhodnuto „generovat celý blok 128 m“ [4]. E96 ho ale složilo z 16 × 16 bloků po 8 m [5]. Ostrov má podle konceptu začínat na 4 blocích a mít nejvýš ~16 [1]. TODO uvádí „4 × 4 bloky = 512 × 512 m“ [3].
 
 **Varianty**
 
@@ -110,7 +110,7 @@ Paměť je výpočet (256 × 256 × výška × 1 B), ne měření. Skutečná pa
 
 **Současný stav**
 - Terén jsou funkce ve světových metrech (`geo_fn`: povrch, hranice vrstev na řídicí mřížce 0,5 m, materiál bodu). Buňky jsou z nich vzorky [9]. Princip „funkce jsou jediný zdroj pravdy, buňky, voda a vykreslení jsou odvozené“ je v TODO jako návrh (ChatGPT 2026-11-19) [3].
-- Povrch dnes dávají **šablony blueprintu** (louka, kopec, hora, písčina) na segment 8 m (v kódu „blok“). Okraje se dorovnávají na sousedy, sousedé se nikdy nemění (*rozhodnuto 2026-11-17*) [1].
+- Povrch dnes dávají **šablony povrchu** (recepty louka, kopec, hora, písčina; ve studiích „šablony blueprintu“) na segment 8 m (v kódu „blok“). Okraje se dorovnávají na sousedy, sousedé se nikdy nemění (*rozhodnuto 2026-11-17*) [1].
 - *rozhodnuto (2026-11-20 11:48):* blok 128 m z funkce světa místo šablon [4].
 - K6/K7: hora a funkce světa existují ve více verzích.
 
@@ -124,11 +124,25 @@ Paměť je výpočet (256 × 256 × výška × 1 B), ne měření. Skutečná pa
 | negativa | hora malá (9 m) | tůně 22 % plochy [5] | stěna 5–6 m vedle nížiny [11] |
 | parametry | – | E90 × 8 / × 3; E96 × 4 / × 1 | U, nezávislé na E90 |
 
-**Doporučení.** Jedna funkce světa pro povrch i masiv (B + C sloučit do jedné funkce v metrech s jedním nastavením). Šablony blueprintu nechat jako **recept**, který funkci jen moduluje (typ bloku řídí geologii a jemný tvar, jako cesta `base_hm` v E49). `p94_hora_k` a omezovač sklonu E92 zrušit: řeší totéž hůř a mění vodu. Svět výprav a ostrov musí brát stejnou funkci.
+**Doporučení.** Jedna funkce světa pro povrch i masiv (B + C sloučit do jedné funkce v metrech s jedním nastavením). Šablony povrchu nechat jako **recept**, který funkci jen moduluje (typ bloku řídí geologii a jemný tvar, jako cesta `base_hm` v E49). `p94_hora_k` a omezovač sklonu E92 zrušit: řeší totéž hůř a mění vodu. Svět výprav a ostrov musí brát stejnou funkci.
 
 **Otázka pro Jana.** Má povrch bloku dávat jedna funkce světa a recept (louka, hora…) jen upravovat geologii a detail? Nebo chceš šablony zachovat jako hlavní tvar?
 
-**Platí:**
+**Platí:** *rozhodnuto (2026-11-20 15:09–15:12, Jan t718u, t719u)*
+
+Jde o dvě oddělené věci:
+
+1. **Herní svět**
+   - Generuje se jako celek z funkce světa.
+   - Tvar terénu dává jen funkce: žádné šablony povrchu a žádné ruční zvedání hor. `p94_hora_k` a omezovač sklonu E92 se ruší. Hory dělá svět, i masiv E87 má být součástí funkce světa.
+2. **Blueprint**
+   - Blueprint je **otisk jedné oblasti herního světa o velikosti jednoho bloku** (128 m).
+   - Vesnický ostrov se skládá z blueprintů: vložení, zrcadlení, otočení, posun výšky a napojení na sousedy (dříve rozhodnuto: sousedé se nemění, přizpůsobuje se nový blok).
+3. **Testovací pipeline** (jeden krok navíc v generování světa)
+   - Vygenerovat svět 3 × 3 bloky (384 × 384 m), rozřezat ho na 9 blueprintů a ty náhodně poskládat do ostrova (náhodné pořadí, otočení a zrcadlení).
+   - Lze spustit celé (test světa i Willage zároveň), nebo zvlášť: jen svět, nebo jen ostrov z hotových blueprintů, podle fáze testování.
+
+Pojmy: **blueprint** = otisk světa o velikosti bloku. To, čemu se ve studiích říkalo „šablona blueprintu“ (louka, kopec…), je dnes **šablona povrchu / recept** a pro tvar terénu se už nepoužívá. Vložený blueprint na ostrově je **blok**.
 
 ---
 
@@ -188,7 +202,7 @@ Paměť je výpočet (256 × 256 × výška × 1 B), ne měření. Skutečná pa
 
 **Současný stav**
 - Vrstvy jsou uspořádané funkce mocností ve sloupci (20 vrstev), mají klíny a vyklínění. Regionální základ je ve světových souřadnicích [11].
-- *rozhodnuto (2026-11-20 03:26):* v blueprintu zakázat vrstvy < 25 cm. Implementace `p85_vrstvy` má tenkých vrstev 17 426 → 0 a mění 0,65 % buněk. Po ořezu povrchem ale zůstane 775 tenkých zbytků [9].
+- *rozhodnuto (2026-11-20 03:26):* v definici vrstev zakázat vrstvy < 25 cm (Jan: „v blueprintu“, tehdy ve smyslu receptu bloku). Implementace `p85_vrstvy` má tenkých vrstev 17 426 → 0 a mění 0,65 % buněk. Po ořezu povrchem ale zůstane 775 tenkých zbytků [9].
 - *rozhodnuto (2026-11-20 01:55, 03:26):* vápenec k hladině v ~50 % bloků (mince), i pro jeskynní a hluboký vápenec a dolomit, vršek 2 m. ⚠ Ve výchozím podzemí E58 kras skoro nevzniká (2 ze 63 bloků „ano“), v E67 ano [9].
 - Jádro hory: E87 masiv přes švy (viz 1.4) [11].
 - Útvary (žíly, pegmatity, skarny, kras): dnes `cavity_one` po buňkách, jen v bloku. E84 navrhuje strom SDF z hashe světové mřížky (+51 ms na blok, útvar 176–296 B, přes šev funguje) [9].
@@ -345,6 +359,35 @@ Jen data. Velikost modelů je prezentace (`p94_meritko_veg`, Jan 11:39).
 
 ---
 
+## 1.13 Profil ostrova
+
+**Téma.** Půdorys ostrova shora a tvar spodku a okrajů z boku: útesy, kužel pod ostrovem, vodopády z okraje do mlhy.
+
+**Současný stav (z paměti a studií)**
+- Ostrov na začátku je zhruba kruhový, 4 připravené bloky, zbytek je mlha. Mlha je zvláštní materiál: nedá se v ní kopat ani stavět a mizí jen vložením nového bloku. Odemkne se vždy jen jeden blok sousedící s ostrovem [1].
+- Ostrov je plovoucí. Okraj mapy je okraj ostrova, voda tam přepadá do mlhy a dál se nesimuluje. Chybějící slot je stěna [21].
+- E96: na bloku 128 m 4 vodopády přes okraj (20,2 l/s, nejvyšší 19 m). Svět studie má kolem ostrova prstenec mlhy / příkopu [5].
+- Dno ostrova (z = 0) je plné. *rozhodnuto (2026-11-20 03:26):* zákaz prokopání dna i okraje ostrova (`p85_okraj`: díry ve dně 703 → 0) [3][9].
+- E67: podzemní voda vytéká z vrstev na okraji bloku (Jan 2026-11-19 15:54). E80: díra dnem ani chodba bokem vodu z ostrova nevypustí, model otevřené dno ani bok nezná [9].
+- E66b: Jan chtěl skrýt texturu na boku dlaždice ostrova (prezentace) [22].
+- Spodek ostrova (kužel, skála pod ostrovem) dnes v datech není. Ostrov končí plochým dnem sloupce. Po rozhodnutí 1.3 je dno 64 m pod neutrální úrovní.
+
+**Varianty (k rozhodnutí)**
+
+| | A: hranol (dnes) | B: hranol + kužel / skalní spodek pod ostrovem | C: B + útesy na okraji z funkce světa |
+|---|---|---|---|
+| bok ostrova | svislá stěna sloupců | svislá stěna, pod ní zužující se spodek | útes podle geologie, vodopády ze stěn |
+| data | jen sloupce bloku | spodek jako funkce vzdálenosti od okraje ostrova (mimo kopání) | totéž + okrajový pás bloku |
+| závislost na tvaru ostrova | ne | mění se při vložení nového bloku | mění se při vložení |
+
+**Doporučení.** Spodek ostrova je funkce půdorysu (vzdálenost od okraje ostrova), ne data bloku. Blueprint ho nenese a po vložení bloku se přepočítá. Okraj zůstává nekopatelný. Voda z okraje padá do mlhy (dnešní model) a výtok vrstev na boku (E67) se kreslí jako vodopád ze stěny. Vzhled spodku (kužel, skála) je prezentace, datově stačí tvar.
+
+**Otázka pro Jana.** Jak má ostrov vypadat z boku: svislá stěna, nebo útesy a zužující se skalní spodek (kužel)? Má spodek patřit k datům (kolize, voda), nebo jen k vykreslení?
+
+**Platí:**
+
+---
+
 ## Zdroje
 
 1. `devlog/koncept.md`, `teren-bloky-bunky.md` (main 0e8aa00).
@@ -367,3 +410,5 @@ Jen data. Velikost modelů je prezentace (`p94_meritko_veg`, Jan 11:39).
 18. PROP E95 (`e95-async-voda` 597342d).
 19. `devlog/architektura.md` (main).
 20. PROP E93 (`e93-telefon` 7cbcf68), `shots/e93/cpu_limit_souhrn.json`.
+21. `devlog/voda.md`, `blueprint-studie/README.md` (E47b/c okraj ostrova), main.
+22. `blueprint-studie/PROP.md` „E66b podzemní těleso, bok ostrova“ (main).
