@@ -7,6 +7,7 @@ extends RefCounted
 const VS = preload("res://scripts/voda/voda_svet.gd")
 const UG = preload("res://scripts/voda/podzemi.gd")
 const SELF = preload("res://scripts/voda/podzemi/ug_pole.gd")
+const LI = preload("res://scripts/voda/litry.gd")   # E94: jeden tvar l → m³
 
 class Members:
 	var ctx: Dictionary
@@ -117,7 +118,7 @@ static func solve(ctx: Dictionary, entries: PackedInt32Array, q: float, excl := 
 	var ev := []; var cum := 0.0; var t := 0.0
 	for zz in range(zmin, z_out + 1):
 		cum += vz[zz] * float(ctx.cell_m3)
-		t = (cum / (net * float(ctx.q_to_m3))) if net > 0.0 else -1.0
+		t = (cum / (net / float(ctx.l_na_m3))) if net > 0.0 else -1.0
 		ev.append({"z": zz, "objem_m3": cum, "cas_s": t})
 	var path := PackedInt32Array()
 	if has_out:   # zpět po klesající vzdálenosti
