@@ -54,11 +54,11 @@ Upřesnění od Jana:
 ## Pořadí otevřených bodů (kapitoly 3–8, jen to, co 1–2 nerozhodly)
 
 1. **6.1** Co server ověřuje a zda posílat snímek buněk (E88 č. 4) — společně s Willage-backend.
-2. **6.2** Tvar verze generátoru `gen_ver` (E88 č. 11).
-3. **4.1** Zapisovat erozi E51 do překryvu (E88 č. 7).
-4. **5.1** Rohoví sousedé v kontraktu (E88 č. 6).
-5. **5.2** Výchozí režim napojení švů (Auto / Blend / Keep).
-6. **3.1** Práh pro plný přepočet vody místo povodí (E88 č. 8).
+2. **6.3** Serverová kontrola a mazání ověřených dat.
+3. **6.2** Tvar verze generátoru `gen_ver` (E88 č. 11).
+4. **4.1** Zapisovat erozi E51 do překryvu (E88 č. 7).
+5. **5.1** Rohoví sousedé v kontraktu (E88 č. 6).
+6. **5.2** Výchozí režim napojení švů (Auto / Blend / Keep).
 7. **3.2** Slučovat drobné výstupy v dosahu 8 m i mezi sebou?
 8. **7.1** Pohled 2D (dlaždice), nebo 3D (modely)?
 9. **7.2** LOD prezentační vrstvy.

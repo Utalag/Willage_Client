@@ -18,12 +18,11 @@ Značení: [n] = zdroj na konci. K1–K12 = konflikty z `00-mapa-vetvi.md`. Čas
 4. **4.1** Zapisovat erozi E51 do překryvu (E88 č. 7).
 5. **5.1** Rohoví sousedé v kontraktu (E88 č. 6).
 6. **5.2** Výchozí režim napojení švů (Auto / Blend / Keep) u přeneseného výřezu.
-7. **3.1** Práh, kdy místo přepočtu na povodí jít rovnou do plného výpočtu vody (E88 č. 8).
-8. **3.2** Slučovat drobné výstupy v dosahu 8 m i mezi sebou?
-9. **7.1** Pohled 2D (dlaždice), nebo 3D (modely)?
-10. **7.2** LOD prezentační vrstvy.
-11. **7.3** Průhlednost a řez v izometrii (E91).
-12. **8.1** Pořadí slučování větví do hry.
+7. **3.2** Slučovat drobné výstupy v dosahu 8 m i mezi sebou?
+8. **7.1** Pohled 2D (dlaždice), nebo 3D (modely)?
+9. **7.2** LOD prezentační vrstvy.
+10. **7.3** Průhlednost a řez v izometrii (E91).
+11. **8.1** Pořadí slučování větví do hry.
 
 ---
 
@@ -33,6 +32,7 @@ Původní plán: jeden algoritmus podzemí, oprava lokálního přepočtu, vlák
 
 **Už vyřešeno v kap. 1–2**
 
+- Práh pro plný přepočet vody (dřívější bod 3.1, E88 č. 8) je vyřešený v 1.9: voda se počítá asynchronně v pozadí s debouncem, lokální přepočet dává stejný výsledek jako plný a počítá se sjednocené povodí. Bod zrušen (Jan, hovor 20. 11. 2026).
 - Výchozí podzemí E67 (`pretok`) → 1.8.
 - Lokální přepočet = plný výpočet; okno je celé zasažené povodí; běží asynchronně na pozadí; prodleva 2 s, strop 10 s; fronta dalších výkopů; scénář „dva hráči“ → 1.9.
 - Výchozí voda je funkce, po vygenerování světa v ustáleném stavu; prameny se ukládají; na ostrově se počítá na povodí; ukládá se jen odchylka → 1.2, 1.8, 2.5.
@@ -43,30 +43,6 @@ Původní plán: jeden algoritmus podzemí, oprava lokálního přepočtu, vlák
 - Neobsazený pramen zvedá hladinu tělesa, obsazování je zapnuté, pramen se kreslí, dokud ho hráč nevykope, nenapojí nebo nezachytí → 1.8 (2026-11-20 01:49).
 
 Oprava K5 (lokální ≠ plný v pěti větvích) a zrychlení podzemí jsou implementace rozhodnutého 1.9, ne nové rozhodnutí.
-
-### 3.1 Práh pro plný přepočet vody
-
-**Téma.** Kdy přepočet vody po výkopu vynechá „lokální na povodí“ a rovnou spočítá celý ostrov (E88 otázka 8) [2].
-
-**Současný stav**
-- 1.9 už říká: lokální výřez se rozšíří na povodí a běží asynchronně. Práh, kdy je levnější rovnou plný výpočet, v 1.9 není.
-- Drobné změny jsou lokálně 46–206 ms proti ~2 s plně. Chodba s `p85_blok2` je lokálně **pomalejší** než plně: 12,6 s proti 1,6 s [3]. E79 samo zrychlí jen o 10–35 % (1,1–1,5 s proti 1,6–1,7 s) [4].
-- Režim přelivu (E62, podzemí E58): lokální úprava tělesa 3,4 → 2,7 s (jen 1,27×), cíl „zpět na milisekundy“ se nesplnil [5]. Výchozí podzemí je teď E67, ale pomalý lokální běh na velkém tělese zůstává rizikem (E96 výkop 27–41 s, E95 podzemí 128 m 90–228 s) [6][7].
-
-**Varianty**
-
-| | A: vždy jen povodí (1.9 bez prahu) | B: práh — velké povodí nebo odhad delší než plný → plný výpočet |
-|---|---|---|
-| chodba 12,6 s [3] | může být pomalejší než plný | spadne do plného |
-| drobný výkop | povodí (správně) | povodí, pod prahem |
-
-**Doporučení.** Varianta B. Když je zasažené povodí skoro celý ostrov, nebo by lokální běh podle odhadu trval déle než plný, jde se rovnou do plného výpočtu. Přesné číslo prahu se změří v testu 2.7, do pravidla teď stačí princip. Asynchronní fronta z 1.9 platí v obou případech.
-
-**Otázka pro Jana.** Má přepočet vody práh, nad kterým se místo povodí rovnou spočítá celý ostrov (třeba u dlouhé chodby, kde je lokální běh pomalejší)?
-
-**Platí:**
-
----
 
 ### 3.2 Slučování drobných výstupů mezi sebou
 
