@@ -207,7 +207,7 @@ Pojmy: **blueprint** = otisk světa o velikosti bloku. To, čemu se ve studiích
 - Zatím **jedna tabulka**, případně několik propojených tabulek. **Jeden materiál = jedno číselné id.** Další parametry se k němu přidávají novými sloupci nebo vedlejšími tabulkami se stejným id.
 - Grafová nebo vektorová databáze pro vztahy (tavení, co na čem roste, podobnost materiálů) je možnost pro později. Teď ne.
 - **Návrh tabulky:** [`materialy.csv`](materialy.csv), 78 materiálů. Sloučené seznamy: `sdilene/materialy_voda.json` + `horniny_voda.json` (voda, eroze) [13], `tezba-studie/data/horniny_tezba_navrh.json` (hustota, tvrdost, vzácnost, nástroj) [14], `mat.gd` (herní třídy, barvy, skóre rarity) a `poradi_hornin.json` (horniny, barvy) [15], `veg.gd` (povrchy pro vegetaci) [16], `mineraly_hostitele.json` a `tridy.gd` (minerály, převod na herní třídu) [26].
-  - Sloupce: id, název, skupina (soil / rock / ore / water / other), propustnost 0–1 = (log10 K + 9) / 6, K v m/s (Darcy), pórovitost, odpor povrchu, eroze (kritická rychlost proudu `ero_v` a třída), hustota kg/m³, tvrdost (Mohs, třída, nejslabší nástroj), vzácnost (+ skóre rarity), vegetace (podle `veg.gd` přes herní třídu), barva hex, poznámka.
+  - Sloupce: id, název, skupina (soil / rock / ore / water / other), propustnost 0–1 = (log10 K + 9) / 6, K v m/s (Darcy), propustnost buňky v l/s herního času (přibližné, spočtené z K, viz 1.8.1), pórovitost, odpor povrchu, eroze (kritická rychlost proudu `ero_v` a třída), hustota kg/m³, tvrdost (Mohs, třída, nejslabší nástroj), vzácnost (+ skóre rarity), vegetace (podle `veg.gd` přes herní třídu), barva hex, poznámka.
   - Hodnoty jsou z dat. Doplněné odhady mají `~` a zdroj [23]–[25]. „–“ znamená, že se na materiál nevztahuje.
   - Zachovaná pravidla: písek vodu neudrží a trochu zpomalí, tráva hodně zpomalí, jíl a pevná skála vodu drží, pórovitá hornina trochu prosakuje [27]. **Propustnost vápence je 0,246** (skutečná hodnota, E61, Jan 2026-11-19 04:39) [28]. Staré pravidlo „vápenec nepropustný / perm 0“ z 2026-11-17 19:18 [27] se ruší (Jan t732u, viz 1.8).
   - Voda není materiál, ale stav buňky. V tabulce je jen id 250 (dutina s vodou z `tridy.gd`).
@@ -299,7 +299,7 @@ Pojmy: **blueprint** = otisk světa o velikosti bloku. To, čemu se ve studiích
 
 **Otázka pro Jana.** Přepneme výchozí podzemí z E58 na E67 (výtok z okrajů vrstev, kras funguje)?
 
-**Platí:** *rozhodnuto (2026-11-20, Jan t732u)*
+**Platí:** *rozhodnuto (2026-11-20, Jan t732u); doplněno (2026-11-20, Jan t765u–t768u)*
 
 - **Voda je obsah buňky.** Ukládá se v **m³ na buňku**, s jedním převodem z litrů [8].
 - **Povrchová voda** používá priority-flood + D8 [17].
@@ -312,6 +312,20 @@ Pojmy: **blueprint** = otisk světa o velikosti bloku. To, čemu se ve studiích
 - **Mince E82:** u jeskynního a hlubokého vápence a dolomitu semínko 50/50 rozhodne, jestli se vrstva zvedne až 2 m pod hladinu podzemní vody. Tím je propustná a může v ní vznikat kras [9].
 - **Jíl nad zvednutou vápencovou vrstvou vyklíní** (ztenčí se a místy chybí), takže tam voda prosakuje do vápence a kras vzniká přirozeně.
 - **Propustnost vápence = 0,246** (skutečná hodnota). Staré pravidlo „vápenec 0“ se ruší [27][28].
+- Vsakování a průsaky viz 1.8.1.
+
+### 1.8.1 Vsakování a průsaky
+
+**Platí:** *rozhodnuto (2026-11-20, Jan t765u–t768u)*
+
+- **Propustnost materiálu** je zadaná jako **propustnost buňky**, v **l/s herního času**: maximální průtok buňkou. Počítá se z Darcyho K: K × plocha stěny 0,25 m² × spád (1 u svislého toku), převedeno na herní čas (1 herní den = 1 h, faktor 24, proto Q_herní = K × 0,25 × 1000 / 24). Buňka je krychle, takže stačí jedno číslo na materiál. Příklady (reálný čas, před převodem): písek K 1e-4 ≈ 0,025 l/s, plná buňka 125 l za ~80 s; tráva / hlína K 1e-5 ≈ 0,0025 l/s, asi 14 min.
+- **Boční tok** = propustnost krát skutečný spád.
+- Mezi dvěma materiály se bere **menší z obou hodnot** (přibližně harmonický průměr z E70). Počítá se za běhu a neukládá se.
+- **Tok dolů** jde jen do volné kapacity buňky pod ní (E71).
+- **Boční průsak po svahu** dosahuje až 8 m (E72); z něj vznikají svahové prameny.
+- **Zavěšená voda** se drží nad jílem a nepropustnou skálou.
+- **Čas je událostový** (herní čas, 1 herní den = 1 h).
+- Sloupec `propustnost_l_s_herni` v [`materialy.csv`](materialy.csv) má přibližné hodnoty spočtené z K skriptem [`prepocet_propustnost_l_s.py`](prepocet_propustnost_l_s.py).
 
 ---
 

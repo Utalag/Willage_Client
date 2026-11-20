@@ -37,7 +37,7 @@ Upřesnění od Jana:
 4. **1.2 Jednotky a jemná mřížka:** definice 0,5 m a 0,25 m jen u kopání (přehodnocení 03:26).
 5. **1.5 Verze generátoru:** *odloženo 2026-11-20 (t726u)*, dokud nebude jeden funkční generátor.
 6. **1.9 Přepočet vody:** lokální = plný, výřez na povodí + asynchronně na pozadí, prodleva 2 s / strop 10 s – *rozhodnuto 2026-11-20 (t734u, t735u)*.
-7. **1.8 Voda jako data:** obsah buňky v m³, povrch priority-flood + D8, výchozí podzemí E67, čas 1 den = 1 h – *rozhodnuto 2026-11-20 (t732u)*.
+7. **1.8 Voda jako data:** obsah buňky v m³, povrch priority-flood + D8, výchozí podzemí E67, čas 1 den = 1 h; vsakování: propustnost buňky v l/s herního času z Darcyho K – *rozhodnuto 2026-11-20 (t732u), doplněno (t765u–t768u)*.
 8. **1.11 Datový rozpočet:** *přeskočeno 2026-11-20 (t738u)*.
 9. **1.6 Materiály:** jedna tabulka, jedno id – *rozhodnuto 2026-11-20 (t727u)*, návrh `materialy.csv`.
 10. **1.7 Geologie:** útvary jako funkce světa přes švy, vrstvy podle terénu, vyklínění; skladba vrstev, mapa složení na maximální ploše (hrubé body ze seedu, interpolace), 1–3 zástupci v pásmu, min. 1 buňka, švy 1/16 bloku – *rozhodnuto 2026-11-20 (t732u), doplněno (t750u–t763u)*.
