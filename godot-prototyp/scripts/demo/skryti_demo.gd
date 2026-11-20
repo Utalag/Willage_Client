@@ -3,12 +3,13 @@ extends Node
 ##   -- --skryti-shots [--tag=X]   screenshoty shots/40_skryti_*<_tag>.png
 ##   -- --skryti-bench [--tag=X]   měření → shots/40_skryti_bench<_tag>.txt
 
+const J = preload("res://scripts/jednotky.gd")   # E94: mřížka a metry z jednoho místa
 const BlockGen = preload("res://scripts/block_gen.gd")
 const Mat = preload("res://scripts/mat.gd")
 const Mesher = preload("res://scripts/mesher.gd")
 const Discovery = preload("res://scripts/discovery.gd")
 const Params = preload("res://scripts/surface/surface_params.gd")
-const BS := 16
+const BS := J.BS
 
 var m
 var tag := ""
