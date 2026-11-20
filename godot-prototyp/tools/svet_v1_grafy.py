@@ -93,9 +93,10 @@ ax.set_xlabel("x (m)"); ax.set_ylabel("výška (m)"); ax.legend(); ax.grid(alpha
 save(fig, "test1_sev_profil.png")
 
 # ---------------- test 2: histogramy sklonů
-sk = J["sklony"]
-fig, ax = plt.subplots(1, 3, figsize=(18, 4.5))
-for a, k in zip(ax, ["start", "sopka", "masiv"]):
+sk = dict(J["sklony"])
+sk["celý svět 4096 m (4 m)"] = json.load(open(os.path.join(OUT, "sklony_svet.json")))["sklony_svet"]
+fig, ax = plt.subplots(1, 4, figsize=(24, 4.5))
+for a, k in zip(ax, ["start", "sopka", "masiv", "celý svět 4096 m (4 m)"]):
     r = sk[k]; hst = np.array(r["hist_0_5deg"], dtype=float)
     a.bar(np.arange(181) * 0.5 + 0.25, hst / hst.sum() * 100, width=0.5, color="#557")
     for q, c in (("p50_deg", "g"), ("p95_deg", "orange"), ("max_deg", "r")):

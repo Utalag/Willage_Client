@@ -1,0 +1,15 @@
+Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+
+spojitost: bloky max 0.0 m, segmenty 0.0 m, segment↔blok 0.0, přes sopku 0.0
+sklony start: p50 6.8° p95 15.8° max 22.4°, max nad stropem -17.57° (0 vzorků)
+sklony sopka: p50 5.8° p95 19.8° max 31.1°, max nad stropem -8.94° (0 vzorků)
+sklony masiv: p50 6.8° p95 17.8° max 25.8°, max nad stropem -14.23° (0 vzorků)
+sopka 0: H 31.2 m, vrchol 100.85 m (strop 123.0), kráter 4.57 m, nejbližší 413 m, OK
+sopka 1: H 32.3 m, vrchol 101.49 m (strop 123.0), kráter 4.67 m, nejbližší 413 m, OK
+mapy: Δváha/m 0.0092, Δhornina/m 0.0075, Δz/m 0.447, jiný biom (seed+1) 74.2 %
+čas: {"blok128_0.25_ms":3512.932,"blok128_0.5_ms":863.245,"blok128_1.0_ms":212.29,"blok128_sopka_0.5_ms":720.717,"bod_us":38.81045,"e90_3km_ms":4900.0,"init_ms":89.387,"mapa_3km_po_4m_ms":5857.644,"sloupec_us":53.31085,"vyska_us":12.89305}
+chyb celkem: 0
+
+real	1m54.713s
+user	1m54.469s
+sys	0m0.192s
