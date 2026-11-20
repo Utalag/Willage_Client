@@ -211,7 +211,7 @@ Minerály, žíly, kras i dutiny jsou útvary funkce světa (1.7), ne krok „po
 
 - Podzemní hladina a propustnost jsou **čistá funkce**, neukládají se (1.2).
 - **Prameny** se nasazují ze seedu a ukládají se, protože je hráč může ucpat, vykopat a přenést (1.8).
-- **Povrchová voda** (koryta, tůně) se dopočítá, až ji potřebuje slupka nebo přepočet, **na celém povodí asynchronně** (1.9). První zobrazení nového území může trvat déle.
+- **Povrchová voda** (koryta, tůně) se dopočítá, až ji potřebuje slupka nebo přepočet, **na celém povodí asynchronně** (1.9). První zobrazení nového území může trvat déle. **První načtení nebo uložení bloku smí chvíli trvat, zobrazí se progressbar** (Jan t826u, 21:39).
 - Ukládá se **jen odchylka** od výchozího výpočtu (1.4). Plný výpočet bloku při každém načtení odpadá.
 
 
