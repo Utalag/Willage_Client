@@ -535,7 +535,7 @@ Jen data. Velikost modelů je prezentace (`p94_meritko_veg`, Jan 11:39).
 - **Poznámka:** testovací svět 3 × 3 (velká hora, kopec, nížina, vodní plocha) – hledání hodnot odloženo na později (Jan t722u).
 - Sopky (počet a rozteč jako parametry světa) viz 1.14.
 
-### 1.13.1 Obrys, bok a spodek ostrova (otevřené)
+### 1.13.1 Obrys, bok a spodek ostrova
 
 **Téma (původní kostra).** Půdorys ostrova shora a tvar spodku a okrajů z boku: útesy, kužel pod ostrovem, vodopády z okraje do mlhy.
 
@@ -560,7 +560,14 @@ Jen data. Velikost modelů je prezentace (`p94_meritko_veg`, Jan 11:39).
 
 **Otázka pro Jana.** Jak má ostrov vypadat z boku: svislá stěna, nebo útesy a zužující se skalní spodek (kužel)? Má spodek patřit k datům (kolize, voda), nebo jen k vykreslení?
 
-**Platí:**
+**Platí:** *rozhodnuto (2026-11-20 20:29–20:34, Jan t805u–t807u)*
+
+- **Bok a spodek ostrova nepatří do dat.** Jsou čistě prezentace a buňky se pro ně negenerují.
+- Z boku se vykreslí jen **jednoduché bloky s vlastní texturou** do hloubky **5 m pod nejnižší okrajovou buňkou ostrova** (minimum funkce na okraji). Hloubka je parametr.
+- Ve stejné výšce jsou **oblaka**, ve kterých se spodek ostrova ztrácí.
+- **Voda z okraje** dál padá do oblak a dál se nesimuluje.
+- Okraj a dno zůstávají nekopatelné (dřívější rozhodnutí 03:26, `p85_okraj`).
+
 
 ---
 

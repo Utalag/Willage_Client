@@ -43,7 +43,7 @@ Upřesnění od Jana:
 10. **1.7 Geologie:** útvary jako funkce světa přes švy, vrstvy podle terénu, vyklínění; skladba vrstev, mapa složení na maximální ploše (hrubé body ze seedu, interpolace), 1–3 zástupci v pásmu, min. 1 buňka, švy 1/16 bloku – *rozhodnuto 2026-11-20 (t732u), doplněno (t750u–t763u)*.
 11. **1.12 Objektová vrstva:** terén a rostliny po segmentu (otáčejí se s blokem), stavby a cesty seznam na ostrově, smějí přes hranici bloku – *rozhodnuto 2026-11-20 (t739u, t740u), změněno (t741u–t743u)*.
 12. **1.10 Kontrakt:** WVB1 základ, data po segmentech, voda v litrech (1 B), server ukládá seed, parametry, verzi, seznam vložení a rozdíl proti funkci, namátkově kontroluje generátorem (vypínatelné) – *rozhodnuto 2026-11-20 (t736u, t737u), změněno (t801u–t803u)*.
-13. **1.13 Profil a členitost terénu:** parametry členitosti (rozhodnuto); obrys, bok a spodek ostrova otevřené.
+13. **1.13 Profil a členitost terénu:** parametry členitosti (rozhodnuto); bok ostrova jen prezentace: bloky s texturou 5 m pod nejnižší okrajovou buňkou, v té výšce oblaka, voda padá do oblak – *rozhodnuto 2026-11-20 (t805u–t807u)*.
 14. **1.14 Sopka:** neaktivní, události ji probudí a uspí; tvar mezi strato a štítovou (sklon 17°); větší 40 m / 2 bloky, nižší 20 m / 1 blok; vrchol aspoň 5 m pod okrajem sloupce; počet a rozteč jako parametry světa (2, 3 bloky); průduch id 75 a kuželovité vrstvy lávy a popela, těleso se propíchne běžnými vrstvami jako skalní jádro (rozhodnuto).
 
 ## Legenda
