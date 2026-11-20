@@ -6,6 +6,7 @@ extends RefCounted
 ## kola = 4, tol = 0 → bitově stejné jako tok.route / tok60.update.
 const T = preload("res://scripts/voda/tok.gd")
 const T60 = preload("res://scripts/alg60/tok60.gd")
+const LI = preload("res://scripts/voda/litry.gd")   # E94: jeden tvar l → m³
 static var LADIT := false   # E68: výpis kol (ladění)
 
 ## plný výpočet jako tok.route, smyčka povrch ↔ podzemí nejvýš `kola` kol, konec při změně ≤ tol (l/s)
@@ -111,9 +112,9 @@ static func otisk(st: Dictionary) -> String:
 	return h.finish().hex_encode().substr(0, 16)
 
 ## události plnění tůní seřazené podle času (pevné pořadí: čas, přeliv, hladina); cas_s < 0 = nenaplní se
-static func udalosti(st: Dictionary, cell_m2 := 0.25, u_m := 0.5, q_to_m3 := 0.001) -> Array:
+static func udalosti(st: Dictionary, cell_m2 := 0.25, u_m := 0.5, l_na_m3 := LI.L_NA_M3) -> Array:
 	var ev := []
-	for x in T.ponds(st, cell_m2, u_m, true, q_to_m3):
+	for x in T.ponds(st, cell_m2, u_m, true, l_na_m3):
 		for e in x.udalosti: ev.append([float(e.cas_s), int(x.outlet), float(e.hladina_m), float(e.objem_m3)])
 	ev.sort_custom(func(a, b): return a[0] < b[0] or (a[0] == b[0] and (a[1] < b[1] or (a[1] == b[1] and a[2] < b[2]))))
 	return ev

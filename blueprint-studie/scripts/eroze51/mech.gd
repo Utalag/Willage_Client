@@ -10,6 +10,7 @@ extends RefCounted
 const TOK = preload("res://scripts/voda/tok.gd")
 const HY = preload("res://scripts/eroze51/hydro.gd")
 const Heap = preload("res://scripts/eroze51/halda.gd")
+const LI = preload("res://scripts/voda/litry.gd")   # E94: jeden tvar l → m³
 
 var p: Dictionary
 var W := 0; var H := 0; var NZ := 0
@@ -86,11 +87,11 @@ func hydraulics(i: int) -> Array:
 	var m := HY.mat(top_mat(i))
 	if st.pw[i] == 1:
 		var e := _pond(i)
-		var v := HY.pond_v(float(e[0]) / 1000.0, (st.fill[i] - st.hm[i]) * HY.CELL, float(e[1]))
+		var v := HY.pond_v(float(e[0]) / LI.L_NA_M3, (st.fill[i] - st.hm[i]) * HY.CELL, float(e[1]))
 		if v < float(HY.mat(dep)[2]): return [v, 2]
 		return [v, 1 if v >= float(m[0]) and hm[i] > 1 else 0]
 	var s := _slope(i)
-	var v: float = HY.manning(st.eff[i] / 1000.0, s, p).v
+	var v: float = HY.manning(st.eff[i] / LI.L_NA_M3, s, p).v
 	return [v, 1 if v >= float(m[0]) and hm[i] > 1 else 0]
 
 ## sklon po proudu přes e51_s_len sloupců (výšky jsou celé buňky → jinak by mezi schody byl sklon 0); přes okraj e51_s_edge
@@ -117,12 +118,12 @@ func _resched(list, force := {}) -> void:
 		var dt := INF
 		if mode[i] == 1:
 			var m := HY.mat(top_mat(i))
-			var qm: float = st.eff[i] / 1000.0 if st.pw[i] == 0 else float(_pond(i)[0]) / 1000.0
+			var qm: float = st.eff[i] / LI.L_NA_M3 if st.pw[i] == 0 else float(_pond(i)[0]) / LI.L_NA_M3
 			re[i] = qm * pow(vel[i] / float(m[0]), float(p.e51_k))
 			if re[i] > 0.0: dt = R[i] / re[i]
 		elif mode[i] == 2:
 			var e := _pond(i)
-			rd[i] = float(p.e51_c0) * float(e[0]) / 1000.0 / float(e[2])
+			rd[i] = float(p.e51_c0) * float(e[0]) / LI.L_NA_M3 / float(e[2])
 			var need := cellv * (1.0 - float(HY.mat(dep)[3]))
 			if rd[i] > 0.0: dt = maxf(need - A[i], 0.0) / rd[i]
 		if not force.has(i) and om == mode[i] and absf(ore - re[i]) <= 1e-12 * maxf(ore, 1e-30) and absf(ord - rd[i]) <= 1e-12 * maxf(ord, 1e-30):
