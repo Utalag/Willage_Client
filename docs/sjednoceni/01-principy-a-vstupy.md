@@ -25,19 +25,20 @@ Značení: „rozhodnuto (datum)“ = Jan už rozhodl. ⚠ = novější měřen�
 
 **Otázka pro Jana.** Je blok 128 m jednotka, kterou hráč vkládá a otáčí, a ostrov se skládá z 4 až 16 takových bloků? Nebo je 128 m celý ostrov?
 
-**Platí:** *rozhodnuto (2026-11-20 14:34–14:39, Jan t713u, t714u); doplněno (2026-11-20, Jan t741u–t743u)*
+**Platí:** *rozhodnuto (2026-11-20 14:34–14:39, Jan t713u, t714u); doplněno (2026-11-20, Jan t741u–t743u); doplněno (Jan 2026-11-21 00:19, buňka 0,25 m)*
 
 | Pojem | Co to je | Velikost (výchozí) |
 |---|---|---|
 | **Ostrov** | jednotka ukládání: proměnný počet bloků, roste dynamicky po jednom bloku, nese i data přes hranice bloků | – |
-| **Blok** | jeden stavební dílek, ze kterého se ostrov skládá. Hráč ho vkládá, zrcadlí a otáčí | 128 × 128 m (256 × 256 buněk) |
-| **Segment** | vnitřní část bloku. Jednotka výpočtu, ukládání a načítání. Segmenty vykreslují buňky | parametr, výchozí 8 m (16 × 16 buněk). 16 a 32 m jsou kandidáti, doladí se v bodě o výkonu (1.11) |
-| **Buňka (voxel)** | nese materiál a vodu | 0,5 m |
+| **Blok** | jeden stavební dílek, ze kterého se ostrov skládá. Hráč ho vkládá, zrcadlí a otáčí | 128 × 128 m (512 × 512 buněk) |
+| **Segment** | vnitřní část bloku. Jednotka výpočtu, ukládání a načítání. Segmenty vykreslují buňky | parametr, výchozí 8 m (32 × 32 buněk). 16 a 32 m jsou kandidáti, doladí se v bodě o výkonu (1.11) |
+| **Buňka (voxel)** | nese materiál a vodu | 0,25 m |
 
 - **Pravidlo:** velikost bloku, segmentu i buňky jsou parametry a v buňkách musí být mocninou 2. Blok se musí beze zbytku dělit na segmenty a segment na buňky. Blok 100 m tedy nejde, 64, 128 nebo 256 m ano.
 - **Proč:** indexy jdou bitovými posuny, přehledy a LOD se půlí až na jednu buňku, quadtree slouží pro načítání a slučované vykreslování, a velikosti sedí na 2D tilesety 16/32/64 px (Jan t714u).
 - **Důsledek:** dnešní „blok“ 8 m v kódu (`BS` 16, WVB1 `dims`, `veg.gd`, E88) je od teď segment. Vkládání, zrcadlení, rotace, recept a sousedé patří bloku. „Dlaždice“ zůstává pro svět výprav.
-- **Data a zobrazení (Jan t715u, 2026-11-20):** datový model je v metrech a o pixelech nic neví. Se zobrazením ho spojuje jen pravidlo **buňka 0,5 m = 1 dlaždice (tile)**. Segment i blok jsou celé násobky buňky, což zaručují mocniny 2 (segment 8 m = 16 × 16 dlaždic, blok 128 m = 256 × 256). Zobrazení převádí jedním faktorem (např. 1 m = 64 px, tedy dlaždice 32 px). Výměna tilesetu ani přechod mezi 2D a 3D data nemění.
+- **Data a zobrazení (Jan t715u, 2026-11-20):** datový model je v metrech a o pixelech nic neví. ~~Se zobrazením ho spojuje jen pravidlo **buňka 0,5 m = 1 dlaždice (tile)**. Segment 8 m = 16 × 16 dlaždic, blok 128 m = 256 × 256. Zobrazení převádí jedním faktorem (např. 1 m = 64 px, tedy dlaždice 32 px).~~ ⚠ překonáno rozhodnutím 2026-11-21 00:19.
+- **rozhodnuto (Jan 2026-11-21 00:19):** datová buňka (materiál, voda, kopání, simulace vody, rozdíl / překryv) je sjednocená na **0,25 m**, stejně jako viditelný voxel a dlaždice. Pravidlo zobrazení je **buňka 0,25 m = 1 dlaždice (tile)**. Segment 8 m = 32 × 32 dlaždic, blok 128 m = 512 × 512, sloupec 128 m = 512 buněk. Plná buňka vody je 0,25³ m³ = **15,625 l**. Důvod: výřez okna je malý (pevný zoom 64 dlaždic), delší jsou jen vstupní výpočty. Zobrazení převádí jedním faktorem (např. 1 m = 64 px, tedy dlaždice 16 px). Výměna tilesetu ani přechod mezi 2D a 3D data nemění.
 - **Hierarchie ukládání (Jan t741u–t743u):** ostrov → blok → segment → buňka. Ostrov je také jednotka ukládání: roste dynamicky po jednom bloku a nese data, která jdou přes hranice bloků.
 - **Poznámka – ostrov a svět:** tyto dva pojmy se nesmějí zaměňovat. **Svět** (1.4) zůstává vygenerovaný zdroj blueprintů. **Ostrov** je to, co hráč skládá z bloků a kde se ukládají i data přesahující hranici bloku.
 
@@ -46,14 +47,16 @@ Značení: „rozhodnuto (datum)“ = Jan už rozhodl. ⚠ = novější měřen�
 ## 1.2 Jednotky a mřížky
 
 **Současný stav**
-- *rozhodnuto (2026-11-19 20:12):* herní jednotka a kopací buňka 0,25 m, postava 1,75 m = 7 jednotek. Hierarchie: 1 m hrubý svět, 0,5 m řídicí mřížka geologie, 0,25 m kopání, terén sám rozlišení nemá [3].
+- *rozhodnuto (2026-11-19 20:12):* herní jednotka a kopací buňka 0,25 m, postava 1,75 m = 7 jednotek. Hierarchie: 1 m hrubý svět, 0,5 m řídicí mřížka geologie (vnitřní mřížka funkce, ne datová buňka), 0,25 m kopání, terén sám rozlišení nemá [3].
 - *rozhodnuto (2026-11-19 20:40):* kopání zůstává po 0,25 m [3].
 - *rozhodnuto (2026-11-20 ~11:04, t699u):* 1 jednotka scény = 1 m, převod na `jednotky.gd` postupně, jeden tvar l → m³, stavby a stromy v metrech [7]. Hotovo na `e94-metry` (otisky beze změny ve 40 commitech, l → m³ bez změny otisků) [8].
-- *rozhodnuto (2026-11-20 03:26):* mřížku 0,25 m počítat z funkcí [3]. ⚠ E85: 65–108× pomalejší (442–784 ms na segment 8 m) a jiných 7,8 % buněk [9]. E84 doporučuje nechat definici 0,5 m [9].
-- Hra pořád kope po 0,5 m. Mřížka 0,25 m je jen v `prekryv78` [9].
-- K2: `U` = 0,5 m v geologii, `hj` = 0,25 m [8].
+- *rozhodnuto (2026-11-20 03:26):* mřížku 0,25 m počítat z funkcí [3]. ⚠ E85: 65–108× pomalejší (442–784 ms na segment 8 m) a jiných 7,8 % buněk [9]. ~~E84 doporučuje nechat definici 0,5 m [9].~~ ⚠ překonáno rozhodnutím 2026-11-21 00:19: datová buňka je 0,25 m (1.1). Měření E85 platí (vzorek 0,25 m na celý segment).
+- Hra dnes pořád kope po 0,5 m (stav kódu, úkol implementace). Mřížka 0,25 m je zatím jen v `prekryv78` [9].
+- K2: `U` = 0,5 m v geologii (řídicí mřížka funkce, ne datová buňka), `hj` = 0,25 m [8].
 
 **Varianty jemné mřížky 0,25 m**
+
+⚠ překonáno rozhodnutím 2026-11-21 00:19: datová buňka je 0,25 m (1.1). Tabulka a časy zůstávají jako měření z doby, kdy definice byla 0,5 m.
 
 | | A: zjemnění buněk 0,5 m (dnes) | B: vzorek funkcí 0,25 m (Jan 03:26, `p85_jemne`) | C: definice 0,5 m, 0,25 m jen překryv hráče (E80, E84) |
 |---|---|---|---|
@@ -62,16 +65,16 @@ Značení: „rozhodnuto (datum)“ = Jan už rozhodl. ⚠ = novější měřen�
 | věrnost funkci | 7,8 % buněk jinak | přesná | jako A, rozdíl jen u výkopu |
 | závislost na otočení | ne | musí se počítat v souřadnicích původu (E86) | ne |
 
-**Doporučení.** Jednotky: **metr** pro fyziku a vodu, **buňka 0,5 m** jako definice terénu, **0,25 m** jen pro kopání a překryv. Jedno jméno pro každou jednotku (`m`, `b05`, `b025`) a zrušit `U` v textech. Pro jemnou mřížku varianta C: zachová rozhodnutí o kopání 0,25 m a nestojí minuty na blok. Variantu B vrátit, jen až bude generátor v rychlejším jazyce.
+**Doporučení.** ~~Jednotky: **metr** pro fyziku a vodu, **buňka 0,5 m** jako definice terénu, **0,25 m** jen pro kopání a překryv. Jedno jméno pro každou jednotku (`m`, `b05`, `b025`) a zrušit `U` v textech. Pro jemnou mřížku varianta C: zachová rozhodnutí o kopání 0,25 m a nestojí minuty na blok. Variantu B vrátit, jen až bude generátor v rychlejším jazyce.~~ ⚠ překonáno rozhodnutím 2026-11-21 00:19: datová buňka je 0,25 m (1.1). Metr zůstává jednotkou fyziky. `U` / řídicí mřížka 0,5 m je vnitřní mřížka geologické funkce, ne datová buňka.
 
-**Otázka pro Jana.** Necháme definici terénu po 0,5 m a jemných 0,25 m jen tam, kde hráč kope? Tím se mění tvoje rozhodnutí z 03:26 „0,25 m z funkcí“.
+**Otázka pro Jana.** ~~Necháme definici terénu po 0,5 m a jemných 0,25 m jen tam, kde hráč kope? Tím se mění tvoje rozhodnutí z 03:26 „0,25 m z funkcí“.~~ ⚠ překonáno rozhodnutím 2026-11-21 00:19: buňka 0,25 m platí pro definici i kopání.
 
 **Platí:** *rozhodnuto (2026-11-20 20:09–20:14, Jan t799u, t800u)*; mění rozhodnutí 2026-11-20 03:26 „0,25 m z funkcí všude“
 
 - **Procedurální svět:** terén se negeneruje celý dopředu, generuje se z funkce světa podle potřeby.
 - Pohled je izometrický, výhled je omezený. Generuje a vykresluje se jen **zorné pole plus pár polí okraje** kvůli plynulému pohybu a dokreslování.
 - Vykresluje se jen to, co je **obnažené vzduchem**. U otevřené průhledné vody se vykreslí i dno.
-- Generuje se jen **slupka 2–3 buněk** pod povrchem (hloubka je parametr). V ní se jemná mřížka **0,25 m počítá přímo z funkce světa** (varianta B), protože jde jen o tenkou vrstvu, ne o celý blok.
+- Generuje se jen **slupka 2–3 buněk** pod povrchem (hloubka je parametr). V ní se buňka **0,25 m počítá přímo z funkce světa** (varianta B), protože jde jen o tenkou vrstvu, ne o celý blok. Sjednocení datové buňky na 0,25 m (2026-11-21 00:19, 1.1) toto pravidlo nemění: pořád se vzorkuje jen slupka, ne celý sloupec.
 - Hlubší buňky se **donačtou až při odkrytí** (kopání, voda). Uložená data obsahují jen to, co už bylo vygenerované nebo změněné.
 - **Podzemní voda** se počítá jako funkce (propustnost a hladina z funkce světa) bez uložených buněk. Kde se vzduchem obnaží, vykreslí se.
 
@@ -80,18 +83,20 @@ Značení: „rozhodnuto (datum)“ = Jan už rozhodl. ⚠ = novější měřen�
 
 ## 1.3 Výška sloupce
 
-**Současný stav.** Sloupec má 64 buněk × 0,5 m = 32 m a pevně je zapsaný v WVB1 (`dims` 16, 16, 64) [2], v E88 [10] i v `jednotky.gd` (BH 64) [8]. Povrch může mít nejvýš 61 buněk = 30,5 m [8]. E96 kvůli tomu snížilo reliéf funkce z × 3 (7–50 m) na × 1 (16–30 m) a vrchol hory je uříznutý [5]. Charakter krajiny (kompaktní / vyvážená / velkolepá) Jan nerozhodl (Blok 5) [3].
+**Současný stav.** V dnešním kódu má sloupec 64 buněk × 0,5 m = 32 m a pevně je zapsaný v WVB1 (`dims` 16, 16, 64) [2], v E88 [10] i v `jednotky.gd` (BH 64) [8]. Povrch může mít nejvýš 61 buněk = 30,5 m [8]. E96 kvůli tomu snížilo reliéf funkce z × 3 (7–50 m) na × 1 (16–30 m) a vrchol hory je uříznutý [5]. Charakter krajiny (kompaktní / vyvážená / velkolepá) Jan nerozhodl (Blok 5) [3].
 
 **Varianty**
 
-| | 32 m (dnes) | 64 m | 128 m |
+| | 32 m (dnes v kódu) | 64 m | 128 m |
 |---|---|---|---|
-| buněk 0,5 m ve sloupci | 64 | 128 | 256 |
+| buněk 0,5 m ve sloupci (tehdejší buňka) | 64 | 128 | 256 |
+| buněk 0,25 m ve sloupci (výpočet) | 128 | 256 | 512 |
 | hora nad loukou | ~10 m (E94) | ~40 m | ~100 m |
-| paměť buněk bloku 128 m (u8, 0,5 m) | 4 MB | 8 MB | 16 MB |
-| index 0,25 m na segment 8 m | 17 bitů | 18 bitů | 19 bitů |
+| paměť buněk bloku 128 m (u8, 0,5 m, výpočet) | 4 MB | 8 MB | 16 MB |
+| paměť buněk bloku 128 m (u8, 0,25 m, výpočet = × 8) | 32 MB | 64 MB | 128 MB |
+| index buňky 0,25 m na segment 8 m | 17 bitů | 18 bitů | 19 bitů |
 
-Paměť je výpočet (256 × 256 × výška × 1 B), ne měření. Skutečná paměť E96 byla 2,5 GB RSS, hlavně kvůli scéně [5].
+Paměť je výpočet, ne měření. Při buňce 0,5 m: 256 × 256 × výška × 1 B. Při buňce 0,25 m osminásobek (512 × 512 × výška). Skutečná paměť E96 byla 2,5 GB RSS, hlavně kvůli scéně, a měřila se při buňce 0,5 m [5].
 
 **Doporučení.** 64 m. Vejde se hora z E90/E96 bez ořezu. Ukládá se jen definice a překryv (1.11), takže výška stojí hlavně při generování. 128 m až po rozhodnutí o charakteru krajiny.
 
@@ -100,26 +105,28 @@ Paměť je výpočet (256 × 256 × výška × 1 B), ne měření. Skutečná pa
 **Platí:** *rozhodnuto (2026-11-20, Jan t716u, t717u)*
 
 - **Výška sloupce** je celá výška bloku od dna ostrova po nejvyšší bod: podloží, vrstvy, jeskyně, podzemní voda i hory.
-- Je to **parametr jako výčet mocnin 2: 32 / 64 / 128 m**, výchozí **128 m** (256 buněk po 0,5 m).
+- Je to **parametr jako výčet mocnin 2: 32 / 64 / 128 m**, výchozí **128 m** (512 buněk po 0,25 m).
 - **Neutrální úroveň terénu je v polovině výšky.** Při 128 m je pod ní 64 m pro podloží a kopání a nad ní 64 m pro hory.
 - **Proč:** vejde se i největší hora a hezky se vykreslí (Jan t717u).
 - **Důsledek – velikost dat (odhad, ne měření):** buňka u8 (materiál). Vzduch nad terénem se neukládá, takže pevné buňky jsou zhruba po neutrální úroveň a do výšky hor.
 
-  | výška | buněk ve sloupci | segment 8 m (16 × 16) plný sloupec | segment, jen pod neutrální úrovní | blok 128 m (256 segmentů), jen pod neutrální úrovní |
-  |---|---|---|---|---|
-  | 32 m | 64 | 16 kB | 8 kB | 2 MB |
-  | 64 m | 128 | 32 kB | 16 kB | 4 MB |
-  | 128 m | 256 | 64 kB | 32 kB | 8 MB |
+  Čísla níž jsou výpočet při buňce 0,25 m (osminásobek dřívějších hodnot počítaných při 0,5 m). Není to měření.
 
-  Jsou to nekomprimované buňky v paměti při generování. Na disk a na server jde jen definice + překryv (1.10), který na výšce skoro nezávisí. Voda (u16) jen v buňkách, kde je. Index buňky 0,25 m v segmentu 8 m (32 × 32 × 512) má při 128 m 19 bitů (dnes 17).
-- **Důsledek – co změnit při stavbě modelu:** 32 m (64 buněk) je dnes natvrdo ve WVB1 (`dims` 16, 16, 64), v E88 / WTI1 (souřadnice 16 × 16 × 64, index 17 bitů) a v `jednotky.gd` (`BH` 64). Musí to být parametr podle tohoto výčtu.
+  | výška | buněk ve sloupci (0,25 m) | segment 8 m (32 × 32) plný sloupec | segment, jen pod neutrální úrovní | blok 128 m (256 segmentů), jen pod neutrální úrovní |
+  |---|---|---|---|---|
+  | 32 m | 128 | 128 kB | 64 kB | 16 MB |
+  | 64 m | 256 | 256 kB | 128 kB | 32 MB |
+  | 128 m | 512 | 512 kB | 256 kB | 64 MB |
+
+  Jsou to nekomprimované buňky v paměti při generování. Na disk a na server jde jen definice + překryv (1.10), který na výšce skoro nezávisí. Voda jen v buňkách, kde je. Index buňky v segmentu 8 m (32 × 32 × 512) má při sloupci 128 m 19 bitů (při sloupci 32 m 17 bitů).
+- **Důsledek – co změnit při stavbě modelu:** 32 m (64 buněk po 0,5 m) je dnes natvrdo ve WVB1 (`dims` 16, 16, 64), v E88 / WTI1 (souřadnice 16 × 16 × 64, index 17 bitů) a v `jednotky.gd` (`BH` 64). Musí to být parametr podle tohoto výčtu, při buňce 0,25 m a sloupci 128 m tedy 512 buněk.
 
 ---
 
 ## 1.4 Zdroj pravdy o terénu: funkce světa, šablony a hora
 
 **Současný stav**
-- Terén jsou funkce ve světových metrech (`geo_fn`: povrch, hranice vrstev na řídicí mřížce 0,5 m, materiál bodu). Buňky jsou z nich vzorky [9]. Princip „funkce jsou jediný zdroj pravdy, buňky, voda a vykreslení jsou odvozené“ je v TODO jako návrh (ChatGPT 2026-11-19) [3].
+- Terén jsou funkce ve světových metrech (`geo_fn`: povrch, hranice vrstev na řídicí mřížce 0,5 m — to je vnitřní mřížka funkce, ne datová buňka, viz 1.1 — materiál bodu). Buňky jsou z nich vzorky [9]. Princip „funkce jsou jediný zdroj pravdy, buňky, voda a vykreslení jsou odvozené“ je v TODO jako návrh (ChatGPT 2026-11-19) [3].
 - Povrch dnes dávají **šablony povrchu** (recepty louka, kopec, hora, písčina; ve studiích „šablony blueprintu“) na segment 8 m (v kódu „blok“). Okraje se dorovnávají na sousedy, sousedé se nikdy nemění (*rozhodnuto 2026-11-17*) [1].
 - *rozhodnuto (2026-11-20 11:48):* blok 128 m z funkce světa místo šablon [4].
 - K6/K7: hora a funkce světa existují ve více verzích.
@@ -156,7 +163,7 @@ Pojmy: **blueprint** = otisk světa o velikosti bloku. To, čemu se ve studiích
 
 - **Doplněno (Jan t744u–t749u, t761u–t762u):**
   - Herní svět je **velká mapa ze spojité funkce**. Vlastní bloky nemá; na blueprinty se dělí řezáním.
-  - Segmenty uvnitř blueprintu vzorkují svou část funkce do buněk 0,5 m a ukládají výsledná data, ne funkci. Při vložení se buňky jen otočí nebo zrcadlí. Od té chvíle se data segmentu mění kopáním a vodou. Funkce zůstává zdrojem pro regeneraci a pro namátkovou kontrolu na serveru (1.10).
+  - Segmenty uvnitř blueprintu vzorkují svou část funkce do buněk 0,25 m a ukládají výsledná data, ne funkci. Při vložení se buňky jen otočí nebo zrcadlí. Od té chvíle se data segmentu mění kopáním a vodou. Funkce zůstává zdrojem pro regeneraci a pro namátkovou kontrolu na serveru (1.10).
   - **Procedurální ostrov (Jan t801u–t803u, 2026-11-20 20:17–20:21):** svět je ze seedu, parametrů a verze generátoru plně opakovatelný. Ostrov zůstává procedurální, má jen jeden vstup navíc: **seznam vložení v pořadí**. Každé vložení nese souřadnice blueprintu ve světě, zrcadlení, otočení, výškový posun a režim napojení boků (Auto/Blend/Keep). Funkce bloku je funkce světa přepočtená do nové polohy, prolnutí švů je funkce sousedů (ti se při vložení nemění, proto stačí pořadí).
   - Vložení nese i **seed a verzi generátoru svého světa**, aby šel vložit i blueprint z jiného světa (připravenost do budoucna).
   - **Ukládá se jen rozdíl proti funkci:** změněné buňky terénu, vrstvy nad terénem (stavby, cesty, změny rostlin) a voda tam, kde se liší od výchozí funkce. Nezměněné buňky se neukládají, ani když už byly vygenerované (viz 1.2). Tím se mění předchozí bod „segmenty ukládají výsledná data“.
@@ -249,7 +256,7 @@ Pojmy: **blueprint** = otisk světa o velikosti bloku. To, čemu se ve studiích
 | | A: `cavity_one` (dnes) | B: SDF z hashe světa (E84 R1) | C: B + intervaly pro vodu (E84 R2) |
 |---|---|---|---|
 | přes šev | ne | ano | ano |
-| čas na segment 8 m (0,5 m) | 38 ms | 89 ms | 355 ms stavba |
+| čas na segment 8 m (měřeno při buňce 0,5 m) | 38 ms | 89 ms | 355 ms stavba |
 | stálost mezi rozlišeními | 56–75 % | 50–68 % (pravda je v SDF) | přesná v intervalech |
 
 **Doporučení.** Geologie = funkce světa (vrstvy, masiv, útvary SDF). Bloky z ní jen vzorkují. Minimum 25 cm uplatnit v definici a zbytky po ořezu povrchem tolerovat. Mince vápence zapnout spolu s rozhodnutím o podzemí (1.8). Klín u švu výřezu řešit v 1.11 / přenosu.
@@ -262,7 +269,7 @@ Pojmy: **blueprint** = otisk světa o velikosti bloku. To, čemu se ve studiích
 - Přístup **„jeden útvar na blok“** se ruší.
 - **Vrstvy se přizpůsobují tvaru terénu.**
 - Chybějící vrstvy končí **vyklíněním**: vrstva se do strany zužuje, až zmizí. Neskončí svislou stěnou.
-- Minimální mocnost vrstvy je nově 1 buňka (0,5 m); dřívější zákaz vrstev < 25 cm se ruší, viz 1.7.1.
+- Minimální mocnost vrstvy je nově 0,5 m (2 buňky); dřívější zákaz vrstev < 25 cm se ruší, viz 1.7.1.
 
 ### 1.7.1 Skladba vrstev
 
@@ -280,7 +287,7 @@ Pojmy: **blueprint** = otisk světa o velikosti bloku. To, čemu se ve studiích
 
 - **Mapa složení** pokrývá celou maximální plochu světa (1.4). Obsahuje jen hrubé řídicí body s hodnotami (koncentrace zástupců pásem). Umístění i hodnoty bodů se generují ze seedu světa, takže každý svět je jiný (Jan t763u). Mezi body se složení plynule interpoluje, bez deformace (např. na severu jiné složení než na jihu).
 - V každém pásmu se na daném místě vyberou **1–3 zástupci** (výchozí počet, parametr). Světové funkce zástupců berou přítomnost a mocnost z mapy složení, takže složení se po světě mění plynule: některé vrstvy vyklíní a zmizí, jiné se objeví. Bloky se proto přirozeně liší a blueprint přebírá složení svého místa ve světě.
-- **Mocnost vrstvy:** minimum 1 buňka (0,5 m; nahrazuje dřívější zákaz vrstev < 25 cm), maximum 1/4 výšky od povrchu po spodní okraj.
+- **Mocnost vrstvy:** minimum 0,5 m (2 buňky; nahrazuje dřívější zákaz vrstev < 25 cm), maximum 1/4 výšky od povrchu po spodní okraj.
 - **Deformace**, která vrstvu zvedne výš (např. vápenec a jíl, mince E82), je dovolená.
 - Pně, žíly, kontakty a dómy (kimberlit, pegmatit, skarn, sůl) se berou jako **útvary podle varianty B**, ne jako vrstvy.
 - **Švy na ostrově:** blueprinty bloků mohou pocházet z různých míst, takže pořadí vrstev na švu nemusí souhlasit. Vrstvy se do sebe zaklíní nebo napojí na úseku **1/16 bloku** (8 m při bloku 128 m); délka se škáluje s velikostí bloku.
@@ -338,7 +345,7 @@ Pojmy: **blueprint** = otisk světa o velikosti bloku. To, čemu se ve studiích
 
 **Platí:** *rozhodnuto (2026-11-20, Jan t765u–t768u); doplněno (2026-11-20, Jan t769u–t775u)*
 
-- **Propustnost materiálu** je zadaná jako **propustnost buňky** X, v **l/s herního času**: průtok buňkou **při spádu 1**. Fyzikální hodnota K × plocha stěny 0,25 m² platí přímo na herní sekundu (čistě K × A, bez dalšího násobitele). Buňka je krychle, takže stačí jedno číslo na materiál. Příklady při spádu 1: písek K 1e-4 ≈ 0,025 l/s, plná buňka 125 l za ~80 herních s ≈ 3,5 reálných s; tráva / hlína K 1e-5 ≈ 0,0025 l/s, asi 14 herních min ≈ 35 reálných s. Zrychlení 24× (1 herní den = 1 h) se týká jen převodu na reálný čas: herní sekunda trvá 1/24 reálné sekundy. Při změně časového měřítka se tok upraví sám (t773u).
+- **Propustnost materiálu** je zadaná jako **propustnost buňky** X, v **l/s herního času**: průtok buňkou **při spádu 1**. Fyzikální hodnota K × plocha stěny **0,0625 m²** (stěna buňky 0,25 m) platí přímo na herní sekundu (čistě K × A, bez dalšího násobitele). Buňka je krychle, takže stačí jedno číslo na materiál. Příklady při spádu 1: písek K 1e-4 ≈ 0,00625 l/s, plná buňka 15,625 l za 2 500 herních s ≈ 104 reálných s; tráva / hlína K 1e-5 ≈ 0,000625 l/s, za 25 000 herních s ≈ 17 reálných min. Dřívější příklady (plocha 0,25 m², X 0,025 l/s, plná buňka 125 l) platily pro buňku 0,5 m. Zrychlení 24× (1 herní den = 1 h) se týká jen převodu na reálný čas: herní sekunda trvá 1/24 reálné sekundy. Při změně časového měřítka se tok upraví sám (t773u).
 - **Skutečný tok** = X × spád, svisle i do stran. Spád je Darcyho hydraulický spád a **zahrnuje výšku vody nad buňkou**: svisle (výška vody + tloušťka vrstvy) / tloušťka vrstvy; bočně skutečný spád hladiny.
 - Mezi dvěma materiály se bere **menší z obou hodnot**. Počítá se za běhu a neukládá se. Dosavadní výchozí „pomer“ (jen spodní buňka nebo soused) i volitelný harmonický průměr z E70 se při zpracování dokumentu nahradí minimem.
 - **Dolní limit** je limit průtoku rozhraní v l/s (E71), ne volný objem buňky pod ní.
@@ -347,7 +354,7 @@ Pojmy: **blueprint** = otisk světa o velikosti bloku. To, čemu se ve studiích
 - **Eroze:** rychlost průsaku v pórech erozi nespouští. Eroze je jen u povrchového / volného toku; pravidla viz 1.8.2.
 - **Přednostní cesty:** soustředění vody do prostřední buňky (Geminiho „dynamická“ varianta) se **zamítá**. Přednostní cesta smí být později vlastností buňky (např. trhlina s vyšší propustností).
 - **Čas je událostový** (herní čas, 1 herní den = 1 h).
-- Sloupec `propustnost_l_s_herni` v [`materialy.csv`](materialy.csv) má přibližné hodnoty X při spádu 1, spočtené z K skriptem [`prepocet_propustnost_l_s.py`](prepocet_propustnost_l_s.py).
+- Sloupec `propustnost_l_s_herni` v [`materialy.csv`](materialy.csv) má přibližné hodnoty X při spádu 1, spočtené z K skriptem [`prepocet_propustnost_l_s.py`](prepocet_propustnost_l_s.py). Skript i tabulka zatím násobí plochou stěny 0,25 m² (buňka 0,5 m); po sjednocení buňky se hodnoty mají přepočítat na 0,0625 m² (čistě × 1/4).
 - **Artéská voda** (přidat, jen pokud to model zvládne; ověřit při zpracování, t774u–t775u): propustná vrstva sevřená mezi dvěma nepropustnými, doplňovaná výše (tam, kde vystupuje na povrch), nese vodu pod tlakem. Tlaková výška se rovná výšce oblasti doplňování.
   - **Výpočet:** tlak v sevřené vrstvě je jen funkce / algoritmus (odvozený z geologie B a výšky doplňování). Neukládá se jako voda v buňkách.
   - **Materializace:** teprve když hráč vrstvu obnaží (prokope se do ní), stane se voda skutečným obsahem buněk. Stoupne až k tlakové výšce (nad povrch, pokud je výška vyšší — jako artéská studna) a dál teče podle běžných pravidel (X × spád včetně výšky vody).
@@ -429,7 +436,7 @@ Pojmy: **blueprint** = otisk světa o velikosti bloku. To, čemu se ve studiích
 
 | | WVB1 (pole) | WTI1 (definice + překryv, E88) |
 |---|---|---|
-| segment 8 m bez změn | 1,4–2,2 kB | ~400–450 B |
+| segment 8 m bez změn (měřeno při buňce 0,5 m) | 1,4–2,2 kB | ~400–450 B |
 | chodba 70 m | 13–17 kB (4 bloky) | 244 B |
 | server zná geometrii | ano | jen se snímkem buněk (volitelný) nebo s portem generátoru |
 | závislost na determinismu | malá | velká (1.5) |
@@ -444,7 +451,7 @@ Pojmy: **blueprint** = otisk světa o velikosti bloku. To, čemu se ve studiích
 - **Změny vůči WVB1:**
   1. **Výška sloupce** není natvrdo 32 m, ale výčet **32 / 64 / 128 m** (viz 1.3).
   2. Data se ukládají a posílají **po segmentech**. Velikost segmentu je parametr **8 / 16 / 32 m**; optimální hodnota se změří, až bude dokument hotový.
-  3. **Voda v buňce** je celé číslo litrů (pevný krok 1 l), rozsah 0–125 u buňky 0,5 m, v 1 bytu. Důvody: deterministické SHA-256 napříč zařízeními a velikost; simulace počítá v celých litrech. Záloha: 2 byty (krok ~2 ml), pokud by 1 l byl příliš hrubý.
+  3. **Voda v buňce** je celé číslo litrů (pevný krok 1 l), rozsah 0–15,625 l u buňky 0,25 m, v 1 bytu. (Dříve 0–125 l u buňky 0,5 m.) Důvody: deterministické SHA-256 napříč zařízeními a velikost; simulace počítá v celých litrech. Záloha: 2 byty (krok ~2 ml), pokud by 1 l byl příliš hrubý. 15,625 l není celé číslo litrů; krok 1 l a kódování v 1 B tímto rozhodnutím o velikosti buňky nemění, zaokrouhlení potřebuje potvrzení.
 - **Přenos dat** je kombinovaná varianta: server ukládá a posílá **hotová data segmentu** (komprimované buňky). Generátor si server nechává jen pro **namátkovou kontrolu**: občas znovu vygeneruje segment ze seedu + změn a porovná hash. Je to pojistka proti chybám i podvádění.
 - Kontrolu generátorem na serveru lze **vypnout přepínačem**; server pak jen ukládá a kontroluje bilanci materiálu.
 - **Změněno (2026-11-20 20:17–20:21, Jan t801u–t803u):** nahrazuje odrážku „Přenos dat“ výše. Server ukládá a posílá **seed a parametry světa, verzi generátoru, seznam vložení blueprintů a rozdíl proti funkci** (změněné buňky, vrstvy nad terénem, odchylky vody), ne hotová data segmentů. Formát WVB1 slouží pro balík změn segmentu. Namátková kontrola generátorem na serveru zůstává a jde vypnout.
@@ -487,7 +494,7 @@ Jen data. Velikost modelů je prezentace (`p94_meritko_veg`, Jan 11:39).
 - *rozhodnuto (2026-11-17):* rostliny, cesty a stavby jsou samostatná vrstva nad terénem, ne buňky bloku [1].
 - Vegetace (`veg.gd`): záznam `{druh, lx, ly, lz, posun, natočení, měřítko}`, deterministicky ze seedu bloku (účel „VEG“). Druh smí jen na povrch ze seznamu `SURFACES` (tráva, hlína, písek, skála) [16].
 - Hustota je pravděpodobnost na **sloupec** podle receptu (louka, kopec, hora, písčina). Stromy jen na sudé mřížce [16]. ⚠ E94: hustota na sloupec se mění s velikostí buňky, má být na m² [8]. ⚠ E87: recept `hora_vyzdvizena` chybí, blok je bez vegetace [11]. E96: rostliny v tůních a korytech se nevysadí [5].
-- Stavby mají půdorys v metrech (domek 3,5 m = 7 buněk), cesty po buňkách 0,5 m [8].
+- Stavby mají půdorys v metrech (domek 3,5 m = 7 buněk při tehdejší buňce 0,5 m), cesty po buňkách 0,5 m [8].
 - Vegetace není ve WVB1 ani E88 [10].
 
 **Varianty umístění vegetace**
@@ -498,7 +505,7 @@ Jen data. Velikost modelů je prezentace (`p94_meritko_veg`, Jan 11:39).
 | přes šev, po otočení | po bloku (otáčí se s ním) | spojitá; u výřezu v souřadnicích původu |
 | pravidlo povrchu | materiál horní buňky | materiál v bodě + voda (ne v tůni) |
 
-**Doporučení.** B. Objekt = typ + pozice v metrech + natočení + seed. Pravidlo výskytu = materiál povrchu, sklon, voda a recept (hustota na m²). Ve vrstvě objektů se ukládají jen změny hráče (vykácení, výsadba), stejně jako překryv terénu. Stavby a cesty: půdorys v metrech, kotva na buňku 0,5 m.
+**Doporučení.** B. Objekt = typ + pozice v metrech + natočení + seed. Pravidlo výskytu = materiál povrchu, sklon, voda a recept (hustota na m²). Ve vrstvě objektů se ukládají jen změny hráče (vykácení, výsadba), stejně jako překryv terénu. Stavby a cesty: půdorys v metrech, kotva na buňku 0,5 m. ⚠ kotva 0,5 m je z doby před sjednocením buňky (2026-11-21 00:19); datová buňka je 0,25 m (1.1).
 
 **Otázka pro Jana.** Má vegetace být objektová vrstva ve světových metrech (hustota na m², pravidlo podle materiálu a vody) a ukládat se jen změny od hráče?
 

@@ -37,7 +37,7 @@ Stav: **návrh k odsouhlasení**, 2026-11-20 23:50 SEČ. Podklad pro stavbu nov�
 
 **Obsah**
 - Jednotky v metrech a jeden převod l → m³: převzít modul `scripts/jednotky.gd` a `scripts/voda/litry.gd` z větve `e94-metry` (E89 + E94, otisky beze změny).
-- Nový modul rozměrů modelu V1.0 (vedle dnešních konstant, které hra zatím potřebuje): blok 128 m, segment 8 m (parametr 8 / 16 / 32), buňka 0,5 m, jemná buňka 0,25 m, výška sloupce jako výčet 32 / 64 / 128 m (výchozí 128), neutrální úroveň v polovině, maximální svět 4096 m, výchozí svět 3 × 3 bloky. Kontrola pravidla mocnin 2 a dělitelnosti (1.1, 1.3, 1.4).
+- Nový modul rozměrů modelu V1.0 (vedle dnešních konstant, které hra zatím potřebuje): blok 128 m, segment 8 m (parametr 8 / 16 / 32), buňka 0,25 m, výška sloupce jako výčet 32 / 64 / 128 m (výchozí 128 m = 512 buněk), neutrální úroveň v polovině, maximální svět 4096 m, výchozí svět 3 × 3 bloky. Kontrola pravidla mocnin 2 a dělitelnosti (1.1, 1.3, 1.4).
 - `gen_ver` ve tvaru `Vmajor.minor`: čtení, porovnání, uložení (6.2). Výchozí hodnota V1.0.
 - Jedna tabulka materiálů: `materialy.csv` (78 id) jako jediný zdroj, načítání podle id, kontrola (unikátní id 0–255, rozsahy, propustnost podle vzorce (log10 K + 9) / 6) (1.6). Konflikty starých seznamů se jen vypíšou, opraví se v kroku 3, kde se tabulka poprvé použije pro geologii.
 - Pravidla determinismu na jednom místě: float64, řazené klíče, celočíselné hashe (`stable_hash.gd`, main) (1.5).
@@ -90,7 +90,7 @@ Stav: **návrh k odsouhlasení**, 2026-11-20 23:50 SEČ. Podklad pro stavbu nov�
 ## Krok 3 – Funkce světa II: geologie a útvary
 
 **Obsah**
-- Pásma vrstev z úrovní 0–40 (`poradi_hornin.json`), 1–3 zástupci podle mapy hornin, vrstvy podle tvaru terénu, vyklínění, mocnost min. 1 buňka 0,5 m a max. 1/4 výšky (1.7, 1.7.1).
+- Pásma vrstev z úrovní 0–40 (`poradi_hornin.json`), 1–3 zástupci podle mapy hornin, vrstvy podle tvaru terénu, vyklínění, mocnost min. 0,5 m (2 buňky) a max. 1/4 výšky (1.7, 1.7.1).
 - Mince E82 (jeskynní a hluboký vápenec a dolomit 50/50 až 2 m pod hladinu) a vyklínění jílu nad ní (1.8).
 - Útvary jako funkce celého světa přes švy (SDF z hashe světové mřížky, E84): žíly, pně, skarny, dómy, kras, dutiny, minerály. `cavity_one` se ruší (1.7, 2.1).
 - Sopka uvnitř: průduch id 75 od kráteru po z = 0, kuželovité slupky lávy a popela, těleso vrstvy propíchne (1.14).
@@ -164,7 +164,7 @@ Stav: **návrh k odsouhlasení**, 2026-11-20 23:50 SEČ. Podklad pro stavbu nov�
 ## Krok 6 – Buňky: slupka, kopání, rozdíl a ukládání
 
 **Obsah**
-- Generuje se jen zorné pole + okraj (parametr) a slupka 2–3 buněk u vzduchu a pod průhlednou vodou, jemná mřížka 0,25 m přímo z funkce (1.2, 2.3).
+- Generuje se jen zorné pole + okraj (parametr) a slupka 2–3 buněk u vzduchu a pod průhlednou vodou, buňka 0,25 m přímo z funkce (1.2, 2.3).
 - Obnažená buňka sousedí se vzduchem nebo je dnem průhledné vody. Hlubší buňky se donačtou při odkrytí (2.3).
 - Kopání po 0,25 m (úkol 8 v kap. 3). Zákaz prokopání dna a okraje (`p85_okraj`, 1.13.1).
 - Ukládá se jen rozdíl proti funkci po segmentech 8 m: překryv E78 (klíče + deflate), hlavička WTI1 s `gen_ver`, transformací a pořadím (2.4). Ostrov se uloží a načte jako seed + parametry + verze + seznam vložení + rozdíl (1.4, 1.10).
@@ -196,7 +196,7 @@ Stav: **návrh k odsouhlasení**, 2026-11-20 23:50 SEČ. Podklad pro stavbu nov�
 - Eroze: `e51_k` = 1,5 (úkol 4) a eroze jako samostatná vrstva posunu výšky nad funkcí, ne změněné buňky (4.1). Voda počítá na terénu s posunem.
 - Přepočet: lokální = plný na sjednoceném povodí (oprava K5 včetně `p79_chodby` a `p85_voda`), asynchronně na pozadí, prodleva 2 s, strop 10 s, fronta výkopů (1.9, úkoly 6–7).
 - Slučování výtoků pod prahem 0,1 l/s (laditelný parametr) v dosahu 8 m, i mezi sebou (3.2).
-- Výchozí voda v ustáleném stavu po vygenerování, uloží se jen odchylka v celých litrech (1 B) (2.5, 1.10).
+- Výchozí voda v ustáleném stavu po vygenerování, uloží se jen odchylka v celých litrech, rozsah 0–15,625 l (1 B) (2.5, 1.10).
 
 **Odkud kód:** `voda/hydro68.gd`, `ostrov_voda.gd`, `ug67.gd`, `kras75.gd`, `prameny.gd`, `eroze/mech.gd` (main), `voda/async95.gd` a `tools/async_e95.gd` (`e95-async-voda`), `tools/chodby_e79.gd` (`e79-chodby-voda`), slučování E72 (`p72_*`, main).
 
@@ -325,22 +325,17 @@ Nic z toho není rozhodnutí. Jde o návrhy úprav textu nebo otázky pro Jana. 
 
 ### A.1 Rozpory
 
-1. **Velikost buňky v datech: 0,5 m, nebo 0,25 m?**
-   - `01` 1.1, tabulka: „Buňka (voxel) | nese materiál a vodu | 0,5 m“ a „buňka 0,5 m = 1 dlaždice (tile)“.
-   - `02` 2.3: „Rozlišení 0,5 m je pro data a výpočty“, ale také „viditelný voxel je 0,25 m“ a zoom „64 dlaždic (voxelů 0,25 m)“.
-   - `03` 7.2 **Platí:** „jediné rozlišení 0,25 m na buňku“.
-   - `03` kap. 7 „Už vyřešeno“ má obě věty vedle sebe: „buňka 0,5 m = 1 dlaždice“ i „Viditelný voxel je 0,25 m“.
-   - Návrh: zapsat jednu větu, např. „definice a voda po 0,5 m, kopání, překryv a zobrazení po 0,25 m“, a opravit most „buňka 0,5 m = 1 dlaždice“ na „voxel 0,25 m = 1 dlaždice“. **Potřebuje Janovo potvrzení.** Krok 1 zatím zavádí obě velikosti jako parametry a nic nevolí.
-2. **Voda v buňce 0–125 l platí jen pro buňku 0,5 m.** `01` 1.10: „rozsah 0–125 u buňky 0,5 m, v 1 bytu“; 1.8.1 počítá „K × plocha stěny 0,25 m²“ a „plná buňka 125 l“. Při buňce 0,25 m je to 15,6 l a plocha 0,0625 m². Návrh: po vyřešení bodu 1 doplnit, ke které buňce se voda vztahuje.
+1. **Velikost buňky v datech: 0,5 m, nebo 0,25 m?** **Rozhodnuto (Jan 2026-11-21 00:19):** datová buňka je **0,25 m**, stejně jako viditelný voxel a dlaždice (1.1, 2.3, 7.2). Segment 8 m = 32 × 32 buněk, blok 128 m = 512 × 512, sloupec 128 m = 512 buněk. Plná buňka vody je 15,625 l. Výřez okna je malý (pevný zoom 64 dlaždic), delší jsou jen vstupní výpočty. Starý návrh „definice a voda po 0,5 m, kopání po 0,25 m“ se nepoužije.
+2. **Voda v buňce 0–125 l platí jen pro buňku 0,5 m.** **Vyřešeno s bodem 1:** u buňky 0,25 m je rozsah **0–15,625 l** a plocha stěny **0,0625 m²** (1.8.1, 1.10). Zůstává otevřené, jak skloubit maximum 15,625 l s krokem 1 l v 1 bytu.
 3. **Voda v m³, nebo v celých litrech?** `01` 1.8: „Ukládá se v m³ na buňku“; 1.10: „celé číslo litrů (pevný krok 1 l)… v 1 bytu“. Návrh: 1.8 = jednotka výpočtu, 1.10 = uložený tvar; doplnit odkaz.
 4. **Ukládání hotových dat segmentů (zastaralé, ale nepřeškrtnuté).**
-   - `01` 1.4: „Segmenty uvnitř blueprintu vzorkují svou část funkce do buněk 0,5 m a ukládají výsledná data, ne funkci.“ O tři odrážky níž: „Tím se mění předchozí bod“.
+   - `01` 1.4: „Segmenty uvnitř blueprintu vzorkují svou část funkce do buněk 0,25 m a ukládají výsledná data, ne funkci.“ (velikost buňky už je 0,25 m). O tři odrážky níž: „Tím se mění předchozí bod“ (uložení jen rozdílu, tohle zůstává zastaralé).
    - `01` 1.10: odrážka „Přenos dat… hotová data segmentu“ a „server pak jen ukládá a kontroluje bilanci materiálu“, níže „Změněno… nahrazuje odrážku Přenos dat“.
    - `01` 1.12: „Terén (s vodou) a rostliny se ukládají po segmentech… protože pocházejí z blueprintu“.
    - Návrh: přeškrtnout nebo označit „nahrazeno (t801u–t803u)“, aby se při implementaci nečetla stará verze.
 5. **Napojení švů: funkce, nebo dorovnání?** `01` 1.4: „prolnutí švů je funkce sousedů“, ale v téže kapitole „sousedé na ostrově se napojují dorovnáním okrajů, ne funkcí“. Návrh: sjednotit na „dorovnání podle režimu 5.2 (Auto výchozí)“.
 6. **Blend v 5.2: klín 1/16 bloku, nebo 1–4 buňky?** `03` 5.2, tabulka: „Blend (klín 1/16 bloku, 1.7.1)“ a doporučení „Výchozí Blend: klín… 1/16 bloku“; **Platí:** „Blend (dorovnat na 1–4 buňkách)“. Klín 1/16 bloku z 1.7.1 je pro vrstvy, Blend 1–4 pro povrch. Návrh: v textu oddělit napojení povrchu (Auto / Blend / Keep) a napojení vrstev (klín 1/16 bloku).
-7. **Auto „6 buněk“ a „3 buňky“** pochází z prototypu s buňkou 0,5 m (3 m a 1,5 m). Po bodu 1 doplnit, jestli jde o buňky 0,5 m.
+7. **Auto „6 buněk“ a „3 buňky“** pochází z prototypu s buňkou 0,5 m (3 m a 1,5 m). Bod 1 je rozhodnutý (buňka 0,25 m); pořád chybí, jestli Auto zůstane 6 a 3 buňky (teď 1,5 m a 0,75 m), nebo 3 m a 1,5 m (12 a 6 buněk).
 8. **Eroze jako posun výšky (4.1) a kras.** `01` 1.8 a 1.8.2: kras E75 vzniká erozí během hry a „rozpouští se podle průtoku“ v podzemí; 1.8.2 má i usazování pod `sed_v`. Posun výšky povrchu nepopisuje dutinu pod povrchem ani usazeninu nad funkcí. **Chybí rozhodnutí:** kam se ukládá kras během hry (překryv, nebo jiná vrstva) a zda posun může být kladný (usazování).
 9. **Mlha, nebo oblaka?** `01` 1.8: „voda padá jako vodopád do mlhy“; 1.13.1 **Platí:** „Voda z okraje dál padá do oblak“. Návrh: sjednotit na oblaka.
 10. **Vegetace: s blokem, nebo jen ve slupce?** `01` 1.12: „Základní vegetace se generuje s blokem ze seedu“; `02` 2.6: „Vyhodnocuje se jen ve slupce“. Návrh: v 1.12 doplnit odkaz na 2.6.
@@ -351,11 +346,11 @@ Nic z toho není rozhodnutí. Jde o návrhy úprav textu nebo otázky pro Jana. 
 2. `README.md` tabulka souborů: `03` „kostra, čeká na Jana“. Seznam „Pořadí otevřených bodů“ v `README.md` i v `03` stále vypisuje rozhodnuté body 6.2, 4.1, 5.1, 5.2, 3.2, 7.2, 7.3. Návrh: nechat jen 6.1, 6.3, 7.1 a přidat `04`.
 3. `03` 3.2, současný stav: „Slučování mezi sebou… Jan ještě nerozhodl“. Návrh: „rozhodnuto, viz Platí“.
 4. `03` 5.2, současný stav: věta o Auto je už opravená, ale doporučení „Auto zatím nezavádět“ zůstalo. Návrh: označit jako nahrazené rozhodnutím.
-5. `03` 7.2, současný stav a varianty: pásma LOD E90 (16 / 48 m), „blízko 0,25 m, dál 0,5 m“. Platí ruší LOD. Návrh: označit jako historii.
+5. `03` 7.2, současný stav a varianty: pásma LOD E90 (16 / 48 m), „blízko 0,25 m, dál 0,5 m“. Platí ruší LOD. Označeno jako historie; datová buňka je 0,25 m (2026-11-21 00:19).
 6. `02` 2.3: „Viditelnou oblast určuje prezentace podle zoomu“ vedle „zoom je pevný“. Není to rozpor v datech, ale věta o zoomu je zastaralá. Návrh: „podle pevného zoomu (64 voxelů)“.
 7. `02` 2.2: „Zbylé otázky E88 (3, 4, 6, 7, 8, 11) patří do kapitol 3, 5 a 6.“ Otázka 8 je vyřešená v 1.9 (bod 3.1 zrušen), 6, 7 a 11 jsou rozhodnuté. Návrh: „zbývá 4 (6.1), 3 je odložená s 1.5“.
 8. `01` 1.2: „Hra pořád kope po 0,5 m“ a odkaz na rozhodnutí 03:26 jsou historie; v pořádku, jen označit.
-9. Starý práh 0,025 l/s v textu nezůstal (jediná hodnota 0,025 je propustnost písku v 1.8.1, ta je správně). Odkazy na zrušené body 3.1 a 8.1 zůstaly jen jako poznámka „bod zrušen“, v pořádku.
+9. Starý práh 0,025 l/s v textu nezůstal. Hodnota 0,025 l/s v 1.8.1 byla propustnost písku při buňce 0,5 m; po 2026-11-21 00:19 je u buňky 0,25 m 0,00625 l/s. Odkazy na zrušené body 3.1 a 8.1 zůstaly jen jako poznámka „bod zrušen“, v pořádku.
 10. `03` Úkoly implementace neobsahují nová rozhodnutí z hovoru: vrstva posunu eroze (4.1), Auto jako výchozí (5.2), slučování pod 0,1 l/s i mezi sebou (3.2), `gen_ver` V-tvar (6.2), přepínače průhlednosti (7.3). Jsou zařazené v krocích 1, 5, 7 a 11 tohoto dokumentu.
 
 ### A.3 Chybějící rozhodnutí
@@ -365,4 +360,4 @@ Nic z toho není rozhodnutí. Jde o návrhy úprav textu nebo otázky pro Jana. 
 3. **7.1** – 2D, nebo 3D: odloženo. Datový model na tom nezávisí.
 4. **1.5** – přepočet světa při nové verzi generátoru: odloženo (t726u).
 5. **1.11** – datový rozpočet: přeskočeno (t738u).
-6. Velikost buňky dat (A.1 bod 1) a kras / usazování ve vrstvě posunu eroze (A.1 bod 8): potřebují krátké potvrzení.
+6. Velikost buňky dat (A.1 bod 1) je rozhodnutá (0,25 m, Jan 2026-11-21 00:19). Kras / usazování ve vrstvě posunu eroze (A.1 bod 8) pořád potřebuje potvrzení. Auto 6 / 3 buňky (A.1 bod 7) a krok vody 1 l při maximu 15,625 l také.

@@ -26,8 +26,8 @@ Upřesnění od Jana:
 
 ## Pořadí bodů kapitoly 1 k projití s Janem
 
-1. **1.1 Pojmy:** ostrov, blok, segment, buňka; hierarchie ukládání ostrov → blok → segment → buňka, ostrov jako jednotka ukládání, svět (1.4) se s ostrovem nesmí zaměňovat – *rozhodnuto 2026-11-20 (t713u, t714u), doplněno (t741u–t743u)*.
-2. **1.3 Výška sloupce:** výčet 32 / 64 / 128 m, výchozí 128 m, neutrální úroveň v polovině – *rozhodnuto 2026-11-20 (t716u, t717u)*.
+1. **1.1 Pojmy:** ostrov, blok, segment, buňka; hierarchie ukládání ostrov → blok → segment → buňka, ostrov jako jednotka ukládání, svět (1.4) se s ostrovem nesmí zaměňovat; datová buňka 0,25 m = 1 dlaždice – *rozhodnuto 2026-11-20 (t713u, t714u), doplněno (t741u–t743u), buňka sjednocena 2026-11-21 00:19*.
+2. **1.3 Výška sloupce:** výčet 32 / 64 / 128 m, výchozí 128 m (512 buněk po 0,25 m), neutrální úroveň v polovině – *rozhodnuto 2026-11-20 (t716u, t717u), přepočteno 2026-11-21 00:19*.
 3. **1.4 Zdroj pravdy o terénu:** herní svět ze spojité funkce bez vlastních bloků, blueprint řezáním, segmenty ukládají buňky; výchozí velikost 3 × 3 bloky, maximum 4096 × 4096 m (parametr), ostrov se rozšiřuje vkládáním; ostrov procedurální = seed + parametry + verze + seznam vložení (nese i seed a verzi zdrojového světa), ukládá se jen rozdíl proti funkci – *rozhodnuto 2026-11-20 (t718u, t719u), doplněno (t744u–t749u, t761u–t762u, t801u–t803u)*.
 4. **1.2 Jednotky a jemná mřížka:** procedurální svět; generuje se jen zorné pole + okraj a slupka 2–3 buněk u vzduchu (0,25 m z funkce), hlubší buňky až při odkrytí, podzemní voda jako funkce – *rozhodnuto 2026-11-20 (t799u, t800u)*.
 5. **1.5 Verze generátoru:** determinismus povinný, změny a vložení nesou verzi (t801u–t803u); přepočet při nové verzi *odložen 2026-11-20 (t726u)*.
@@ -35,9 +35,9 @@ Upřesnění od Jana:
 7. **1.8 Voda jako data:** obsah buňky v m³, povrch priority-flood + D8, výchozí podzemí E67, čas 1 den = 1 h; vsakování: propustnost X v l/s herního času při spádu 1, skutečný tok = X × spád včetně výšky vody, min dvou materiálů; artéská voda; pramen (jmenovitý výkon omezený okolím, jednoduchý / tlakový model); eroze E51 (práh `ero_v`, odnos průtok × (v/práh)^k, výchozí k = 1,5) – *rozhodnuto 2026-11-20 (t732u), doplněno (t765u–t785u)*.
 8. **1.11 Datový rozpočet:** *přeskočeno 2026-11-20 (t738u)*.
 9. **1.6 Materiály:** jedna tabulka, jedno id – *rozhodnuto 2026-11-20 (t727u)*, návrh `materialy.csv`.
-10. **1.7 Geologie:** útvary jako funkce světa přes švy, vrstvy podle terénu, vyklínění; skladba vrstev, mapa složení na maximální ploše (hrubé body ze seedu, interpolace), 1–3 zástupci v pásmu, min. 1 buňka, švy 1/16 bloku – *rozhodnuto 2026-11-20 (t732u), doplněno (t750u–t763u)*.
+10. **1.7 Geologie:** útvary jako funkce světa přes švy, vrstvy podle terénu, vyklínění; skladba vrstev, mapa složení na maximální ploše (hrubé body ze seedu, interpolace), 1–3 zástupci v pásmu, min. 0,5 m (2 buňky), švy 1/16 bloku – *rozhodnuto 2026-11-20 (t732u), doplněno (t750u–t763u)*.
 11. **1.12 Objektová vrstva:** terén a rostliny po segmentu (otáčejí se s blokem), stavby a cesty seznam na ostrově, smějí přes hranici bloku – *rozhodnuto 2026-11-20 (t739u, t740u), změněno (t741u–t743u)*.
-12. **1.10 Kontrakt:** WVB1 základ, data po segmentech, voda v litrech (1 B), server ukládá seed, parametry, verzi, seznam vložení a rozdíl proti funkci, namátkově kontroluje generátorem (vypínatelné) – *rozhodnuto 2026-11-20 (t736u, t737u), změněno (t801u–t803u)*.
+12. **1.10 Kontrakt:** WVB1 základ, data po segmentech, voda v litrech 0–15,625 l (1 B), server ukládá seed, parametry, verzi, seznam vložení a rozdíl proti funkci, namátkově kontroluje generátorem (vypínatelné) – *rozhodnuto 2026-11-20 (t736u, t737u), změněno (t801u–t803u), rozsah vody 2026-11-21 00:19*.
 13. **1.13 Profil a členitost terénu:** parametry členitosti (rozhodnuto); bok ostrova jen prezentace: bloky s texturou 5 m pod nejnižší okrajovou buňkou, v té výšce oblaka, voda padá do oblak – *rozhodnuto 2026-11-20 (t805u–t807u)*.
 14. **1.14 Sopka:** neaktivní, události ji probudí a uspí; tvar mezi strato a štítovou (sklon 17°); větší 40 m / 2 bloky, nižší 20 m / 1 blok; vrchol aspoň 5 m pod okrajem sloupce; počet a rozteč jako parametry světa (2, 3 bloky); průduch id 75 a kuželovité vrstvy lávy a popela, těleso se propíchne běžnými vrstvami jako skalní jádro (rozhodnuto).
 
