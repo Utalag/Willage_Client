@@ -38,6 +38,8 @@ var geo := PackedByteArray()          # E66 gen bp: plné MaterialId 0–255 (ho
 var bp_rec := {}                       # E66 gen bp: záznam bloku ve světě studie (bp, hm_f, bs, cells, water, rep)
 var prameny76 = null                  # E76: uložené prameny bloku [[lx, ly, z, q, druh]] (z v buňkách), null = ještě nenalezené
 var prenos76 := {}                     # E76: výřez z průzkumného světa {puvod: slot světa původu, dz: posun v buňkách}
+var def78 := PackedByteArray()       # E78: pole materiálů 0,5 m hned po vygenerování (definice), prázdné = bez překryvu
+var jemne78 := PackedByteArray()     # E78: živá mřížka 0,25 m (32 × 32 × 128), prázdná = ještě se nekopalo jemně
 var gen_ms := 0.0
 var mesh_ms := 0.0
 
