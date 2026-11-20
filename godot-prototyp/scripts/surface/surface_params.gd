@@ -34,6 +34,9 @@ static func inst():
 ## E94b (Jan 2026-11-20 11:39): měřítko modelů rostlin ve scéně v metrech (× výšky VYSKA_M; 0,5 → listnáč 1,75 m,
 ## jehličnan 2 m, keř 0,5 m, kaktus 0,75 m). Hustota beze změny; bez p89_meritko se nepoužije.
 @export_range(0.1, 2.0, 0.05) var p94_meritko_veg := 0.5
+## E96 (Jan 2026-11-20 11:48): ostrov = jeden blok 128 × 128 m z funkce světa (16 × 16 bloků po 8 m, buňka 0,5 m) místo
+## čtyř šablon 8 m. Výchozí vyp. Projeví se při startu hry (`--surface.p96_blok128=true`).
+@export var p96_blok128 := false
 
 @export_group("Duální mřížka")
 @export var dual_enabled := true                       ## duální mřížka pro povrch louky, písku a vody
