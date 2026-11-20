@@ -375,7 +375,7 @@ Jen data. Velikost modelů je prezentace (`p94_meritko_veg`, Jan 11:39).
   - **strop přirozeného sklonu** (°).
 - Hodnoty jsou vstupní data světa (spolu se seedem), ne konstanty v kódu.
 - **Pojmenované profily** (např. nížina, pahorkatina, hornatina) lze přidat později jako hotové sady parametrů.
-- **Testovací svět:** pro simulace se použije jedna pevná sada parametrů + seed pro svět 3 × 3 bloky, ve kterém je velká hora (nejvyšší bod), kopec, rovinatá nížina a vodní plocha. Hledá ji studie E97 („Testovací svět“), výsledek bude uložen jako soubor presetu.
+- **Poznámka:** testovací svět 3 × 3 (velká hora, kopec, nížina, vodní plocha) – hledání hodnot odloženo na později (Jan t722u).
 - Největší hora je zároveň **sopka**, viz 1.14.
 
 ### 1.13.1 Obrys, bok a spodek ostrova (otevřené)
