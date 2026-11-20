@@ -40,6 +40,7 @@ var prameny76 = null                  # E76: uložené prameny bloku [[lx, ly, z
 var prenos76 := {}                     # E76: výřez z průzkumného světa {puvod: slot světa původu, dz: posun v buňkách}
 var def78 := PackedByteArray()       # E78: pole materiálů 0,5 m hned po vygenerování (definice), prázdné = bez překryvu
 var jemne78 := PackedByteArray()     # E78: živá mřížka 0,25 m (32 × 32 × 128), prázdná = ještě se nekopalo jemně
+var def85 := PackedByteArray()       # E85 (p85_jemne): definice 0,25 m přímo z funkcí geo_fn, prázdná = zjemnění def78
 var gen_ms := 0.0
 var mesh_ms := 0.0
 

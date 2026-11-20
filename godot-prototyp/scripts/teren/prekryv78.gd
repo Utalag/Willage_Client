@@ -7,6 +7,10 @@ extends RefCounted
 ## Záznam bloku rozšiřuje E76 (typ, seed, slot, posun, prameny76): místo „vykopy“ po sloupcích nese „bunky“ (překryv),
 ## výška sloupců se z buněk odvodí.
 const TR = preload("res://scripts/teren/tridy.gd")
+const T = preload("res://scripts/teren/ostrov_teren.gd")
+const FN = preload("res://scripts/teren/geo_fn.gd")
+const MN = preload("res://scripts/teren/minerals.gd")
+const BPV = preload("res://scripts/teren/blueprint.gd")
 const N := 32          # buněk 0,25 m na stranu bloku
 const NZ := 128        # buněk 0,25 m na výšku
 const SIZE := N * N * NZ
@@ -18,6 +22,44 @@ static func fidx(fx: int, fy: int, fz: int) -> int:
 static func attach(b) -> void:
 	b.def78 = b.geo.duplicate()
 	b.jemne78 = PackedByteArray()
+	b.def85 = fine_fn(b) if FN.on85(T.p, "p85_jemne") and b.prenos76.is_empty() else PackedByteArray()
+
+## E85 (Jan 2026-11-20 03:26, p85_jemne): definice 0,25 m = vzorek funkcí geo_fn při 32 × 32 × 128, pak minerály
+## a dutina stejně jako pipeline (stejné pořadí, seed blueprintu, počty × 8 uvnitř mineral_one / cavity_one).
+## Blok musí být ve světě studie (T.commit). Staré bloky se při načtení přepočítají stejně (překryv se položí na novou definici).
+static func fine_fn(b) -> PackedByteArray:
+	var ws := T.wslot(b.slot)
+	if not T.world.slots.has(ws): return PackedByteArray()
+	var wf := FN.world_fn(T.world.slots)
+	var bp: Dictionary = T.world.slots[ws].bp
+	var info := FN.block_info(wf, ws, bp, T.p)
+	var c := FN.sample_all(wf, info, N)
+	for m in MN.order(bp.minerals):
+		if not FN.is_cavity(m): FN.mineral_one(c, N, wf, info, m, int(bp.minerals[m]), int(bp.seed))
+	if BPV.validate(bp).ok:
+		for m in MN.order(bp.minerals):
+			if FN.is_cavity(m) and int(bp.minerals[m]) > 0: FN.cavity_one(c, N, wf, info, m, int(bp.minerals[m]), int(bp.seed))
+	return c
+
+## definice 0,25 m: z funkcí (E85) nebo zjemnění definice 0,5 m (E78)
+static func deffine(b) -> PackedByteArray:
+	return b.def85 if not b.def85.is_empty() else refine(b.def78)
+
+## živá mřížka bez uložení: jemne78, jinak definice; u E85 se buňky 0,5 m změněné mimo překryv (kopání po 0,5 m) přenesou
+static func _live(b) -> PackedByteArray:
+	if not b.jemne78.is_empty(): return b.jemne78
+	if b.def85.is_empty(): return refine(b.geo)
+	var f: PackedByteArray = b.def85.duplicate()
+	for ci in 256:
+		for z in 64:
+			var i := ci * 64 + z
+			if b.geo[i] == b.def78[i]: continue
+			var x := ci / 16; var y := ci % 16
+			for dx in 2:
+				for dy in 2:
+					var o := fidx(2 * x + dx, 2 * y + dy, 2 * z)
+					f[o] = b.geo[i]; f[o + 1] = b.geo[i]
+	return f
 
 static func refine(geo: PackedByteArray) -> PackedByteArray:
 	var f := PackedByteArray(); f.resize(SIZE)
@@ -34,7 +76,7 @@ static func refine(geo: PackedByteArray) -> PackedByteArray:
 	return f
 
 static func fine(b) -> PackedByteArray:
-	if b.jemne78.is_empty(): b.jemne78 = refine(b.geo)
+	if b.jemne78.is_empty(): b.jemne78 = _live(b)
 	return b.jemne78
 
 static func inside(fx: int, fy: int, fz: int) -> bool:
@@ -44,12 +86,24 @@ static func inside(fx: int, fy: int, fz: int) -> bool:
 ## E80: mimo blok (z < 0 pod dnem ostrova, z ≥ 128 nad stropem bloku, x/y mimo) → false; dřív index přetekl do sousedního sloupce.
 static func op(b, fx: int, fy: int, fz: int, mat: int) -> bool:
 	if not inside(fx, fy, fz): return false
+	if mat == 0 and FN.on85(T.p, "p85_okraj") and chraneno85(b.slot, fx, fy, fz): return false
 	var f := fine(b)
 	var i := fidx(fx, fy, fz)
 	if mat != 0 and f[i] != 0: return false
 	if mat == 0 and f[i] == 0: return false
 	f[i] = mat
 	return true
+
+## E85 (Jan 2026-11-20 03:26, p85_okraj): dno ostrova (vrstva z = 0) a obvodové sloupce ostrova (strana bloku bez souseda
+## ve světě) se vykopat nedají; švy mezi bloky ostrova ano. Soused položený později udělá ze strany vnitřní šev.
+static func chraneno85(slot: Vector2i, fx: int, fy: int, fz: int) -> bool:
+	if fz == 0: return true
+	var ws := T.wslot(slot)
+	if fx == 0 and not T.world.slots.has(ws + Vector2i(-1, 0)): return true
+	if fx == N - 1 and not T.world.slots.has(ws + Vector2i(1, 0)): return true
+	if fy == 0 and not T.world.slots.has(ws + Vector2i(0, -1)): return true
+	if fy == N - 1 and not T.world.slots.has(ws + Vector2i(0, 1)): return true
+	return false
 
 ## buňky 0,5 m z jemné mřížky; vrací sloupce (ci), kterým se změnila výška
 static func sync(b) -> Array:
@@ -58,6 +112,7 @@ static func sync(b) -> Array:
 ## E79: totéž, navíc sloupce (ci), ve kterých se změnila jakákoli buňka 0,5 m (i pod povrchem: chodba, dutina)
 static func sync79(b) -> Dictionary:
 	var f := fine(b)
+	var d85: PackedByteArray = b.def85
 	var changed := []; var geo_ch := []
 	var cnt := PackedInt32Array(); cnt.resize(256)
 	for x in 16:
@@ -67,16 +122,20 @@ static func sync79(b) -> Dictionary:
 			for z in 64:
 				var best := 0; var bc := 0
 				var ids := []; var cs := []
+				var same := not d85.is_empty()   # E85: všech 8 buněk jako definice z funkcí → buňka 0,5 m = definice pipeline
 				for dx in 2:
 					for dy in 2:
 						for dz in 2:
-							var m := f[fidx(2 * x + dx, 2 * y + dy, 2 * z + dz)]
+							var o := fidx(2 * x + dx, 2 * y + dy, 2 * z + dz)
+							var m := f[o]
+							if same and m != d85[o]: same = false
 							if m == 0: continue
 							var k := ids.find(m)
 							if k < 0: ids.append(m); cs.append(1)
 							else: cs[k] += 1
 				for k in ids.size():
 					if cs[k] > bc or (cs[k] == bc and ids[k] < best): best = ids[k]; bc = cs[k]
+				if same: best = b.def78[ci * 64 + z]
 				if b.geo[ci * 64 + z] != best: gch = true
 				b.geo[ci * 64 + z] = best
 				if best != 0: top = z + 1
@@ -88,8 +147,8 @@ static func sync79(b) -> Dictionary:
 
 ## překryv = rozdíl živé mřížky proti definici (seřazené klíče)
 static func overlay(b) -> Dictionary:
-	var d := refine(b.def78)
-	var f: PackedByteArray = b.jemne78 if not b.jemne78.is_empty() else refine(b.geo)
+	var d := deffine(b)
+	var f: PackedByteArray = _live(b)
 	var o := {}
 	for i in SIZE:
 		if f[i] != d[i]: o[i] = f[i]
@@ -189,5 +248,5 @@ static func otisk(blocks: Dictionary, coarse := false) -> String:
 	for s in ks:
 		var b = blocks[s]
 		if coarse: h.update(b.geo)
-		else: h.update(b.jemne78 if not b.jemne78.is_empty() else refine(b.geo))
+		else: h.update(_live(b))
 	return h.finish().hex_encode().substr(0, 16)
