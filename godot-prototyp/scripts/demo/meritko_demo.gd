@@ -5,7 +5,7 @@ extends Node
 const Block = preload("res://scripts/block.gd")
 const J = preload("res://scripts/jednotky.gd")
 const Params = preload("res://scripts/surface/surface_params.gd")
-const BS := 16
+const BS := J.BS
 
 var m
 var p
