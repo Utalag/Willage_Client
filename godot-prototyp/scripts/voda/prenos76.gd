@@ -5,13 +5,14 @@ extends RefCounted
 ## v novém okolí (ostrov_voda.place76 lokálně nebo build plně) a z ustáleného stavu se znovu naplánují události.
 ## Otočení po 90° se nedělá (není triviální: pole, šum hornin i tělesa by se musela otáčet).
 
+const J = preload("res://scripts/jednotky.gd")   # E94: mřížka a metry z jednoho místa
 const Block = preload("res://scripts/block.gd")
 const T = preload("res://scripts/teren/ostrov_teren.gd")
 const H68 = preload("res://scripts/voda/hydro68.gd")
 const MC = preload("res://scripts/voda/eroze/mech.gd")
 const HY = preload("res://scripts/voda/eroze/hydro.gd")
-const BS := 16
-const BH := 64
+const BS := J.BS
+const BH := J.BH
 
 ## výřez z bloku průzkumného světa; v = voda toho světa (ostrov_voda) → prameny ležící v bloku
 static func cutout(b, v) -> Dictionary:
