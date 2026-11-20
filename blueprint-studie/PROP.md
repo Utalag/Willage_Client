@@ -356,6 +356,27 @@ Výchozí: 800 kapek na blok, `ero_cap` 1,0, `ero_erode` 0,1, `ero_deposit_rate`
   pravidlu „sousedé se nemění“. Minerály a dutiny nejsou funkce (výběr buněk) → při jiném rozlišení jiná místa. Změna
   verze funkcí pod překryvem bez pravidla rozbije výkopy. Bez rozhodnutí Jana jen návrh.
 
+## E81 tenké vrstvy a převzorkování (plán, zapsáno před pokusem 2026-11-20 01:41; TODO Architektura světa: „vrstva tenčí než buňka nesmí zmizet nebo se objevovat podle rozlišení“; větev z `e80-hranice-funkci`)
+- **Co už je:** `geo_fn.material` vybere vrstvu podle středu buňky (Z < bs[k]). Vrstva tenčí než buňka je ve sloupci vidět,
+  jen když na ni padne střed buňky → mizí a objevuje se po sloupcích, podle rozlišení i místa. Klíny (vyklínění do ~3 m
+  od švu, v2.1) tvoří tenké konce vrstev. Podzemí vody bere pásma přímo z funkcí (`ug_funkce.bands`), takže vodu sampling
+  netrápí – ale buňky (vykreslení, kopání, hostitelé minerálů, materiál pro ztráty `_mat_d`) ano. Dřív (E52) „tenké
+  propustné vrstvy se v hrubých buňkách spojí“.
+- **Pokus (`godot-prototyp/tools/tenke_e81.gd`, ostrov 4 bloky):**
+  1. *Soupis:* pro každou vrstvu mocnost v řídicích bodech; sloupce s 0 < t < 0,25 m, < 0,5 m; konce vyklínění.
+  2. *Výskyt:* vrstva podle funkce (t > t_min) proti buňkám při 0,5 a 0,25 m: shoda sloupců, plocha, počet kusů
+     (souvislé oblasti přes celý ostrov, tedy i přes švy), rozdíl na švu proti uvnitř.
+  3. *Voda:* podzemí z buněk (`ug_funkce.from_cells`) při 0,5 a 0,25 m proti podzemí z funkcí: počet těles, pokrytí tenké
+     nepropustné vrstvy (díry = voda projde), rozpad tenké propustné vrstvy. Plus otisk vody ostrova s opravou a bez.
+  4. *Minerály:* hostitelské buňky a schodek rud při 0,5 / 0,25 m s opravou a bez.
+- **Oprava (příznak `p81_tenke`, výchozí vypnuto):** konzervativní vzorkování v `geo_fn.sample`: vrstva, která je ve
+  sloupci podle funkce (mocnost > `p81_min_m`, výchozí 0,05 m), ale nepadl na ni žádný střed buňky, dostane jednu buňku
+  (tu, kde leží střed vrstvy), pokud tam funkce opravdu dává tuto vrstvu (ne kryt, ne těleso). Konec vyklínění je pak
+  určen funkcí (t = t_min), ne rozlišením. Konflikty (dvě tenké vrstvy v jedné buňce) se spočítají.
+- **Riziko / negativa předem:** vrstva se nafoukne na celou buňku (objem roste, tenké vrstvy 0,5 m místo 0,1 m), změní se
+  počty hornin v souhrnu (validátor WVB1 počítá materiály), výchozí 0,5 m pipeline se změní jen se zapnutým příznakem.
+  Voda (pásma z funkcí) se nezmění, změní se jen `_mat_d` a hostitelé.
+
 ## E80 výsledky (zapsáno 2026-11-20 01:39; `godot-prototyp/tools/hranice_e80.gd -- --bp.p76_prameny=true --bp.p79_chodby=true`, `shots/e80/`)
 - **Hranice (jak to je v kódu):** zdroj pravdy = funkce v metrech světa (`geo_fn`: povrch, hranice vrstev na řídicí mřížce
   0,5 m, materiál bodu, tělesa) + seed bloku. Při 0,5 m jsou buňky přesně vzorky funkcí (16 = pipeline ve všech 4 blocích).
