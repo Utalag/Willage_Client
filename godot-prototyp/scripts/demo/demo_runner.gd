@@ -17,6 +17,7 @@ const MODES := [
 	[["--napojeni-shots", "--napojeni-bench"], "res://scripts/demo/napojeni_demo.gd"],  # povrch louka/písek/voda
 	[["--grass-shots", "--grass-bench"], "res://scripts/demo/grass_demo.gd"],       # tráva C
 	[["--meritko-shots"], "res://scripts/demo/meritko_demo.gd"],                  # E89 měřítko scény: snímky 89_*
+	[["--blok128-shots"], "res://scripts/demo/blok128_demo.gd"],                  # E96 blok 128 m: snímky a měření 96_*
 	[["--demo", "--video"], "res://scripts/demo/main_demo.gd"],                     # hlavní demo 01–22, video
 ]
 const TOOLS := ["--res-test", "--export-vectors"]
