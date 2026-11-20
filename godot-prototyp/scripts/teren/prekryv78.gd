@@ -220,6 +220,7 @@ static func save(blocks: Dictionary, order: Array) -> Array:
 		var b = blocks[s]
 		out.append({"kind": b.kind, "seed": b.seed, "slot": [s.x, s.y], "shift": b.shift, "prameny76": b.prameny76,
 			"bunky": "", "bunky_n": 0})
+		if not b.obsazeno85.is_empty(): out[-1].obsazeno85 = Array(b.obsazeno85)   # E85: obsazené výtoky (jen když jsou)
 		var e := enc_keys(overlay(b)); var z := deflate(e)
 		if z.size() < e.size(): out[-1].bunky = Marshalls.raw_to_base64(z); out[-1].bunky_n = e.size()
 		else: out[-1].bunky = Marshalls.raw_to_base64(e)
@@ -240,6 +241,7 @@ static func load_into(data: Array, Block, BlockGen, T) -> Dictionary:
 			for k in o: f[k] = o[k]
 			sync(b)
 		b.prameny76 = e.prameny76
+		b.obsazeno85 = PackedInt32Array(e.get("obsazeno85", []))
 		blocks[b.slot] = b
 	return blocks
 

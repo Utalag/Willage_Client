@@ -74,6 +74,9 @@ func build(bl: Dictionary) -> void:
 	blocks = {}
 	for s in bl:
 		if bl[s].gen == "bp" and not bl[s].geo.is_empty(): blocks[s] = bl[s]
+	if _on85v():   # E85: obsazení výtoků je stav hry (hráč pramen vykopal / napojil) → z bloků, ne z historie instance
+		for s in blocks:
+			for ci in blocks[s].obsazeno85: claims[gi_of(s, int(ci) / BS, int(ci) % BS)] = true
 	var n := W * H
 	hm = PackedFloat64Array(); hm.resize(n)
 	# příkop: dno voda_prikop_u se sklonem voda_prikop_sklon (buněk na sloupec) k okraji mapy. Bez sklonu by plochý
@@ -472,7 +475,24 @@ func _claims(dug: int) -> PackedInt32Array:
 		if ok: nw.append(e)
 	nw.sort()
 	for e in nw: claims[e] = true
+	if not nw.is_empty(): _save85()
 	return nw
+
+## E85 (p85_voda / p85_blok2): obsazení výtoků do bloků (uloží se se záznamem bloku, plný výpočet a načtení je převezmou)
+func _on85v() -> bool:
+	return bool(p.get("p85_blok2", false)) or bool(p.get("p85_voda", false))
+
+func _save85() -> void:
+	if not _on85v(): return
+	var per := {}
+	for gi in claims:
+		var a := slot_of(int(gi))
+		if not blocks.has(a[0]): continue
+		if not per.has(a[0]): per[a[0]] = []
+		per[a[0]].append(int(a[1]) * BS + int(a[2]))
+	for s in blocks:
+		var l: Array = per.get(s, []); l.sort()
+		blocks[s].obsazeno85 = PackedInt32Array(l)
 
 func _claim_update(dug: int) -> void:
 	var nc := _claims(dug)
@@ -487,6 +507,7 @@ func _claim_update(dug: int) -> void:
 func claim(gi: int) -> void:
 	if claims.has(gi): return
 	claims[gi] = true
+	_save85()
 	var ch := PackedInt32Array([gi]); var hh := PackedFloat64Array([st.hm[gi]])
 	_add_drains(ch, hh)
 	_update(ch, hh, st.src)
