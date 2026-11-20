@@ -125,7 +125,7 @@ Hra dnes pořád kope po 0,5 m a vyplňuje celý sloupec — to je úkol impleme
 
 **Otázka pro Jana.** Má se eroze E51 (a úbytek horniny krasem) zapisovat do překryvu jako změna proti funkci, se zdrojem „eroze“, a ne do definice terénu?
 
-**Platí:**
+**Platí:** (Jan, hovor 20. 11. 2026) Eroze se **neukládá** jako změněné buňky. Původní generátor terénu zůstává nedotčený a eroze je samostatná vrstva offsetu (posunu výšky), která se přičítá k výšce z původní funkce. Vzniká tak v podstatě druhá funkce s upraveným vstupem: eroze terén prohlubuje a čím je větší, tím víc původní funkci mění. Výpočet vody běží na výsledném terénu s offsetem. Výhody: minimální objem dat, erozi lze kdykoli vypnout nebo předělat bez zásahu do generátoru a voda se v prohlubních chová správně.
 
 ---
 
