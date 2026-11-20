@@ -118,10 +118,25 @@ static func column(wf: Dictionary, info: Dictionary, X: float, Y: float) -> Dict
 	var bs := PackedFloat64Array(); bs.resize(info.lay.size())
 	for k in bs.size():
 		bs[k] = boundary_m(wf, info.slot, k, X, Y)
+	if on85(info.p, "p85_vrstvy"): min85(bs, float(info.p.get("p85_min_m", 0.25)))
 	var col := {"h": surface_m(wf, info.slot, X, Y), "bs": bs}
 	var r = _rec(wf, info.slot)
 	col.h0 = _field(wf, info.slot, -2, X, Y) if r != null and r.has("hm_pre") else col.h
 	return col
+
+## E85: příznak bloku 2 (p85_blok2 zapne všechny části, jinak jednotlivě)
+static func on85(p: Dictionary, k: String) -> bool:
+	return bool(p.get("p85_blok2", false)) or bool(p.get(k, false))
+
+## E85 (Jan 2026-11-20 03:26, p85_vrstvy): vrstva tenčí než tmin (0,25 m) v blueprintu není. Zdola nahoru: mocnost
+## bs[k] − lo < tmin → bs[k] = lo (vrstva zmizí, místo dostane vrstva nad ní; nejvyšší vrstva → výplň nad hranicemi).
+## Počítá se v bodě z interpolovaných hranic, takže platí i mezi řídicími body a na švu je z obou stran stejné.
+## Vyklínění pak nekončí klínem do nuly, ale schodem tmin.
+static func min85(bs: PackedFloat64Array, tmin: float) -> void:
+	var lo := 0.0
+	for k in bs.size():
+		if bs[k] - lo < tmin: bs[k] = lo
+		else: lo = bs[k]
 
 static func _mountain_rock(info: Dictionary, X: float, Y: float, Z: float) -> int:
 	var rel: float = (Z / U - float(info.p.surf_ref)) / 21.0 + 0.06 * info.mnoise.get_noise_3d(X, Y, Z)
