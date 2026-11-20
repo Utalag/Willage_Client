@@ -198,7 +198,7 @@ Návrh E88 s Willage-backend **ještě nebyl projednán** [2]. Body 6.1 a 6.2 js
 
 **Otázka pro Jana.** Má položka překryvu nést i původní materiál definice (kvůli bilanci na serveru) a snímek buněk 0,5 m zůstat jen volitelný? Tento bod se má projednat s Willage-backend.
 
-**Platí:**
+**Platí:** (Jan 2026-11-21 00:10, po vyjádření Willage-backend) Ostrov = seed + parametry + verze generátoru (`Vmajor.minor`) + seznam vložení + rozdíl proti funkci. Položka překryvu nese i původní materiál buňky (+1 B) a umí i odchylku vody. Snímek buněk je jen volitelný (ladění) a nikdy není zdroj pravdy. Formát balíku změn je verzovaný a nesmí se plést se starým WVB1 jako celým polem buněk (WVB1 v2 nebo WTI1, hlavička podle 1.1 a 1.3). Kontrola generátorem jde vypnout. Kontrola se provádí vždy proti pinované verzi ostrova, nikdy proti novějšímu generátoru.
 
 ---
 
@@ -241,7 +241,7 @@ Návrh E88 s Willage-backend **ještě nebyl projednán** [2]. Body 6.1 a 6.2 js
 
 **Otázka pro Jana.** Platí tento postup jako pravidlo kontraktu? Projedná se spolu s 6.1 s Willage-backend.
 
-**Platí:**
+**Platí:** (Jan 2026-11-21 00:10, po vyjádření Willage-backend) Kontrola není namátková: běží buď po nastaveném časovém intervalu, nebo po určitém počtu změn (obojí parametr). Po úspěšné kontrole se smaže **jen pole původního materiálu**; položka změny (nová hodnota a voda) zůstává, jinak by se vracel výkop. Pole se po ověření vynechá, nenuluje (0 = vzduch). Při přijetí změny se pohyb materiálu zapíše do účetní knihy hráče a ostrova, protože po smazání původních hodnot zůstane jen čistý rozdíl vůči funkci. Záznamy s rozporem se nemažou a zůstávají jako reference pro spor. K úspěšné kontrole se uloží krátký otisk (čas, gen_ver, segment, hash, počet buněk). Kontrola nepřegenerovává celý segment při kopání. Otevřené pro Jana: Willage-backend navrhuje u rud levnou kontrolu původní hodnoty při každém zápisu, a pokud je kontrola generátorem vypnutá, říct v kontraktu, zda inventář věří klientovi.
 
 ---
 
