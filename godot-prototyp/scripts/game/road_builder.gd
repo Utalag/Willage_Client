@@ -53,6 +53,7 @@ func click(g) -> void:
 	sm.material = mat
 	m.mesh = sm
 	m.position = Vector3(g.x + 0.5, Roads.height(island, g) * Roads.CELL_H + 0.4, g.y + 0.5)
+	m.scale = island.protiskala()   # E94: koule bodu trasy v metrech (ne zúžená)
 	island.add_child(m)
 	road_marks.append(m)
 	hint_changed.emit()

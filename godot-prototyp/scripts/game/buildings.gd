@@ -12,12 +12,32 @@ const J = preload("res://scripts/jednotky.gd")   # E94: mřížka a metry z jedn
 const BS := J.BS
 const CELL_H := J.CELL_M
 
+## size = půdorys v buňkách dnešní scény (1 × 1 × 0,5); E94 size_m = půdorys v metrech (scéna v metrech), model_m = šířka
+## modelu .glb v metrech (modely jsou v metrech). Ve scéně v metrech se model zvětší / zmenší tak, aby vyplnil půdorys.
 const BTYPES := [
-	{"name": "Domek", "glb": "domek", "size": 3, "col": Color(0.95, 0.70, 0.80)},
-	{"name": "Studna", "glb": "studna", "size": 1, "col": Color(0.70, 0.82, 0.98)},
-	{"name": "Větrný mlýn", "glb": "mlyn", "size": 3, "col": Color(0.98, 0.90, 0.75)},
-	{"name": "Políčko", "glb": "pole", "size": 3, "col": Color(0.75, 0.92, 0.65)},
+	{"name": "Domek", "glb": "domek", "size": 3, "size_m": 3.5, "model_m": 3.5, "col": Color(0.95, 0.70, 0.80)},
+	{"name": "Studna", "glb": "studna", "size": 1, "size_m": 1.5, "model_m": 1.75, "col": Color(0.70, 0.82, 0.98)},
+	{"name": "Větrný mlýn", "glb": "mlyn", "size": 3, "size_m": 3.5, "model_m": 2.66, "col": Color(0.98, 0.90, 0.75)},
+	{"name": "Políčko", "glb": "pole", "size": 3, "size_m": 3.5, "model_m": 3.0, "col": Color(0.75, 0.92, 0.65)},
 ]
+
+## E94: scéna v metrech (ostrov s měřítkem)?
+func _metry() -> bool:
+	return island.scale != Vector3.ONE
+
+## půdorys v buňkách: dnešní size, ve scéně v metrech liché číslo nejblíž size_m / 0,5 m (střed + stejně na obě strany)
+func size_of(t: int) -> int:
+	if not _metry():
+		return BTYPES[t].size
+	var n := int(round(float(BTYPES[t].size_m) / CELL_H))
+	return n if n % 2 == 1 else n + 1
+
+## měřítko uzlu stavby: dnešní scéna 1; v metrech model vyplní půdorys a ostrov ho nezúží (protiměřítko)
+func node_scale(t: int) -> Vector3:
+	if not _metry():
+		return Vector3.ONE
+	var k := float(size_of(t)) * CELL_H / float(BTYPES[t].model_m)
+	return island.protiskala() * k
 
 @export var island_path: NodePath
 @export var ui_path: NodePath
@@ -40,7 +60,7 @@ func names_and_colors() -> Array:
 	return [bn, bc]
 
 func fp_of(c: Vector2i, t: int) -> Array:
-	var hs: int = BTYPES[t].size / 2
+	var hs: int = size_of(t) / 2
 	var out := []
 	for dx in range(-hs, hs + 1):
 		for dz in range(-hs, hs + 1):
@@ -48,7 +68,7 @@ func fp_of(c: Vector2i, t: int) -> Array:
 	return out
 
 func door_of(c: Vector2i, t: int, rot: int) -> Vector2i:
-	var o := Vector2i(0, BTYPES[t].size / 2 + 1)
+	var o := Vector2i(0, size_of(t) / 2 + 1)
 	for i in rot:
 		o = Vector2i(-o.y, o.x)
 	return c + o
@@ -84,6 +104,7 @@ func add_building(c: Vector2i, t: int, rot: int) -> void:
 		island.occupied[f] = true
 	node.position = Vector3(c.x + 0.5, top * CELL_H, c.y + 0.5)
 	node.rotation.y = deg_to_rad(-90.0 * rot)
+	node.scale = node_scale(t)
 	island.add_child(node)
 	island.props.append(node)
 	houses.append(c)
@@ -118,8 +139,9 @@ static func slots_of(cells: Array) -> Array:
 func find_site(slot: Vector2i, reach := {}, t := 0, rot := 0) -> Variant:
 	var best = null
 	var bd := 1e9
-	for lx in range(2, 14):
-		for ly in range(2, 12):
+	var hs: int = size_of(t) / 2
+	for lx in range(hs + 1, BS - hs - 1):          # dnešní domek (hs 1): 2..13 jako dřív
+		for ly in range(hs + 1, BS - hs - 3):      # místo pro dveře před stavbou: 2..11
 			var c := slot * BS + Vector2i(lx, ly)
 			if not site_ok(c, t, rot):
 				continue
@@ -203,7 +225,8 @@ func hover(g) -> void:
 	build_ghost.visible = true
 	build_ghost.position = Vector3(g.x + 0.5, top * CELL_H, g.y + 0.5)
 	build_ghost.rotation.y = deg_to_rad(-90.0 * build_rot)
-	var sz: int = BTYPES[build_sel].size
+	build_ghost.scale = node_scale(build_sel)
+	var sz: int = size_of(build_sel)
 	(build_mark.mesh as PlaneMesh).size = Vector2(sz + 0.8, sz + 0.8)
 	build_mark.position = Vector3(g.x + 0.5, top * CELL_H + 0.06, g.y + 0.5)
 	(build_mark.material_override as StandardMaterial3D).albedo_color = Color(0.45, 0.95, 0.55, 0.55) if ok else Color(1.0, 0.40, 0.45, 0.55)
