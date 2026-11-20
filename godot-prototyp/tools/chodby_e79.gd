@@ -184,6 +184,7 @@ func run79(name: String, mode: String) -> Dictionary:
 	return r
 
 func _init() -> void:
+	if get_script().resource_path != "res://tools/chodby_e79.gd": return   # E80 nástroj dědí pomocné funkce
 	var out := []
 	for name in _arg("scenare", "tunel,tunel_obracene,dlouhy,n1,n10,n100,n1000,zvodnela,zvodnela_obracene,tun,tun_obracene").split(","):
 		for mode in _arg("rezimy", "stara,e79").split(","): out.append(run79(name, mode))
