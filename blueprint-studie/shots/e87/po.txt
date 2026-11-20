@@ -1,0 +1,57 @@
+p87 true masiv2x2 pořadí 0 otisk a52daab1768ec4df
+   blok (0, 0) hora_vyzdvizena: max 53.9 U, průměr 50.9 U, jádro na povrchu 242/256, krok uvnitř max 1.46 U, minerály 56/64, schodek 8, 262 ms
+   blok (1, 0) hora_vyzdvizena: max 51.0 U, průměr 48.1 U, jádro na povrchu 114/256, krok uvnitř max 1.35 U, minerály 56/64, schodek 8, 294 ms
+   blok (0, 1) hora_vyzdvizena: max 51.3 U, průměr 47.9 U, jádro na povrchu 53/256, krok uvnitř max 1.11 U, minerály 56/64, schodek 8, 512 ms
+   blok (1, 1) hora_vyzdvizena: max 51.4 U, průměr 48.7 U, jádro na povrchu 177/256, krok uvnitř max 1.38 U, minerály 56/64, schodek 8, 251 ms
+   šev (0, 0)|(1, 0) povrch 0.70/0.30 U (dovnitř 0.29), sedlo výška 49.1, jádro 0.81 U (dovnitř 0.72), vrstvy 2.24 U (dovnitř 2.56), jádro na povrchu 22/32, vytlačené 21 (dovnitř 29), buňky jinak 6.3 % (dovnitř 5.1 %)
+   šev (0, 0)|(0, 1) povrch 0.87/0.36 U (dovnitř 0.36), sedlo výška 49.0, jádro 1.30 U (dovnitř 1.32), vrstvy 4.25 U (dovnitř 5.99), jádro na povrchu 19/32, vytlačené 26 (dovnitř 26), buňky jinak 12.8 % (dovnitř 13.4 %)
+   šev (1, 0)|(1, 1) povrch 0.53/0.21 U (dovnitř 0.24), sedlo výška 47.5, jádro 0.84 U (dovnitř 1.36), vrstvy 3.57 U (dovnitř 3.43), jádro na povrchu 8/32, vytlačené 35 (dovnitř 40), buňky jinak 7.0 % (dovnitř 8.7 %)
+   šev (0, 1)|(1, 1) povrch 0.70/0.26 U (dovnitř 0.25), sedlo výška 47.9, jádro 0.79 U (dovnitř 0.85), vrstvy 3.35 U (dovnitř 6.05), jádro na povrchu 3/32, vytlačené 33 (dovnitř 36), buňky jinak 10.7 % (dovnitř 11.2 %)
+   0,25 m: změna buněk po přidání sousedů { "(0, 0)": 0, "(1, 0)": 0, "(0, 1)": 0, "(1, 1)": 0 }, krok na švu max 0.25 m, uvnitř max 0.50 m, hrubé vs jemné max 0.50 m, vzorek 32 642 ms/blok
+   voda E74: { "prameny": 3, "koryto_sloupcu": 28, "tun_sloupcu": 167, "vodopady": 0, "vodopady_okraj": 2, "okraj_lps": 9.5, "podzemni_telesa": 1, "vyvery": 1, "volani_podzemi": 3 } chyba 0.0 otisk 8f3abf374c170f79 | E67: { "prameny": 3, "koryto_sloupcu": 28, "tun_sloupcu": 167, "vodopady": 0, "vodopady_okraj": 2, "okraj_lps": 9.5, "podzemni_telesa": 1, "vyvery": 0, "volani_podzemi": 2 } chyba 0.0 otisk 449bb242baa4690d
+p87 true masiv2x2 pořadí 1 otisk a52daab1768ec4df
+   blok (1, 1) hora_vyzdvizena: max 51.4 U, průměr 48.7 U, jádro na povrchu 177/256, krok uvnitř max 1.38 U, minerály 56/64, schodek 8, 259 ms
+   blok (0, 1) hora_vyzdvizena: max 51.3 U, průměr 47.9 U, jádro na povrchu 53/256, krok uvnitř max 1.11 U, minerály 56/64, schodek 8, 492 ms
+   blok (1, 0) hora_vyzdvizena: max 51.0 U, průměr 48.1 U, jádro na povrchu 114/256, krok uvnitř max 1.35 U, minerály 56/64, schodek 8, 282 ms
+   blok (0, 0) hora_vyzdvizena: max 53.9 U, průměr 50.9 U, jádro na povrchu 242/256, krok uvnitř max 1.46 U, minerály 56/64, schodek 8, 261 ms
+   šev (0, 1)|(1, 1) povrch 0.70/0.26 U (dovnitř 0.25), sedlo výška 47.9, jádro 0.79 U (dovnitř 0.85), vrstvy 3.35 U (dovnitř 6.05), jádro na povrchu 3/32, vytlačené 33 (dovnitř 36), buňky jinak 10.7 % (dovnitř 11.2 %)
+   šev (1, 0)|(1, 1) povrch 0.53/0.21 U (dovnitř 0.24), sedlo výška 47.5, jádro 0.84 U (dovnitř 1.36), vrstvy 3.57 U (dovnitř 3.43), jádro na povrchu 8/32, vytlačené 35 (dovnitř 40), buňky jinak 7.0 % (dovnitř 8.7 %)
+   šev (0, 0)|(1, 0) povrch 0.70/0.30 U (dovnitř 0.29), sedlo výška 49.1, jádro 0.81 U (dovnitř 0.72), vrstvy 2.24 U (dovnitř 2.56), jádro na povrchu 22/32, vytlačené 21 (dovnitř 29), buňky jinak 6.3 % (dovnitř 5.1 %)
+   šev (0, 0)|(0, 1) povrch 0.87/0.36 U (dovnitř 0.36), sedlo výška 49.0, jádro 1.30 U (dovnitř 1.32), vrstvy 4.25 U (dovnitř 5.99), jádro na povrchu 19/32, vytlačené 26 (dovnitř 26), buňky jinak 12.8 % (dovnitř 13.4 %)
+   pořadí 0 vs 1: neshod buněk po blocích { "(0, 0)": 0, "(1, 0)": 0, "(0, 1)": 0, "(1, 1)": 0 }
+p87 true vedle pořadí 0 otisk 2194fa3d04d7ea76
+   blok (0, 0) hora_vyzdvizena: max 53.9 U, průměr 50.9 U, jádro na povrchu 242/256, krok uvnitř max 1.46 U, minerály 56/64, schodek 8, 268 ms
+   blok (1, 0) hora_vyzdvizena: max 51.0 U, průměr 48.1 U, jádro na povrchu 114/256, krok uvnitř max 1.35 U, minerály 56/64, schodek 8, 289 ms
+   blok (0, 1) kopec: max 51.5 U, průměr 42.4 U, jádro na povrchu 10/256, krok uvnitř max 11.47 U, minerály 80/80, schodek 0, 246 ms
+   blok (1, 1) louka: max 50.2 U, průměr 41.1 U, jádro na povrchu 4/256, krok uvnitř max 10.17 U, minerály 44/44, schodek 0, 208 ms
+   šev (0, 0)|(1, 0) povrch 0.70/0.30 U (dovnitř 0.29), sedlo výška 49.1, jádro 0.81 U (dovnitř 0.72), vrstvy 2.24 U (dovnitř 2.56), jádro na povrchu 22/32, vytlačené 21 (dovnitř 29), buňky jinak 6.3 % (dovnitř 5.1 %)
+   šev (0, 0)|(0, 1) povrch 0.00/0.00 U (dovnitř 2.21), sedlo výška 49.2, jádro 0.00 U (dovnitř 1.32), vrstvy 0.00 U (dovnitř 5.99), jádro na povrchu 20/32, vytlačené 0 (dovnitř 26), buňky jinak 3.9 % (dovnitř 13.4 %)
+   šev (1, 0)|(1, 1) povrch 0.19/0.01 U (dovnitř 1.70), sedlo výška 47.5, jádro 0.31 U (dovnitř 1.36), vrstvy 0.38 U (dovnitř 3.43), jádro na povrchu 8/32, vytlačené 1 (dovnitř 40), buňky jinak 4.2 % (dovnitř 8.7 %)
+   šev (0, 1)|(1, 1) povrch 0.19/0.01 U (dovnitř 0.63), sedlo výška 40.5, jádro 0.31 U (dovnitř 10.29), vrstvy 0.38 U (dovnitř 10.29), jádro na povrchu 0/32, vytlačené 3 (dovnitř 36), buňky jinak 3.1 % (dovnitř 23.1 %)
+   0,25 m: změna buněk po přidání sousedů { "(0, 0)": 84, "(1, 0)": 78, "(0, 1)": 4, "(1, 1)": 0 }, krok na švu max 0.25 m, uvnitř max 2.75 m, hrubé vs jemné max 1.75 m, vzorek 32 521 ms/blok
+   voda E74: { "prameny": 7, "koryto_sloupcu": 12, "tun_sloupcu": 47, "vodopady": 3, "vodopady_okraj": 6, "okraj_lps": 16.44669, "podzemni_telesa": 1, "vyvery": 1, "volani_podzemi": 4 } chyba 0.0 otisk 00e3822f57c23c3f | E67: { "prameny": 7, "koryto_sloupcu": 12, "tun_sloupcu": 47, "vodopady": 3, "vodopady_okraj": 6, "okraj_lps": 16.44669, "podzemni_telesa": 1, "vyvery": 0, "volani_podzemi": 2 } chyba -0.0 otisk ba0ed633bd469fe4
+p87 true vedle pořadí 1 otisk d6132492d579489c
+   blok (0, 1) kopec: max 48.0 U, průměr 41.1 U, jádro na povrchu 0/256, krok uvnitř max 5.00 U, minerály 80/80, schodek 0, 235 ms
+   blok (1, 1) louka: max 41.0 U, průměr 40.0 U, jádro na povrchu 0/256, krok uvnitř max 1.23 U, minerály 44/44, schodek 0, 201 ms
+   blok (0, 0) hora_vyzdvizena: max 53.9 U, průměr 49.7 U, jádro na povrchu 139/256, krok uvnitř max 11.75 U, minerály 56/64, schodek 8, 336 ms
+   blok (1, 0) hora_vyzdvizena: max 51.0 U, průměr 47.1 U, jádro na povrchu 94/256, krok uvnitř max 9.72 U, minerály 56/64, schodek 8, 344 ms
+   šev (0, 1)|(1, 1) povrch 0.00/0.00 U (dovnitř 0.21), sedlo výška 40.0, jádro 0.00 U (dovnitř 0.16), vrstvy 0.00 U (dovnitř 2.16), jádro na povrchu 0/32, vytlačené 0 (dovnitř 31), buňky jinak 2.5 % (dovnitř 14.4 %)
+   šev (0, 0)|(1, 0) povrch 0.70/0.29 U (dovnitř 0.64), sedlo výška 48.6, jádro 0.81 U (dovnitř 9.47), vrstvy 2.24 U (dovnitř 9.47), jádro na povrchu 22/32, vytlačené 17 (dovnitř 48), buňky jinak 6.6 % (dovnitř 9.5 %)
+   šev (0, 0)|(0, 1) povrch 0.00/0.00 U (dovnitř 2.14), sedlo výška 40.0, jádro 0.00 U (dovnitř 25.36), vrstvy 0.00 U (dovnitř 25.36), jádro na povrchu 0/32, vytlačené 0 (dovnitř 30), buňky jinak 0.0 % (dovnitř 62.2 %)
+   šev (1, 0)|(1, 1) povrch 0.19/0.01 U (dovnitř 1.61), sedlo výška 40.0, jádro 0.18 U (dovnitř 24.75), vrstvy 0.32 U (dovnitř 24.75), jádro na povrchu 0/32, vytlačené 0 (dovnitř 32), buňky jinak 3.3 % (dovnitř 56.1 %)
+   pořadí 0 vs 1: neshod buněk po blocích { "(0, 0)": 2211, "(1, 0)": 2021, "(0, 1)": 2732, "(1, 1)": 2487 }
+p87 true hreben pořadí 0 otisk 6378881a100416d5
+   blok (-1, 0) hora_vyzdvizena: max 54.6 U, průměr 51.9 U, jádro na povrchu 254/256, krok uvnitř max 1.19 U, minerály 56/64, schodek 8, 252 ms
+   blok (0, 0) hora_vyzdvizena: max 53.9 U, průměr 50.9 U, jádro na povrchu 242/256, krok uvnitř max 1.46 U, minerály 56/64, schodek 8, 513 ms
+   blok (1, 0) hora_vyzdvizena: max 51.0 U, průměr 48.1 U, jádro na povrchu 114/256, krok uvnitř max 1.35 U, minerály 56/64, schodek 8, 297 ms
+   šev (-1, 0)|(0, 0) povrch 0.49/0.23 U (dovnitř 0.34), sedlo výška 52.6, jádro 0.46 U (dovnitř 0.55), vrstvy 5.69 U (dovnitř 6.44), jádro na povrchu 32/32, vytlačené 16 (dovnitř 25), buňky jinak 13.6 % (dovnitř 13.0 %)
+   šev (0, 0)|(1, 0) povrch 0.70/0.30 U (dovnitř 0.29), sedlo výška 49.1, jádro 0.81 U (dovnitř 0.72), vrstvy 2.24 U (dovnitř 2.56), jádro na povrchu 22/32, vytlačené 21 (dovnitř 29), buňky jinak 7.4 % (dovnitř 5.7 %)
+   0,25 m: změna buněk po přidání sousedů { "(-1, 0)": 0, "(0, 0)": 0, "(1, 0)": 0 }, krok na švu max 0.25 m, uvnitř max 0.50 m, hrubé vs jemné max 0.50 m, vzorek 32 714 ms/blok
+   voda E74: { "prameny": 5, "koryto_sloupcu": 35, "tun_sloupcu": 4, "vodopady": 0, "vodopady_okraj": 5, "okraj_lps": 19.5, "podzemni_telesa": 0, "vyvery": 0, "volani_podzemi": 0 } chyba 0.0 otisk 1620c0d1cb1bb6b2 | E67: { "prameny": 5, "koryto_sloupcu": 35, "tun_sloupcu": 4, "vodopady": 0, "vodopady_okraj": 5, "okraj_lps": 19.5, "podzemni_telesa": 0, "vyvery": 0, "volani_podzemi": 0 } chyba 0.0 otisk 1620c0d1cb1bb6b2
+p87 true hreben pořadí 1 otisk 6378881a100416d5
+   blok (1, 0) hora_vyzdvizena: max 51.0 U, průměr 48.1 U, jádro na povrchu 114/256, krok uvnitř max 1.35 U, minerály 56/64, schodek 8, 299 ms
+   blok (-1, 0) hora_vyzdvizena: max 54.6 U, průměr 51.9 U, jádro na povrchu 254/256, krok uvnitř max 1.19 U, minerály 56/64, schodek 8, 274 ms
+   blok (0, 0) hora_vyzdvizena: max 53.9 U, průměr 50.9 U, jádro na povrchu 242/256, krok uvnitř max 1.46 U, minerály 56/64, schodek 8, 529 ms
+   šev (-1, 0)|(0, 0) povrch 0.49/0.23 U (dovnitř 0.34), sedlo výška 52.6, jádro 0.46 U (dovnitř 0.55), vrstvy 5.69 U (dovnitř 6.44), jádro na povrchu 32/32, vytlačené 16 (dovnitř 25), buňky jinak 13.6 % (dovnitř 13.0 %)
+   šev (0, 0)|(1, 0) povrch 0.70/0.30 U (dovnitř 0.29), sedlo výška 49.1, jádro 0.81 U (dovnitř 0.72), vrstvy 2.24 U (dovnitř 2.56), jádro na povrchu 22/32, vytlačené 21 (dovnitř 29), buňky jinak 7.4 % (dovnitř 5.7 %)
+   pořadí 0 vs 1: neshod buněk po blocích { "(-1, 0)": 0, "(0, 0)": 0, "(1, 0)": 0 }
