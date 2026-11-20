@@ -1,0 +1,464 @@
+{
+ "A": {
+  "(-1, 1)": {
+   "dutina_bunek": 60,
+   "ms_3_otoceni_a_kontroly": 371.943,
+   "ms_otoceni": 4.851,
+   "prameny": 0,
+   "rot": {
+    "1": {
+     "dutina_bunek_ok": "60/60",
+     "hrany": [
+      "S→V stejne",
+      "V→J obracene",
+      "J→Z stejne",
+      "Z→S obracene"
+     ],
+     "neshod": {
+      "bs": 0,
+      "cells": 0,
+      "geo": 0,
+      "hm": 0,
+      "hm_f": 0,
+      "hm_gen": 0,
+      "hm_pre": 0,
+      "hm_raw": 0,
+      "rec_cells": 0,
+      "rec_water": 0,
+      "water": 0
+     },
+     "neshod_celkem": 0,
+     "pocty_stejne": true,
+     "prameny_ok": "0/0",
+     "rot1_rkrat_stejne": true,
+     "rot4_identita": true
+    },
+    "2": {
+     "dutina_bunek_ok": "60/60",
+     "hrany": [
+      "S→J obracene",
+      "V→Z obracene",
+      "J→S obracene",
+      "Z→V obracene"
+     ],
+     "neshod": {
+      "bs": 0,
+      "cells": 0,
+      "geo": 0,
+      "hm": 0,
+      "hm_f": 0,
+      "hm_gen": 0,
+      "hm_pre": 0,
+      "hm_raw": 0,
+      "rec_cells": 0,
+      "rec_water": 0,
+      "water": 0
+     },
+     "neshod_celkem": 0,
+     "pocty_stejne": true,
+     "prameny_ok": "0/0",
+     "rot1_rkrat_stejne": true,
+     "rot4_identita": true
+    },
+    "3": {
+     "dutina_bunek_ok": "60/60",
+     "hrany": [
+      "S→Z obracene",
+      "V→S stejne",
+      "J→V obracene",
+      "Z→J stejne"
+     ],
+     "neshod": {
+      "bs": 0,
+      "cells": 0,
+      "geo": 0,
+      "hm": 0,
+      "hm_f": 0,
+      "hm_gen": 0,
+      "hm_pre": 0,
+      "hm_raw": 0,
+      "rec_cells": 0,
+      "rec_water": 0,
+      "water": 0
+     },
+     "neshod_celkem": 0,
+     "pocty_stejne": true,
+     "prameny_ok": "0/0",
+     "rot1_rkrat_stejne": true,
+     "rot4_identita": true
+    }
+   },
+   "seed": 505,
+   "skladani_neshod": 0,
+   "typ": "louka"
+  },
+  "(0, 0)": {
+   "dutina_bunek": 0,
+   "ms_3_otoceni_a_kontroly": 386.453,
+   "ms_otoceni": 5.118,
+   "prameny": 3,
+   "rot": {
+    "1": {
+     "dutina_bunek_ok": "0/0",
+     "hrany": [
+      "S→V stejne",
+      "V→J obracene",
+      "J→Z stejne",
+      "Z→S obracene"
+     ],
+     "neshod": {
+      "bs": 0,
+      "cells": 0,
+      "geo": 0,
+      "hm": 0,
+      "hm_f": 0,
+      "hm_gen": 0,
+      "hm_pre": 0,
+      "hm_raw": 0,
+      "rec_cells": 0,
+      "rec_water": 0,
+      "water": 0
+     },
+     "neshod_celkem": 0,
+     "pocty_stejne": true,
+     "prameny_ok": "3/3",
+     "rot1_rkrat_stejne": true,
+     "rot4_identita": true
+    },
+    "2": {
+     "dutina_bunek_ok": "0/0",
+     "hrany": [
+      "S→J obracene",
+      "V→Z obracene",
+      "J→S obracene",
+      "Z→V obracene"
+     ],
+     "neshod": {
+      "bs": 0,
+      "cells": 0,
+      "geo": 0,
+      "hm": 0,
+      "hm_f": 0,
+      "hm_gen": 0,
+      "hm_pre": 0,
+      "hm_raw": 0,
+      "rec_cells": 0,
+      "rec_water": 0,
+      "water": 0
+     },
+     "neshod_celkem": 0,
+     "pocty_stejne": true,
+     "prameny_ok": "3/3",
+     "rot1_rkrat_stejne": true,
+     "rot4_identita": true
+    },
+    "3": {
+     "dutina_bunek_ok": "0/0",
+     "hrany": [
+      "S→Z obracene",
+      "V→S stejne",
+      "J→V obracene",
+      "Z→J stejne"
+     ],
+     "neshod": {
+      "bs": 0,
+      "cells": 0,
+      "geo": 0,
+      "hm": 0,
+      "hm_f": 0,
+      "hm_gen": 0,
+      "hm_pre": 0,
+      "hm_raw": 0,
+      "rec_cells": 0,
+      "rec_water": 0,
+      "water": 0
+     },
+     "neshod_celkem": 0,
+     "pocty_stejne": true,
+     "prameny_ok": "3/3",
+     "rot1_rkrat_stejne": true,
+     "rot4_identita": true
+    }
+   },
+   "seed": 808,
+   "skladani_neshod": 0,
+   "typ": "hora"
+  },
+  "(0, 1)": {
+   "dutina_bunek": 0,
+   "ms_3_otoceni_a_kontroly": 364.151,
+   "ms_otoceni": 5.877,
+   "prameny": 2,
+   "rot": {
+    "1": {
+     "dutina_bunek_ok": "0/0",
+     "hrany": [
+      "S→V stejne",
+      "V→J obracene",
+      "J→Z stejne",
+      "Z→S obracene"
+     ],
+     "neshod": {
+      "bs": 0,
+      "cells": 0,
+      "geo": 0,
+      "hm": 0,
+      "hm_f": 0,
+      "hm_gen": 0,
+      "hm_pre": 0,
+      "hm_raw": 0,
+      "rec_cells": 0,
+      "rec_water": 0,
+      "water": 0
+     },
+     "neshod_celkem": 0,
+     "pocty_stejne": true,
+     "prameny_ok": "2/2",
+     "rot1_rkrat_stejne": true,
+     "rot4_identita": true
+    },
+    "2": {
+     "dutina_bunek_ok": "0/0",
+     "hrany": [
+      "S→J obracene",
+      "V→Z obracene",
+      "J→S obracene",
+      "Z→V obracene"
+     ],
+     "neshod": {
+      "bs": 0,
+      "cells": 0,
+      "geo": 0,
+      "hm": 0,
+      "hm_f": 0,
+      "hm_gen": 0,
+      "hm_pre": 0,
+      "hm_raw": 0,
+      "rec_cells": 0,
+      "rec_water": 0,
+      "water": 0
+     },
+     "neshod_celkem": 0,
+     "pocty_stejne": true,
+     "prameny_ok": "2/2",
+     "rot1_rkrat_stejne": true,
+     "rot4_identita": true
+    },
+    "3": {
+     "dutina_bunek_ok": "0/0",
+     "hrany": [
+      "S→Z obracene",
+      "V→S stejne",
+      "J→V obracene",
+      "Z→J stejne"
+     ],
+     "neshod": {
+      "bs": 0,
+      "cells": 0,
+      "geo": 0,
+      "hm": 0,
+      "hm_f": 0,
+      "hm_gen": 0,
+      "hm_pre": 0,
+      "hm_raw": 0,
+      "rec_cells": 0,
+      "rec_water": 0,
+      "water": 0
+     },
+     "neshod_celkem": 0,
+     "pocty_stejne": true,
+     "prameny_ok": "2/2",
+     "rot1_rkrat_stejne": true,
+     "rot4_identita": true
+    }
+   },
+   "seed": 707,
+   "skladani_neshod": 0,
+   "typ": "kopec"
+  },
+  "(1, 0)": {
+   "dutina_bunek": 90,
+   "ms_3_otoceni_a_kontroly": 369.254,
+   "ms_otoceni": 5.233,
+   "prameny": 0,
+   "rot": {
+    "1": {
+     "dutina_bunek_ok": "90/90",
+     "hrany": [
+      "S→V stejne",
+      "V→J obracene",
+      "J→Z stejne",
+      "Z→S obracene"
+     ],
+     "neshod": {
+      "bs": 0,
+      "cells": 0,
+      "geo": 0,
+      "hm": 0,
+      "hm_f": 0,
+      "hm_gen": 0,
+      "hm_pre": 0,
+      "hm_raw": 0,
+      "rec_cells": 0,
+      "rec_water": 0,
+      "water": 0
+     },
+     "neshod_celkem": 0,
+     "pocty_stejne": true,
+     "prameny_ok": "0/0",
+     "rot1_rkrat_stejne": true,
+     "rot4_identita": true
+    },
+    "2": {
+     "dutina_bunek_ok": "90/90",
+     "hrany": [
+      "S→J obracene",
+      "V→Z obracene",
+      "J→S obracene",
+      "Z→V obracene"
+     ],
+     "neshod": {
+      "bs": 0,
+      "cells": 0,
+      "geo": 0,
+      "hm": 0,
+      "hm_f": 0,
+      "hm_gen": 0,
+      "hm_pre": 0,
+      "hm_raw": 0,
+      "rec_cells": 0,
+      "rec_water": 0,
+      "water": 0
+     },
+     "neshod_celkem": 0,
+     "pocty_stejne": true,
+     "prameny_ok": "0/0",
+     "rot1_rkrat_stejne": true,
+     "rot4_identita": true
+    },
+    "3": {
+     "dutina_bunek_ok": "90/90",
+     "hrany": [
+      "S→Z obracene",
+      "V→S stejne",
+      "J→V obracene",
+      "Z→J stejne"
+     ],
+     "neshod": {
+      "bs": 0,
+      "cells": 0,
+      "geo": 0,
+      "hm": 0,
+      "hm_f": 0,
+      "hm_gen": 0,
+      "hm_pre": 0,
+      "hm_raw": 0,
+      "rec_cells": 0,
+      "rec_water": 0,
+      "water": 0
+     },
+     "neshod_celkem": 0,
+     "pocty_stejne": true,
+     "prameny_ok": "0/0",
+     "rot1_rkrat_stejne": true,
+     "rot4_identita": true
+    }
+   },
+   "seed": 909,
+   "skladani_neshod": 0,
+   "typ": "louka"
+  },
+  "(1, 1)": {
+   "dutina_bunek": 90,
+   "ms_3_otoceni_a_kontroly": 368.526,
+   "ms_otoceni": 5.014,
+   "prameny": 0,
+   "rot": {
+    "1": {
+     "dutina_bunek_ok": "90/90",
+     "hrany": [
+      "S→V stejne",
+      "V→J obracene",
+      "J→Z stejne",
+      "Z→S obracene"
+     ],
+     "neshod": {
+      "bs": 0,
+      "cells": 0,
+      "geo": 0,
+      "hm": 0,
+      "hm_f": 0,
+      "hm_gen": 0,
+      "hm_pre": 0,
+      "hm_raw": 0,
+      "rec_cells": 0,
+      "rec_water": 0,
+      "water": 0
+     },
+     "neshod_celkem": 0,
+     "pocty_stejne": true,
+     "prameny_ok": "0/0",
+     "rot1_rkrat_stejne": true,
+     "rot4_identita": true
+    },
+    "2": {
+     "dutina_bunek_ok": "90/90",
+     "hrany": [
+      "S→J obracene",
+      "V→Z obracene",
+      "J→S obracene",
+      "Z→V obracene"
+     ],
+     "neshod": {
+      "bs": 0,
+      "cells": 0,
+      "geo": 0,
+      "hm": 0,
+      "hm_f": 0,
+      "hm_gen": 0,
+      "hm_pre": 0,
+      "hm_raw": 0,
+      "rec_cells": 0,
+      "rec_water": 0,
+      "water": 0
+     },
+     "neshod_celkem": 0,
+     "pocty_stejne": true,
+     "prameny_ok": "0/0",
+     "rot1_rkrat_stejne": true,
+     "rot4_identita": true
+    },
+    "3": {
+     "dutina_bunek_ok": "90/90",
+     "hrany": [
+      "S→Z obracene",
+      "V→S stejne",
+      "J→V obracene",
+      "Z→J stejne"
+     ],
+     "neshod": {
+      "bs": 0,
+      "cells": 0,
+      "geo": 0,
+      "hm": 0,
+      "hm_f": 0,
+      "hm_gen": 0,
+      "hm_pre": 0,
+      "hm_raw": 0,
+      "rec_cells": 0,
+      "rec_water": 0,
+      "water": 0
+     },
+     "neshod_celkem": 0,
+     "pocty_stejne": true,
+     "prameny_ok": "0/0",
+     "rot1_rkrat_stejne": true,
+     "rot4_identita": true
+    }
+   },
+   "seed": 606,
+   "skladani_neshod": 0,
+   "typ": "piscina"
+  }
+ }
+}

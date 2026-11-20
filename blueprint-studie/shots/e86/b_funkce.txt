@@ -1,0 +1,15 @@
+B (0, 0) hora:808 n 16 (67 ms): ["rot1 základ 45 { \"hornina_hor\": 45 } | vše 201, min+dut 156", "rot2 základ 33 { \"hornina_hor\": 33 } | vše 189, min+dut 156", "rot3 základ 42 { \"hornina_hor\": 42 } | vše 196, min+dut 154"]
+   kontrola: samostatný svět proti uloženým 0 {  }, svět původu 0
+B (0, 0) hora:808 n 32 (487 ms): ["rot1 základ 222 { \"hornina_hor\": 222 } | vše 1448, min+dut 1226", "rot2 základ 262 { \"hornina_hor\": 262 } | vše 1494, min+dut 1232", "rot3 základ 256 { \"hornina_hor\": 256 } | vše 1488, min+dut 1232"]
+B (1, 0) louka:909 n 16 (79 ms): ["rot1 základ 0 {  } | vše 266, min+dut 266", "rot2 základ 0 {  } | vše 268, min+dut 268", "rot3 základ 0 {  } | vše 268, min+dut 268"]
+   kontrola: samostatný svět proti uloženým 0 {  }, svět původu 0
+B (1, 0) louka:909 n 32 (746 ms): ["rot1 základ 0 {  } | vše 2133, min+dut 2133", "rot2 základ 0 {  } | vše 2135, min+dut 2135", "rot3 základ 0 {  } | vše 2144, min+dut 2144"]
+B (0, 1) kopec:707 n 16 (60 ms): ["rot1 základ 13 { \"hornina_hor\": 13 } | vše 169, min+dut 156", "rot2 základ 8 { \"hornina_hor\": 8 } | vše 168, min+dut 160", "rot3 základ 6 { \"hornina_hor\": 6 } | vše 166, min+dut 160"]
+   kontrola: samostatný svět proti uloženým 0 {  }, svět původu 0
+B (0, 1) kopec:707 n 32 (488 ms): ["rot1 základ 100 { \"hornina_hor\": 100 } | vše 1338, min+dut 1238", "rot2 základ 71 { \"hornina_hor\": 71 } | vše 1349, min+dut 1278", "rot3 základ 71 { \"hornina_hor\": 71 } | vše 1349, min+dut 1278"]
+B (1, 1) piscina:606 n 16 (100 ms): ["rot1 základ 0 {  } | vše 356, min+dut 356", "rot2 základ 0 {  } | vše 378, min+dut 378", "rot3 základ 0 {  } | vše 378, min+dut 378"]
+   kontrola: samostatný svět proti uloženým 0 {  }, svět původu 0
+B (1, 1) piscina:606 n 32 (645 ms): ["rot1 základ 0 {  } | vše 2839, min+dut 2839", "rot2 základ 0 {  } | vše 3022, min+dut 3022", "rot3 základ 0 {  } | vše 3002, min+dut 3002"]
+B (-1, 1) louka:505 n 16 (67 ms): ["rot1 základ 0 {  } | vše 208, min+dut 208", "rot2 základ 0 {  } | vše 187, min+dut 187", "rot3 základ 0 {  } | vše 204, min+dut 204"]
+   kontrola: samostatný svět proti uloženým 0 {  }, svět původu 0
+B (-1, 1) louka:505 n 32 (584 ms): ["rot1 základ 0 {  } | vše 1653, min+dut 1653", "rot2 základ 0 {  } | vše 1524, min+dut 1524", "rot3 základ 0 {  } | vše 1610, min+dut 1610"]

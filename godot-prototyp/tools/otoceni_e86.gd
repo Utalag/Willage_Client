@@ -290,12 +290,17 @@ func seams(v, blocks: Dictionary, tslot: Vector2i) -> Dictionary:
 		var ns: Vector2i = tslot + SD.DIRS[d]
 		if not blocks.has(ns): out.strany.append(null); continue
 		var nb = blocks[ns]
-		var m := 0.0; var su := 0.0; var mh := 0
+		var m := 0.0; var su := 0.0; var mh := 0; var mb := 0.0; var mbi := 0.0
 		for t in 16:
 			var o := SD.own(d, t); var c := SD.nb(d, t)
 			var dd := absf(b.bp_rec.hm_f[o.x * 16 + o.y] - nb.bp_rec.hm_f[c.x * 16 + c.y]); m = maxf(m, dd); su += dd
 			mh = maxi(mh, absi(b.hm[o.x * 16 + o.y] - nb.hm[c.x * 16 + c.y]))
-		out.strany.append({"strana": SD.NAMES[d], "max_u": m, "prumer_u": su / 16.0, "max_bunek": mh})
+			# hranice vrstev přes šev (U) a pro srovnání krok o jeden sloupec dovnitř bloku
+			var o2: Vector2i = o - SD.DIRS[d]
+			for k in b.bp_rec.bs.size():
+				mb = maxf(mb, absf(b.bp_rec.bs[k][o.x * 16 + o.y] - nb.bp_rec.bs[k][c.x * 16 + c.y]))
+				mbi = maxf(mbi, absf(b.bp_rec.bs[k][o.x * 16 + o.y] - b.bp_rec.bs[k][o2.x * 16 + o2.y]))
+		out.strany.append({"strana": SD.NAMES[d], "max_u": m, "prumer_u": su / 16.0, "max_bunek": mh, "vrstvy_sev_max_u": mb, "vrstvy_vnitrni_krok_max_u": mbi})
 	return out
 
 func part_d() -> Dictionary:
@@ -359,7 +364,10 @@ func part_d() -> Dictionary:
 		res.vlozeni.append(e)
 		print("D p86 %s slot %s rot %d: lokálně %.0f ms, plný %.0f ms, otisk %s / %s neshod %s, bilance %s / %s, pásma %s (vnitřek %s), prameny %s %s" % [on, tslot, r, loc.celkem_ms, full_ms,
 			h_loc.otisk, h_full.otisk, str(d), str(e.bilance_lokalne), str(e.bilance_plny), e.pasma_stejne_vse, e.pasma_stejne_vnitrek, e.prameny_stejne, str(sp_got)])
-		print("   švy: vnitřní max %.3f U, strany %s; okraj %.4f l/s, region %s" % [e.svy.vnitrni_max_u, str(e.svy.strany.map(func(x): return null if x == null else "%s max %.3f U / %d b., průměr %.3f" % [x.strana, x.max_u, x.max_bunek, x.prumer_u])), float(e.okraj_lps), str(reg)])
+		print("   švy: vnitřní max %.3f U, strany %s; okraj %.4f l/s, region %s" % [e.svy.vnitrni_max_u, str(e.svy.strany.map(func(x): return null if x == null else "%s povrch max %.3f U / %d b.; vrstvy šev max %.3f U (krok dovnitř %.3f U)" % [x.strana, x.max_u, x.max_bunek, x.vrstvy_sev_max_u, x.vrstvy_vnitrni_krok_max_u])), float(e.okraj_lps), str(reg)])
+		if not res.has("sev_ostrov"):
+			res.sev_ostrov = seams(v2, blocks, Vector2i(0, 0))
+			print("   šev mezi bloky ostrova generovanými na místě, blok (0, 0): %s" % str(res.sev_ostrov))
 		v.dispose(); v2.dispose()
 	v0.dispose()
 	return res

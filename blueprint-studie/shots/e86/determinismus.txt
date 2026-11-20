@@ -1,0 +1,16 @@
+E86 D: dva běhy ve dvou procesech, otisk lokálně / plně
+D p86 true slot (2, 0) rot 0 af8fdf0f2eeca11d af8fdf0f2eeca11d | af8fdf0f2eeca11d af8fdf0f2eeca11d stejné
+D p86 true slot (2, 0) rot 1 ef5661a8a8b295f1 ef5661a8a8b295f1 | ef5661a8a8b295f1 ef5661a8a8b295f1 stejné
+D p86 true slot (2, 0) rot 2 064cb1c41f20da7a 064cb1c41f20da7a | 064cb1c41f20da7a 064cb1c41f20da7a stejné
+D p86 true slot (2, 0) rot 3 ce49db99bc6a9767 ce49db99bc6a9767 | ce49db99bc6a9767 ce49db99bc6a9767 stejné
+D p86 true slot (0, -1) rot 0 e70753ebb47ff563 e70753ebb47ff563 | e70753ebb47ff563 e70753ebb47ff563 stejné
+D p86 true slot (0, -1) rot 1 132e70a637ebad77 132e70a637ebad77 | 132e70a637ebad77 132e70a637ebad77 stejné
+D p86 true slot (0, -1) rot 2 8361cc2dfebd6280 8361cc2dfebd6280 | 8361cc2dfebd6280 8361cc2dfebd6280 stejné
+D p86 true slot (0, -1) rot 3 8800fe3b14472025 8800fe3b14472025 | 8800fe3b14472025 8800fe3b14472025 stejné
+D p86 false slot (2, 0) rot 1 ef5661a8a8b295f1 ef5661a8a8b295f1 | ef5661a8a8b295f1 ef5661a8a8b295f1 stejné
+D p86 false slot (2, 0) rot 2 064cb1c41f20da7a 064cb1c41f20da7a | 064cb1c41f20da7a 064cb1c41f20da7a stejné
+D p86 false slot (2, 0) rot 3 ce49db99bc6a9767 ce49db99bc6a9767 | ce49db99bc6a9767 ce49db99bc6a9767 stejné
+D p86 false slot (0, -1) rot 1 132e70a637ebad77 132e70a637ebad77 | 132e70a637ebad77 132e70a637ebad77 stejné
+D p86 false slot (0, -1) rot 2 8361cc2dfebd6280 8361cc2dfebd6280 | 8361cc2dfebd6280 8361cc2dfebd6280 stejné
+D p86 false slot (0, -1) rot 3 8800fe3b14472025 8800fe3b14472025 | 8800fe3b14472025 8800fe3b14472025 stejné
+shoda 14/14
