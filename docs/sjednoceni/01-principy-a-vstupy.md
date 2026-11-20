@@ -305,7 +305,17 @@ Pojmy: **blueprint** = otisk světa o velikosti bloku. To, čemu se ve studiích
 
 **Otázka pro Jana.** Platí pravidlo „lokální přepočet = plný výpočet, jinak je to chyba“ a opravíme to před dalšími studiemi? Bereme frontu ve vlákně s převzetím v tiku jako cíl?
 
-**Platí:**
+**Platí:** *rozhodnuto (2026-11-20, Jan t734u, t735u)*
+
+- **Pravidlo:** výsledek lokálního přepočtu musí být stejný jako výsledek plného výpočtu.
+- **Dnešní problém, který to řeší:** lokální přepočet, který vidí jen výřez, se liší od plného výpočtu, protože přeliv a podzemní tok jdou přes okraj výřezu (pozorováno v 5 větvích) [8][9][18].
+- **Řešení:** kombinace varianty 1 a varianty 3.
+  - **Varianta 1:** lokální přepočet rozšíří výřez na celé povodí, které výkop zasáhl.
+  - **Varianta 3:** běží asynchronně na pozadí (jako v E95), takže kopání na něj nečeká [18].
+- **Prodleva (debounce):** každý výkop znovu nastaví odpočet. Přepočet začne až po pauze v kopání a zpracuje všechny výkopy od posledního běhu najednou, přes sjednocení jejich povodí.
+- **Horní strop:** při souvislém kopání začne přepočet nejpozději po stropu.
+- Kopání během běžícího výpočtu ten výpočet nezahodí; nové výkopy se zařadí do fronty na další běh.
+- **Parametry:** výchozí prodleva 2 s reálného času, strop 10 s.
 
 ---
 
