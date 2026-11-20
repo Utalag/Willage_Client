@@ -97,7 +97,16 @@ Minerály, žíly, kras i dutiny jsou útvary funkce světa (1.7), ne krok „po
 
 **Otázka pro Jana.** Má být rozhraní funkce světa jeden dotaz na bod a na sloupec v metrech (s inverzní transformací vložení), a objekty E88 (Source, Transform, Placement, Instance) základem uložení, aniž bychom ukládali řídicí mřížku?
 
-**Platí:**
+**Platí:** *rozhodnuto (2026-11-20 20:52–20:53, Jan t816u, t817u)*
+
+- **Jedno rozhraní funkce světa** v metrech, jediné místo, kde se zbytek hry ptá, co kde je (generátor slupky, voda, kontrola na serveru):
+  - dotaz na **bod** `(x, y, z)` vrátí materiál,
+  - dotaz na **sloupec** `(x, y)` vrátí povrch, hranice vrstev a hladinu podzemí.
+- Funkce nepotřebuje předem mřížku sousedů. **Řídicí mřížka se neukládá** (E88).
+- Vložený blok se počítá **inverzní transformací** (zrcadlení, otočení, posun) do souřadnic zdrojového světa (E86). Otočený nebo zrcadlený blok tak dá na stejný dotaz stejnou odpověď jako originál ve světě.
+- Ukládá se jen popis vložení podle E88 (Source, Transform, Placement). Zrcadlení se změří v 2.7.
+- Zbylé otázky E88 (3, 4, 6, 7, 8, 11) patří do kapitol 3, 5 a 6.
+
 
 ---
 
