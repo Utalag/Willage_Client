@@ -2556,3 +2556,38 @@ a `surface.adapt(real)` se bez nových vstupů neprojeví.
 
 Těžba a rozklad hornin jsou samostatná studie. Návrh E65 je teď **T01 (dříve E65)** v `../tezba-studie/` (`README.md`, `PROP.md`, `DENIK.md`, `ZDROJE.md` [1]–[28], tabulka v `data/horniny_tezba_navrh.json`).
 Zdroje [45]–[72] níže v tomto souboru zůstávají jen jako zástupné číslo, aby se neposunulo číslování blueprint-studie.
+
+## E87 jádro vyzdvižené hory přes více bloků (plán, zapsáno před pokusem 2026-11-20 06:45; TODO Blok 3 „Jádro vyzdvižené hory přes více bloků“)
+- **Co je dnes (čtení kódu):** `hora_vyzdvizena` = šablona povrchu `BG.base_heightmap("hora", seed)` v MÍSTNÍCH souřadnicích bloku
+  (jeden vlastní tvar na blok, 31–48 buněk + `surface_shift` 9). Okraje se dorovnají (`SF.adapt`, pás `band` 4): ke
+  skutečnému sousedovi na jeho výšku, na VOLNÉ straně na regionální základ `surf_ref` (40 U = 20 m). Zdvih jádra
+  u = převýšení nad `surf_ref` rozmazané krabicí (`uplift_blur` 2) jen UVNITŘ bloku (okraje se opakují), vršek krystalinika
+  se pro u od 2 do 9 U zvedne až k (vyhlazenému) povrchu. Vrstvy se pak klíny (`continue_thick`, `taper_m` 3 m) navážou na
+  souseda, na volné straně na regionální základ (rovná louka bez zdvihu). Šum vrstev `BP_STRATA2` je v místních souřadnicích
+  se seedem bloku.
+- **Hypotéza dnešního stavu (změřit):** masiv z několika bloků hory se rozpadne na samostatné vrcholy se sedlem na každém
+  švu (první blok má volné okraje stažené na 20 m, sousedé se jen napojí). Jádro se k okraji bloku utne (u → 0 na okraji
+  dorovnaném na `surf_ref` + klín na regionální vrstvy). Povrch i vrstvy přes šev bez skoku (napojení), ale masiv a jádro
+  nejsou spojité „geologicky“; pořadí vložení mění výsledek.
+- **Návrh (`p87_jadro_hory`, výchozí vyp):** masiv = funkce ve SVĚTOVÝCH metrech F(X, Y) (šum světa se `world_seed`, nízká
+  frekvence ~ několik bloků, výška v rozsahu dnešní hory). Pro blok `hora_vyzdvizena`:
+  1. šablona povrchu = F v řídicích bodech (+ posun bloku);
+  2. regionální základ na volné straně = F (ne `surf_ref`), u souseda, který je také masiv E87, se přenáší ODCHYLKA od F
+     (soused − F(sloupec souseda) + F(vlastní sloupec)), u jiného souseda výška jako dnes;
+  3. zdvih u a vyhlazený povrch z F rozmazané ve světě (bez opakování okrajů), vršek jádra omezený skutečným povrchem;
+     šum vrstev ve světových souřadnicích;
+  4. klíny vrstev: volná strana = vlastní cíl (ne regionální rovina), masiv-soused = přenos odchylky mocnosti od cíle;
+  5. jemné vzorkování (0,25 m): chybí-li soused, řídicí bod za okrajem = čistá funkce masivu (virtuální soused), aby se
+     buňky bloku nezměnily, až soused přibude.
+  Čistá funkce na obou stranách → odchylka 0 → šev bez opravy a výsledek nezávisí na pořadí (Janovo pravidlo „sousedé se
+  nemění“ zůstává: blok se nemění, jen se už nemusí měnit nic).
+- **Rizika / co může selhat:** masiv vedle louky / kopce se dorovná jen na straně nového bloku → strmý svah nebo stěna
+  na 2 m pásu; volný okraj masivu na kraji ostrova je vysoký (útes do mlhy); jiný tvar hory než dnes (plošina s vrcholy
+  podle světa místo jednoho vrcholu na blok) → jiná voda, prameny, rarita; posun výšky bloku (`shift`) mezi bloky masivu
+  vytvoří schod (záměr); virtuální soused v 0,25 m nesedí, když skutečný soused má odchylku (rohy u třetího souseda);
+  minerály a dutiny dál podle bloku (nemění se).
+- **Měření (`tools/jadro_e87.gd`, `shots/e87`):** scénáře masiv 2 × 2 (dvě pořadí vložení), masiv vedle kopce a louky,
+  dlouhý hřbet 3 × 1. Dnes a s `p87`: skok povrchu na švu (max, průměr proti kroku uvnitř), skok vršku jádra, hranic vrstev,
+  vytlačené vrstvy u švu, podíl jádra na povrchu u švu a uvnitř, neshoda buněk přes šev, minerály (počty, schodek), voda
+  (prameny, bilance, otisk), stejné buňky při jiném pořadí, 0,25 m: změna buněk bloku po přidání souseda, krok na švu;
+  čas generování bloku; dva běhy = stejné otisky. Výchozí `voda_e66` a `port_studie --check` beze změny.
