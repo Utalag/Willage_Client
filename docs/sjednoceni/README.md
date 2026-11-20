@@ -37,10 +37,10 @@ Upřesnění od Jana:
 4. **1.2 Jednotky a jemná mřížka:** definice 0,5 m a 0,25 m jen u kopání (přehodnocení 03:26).
 5. **1.5 Verze generátoru:** *odloženo 2026-11-20 (t726u)*, dokud nebude jeden funkční generátor.
 6. **1.9 Přepočet vody:** pravidlo „lokální = plný“, fronta ve vlákně.
-7. **1.8 Voda jako data:** podzemí E58, nebo E67.
+7. **1.8 Voda jako data:** obsah buňky v m³, povrch priority-flood + D8, výchozí podzemí E67, čas 1 den = 1 h – *rozhodnuto 2026-11-20 (t732u)*.
 8. **1.11 Datový rozpočet:** cílový telefon a čísla.
 9. **1.6 Materiály:** jedna tabulka, jedno id – *rozhodnuto 2026-11-20 (t727u)*, návrh `materialy.csv`.
-10. **1.7 Geologie:** útvary jako funkce světa přes švy.
+10. **1.7 Geologie:** útvary jako funkce světa přes švy, vrstvy podle terénu, vyklínění – *rozhodnuto 2026-11-20 (t732u)*.
 11. **1.12 Objektová vrstva:** vegetace na m² ve světových metrech.
 12. **1.10 Kontrakt:** WTI1 a jednání s Willage-backend.
 13. **1.13 Profil a členitost terénu:** parametry členitosti (rozhodnuto); obrys, bok a spodek ostrova otevřené.
