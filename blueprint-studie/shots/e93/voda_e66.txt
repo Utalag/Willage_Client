@@ -1,0 +1,3 @@
+23:neshod s plným výpočtem celkem: 0
+24:E68 před výkopy: { … "otisk": "d7aedf3a6d9d10e8", "kolo": { "kola": 3, "zmena": 0.0, "ustaleno": true, "cyklus": 0, "skoky": 0 } }
+25:E68 po výkopech: { … "otisk": "63d7b89a91385a79", "kolo": { "kola": 1, "zmena": 0.0, "ustaleno": true, "cyklus": 0, "skoky": 0 } }

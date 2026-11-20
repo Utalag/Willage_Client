@@ -1,0 +1,62 @@
+[
+ {
+  "beh": "plná rychlost (8 jader)",
+  "soubor": "plna_1",
+  "generace_bloky_ms": 923,
+  "voda_celkem_ms": 2610,
+  "vykop_prumer_ms": 818,
+  "vykop_median_ms": 787,
+  "vykop_max_ms": 1327,
+  "r_krok_max_median_ms": 72.7
+ },
+ {
+  "beh": "plná rychlost (8 jader)",
+  "soubor": "plna_2",
+  "generace_bloky_ms": 879,
+  "voda_celkem_ms": 2457,
+  "vykop_prumer_ms": 726,
+  "vykop_median_ms": 666,
+  "vykop_max_ms": 1220,
+  "r_krok_max_median_ms": 64.3
+ },
+ {
+  "beh": "1 jádro (taskset)",
+  "soubor": "1jadro_1",
+  "generace_bloky_ms": 920,
+  "voda_celkem_ms": 2527,
+  "vykop_prumer_ms": 742,
+  "vykop_median_ms": 676,
+  "vykop_max_ms": 1212,
+  "r_krok_max_median_ms": 63.7
+ },
+ {
+  "beh": "1 jádro (taskset)",
+  "soubor": "1jadro_2",
+  "generace_bloky_ms": 905,
+  "voda_celkem_ms": 2557,
+  "vykop_prumer_ms": 739,
+  "vykop_median_ms": 653,
+  "vykop_max_ms": 1326,
+  "r_krok_max_median_ms": 66.6
+ },
+ {
+  "beh": "1 jádro + cpulimit 50 %",
+  "soubor": "50",
+  "generace_bloky_ms": 1698,
+  "voda_celkem_ms": 4963,
+  "vykop_prumer_ms": 1458,
+  "vykop_median_ms": 1354,
+  "vykop_max_ms": 2491,
+  "r_krok_max_median_ms": 266.9
+ },
+ {
+  "beh": "1 jádro + cpulimit 25 %",
+  "soubor": "25",
+  "generace_bloky_ms": 3014,
+  "voda_celkem_ms": 10564,
+  "vykop_prumer_ms": 2676,
+  "vykop_median_ms": 2579,
+  "vykop_max_ms": 4340,
+  "r_krok_max_median_ms": 766.6
+ }
+]
