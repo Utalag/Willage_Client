@@ -5,11 +5,12 @@ extends Node
 
 signal cell_inspected(g: Vector2i)   # panel vpravo má ukázat blok pod sloupcem g
 
+const J = preload("res://scripts/jednotky.gd")   # E94: mřížka a metry z jednoho místa
 const Mat = preload("res://scripts/mat.gd")
 const VegG = preload("res://scripts/veg.gd")
 const Block = preload("res://scripts/block.gd")
 const H = preload("res://scripts/stable_hash.gd")
-const BS := 16
+const BS := J.BS
 
 @export var island_path: NodePath
 @export var ui_path: NodePath

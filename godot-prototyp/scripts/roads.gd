@@ -7,7 +7,9 @@
 ## Terén se nemění: rampy a schody jsou objekty vrstvy cesty, stojí na nižším sloupci a vedou k hraně vyššího.
 extends RefCounted
 
-const BS := 16
+const J = preload("res://scripts/jednotky.gd")   # E94: mřížka a metry z jednoho místa
+const BS := J.BS
+const CELL_H := J.CELL_M     # výška buňky (m)
 const MAX_STEP := 4          # větší rozdíl = útes, neprůchozí
 const STAIR_FROM := 2        # od 2 buněk se staví schody (1 buňka = rampa)
 const Toon = preload("res://scripts/toon.gd")
@@ -178,18 +180,18 @@ static func build_layer(island, path: Array) -> Node3D:
 	for p in path:
 		if pc.has(p) or used.has(p):
 			continue
-		_cobble(tiles, p, height(island, p) * 0.5)
+		_cobble(tiles, p, height(island, p) * CELL_H)
 	for lo in pc:
 		if lo is String:
 			continue
 		var e: Dictionary = pc[lo]
 		has_st = true
 		var hl := height(island, lo)
-		var y0 := hl * 0.5
+		var y0 := hl * CELL_H
 		if e.fill > hl:   # plošina v údolí (sloučení dvou stoupání)
-			_box(st, lo, Vector2i(1, 0), 0.0, 1.0, -0.5, 0.5, y0 - T, e.fill * 0.5 + 0.03, e.fill * 0.5 + 0.03, STAIR_COL.darkened(0.08))
-		var ys: float = e.fill * 0.5 + 0.03
-		var ye: float = e.hu * 0.5 + 0.03
+			_box(st, lo, Vector2i(1, 0), 0.0, 1.0, -0.5, 0.5, y0 - T, e.fill * CELL_H + 0.03, e.fill * CELL_H + 0.03, STAIR_COL.darkened(0.08))
+		var ys: float = e.fill * CELL_H + 0.03
+		var ye: float = e.hu * CELL_H + 0.03
 		var dh: int = e.hu - e.fill
 		var t0: float = 1.0 - e.run
 		if dh == 0:

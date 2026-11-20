@@ -12,6 +12,7 @@ const F = preload("res://scripts/voda/podzemi/ug_funkce.gd")
 const CH = preload("res://scripts/voda/cas_hry.gd")   # E77: čas hry na jednom místě
 const VS = preload("res://scripts/voda/voda_svet.gd")
 const HP = preload("res://scripts/voda/podzemi/heap64.gd")
+const LI = preload("res://scripts/voda/litry.gd")   # E94: jeden tvar l → m³
 const E := 1e-6
 
 static func _perm(c: Dictionary, b: int, t: Dictionary) -> float:
@@ -489,7 +490,7 @@ static func _result(c: Dictionary, entries: PackedInt32Array, q: float, trace: b
 		vol += v; leak += (float(p.get("lused", 0.0)) if e71 else float(p.leak)) * qs
 		var net := float(p.q_in) - (float(p.lused) + sent if bool(c._k71.on) else float(p.leak))
 		pl.append({"hladina": float(p.level), "dno": float(p.floor), "pasem": p.bands.size(), "objem_m3": v, "typ": String(p.typ),
-			"q_in": float(p.q_in) * qs, "cas_s": (v / (net * float(c.q_to_m3))) if net > 0.0 and not trace else -1.0, "bands": p.bands,
+			"q_in": float(p.q_in) * qs, "cas_s": (v / (net / float(c.l_na_m3))) if net > 0.0 and not trace else -1.0, "bands": p.bands,
 			"prusak_pouzit": float(p.get("lused", 0.0)) * qs, "dolu": sent * qs})
 	var ol := []
 	for k in outs: ol.append(outs[k])

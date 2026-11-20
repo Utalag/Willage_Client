@@ -9,8 +9,9 @@ extends RefCounted
 ## mesher kreslí jako plnou neutrální buňku (jeskyně není vidět ani v řezu), voda v něm se nekreslí.
 ## Poznámka na později: klient má v paměti celé pole, upravený klient by mohl vidět do země. Teď to neřešíme.
 
-const BS := 16
-const BH := 64
+const J = preload("res://scripts/jednotky.gd")   # E94: mřížka a metry z jednoho místa
+const BS := J.BS
+const BH := J.BH
 const P := BS + 2
 
 ## cells: jen pro jeskyně (vzduch pod hm); nbs se nepoužijí, platí hms.

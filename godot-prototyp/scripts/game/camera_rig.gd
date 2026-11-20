@@ -15,6 +15,11 @@ const Grass = preload("res://scripts/grass.gd")
 ## UI kvůli posunu středu záběru do volné plochy (panel vpravo, lišta dole)
 @export var ui_path: NodePath
 
+## E94: jednotek scény na dnešní jednotku vodorovně (1 = dnešní scéna, 0,5 = scéna v metrech); zoom a LOD trávy se přepočítají
+var k_sc := 1.0
+const ZOOM_MIN := 18.0
+const ZOOM_MAX := 160.0
+
 @onready var cam: Camera3D = $Camera
 var ui: CanvasLayer
 var dragging := false
@@ -33,12 +38,18 @@ func place() -> void:
 	cam.transform = Transform3D(basis, center + basis.z * 200.0)
 	if Engine.is_editor_hint():
 		return
-	Grass.update_lod(cam.size)   # tráva C: řidší trsy při oddálení
+	Grass.update_lod(cam.size / k_sc)   # tráva C: řidší trsy při oddálení (E94: v dnešních jednotkách)
 	# střed scény do volné plochy (vpravo panel 290 px, dole lišta 112 px), aby popisky nezajížděly pod panel
 	var k := cam.size / 800.0
 	var ui_on: bool = ui != null and ui.visible
 	cam.h_offset = 145.0 * k if ui_on else 0.0
 	cam.v_offset = -56.0 * k if ui_on else 0.0
+
+## E94: scéna v metrech (Main po Island.setup): střed, velikost záběru a meze zoomu ×k (ostrov 32 → 16 jednotek)
+func set_meritko(k: float) -> void:
+	center = Vector3(center.x * k / k_sc, center.y, center.z * k / k_sc)
+	cam.size = cam.size * k / k_sc
+	k_sc = k
 
 func pan(d: Vector2) -> void:
 	var r := deg_to_rad(yaw)
@@ -70,8 +81,8 @@ func _unhandled_input(e: InputEvent) -> void:
 			pan(-e.relative * cam.size / 800.0)
 	elif e is InputEventMouseButton and e.pressed:
 		match e.button_index:
-			MOUSE_BUTTON_WHEEL_UP: cam.size = maxf(cam.size * 0.9, 18.0); place()
-			MOUSE_BUTTON_WHEEL_DOWN: cam.size = minf(cam.size * 1.1, 160.0); place()
+			MOUSE_BUTTON_WHEEL_UP: cam.size = maxf(cam.size * 0.9, ZOOM_MIN * k_sc); place()
+			MOUSE_BUTTON_WHEEL_DOWN: cam.size = minf(cam.size * 1.1, ZOOM_MAX * k_sc); place()
 			MOUSE_BUTTON_MIDDLE, MOUSE_BUTTON_RIGHT: dragging = true
 	elif e is InputEventMouseButton and not e.pressed:
 		if e.button_index in [MOUSE_BUTTON_MIDDLE, MOUSE_BUTTON_RIGHT]:

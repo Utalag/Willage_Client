@@ -10,13 +10,14 @@ extends RefCounted
 ## - Kontrola jako delta (validate): součet vody v bloku = před tokem (vykopaná voda se počítá zvlášť), mimo výřez beze změny,
 ##   voda jen ve vzduchu a propustných buňkách do kapacity, a stav je ustálený (dalších VERIFY_TICKS tiků nic nepohne).
 
+const J = preload("res://scripts/jednotky.gd")   # E94: mřížka a metry z jednoho místa
 const Mat = preload("res://scripts/mat.gd")
 const G = preload("res://scripts/gen3/gen_v3.gd")
 const VSim = preload("res://scripts/gen3/voda_sim.gd")
 const VM = preload("res://scripts/gen3/voda_mat.gd")
 const WT = preload("res://scripts/gen3/water_table.gd")
-const BS := 16
-const BH := 64
+const BS := J.BS
+const BH := J.BH
 const FULL := 4096
 const RXY := 7
 const RZ := 16

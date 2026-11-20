@@ -216,6 +216,19 @@ Skupiny: 1 Prototyp a buildy · 2 Terén a tvar · 3 Rozlišení bloku · 4 Ská
 - **Komplikace:** koryta jsou krátké úseky (malý svět, malá povodí). Krasová vyvěračka 0. Hráz na svahu tůň nevytvořila (potok ji obtekl). Podzemní tok vede zatím zjednodušeně k nejbližšímu okraji.
 - **Další krok:** Jan rozhodne, jak daleko vést podzemní tok (sledovat propustnou vrstvu?) a jestli má mít krasová vyvěračka vlastní pravidlo. Starší otevřené otázky (eroze po blocích vs hrubý svět, jádro hory přes šev, minerály z hrubého světa) zůstávají.
 
+### 📏 Blok 4 / E94: scéna v metrech a převod na jednotky.gd, rozhodnutí Jana 2026-11-20 11:04 (2026-11-20 11:35 · `godot-prototyp/scripts/jednotky.gd`, `blueprint-studie/scripts/voda/litry.gd`, `tools/meritko_e94.gd`, `tools/litry_e94.gd`, příznaky `p89_meritko` (na větvi zap), `p94_hora_k`, větev a tag `e94-metry`, data `blueprint-studie/shots/e94/`)
+- **Směr:** E89 otázky 1–4 = ano. Ve scéně platí 1 jednotka = 1 m. Konstanty se převedly na modul soubor po souboru a l → m³ má jeden tvar. Stromy, stavby, kamera a mlha jsou v metrech a ve smyčkách jsou jen konstanty modulu.
+- **Zlepšení:** 30 vlastních skriptů bere `BS`/`BH`/`CELL_H` z `jednotky.gd`. Otisky buněk, sítí, odkrytí a vegetace jsou stejné ve všech 40 commitech, `voda_e66` d7aedf3a6d9d10e8 → 63d7b89a91385a79 s 0 neshodami a `port_studie` má 0 změn. l → m³ jde jen dělením (`voda/litry.gd`). Ve scéně v metrech už stromy a domky nejsou zúžené a kamera, zoom, mlha a body trasy počítají v metrech. Rychlost je stejná (síť 187 → 185 ms), konstanta modulu stojí ve smyčce stejně jako literál, volání funkce 4,5× víc.
+- **Komplikace:** otisky vody se sjednocením nezměnily, protože na ostrově START je 0 rozdílných bitů v 79 495 hodnotách. Stromy 3,5–4 m při hustotě po buňkách zakryjí louku. Hora se v bloku 8 m nedá zvednout nad 30,5 m (`p94_hora_k` 1,5: vrchol 10,5 m nad loukou). S vyšší horou má lokální přepočet vody 162 neshod (výkopy 4–5), stejně i na main, takže je to stará chyba vody.
+- **Rozhodnutí Jana 11:39 (E94b):** velikost vegetace 0,5 (`p94_meritko_veg`): listnáč 1,75 m, jehličnan 2 m, hustota zatím beze změny, otisky výchozí hry stejné (snímky `94_vegm05_*`).
+- **Další krok (Jan):** sloučit? hustota stromů na m² (později)? půdorysy staveb? cesty 1 m? hora `p94_hora_k` nebo E87/E92? opravit neshody lokálního přepočtu?
+
+### 📏 Blok 4 / E89: oddělené typy jednotek (2026-11-20 07:19 · `godot-prototyp/scripts/jednotky.gd`, `tools/jednotky_e89.py` + `.gd`, příznak `p89_meritko`, větev `e89-jednotky`, data `blueprint-studie/shots/e89/`)
+- **Směr:** TODO Blok 4, první bod: metry pro fyziku a vodu, herní jednotky 0,25 m, hustota vzorkování a celočíselná mřížka na jednom místě. Hydraulika zůstává v m, s, l/s.
+- **Zjištění:** konstanty bloku rozepsané (BS 33×, BH 18×, CELL_H 9×), dvě konvence os indexu (stejná čísla), l → m³ dvakrát jinak (13 % průtoků jiný poslední bit), `ug_cell_m3` s výchozí 0,125 i 1,0. Scéna kreslí buňku 1 × 1 × 0,5 → vodorovně natažená 2×.
+- **Výsledek:** modul bez chyb (tam a zpět, vnoření, index pro 16–128), volání 3–4× dražší než výraz. `p89_meritko` ukáže scénu v metrech, výchozí hra beze změny.
+- **Další krok (Jan):** scéna v metrech? postupný převod konstant? jeden tvar l → m³? vegetace a stavby v metrech?
+
 ### 🔄 Voda E74–E77 sloučena, přepínače podle Jana (2026-11-20 04:08 · větev `voda-e74-e77-slouceni`, tag `voda-e74-e77-ready`, `tok.solve74`, `ug67._merge_outs72d`, `ostrov_voda.place76`, data `blueprint-studie/shots/voda_e74_e77/`)
 - **Směr:** Jan 2026-11-20 01:49 a 03:26: sloučit E74–E77, zapnout obsazování pramenů s hladinou, uložené prameny, slučování do 8 m; E75 a těžba na `cas_hry.gd`.
 - **Zlepšení:** výchozí ostrov beze změny otisku (63d7b89a91385a79), 0 neshod, chyba 0 ve všech testech, druhý běh bitově stejný; neobsazený pramen už vodu ze světa nepouští; nové postavení a načtení ostrova = lokální stav; slučování nejdál 8 m.

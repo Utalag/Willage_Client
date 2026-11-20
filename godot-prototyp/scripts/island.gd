@@ -17,8 +17,10 @@ const TerenBP = preload("res://scripts/teren/ostrov_teren.gd")
 const TerenTridy = preload("res://scripts/teren/tridy.gd")
 const OstrovVoda = preload("res://scripts/voda/ostrov_voda.gd")
 const OstrovVodaRender = preload("res://scripts/voda/ostrov_voda_render.gd")
-const BS := 16
-const CELL_H := 0.5
+const J = preload("res://scripts/jednotky.gd")   # E89
+const Grass = preload("res://scripts/grass.gd")
+const BS := J.BS
+const CELL_H := J.CELL_M
 const SURF_Y := 32 * CELL_H       # výchozí povrch (střed výšky)
 const CENTER := Vector2(1.0, 1.0) # střed rozložení ve slotech (start 2 × 2 = sloty 0..1)
 const RADIUS := 2.6
@@ -237,6 +239,8 @@ static func _box(st: SurfaceTool, a: Vector3, b: Vector3, with_top: bool) -> voi
 
 ## paprsek -> globální sloupec povrchu (pochod po výškové mapě), nebo null
 func cell_at_ray(origin: Vector3, dir: Vector3):
+	if scale != Vector3.ONE:
+		var rl := _ray_local(origin, dir); origin = rl[0]; dir = rl[1]
 	var p := origin
 	if dir.y < 0 and p.y > 40.0:  # přeskoč prázdný prostor nad ostrovem
 		p += dir * ((p.y - 40.0) / -dir.y)
@@ -262,6 +266,28 @@ func _init() -> void:
 func _ready() -> void:
 	if Engine.is_editor_hint():
 		_editor_rebuild.call_deferred()
+	elif SurfaceParamsS.inst().p89_meritko:
+		scale = J.SCENA_DNES_M_NA_SC   # E89: scéna v metrech (buňka 0,5 × 0,5 × 0,5 m), data beze změny
+	# E94: objekty (stromy, tráva, stavby) mají rozměry v metrech → v ostrově s měřítkem se vyrovnají (×2 vodorovně)
+	VegRender.proti = protiskala()
+	VegRender.metry = scale != Vector3.ONE
+	VegRender.meritko_veg = float(SurfaceParamsS.inst().p94_meritko_veg) if VegRender.metry else 1.0   # E94b
+	Grass.proti = protiskala()
+
+## E94: měřítko, které vrátí objekt v ostrově na metry (ostrov vodorovně ×0,5 → objekt ×2); bez p89_meritko jedničky
+func protiskala() -> Vector3:
+	return Vector3(1.0 / scale.x, 1.0 / scale.y, 1.0 / scale.z)
+
+## E94: metrů na jednotku ostrova vodorovně (0,5 v metrech, 1 = dnešní scéna)
+func m_na_bunku() -> float:
+	return scale.x
+
+## E89: paprsek ze scény do místních souřadnic ostrova (bez p89_meritko beze změny)
+func _ray_local(origin: Vector3, dir: Vector3) -> Array:
+	if scale == Vector3.ONE:
+		return [origin, dir]
+	var inv := global_transform.affine_inverse()
+	return [inv * origin, inv.basis * dir]
 
 ## blok z receptu (typ, seed); unikátní blok má bonus rud
 static func make_block(kind: String, seed: int, title: String, category := "běžný") -> Block:
@@ -359,6 +385,7 @@ func setup() -> void:
 		l.modulate = Color(1, 1, 1)
 		l.outline_modulate = Color(0.35, 0.25, 0.45)
 		l.visible = false
+		l.scale = protiskala()   # E94: popisek ve scéně v metrech nezúžit
 		add_child(l)
 		preview_labels.append(l)
 
@@ -552,6 +579,7 @@ func _make_fog(s: Vector2i) -> void:
 		mat.shader = fog_shader
 		mat.set_shader_parameter("layer_alpha", 0.36 if l == layers - 1 else 0.05)
 		mat.set_shader_parameter("seed", float(l) * 1.7 + s.x * 3.1 + s.y * 5.3)
+		mat.set_shader_parameter("noise_k", 0.12 / scale.x)   # E94: stejný vzor na buňku i ve scéně v metrech
 		var mi := MeshInstance3D.new()
 		mi.mesh = pm
 		mi.material_override = mat
@@ -652,6 +680,8 @@ func hide_preview() -> void:
 
 ## paprsek z kamery -> slot (průsečík s rovinou výchozího povrchu)
 func slot_at_ray(origin: Vector3, dir: Vector3):
+	if scale != Vector3.ONE:
+		var rl := _ray_local(origin, dir); origin = rl[0]; dir = rl[1]
 	if absf(dir.y) < 0.0001:
 		return null
 	var t := (SURF_Y - origin.y) / dir.y

@@ -3,10 +3,11 @@ extends RefCounted
 ## Kostkový mesher: kreslí jen stěny sousedící se vzduchem, AO ve vrcholech, výška buňky 0,5.
 ## Okraje sousedních bloků se načtou do obalu 18 × 18 × 66, takže mezi bloky nevznikají zbytečné stěny.
 
+const J = preload("res://scripts/jednotky.gd")   # E94: mřížka a metry z jednoho místa
 const Mat = preload("res://scripts/mat.gd")
-const BS := 16
-const BH := 64
-const CELL_H := 0.5
+const BS := J.BS
+const BH := J.BH
+const CELL_H := J.CELL_M
 const P := BS + 2
 const PY := BH + 2
 

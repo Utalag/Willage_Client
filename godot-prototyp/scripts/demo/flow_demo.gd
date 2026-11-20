@@ -3,13 +3,14 @@ extends Node
 ##   -- --flow-shots [--tag=X]   časová řada: jáma ze strany prokopnutá do jeskyně s vodou → shots/42_tok_*<_tag>.png
 ##   -- --flow-bench [--tag=X]   měření kopání s tokem, kontrola delty, determinismus → shots/42_tok_bench<_tag>.txt
 
+const J = preload("res://scripts/jednotky.gd")   # E94: mřížka a metry z jednoho místa
 const BlockGen = preload("res://scripts/block_gen.gd")
 const Block = preload("res://scripts/block.gd")
 const Mat = preload("res://scripts/mat.gd")
 const Params = preload("res://scripts/surface/surface_params.gd")
 const WF = preload("res://scripts/gen3/water_flow.gd")
-const BS := 16
-const BH := 64
+const BS := J.BS
+const BH := J.BH
 const PIT_LEN := 3      # jáma za stěnou: 3 sloupce do délky × 3 do šířky
 const PIT_DEPTH := 3    # dno jámy 3 buňky pod hladinou jeskyně
 const DIRS := [Vector2i(1, 0), Vector2i(-1, 0), Vector2i(0, 1), Vector2i(0, -1)]

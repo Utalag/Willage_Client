@@ -6,6 +6,7 @@ extends RefCounted
 const F = preload("res://scripts/podzemi52/ug_funkce.gd")
 const BQ = preload("res://scripts/alg58/bq58.gd")
 const VS = preload("res://scripts/voda/voda_svet.gd")
+const LI = preload("res://scripts/voda/litry.gd")   # E94: jeden tvar l → m³
 const E := 1e-6
 const SH := 4194304.0   # 2^22 pro kódování (z, index) v jednom čísle při řazení
 const P64 = preload("res://scripts/alg64/pre64.gd")   # E64 K (jen s c._useK)
@@ -420,7 +421,7 @@ static func requ(c: Dictionary, rb: Dictionary, q: float, leak: float, best: Arr
 	var net := q - leak
 	var ev := []
 	for e in rb.events:
-		ev.append({"z": e.z, "objem_m3": e.objem_m3, "cas_s": (float(e.objem_m3) / (net * float(c.q_to_m3))) if net > 0.0 else -1.0})
+		ev.append({"z": e.z, "objem_m3": e.objem_m3, "cas_s": (float(e.objem_m3) / (net / float(c.l_na_m3))) if net > 0.0 else -1.0})
 	r.events = ev
 	r.q_in = q; r.leak = minf(leak, q); r.never_fills = net <= 0.0; r.closed = closed
 	r.out_q = maxf(net, 0.0) if not closed else 0.0

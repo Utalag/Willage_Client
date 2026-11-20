@@ -3,8 +3,9 @@ extends RefCounted
 ## (šířka podle průtoku), vodopády = svislé pásy z horního do dolního sloupce; přes okraj ostrova pás do mlhy (dolů o
 ## mlha_m pod dno bloku) a pod ním obláček mlhy. Souřadnice = souřadnice ostrova (slot ostrova × 16 + sloupec, výška × 0,5 m).
 
-const CELL_H := 0.5
-const BS := 16
+const J = preload("res://scripts/jednotky.gd")   # E94: mřížka a metry z jednoho místa
+const CELL_H := J.CELL_M
+const BS := J.BS
 const TT = preload("res://scripts/teren/ostrov_teren.gd")
 
 static func mats() -> Dictionary:

@@ -5,11 +5,12 @@ extends Node
 ##   -- --e66-bench   měření vložení bloků, kopání u vody (lokální přepočet + kroky R) a kontrola proti plnému výpočtu
 ##                    → shots/66_parita/66_bench.txt
 
+const J = preload("res://scripts/jednotky.gd")   # E94: mřížka a metry z jednoho místa
 const BlockGen = preload("res://scripts/block_gen.gd")
 const Params = preload("res://scripts/surface/surface_params.gd")
 const T = preload("res://scripts/teren/ostrov_teren.gd")
-const BS := 16
-const CELL_H := 0.5
+const BS := J.BS
+const CELL_H := J.CELL_M
 
 var m
 var p
