@@ -142,7 +142,7 @@ Stav: **návrh k odsouhlasení**, 2026-11-20 23:50 SEČ. Podklad pro stavbu nov�
 **Obsah**
 - Objekty Source, Transform, Placement (E88): ostrov = seed + parametry + verze + seznam vložení v pořadí. Vložení nese souřadnice blueprintu ve světě, zrcadlení, otočení, výškový posun, režim napojení, seed a verzi zdrojového světa (1.4, 2.2).
 - Inverzní transformace: dotaz na vložený blok se přepočte do souřadnic zdroje (2.2, E86).
-- Napojení jen po stranách, rohy se neřeší (5.1). Výchozí režim Auto (rozdíl ≤ 6 buněk rampa na 3 buňkách, větší útes, po sloupcích), volitelně Blend 1–4 a Keep (5.2). Vrstvy se na švu zaklíní na 1/16 bloku (1.7.1).
+- Napojení jen po stranách, rohy se neřeší (5.1). Výchozí režim Auto (rozdíl ≤ 6 buněk rampa na 3 buňkách, větší útes, po sloupcích), volitelně Blend a Keep (5.2). Blend má dvě nezávislá nastavení: povrch rampa 1–4 buňky a podzemní vrstvy klín (výchozí 1/16 bloku, 1.7.1).
 - Sousedé se při vložení nemění.
 
 **Odkud kód:** `teren/otoceni86.gd` a `tools/otoceni_e86.gd` (`e86-otoceni-90`), režimy napojení z `block_gen.gd` (`BLEND_MAX` 6, main) a `island.gd` (výběr režimu stran), `teren/sides.gd`, návrh objektů `navrhy/navrh-terrainsource-kontrakt.md` (`e88-kontrakt-navrh`).
@@ -153,7 +153,7 @@ Stav: **návrh k odsouhlasení**, 2026-11-20 23:50 SEČ. Podklad pro stavbu nov�
 
 **Testy**
 1. *Inverzní transformace*: otočený a zrcadlený blok dá na stejný dotaz stejnou odpověď jako originál (`otoceni_e86.gd`, rozšířit o zrcadlení). Prošlo = 0 neshod pro rot 0–3 × zrcadlení.
-2. *Režimy švu*: řez přes šev pro Auto, Blend 1–4 a Keep (obrázek, `rez_profil.py`). Prošlo = Auto: rozdíl ≤ 6 buněk dorovnán na 3 buňkách, větší zůstane; Blend: rampa na zvoleném počtu; Keep: beze změny; sousedé beze změny (0 buněk).
+2. *Režimy švu*: řez přes šev pro Auto, Blend (povrch i vrstvy) a Keep (obrázek, `rez_profil.py`). Prošlo = Auto: rozdíl ≤ 6 buněk dorovnán na 3 buňkách, větší zůstane; Blend povrchu: rampa na zvoleném počtu 1–4 buněk; Blend vrstev: klín na zvolené délce (výchozí 1/16 bloku); Keep: beze změny; sousedé beze změny (0 buněk).
 3. *Pořadí vložení*: blok závisí jen na sousedech na 4 stranách položených před ním (`determinismus_e83.gd`). Prošlo = roh a vzdálený blok mění 0 buněk, dva procesy shodně.
 4. *Cizí svět*: vložení blueprintu s jiným seedem a verzí. Prošlo = načte se a napojí bez chyby.
 
@@ -193,7 +193,8 @@ Stav: **návrh k odsouhlasení**, 2026-11-20 23:50 SEČ. Podklad pro stavbu nov�
 **Obsah**
 - Výchozí podzemí E67 a kras E75 zapnutý (úkol 9 v kap. 3).
 - Pravidla vsakování 1.8.1: zrušit násobitel `p71_cas` × 24, spád včetně výšky vody, spojení materiálů = minimum, boční tok X × spád (úkoly 1–3).
-- Eroze: `e51_k` = 1,5 (úkol 4) a eroze jako samostatná vrstva posunu výšky nad funkcí, ne změněné buňky (4.1). Voda počítá na terénu s posunem.
+- Eroze: `e51_k` = 1,5 (úkol 4) a eroze jako samostatná vrstva posunu výšky nad funkcí, ne změněné buňky (4.1). Posun smí být kladný (usazování, náplavy, delty) i záporný. Voda počítá na terénu s posunem.
+- Kras během hry se ukládá stejnou cestou offsetu, ne jako vzduch v překryvu buněk. **V tomto kroku se ověří**, jestli offset stačí i pro podzemní dutiny (Jan 2026-11-21 00:24: „Zkusíme jít cestou offsetu“).
 - Přepočet: lokální = plný na sjednoceném povodí (oprava K5 včetně `p79_chodby` a `p85_voda`), asynchronně na pozadí, prodleva 2 s, strop 10 s, fronta výkopů (1.9, úkoly 6–7).
 - Slučování výtoků pod prahem 0,1 l/s (laditelný parametr) v dosahu 8 m, i mezi sebou (3.2).
 - Výchozí voda v ustáleném stavu po vygenerování, uloží se jen odchylka v celých litrech, rozsah 0–15,625 l (1 B) (2.5, 1.10).
@@ -210,9 +211,10 @@ Stav: **návrh k odsouhlasení**, 2026-11-20 23:50 SEČ. Podklad pro stavbu nov�
 3. *Asynchronní běh*: blokování hlavního vlákna a čas do výsledku (graf, `async_e95.gd`). Prošlo = blokování < 1 ms; výsledek po frontě shodný s plným výpočtem.
 4. *Scénář „dva hráči“*: časová řada průtoku v korytě po ucpání pramene (graf). Prošlo = voda nezmizí naráz, odtéká postupně, tůně zůstanou.
 5. *Výtoky*: počet výstupů před a po slučování (E72: 150 → 6 → 18). Prošlo = součet průtoku beze změny, drobné výtoky v dosahu 8 m sloučené.
-6. *Eroze*: vypnutí vrstvy posunu vrátí terén bitově na funkci; řez koryta po erozi (obrázek). Prošlo = shoda po vypnutí.
-7. *Ustálený stav*: po vygenerování se voda bez zásahu nehýbe. Prošlo = 0 změn za N tiků.
-8. *Determinismus*: otisk vody v celých litrech ze dvou procesů. Prošlo = shoda.
+6. *Eroze*: vypnutí vrstvy posunu vrátí terén bitově na funkci; řez koryta po erozi i po usazení (obrázek). Prošlo = shoda po vypnutí; kladný posun zvedne povrch, záporný ho sníží.
+7. *Kras offsetem*: dutina vzniklá během hry se uloží ve vrstvě posunu, ne jako vzduch v překryvu. Prošlo = po vypnutí offsetu je materiál funkce zpět; ověření, zda offset stačí i pod povrchem, se zapíše do reportu (zkusit cestu offsetu).
+8. *Ustálený stav*: po vygenerování se voda bez zásahu nehýbe. Prošlo = 0 změn za N tiků.
+9. *Determinismus*: otisk vody v celých litrech ze dvou procesů. Prošlo = shoda.
 
 Výchozí hra se tu mění záměrně. Vznikne nová reference otisku `voda_e66`.
 
@@ -270,14 +272,14 @@ Výchozí hra se tu mění záměrně. Vznikne nová reference otisku `voda_e66`
 
 **Obsah**
 - Kontrakt podle 1.10: server ukládá seed, parametry, verzi, seznam vložení a rozdíl; namátková kontrola generátorem jde vypnout.
-- 6.1 (původní materiál +1 B na změněnou buňku, snímek buněk volitelný) a 6.3 (mazání ověřených dat, ponechání rozporů).
+- 6.1 (původní materiál +1 B na změněnou buňku, snímek buněk volitelný) a 6.3 (zásobník změn: kontrola, když je zásobník plný nebo po intervalu, podle toho, co nastane dřív; bez zvláštní kontroly rud při každém zápisu; po ověření se maže jen pole původního materiálu, rozpory zůstanou).
 - Testovací vektory pro port generátoru do C# (determinismus .NET).
 
 **Odkud kód:** WVB1 a návrh E88, formát rozdílu z kroku 6, vektory `godot-prototyp/vectors`.
 
 **Proč tady:** formát rozdílu musí být hotový a ověřený testem 2.7, aby se backendu nedával pohyblivý cíl. Krok nezasahuje do generátoru, jen ho čte.
 
-**Stav:** otevřené. 6.1 je s Janem domluvené v chatu, ale pole **Platí:** je prázdné (čeká na zápis). 6.3 čeká na Willage-backend. Návrh E88 s backendem neprojednaný.
+**Stav:** otevřené vůči Willage-backend. 6.1 a 6.3 mají pole **Platí:** zapsané (zásobník Jan 2026-11-21 00:24). Návrh E88 s backendem neprojednaný.
 
 **Testy:** testovací vektory (stejný hash v GDScriptu a C#), bilance materiálu bez generátoru z +1 B, simulace mazání ověřených buněk. Kritéria se doplní po dohodě s Willage-backend. Do Willage_Dev zapisuje jen Willage-backend.
 
@@ -334,9 +336,9 @@ Nic z toho není rozhodnutí. Jde o návrhy úprav textu nebo otázky pro Jana. 
    - `01` 1.12: „Terén (s vodou) a rostliny se ukládají po segmentech… protože pocházejí z blueprintu“.
    - Návrh: přeškrtnout nebo označit „nahrazeno (t801u–t803u)“, aby se při implementaci nečetla stará verze.
 5. **Napojení švů: funkce, nebo dorovnání?** `01` 1.4: „prolnutí švů je funkce sousedů“, ale v téže kapitole „sousedé na ostrově se napojují dorovnáním okrajů, ne funkcí“. Návrh: sjednotit na „dorovnání podle režimu 5.2 (Auto výchozí)“.
-6. **Blend v 5.2: klín 1/16 bloku, nebo 1–4 buňky?** `03` 5.2, tabulka: „Blend (klín 1/16 bloku, 1.7.1)“ a doporučení „Výchozí Blend: klín… 1/16 bloku“; **Platí:** „Blend (dorovnat na 1–4 buňkách)“. Klín 1/16 bloku z 1.7.1 je pro vrstvy, Blend 1–4 pro povrch. Návrh: v textu oddělit napojení povrchu (Auto / Blend / Keep) a napojení vrstev (klín 1/16 bloku).
+6. **Blend v 5.2: klín 1/16 bloku, nebo 1–4 buňky?** **Rozhodnuto (Jan 2026-11-21 00:24):** dvě nezávislá nastavení. Napojení povrchu je rampa na 1–4 buňkách, napojení podzemních vrstev je klín, výchozí 1/16 bloku (1.7.1).
 7. **Auto „6 buněk“ a „3 buňky“** pochází z prototypu s buňkou 0,5 m (3 m a 1,5 m). Bod 1 je rozhodnutý (buňka 0,25 m); pořád chybí, jestli Auto zůstane 6 a 3 buňky (teď 1,5 m a 0,75 m), nebo 3 m a 1,5 m (12 a 6 buněk).
-8. **Eroze jako posun výšky (4.1) a kras.** `01` 1.8 a 1.8.2: kras E75 vzniká erozí během hry a „rozpouští se podle průtoku“ v podzemí; 1.8.2 má i usazování pod `sed_v`. Posun výšky povrchu nepopisuje dutinu pod povrchem ani usazeninu nad funkcí. **Chybí rozhodnutí:** kam se ukládá kras během hry (překryv, nebo jiná vrstva) a zda posun může být kladný (usazování).
+8. **Eroze jako posun výšky (4.1) a kras.** **Rozhodnuto (Jan 2026-11-21 00:24):** posun eroze smí být kladný (usazování, náplavy, delty). Kras během hry se ukládá cestou offsetu, stejně jako eroze, ne jako vzduch v překryvu buněk. Jan: „Zkusíme jít cestou offsetu.“ V kroku 7 se ověří, jestli offset stačí i pro podzemní dutiny.
 9. **Mlha, nebo oblaka?** `01` 1.8: „voda padá jako vodopád do mlhy“; 1.13.1 **Platí:** „Voda z okraje dál padá do oblak“. Návrh: sjednotit na oblaka.
 10. **Vegetace: s blokem, nebo jen ve slupce?** `01` 1.12: „Základní vegetace se generuje s blokem ze seedu“; `02` 2.6: „Vyhodnocuje se jen ve slupce“. Návrh: v 1.12 doplnit odkaz na 2.6.
 
@@ -360,4 +362,4 @@ Nic z toho není rozhodnutí. Jde o návrhy úprav textu nebo otázky pro Jana. 
 3. **7.1** – 2D, nebo 3D: odloženo. Datový model na tom nezávisí.
 4. **1.5** – přepočet světa při nové verzi generátoru: odloženo (t726u).
 5. **1.11** – datový rozpočet: přeskočeno (t738u).
-6. Velikost buňky dat (A.1 bod 1) je rozhodnutá (0,25 m, Jan 2026-11-21 00:19). Kras / usazování ve vrstvě posunu eroze (A.1 bod 8) pořád potřebuje potvrzení. Auto 6 / 3 buňky (A.1 bod 7) a krok vody 1 l při maximu 15,625 l také.
+6. Velikost buňky dat (A.1 bod 1) je rozhodnutá (0,25 m, Jan 2026-11-21 00:19). Kras cestou offsetu a kladný posun eroze (A.1 bod 8) i dvě nastavení Blendu (A.1 bod 6) jsou rozhodnuté (Jan 2026-11-21 00:24); kras se v kroku 7 ověří. Auto 6 / 3 buňky (A.1 bod 7) a krok vody 1 l při maximu 15,625 l zůstávají otevřené.

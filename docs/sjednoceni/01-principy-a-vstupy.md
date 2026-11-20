@@ -290,7 +290,7 @@ Pojmy: **blueprint** = otisk světa o velikosti bloku. To, čemu se ve studiích
 - **Mocnost vrstvy:** minimum 0,5 m (2 buňky; nahrazuje dřívější zákaz vrstev < 25 cm), maximum 1/4 výšky od povrchu po spodní okraj.
 - **Deformace**, která vrstvu zvedne výš (např. vápenec a jíl, mince E82), je dovolená.
 - Pně, žíly, kontakty a dómy (kimberlit, pegmatit, skarn, sůl) se berou jako **útvary podle varianty B**, ne jako vrstvy.
-- **Švy na ostrově:** blueprinty bloků mohou pocházet z různých míst, takže pořadí vrstev na švu nemusí souhlasit. Vrstvy se do sebe zaklíní nebo napojí na úseku **1/16 bloku** (8 m při bloku 128 m); délka se škáluje s velikostí bloku.
+- **Švy na ostrově:** blueprinty bloků mohou pocházet z různých míst, takže pořadí vrstev na švu nemusí souhlasit. Vrstvy se do sebe zaklíní nebo napojí na úseku **1/16 bloku** (8 m při bloku 128 m); délka se škáluje s velikostí bloku. Toto je napojení podzemních vrstev a je nezávislé na napojení povrchu (Blend 1–4 buňky), viz 5.2 (Jan 2026-11-21 00:24).
 
 ---
 
@@ -326,7 +326,7 @@ Pojmy: **blueprint** = otisk světa o velikosti bloku. To, čemu se ve studiích
 - **Výchozí model podzemí je E67** [17].
 - **Čas:** 1 herní den = 1 h [3].
 - **Na okraji ostrova** voda padá jako vodopád do mlhy a dál se nesimuluje [21].
-- **Kras** vzniká ze dvou zdrojů: z generátoru (mince E82) a přirozeně erozí E75 během hry [9].
+- **Kras** vzniká ze dvou zdrojů: z generátoru (mince E82) a přirozeně erozí E75 během hry [9]. Kras během hry se ukládá cestou offsetu, stejně jako eroze, ne jako změna materiálu na vzduch v překryvu buněk (4.1). Jan 2026-11-21 00:24: „Zkusíme jít cestou offsetu.“ Ověří se v kroku 7.
 - **Déšť je událost** (plocha × intenzita × doba), ne trvalý stav.
 - **Prameny** jsou nasazené na mapě ze seedu. Pramen je zvláštní typ buňky, která sama vytváří vodu. Síla pramene určuje, kolik pramenných buněk pokrývá výtok.
   - Když ho hráč ucpe nepropustným materiálem, přestane téct; po otevření teče znovu.
@@ -373,7 +373,7 @@ Pojmy: **blueprint** = otisk světa o velikosti bloku. To, čemu se ve studiích
 
 **Platí:** *rozhodnuto (2026-11-20, Jan t783u–t785u)*
 
-- Eroze začne, když rychlost proudu překročí `ero_v` materiálu na povrchu. Rychlost v korytě je z Manningova vzorce (z průtoku, sklonu a průřezu koryta); v tůni je to průtok / průřez. Pod `sed_v` se materiál usazuje.
+- Eroze začne, když rychlost proudu překročí `ero_v` materiálu na povrchu. Rychlost v korytě je z Manningova vzorce (z průtoku, sklonu a průřezu koryta); v tůni je to průtok / průřez. Pod `sed_v` se materiál usazuje. Posun výšky **smí být kladný** (usazování, náplavy, delty) i záporný (odnos); viz 4.1 (Jan 2026-11-21 00:24).
 - Odnesené množství za sekundu = průtok × (rychlost / práh)^k, výchozí k = 1,5 (parametr). Rychlejší tok nad prahem odnáší materiál rychleji, takže tlakový výtok rychle rozšiřuje otvor.
 - V dnešním kódu je `e51_k = 0` (jen průtok); při zpracování dokumentu se změní na 1,5.
 - Čas běží jako události v herních sekundách; kopání nebo položení odpočet vynuluje.

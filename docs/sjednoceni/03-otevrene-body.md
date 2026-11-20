@@ -96,11 +96,13 @@ Hra dnes pořád kope po 0,5 m a vyplňuje celý sloupec — to je úkol impleme
 | opakovatelnost ostrova | ne, funkce už nesedí | ano, rozdíl proti funkci |
 | shoda s 1.4 / 2.4 | rozbíjí to | sedí |
 
-**Doporučení.** Varianta B. Eroze E51 (a rozpouštění krasu E75, které bere horninu) se zapisuje do stejného překryvu jako kopání, se zdrojem „eroze“. Kanonizace E78 platí (položka rovná funkci se maže). Voda v tom samém kroku terén nemění.
+**Doporučení.** ~~Varianta B. Eroze E51 (a rozpouštění krasu E75, které bere horninu) se zapisuje do stejného překryvu jako kopání, se zdrojem „eroze“.~~ ⚠ překonáno: eroze i kras během hry jdou vrstvou offsetu, ne překryvem buněk (viz Platí).
 
-**Otázka pro Jana.** Má se eroze E51 (a úbytek horniny krasem) zapisovat do překryvu jako změna proti funkci, se zdrojem „eroze“, a ne do definice terénu?
+**Otázka pro Jana.** ~~Má se eroze E51 (a úbytek horniny krasem) zapisovat do překryvu jako změna proti funkci, se zdrojem „eroze“, a ne do definice terénu?~~ ⚠ překonáno, viz Platí.
 
-**Platí:** (Jan, hovor 20. 11. 2026) Eroze se **neukládá** jako změněné buňky. Původní generátor terénu zůstává nedotčený a eroze je samostatná vrstva offsetu (posunu výšky), která se přičítá k výšce z původní funkce. Vzniká tak v podstatě druhá funkce s upraveným vstupem: eroze terén prohlubuje a čím je větší, tím víc původní funkci mění. Výpočet vody běží na výsledném terénu s offsetem. Výhody: minimální objem dat, erozi lze kdykoli vypnout nebo předělat bez zásahu do generátoru a voda se v prohlubních chová správně.
+**Platí:** (Jan, hovor 20. 11. 2026) Eroze se **neukládá** jako změněné buňky. Původní generátor terénu zůstává nedotčený a eroze je samostatná vrstva offsetu (posunu výšky), která se přičítá k výšce z původní funkce. Vzniká tak v podstatě druhá funkce s upraveným vstupem. Výpočet vody běží na výsledném terénu s offsetem. Výhody: minimální objem dat, erozi lze kdykoli vypnout nebo předělat bez zásahu do generátoru a voda se v prohlubních chová správně.
+- **Doplněno (Jan 2026-11-21 00:24):** posun eroze **smí být kladný**. Terén může i růst (usazování, náplavy, delty), nejen ubývat.
+- **Doplněno (Jan 2026-11-21 00:24):** kras během hry se ukládá **stejnou cestou offsetu**, ne jako změna materiálu na vzduch v překryvu buněk. Jan: „Zkusíme jít cestou offsetu.“ V kroku 7 se ověří, jestli offset stačí i pro podzemní dutiny.
 
 ---
 
@@ -156,11 +158,12 @@ Otočení hotových dat je změřené (0 neshod, ~5 ms). Skok vrstev 1,8–2,7 m
 |---|---|---|---|
 | šev výřezu 1,8–2,7 m [10] | ostane skok | zaklíní se na 8 m | podle pravidla (návrh: Blend, když by skok přesáhl 1 buňku, jinak Keep) |
 
-**Doporučení.** Výchozí **Blend**: klín nebo napojení na 1/16 bloku podle 1.7.1. Keep jen když ho hráč u daného vložení výslovně zvolí. Auto zatím nezavádět, dokud ho nebude potřeba jako zkratku.
+**Doporučení.** ~~Výchozí **Blend**: klín nebo napojení na 1/16 bloku podle 1.7.1. Keep jen když ho hráč u daného vložení výslovně zvolí. Auto zatím nezavádět, dokud ho nebude potřeba jako zkratku.~~ ⚠ překonáno: výchozí je Auto; Blend má dvě nezávislá nastavení (povrch 1–4 buňky, vrstvy klín 1/16 bloku), viz Platí (2026-11-21 00:24).
 
 **Otázka pro Jana.** Má být výchozí napojení švu při vložení blueprintu Blend (klín na 1/16 bloku podle 1.7.1) a Keep jen na výslovnou volbu?
 
-**Platí:** (Jan, hovor 20. 11. 2026) Výchozí režim je **Auto**. Auto se rozhoduje podle rozdílu výšek v každém sloupci zvlášť: rozdíl do 6 buněk vyhladí rampou na 3 buňkách, větší rozdíl nechá jako útes. Blend (dorovnat na 1–4 buňkách) a Keep (ponechat, schod) zůstávají jako volitelné alternativy. Počty 6 a 3 buněk pocházejí z prototypu s buňkou 0,5 m (3 m a 1,5 m). Po sjednocení buňky na 0,25 m (2026-11-21 00:19) není rozhodnuté, jestli zůstanou počty buněk, nebo vzdálenosti v metrech.
+**Platí:** (Jan, hovor 20. 11. 2026) Výchozí režim je **Auto**. Auto se rozhoduje podle rozdílu výšek v každém sloupci zvlášť: rozdíl do 6 buněk vyhladí rampou na 3 buňkách, větší rozdíl nechá jako útes. Blend a Keep zůstávají jako volitelné alternativy. Počty 6 a 3 buněk pocházejí z prototypu s buňkou 0,5 m (3 m a 1,5 m). Po sjednocení buňky na 0,25 m (2026-11-21 00:19) není rozhodnuté, jestli zůstanou počty buněk, nebo vzdálenosti v metrech.
+- **Doplněno (Jan 2026-11-21 00:24):** Blend má **dvě nezávislá nastavení**. Napojení povrchu je rampa na 1–4 buňkách. Napojení podzemních vrstev je klín, výchozí 1/16 bloku (1.7.1).
 
 ---
 
@@ -241,7 +244,7 @@ Návrh E88 s Willage-backend **ještě nebyl projednán** [2]. Body 6.1 a 6.2 js
 
 **Otázka pro Jana.** Platí tento postup jako pravidlo kontraktu? Projedná se spolu s 6.1 s Willage-backend.
 
-**Platí:** (Jan 2026-11-21 00:10, po vyjádření Willage-backend) Kontrola není namátková: běží buď po nastaveném časovém intervalu, nebo po určitém počtu změn (obojí parametr). Po úspěšné kontrole se smaže **jen pole původního materiálu**; položka změny (nová hodnota a voda) zůstává, jinak by se vracel výkop. Pole se po ověření vynechá, nenuluje (0 = vzduch). Při přijetí změny se pohyb materiálu zapíše do účetní knihy hráče a ostrova, protože po smazání původních hodnot zůstane jen čistý rozdíl vůči funkci. Záznamy s rozporem se nemažou a zůstávají jako reference pro spor. K úspěšné kontrole se uloží krátký otisk (čas, gen_ver, segment, hash, počet buněk). Kontrola nepřegenerovává celý segment při kopání. Kontrola je ve výchozím stavu zapnutá (Jan 2026-11-21 00:18). Když se vypne, server věří inventáři od klienta.
+**Platí:** (Jan 2026-11-21 00:10, po vyjádření Willage-backend; doplněno 2026-11-21 00:24) Kontrola není namátková. Změny se sbírají do **zásobníku**; kontrola doběhne, když je zásobník plný, nebo po uplynutí časového intervalu, podle toho, co nastane dřív. Obě meze jsou parametry. Zvláštní kontrola rud při každém zápisu není. (Nahrazuje dřívější formulaci „interval nebo počet změn“.) Po úspěšné kontrole se smaže **jen pole původního materiálu**; položka změny (nová hodnota a voda) zůstává, jinak by se vracel výkop. Pole se po ověření vynechá, nenuluje (0 = vzduch). Při přijetí změny se pohyb materiálu zapíše do účetní knihy hráče a ostrova, protože po smazání původních hodnot zůstane jen čistý rozdíl vůči funkci. Záznamy s rozporem se nemažou a zůstávají jako reference pro spor. K úspěšné kontrole se uloží krátký otisk (čas, gen_ver, segment, hash, počet buněk). Kontrola nepřegenerovává celý segment při kopání. Kontrola je ve výchozím stavu zapnutá (Jan 2026-11-21 00:18). Když se vypne, server věří inventáři od klienta.
 
 ---
 
@@ -346,7 +349,7 @@ Z rozhodnutí vyplývá výchozí chování; při stavbě modelu se přepínače
 - `p79_chodby` + `p85_voda` jsou nutné k tomu, aby lokální přepočet viděl dutiny a výtoky (1.9, K5) [3][12].
 - Otočení a zrcadlení přes inverzní transformaci (`p86`) → 2.2; jádro hory ve funkci světa (`p87`) → 1.4, 1.7; blok 128 m z funkce (`p96`) → 1.1, 1.4.
 - Jedna funkce světa, bez `p94_hora_k` a omezovače E92 → 1.4 (K6, K7).
-- Kras E75 během hry patří k 1.8 (`p75_kras` je dnes vypnutý — zapne se při implementaci).
+- Kras E75 během hry patří k 1.8 (`p75_kras` je dnes vypnutý — zapne se při implementaci) a ukládá se cestou offsetu (4.1, ověřit v kroku 7).
 - Do main jen s Janovým ano; každé sloučení má PROP a kontrolu výchozí hry, nebo novou referenci, když se výchozí hra mění záměrně.
 
 E95 (vlákno vody) a E96 (blok 128 m) spolu nikdy neběžely [14]. Zkušební větev `zkusebni-vse` nemá E95 ani E96 a její „E95“ je jiný pokus než `e95-async-voda` (při sloučení přečíslovat na Z1) [14].
