@@ -11,6 +11,7 @@ const Block = preload("res://scripts/block.gd")
 const BlockGen = preload("res://scripts/block_gen.gd")
 const Toon = preload("res://scripts/toon.gd")
 const DemoRunner = preload("res://scripts/demo/demo_runner.gd")
+const SP96 = preload("res://scripts/surface/surface_params.gd")   # E96: LOD přehledu bloku 128 m
 const BS := J.BS
 
 @onready var world = $World
@@ -36,7 +37,10 @@ func _ready() -> void:
 	island.setup()
 	rig.set_meritko(island.m_na_bunku())   # E94: scéna v metrech → kamera v metrech (1 = beze změny)
 	island.generate_start()
-	buildings.add_house(Vector2i(6, 8))   # testovací domek z Blenderu (assets/domek.glb)
+	if island.spawn96.is_empty():
+		buildings.add_house(Vector2i(6, 8))   # testovací domek z Blenderu (assets/domek.glb)
+	else:
+		_start_b96()
 	ui.candidate_picked.connect(placement.pick)
 	ui.settings_changed.connect(placement.rebuild_preview)
 	ui.confirm_pressed.connect(placement.confirm)
@@ -53,6 +57,23 @@ func _ready() -> void:
 	rig.place()
 	update_hint()
 	dev_panel.activate()
+
+## E96: blok 128 m – domek a postava (značka 1,75 m, hra zatím postavu nemá) na nejrovnějším místě u středu, kamera na ni
+var postava96: MeshInstance3D
+func _start_b96() -> void:
+	buildings.add_house(island.spawn96.dum)
+	var g: Vector2i = island.spawn96.postava
+	var cap := CapsuleMesh.new(); cap.height = J.hj_m(J.POSTAVA_HJ); cap.radius = 0.25
+	postava96 = MeshInstance3D.new(); postava96.mesh = cap
+	var mat := StandardMaterial3D.new(); mat.albedo_color = Color(0.85, 0.2, 0.2); postava96.material_override = mat
+	var top: Vector3 = island.to_global(Vector3(g.x + 0.5, island.col_h(g) * Block.CELL_H, g.y + 0.5))
+	postava96.position = top + Vector3(0, cap.height / 2.0, 0)
+	add_child(postava96)
+	rig.center = top
+	rig.zoom_max_k = 2.0   # 160 × 0,5 × 2 = 160 m záběr: celý blok 128 m
+	var lz := float(SP96.inst().p96_lod_zaber)
+	if lz > 0.0:   # LOD přehledu: nad lz m záběru jedna síť 1 m bez vegetace (E90)
+		rig.placed.connect(func(sz: float): island.lod96_set(sz > lz))
 
 ## demo / testy: zastaví vše, co běží po snímcích (kamera WASD, tok vody, čas větru)
 func set_game_process(on: bool) -> void:

@@ -19,6 +19,8 @@ const Grass = preload("res://scripts/grass.gd")
 var k_sc := 1.0
 const ZOOM_MIN := 18.0
 const ZOOM_MAX := 160.0
+var zoom_max_k := 1.0   # E96: blok 128 m → oddálení až na celý blok (1 = beze změny)
+signal placed(size: float)   # E96: po každém umístění kamery (LOD přehledu bloku 128 m); bez posluchače nic
 
 @onready var cam: Camera3D = $Camera
 var ui: CanvasLayer
@@ -44,6 +46,7 @@ func place() -> void:
 	var ui_on: bool = ui != null and ui.visible
 	cam.h_offset = 145.0 * k if ui_on else 0.0
 	cam.v_offset = -56.0 * k if ui_on else 0.0
+	placed.emit(cam.size)
 
 ## E94: scéna v metrech (Main po Island.setup): střed, velikost záběru a meze zoomu ×k (ostrov 32 → 16 jednotek)
 func set_meritko(k: float) -> void:
@@ -82,7 +85,7 @@ func _unhandled_input(e: InputEvent) -> void:
 	elif e is InputEventMouseButton and e.pressed:
 		match e.button_index:
 			MOUSE_BUTTON_WHEEL_UP: cam.size = maxf(cam.size * 0.9, ZOOM_MIN * k_sc); place()
-			MOUSE_BUTTON_WHEEL_DOWN: cam.size = minf(cam.size * 1.1, ZOOM_MAX * k_sc); place()
+			MOUSE_BUTTON_WHEEL_DOWN: cam.size = minf(cam.size * 1.1, ZOOM_MAX * k_sc * zoom_max_k); place()
 			MOUSE_BUTTON_MIDDLE, MOUSE_BUTTON_RIGHT: dragging = true
 	elif e is InputEventMouseButton and not e.pressed:
 		if e.button_index in [MOUSE_BUTTON_MIDDLE, MOUSE_BUTTON_RIGHT]:

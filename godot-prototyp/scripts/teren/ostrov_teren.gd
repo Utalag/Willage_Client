@@ -49,6 +49,10 @@ const HRA := {
 	"p67_min_vytok_render": 0.02,        # E67b: vývěr podzemní vody ve stěně / pramen slabší než tolik l/s se nekreslí (simulace beze změny)
 	"p67_min_tok_render": 0.02,          # E67b: protékající větev podzemní vody slabší než tolik l/s se v řezech nekreslí
 	"p94_hora_k": 1.0,                   # E94: převýšení hory nad její patou (1 = beze změny; strop sloupce 61 buněk = 30,5 m)
+	"p96_natazeni": 4.0,                 # E96 (jen s p96_blok128): vodorovné natažení funkce E49 (E90: 8)
+	"p96_relief": 1.0,                   # E96: reliéf kolem 20 m (E90: 3; 1 = E49 14–30 m, vejde se do sloupce 32 m)
+	"p96_dlazdice_x": 7,                 # E96: dlaždice 128 m funkce světa, ze které je ostrov
+	"p96_dlazdice_y": 4,
 }
 
 static func params() -> Dictionary:
@@ -94,7 +98,10 @@ static func build(b) -> void:
 	var bp := blueprint(b)
 	var pp: Dictionary = p.duplicate()
 	pp.surface_shift = float(p.surface_shift) + float(b.shift)
-	var hk := float(p.get("p94_hora_k", 1.0))
+	if b.has_meta("p96_hm"):
+		# E96: povrch z funkce světa (blok 128 m), typ bloku řídí jen geologii; cesta base_hm (E49) bez jemného šumu
+		bp.base_hm = b.get_meta("p96_hm"); bp.detail = 0.0
+	var hk := float(p.get("p94_hora_k", 1.0)) if not b.has_meta("p96_hm") else 1.0
 	if hk != 1.0 and String(bp.shape).begins_with("hora"):
 		# E94: hora START je v bloku 8 m jen ~3 m (medián) / 9 m (vrchol) nad loukou. Výšková mapa tvaru „hora“ (stejná jako
 		# blueprint.raw_height) natažená nad patou × hk, posun výšky jako ve studii, strop 61 buněk; jde cestou base_hm (E49).

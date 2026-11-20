@@ -1,0 +1,11 @@
+Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+
+E96 bloky: 256 za 57491 ms (p50 223, max 316), typy { "louka": 181, "kopec": 34, "hora": 35, "piscina": 6 }, výška 32–60 buněk, RSS 201 MB
+voda: { "prameny": 334.226, "podzemí: pásma": 15269.304, "povrch + podzemí: plný výpočet": 33264.547, "celkem": 50287.098 }
+souhrn: { "prameny": 10, "koryto_sloupcu": 360, "tun_sloupcu": 14719, "vodopady": 0, "vodopady_okraj": 4, "okraj_lps": 20.194277, "podzemni_telesa": 1, "vyvery": 1, "volani_podzemi": 6 }
+výkop 1: 27919 ms (povrch 4597, podzemí 21883), kroků R 0 (max 0 ms), celkem 27919 ms, okno 169
+výkop 2: 27946 ms (povrch 170, podzemí 26131), kroků R 0 (max 0 ms), celkem 27946 ms, okno 30597
+výkop 3: 28180 ms (povrch 169, podzemí 26602), kroků R 0 (max 0 ms), celkem 28180 ms, okno 33066
+výkop 4: 31959 ms (povrch 4305, podzemí 26329), kroků R 0 (max 0 ms), celkem 31959 ms, okno 16632
+výkop 5: 30254 ms (povrch 106, podzemí 28839), kroků R 0 (max 0 ms), celkem 30254 ms, okno 19602
+exit 143
