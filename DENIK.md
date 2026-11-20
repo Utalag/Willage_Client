@@ -216,6 +216,12 @@ Skupiny: 1 Prototyp a buildy · 2 Terén a tvar · 3 Rozlišení bloku · 4 Ská
 - **Komplikace:** koryta jsou krátké úseky (malý svět, malá povodí). Krasová vyvěračka 0. Hráz na svahu tůň nevytvořila (potok ji obtekl). Podzemní tok vede zatím zjednodušeně k nejbližšímu okraji.
 - **Další krok:** Jan rozhodne, jak daleko vést podzemní tok (sledovat propustnou vrstvu?) a jestli má mít krasová vyvěračka vlastní pravidlo. Starší otevřené otázky (eroze po blocích vs hrubý svět, jádro hory přes šev, minerály z hrubého světa) zůstávají.
 
+### 🧪 E91: průhlednost překážek v izometrii (2026-11-20 07:55 · větev `e91-pruhlednost`, tag `e91-pruhlednost`, `scripts/game/pruhlednost91.gd`, `tools/pruhlednost_e91.gd`, shots `blueprint-studie/shots/e91/`)
+- **Směr:** Jan 2026-11-19 21:03: zprůhlednit buňky mezi kamerou a postavou; v podzemí řez nad úrovní postavy. Za příznakem `p91_pruhlednost` (výchozí vyp), shadery na disku beze změny.
+- **Zlepšení:** A (válec 3 m s ditherem v shaderu) ukáže postavu za kopcem z 67 % a v chodbě ze 100 %, přepnutí 0,45 ms. B (řez shaderem) 53 % a 87 %. Výchozí hashe beze změny.
+- **Komplikace:** C (řez sítí) 38 % a 73 %, ~200 ms na přestavbu. C2 (skrytí bloků) 0 %. Překlad upravených shaderů 4 s. Čas snímku na software GPU +3 až +14 % (na hraně šumu). Díra je jen tmavá barva víka.
+- **Další krok:** Jan rozhodne: A na povrchu + B v podzemí? poloměr válce, výška řezu, víko barvou nebo skutečné řezy, co s vegetací a vodopády.
+
 ### 🔄 Voda E74–E77 sloučena, přepínače podle Jana (2026-11-20 04:08 · větev `voda-e74-e77-slouceni`, tag `voda-e74-e77-ready`, `tok.solve74`, `ug67._merge_outs72d`, `ostrov_voda.place76`, data `blueprint-studie/shots/voda_e74_e77/`)
 - **Směr:** Jan 2026-11-20 01:49 a 03:26: sloučit E74–E77, zapnout obsazování pramenů s hladinou, uložené prameny, slučování do 8 m; E75 a těžba na `cas_hry.gd`.
 - **Zlepšení:** výchozí ostrov beze změny otisku (63d7b89a91385a79), 0 neshod, chyba 0 ve všech testech, druhý běh bitově stejný; neobsazený pramen už vodu ze světa nepouští; nové postavení a načtení ostrova = lokální stav; slučování nejdál 8 m.

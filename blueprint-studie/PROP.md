@@ -2583,3 +2583,39 @@ Zdroje [45]–[72] níže v tomto souboru zůstávají jen jako zástupné čís
 - **Negativa předem:** software GPU na boxu → časy snímku nejsou telefon. Dither je zrnitý (bez TAA). Řez shaderem
   nemá skutečné víko (jen barva odvrácených stěn). C je drahé (přestavba všech sítí). C2 skryje celý blok 16 × 16,
   tedy i zem pod postavou. Stíny a obrysy (`next_pass`) se musí ořezat stejně, jinak zůstanou „duchové“.
+
+
+### E91 výsledky (2026-11-20 07:55)
+- **Scéna:** startovní ostrov prototypu (louka 101, hora 202, kopec 303, louka 404), kamera yaw 45°, pitch −35°, okno 1280 × 800,
+  buňka 1 × 1 × 0,5 m. Postava = kapsle 1,8 m, r 0,35 m.
+  - **kopec:** nejnižší sloupec, který terén zakrývá ze všech tří výšek postavy: nohy (17,5; 19,5; 11,5) v bloku hory.
+  - **chodba:** do hory (1, 0) vyřezaná vodorovná chodba 2 × 2 m, 9 m dlouhá (59 buněk), nadloží 9 m (18 buněk),
+    přestavba sítí 568 ms. Nohy (23,5; 20,0; 12,0), postava je v podzemí.
+- **Viditelnost postavy** (podíl pixelů postavy proti snímku bez terénu, 223 a 315 px při kroku 2):
+
+| Metoda | kopec | chodba | přepnutí |
+|---|---|---|---|
+| před (nic) | 0 % | 0 % | – |
+| A válec r 3 m, dither 4 × 4 | 67 % | 100 % | uniformy 0,45 ms (393 materiálů) |
+| B řez shaderem nad nohy + 1,25 m, kruh r 10 m | 53 % | 87 % | uniformy 0,45 ms |
+| A + B | 67 % | ≈ 100 % | uniformy 0,45 ms |
+| C řez sítí na CPU (`set_slice`, nohy + 3 buňky) | 38 % | 73 % | 195–238 ms zapnout, 230 ms vypnout |
+| C2 skrytí bloků na paprsku | 0 % | 0 % | 0,02 ms |
+
+- **Čas snímku** (llvmpipe, software GPU na boxu, medián ze 3 kol po 60 snímcích, střídavě): kopec před 213 ms, A 223 (+4 %),
+  B 219 (+3 %), AB 243 (+14 %); chodba před 199 ms, A 222 (+12 %), B 215 (+8 %), AB 216 (+8 %). Rozptyl kol je ±5–10 %,
+  takže rozdíly jsou na hraně šumu. C má 56 ms, ale jen proto, že řez skryje trávu, vegetaci a duální povrch – nesrovnatelné.
+- **Shadery:** 8 shaderů, 393 materiálů upraveno za běhu, +29 řádků na shader (1 funkce: 2 skaláry dot/length, 2 smoothstep,
+  Bayerova mřížka 4 × 4, 1 discard; konec fragmentu: barva víka pro odvrácené stěny). Překlad všech kopií při zapnutí
+  3,8–4,6 s (první snímek) na llvmpipe.
+- **Výchozí hra beze změny:** shadery na disku se nemění. `voda_e66` d7aedf3a6d9d10e8 → 63d7b89a91385a79, 0 neshod;
+  `port_studie --check` 0 změn.
+- **Negativa:**
+  - A nechá zem a sloupec pod úrovní nohou (pravidlo „pod nohy + 0,2 m nic“), takže u kopce zůstanou nohy zakryté (67 %).
+  - Dither je zrnitý (bez TAA), díra je tmavá barva víka, ne skutečné horniny.
+  - B ořízne i stromy a tvoří na okraji kruhu vysokou tmavou stěnu z odvrácených stěn. Vodopády nad řezem zčásti zůstanou.
+  - Víko v A i B je jen plochá barva odvrácených stěn (cull_disabled ve všech upravených shaderech = víc fragmentů).
+  - C dává skutečné víko s materiály, ale přestaví všechny sítě (~200 ms), řeže celý svět a skryje vegetaci a povrch.
+  - C2 je k ničemu: překážka je ve vlastním bloku postavy (16 × 16), skrytí bloku by vzalo i zem.
+  - Překlad shaderů při zapnutí 4 s = nutné předkompilovat při načtení.
+  - Software GPU, ne telefon; čas snímku je 200+ ms hlavně kvůli trávě.
