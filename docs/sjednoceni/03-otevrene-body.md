@@ -162,7 +162,7 @@ Otočení hotových dat je změřené (0 neshod, ~5 ms). Skok vrstev 1,8–2,7 m
 
 **Otázka pro Jana.** Stačí v uloženém vložení jen 4 hranoví sousedé (jak je to dnes a jak změřilo E83), nebo mají do kontraktu patřit i rohy?
 
-**Platí:**
+**Platí:** (Jan, hovor 20. 11. 2026) **Zavrženo.** Rohoví sousedé se neřeší. Bloky se napojují vždy jen po stranách (v osách), nikdy diagonálně přes roh.
 
 ---
 
