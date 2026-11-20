@@ -20,14 +20,9 @@ Upřesnění od Jana:
 |---|---|---|
 | [`00-mapa-vetvi.md`](00-mapa-vetvi.md) | všechny větve a studie, přepínače, čísla, rozhodnutí, konflikty K1–K12, prezentační vrstva | hotový podklad |
 | [`materialy.csv`](materialy.csv) | návrh jedné tabulky materiálů (78 id, přibližné hodnoty, `~` = odhad) | návrh k 1.6 |
-| [`01-principy-a-vstupy.md`](01-principy-a-vstupy.md) | kapitola 1: pojmy, jednotky, výška sloupce, funkce světa, determinismus a verze, materiály, geologie, voda, přepočet vody, kontrakt, datový rozpočet, objektová vrstva, profil ostrova | kostra, čeká na Jana |
-| [`02-model-sveta-a-generovani.md`](02-model-sveta-a-generovani.md) | kapitola 2: pořadí kroků generátoru, rozhraní funkce světa, slupka, segment a rozdíl, výchozí voda, vegetace, test 3 × 3 | kostra, čeká na Jana |
-| `03-…` (plán) | voda: jeden algoritmus podzemí, oprava lokálního přepočtu, vlákno | po 1.8–1.9 |
-| `04-…` (plán) | kopání a překryv 0,25 m, zákaz dna a okraje, ukládání | po 1.2 |
-| `05-…` (plán) | přenos výřezu: otočení, švy vrstev, prameny | po 1.4–1.5 |
-| `06-…` (plán) | kontrakt se serverem (WTI1), společně s Willage-backend | po 1.10 |
-| `07-…` (plán) | prezentační vrstva: co čte z dat, LOD, průhlednost, řez, 2D/3D | po rozhodnutí o pohledu |
-| `08-…` (plán) | plán slučování větví a pořadí zapnutí přepínačů | na konec |
+| [`01-principy-a-vstupy.md`](01-principy-a-vstupy.md) | kapitola 1: pojmy, jednotky, výška sloupce, funkce světa, determinismus a verze, materiály, geologie, voda, přepočet vody, kontrakt, datový rozpočet, objektová vrstva, profil ostrova | rozhodnuto (přepočet verze 1.5 odložen, 1.11 přeskočeno) |
+| [`02-model-sveta-a-generovani.md`](02-model-sveta-a-generovani.md) | kapitola 2: pořadí kroků generátoru, rozhraní funkce světa, slupka, segment a rozdíl, výchozí voda, vegetace, test 3 × 3 | rozhodnuto |
+| [`03-otevrene-body.md`](03-otevrene-body.md) | zbývající otevřené body po kapitolách 1–2, podle původních kapitol 3–8 (voda, kopání, přenos výřezu, kontrakt WTI1 společně s Willage-backend, prezentace, plán slučování) | kostra, čeká na Jana |
 
 ## Pořadí bodů kapitoly 1 k projití s Janem
 
@@ -55,6 +50,22 @@ Upřesnění od Jana:
 5. **2.5 Výchozí voda:** zůstává funkcí, počítá se ve slupce nebo na povodí, ukládají se prameny a odchylky.
 6. **2.6 Vegetace:** funkce seedu (hustota na m²), ve slupce, na disk jen změny.
 7. **2.7 Testovací pipeline 3 × 3:** svět → 9 blueprintů → ostrov; měření slupky, rozdílu, vody a determinismu. Stavět až po rozhodnutí 2.1–2.6.
+
+## Pořadí otevřených bodů (kapitoly 3–8, jen to, co 1–2 nerozhodly)
+
+1. **6.1** Co server ověřuje a zda posílat snímek buněk (E88 č. 4) — společně s Willage-backend.
+2. **6.2** Tvar verze generátoru `gen_ver` (E88 č. 11).
+3. **4.1** Zapisovat erozi E51 do překryvu (E88 č. 7).
+4. **5.1** Rohoví sousedé v kontraktu (E88 č. 6).
+5. **5.2** Výchozí režim napojení švů (Auto / Blend / Keep).
+6. **3.1** Práh pro plný přepočet vody místo povodí (E88 č. 8).
+7. **3.2** Slučovat drobné výstupy v dosahu 8 m i mezi sebou?
+8. **7.1** Pohled 2D (dlaždice), nebo 3D (modely)?
+9. **7.2** LOD prezentační vrstvy.
+10. **7.3** Průhlednost a řez v izometrii (E91).
+11. **8.1** Pořadí slučování větví do hry.
+
+Odložené (teď se neptám): přepočet při nové verzi generátoru (1.5) včetně E88 č. 3; datový rozpočet 1.11. Úkoly implementace jsou na konci `03-otevrene-body.md`, nejsou to rozhodnutí.
 
 ## Legenda
 
