@@ -44,7 +44,7 @@ Upřesnění od Jana:
 11. **1.12 Objektová vrstva:** terén a rostliny po segmentu (otáčejí se s blokem), stavby a cesty seznam na ostrově, smějí přes hranici bloku – *rozhodnuto 2026-11-20 (t739u, t740u), změněno (t741u–t743u)*.
 12. **1.10 Kontrakt:** WVB1 základ, data po segmentech, voda v litrech (1 B), server ukládá hotová data a namátkově kontroluje generátorem – *rozhodnuto 2026-11-20 (t736u, t737u)*.
 13. **1.13 Profil a členitost terénu:** parametry členitosti (rozhodnuto); obrys, bok a spodek ostrova otevřené.
-14. **1.14 Sopka:** neaktivní, události ji probudí a uspí; tvar mezi strato a štítovou (sklon 17°); větší 40 m / 2 bloky, nižší 20 m / 1 blok; vrchol aspoň 5 m pod okrajem sloupce; počet a rozteč jako parametry světa (2, 3 bloky); průduch id 75 a šikmé vrstvy lávy a popela (rozhodnuto).
+14. **1.14 Sopka:** neaktivní, události ji probudí a uspí; tvar mezi strato a štítovou (sklon 17°); větší 40 m / 2 bloky, nižší 20 m / 1 blok; vrchol aspoň 5 m pod okrajem sloupce; počet a rozteč jako parametry světa (2, 3 bloky); průduch id 75 a kuželovité vrstvy lávy a popela, těleso se propíchne běžnými vrstvami jako skalní jádro (rozhodnuto).
 
 ## Legenda
 
