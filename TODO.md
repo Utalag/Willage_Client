@@ -30,7 +30,8 @@ Nejdřív se dořeší všechno s vodou, pak další bloky. V rámci bloku se ne
 - [x] **E67: rozlišit „zavřené“ a „vše prosákne“** – E73 (`p73_prusak_tok`).
   - E73: tag `e73-nalezy`, větev `e73-nalezy-e68`, výchozí zapnuto, sloučeno do main (Jan 2026-11-20 00:10). Opravena i chyba: plný výpočet bral z E67 jen hlavní výstup.
 - [ ] **Měřit objem vody v `voda_e66`** (drobnost z E73).
-- [ ] **Jan rozhodne:** slučovat i průsak tekoucí vody (`p72_prusak`)? omezit vzdálenost slučování výstupů (dnes až 19 sloupců)?
+- [x] **Jan rozhodl (2026-11-20 03:26):** slučovat i průsak tekoucí vody (`p72_prusak` zapnout) a omezit vzdálenost slučování výstupů na 8 m.
+  - [ ] Implementovat limit vzdálenosti slučování 8 m a zapnout `p72_prusak`.
 
 ## Architektura světa
 
@@ -43,7 +44,8 @@ Podnět: druhá odpověď ChatGPT 2026-11-19 (Jan ji poslal do chatu). Jde o ná
 - [ ] **Jádro vyzdvižené hory přes více bloků:** geologická kontinuita masivu přes švy.
 - [x] **Tenké vrstvy a převzorkování mezi rozlišeními:** vrstva tenčí než buňka nesmí zmizet nebo se objevovat podle rozlišení.
   - 🧪 E81 (tag `e81-tenke`, nesloučeno, příznak `p81_tenke` vypnutý): vrstva > 0,05 m dostane aspoň jednu buňku. Chybění 60 % → 7,6 % (0,5 m), 48 % → 2,3 % (0,25 m); díry v nepropustné 64 % → 8 %. Vady: nafouknutí na celou buňku, 3 tenké vrstvy v jedné buňce 0,5 m (206 konfliktů).
-  - [ ] Jan: zapnout `p81_tenke` (spolu s `gen_ver`)? Tři tenké vrstvy v buňce: nejtenčí / sloučit / zakázat < 0,25 m v blueprintu? Práh 0,05 m?
+  - [x] Jan rozhodl (2026-11-20 03:26): v blueprintu zakázat vrstvy tenčí než 25 cm.
+  - [ ] Implementovat v blueprintu minimum tloušťky vrstvy 25 cm.
 - [ ] **Výkon na telefonu:** hierarchie rozlišení (region, blok, sekce 16³ nebo 32³, jemné buňky jen u hráče), všechny úrovně ze stejných funkcí. Změřit generování bloku na slabém zařízení.
 
 ## Přenos terénu z průzkumného světa na ostrov
@@ -54,7 +56,7 @@ Podnět: třetí odpověď ChatGPT 2026-11-19. Dva světy se společnou geologi�
 - [ ] **Otočení výřezu po 90°:** ověřit, že funkce vrstev, minerály a dutiny se otočí bez rozdílu proti vygenerování na místě.
 - [x] **Voda se nepřenáší hotová:** přenesou se zdroje, materiály a geometrie, stav vody se po vložení přepočítá v novém okolí a z ustáleného stavu se znovu naplánují události (příchod vody, plnění tůní, eroze).
   - 🧪 Ověřeno v E76 (tag `e76-prenos`, větev `e76-voda-po-prenosu`, nesloučeno): lokální vložení = plný výpočet (0 neshod, bilance 0) i s posunem ±4; přeplánování událostí jen dotčených sloupců 61–104 ms; uložení 4 bloků + 12 výkopů 524 B.
-  - [ ] Jan rozhodne: zapnout `p76_prameny` (uložené prameny u bloku)?
+  - [x] Jan rozhodl (2026-11-20 03:26): zapnout `p76_prameny` a sloučit E74–E77 do main.
   - [ ] Po vložení stavět podzemí jen pro nový blok (dnes lokální vložení jen o 10–40 % rychlejší než plné).
   - [ ] Do datové smlouvy výřezu s backendem patří i uložené prameny a výkopy.
 
@@ -71,7 +73,8 @@ Podnět: čtvrtá odpověď ChatGPT 2026-11-19, popis je v [devlog/model-sveta.m
 - [x] **Kde končí funkce a pásma:** kritérium, kdy změna (převis, oblouk, nepravidelná jeskyně) potřebuje lokální oblast s plnými buňkami, a jak takovou oblast uložit (řídký objem, octree, komprimované intervaly).
   - 🧪 E80 (tag `e80-hranice`, nesloučeno): funkce platí do buňky 0,5 m, jemnější = překryv hráče. Uložení: seřazené klíče + komprese (nejmenší nebo ≤1,6×), octree/řídký objem zatím ne. Švy bez skoku, pořadí bloků nic nemění.
   - [ ] Voda: víc dutin v jednom sloupci jako víc pásem, případně podzemí po 0,25 m kolem výkopů (pásma nestačí u dvou dutin nad sebou a změn jemnějších než 0,5 m).
-  - [ ] Jan: mřížka 0,25 m z funkcí, nebo rozdělením 0,5 m? Blok drží svou verzi generátoru (`gen_ver`)? Kopání na dno / bokem ven a odtok vody z ostrova?
+  - [x] Jan rozhodl (2026-11-20 03:26): mřížku 0,25 m počítat z funkcí a při nové verzi přepočítat i staré bloky; zakázat prokopání dna i okraje ostrova.
+  - [ ] Implementovat: vzorkování 0,25 m z funkcí + zákaz prokopání dna a okraje ostrova.
 - [ ] **Rešerše implicitního geologického modelování:** jak do vrstev doplnit nepravidelné útvary (žíly, pegmatity, skarny, krasové dutiny) bez plných voxelů. Výchozí zdroj: [A Review of Digital Terrain Modeling](https://doi.org/10.1111/cgf.13657).
 
 ## Měřítko
@@ -86,12 +89,12 @@ Podnět: odpověď ChatGPT 2026-11-19 o měřítku. Nic z toho není rozhodnuté
 - [x] **Kopání zůstává po 0,25 m** (Jan 2026-11-19 20:40). Studie kopání po 0,125 m se nedělá. Kdyby se Jan rozmyslel: jemné buňky jen vizuálně/pro tvar, ale buňka 0,25 m se pro výpočty (voda, propustnost, pevnost) chová jako celá, dokud z ní nezmizí všech 8 jemných buněk.
 - [x] **Hladina podzemní vody jako plocha funkce** (Jan 2026-11-19 20:47, hypotéza). Při položení bloku se spočítá jen hrubý ustálený stav po tělesech (objem, výtok, prameny pro povrch). Voda v podzemí se pak drží jako další plocha funkce `gw(x, y)` uvnitř propustné vrstvy (nebo jako tvar v prostoru tam, kde jedna výška nestačí), stejně jako `bs[k]`. Buňky s vodou (hladina, mokré stěny, kapání) se vzorkují až při kontaktu: obnažená vrstva nebo výkop. Ověřit: paměť plochy proti pásmům, čas vzorkování při kontaktu, shoda s E52/E58 a hashem. Výtoky (Jan 20:49): kde `gw` protne povrch nebo stěnu výkopu (kontakt se vzduchem), vznikne výtok, který se jen vykreslí; voda se materializuje do buněk a průtoků až při obsazení pramene (zachycení, napojení na koryto, kopání u něj).
   - 🧪 Ověřeno v E74 (tag `e74-gw`, větev `e74-gw-plocha`, nesloučeno): kompaktní plocha 9,4 kB místo 1,6 MB pásem, stavba ~30 ms, vzorek stěny 44–63 µs, objem sedí s E52/E58/E67, 0 neshod. Jedna výška nestačí (2–3 intervaly, pravidlo z geologie + 27 výjimek); výtoky E67 dál z řešiče. Přepínače `p74_gw`, `p74_vyzvednout` vypnuté.
-  - [ ] Jan rozhodne: má neobsazený pramen zvedat hladinu tělesa místo odtoku ze světa? Zapnout obsazování pramenů ve hře?
+  - [x] Jan rozhodl (2026-11-20 01:49): neobsazený pramen zvedá hladinu tělesa a obsazování pramenů zapnout (při sloučení E74).
   - [ ] Po výkopu stavět plochu jen pro dotčené těleso.
   - [x] Při novém postavení ostrova po výkopech se povrchové prameny našly znovu – vyřešeno v E76 uloženými prameny (`p76_prameny`).
 - [x] **Eroze v podzemí po tělesech** (Jan 2026-11-19 20:53, hypotéza). Nematerializované podzemí se neeroduje po buňkách. Průsak pórovitou vrstvou je zanedbatelný; u rozpustných hornin (vápenec, kras) se z průtoku tělesem počítá rozpuštěný objem za čas jako hodnota u tělesa. Po překročení prahu vznikne nebo se zvětší dutina (tvar v prostoru jako u blueprint dutin), buňky se materializují až při prokopání. Navázat na event erozi (E51) a materiálovou tabulku (rozpustnost).
   - 🧪 Ověřeno v E75 (tag `e75-kras`, větev `e75-kras`, nesloučeno): modul `kras75`, rozpustnost v tabulce materiálů, dutina u hladiny ve výstupním pásmu, lokální přepočet přes E68 9–15 ms. Test 0,742 l/s: první dutina vápenec 331 herních dní (55 h), sádrovec 22,5, sůl 0,15. Na ostrově bez efektu (hladina v půdě/písku). `p75_kras` vypnuto.
-  - [ ] Jan rozhodne: zrychlení krasu pro hru (`p75_zrychleni`); má generátor dávat vápenec k hladině?
+  - [x] Jan rozhodl (2026-11-20 01:55 a 03:26): kras doladit později; vápenec 50/50 pro jeskynní i hluboký vápenec a dolomit v hloubce 2 m.
   - [ ] Propojení těles dutinou a zobrazení dutiny ve scéně při kopání.
 - [ ] **Plán vzorkování a LOD** (Jan 2026-11-19 20:58, hypotéza). Svět zůstává funkcí; vzorkuje se jen povrchová slupka (viditelné buňky + 1–2 vrstvy pod nimi), zbytek až při interakci. LOD podle vzdálenosti kamery: zblízka 0,25 m, dál 0,5 m, zdálky/oddálení 1 m, vše ze stejných funkcí. Vyřešit švy mezi úrovněmi (bez děr). Test: mapa 3 × 3 km (~550 bloků po 128 m) jen jako hrubá data a funkce, detail kolem několika hráčů; změřit paměť a čas.
 - [ ] **Průhlednost překážek v izometrii** (Jan 2026-11-19 21:03). Při cestování nebo kopání za překážkou zprůhlednit (nebo nevykreslit) buňky v kuželu mezi kamerou a postavou. V podzemí řez do výšky: terén nad úrovní postavy se skryje (styl Dwarf Fortress / The Sims). Navázat na skrývání vrstev a xray přepínač v prototypu.
@@ -99,4 +102,6 @@ Podnět: odpověď ChatGPT 2026-11-19 o měřítku. Nic z toho není rozhodnuté
 ## Rozhodnutí Jana
 - 2026-11-20 01:49: neobsazený pramen zvedá hladinu svého tělesa (místo odtoku ze světa) a obsazování pramenů je zapnuté (pramen se jen kreslí, dokud ho hráč nevykope, nenapojí nebo nezachytí). Zapnout v E74 při sloučení do main.
 - 2026-11-20 01:55: rozpustnost a zrychlení krasu doladit až po konečné délce dne. Generátor dává vápenec k hladině zhruba v 50 % případů (náhodně podle seedu bloku).
-  - [ ] Implementovat 50/50 vápenec k hladině v generátoru (po E81).
+  - [x] Implementovat 50/50 vápenec k hladině v generátoru – E82 (tag `e82-vapenec`, nesloučeno, `p82_vapenec` vypnutý): mince 495/1000, vršek 2 m pod povrchem, jíl nad ním se vyklíní (`p82_tesneni`). V podzemí E58 kras skoro nevzniká, v E67 na 19/30 ostrovech (i v blocích „ne“). START: 6 pramenů místo 3.
+  - [ ] Jan (zbývá rozhodnout): vyklínit jíl nad vápencem a přepnout podzemí na E67?
+- 2026-11-20 03:26: E72 `p72_prusak` zapnout + limit slučování 8 m; E76 `p76_prameny` zapnout + sloučit E74–E77 do main; mřížka 0,25 m z funkcí (přepočítávat i staré bloky); zákaz prokopání dna i okraje ostrova; v blueprintu zakázat vrstvy < 25 cm; E82 mince pro jeskynní i hluboký vápenec a dolomit v hloubce 2 m.
