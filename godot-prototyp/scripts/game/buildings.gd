@@ -8,7 +8,9 @@ signal hint_changed                  # změnil se režim → přepsat nápovědu
 
 const Roads = preload("res://scripts/roads.gd")
 const Toon = preload("res://scripts/toon.gd")
-const BS := 16
+const J = preload("res://scripts/jednotky.gd")   # E94: mřížka a metry z jednoho místa
+const BS := J.BS
+const CELL_H := J.CELL_M
 
 const BTYPES := [
 	{"name": "Domek", "glb": "domek", "size": 3, "col": Color(0.95, 0.70, 0.80)},
@@ -80,7 +82,7 @@ func add_building(c: Vector2i, t: int, rot: int) -> void:
 	for f in fp_of(c, t):
 		top = maxi(top, Roads.height(island, f))
 		island.occupied[f] = true
-	node.position = Vector3(c.x + 0.5, top * 0.5, c.y + 0.5)
+	node.position = Vector3(c.x + 0.5, top * CELL_H, c.y + 0.5)
 	node.rotation.y = deg_to_rad(-90.0 * rot)
 	island.add_child(node)
 	island.props.append(node)
@@ -199,11 +201,11 @@ func hover(g) -> void:
 		top = maxi(top, Roads.height(island, f))
 	var ok := site_ok(g, build_sel, build_rot)
 	build_ghost.visible = true
-	build_ghost.position = Vector3(g.x + 0.5, top * 0.5, g.y + 0.5)
+	build_ghost.position = Vector3(g.x + 0.5, top * CELL_H, g.y + 0.5)
 	build_ghost.rotation.y = deg_to_rad(-90.0 * build_rot)
 	var sz: int = BTYPES[build_sel].size
 	(build_mark.mesh as PlaneMesh).size = Vector2(sz + 0.8, sz + 0.8)
-	build_mark.position = Vector3(g.x + 0.5, top * 0.5 + 0.06, g.y + 0.5)
+	build_mark.position = Vector3(g.x + 0.5, top * CELL_H + 0.06, g.y + 0.5)
 	(build_mark.material_override as StandardMaterial3D).albedo_color = Color(0.45, 0.95, 0.55, 0.55) if ok else Color(1.0, 0.40, 0.45, 0.55)
 	ghost_mat.albedo_color = Color(0.55, 1.0, 0.65, 0.6) if ok else Color(1.0, 0.45, 0.5, 0.6)
 	build_mark.visible = true
