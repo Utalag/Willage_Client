@@ -243,12 +243,33 @@ Pojmy: **blueprint** = otisk světa o velikosti bloku. To, čemu se ve studiích
 
 **Otázka pro Jana.** Mají útvary (žíly, kras, jádro hory) být funkce celého světa, které jdou přes švy bloků (E84 + E87)?
 
-**Platí:** *rozhodnuto (2026-11-20, Jan t732u)*
+**Platí:** *rozhodnuto (2026-11-20, Jan t732u); doplněno (2026-11-20, Jan t750u–t760u)*
 
 - **Útvary** jsou **funkce celého světa** (varianta B). Jdou přes švy bloků i segmentů. Měření: ~89 ms na segment [9].
 - Přístup **„jeden útvar na blok“** se ruší.
 - **Vrstvy se přizpůsobují tvaru terénu.**
 - Chybějící vrstvy končí **vyklíněním**: vrstva se do strany zužuje, až zmizí. Neskončí svislou stěnou.
+- Minimální mocnost vrstvy je nově 1 buňka (0,5 m); dřívější zákaz vrstev < 25 cm se ruší, viz 1.7.1.
+
+### 1.7.1 Skladba vrstev
+
+**Platí:** *rozhodnuto (2026-11-20, Jan t750u–t760u)*
+
+- **Zdrojový seznam:** pořadí hornin v `poradi_hornin.json` (64 úrovní, 0 = spodek, 40 = úroveň nížiny / ornice, 41–63 pahorky až obloha) [15]. Jako vrstvy se používají jen úrovně **0–40** (ornice a pod ní). Úrovně **41–63** jsou pásma / tvary krajiny (patří k profilu terénu 1.13), ne vrstvy. Poznámka: v `materialy.csv` bude potřeba pásma krajiny (id 57–74) později odstranit nebo přemapovat.
+- **Hrubé členění na pásma**, každé s mocností (parametr):
+
+  | Pásmo | Úrovně | Horniny |
+  |---|---|---|
+  | svrchní | 37–40 | ornice, spraš, štěrk, zvětralé jíly |
+  | sedimenty | 26–36 | vápence, dolomit, pískovec, břidlice, uhlí, sádrovec |
+  | krystalinikum | 13–25 | ruly, žuly, svory, fylity, kvarcit |
+  | spodní kůra a plášť | 0–12 | gabro, amfibolit, granulit, peridotit, magnetit |
+
+- V každém pásmu se na daném místě vyberou **1–3 zástupci** (výchozí počet, parametr). Každý zástupce je funkce světa (jeho přítomnost i mocnost), takže složení se po světě mění plynule: některé vrstvy vyklíní a zmizí, jiné se objeví. Bloky se proto přirozeně liší a blueprint přebírá složení svého místa ve světě.
+- **Mocnost vrstvy:** minimum 1 buňka (0,5 m; nahrazuje dřívější zákaz vrstev < 25 cm), maximum 1/4 výšky od povrchu po spodní okraj.
+- **Deformace**, která vrstvu zvedne výš (např. vápenec a jíl, mince E82), je dovolená.
+- Pně, žíly, kontakty a dómy (kimberlit, pegmatit, skarn, sůl) se berou jako **útvary podle varianty B**, ne jako vrstvy.
+- **Švy na ostrově:** blueprinty bloků mohou pocházet z různých míst, takže pořadí vrstev na švu nemusí souhlasit. Vrstvy se do sebe zaklíní nebo napojí na úseku **1/16 bloku** (8 m při bloku 128 m); délka se škáluje s velikostí bloku.
 
 ---
 
