@@ -32,6 +32,8 @@ var ug := {}
 var falls := []                   # [{top, bot, q, drop_u, edge}] vodopády (edge = přes okraj ostrova do mlhy)
 var ms := {}
 var last_edit := {}
+var _ugc79 = null                 # E79: funkční pásma podzemí z plného postavení (p79_chodby)
+var _cav79 := {}                  # E79: podpis dutin sloupce gi → "počet|spodek|vršek" (jen sloupce s dutinou)
 
 func gi_of(s: Vector2i, x: int, y: int) -> int:
 	var ws := T.wslot(s)
@@ -95,9 +97,11 @@ func build(bl: Dictionary) -> void:
 	var t1 := Time.get_ticks_usec()
 	ug = {}
 	if bool(p.get("podzemi_vrstva", true)) and not blocks.is_empty():
-		ug = UGO.make(T.world, T.fine(blocks), p, W, st.hm, wall, float(p.voda_cell_m))
+		_ugc79 = {} if bool(p.get("p79_chodby", false)) else null
+		ug = UGO.make(T.world, T.fine(blocks), p, W, st.hm, wall, float(p.voda_cell_m), _ugc79)
 		_replay_digs(ug)
 		st.ug = ug
+	if bool(p.get("p79_chodby", false)): _cav79 = _cav_all()
 	ms["podzemí: pásma"] = (Time.get_ticks_usec() - t1) / 1000.0
 	t1 = Time.get_ticks_usec()
 	_route(st)
@@ -240,6 +244,137 @@ func edit(s: Vector2i, lx: int, ly: int, new_h: int) -> Dictionary:
 	out.ms = (Time.get_ticks_usec() - t0) / 1000.0
 	last_edit = out
 	return out
+
+## E79: podpis dutiny sloupce jako v ug_funkce.from_world (vzduch pod povrchem: počet, nejnižší, nejvyšší); "" = bez dutiny
+func _cav_sig(b, ci: int) -> String:
+	var cnt := 0; var zl := -1; var zh := -1
+	var base := ci * 64
+	for z in int(b.hm[ci]):
+		if b.geo[base + z] == 0:
+			cnt += 1; zh = z
+			if zl < 0: zl = z
+	return "" if cnt == 0 else "%d|%d|%d" % [cnt, zl, zh]
+
+func _cav_all() -> Dictionary:
+	var out := {}
+	for s in blocks:
+		for ci in BS * BS:
+			var g := _cav_sig(blocks[s], ci)
+			if g != "": out[gi_of(s, ci / BS, ci % BS)] = g
+	return out
+
+## E79 (p79_chodby): dávka změn buněk; zm = {slot: [ci, ...]} sloupce, kde se změnily buňky 0,5 m (bloky už jsou
+## přepočtené, např. prekryv78.sync79). Když se změnila dutina některého sloupce (chodba, šachta pod povrchem) nebo výška
+## sloupce (výkop i položení), podzemí se postaví znovu (funkční pásma z mezipaměti, znovu jen dutiny), přehrají se výkopy a
+## lokální přepočet E68 dostane změněné sloupce, odtoky tůní a vývěry (jako vložení bloku E76). Jinak (jen položení na
+## povrch, materiál) stará cesta edit() po sloupcích. Materiály pro ztráty a suché `to` jako plný výpočet.
+func edit79(zm: Dictionary) -> Dictionary:
+	if st.is_empty(): return {}
+	var t0 := Time.get_ticks_usec()
+	var cav := false; var vykop := false
+	var all := []   # [slot, ci, gi]
+	for s in zm:
+		if not blocks.has(s): continue
+		var b = blocks[s]
+		for ci in zm[s]:
+			var gi := gi_of(s, ci / BS, ci % BS)
+			all.append([s, ci, gi])
+			var g := _cav_sig(b, ci)
+			if g != String(_cav79.get(gi, "")):
+				cav = true
+				if g == "": _cav79.erase(gi)
+				else: _cav79[gi] = g
+			if int(b.hm[ci]) != int(st.hm[gi]): vykop = true   # i položení: povrch podzemí (hs) a výkopy se musí shodovat s plným výpočtem
+	var out := {"dutiny": cav, "vykop": vykop, "sloupcu": all.size()}
+	var dd := int(round(float(p.strz_target_m) / float(p.voda_cell_m)))
+	var gen76 := bool(p.get("p76_prameny", false)) and bool(p.get("p76_mat_gen", true))
+	if (not cav and not vykop) or ug.is_empty():
+		var n := 0
+		var mch := PackedInt32Array(); var mhh := PackedFloat64Array()
+		for e in all:
+			var s: Vector2i = e[0]; var ci: int = e[1]; var gi: int = e[2]
+			var b = blocks[s]
+			var m := _mat_d(gi, dd, gen76)   # materiál pro ztráty jako plný výpočet (šachta může vykopat i buňku hm_gen − 1 − dd)
+			var hm_ch := int(b.hm[ci]) != int(st.hm[gi])
+			if m != st.mats[gi]:
+				st.mats[gi] = m
+				if not hm_ch: mch.append(gi); mhh.append(st.hm[gi])
+			if hm_ch:
+				hm[gi] = float(b.hm[ci])
+				edit(s, ci / BS, ci % BS, int(b.hm[ci])); n += 1
+				while pending(): step()
+		if not mch.is_empty(): _update(mch, mhh, st.src); _falls()
+		_dry_to79(all)
+		out.cesta = "sloupce"; out.edit = n; out.materialy = mch.size()
+		out.ms = (Time.get_ticks_usec() - t0) / 1000.0
+		return out
+	var ch := PackedInt32Array(); var hh := PackedFloat64Array()
+	for e in all:
+		var gi: int = e[2]
+		hm[gi] = float(blocks[e[0]].hm[e[1]]); ch.append(gi); hh.append(hm[gi]); st.hm[gi] = hm[gi]   # jako place76
+		st.mats[gi] = _mat_d(gi, dd, gen76)
+	var src_new := PRM.src(springs, st.hm, W * H)
+	var t1 := Time.get_ticks_usec()
+	if not ug.is_empty(): ug.clear()
+	ug = UGO.make(T.world, T.fine(blocks), p, W, st.hm, wall, float(p.voda_cell_m), _ugc79)
+	_replay_digs(ug)
+	st.ug = ug
+	st.ug_cache = {}
+	out.podzemi_ms = (Time.get_ticks_usec() - t1) / 1000.0
+	var t2 := Time.get_ticks_usec()
+	_add_drains(ch, hh)
+	out.tune = _ponds79(ch, hh)
+	# smyčka tůň → těleso → pramen začne jako plný výpočet od nuly (jinak se udrží pramen, který živí sám sebe)
+	for u in st.get("under", []):
+		for k in ["from", "exit"]:
+			var i: int = int(u[k])
+			if i >= 0: st.extra[i] = 0.0; st.src2[i] = 0.0
+	var r := _update(ch, hh, src_new)
+	_falls()
+	_dry_to79(all)
+	out.povrch_ms = (Time.get_ticks_usec() - t2) / 1000.0
+	out.okno = r.get("window", 0)
+	out.cesta = "dutiny"
+	out.ms = (Time.get_ticks_usec() - t0) / 1000.0
+	last_edit = {}
+	return out
+
+## E79: tůně nad tělesy, kterých se změna dotkla (pásma změněných sloupců v novém podzemí), jdou do přepočtu celé:
+## jejich odtok do podzemí a hladina (kapacita E71) závisí na tělese, i když leží mimo okno změny. Vrací počet buněk.
+func _ponds79(ch: PackedInt32Array, hh: PackedFloat64Array) -> int:
+	var comps := {}
+	for k in ch.size():
+		var cc := UGO.col_of(ug, ch[k])
+		for x in range(-1, 2):   # i sousední sloupce řídicí mřížky (chodba ve stěně sousedí s tělesem vedle)
+			for y in range(-1, 2):
+				var c2: int = cc + x * int(ug.H) + y
+				if c2 < 0 or c2 >= int(ug.W) * int(ug.H): continue
+				for b in range(ug.cs[c2], ug.cs[c2 + 1]):
+					if ug.body[b] == 1: comps[ug.comp[b]] = true
+	var seen := {}
+	for i in ch: seen[i] = true
+	var n := 0
+	for i in W * H:
+		if island[i] == 0 or seen.has(i) or not is_pond(i): continue
+		var e := UGO.entry(ug, i)
+		if e >= 0 and comps.has(ug.comp[e]): ch.append(i); hh.append(st.hm[i]); n += 1
+	return n
+
+## E79: lokální přepočet v suchu (tok60 „suché okolí“) nechá směr odtoku `to` beze změny; plný výpočet ho spočítá z fill.
+## Suché buňky (eff 0) kolem změněných sloupců dostanou `to` znovu (stejná funkce jako plný výpočet), voda se nemění.
+func _dry_to79(all: Array) -> void:
+	var seen := {}
+	for e in all:
+		var gi: int = e[2]
+		var x := gi / H; var y := gi % H
+		for dx in range(-1, 2):
+			for dy in range(-1, 2):
+				var qx := x + dx; var qy := y + dy
+				if qx < 0 or qy < 0 or qx >= W or qy >= H: continue
+				var j := qx * H + qy
+				if seen.has(j) or wall[j] == 1 or st.eff[j] != 0.0: continue
+				seen[j] = true
+				TOK._to(st, j)
 
 ## výsledek podzemí se změnil → do přepočtu povrchu přidat odtoky tůní do podzemí a vývěry (beze změny výšky). Jinak by
 ## tok60 při výkopu v suchu nic nepřepočítal a změna podzemí by se na povrch nedostala.
