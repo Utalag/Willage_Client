@@ -25,11 +25,11 @@ Značení: „rozhodnuto (datum)“ = Jan už rozhodl. ⚠ = novější měřen�
 
 **Otázka pro Jana.** Je blok 128 m jednotka, kterou hráč vkládá a otáčí, a ostrov se skládá z 4 až 16 takových bloků? Nebo je 128 m celý ostrov?
 
-**Platí:** *rozhodnuto (2026-11-20 14:34–14:39, Jan t713u, t714u)*
+**Platí:** *rozhodnuto (2026-11-20 14:34–14:39, Jan t713u, t714u); doplněno (2026-11-20, Jan t741u–t743u)*
 
 | Pojem | Co to je | Velikost (výchozí) |
 |---|---|---|
-| **Ostrov** | proměnný počet bloků | – |
+| **Ostrov** | jednotka ukládání: proměnný počet bloků, roste dynamicky po jednom bloku, nese i data přes hranice bloků | – |
 | **Blok** | jeden stavební dílek, ze kterého se ostrov skládá. Hráč ho vkládá, zrcadlí a otáčí | 128 × 128 m (256 × 256 buněk) |
 | **Segment** | vnitřní část bloku. Jednotka výpočtu, ukládání a načítání. Segmenty vykreslují buňky | parametr, výchozí 8 m (16 × 16 buněk). 16 a 32 m jsou kandidáti, doladí se v bodě o výkonu (1.11) |
 | **Buňka (voxel)** | nese materiál a vodu | 0,5 m |
@@ -38,6 +38,8 @@ Značení: „rozhodnuto (datum)“ = Jan už rozhodl. ⚠ = novější měřen�
 - **Proč:** indexy jdou bitovými posuny, přehledy a LOD se půlí až na jednu buňku, quadtree slouží pro načítání a slučované vykreslování, a velikosti sedí na 2D tilesety 16/32/64 px (Jan t714u).
 - **Důsledek:** dnešní „blok“ 8 m v kódu (`BS` 16, WVB1 `dims`, `veg.gd`, E88) je od teď segment. Vkládání, zrcadlení, rotace, recept a sousedé patří bloku. „Dlaždice“ zůstává pro svět výprav.
 - **Data a zobrazení (Jan t715u, 2026-11-20):** datový model je v metrech a o pixelech nic neví. Se zobrazením ho spojuje jen pravidlo **buňka 0,5 m = 1 dlaždice (tile)**. Segment i blok jsou celé násobky buňky, což zaručují mocniny 2 (segment 8 m = 16 × 16 dlaždic, blok 128 m = 256 × 256). Zobrazení převádí jedním faktorem (např. 1 m = 64 px, tedy dlaždice 32 px). Výměna tilesetu ani přechod mezi 2D a 3D data nemění.
+- **Hierarchie ukládání (Jan t741u–t743u):** ostrov → blok → segment → buňka. Ostrov je také jednotka ukládání: roste dynamicky po jednom bloku a nese data, která jdou přes hranice bloků.
+- **Poznámka – ostrov a svět:** tyto dva pojmy se nesmějí zaměňovat. **Svět** (1.4) zůstává vygenerovaný zdroj blueprintů. **Ostrov** je to, co hráč skládá z bloků a kde se ukládají i data přesahující hranici bloku.
 
 ---
 
