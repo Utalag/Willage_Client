@@ -2606,7 +2606,7 @@ Zdroje [45]–[72] níže v tomto souboru zůstávají jen jako zástupné čís
 - **C – „vygenerovat otočené na místě“ (negativ).** Celý pipeline se šablonou povrchu otočenou o rot (bez sousedů) proti otočenému
   vygenerovanému bloku: povrch stejný (hm 0 neshod; hm_f liší se nejvýš o 1,2·10⁻⁵ U ve 131–132 sloupcích – pořadí sčítání
   při dorovnání okrajů), ale hranice vrstev se liší až o 4,3–6,9 U (2,1–3,4 m, průměr 0,1–2,3 U podle vrstvy) a buňky
-  v 18,9–24,8 % (3 094–4 062 z 16 384), z toho ~88 % vrstvy, zbytek skarn, minerály, dutiny, hornina hor. Příčina: regionální
+  v 18,9–24,8 % (3 094–4 062 z 16 384), z toho 80–90 % vrstvy, zbytek skarn, minerály, dutiny, hornina hor. Příčina: regionální
   základ vrstev (`region.gd`, `geo2.targets`) a jejich šum jsou v souřadnicích světa, šablona se otočí, region ne.
 - **D – ostrov (`p86_otoceni` zap):** výřez kopec 707 z (0, 1) průzkumného světa, rot 0–3, sloty (2, 0) a (0, −1), dz 0:
   - lokální `place76` = plný výpočet ve všech 8 bězích (0 neshod fill / eff / to, stejný otisk), chyba bilance 0;
