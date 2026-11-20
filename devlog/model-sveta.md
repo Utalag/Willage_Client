@@ -66,6 +66,8 @@ definice → vzorkování buněk → překryv změn → skutečný stav buňky
 
 U průzkumného světa to znamená generovat deterministicky ze stejných funkcí a ukládat jen změny. U osobního ostrova to navazuje na formát bloku WVB1, který dnes ukládá celé pole bloku. Jak se k sobě oba způsoby mají, je otevřené.
 
+Pokus E78 (2026-11-20 01:08, větev `e78-prekryv`): překryv v buňkách 0,25 m nad blokem z definice. Po načtení (bloky znovu z definice a překryv) sedí otisk buněk i vody s živým stavem. Překryv 1000 náhodných buněk má 1,8 kB, chodba 70 m 244 B. Celé pole 0,25 m ostrova po kompresi má 13–17 kB. Ukládá se konečný stav buňky, takže výsledek závisí na definici a překryvu, ne na historii. Na téže buňce rozhoduje poslední operace. Otevřené zůstává, že lokální přepočet vody nevidí novou chodbu pod povrchem.
+
 ## Dva světy a přenos terénu
 
 Průzkumný svět (velký, po chunkách) a osobní ostrov (začíná na 4 blocích, nejvýš asi 16) sdílí stejnou geologii a vodu. Hráč přenese výřez s celou geologickou definicí, otočí ho, posune ho do výšky a připojí ho. Existující bloky se nemění, přizpůsobí se jen nový. Voda se nepřenáší hotová, po vložení se přepočítá v novém okolí. Otevřené body jsou v [`TODO.md`](../TODO.md).

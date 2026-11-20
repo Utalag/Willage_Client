@@ -315,6 +315,42 @@ Výchozí: 800 kapek na blok, `ero_cap` 1,0, `ero_erode` 0,1, `ero_deposit_rate`
 - **Očekávání / riziko:** chodba pod povrchem nemění výšku sloupce → lokální přepočet vody ji nevidí, plný přepočet ano
   (dutina z buněk) → živá voda se může lišit od načtené. Bez backendu: WVB1 jen jako návrh změny.
 
+## E78 výsledky (zapsáno 2026-11-20 01:08; `godot-prototyp/tools/prekryv_e78.gd -- --bp.p76_prameny=true`, `shots/e78/vysledky.json`, `vystup.txt`)
+- **Přechod definice → buňky:** buňky 0,5 m → 0,25 m → 0,5 m beze změny a výška = `hm` z generátoru u všech 4 bloků.
+- **Shoda po načtení:** ve všech 6 scénářích otisk buněk 0,25 m i 0,5 m po načtení = živý stav a voda po načtení
+  (plný přepočet, uložené prameny E76) = plný přepočet živého stavu. Bez `p76_prameny` u chodby taky.
+- **Velikost (ostrov 4 bloky, součet; A = seřazené klíče, B = úseky ve sloupcích; syrově / deflate):**
+
+| scénář | změn | položek | A | B | JSON záznam |
+|---|---|---|---|---|---|
+| 1 buňka | 1 | 1 | 8 / 40 B | 5 / 13 B | viz json |
+| 10 | 10 | 10 | 40 / 70 B | 50 / 82 B | |
+| 100 | 100 | 100 | 304 / 255 B | 500 / 481 B | |
+| 1000 | 1000 | 1000 | 2779 / 1792 B | 4980 / 3341 B | |
+| chodba 15 m + šachta + položení + zasypání | 2185 | 2175 | 4421 / 124 B | 1300 / 451 B | |
+| dlouhá chodba ~70 m přes 4 bloky | 9288 | 9288 | 18831 / 244 B | 5920 / 1865 B | |
+
+  Celé pole WVB1 pro tytéž 4 bloky: 0,5 m 65 536 B syrově / ~7,1–7,2 kB deflate; 0,25 m 524 288 B / 13,4–17,4 kB deflate
+  (roste s počtem náhodných změn). Překryv je i u 1000 náhodných buněk 4–10× menší než deflate celého pole, chodby 30–55×.
+- **Čas načtení:** bloky z definice ~0,95–1,03 s (4 bloky), překryv + převod na 0,5 m +0,07–0,19 s; voda (plný přepočet)
+  1,7–2,2 s. Lokální kroky vody po změně jen u sloupců se změněnou výškou.
+- **Pořadí:** vykopat → zasypat hlínou = hlína (1 položka), zasypat → vykopat = vzduch (zasypání plné buňky se neprovede),
+  otisky se liší, záměrně a vysvětlitelně. Vykopat a vrátit původní materiál = otisk definice, 0 položek. Dvě operace na
+  různých buňkách v obou pořadích = stejný otisk. Hash = f(definice, překryv), ne f(historie).
+- **Záznam E76 rozšířen:** `prenos_e76.gd` ukládá místo `vykopy` překryv buněk (`bunky`, `bunky_n`), výška se odvodí.
+  Část A E76 dává stejný otisk 63d7b89a91385a79 (0 neshod), záznam 644 B místo 524 B.
+- **Negativa:**
+  - Chodba se vstupem z povrchu: lokální přepočet vody ji nevidí (mění se jen výška sloupců), proti plnému přepočtu 153 buněk
+    jiný `eff` a 1 `to`, jiný otisk vody. Načtení odpovídá plnému přepočtu, ne živému lokálnímu stavu. Dutiny pod
+    povrchem musí lokálnímu přepočtu podzemí dát vědět (přestavět pásma dotčených sloupců), jinak hra a načtení nesedí.
+    Dlouhá uzavřená chodba (bez vstupu) vodu nemění, tam lokální = plný.
+  - Pro výkopy po sloupcích je překryv buněk větší než výšky sloupců (644 proti 524 B), jeden sloupec 0,5 m = 8 položek.
+  - Deflate se u malých překryvů nevyplatí (8 → 40 B); záznam proto komprimuje jen když je to menší.
+  - Kódování B (úseky) je lepší syrově u chodeb, ale po deflate horší než A; A s deflate vychází nejlépe všude kromě 1 buňky.
+  - Buňka 0,5 m zůstává plná, dokud v ní zbývá 1 z 8 jemných buněk: voda a kolize 0,5 m nevidí díru 0,25 m. Prototyp
+    sám dál kope po 0,5 m; mřížka 0,25 m je zatím jen v tomto pokusu.
+  - Načtení stojí hlavně generování bloků (~1 s) a plný přepočet vody (~2 s), ne překryv.
+
 ## E76 voda po přenosu výřezu na ostrov (plán, zapsáno před pokusem 2026-11-20 00:36; TODO Přenos terénu „Voda se nepřenáší hotová“ + nález E74)
 - **Rozsah:** jen lokální studie klienta, žádná datová smlouva s backendem (`TerrainSource` atd. je pozdější blok).
 - **Co už je:** blok `bp` = blueprint (tvar, seed, minerály) + posun výšky, záznam ve světě studie (`bp_rec`: hm, hm_f, bs,

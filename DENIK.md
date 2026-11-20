@@ -510,6 +510,12 @@ Skupiny: 1 Prototyp a buildy · 2 Terén a tvar · 3 Rozlišení bloku · 4 Ská
 
 ## 3 Rozlišení bloku
 
+### 🧪 E78: překryv změn po kopání nad definicí bloku, buňka 0,25 m (2026-11-20 01:08 · prototyp `scripts/teren/prekryv78.gd`, `tools/prekryv_e78.gd`, záznam `tools/prenos_e76.gd`, větev `e78-prekryv`)
+- **Směr:** TODO Model světa a kopání: definice zůstává funkcí, změny hráče se ukládají jako překryv (buňka 0,25 m → materiál, konečný stav, položka rovná definici se maže). Záznam bloku E76 nese buňky místo výkopů po sloupcích.
+- **Zlepšení:** načtení (bloky z definice + překryv) = živý stav ve všech scénářích (buňky i voda po plném přepočtu). Překryv 1000 náhodných buněk 1,8 kB, chodba 70 m 244 B proti 13–17 kB deflate celého pole 0,25 m (WVB1). Pořadí je explicitní: hash z definice a překryvu.
+- **Komplikace:** lokální přepočet vody nevidí chodbu pod povrchem (153 buněk jinak než plný přepočet). Buňka 0,5 m je plná, dokud zbývá 1 z 8. Načtení ~1 s bloky + ~2 s voda.
+- **Další krok:** lokální přepočet pásem podzemí po změně dutin; kopání v prototypu po 0,25 m; Jan a backend: WVB1 jako překryv nad definicí.
+
 ### 🧪 Nastavitelné rozlišení, test 32 × 32 × 64 s buňkou 0,5³ (2026-11-17 11:50 · `--res-test`)
 - **Směr:** generátor počítá ve fyzických jednotkách, rozlišení a velikost buňky jsou parametry (`--res-xy`, `--res-z`, `--cell-xy`, `--cell-z`).
 - **Zlepšení:** výrazně jemnější tvar se stejným reliéfem; dá se ladit jakákoli kombinace.
