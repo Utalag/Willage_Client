@@ -44,11 +44,17 @@ func _bench() -> void:
 	if on: isl.water_finish_async()
 	else: isl.water_finish()
 	var fin_ms := (Time.get_ticks_usec() - tf) / 1000.0
+	var tr := Time.get_ticks_usec()
+	for k in 3: isl.render_water()
+	var render_ms := (Time.get_ticks_usec() - tr) / 3000.0
+	var tre := Time.get_ticks_usec()
+	isl.refresh_after_edit(digs[0].get("sl", Vector2i(1, 1)) if false else isl.blocks.keys()[0], 5, 5)
+	var refresh_ms := (Time.get_ticks_usec() - tre) / 1000.0
 	var fm := frame_ms.duplicate(); fm.sort()
 	var dm := digs.map(func(d): return float(d.dig_ms)); dm.sort()
 	var out := {"p95_async_voda": on, "mezera_snimku": mezera, "digs": digs, "dig_ms_max": dm[-1], "dig_ms_p50": dm[dm.size() / 2],
 		"voda_na_snimek_ms": {"p50": fm[fm.size() / 2], "max": fm[-1], "nad_33ms": fm.filter(func(x): return x > 33.3).size()},
-		"dokonceni_na_konci_ms": fin_ms, "otisk": H68.otisk(v.st), "neshod_plny": v.check_full(),
+		"dokonceni_na_konci_ms": fin_ms, "render_vody_ms": render_ms, "prestavba_terenu_ms": refresh_ms, "otisk": H68.otisk(v.st), "neshod_plny": v.check_full(),
 		"pamet_pohled_B": (isl.voda_async.front.bytes() if on else 0)}
 	print("E95 hra: ", JSON.stringify(out))
 	var path := ProjectSettings.globalize_path(_arg("e95-out", "res://shots/e95/hra.json"))

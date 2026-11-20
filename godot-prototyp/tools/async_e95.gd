@@ -8,6 +8,7 @@ const T = preload("res://scripts/teren/ostrov_teren.gd")
 const OV = preload("res://scripts/voda/ostrov_voda.gd")
 const A95 = preload("res://scripts/voda/async95.gd")
 const H68 = preload("res://scripts/voda/hydro68.gd")
+const B128 = preload("res://scripts/voda/blok128_voda95.gd")   # --svet=blok128: celý blok 128 m z funkce (256 × 256, bez podzemí)
 const TICK_US := 16667
 
 func _arg(k: String, d: String) -> String:
@@ -16,12 +17,13 @@ func _arg(k: String, d: String) -> String:
 	return d
 
 var blocks := {}
+var terr := PackedFloat64Array()   # blok128: terén v hlavním vlákně (buňky), model vody má vlastní kopii
 
 ## posloupnost výkopů [[gi, tick], ...] (tick = kdy hráč kopne)
 func _seq(v, name: String) -> Array:
 	var cand := []
 	for i in v.W * v.H:
-		if v.island[i] == 1 and v.level(i) >= 0.0: cand.append(i)
+		if v.island[i] == 1 and v.level(i) >= 0.0 and i / v.H > 1 and i % v.H > 1 and i / v.H < v.W - 2 and i % v.H < v.H - 2: cand.append(i)
 	var spr := []
 	for sp in v.springs: cand.append(sp.gi); spr.append(sp.gi)
 	var rng := RandomNumberGenerator.new()
@@ -37,6 +39,20 @@ func _seq(v, name: String) -> Array:
 			for k in 6: gis.append(cand[rng.randi_range(0, cand.size() - 1)])
 			for s in spr: gis.append(s)   # výkopy pramenů (zdroj se zavře / otevře)
 			iv = 60
+		"B1", "B2":   # blok128: koryta (ne tůně) a suché okraje tůní (výkop může tůň vypustit), kop každé 2 s / dávka každý tik
+			rng.seed = 128
+			var kor := []; var rim := []
+			for i in cand:
+				if not v.is_pond(i): kor.append(i)
+			for i in v.W * v.H:
+				var x: int = i / v.H; var y: int = i % v.H
+				if x < 2 or y < 2 or x >= v.W - 2 or y >= v.H - 2 or v.level(i) >= 0.0: continue
+				for d in [1, -1, v.H, -v.H]:
+					if v.is_pond(i + d): rim.append(i); break
+			for k in 6:
+				if not kor.is_empty(): gis.append(kor[rng.randi_range(0, kor.size() - 1)])
+				if not rim.is_empty(): gis.append(rim[rng.randi_range(0, rim.size() - 1)])
+			if name == "B2": gis = gis.slice(0, 6); iv = 1
 		"S5":   # výkop během přítoku: další kop dřív, než předchozí výpočet doběhne; stejný sloupec dvakrát
 			rng.seed = 5
 			var a: int = cand[rng.randi_range(0, cand.size() - 1)]
@@ -47,6 +63,10 @@ func _seq(v, name: String) -> Array:
 	return out
 
 func _dig(v, gi: int, dep: int) -> Array:   # změna terénu (hlavní vlákno, hned); vrací [slot, lx, ly, nh]
+	if not terr.is_empty():
+		var nh0 := maxi(int(terr[gi]) - dep, 1)
+		terr[gi] = nh0
+		return [Vector2i.ZERO, gi / 256, gi % 256, nh0]
 	var a: Array = v.slot_of(gi)
 	var b = blocks[a[0]]
 	var ci: int = a[1] * 16 + a[2]
@@ -71,20 +91,43 @@ func _stats(a: Array) -> Dictionary:
 func _init() -> void:
 	BlockGen.gen_version = "bp"
 	T.reset()
-	for e in "0,0:louka:101;1,0:hora:202;0,1:kopec:303;1,1:louka:404".split(";"):
-		var a := e.split(":"); var xy := a[0].split(",")
-		var b := Block.new()
-		b.kind = a[1]; b.seed = int(a[2]); b.slot = Vector2i(int(xy[0]), int(xy[1]))
-		BlockGen.build(b, [null, null, null, null])
-		T.commit(b)
-		blocks[b.slot] = b
-	var v := OV.new()
-	v.build(blocks)
+	var svet := _arg("svet", "ostrov")
+	var v
+	var tb0 := Time.get_ticks_usec()
+	if svet == "blok128":
+		v = B128.z_funkce(int(_arg("pram_max", "16")))
+		terr = v.hm.duplicate()
+		print("blok128 dlaždice %s: postavení %.0f ms (%s), prameny %d, souhrn %s" % [v.dlazdice, (Time.get_ticks_usec() - tb0) / 1000.0, v.ms, v.springs.size(), v.summary()])
+	elif svet.begins_with("ostrov") and svet.length() > 6:   # ostrovNxN: N × N bloků bp (16 sloupců po 0,5 m) s podzemím
+		var nb := int(svet.substr(6).split("x")[0])
+		T.reset(Vector2i(1, 1), nb + 2)
+		var kinds := ["louka", "kopec", "hora", "louka"]
+		for bx in nb:
+			for by in nb:
+				var b := Block.new()
+				b.kind = kinds[(bx * 3 + by) % 4]; b.seed = 1000 + bx * 37 + by; b.slot = Vector2i(bx, by)
+				BlockGen.build(b, [null, null, null, null])
+				T.commit(b)
+				blocks[b.slot] = b
+		print("ostrov %d×%d bloků: generování %.0f ms" % [nb, nb, (Time.get_ticks_usec() - tb0) / 1000.0])
+		v = OV.new()
+		v.build(blocks)
+	else:
+		for e in "0,0:louka:101;1,0:hora:202;0,1:kopec:303;1,1:louka:404".split(";"):
+			var a := e.split(":"); var xy := a[0].split(",")
+			var b := Block.new()
+			b.kind = a[1]; b.seed = int(a[2]); b.slot = Vector2i(int(xy[0]), int(xy[1]))
+			BlockGen.build(b, [null, null, null, null])
+			T.commit(b)
+			blocks[b.slot] = b
+		v = OV.new()
+		v.build(blocks)
 	var rezim := _arg("rezim", "sync"); var seqn := _arg("seq", "S1"); var cas := _arg("cas", "virt")
 	var lat := int(_arg("zpozdeni", "30")); var zat := float(_arg("zatez_ms", "8")); var dep := int(_arg("hloubka", "2"))
 	var seq := _seq(v, seqn)
+	if int(_arg("vykopu", "0")) > 0: seq = seq.slice(0, int(_arg("vykopu", "0")))
 	print("E95 režim %s, %s, čas %s, výkopů %d, plný výpočet %.0f ms, otisk %s" % [rezim, seqn, cas, seq.size(), float(v.ms.celkem), H68.otisk(v.st)])
-	var out := {"rezim": rezim, "seq": seqn, "cas": cas, "zpozdeni": lat, "zatez_ms": zat, "vykopy": seq, "cpu": OS.get_processor_count()}
+	var out := {"svet": svet, "voda_ms": v.ms, "souhrn": v.summary(), "rezim": rezim, "seq": seqn, "cas": cas, "zpozdeni": lat, "zatez_ms": zat, "vykopy": seq, "cpu": OS.get_processor_count()}
 	var frames := []; var digs := []; var otisky := []
 	var tick := 0; var di := 0
 	var t_start := Time.get_ticks_usec()
