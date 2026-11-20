@@ -1,0 +1,195 @@
+{
+  "okno": [
+    1280,
+    800
+  ],
+  "renderer": "llvmpipe (LLVM 19.1.7, 256 bits)",
+  "vychozi_cas": {
+    "snimek_prumer_ms": 201.73,
+    "snimek_median_ms": 203.55,
+    "snimek_p90_ms": 229.8,
+    "render_cpu_ms": 189.683,
+    "render_gpu_ms": 193.966
+  },
+  "zapnuti": {
+    "materialu": 393,
+    "shaderu": 8,
+    "prvni_snimek_s_prekladem_ms": 3830.3,
+    "radku_navic_na_shader": 29
+  },
+  "set_params_ms": 0.448,
+  "zapnuto_mode0_cas": {
+    "snimek_prumer_ms": 230.27,
+    "snimek_median_ms": 232.81,
+    "snimek_p90_ms": 264.81,
+    "render_cpu_ms": 223.349,
+    "render_gpu_ms": 226.971
+  },
+  "kopec": {
+    "nohy": [
+      17.5,
+      19.5,
+      11.5
+    ],
+    "v_podzemi": false,
+    "postava_px_bez_terenu": 223,
+    "metody": {
+      "pred": {
+        "viditelnost_postavy": 0.0,
+        "cas": {
+          "snimek_median_ms": 213.06,
+          "render_cpu_ms": 219.362,
+          "kola_median_ms": [
+            208.04,
+            213.06,
+            221.11
+          ]
+        }
+      },
+      "A_valec": {
+        "viditelnost_postavy": 0.673,
+        "cas": {
+          "snimek_median_ms": 222.5,
+          "render_cpu_ms": 219.729,
+          "kola_median_ms": [
+            214.01,
+            222.5,
+            231.25
+          ]
+        }
+      },
+      "B_rez": {
+        "viditelnost_postavy": 0.525,
+        "cas": {
+          "snimek_median_ms": 219.22,
+          "render_cpu_ms": 218.416,
+          "kola_median_ms": [
+            215.63,
+            219.22,
+            225.98
+          ]
+        }
+      },
+      "AB": {
+        "viditelnost_postavy": 0.673,
+        "cas": {
+          "snimek_median_ms": 243.22,
+          "render_cpu_ms": 239.295,
+          "kola_median_ms": [
+            225.54,
+            243.22,
+            244.81
+          ]
+        }
+      },
+      "C_rez_site": {
+        "viditelnost_postavy": 0.377,
+        "cas": {
+          "snimek_prumer_ms": 56.79,
+          "snimek_median_ms": 56.13,
+          "snimek_p90_ms": 60.33,
+          "render_cpu_ms": 53.2,
+          "render_gpu_ms": 54.249
+        },
+        "zapnuti_ms": 238.1,
+        "vypnuti_ms": 230.4,
+        "rez_bunka": 42
+      },
+      "C2_bloky": {
+        "viditelnost_postavy": 0.0,
+        "skryte_bloky": [
+          "(1, 1)"
+        ],
+        "prepnuti_ms": 0.023
+      }
+    }
+  },
+  "chodba_vyrez": {
+    "nohy": "(23.5, 20.0, 12.0)",
+    "vrchol_bunek": 58,
+    "podlaha_bunek": 40,
+    "nadlozi_bunek": 18,
+    "vyrezano_bunek": 59,
+    "delka_bunek": 9,
+    "prestavba_ms": 567.9
+  },
+  "chodba": {
+    "nohy": [
+      23.5,
+      20.0,
+      12.0
+    ],
+    "v_podzemi": true,
+    "postava_px_bez_terenu": 315,
+    "metody": {
+      "pred": {
+        "viditelnost_postavy": 0.0,
+        "cas": {
+          "snimek_median_ms": 198.98,
+          "render_cpu_ms": 197.753,
+          "kola_median_ms": [
+            195.2,
+            198.98,
+            212.04
+          ]
+        }
+      },
+      "A_valec": {
+        "viditelnost_postavy": 1.0,
+        "cas": {
+          "snimek_median_ms": 222.35,
+          "render_cpu_ms": 220.833,
+          "kola_median_ms": [
+            215.48,
+            222.35,
+            228.5
+          ]
+        }
+      },
+      "B_rez": {
+        "viditelnost_postavy": 0.873,
+        "cas": {
+          "snimek_median_ms": 215.41,
+          "render_cpu_ms": 212.852,
+          "kola_median_ms": [
+            210.95,
+            215.41,
+            229.56
+          ]
+        }
+      },
+      "AB": {
+        "viditelnost_postavy": 1.019,
+        "cas": {
+          "snimek_median_ms": 215.57,
+          "render_cpu_ms": 215.432,
+          "kola_median_ms": [
+            214.46,
+            215.57,
+            220.25
+          ]
+        }
+      },
+      "C_rez_site": {
+        "viditelnost_postavy": 0.727,
+        "cas": {
+          "snimek_prumer_ms": 55.9,
+          "snimek_median_ms": 55.9,
+          "snimek_p90_ms": 59.28,
+          "render_cpu_ms": 52.623,
+          "render_gpu_ms": 53.62
+        },
+        "zapnuti_ms": 195.0,
+        "vypnuti_ms": 230.9,
+        "rez_bunka": 43
+      },
+      "C2_bloky": {
+        "viditelnost_postavy": 0.0,
+        "skryte_bloky": [
+          "(1, 1)"
+        ],
+        "prepnuti_ms": 0.025
+      }
+    }
+  }
+}
