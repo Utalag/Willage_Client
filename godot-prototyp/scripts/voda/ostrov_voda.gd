@@ -120,6 +120,8 @@ func build(bl: Dictionary) -> void:
 	t1 = Time.get_ticks_usec()
 	_route(st)
 	var nc := _claims(-1)
+	if _on85v() and not nc.is_empty():   # E85: s novým obsazením znovu od čistého stavu i podzemí (výsledek = funkce konečného obsazení)
+		_ug85(); _resolve85(); nc = PackedInt32Array()
 	while not nc.is_empty():   # E74: obsazení napojením na koryto / tůň mění povrch → znovu (obsazení jen přibývá)
 		_route(st); nc = _claims(-1)
 	ms["povrch + podzemí: plný výpočet"] = (Time.get_ticks_usec() - t1) / 1000.0
@@ -354,6 +356,20 @@ func edit79(zm: Dictionary) -> Dictionary:
 	st.ug_cache = {}
 	out.podzemi_ms = (Time.get_ticks_usec() - t1) / 1000.0
 	var t2 := Time.get_ticks_usec()
+	if _on85v():
+		# E85: po změně dutin povrch a podzemí celé znovu jako build() (lokální H68.update se zapnutými E74 končí jinde
+		# v rámci tolerance, rozdíly ~1e-13 l/s → otisk ≠ plný). Podzemí je už postavené výše, prameny a materiály také.
+		st.src = src_new
+		_resolve85()
+		_gw()
+		_falls()
+		_dry_to79(all)
+		out.cesta85 = "plny_povrch"
+		out.povrch_ms = (Time.get_ticks_usec() - t2) / 1000.0
+		out.ms = (Time.get_ticks_usec() - t0) / 1000.0
+		out.cesta = "dutiny"
+		last_edit = {}
+		return out
 	_add_drains(ch, hh)
 	out.tune = _ponds79(ch, hh)
 	# smyčka tůň → těleso → pramen začne jako plný výpočet od nuly (jinak se udrží pramen, který živí sám sebe)
@@ -362,12 +378,6 @@ func edit79(zm: Dictionary) -> Dictionary:
 			var i: int = int(u[k])
 			if i >= 0: st.extra[i] = 0.0; st.src2[i] = 0.0
 	var r := _update(ch, hh, src_new)
-	if bool(p.get("p85_blok2", false)) or bool(p.get("p85_voda", false)):   # E85: obsazení výtoků (E74) a plocha gw jako plný výpočet
-		var nc := _claims(-1)
-		out.obsazeno85 = nc.size()
-		while not nc.is_empty():   # nové obsazení mění povrch mimo okno → celé znovu jako build() (obsazení jen přibývá)
-			_fresh85(); _route(st); nc = _claims(-1)
-		_gw()
 	_falls()
 	_dry_to79(all)
 	out.povrch_ms = (Time.get_ticks_usec() - t2) / 1000.0
@@ -377,16 +387,30 @@ func edit79(zm: Dictionary) -> Dictionary:
 	last_edit = {}
 	return out
 
+## E85: povrch + podzemí od čistého stavu; když přibude obsazení výtoku, znovu i s čerstvým podzemím. Volání podzemí
+## (U._one) vidí předchozí volání v témže podzemí, takže druhý průchod nad použitým podzemím skončí o ~1e-13 jinde
+## než plný výpočet, který začne rovnou s konečným obsazením.
+func _resolve85() -> void:
+	while true:
+		_fresh85(); _route(st)
+		if _claims(-1).is_empty(): return
+		_ug85()
+
+func _ug85() -> void:
+	if not ug.is_empty(): ug.clear()
+	ug = UGO.make(T.world, T.fine(blocks), p, W, st.hm, wall, float(p.voda_cell_m), _ugc79)
+	_replay_digs(ug)
+	if bool(p.get("p75_kras", false)) and not kras.is_empty(): K75.apply(ug, kras)
+	st.ug = ug
+
 ## E85: stav toku jako čerstvý TOK.make (H68.full začíná z extra / src2 předchozího stavu → jiný ustálený stav než plný
 ## výpočet; klíč mezipaměti řešení obsazení výtoků neobsahuje)
 func _fresh85() -> void:
-	var n := W * H
-	for k in ["fill", "ain", "eff", "extra", "src2"]:
-		var a := PackedFloat64Array(); a.resize(n); st[k] = a
-	var t := PackedInt32Array(); t.resize(n); t.fill(-1); st.to = t
-	var sk := PackedByteArray(); sk.resize(n); st.sink = sk
-	for k in ["_xn", "under", "ug_bodies", "order"]: st.erase(k)
-	st.ug_cache = {}
+	var u = st.get("ug", null)   # podzemí (už nové) se převezme, vše ostatní jako v build(): i pomocná pole H68 / TOK (_pend, _xn, kolo68 …)
+	var src: PackedFloat64Array = st.src
+	st = TOK.make(st.hm, W, H, wall, st.mats, src, TOK.losses(p, true), true)
+	st.claim74 = claims
+	if u != null: st.ug = u
 
 ## E79: tůně nad tělesy, kterých se změna dotkla (pásma změněných sloupců v novém podzemí), jdou do přepočtu celé:
 ## jejich odtok do podzemí a hladina (kapacita E71) závisí na tělese, i když leží mimo okno změny. Vrací počet buněk.
