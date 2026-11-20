@@ -41,7 +41,9 @@ Podnět: druhá odpověď ChatGPT 2026-11-19 (Jan ji poslal do chatu). Jde o ná
   - Místo přímých volání mezi systémy typy změn (`SurfaceChanged`, `LayerBoundaryChanged`, `MaterialChanged`, `CavityCreated`, `CavityRemoved`, `HydraulicConnectivityChanged`) a resolver závislostí: každý systém deklaruje, na které změny reaguje. Navazuje na E68.
 - [ ] **Determinismus celého světa, nejen jednoho bloku.** Ujasnit `Hash(seed, změny, pořadí)`: u kterých operací pořadí nesmí hrát roli a u kterých ano (vykopat a zasypat). Navazování bloků je rozhodnuté (Jan 2026-11-17): sousedé se nikdy nemění, přizpůsobuje se jen nový blok. Pořadí pokládání tedy výsledek ovlivňuje záměrně; platí jen, že stejný výřez, transformace a sousedé dají stejný výsledek.
 - [ ] **Jádro vyzdvižené hory přes více bloků:** geologická kontinuita masivu přes švy.
-- [ ] **Tenké vrstvy a převzorkování mezi rozlišeními:** vrstva tenčí než buňka nesmí zmizet nebo se objevovat podle rozlišení.
+- [x] **Tenké vrstvy a převzorkování mezi rozlišeními:** vrstva tenčí než buňka nesmí zmizet nebo se objevovat podle rozlišení.
+  - 🧪 E81 (tag `e81-tenke`, nesloučeno, příznak `p81_tenke` vypnutý): vrstva > 0,05 m dostane aspoň jednu buňku. Chybění 60 % → 7,6 % (0,5 m), 48 % → 2,3 % (0,25 m); díry v nepropustné 64 % → 8 %. Vady: nafouknutí na celou buňku, 3 tenké vrstvy v jedné buňce 0,5 m (206 konfliktů).
+  - [ ] Jan: zapnout `p81_tenke` (spolu s `gen_ver`)? Tři tenké vrstvy v buňce: nejtenčí / sloučit / zakázat < 0,25 m v blueprintu? Práh 0,05 m?
 - [ ] **Výkon na telefonu:** hierarchie rozlišení (region, blok, sekce 16³ nebo 32³, jemné buňky jen u hráče), všechny úrovně ze stejných funkcí. Změřit generování bloku na slabém zařízení.
 
 ## Přenos terénu z průzkumného světa na ostrov
