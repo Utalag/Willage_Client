@@ -334,6 +334,29 @@ Výchozí: 800 kapek na blok, `ero_cap` 1,0, `ero_erode` 0,1, `ero_deposit_rate`
   plný. Dutina sloupce je jedno pásmo od nejnižšího po nejvyšší vzduch (dvě chodby nad sebou se spojí) – stejné jako plný
   výpočet, neopravuji. Buňka 0,5 m je dutina, jen když je vykopaných všech 8 buněk 0,25 m.
 
+## E83 determinismus: blok, překryv, voda, pořadí vložení (plán, zapsáno před pokusem 2026-11-20 03:31; TODO Architektura světa: „Determinismus celého světa, nejen jednoho bloku. Ujasnit Hash(seed, změny, pořadí)… Pořadí pokládání tedy výsledek ovlivňuje záměrně; platí jen, že stejný výřez, transformace a sousedé dají stejný výsledek.“; větev z `e82-vapenec-hladina`)
+- **Co už je:** hashe jsou vlastní (`stable_hash`: SplitMix64 + FNV-1a, celá čísla mod 2^64), náhoda generátoru je
+  `Ore.Rng` (SplitMix64) a `FastNoiseLite` se seedem z hashe. `RandomNumberGenerator` je jen ve vzhledu (tráva),
+  v testech a ve volbě bloku hráčem (`placement.gd`, to je vstup, ne výpočet). Vlákna se nepoužívají. Otisk vody
+  (`hydro68.otisk`) hashuje surové bity float64 → bitová shoda jen na stejné platformě. E78: překryv = konečný stav,
+  na pořadí operací na RŮZNÝCH buňkách nezáleží, na stejné buňce ano (vykopat / zasypat). E79: lokální = plný přepočet
+  vody v obou pořadích. Jan 2026-11-17: sousedé se nemění, přizpůsobí se jen nový blok.
+- **Pokus (`godot-prototyp/tools/determinismus_e83.gd`):**
+  1. *Běhy:* otisky (geo, cells, hm, překryv, voda před/po výkopech, uložený překryv → znovu načtený) dvakrát v jednom
+     procesu a ve dvou procesech; porovnat.
+  2. *Pořadí vložení:* 2 × 2 v pořadí A a obráceně: jiné buňky po blocích a podle vzdálenosti od švu s už položeným
+     sousedem. Test pravidla: blok postavený jen s jeho skutečnými sousedy (bez ostatních bloků) = stejný; diagonální
+     soused a vzdálený blok nemají vliv; mřížka 0,25 m z funkcí po příchodu souseda (E80).
+  3. *Operace překryvu:* náhodné změny na různých buňkách ve dvou pořadích → stejný překryv a hash.
+  4. *Citlivost na float:* posun řídicích hodnot o ±1e-9 m → kolik buněk se změní (riziko jiné platformy / ARM / C#).
+  5. *Audit kódu (`tools/audit_e83.py`):* exp / pow / sin / cos / log / sqrt, šum, `sort_custom`, iterace slovníků,
+     formátování floatů v klíčích a hashích, čas.
+- **Kandidát na opravu:** klíč mezipaměti podzemí v `tok.gd` / `tok60.gd` je `"%.9f" % q` + `excl.hash()` (32bitový hash
+  Godotu) → dvě různé hodnoty mohou dostat stejný výsledek z mezipaměti (výsledek závisí na historii). Oprava na přesné
+  bity q a seřazený seznam buněk; když se výchozí otisky nezmění, bez příznaku.
+- **Negativa předem:** jinou platformu (ARM, telefon, .NET) tu otestovat nejde – jen audit a citlivost. Pořadí vložení
+  ovlivňuje výsledek záměrně (Jan 2026-11-17).
+
 ## E82 vápenec k hladině v ~50 % bloků (plán, zapsáno před pokusem 2026-11-20 01:59; Rozhodnutí Jana 2026-11-20 01:55: „generátor dává vápenec k hladině zhruba v 50 % případů (náhodně podle seedu bloku)“; větev z `e81-tenke-vrstvy` + sloučený `e75-kras`)
 - **Co už je:** vrstvy v2 = zóny (plášť, krystalinikum, sedimenty), v zóně pořadí z tabulky hornin, mocnost a výskyt podle
   šumu světa (`geo2.targets`). Pak navázání mocností na sousedy (`strata.continue_thick`, náběh `taper_m` 3 m, klíny),
