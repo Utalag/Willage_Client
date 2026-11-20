@@ -10,8 +10,9 @@ extends RefCounted
 ## Materiál (splat) se nepočítá na CPU: shader vzorkuje malou texturu tříd buněk s lineárním filtrem, což jsou
 ## přesně bilineární váhy 4 rohů dlaždice (marching squares), a přidá šum + ostrou hranici.
 
+const J = preload("res://scripts/jednotky.gd")   # E94: mřížka a metry z jednoho místa
 const Mat = preload("res://scripts/mat.gd")
-const BS := 16
+const BS := J.BS
 
 static func build(f, sub: int) -> ArrayMesh:
 	var S := maxi(sub, 1)
