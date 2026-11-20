@@ -1,0 +1,226 @@
+{
+ "blok_hlavni": {
+  "max": 0.26,
+  "n": 6,
+  "nad_100ms": 0,
+  "nad_33ms": 0,
+  "p50": 0.07,
+  "p95": 0.26,
+  "p99": 0.26,
+  "prumer": 0.1
+ },
+ "cas": "real",
+ "celkem_s": 10.293989,
+ "cpu": 8,
+ "digs": [
+  {
+   "blok_hlavni_ms": 0.258,
+   "gi": 7751,
+   "id": 0,
+   "submit_ms": 0.214,
+   "tick": 30
+  },
+  {
+   "blok_hlavni_ms": 0.093,
+   "gi": 6450,
+   "id": 1,
+   "submit_ms": 0.056,
+   "tick": 31
+  },
+  {
+   "blok_hlavni_ms": 0.062,
+   "gi": 7611,
+   "id": 2,
+   "submit_ms": 0.04,
+   "tick": 32
+  },
+  {
+   "blok_hlavni_ms": 0.068,
+   "gi": 8910,
+   "id": 3,
+   "submit_ms": 0.043,
+   "tick": 33
+  },
+  {
+   "blok_hlavni_ms": 0.06,
+   "gi": 8385,
+   "id": 4,
+   "submit_ms": 0.038,
+   "tick": 34
+  },
+  {
+   "blok_hlavni_ms": 0.063,
+   "gi": 7612,
+   "id": 5,
+   "submit_ms": 0.042,
+   "tick": 35
+  }
+ ],
+ "neshod_plny": {
+  "eff": 0,
+  "fill": 0,
+  "to": 0
+ },
+ "otisk_konec": "22fd776439fcf0bc",
+ "otisky": [
+  "22fd776439fcf0bc",
+  "22fd776439fcf0bc"
+ ],
+ "pamet_pohled_B": 477936,
+ "prevzeti": [
+  {
+   "ceka_ms": 0.0,
+   "poll_ms": 0.114,
+   "prevzato": [
+    5
+   ],
+   "tick": 512
+  }
+ ],
+ "rezim": "slouceni",
+ "seq": "S4",
+ "snimky": {
+  "max": 8.28,
+  "n": 513,
+  "nad_100ms": 0,
+  "nad_33ms": 0,
+  "p50": 8.02,
+  "p95": 8.02,
+  "p99": 8.08,
+  "prumer": 8.02
+ },
+ "souhrn": {
+  "koryto_sloupcu": 27,
+  "okraj_lps": 9.64358,
+  "podzemni_telesa": 1,
+  "prameny": 5,
+  "tun_sloupcu": 159,
+  "vodopady": 8,
+  "vodopady_okraj": 5,
+  "volani_podzemi": 4,
+  "vyvery": 1
+ },
+ "svet": "ostrov",
+ "ticku": 513,
+ "ulohy": [
+  {
+   "cekal_ms": 0.115,
+   "edit_ms": 946.055,
+   "hotovo_us": 5492190,
+   "id": 0,
+   "od_vykopu_ms": 946.19,
+   "prace_ms": 946.075,
+   "prevzato_tick": 87,
+   "prevzato_us": 5495969,
+   "r_kroku": 0,
+   "r_max_ms": 0.0,
+   "slouceno": true,
+   "tick": 30
+  },
+  {
+   "cekal_ms": 929.426,
+   "edit_ms": 363.131,
+   "hotovo_us": 5855354,
+   "id": 1,
+   "od_vykopu_ms": 1292.578,
+   "prace_ms": 363.152,
+   "prevzato_tick": 109,
+   "prevzato_us": 5862804,
+   "r_kroku": 0,
+   "r_max_ms": 0.0,
+   "slouceno": true,
+   "tick": 31
+  },
+  {
+   "cekal_ms": 1276.069,
+   "edit_ms": 1713.02,
+   "hotovo_us": 7568417,
+   "id": 2,
+   "od_vykopu_ms": 2989.123,
+   "prace_ms": 1713.053,
+   "prevzato_tick": 212,
+   "prevzato_us": 7579355,
+   "r_kroku": 0,
+   "r_max_ms": 0.0,
+   "slouceno": true,
+   "tick": 32
+  },
+  {
+   "cekal_ms": 2972.47,
+   "edit_ms": 559.268,
+   "hotovo_us": 8127721,
+   "id": 3,
+   "od_vykopu_ms": 3531.766,
+   "prace_ms": 559.295,
+   "prevzato_tick": 245,
+   "prevzato_us": 8129405,
+   "r_kroku": 0,
+   "r_max_ms": 0.0,
+   "slouceno": true,
+   "tick": 33
+  },
+  {
+   "cekal_ms": 3515.061,
+   "edit_ms": 584.692,
+   "hotovo_us": 8712449,
+   "id": 4,
+   "od_vykopu_ms": 4099.776,
+   "prace_ms": 584.714,
+   "prevzato_tick": 280,
+   "prevzato_us": 8712819,
+   "r_kroku": 0,
+   "r_max_ms": 0.0,
+   "slouceno": true,
+   "tick": 34
+  },
+  {
+   "cekal_ms": 4083.158,
+   "edit_ms": 584.526,
+   "hotovo_us": 12577677,
+   "id": 5,
+   "od_vykopu_ms": 7948.375,
+   "otisk": "22fd776439fcf0bc",
+   "prace_ms": 3865.216,
+   "prevzato_tick": 512,
+   "prevzato_us": 12579457,
+   "r_kroku": 55,
+   "r_max_ms": 716.918,
+   "slouceno": false,
+   "tick": 35
+  }
+ ],
+ "voda_ms": {
+  "celkem": 2514.872,
+  "podzemí: pásma": 222.58,
+  "povrch + podzemí: plný výpočet": 2251.008,
+  "prameny": 8.396
+ },
+ "vykopy": [
+  [
+   7751,
+   30
+  ],
+  [
+   6450,
+   31
+  ],
+  [
+   7611,
+   32
+  ],
+  [
+   8910,
+   33
+  ],
+  [
+   8385,
+   34
+  ],
+  [
+   7612,
+   35
+  ]
+ ],
+ "zatez_ms": 8.0,
+ "zpozdeni": -1
+}

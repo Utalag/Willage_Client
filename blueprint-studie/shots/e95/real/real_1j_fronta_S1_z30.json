@@ -1,0 +1,486 @@
+{
+ "blok_hlavni": {
+  "max": 0.44,
+  "n": 12,
+  "nad_100ms": 0,
+  "nad_33ms": 0,
+  "p50": 0.17,
+  "p95": 0.44,
+  "p99": 0.44,
+  "prumer": 0.19
+ },
+ "cas": "real",
+ "celkem_s": 60.774821,
+ "cpu": 8,
+ "digs": [
+  {
+   "blok_hlavni_ms": 0.221,
+   "gi": 7751,
+   "id": 0,
+   "submit_ms": 0.165,
+   "tick": 30
+  },
+  {
+   "blok_hlavni_ms": 0.441,
+   "gi": 6450,
+   "id": 1,
+   "submit_ms": 0.1,
+   "tick": 150
+  },
+  {
+   "blok_hlavni_ms": 0.148,
+   "gi": 7611,
+   "id": 2,
+   "submit_ms": 0.106,
+   "tick": 270
+  },
+  {
+   "blok_hlavni_ms": 0.143,
+   "gi": 8910,
+   "id": 3,
+   "submit_ms": 0.101,
+   "tick": 390
+  },
+  {
+   "blok_hlavni_ms": 0.132,
+   "gi": 8385,
+   "id": 4,
+   "submit_ms": 0.102,
+   "tick": 510
+  },
+  {
+   "blok_hlavni_ms": 0.168,
+   "gi": 7612,
+   "id": 5,
+   "submit_ms": 0.132,
+   "tick": 630
+  },
+  {
+   "blok_hlavni_ms": 0.139,
+   "gi": 8002,
+   "id": 6,
+   "submit_ms": 0.111,
+   "tick": 750
+  },
+  {
+   "blok_hlavni_ms": 0.193,
+   "gi": 7752,
+   "id": 7,
+   "submit_ms": 0.154,
+   "tick": 870
+  },
+  {
+   "blok_hlavni_ms": 0.115,
+   "gi": 8387,
+   "id": 8,
+   "submit_ms": 0.087,
+   "tick": 990
+  },
+  {
+   "blok_hlavni_ms": 0.131,
+   "gi": 9407,
+   "id": 9,
+   "submit_ms": 0.097,
+   "tick": 1110
+  },
+  {
+   "blok_hlavni_ms": 0.166,
+   "gi": 7484,
+   "id": 10,
+   "submit_ms": 0.127,
+   "tick": 1230
+  },
+  {
+   "blok_hlavni_ms": 0.275,
+   "gi": 6337,
+   "id": 11,
+   "submit_ms": 0.228,
+   "tick": 1350
+  }
+ ],
+ "neshod_plny": {
+  "eff": 0,
+  "fill": 0,
+  "to": 0
+ },
+ "otisk_konec": "63d7b89a91385a79",
+ "otisky": [
+  "d7aedf3a6d9d10e8",
+  "4a7b7a866430b24d",
+  "4a7b7a866430b24d",
+  "22fd776439fcf0bc",
+  "22fd776439fcf0bc",
+  "22fd776439fcf0bc",
+  "22fd776439fcf0bc",
+  "22fd776439fcf0bc",
+  "22fd776439fcf0bc",
+  "63d7b89a91385a79",
+  "63d7b89a91385a79",
+  "63d7b89a91385a79",
+  "63d7b89a91385a79"
+ ],
+ "pamet_pohled_B": 477936,
+ "prevzeti": [
+  {
+   "ceka_ms": 1830.692,
+   "poll_ms": 1830.819,
+   "prevzato": [
+    0
+   ],
+   "tick": 60
+  },
+  {
+   "ceka_ms": 2791.181,
+   "poll_ms": 2791.369,
+   "prevzato": [
+    1
+   ],
+   "tick": 180
+  },
+  {
+   "ceka_ms": 3169.831,
+   "poll_ms": 3169.883,
+   "prevzato": [
+    2
+   ],
+   "tick": 300
+  },
+  {
+   "ceka_ms": 3809.372,
+   "poll_ms": 3809.438,
+   "prevzato": [
+    3
+   ],
+   "tick": 420
+  },
+  {
+   "ceka_ms": 3992.76,
+   "poll_ms": 3992.821,
+   "prevzato": [
+    4
+   ],
+   "tick": 540
+  },
+  {
+   "ceka_ms": 3818.756,
+   "poll_ms": 3818.832,
+   "prevzato": [
+    5
+   ],
+   "tick": 660
+  },
+  {
+   "ceka_ms": 4318.812,
+   "poll_ms": 4318.878,
+   "prevzato": [
+    6
+   ],
+   "tick": 780
+  },
+  {
+   "ceka_ms": 5532.727,
+   "poll_ms": 5532.79,
+   "prevzato": [
+    7
+   ],
+   "tick": 900
+  },
+  {
+   "ceka_ms": 3837.278,
+   "poll_ms": 3837.33,
+   "prevzato": [
+    8
+   ],
+   "tick": 1020
+  },
+  {
+   "ceka_ms": 4489.223,
+   "poll_ms": 4489.296,
+   "prevzato": [
+    9
+   ],
+   "tick": 1140
+  },
+  {
+   "ceka_ms": 4860.809,
+   "poll_ms": 4860.874,
+   "prevzato": [
+    10
+   ],
+   "tick": 1260
+  },
+  {
+   "ceka_ms": 4994.863,
+   "poll_ms": 4994.934,
+   "prevzato": [
+    11
+   ],
+   "tick": 1380
+  }
+ ],
+ "rezim": "fronta",
+ "seq": "S1",
+ "snimky": {
+  "max": 5540.8,
+  "n": 1381,
+  "nad_100ms": 12,
+  "nad_33ms": 12,
+  "p50": 8.0,
+  "p95": 8.06,
+  "p99": 15.93,
+  "prumer": 42.47
+ },
+ "souhrn": {
+  "koryto_sloupcu": 27,
+  "okraj_lps": 9.64358,
+  "podzemni_telesa": 1,
+  "prameny": 5,
+  "tun_sloupcu": 159,
+  "vodopady": 8,
+  "vodopady_okraj": 5,
+  "volani_podzemi": 4,
+  "vyvery": 1
+ },
+ "svet": "ostrov",
+ "ticku": 1381,
+ "ulohy": [
+  {
+   "cekal_ms": 8.201,
+   "edit_ms": 1076.865,
+   "hotovo_us": 6977307,
+   "id": 0,
+   "od_vykopu_ms": 2330.414,
+   "otisk": "d7aedf3a6d9d10e8",
+   "prace_ms": 2322.212,
+   "prevzato_tick": 60,
+   "prevzato_us": 6977515,
+   "r_kroku": 23,
+   "r_max_ms": 79.225,
+   "slouceno": false,
+   "tick": 30
+  },
+  {
+   "cekal_ms": 16.582,
+   "edit_ms": 480.705,
+   "hotovo_us": 10742071,
+   "id": 1,
+   "od_vykopu_ms": 3043.754,
+   "otisk": "4a7b7a866430b24d",
+   "prace_ms": 3027.172,
+   "prevzato_tick": 180,
+   "prevzato_us": 10742124,
+   "r_kroku": 31,
+   "r_max_ms": 896.469,
+   "slouceno": false,
+   "tick": 150
+  },
+  {
+   "cekal_ms": 11.995,
+   "edit_ms": 1230.227,
+   "hotovo_us": 14880753,
+   "id": 2,
+   "od_vykopu_ms": 3417.84,
+   "otisk": "4a7b7a866430b24d",
+   "prace_ms": 3405.845,
+   "prevzato_tick": 300,
+   "prevzato_us": 14880880,
+   "r_kroku": 46,
+   "r_max_ms": 70.327,
+   "slouceno": false,
+   "tick": 270
+  },
+  {
+   "cekal_ms": 1.546,
+   "edit_ms": 696.915,
+   "hotovo_us": 19652240,
+   "id": 3,
+   "od_vykopu_ms": 4050.86,
+   "otisk": "22fd776439fcf0bc",
+   "prace_ms": 4049.314,
+   "prevzato_tick": 420,
+   "prevzato_us": 19652334,
+   "r_kroku": 52,
+   "r_max_ms": 743.454,
+   "slouceno": false,
+   "tick": 390
+  },
+  {
+   "cekal_ms": 2.0,
+   "edit_ms": 844.03,
+   "hotovo_us": 24606026,
+   "id": 4,
+   "od_vykopu_ms": 4233.087,
+   "otisk": "22fd776439fcf0bc",
+   "prace_ms": 4231.086,
+   "prevzato_tick": 540,
+   "prevzato_us": 24606053,
+   "r_kroku": 76,
+   "r_max_ms": 75.01,
+   "slouceno": false,
+   "tick": 510
+  },
+  {
+   "cekal_ms": 4.503,
+   "edit_ms": 848.515,
+   "hotovo_us": 29397551,
+   "id": 5,
+   "od_vykopu_ms": 4071.077,
+   "otisk": "22fd776439fcf0bc",
+   "prace_ms": 4066.574,
+   "prevzato_tick": 660,
+   "prevzato_us": 29397746,
+   "r_kroku": 62,
+   "r_max_ms": 74.377,
+   "slouceno": false,
+   "tick": 630
+  },
+  {
+   "cekal_ms": 4.8,
+   "edit_ms": 834.629,
+   "hotovo_us": 34697632,
+   "id": 6,
+   "od_vykopu_ms": 4579.461,
+   "otisk": "22fd776439fcf0bc",
+   "prace_ms": 4574.661,
+   "prevzato_tick": 780,
+   "prevzato_us": 34697851,
+   "r_kroku": 62,
+   "r_max_ms": 119.654,
+   "slouceno": false,
+   "tick": 750
+  },
+  {
+   "cekal_ms": 2.964,
+   "edit_ms": 1502.454,
+   "hotovo_us": 41194217,
+   "id": 7,
+   "od_vykopu_ms": 5774.171,
+   "otisk": "22fd776439fcf0bc",
+   "prace_ms": 5771.207,
+   "prevzato_tick": 900,
+   "prevzato_us": 41194474,
+   "r_kroku": 62,
+   "r_max_ms": 126.608,
+   "slouceno": false,
+   "tick": 870
+  },
+  {
+   "cekal_ms": 4.157,
+   "edit_ms": 834.506,
+   "hotovo_us": 45996364,
+   "id": 8,
+   "od_vykopu_ms": 4081.53,
+   "otisk": "22fd776439fcf0bc",
+   "prace_ms": 4077.373,
+   "prevzato_tick": 1020,
+   "prevzato_us": 45996450,
+   "r_kroku": 62,
+   "r_max_ms": 69.362,
+   "slouceno": false,
+   "tick": 990
+  },
+  {
+   "cekal_ms": 2.16,
+   "edit_ms": 1204.033,
+   "hotovo_us": 51446185,
+   "id": 9,
+   "od_vykopu_ms": 4729.342,
+   "otisk": "63d7b89a91385a79",
+   "prace_ms": 4727.182,
+   "prevzato_tick": 1140,
+   "prevzato_us": 51446333,
+   "r_kroku": 62,
+   "r_max_ms": 99.551,
+   "slouceno": false,
+   "tick": 1110
+  },
+  {
+   "cekal_ms": 4.113,
+   "edit_ms": 1195.116,
+   "hotovo_us": 57275885,
+   "id": 10,
+   "od_vykopu_ms": 5108.978,
+   "otisk": "63d7b89a91385a79",
+   "prace_ms": 5104.865,
+   "prevzato_tick": 1260,
+   "prevzato_us": 57275985,
+   "r_kroku": 67,
+   "r_max_ms": 90.202,
+   "slouceno": false,
+   "tick": 1230
+  },
+  {
+   "cekal_ms": 1.943,
+   "edit_ms": 1698.811,
+   "hotovo_us": 63241672,
+   "id": 11,
+   "od_vykopu_ms": 5244.563,
+   "otisk": "63d7b89a91385a79",
+   "prace_ms": 5242.619,
+   "prevzato_tick": 1380,
+   "prevzato_us": 63241923,
+   "r_kroku": 67,
+   "r_max_ms": 77.462,
+   "slouceno": false,
+   "tick": 1350
+  }
+ ],
+ "voda_ms": {
+  "celkem": 2530.631,
+  "podzemí: pásma": 234.918,
+  "povrch + podzemí: plný výpočet": 2258.443,
+  "prameny": 8.688
+ },
+ "vykopy": [
+  [
+   7751,
+   30
+  ],
+  [
+   6450,
+   150
+  ],
+  [
+   7611,
+   270
+  ],
+  [
+   8910,
+   390
+  ],
+  [
+   8385,
+   510
+  ],
+  [
+   7612,
+   630
+  ],
+  [
+   8002,
+   750
+  ],
+  [
+   7752,
+   870
+  ],
+  [
+   8387,
+   990
+  ],
+  [
+   9407,
+   1110
+  ],
+  [
+   7484,
+   1230
+  ],
+  [
+   6337,
+   1350
+  ]
+ ],
+ "zatez_ms": 8.0,
+ "zpozdeni": 30
+}

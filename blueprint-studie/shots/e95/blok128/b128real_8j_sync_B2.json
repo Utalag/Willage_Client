@@ -1,0 +1,154 @@
+{
+ "blok_hlavni": {
+  "max": 12.43,
+  "n": 6,
+  "nad_100ms": 0,
+  "nad_33ms": 0,
+  "p50": 10.4,
+  "p95": 12.43,
+  "p99": 12.43,
+  "prumer": 9.52
+ },
+ "cas": "real",
+ "celkem_s": 1.799228,
+ "cpu": 8,
+ "digs": [
+  {
+   "blok_hlavni_ms": 3.841,
+   "dokonceni_predchoziho_ms": 0.005,
+   "edit_ms": 3.836,
+   "gi": 9474,
+   "hotovo_ms": 16.722,
+   "r_kroku": 0,
+   "r_max_ms": 0.0,
+   "t_us": 3974321,
+   "tick": 30
+  },
+  {
+   "blok_hlavni_ms": 10.312,
+   "dokonceni_predchoziho_ms": 0.005,
+   "edit_ms": 10.307,
+   "gi": 55455,
+   "hotovo_ms": 18.321,
+   "r_kroku": 0,
+   "r_max_ms": 0.0,
+   "t_us": 3991037,
+   "tick": 31
+  },
+  {
+   "blok_hlavni_ms": 10.571,
+   "dokonceni_predchoziho_ms": 0.0,
+   "edit_ms": 10.571,
+   "gi": 13687,
+   "hotovo_ms": 18.577,
+   "r_kroku": 0,
+   "r_max_ms": 0.0,
+   "t_us": 4009358,
+   "tick": 32
+  },
+  {
+   "blok_hlavni_ms": 9.561,
+   "dokonceni_predchoziho_ms": 0.0,
+   "edit_ms": 9.561,
+   "gi": 61631,
+   "hotovo_ms": 17.57,
+   "r_kroku": 0,
+   "r_max_ms": 0.0,
+   "t_us": 4027935,
+   "tick": 33
+  },
+  {
+   "blok_hlavni_ms": 12.432,
+   "dokonceni_predchoziho_ms": 0.001,
+   "edit_ms": 12.431,
+   "gi": 8290,
+   "hotovo_ms": 20.44,
+   "r_kroku": 0,
+   "r_max_ms": 0.0,
+   "t_us": 4045504,
+   "tick": 34
+  },
+  {
+   "blok_hlavni_ms": 10.404,
+   "dokonceni_predchoziho_ms": 0.001,
+   "edit_ms": 10.403,
+   "gi": 62792,
+   "hotovo_ms": 10.404,
+   "r_kroku": 0,
+   "r_max_ms": 0.0,
+   "t_us": 4065943,
+   "tick": 35
+  }
+ ],
+ "neshod_plny": {
+  "eff": 0,
+  "fill": 93,
+  "to": 36
+ },
+ "otisk_konec": "d789d86a4ac95c2f",
+ "otisky": [
+  "91614ab5e511151f",
+  "91614ab5e511151f",
+  "d789d86a4ac95c2f",
+  "d789d86a4ac95c2f",
+  "d789d86a4ac95c2f",
+  "d789d86a4ac95c2f"
+ ],
+ "rezim": "sync",
+ "seq": "B2",
+ "snimky": {
+  "max": 20.44,
+  "n": 36,
+  "nad_100ms": 0,
+  "nad_33ms": 0,
+  "p50": 8.01,
+  "p95": 18.58,
+  "p99": 20.44,
+  "prumer": 9.6
+ },
+ "souhrn": {
+  "koryto_sloupcu": 237,
+  "okraj_lps": 0.0,
+  "podzemni_telesa": 0,
+  "prameny": 4,
+  "tun_sloupcu": 8135,
+  "vodopady": 0,
+  "vodopady_okraj": 0,
+  "volani_podzemi": 0,
+  "vyvery": 0
+ },
+ "svet": "blok128",
+ "ticku": 36,
+ "voda_ms": {
+  "celkem": 1254.938,
+  "povrch: plný výpočet": 1102.423
+ },
+ "vykopy": [
+  [
+   9474,
+   30
+  ],
+  [
+   55455,
+   31
+  ],
+  [
+   13687,
+   32
+  ],
+  [
+   61631,
+   33
+  ],
+  [
+   8290,
+   34
+  ],
+  [
+   62792,
+   35
+  ]
+ ],
+ "zatez_ms": 8.0,
+ "zpozdeni": -1
+}

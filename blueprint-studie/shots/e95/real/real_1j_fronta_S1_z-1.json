@@ -1,0 +1,486 @@
+{
+ "blok_hlavni": {
+  "max": 5.53,
+  "n": 12,
+  "nad_100ms": 0,
+  "nad_33ms": 0,
+  "p50": 0.09,
+  "p95": 5.53,
+  "p99": 5.53,
+  "prumer": 0.56
+ },
+ "cas": "real",
+ "celkem_s": 60.601604,
+ "cpu": 8,
+ "digs": [
+  {
+   "blok_hlavni_ms": 5.53,
+   "gi": 7751,
+   "id": 0,
+   "submit_ms": 5.495,
+   "tick": 30
+  },
+  {
+   "blok_hlavni_ms": 0.075,
+   "gi": 6450,
+   "id": 1,
+   "submit_ms": 0.043,
+   "tick": 150
+  },
+  {
+   "blok_hlavni_ms": 0.058,
+   "gi": 7611,
+   "id": 2,
+   "submit_ms": 0.039,
+   "tick": 270
+  },
+  {
+   "blok_hlavni_ms": 0.216,
+   "gi": 8910,
+   "id": 3,
+   "submit_ms": 0.127,
+   "tick": 390
+  },
+  {
+   "blok_hlavni_ms": 0.059,
+   "gi": 8385,
+   "id": 4,
+   "submit_ms": 0.04,
+   "tick": 510
+  },
+  {
+   "blok_hlavni_ms": 0.083,
+   "gi": 7612,
+   "id": 5,
+   "submit_ms": 0.053,
+   "tick": 630
+  },
+  {
+   "blok_hlavni_ms": 0.104,
+   "gi": 8002,
+   "id": 6,
+   "submit_ms": 0.076,
+   "tick": 750
+  },
+  {
+   "blok_hlavni_ms": 0.076,
+   "gi": 7752,
+   "id": 7,
+   "submit_ms": 0.051,
+   "tick": 870
+  },
+  {
+   "blok_hlavni_ms": 0.068,
+   "gi": 8387,
+   "id": 8,
+   "submit_ms": 0.043,
+   "tick": 990
+  },
+  {
+   "blok_hlavni_ms": 0.123,
+   "gi": 9407,
+   "id": 9,
+   "submit_ms": 0.059,
+   "tick": 1110
+  },
+  {
+   "blok_hlavni_ms": 0.193,
+   "gi": 7484,
+   "id": 10,
+   "submit_ms": 0.158,
+   "tick": 1230
+  },
+  {
+   "blok_hlavni_ms": 0.089,
+   "gi": 6337,
+   "id": 11,
+   "submit_ms": 0.051,
+   "tick": 1350
+  }
+ ],
+ "neshod_plny": {
+  "eff": 0,
+  "fill": 0,
+  "to": 0
+ },
+ "otisk_konec": "63d7b89a91385a79",
+ "otisky": [
+  "d7aedf3a6d9d10e8",
+  "4a7b7a866430b24d",
+  "4a7b7a866430b24d",
+  "22fd776439fcf0bc",
+  "22fd776439fcf0bc",
+  "22fd776439fcf0bc",
+  "22fd776439fcf0bc",
+  "22fd776439fcf0bc",
+  "22fd776439fcf0bc",
+  "63d7b89a91385a79",
+  "63d7b89a91385a79",
+  "63d7b89a91385a79",
+  "63d7b89a91385a79"
+ ],
+ "pamet_pohled_B": 477936,
+ "prevzeti": [
+  {
+   "ceka_ms": 0.0,
+   "poll_ms": 0.131,
+   "prevzato": [
+    0
+   ],
+   "tick": 186
+  },
+  {
+   "ceka_ms": 0.0,
+   "poll_ms": 0.121,
+   "prevzato": [
+    1
+   ],
+   "tick": 379
+  },
+  {
+   "ceka_ms": 0.0,
+   "poll_ms": 0.092,
+   "prevzato": [
+    2
+   ],
+   "tick": 631
+  },
+  {
+   "ceka_ms": 0.0,
+   "poll_ms": 0.059,
+   "prevzato": [
+    3
+   ],
+   "tick": 922
+  },
+  {
+   "ceka_ms": 0.0,
+   "poll_ms": 0.056,
+   "prevzato": [
+    4
+   ],
+   "tick": 1222
+  },
+  {
+   "ceka_ms": 0.0,
+   "poll_ms": 0.072,
+   "prevzato": [
+    5
+   ],
+   "tick": 1549
+  },
+  {
+   "ceka_ms": 0.0,
+   "poll_ms": 0.049,
+   "prevzato": [
+    6
+   ],
+   "tick": 1870
+  },
+  {
+   "ceka_ms": 0.0,
+   "poll_ms": 0.05,
+   "prevzato": [
+    7
+   ],
+   "tick": 2177
+  },
+  {
+   "ceka_ms": 0.0,
+   "poll_ms": 0.05,
+   "prevzato": [
+    8
+   ],
+   "tick": 2484
+  },
+  {
+   "ceka_ms": 0.0,
+   "poll_ms": 0.049,
+   "prevzato": [
+    9
+   ],
+   "tick": 2824
+  },
+  {
+   "ceka_ms": 0.0,
+   "poll_ms": 0.05,
+   "prevzato": [
+    10
+   ],
+   "tick": 3158
+  },
+  {
+   "ceka_ms": 0.0,
+   "poll_ms": 0.091,
+   "prevzato": [
+    11
+   ],
+   "tick": 3524
+  }
+ ],
+ "rezim": "fronta",
+ "seq": "S1",
+ "snimky": {
+  "max": 28.54,
+  "n": 3525,
+  "nad_100ms": 0,
+  "nad_33ms": 0,
+  "p50": 9.06,
+  "p95": 14.65,
+  "p99": 16.04,
+  "prumer": 10.2
+ },
+ "souhrn": {
+  "koryto_sloupcu": 27,
+  "okraj_lps": 9.64358,
+  "podzemni_telesa": 1,
+  "prameny": 5,
+  "tun_sloupcu": 159,
+  "vodopady": 8,
+  "vodopady_okraj": 5,
+  "volani_podzemi": 4,
+  "vyvery": 1
+ },
+ "svet": "ostrov",
+ "ticku": 3525,
+ "ulohy": [
+  {
+   "cekal_ms": 0.066,
+   "edit_ms": 1181.353,
+   "hotovo_us": 6942900,
+   "id": 0,
+   "od_vykopu_ms": 2593.261,
+   "otisk": "d7aedf3a6d9d10e8",
+   "prace_ms": 2593.195,
+   "prevzato_tick": 186,
+   "prevzato_us": 6949473,
+   "r_kroku": 23,
+   "r_max_ms": 114.029,
+   "slouceno": false,
+   "tick": 30
+  },
+  {
+   "cekal_ms": 593.425,
+   "edit_ms": 469.503,
+   "hotovo_us": 10162011,
+   "id": 1,
+   "od_vykopu_ms": 3812.525,
+   "otisk": "4a7b7a866430b24d",
+   "prace_ms": 3219.1,
+   "prevzato_tick": 379,
+   "prevzato_us": 10166204,
+   "r_kroku": 31,
+   "r_max_ms": 1045.783,
+   "slouceno": false,
+   "tick": 150
+  },
+  {
+   "cekal_ms": 1812.509,
+   "edit_ms": 1418.605,
+   "hotovo_us": 14365054,
+   "id": 2,
+   "od_vykopu_ms": 6015.54,
+   "otisk": "4a7b7a866430b24d",
+   "prace_ms": 4203.031,
+   "prevzato_tick": 631,
+   "prevzato_us": 14366293,
+   "r_kroku": 46,
+   "r_max_ms": 169.292,
+   "slouceno": false,
+   "tick": 270
+  },
+  {
+   "cekal_ms": 4015.444,
+   "edit_ms": 807.491,
+   "hotovo_us": 19208729,
+   "id": 3,
+   "od_vykopu_ms": 8859.107,
+   "otisk": "22fd776439fcf0bc",
+   "prace_ms": 4843.663,
+   "prevzato_tick": 922,
+   "prevzato_us": 19216387,
+   "r_kroku": 52,
+   "r_max_ms": 936.055,
+   "slouceno": false,
+   "tick": 390
+  },
+  {
+   "cekal_ms": 6859.149,
+   "edit_ms": 919.349,
+   "hotovo_us": 24215647,
+   "id": 4,
+   "od_vykopu_ms": 11866.053,
+   "otisk": "22fd776439fcf0bc",
+   "prace_ms": 5006.903,
+   "prevzato_tick": 1222,
+   "prevzato_us": 24216488,
+   "r_kroku": 76,
+   "r_max_ms": 105.428,
+   "slouceno": false,
+   "tick": 510
+  },
+  {
+   "cekal_ms": 9866.023,
+   "edit_ms": 1258.558,
+   "hotovo_us": 29662502,
+   "id": 5,
+   "od_vykopu_ms": 15312.854,
+   "otisk": "22fd776439fcf0bc",
+   "prace_ms": 5446.83,
+   "prevzato_tick": 1549,
+   "prevzato_us": 29666599,
+   "r_kroku": 62,
+   "r_max_ms": 125.749,
+   "slouceno": false,
+   "tick": 630
+  },
+  {
+   "cekal_ms": 13312.839,
+   "edit_ms": 1014.29,
+   "hotovo_us": 35014763,
+   "id": 6,
+   "od_vykopu_ms": 18665.08,
+   "otisk": "22fd776439fcf0bc",
+   "prace_ms": 5352.24,
+   "prevzato_tick": 1870,
+   "prevzato_us": 35016701,
+   "r_kroku": 62,
+   "r_max_ms": 125.862,
+   "slouceno": false,
+   "tick": 750
+  },
+  {
+   "cekal_ms": 16665.053,
+   "edit_ms": 997.42,
+   "hotovo_us": 40133353,
+   "id": 7,
+   "od_vykopu_ms": 21783.627,
+   "otisk": "22fd776439fcf0bc",
+   "prace_ms": 5118.573,
+   "prevzato_tick": 2177,
+   "prevzato_us": 40133473,
+   "r_kroku": 62,
+   "r_max_ms": 116.503,
+   "slouceno": false,
+   "tick": 870
+  },
+  {
+   "cekal_ms": 19783.603,
+   "edit_ms": 1025.883,
+   "hotovo_us": 45247603,
+   "id": 8,
+   "od_vykopu_ms": 24897.84,
+   "otisk": "22fd776439fcf0bc",
+   "prace_ms": 5114.236,
+   "prevzato_tick": 2484,
+   "prevzato_us": 45250241,
+   "r_kroku": 62,
+   "r_max_ms": 125.853,
+   "slouceno": false,
+   "tick": 990
+  },
+  {
+   "cekal_ms": 22897.791,
+   "edit_ms": 1408.973,
+   "hotovo_us": 50907267,
+   "id": 9,
+   "od_vykopu_ms": 28557.43,
+   "otisk": "63d7b89a91385a79",
+   "prace_ms": 5659.638,
+   "prevzato_tick": 2824,
+   "prevzato_us": 50917018,
+   "r_kroku": 62,
+   "r_max_ms": 112.914,
+   "slouceno": false,
+   "tick": 1110
+  },
+  {
+   "cekal_ms": 26557.429,
+   "edit_ms": 1068.951,
+   "hotovo_us": 56475061,
+   "id": 10,
+   "od_vykopu_ms": 32125.211,
+   "otisk": "63d7b89a91385a79",
+   "prace_ms": 5567.782,
+   "prevzato_tick": 3158,
+   "prevzato_us": 56483802,
+   "r_kroku": 67,
+   "r_max_ms": 144.212,
+   "slouceno": false,
+   "tick": 1230
+  },
+  {
+   "cekal_ms": 30125.178,
+   "edit_ms": 1908.159,
+   "hotovo_us": 62576276,
+   "id": 11,
+   "od_vykopu_ms": 36226.381,
+   "otisk": "63d7b89a91385a79",
+   "prace_ms": 6101.202,
+   "prevzato_tick": 3524,
+   "prevzato_us": 62583974,
+   "r_kroku": 67,
+   "r_max_ms": 129.629,
+   "slouceno": false,
+   "tick": 1350
+  }
+ ],
+ "voda_ms": {
+  "celkem": 2382.375,
+  "podzemí: pásma": 219.128,
+  "povrch + podzemí: plný výpočet": 2126.889,
+  "prameny": 7.952
+ },
+ "vykopy": [
+  [
+   7751,
+   30
+  ],
+  [
+   6450,
+   150
+  ],
+  [
+   7611,
+   270
+  ],
+  [
+   8910,
+   390
+  ],
+  [
+   8385,
+   510
+  ],
+  [
+   7612,
+   630
+  ],
+  [
+   8002,
+   750
+  ],
+  [
+   7752,
+   870
+  ],
+  [
+   8387,
+   990
+  ],
+  [
+   9407,
+   1110
+  ],
+  [
+   7484,
+   1230
+  ],
+  [
+   6337,
+   1350
+  ]
+ ],
+ "zatez_ms": 8.0,
+ "zpozdeni": -1
+}

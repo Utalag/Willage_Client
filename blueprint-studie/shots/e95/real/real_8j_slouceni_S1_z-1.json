@@ -1,0 +1,386 @@
+{
+ "blok_hlavni": {
+  "max": 0.26,
+  "n": 12,
+  "nad_100ms": 0,
+  "nad_33ms": 0,
+  "p50": 0.13,
+  "p95": 0.26,
+  "p99": 0.26,
+  "prumer": 0.14
+ },
+ "cas": "real",
+ "celkem_s": 29.289896,
+ "cpu": 8,
+ "digs": [
+  {
+   "blok_hlavni_ms": 0.258,
+   "gi": 7751,
+   "id": 0,
+   "submit_ms": 0.211,
+   "tick": 30
+  },
+  {
+   "blok_hlavni_ms": 0.11,
+   "gi": 6450,
+   "id": 1,
+   "submit_ms": 0.062,
+   "tick": 150
+  },
+  {
+   "blok_hlavni_ms": 0.13,
+   "gi": 7611,
+   "id": 2,
+   "submit_ms": 0.078,
+   "tick": 270
+  },
+  {
+   "blok_hlavni_ms": 0.207,
+   "gi": 8910,
+   "id": 3,
+   "submit_ms": 0.086,
+   "tick": 390
+  },
+  {
+   "blok_hlavni_ms": 0.152,
+   "gi": 8385,
+   "id": 4,
+   "submit_ms": 0.087,
+   "tick": 510
+  },
+  {
+   "blok_hlavni_ms": 0.16,
+   "gi": 7612,
+   "id": 5,
+   "submit_ms": 0.108,
+   "tick": 630
+  },
+  {
+   "blok_hlavni_ms": 0.131,
+   "gi": 8002,
+   "id": 6,
+   "submit_ms": 0.088,
+   "tick": 750
+  },
+  {
+   "blok_hlavni_ms": 0.111,
+   "gi": 7752,
+   "id": 7,
+   "submit_ms": 0.079,
+   "tick": 870
+  },
+  {
+   "blok_hlavni_ms": 0.089,
+   "gi": 8387,
+   "id": 8,
+   "submit_ms": 0.055,
+   "tick": 990
+  },
+  {
+   "blok_hlavni_ms": 0.143,
+   "gi": 9407,
+   "id": 9,
+   "submit_ms": 0.074,
+   "tick": 1110
+  },
+  {
+   "blok_hlavni_ms": 0.125,
+   "gi": 7484,
+   "id": 10,
+   "submit_ms": 0.089,
+   "tick": 1230
+  },
+  {
+   "blok_hlavni_ms": 0.099,
+   "gi": 6337,
+   "id": 11,
+   "submit_ms": 0.067,
+   "tick": 1350
+  }
+ ],
+ "neshod_plny": {
+  "eff": 0,
+  "fill": 0,
+  "to": 0
+ },
+ "otisk_konec": "63d7b89a91385a79",
+ "otisky": [
+  "4a7b7a866430b24d",
+  "63d7b89a91385a79",
+  "63d7b89a91385a79"
+ ],
+ "pamet_pohled_B": 477936,
+ "prevzeti": [
+  {
+   "ceka_ms": 0.0,
+   "poll_ms": 0.204,
+   "prevzato": [
+    1
+   ],
+   "tick": 307
+  },
+  {
+   "ceka_ms": 0.0,
+   "poll_ms": 0.065,
+   "prevzato": [
+    11
+   ],
+   "tick": 1648
+  }
+ ],
+ "rezim": "slouceni",
+ "seq": "S1",
+ "snimky": {
+  "max": 25.31,
+  "n": 1649,
+  "nad_100ms": 0,
+  "nad_33ms": 0,
+  "p50": 8.02,
+  "p95": 8.03,
+  "p99": 8.11,
+  "prumer": 8.04
+ },
+ "souhrn": {
+  "koryto_sloupcu": 27,
+  "okraj_lps": 9.64358,
+  "podzemni_telesa": 1,
+  "prameny": 5,
+  "tun_sloupcu": 159,
+  "vodopady": 8,
+  "vodopady_okraj": 5,
+  "volani_podzemi": 4,
+  "vyvery": 1
+ },
+ "svet": "ostrov",
+ "ticku": 1649,
+ "ulohy": [
+  {
+   "cekal_ms": 0.237,
+   "edit_ms": 987.059,
+   "hotovo_us": 6765011,
+   "id": 0,
+   "od_vykopu_ms": 2012.297,
+   "prace_ms": 2012.059,
+   "prevzato_tick": 151,
+   "prevzato_us": 6769384,
+   "r_kroku": 20,
+   "r_max_ms": 69.659,
+   "slouceno": true,
+   "tick": 30
+  },
+  {
+   "cekal_ms": 12.248,
+   "edit_ms": 354.76,
+   "hotovo_us": 9353617,
+   "id": 1,
+   "od_vykopu_ms": 2600.844,
+   "otisk": "4a7b7a866430b24d",
+   "prace_ms": 2588.596,
+   "prevzato_tick": 307,
+   "prevzato_us": 9369545,
+   "r_kroku": 31,
+   "r_max_ms": 788.709,
+   "slouceno": false,
+   "tick": 150
+  },
+  {
+   "cekal_ms": 600.814,
+   "edit_ms": 1075.691,
+   "hotovo_us": 10815212,
+   "id": 2,
+   "od_vykopu_ms": 2062.396,
+   "prace_ms": 1461.581,
+   "prevzato_tick": 394,
+   "prevzato_us": 10819472,
+   "r_kroku": 8,
+   "r_max_ms": 66.303,
+   "slouceno": true,
+   "tick": 270
+  },
+  {
+   "cekal_ms": 62.304,
+   "edit_ms": 591.944,
+   "hotovo_us": 12756932,
+   "id": 3,
+   "od_vykopu_ms": 2004.014,
+   "prace_ms": 1941.709,
+   "prevzato_tick": 511,
+   "prevzato_us": 12769713,
+   "r_kroku": 27,
+   "r_max_ms": 74.701,
+   "slouceno": true,
+   "tick": 390
+  },
+  {
+   "cekal_ms": 3.956,
+   "edit_ms": 589.983,
+   "hotovo_us": 14753893,
+   "id": 4,
+   "od_vykopu_ms": 2000.904,
+   "prace_ms": 1996.947,
+   "prevzato_tick": 631,
+   "prevzato_us": 14769554,
+   "r_kroku": 30,
+   "r_max_ms": 72.772,
+   "slouceno": true,
+   "tick": 510
+  },
+  {
+   "cekal_ms": 0.98,
+   "edit_ms": 587.935,
+   "hotovo_us": 16782020,
+   "id": 5,
+   "od_vykopu_ms": 2029.096,
+   "prace_ms": 2028.116,
+   "prevzato_tick": 752,
+   "prevzato_us": 16786260,
+   "r_kroku": 28,
+   "r_max_ms": 72.225,
+   "slouceno": true,
+   "tick": 630
+  },
+  {
+   "cekal_ms": 29.08,
+   "edit_ms": 537.321,
+   "hotovo_us": 18756166,
+   "id": 6,
+   "od_vykopu_ms": 2003.217,
+   "prace_ms": 1974.137,
+   "prevzato_tick": 871,
+   "prevzato_us": 18769631,
+   "r_kroku": 32,
+   "r_max_ms": 63.262,
+   "slouceno": true,
+   "tick": 750
+  },
+  {
+   "cekal_ms": 3.187,
+   "edit_ms": 549.313,
+   "hotovo_us": 20760823,
+   "id": 7,
+   "od_vykopu_ms": 2007.835,
+   "prace_ms": 2004.647,
+   "prevzato_tick": 991,
+   "prevzato_us": 20769849,
+   "r_kroku": 30,
+   "r_max_ms": 75.839,
+   "slouceno": true,
+   "tick": 870
+  },
+  {
+   "cekal_ms": 7.731,
+   "edit_ms": 541.352,
+   "hotovo_us": 22790883,
+   "id": 8,
+   "od_vykopu_ms": 2037.782,
+   "prace_ms": 2030.05,
+   "prevzato_tick": 1113,
+   "prevzato_us": 22803156,
+   "r_kroku": 32,
+   "r_max_ms": 63.646,
+   "slouceno": true,
+   "tick": 990
+  },
+  {
+   "cekal_ms": 37.652,
+   "edit_ms": 1562.738,
+   "hotovo_us": 24844351,
+   "id": 9,
+   "od_vykopu_ms": 2091.111,
+   "prace_ms": 2053.457,
+   "prevzato_tick": 1236,
+   "prevzato_us": 24853093,
+   "r_kroku": 8,
+   "r_max_ms": 100.123,
+   "slouceno": true,
+   "tick": 1110
+  },
+  {
+   "cekal_ms": 91.262,
+   "edit_ms": 841.449,
+   "hotovo_us": 26828068,
+   "id": 10,
+   "od_vykopu_ms": 2074.967,
+   "prace_ms": 1983.704,
+   "prevzato_tick": 1355,
+   "prevzato_us": 26836471,
+   "r_kroku": 20,
+   "r_max_ms": 89.238,
+   "slouceno": true,
+   "tick": 1230
+  },
+  {
+   "cekal_ms": 74.822,
+   "edit_ms": 1421.23,
+   "hotovo_us": 31717895,
+   "id": 11,
+   "od_vykopu_ms": 4964.638,
+   "otisk": "63d7b89a91385a79",
+   "prace_ms": 4889.816,
+   "prevzato_tick": 1648,
+   "prevzato_us": 31720062,
+   "r_kroku": 70,
+   "r_max_ms": 82.89,
+   "slouceno": false,
+   "tick": 1350
+  }
+ ],
+ "voda_ms": {
+  "celkem": 2703.61,
+  "podzemí: pásma": 255.628,
+  "povrch + podzemí: plný výpočet": 2406.88,
+  "prameny": 9.671
+ },
+ "vykopy": [
+  [
+   7751,
+   30
+  ],
+  [
+   6450,
+   150
+  ],
+  [
+   7611,
+   270
+  ],
+  [
+   8910,
+   390
+  ],
+  [
+   8385,
+   510
+  ],
+  [
+   7612,
+   630
+  ],
+  [
+   8002,
+   750
+  ],
+  [
+   7752,
+   870
+  ],
+  [
+   8387,
+   990
+  ],
+  [
+   9407,
+   1110
+  ],
+  [
+   7484,
+   1230
+  ],
+  [
+   6337,
+   1350
+  ]
+ ],
+ "zatez_ms": 8.0,
+ "zpozdeni": -1
+}

@@ -1,0 +1,314 @@
+{
+ "blok_hlavni": {
+  "max": 0.09,
+  "n": 11,
+  "nad_100ms": 0,
+  "nad_33ms": 0,
+  "p50": 0.02,
+  "p95": 0.09,
+  "p99": 0.09,
+  "prumer": 0.03
+ },
+ "cas": "virt",
+ "celkem_s": 10.486772,
+ "cpu": 8,
+ "digs": [
+  {
+   "blok_hlavni_ms": 0.069,
+   "gi": 6475,
+   "id": 0,
+   "submit_ms": 0.048,
+   "tick": 30
+  },
+  {
+   "blok_hlavni_ms": 0.086,
+   "gi": 8782,
+   "id": 1,
+   "submit_ms": 0.079,
+   "tick": 90
+  },
+  {
+   "blok_hlavni_ms": 0.015,
+   "gi": 7612,
+   "id": 2,
+   "submit_ms": 0.01,
+   "tick": 150
+  },
+  {
+   "blok_hlavni_ms": 0.014,
+   "gi": 6974,
+   "id": 3,
+   "submit_ms": 0.012,
+   "tick": 210
+  },
+  {
+   "blok_hlavni_ms": 0.021,
+   "gi": 8253,
+   "id": 4,
+   "submit_ms": 0.012,
+   "tick": 270
+  },
+  {
+   "blok_hlavni_ms": 0.013,
+   "gi": 7995,
+   "id": 5,
+   "submit_ms": 0.01,
+   "tick": 330
+  },
+  {
+   "blok_hlavni_ms": 0.012,
+   "gi": 6467,
+   "id": 6,
+   "submit_ms": 0.01,
+   "tick": 390
+  },
+  {
+   "blok_hlavni_ms": 0.012,
+   "gi": 6475,
+   "id": 7,
+   "submit_ms": 0.01,
+   "tick": 450
+  },
+  {
+   "blok_hlavni_ms": 0.015,
+   "gi": 8500,
+   "id": 8,
+   "submit_ms": 0.01,
+   "tick": 510
+  },
+  {
+   "blok_hlavni_ms": 0.015,
+   "gi": 9275,
+   "id": 9,
+   "submit_ms": 0.011,
+   "tick": 570
+  },
+  {
+   "blok_hlavni_ms": 0.012,
+   "gi": 10037,
+   "id": 10,
+   "submit_ms": 0.009,
+   "tick": 630
+  }
+ ],
+ "neshod_plny": {
+  "eff": 0,
+  "fill": 0,
+  "to": 0
+ },
+ "otisk_konec": "ce384aeff953f3d6",
+ "otisky": [
+  "ce384aeff953f3d6",
+  "ce384aeff953f3d6"
+ ],
+ "pamet_pohled_B": 477336,
+ "prevzeti": [],
+ "rezim": "slouceni",
+ "seq": "S3",
+ "ticku": 631,
+ "ulohy": [
+  {
+   "cekal_ms": 0.098,
+   "edit_ms": 327.594,
+   "hotovo_us": 4985830,
+   "id": 0,
+   "od_vykopu_ms": 327.735,
+   "prace_ms": 327.636,
+   "prevzato_tick": 1099511627776,
+   "prevzato_us": 14497450,
+   "r_kroku": 0,
+   "r_max_ms": 0.0,
+   "slouceno": true,
+   "tick": 30
+  },
+  {
+   "cekal_ms": 327.551,
+   "edit_ms": 964.943,
+   "hotovo_us": 5950812,
+   "id": 1,
+   "od_vykopu_ms": 1292.524,
+   "prace_ms": 964.973,
+   "prevzato_tick": 1099511627776,
+   "prevzato_us": 14497462,
+   "r_kroku": 0,
+   "r_max_ms": 0.0,
+   "slouceno": true,
+   "tick": 90
+  },
+  {
+   "cekal_ms": 1292.339,
+   "edit_ms": 1022.6,
+   "hotovo_us": 6973461,
+   "id": 2,
+   "od_vykopu_ms": 2314.979,
+   "prace_ms": 1022.64,
+   "prevzato_tick": 1099511627776,
+   "prevzato_us": 14497466,
+   "r_kroku": 0,
+   "r_max_ms": 0.0,
+   "slouceno": true,
+   "tick": 150
+  },
+  {
+   "cekal_ms": 2314.865,
+   "edit_ms": 494.197,
+   "hotovo_us": 7467690,
+   "id": 3,
+   "od_vykopu_ms": 2809.084,
+   "prace_ms": 494.219,
+   "prevzato_tick": 1099511627776,
+   "prevzato_us": 14497471,
+   "r_kroku": 0,
+   "r_max_ms": 0.0,
+   "slouceno": true,
+   "tick": 210
+  },
+  {
+   "cekal_ms": 2808.972,
+   "edit_ms": 496.285,
+   "hotovo_us": 7964011,
+   "id": 4,
+   "od_vykopu_ms": 3305.279,
+   "prace_ms": 496.306,
+   "prevzato_tick": 1099511627776,
+   "prevzato_us": 14497479,
+   "r_kroku": 0,
+   "r_max_ms": 0.0,
+   "slouceno": true,
+   "tick": 270
+  },
+  {
+   "cekal_ms": 3305.194,
+   "edit_ms": 498.371,
+   "hotovo_us": 8462427,
+   "id": 5,
+   "od_vykopu_ms": 3803.598,
+   "prace_ms": 498.404,
+   "prevzato_tick": 1099511627776,
+   "prevzato_us": 14497488,
+   "r_kroku": 0,
+   "r_max_ms": 0.0,
+   "slouceno": true,
+   "tick": 330
+  },
+  {
+   "cekal_ms": 3803.511,
+   "edit_ms": 1138.522,
+   "hotovo_us": 9600995,
+   "id": 6,
+   "od_vykopu_ms": 4942.067,
+   "prace_ms": 1138.556,
+   "prevzato_tick": 1099511627776,
+   "prevzato_us": 14497493,
+   "r_kroku": 0,
+   "r_max_ms": 0.0,
+   "slouceno": true,
+   "tick": 390
+  },
+  {
+   "cekal_ms": 4941.969,
+   "edit_ms": 615.409,
+   "hotovo_us": 10216441,
+   "id": 7,
+   "od_vykopu_ms": 5557.406,
+   "prace_ms": 615.436,
+   "prevzato_tick": 1099511627776,
+   "prevzato_us": 14497496,
+   "r_kroku": 0,
+   "r_max_ms": 0.0,
+   "slouceno": true,
+   "tick": 450
+  },
+  {
+   "cekal_ms": 5557.319,
+   "edit_ms": 621.567,
+   "hotovo_us": 10838045,
+   "id": 8,
+   "od_vykopu_ms": 6178.913,
+   "prace_ms": 621.594,
+   "prevzato_tick": 1099511627776,
+   "prevzato_us": 14497501,
+   "r_kroku": 0,
+   "r_max_ms": 0.0,
+   "slouceno": true,
+   "tick": 510
+  },
+  {
+   "cekal_ms": 6178.831,
+   "edit_ms": 643.839,
+   "hotovo_us": 11481917,
+   "id": 9,
+   "od_vykopu_ms": 6822.694,
+   "prace_ms": 643.863,
+   "prevzato_tick": 1099511627776,
+   "prevzato_us": 14497509,
+   "r_kroku": 0,
+   "r_max_ms": 0.0,
+   "slouceno": true,
+   "tick": 570
+  },
+  {
+   "cekal_ms": 6822.616,
+   "edit_ms": 621.487,
+   "hotovo_us": 14497268,
+   "id": 10,
+   "od_vykopu_ms": 9837.955,
+   "otisk": "ce384aeff953f3d6",
+   "prace_ms": 3015.338,
+   "prevzato_tick": 1099511627776,
+   "prevzato_us": 14497512,
+   "r_kroku": 56,
+   "r_max_ms": 69.044,
+   "slouceno": false,
+   "tick": 630
+  }
+ ],
+ "vykopy": [
+  [
+   6475,
+   30
+  ],
+  [
+   8782,
+   90
+  ],
+  [
+   7612,
+   150
+  ],
+  [
+   6974,
+   210
+  ],
+  [
+   8253,
+   270
+  ],
+  [
+   7995,
+   330
+  ],
+  [
+   6467,
+   390
+  ],
+  [
+   6475,
+   450
+  ],
+  [
+   8500,
+   510
+  ],
+  [
+   9275,
+   570
+  ],
+  [
+   10037,
+   630
+  ]
+ ],
+ "zatez_ms": 8.0,
+ "zpozdeni": 30
+}

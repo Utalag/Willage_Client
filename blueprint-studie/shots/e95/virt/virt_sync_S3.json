@@ -1,0 +1,208 @@
+{
+ "blok_hlavni": {
+  "max": 1152.38,
+  "n": 11,
+  "nad_100ms": 11,
+  "nad_33ms": 11,
+  "p50": 586.55,
+  "p95": 1152.38,
+  "p99": 1152.38,
+  "prumer": 669.08
+ },
+ "cas": "virt",
+ "celkem_s": 29.299852,
+ "cpu": 8,
+ "digs": [
+  {
+   "blok_hlavni_ms": 269.714,
+   "dokonceni_predchoziho_ms": 0.003,
+   "edit_ms": 269.711,
+   "gi": 6475,
+   "hotovo_ms": 1437.35,
+   "r_kroku": 24,
+   "r_max_ms": 73.616,
+   "t_us": 4804613,
+   "tick": 30
+  },
+  {
+   "blok_hlavni_ms": 965.258,
+   "dokonceni_predchoziho_ms": 0.0,
+   "edit_ms": 965.258,
+   "gi": 8782,
+   "hotovo_ms": 2011.124,
+   "r_kroku": 21,
+   "r_max_ms": 79.476,
+   "t_us": 6241962,
+   "tick": 90
+  },
+  {
+   "blok_hlavni_ms": 1026.646,
+   "dokonceni_predchoziho_ms": 0.001,
+   "edit_ms": 1026.644,
+   "gi": 7612,
+   "hotovo_ms": 2689.274,
+   "r_kroku": 32,
+   "r_max_ms": 92.42,
+   "t_us": 8253085,
+   "tick": 150
+  },
+  {
+   "blok_hlavni_ms": 508.112,
+   "dokonceni_predchoziho_ms": 0.001,
+   "edit_ms": 508.111,
+   "gi": 6974,
+   "hotovo_ms": 2552.141,
+   "r_kroku": 46,
+   "r_max_ms": 107.433,
+   "t_us": 10942358,
+   "tick": 210
+  },
+  {
+   "blok_hlavni_ms": 533.205,
+   "dokonceni_predchoziho_ms": 0.001,
+   "edit_ms": 533.204,
+   "gi": 8253,
+   "hotovo_ms": 2651.088,
+   "r_kroku": 42,
+   "r_max_ms": 90.457,
+   "t_us": 13494498,
+   "tick": 270
+  },
+  {
+   "blok_hlavni_ms": 496.704,
+   "dokonceni_predchoziho_ms": 0.001,
+   "edit_ms": 496.703,
+   "gi": 7995,
+   "hotovo_ms": 2491.909,
+   "r_kroku": 46,
+   "r_max_ms": 73.354,
+   "t_us": 16145584,
+   "tick": 330
+  },
+  {
+   "blok_hlavni_ms": 1152.384,
+   "dokonceni_predchoziho_ms": 0.001,
+   "edit_ms": 1152.383,
+   "gi": 6467,
+   "hotovo_ms": 3028.025,
+   "r_kroku": 42,
+   "r_max_ms": 74.528,
+   "t_us": 18637492,
+   "tick": 390
+  },
+  {
+   "blok_hlavni_ms": 586.01,
+   "dokonceni_predchoziho_ms": 0.0,
+   "edit_ms": 586.01,
+   "gi": 6475,
+   "hotovo_ms": 2885.906,
+   "r_kroku": 52,
+   "r_max_ms": 70.915,
+   "t_us": 21665517,
+   "tick": 450
+  },
+  {
+   "blok_hlavni_ms": 592.19,
+   "dokonceni_predchoziho_ms": 0.001,
+   "edit_ms": 592.189,
+   "gi": 8500,
+   "hotovo_ms": 3076.011,
+   "r_kroku": 52,
+   "r_max_ms": 75.194,
+   "t_us": 24551422,
+   "tick": 510
+  },
+  {
+   "blok_hlavni_ms": 643.16,
+   "dokonceni_predchoziho_ms": 0.001,
+   "edit_ms": 643.159,
+   "gi": 9275,
+   "hotovo_ms": 2907.004,
+   "r_kroku": 52,
+   "r_max_ms": 71.026,
+   "t_us": 27627432,
+   "tick": 570
+  },
+  {
+   "blok_hlavni_ms": 586.552,
+   "dokonceni_predchoziho_ms": 0.001,
+   "edit_ms": 586.551,
+   "gi": 10037,
+   "hotovo_ms": 2910.264,
+   "r_kroku": 52,
+   "r_max_ms": 74.436,
+   "t_us": 30534435,
+   "tick": 630
+  }
+ ],
+ "neshod_plny": {
+  "eff": 0,
+  "fill": 0,
+  "to": 0
+ },
+ "otisk_konec": "ce384aeff953f3d6",
+ "otisky": [
+  "5da4a41fc1134585",
+  "be88d25885ab7752",
+  "be88d25885ab7752",
+  "be88d25885ab7752",
+  "be88d25885ab7752",
+  "be88d25885ab7752",
+  "cce9369d5e304e4f",
+  "bdf021863192c7af",
+  "ee7cf9f9c86e7e20",
+  "298ec7b08c939ced",
+  "ce384aeff953f3d6"
+ ],
+ "rezim": "sync",
+ "seq": "S3",
+ "ticku": 683,
+ "vykopy": [
+  [
+   6475,
+   30
+  ],
+  [
+   8782,
+   90
+  ],
+  [
+   7612,
+   150
+  ],
+  [
+   6974,
+   210
+  ],
+  [
+   8253,
+   270
+  ],
+  [
+   7995,
+   330
+  ],
+  [
+   6467,
+   390
+  ],
+  [
+   6475,
+   450
+  ],
+  [
+   8500,
+   510
+  ],
+  [
+   9275,
+   570
+  ],
+  [
+   10037,
+   630
+  ]
+ ],
+ "zatez_ms": 8.0,
+ "zpozdeni": 30
+}

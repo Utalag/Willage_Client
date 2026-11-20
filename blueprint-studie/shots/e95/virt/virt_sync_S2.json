@@ -1,0 +1,224 @@
+{
+ "blok_hlavni": {
+  "max": 1137.82,
+  "n": 12,
+  "nad_100ms": 12,
+  "nad_33ms": 12,
+  "p50": 618.42,
+  "p95": 1137.82,
+  "p99": 1137.82,
+  "prumer": 675.95
+ },
+ "cas": "virt",
+ "celkem_s": 34.163505,
+ "cpu": 8,
+ "digs": [
+  {
+   "blok_hlavni_ms": 875.656,
+   "dokonceni_predchoziho_ms": 0.003,
+   "edit_ms": 875.653,
+   "gi": 6337,
+   "hotovo_ms": 2014.88,
+   "r_kroku": 23,
+   "r_max_ms": 86.857,
+   "t_us": 4440070,
+   "tick": 30
+  },
+  {
+   "blok_hlavni_ms": 372.4,
+   "dokonceni_predchoziho_ms": 0.0,
+   "edit_ms": 372.4,
+   "gi": 7484,
+   "hotovo_ms": 1943.896,
+   "r_kroku": 34,
+   "r_max_ms": 73.194,
+   "t_us": 6454949,
+   "tick": 150
+  },
+  {
+   "blok_hlavni_ms": 761.281,
+   "dokonceni_predchoziho_ms": 0.0,
+   "edit_ms": 761.28,
+   "gi": 9407,
+   "hotovo_ms": 2264.998,
+   "r_kroku": 31,
+   "r_max_ms": 111.334,
+   "t_us": 8398845,
+   "tick": 270
+  },
+  {
+   "blok_hlavni_ms": 420.965,
+   "dokonceni_predchoziho_ms": 0.001,
+   "edit_ms": 420.964,
+   "gi": 8387,
+   "hotovo_ms": 2325.178,
+   "r_kroku": 37,
+   "r_max_ms": 100.57,
+   "t_us": 10663842,
+   "tick": 390
+  },
+  {
+   "blok_hlavni_ms": 1041.388,
+   "dokonceni_predchoziho_ms": 0.0,
+   "edit_ms": 1041.388,
+   "gi": 7752,
+   "hotovo_ms": 2755.912,
+   "r_kroku": 37,
+   "r_max_ms": 75.545,
+   "t_us": 12989020,
+   "tick": 510
+  },
+  {
+   "blok_hlavni_ms": 537.347,
+   "dokonceni_predchoziho_ms": 0.001,
+   "edit_ms": 537.346,
+   "gi": 8002,
+   "hotovo_ms": 2794.924,
+   "r_kroku": 48,
+   "r_max_ms": 79.259,
+   "t_us": 15744931,
+   "tick": 630
+  },
+  {
+   "blok_hlavni_ms": 542.686,
+   "dokonceni_predchoziho_ms": 0.001,
+   "edit_ms": 542.685,
+   "gi": 7612,
+   "hotovo_ms": 2770.08,
+   "r_kroku": 48,
+   "r_max_ms": 95.037,
+   "t_us": 18539854,
+   "tick": 750
+  },
+  {
+   "blok_hlavni_ms": 509.486,
+   "dokonceni_predchoziho_ms": 0.001,
+   "edit_ms": 509.484,
+   "gi": 8385,
+   "hotovo_ms": 2614.913,
+   "r_kroku": 51,
+   "r_max_ms": 72.347,
+   "t_us": 21309933,
+   "tick": 870
+  },
+  {
+   "blok_hlavni_ms": 1137.815,
+   "dokonceni_predchoziho_ms": 0.0,
+   "edit_ms": 1137.815,
+   "gi": 8910,
+   "hotovo_ms": 3175.518,
+   "r_kroku": 46,
+   "r_max_ms": 76.402,
+   "t_us": 23924846,
+   "tick": 990
+  },
+  {
+   "blok_hlavni_ms": 618.424,
+   "dokonceni_predchoziho_ms": 0.001,
+   "edit_ms": 618.423,
+   "gi": 7611,
+   "hotovo_ms": 2991.158,
+   "r_kroku": 59,
+   "r_max_ms": 68.797,
+   "t_us": 27100363,
+   "tick": 1110
+  },
+  {
+   "blok_hlavni_ms": 616.699,
+   "dokonceni_predchoziho_ms": 0.0,
+   "edit_ms": 616.699,
+   "gi": 6450,
+   "hotovo_ms": 3481.995,
+   "r_kroku": 57,
+   "r_max_ms": 98.978,
+   "t_us": 30091521,
+   "tick": 1230
+  },
+  {
+   "blok_hlavni_ms": 677.215,
+   "dokonceni_predchoziho_ms": 0.001,
+   "edit_ms": 677.214,
+   "gi": 7751,
+   "hotovo_ms": 3202.245,
+   "r_kroku": 57,
+   "r_max_ms": 72.96,
+   "t_us": 33573515,
+   "tick": 1350
+  }
+ ],
+ "neshod_plny": {
+  "eff": 0,
+  "fill": 0,
+  "to": 0
+ },
+ "otisk_konec": "63d7b89a91385a79",
+ "otisky": [
+  "d7aedf3a6d9d10e8",
+  "d7aedf3a6d9d10e8",
+  "7c40df78c12a16d1",
+  "7c40df78c12a16d1",
+  "7c40df78c12a16d1",
+  "7c40df78c12a16d1",
+  "7c40df78c12a16d1",
+  "7c40df78c12a16d1",
+  "63d7b89a91385a79",
+  "63d7b89a91385a79",
+  "63d7b89a91385a79",
+  "63d7b89a91385a79"
+ ],
+ "rezim": "sync",
+ "seq": "S2",
+ "ticku": 1408,
+ "vykopy": [
+  [
+   6337,
+   30
+  ],
+  [
+   7484,
+   150
+  ],
+  [
+   9407,
+   270
+  ],
+  [
+   8387,
+   390
+  ],
+  [
+   7752,
+   510
+  ],
+  [
+   8002,
+   630
+  ],
+  [
+   7612,
+   750
+  ],
+  [
+   8385,
+   870
+  ],
+  [
+   8910,
+   990
+  ],
+  [
+   7611,
+   1110
+  ],
+  [
+   6450,
+   1230
+  ],
+  [
+   7751,
+   1350
+  ]
+ ],
+ "zatez_ms": 8.0,
+ "zpozdeni": 30
+}

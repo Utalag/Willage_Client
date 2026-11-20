@@ -1,0 +1,61 @@
+{
+ "dig_ms_max": 684.569,
+ "dig_ms_p50": 584.418,
+ "digs": [
+  {
+   "dig_ms": 684.569,
+   "gi": 8256,
+   "text": "vykopáno tráva (lz 39)"
+  },
+  {
+   "dig_ms": 316.955,
+   "gi": 6210,
+   "text": "vykopáno tráva (lz 39)"
+  },
+  {
+   "dig_ms": 584.418,
+   "gi": 8252,
+   "text": "vykopáno tráva (lz 39)"
+  },
+  {
+   "dig_ms": 290.541,
+   "gi": 7880,
+   "text": "vykopáno tráva (lz 38)"
+  },
+  {
+   "dig_ms": 301.572,
+   "gi": 9276,
+   "text": "vykopáno sníh (lz 54)"
+  },
+  {
+   "dig_ms": 629.178,
+   "gi": 8131,
+   "text": "vykopáno tráva (lz 39)"
+  },
+  {
+   "dig_ms": 350.213,
+   "gi": 7485,
+   "text": "vykopáno tráva (lz 38)"
+  },
+  {
+   "dig_ms": 630.623,
+   "gi": 8131,
+   "text": "vykopáno hlína (lz 38)"
+  }
+ ],
+ "dokonceni_na_konci_ms": 2037.798,
+ "mezera_snimku": 20,
+ "neshod_plny": {
+  "eff": 0,
+  "fill": 43,
+  "to": 38
+ },
+ "otisk": "c7dbf253538412ab",
+ "p95_async_voda": true,
+ "pamet_pohled_B": 477736,
+ "voda_na_snimek_ms": {
+  "max": 1661.846,
+  "nad_33ms": 7,
+  "p50": 0.022
+ }
+}

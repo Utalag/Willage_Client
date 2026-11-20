@@ -1,0 +1,199 @@
+{
+ "blok_hlavni": {
+  "max": 0.29,
+  "n": 6,
+  "nad_100ms": 0,
+  "nad_33ms": 0,
+  "p50": 0.05,
+  "p95": 0.29,
+  "p99": 0.29,
+  "prumer": 0.09
+ },
+ "cas": "virt",
+ "celkem_s": 20.199028,
+ "cpu": 8,
+ "digs": [
+  {
+   "blok_hlavni_ms": 0.286,
+   "gi": 7751,
+   "id": 0,
+   "submit_ms": 0.25,
+   "tick": 30
+  },
+  {
+   "blok_hlavni_ms": 0.036,
+   "gi": 6450,
+   "id": 1,
+   "submit_ms": 0.027,
+   "tick": 31
+  },
+  {
+   "blok_hlavni_ms": 0.039,
+   "gi": 7611,
+   "id": 2,
+   "submit_ms": 0.034,
+   "tick": 32
+  },
+  {
+   "blok_hlavni_ms": 0.057,
+   "gi": 8910,
+   "id": 3,
+   "submit_ms": 0.032,
+   "tick": 33
+  },
+  {
+   "blok_hlavni_ms": 0.04,
+   "gi": 8385,
+   "id": 4,
+   "submit_ms": 0.028,
+   "tick": 34
+  },
+  {
+   "blok_hlavni_ms": 0.053,
+   "gi": 7612,
+   "id": 5,
+   "submit_ms": 0.048,
+   "tick": 35
+  }
+ ],
+ "neshod_plny": {
+  "eff": 0,
+  "fill": 0,
+  "to": 0
+ },
+ "otisk_konec": "22fd776439fcf0bc",
+ "otisky": [
+  "d7aedf3a6d9d10e8",
+  "4a7b7a866430b24d",
+  "4a7b7a866430b24d",
+  "22fd776439fcf0bc",
+  "22fd776439fcf0bc",
+  "22fd776439fcf0bc",
+  "22fd776439fcf0bc"
+ ],
+ "pamet_pohled_B": 477936,
+ "prevzeti": [],
+ "rezim": "fronta",
+ "seq": "S4",
+ "ticku": 36,
+ "ulohy": [
+  {
+   "cekal_ms": 0.101,
+   "edit_ms": 919.3,
+   "hotovo_us": 6752871,
+   "id": 0,
+   "od_vykopu_ms": 1995.661,
+   "otisk": "d7aedf3a6d9d10e8",
+   "prace_ms": 1995.559,
+   "prevzato_tick": 1099511627776,
+   "prevzato_us": 23146308,
+   "r_kroku": 23,
+   "r_max_ms": 72.196,
+   "slouceno": false,
+   "tick": 30
+  },
+  {
+   "cekal_ms": 1995.391,
+   "edit_ms": 430.804,
+   "hotovo_us": 9410171,
+   "id": 1,
+   "od_vykopu_ms": 4652.676,
+   "otisk": "4a7b7a866430b24d",
+   "prace_ms": 2657.284,
+   "prevzato_tick": 1099511627776,
+   "prevzato_us": 23146470,
+   "r_kroku": 31,
+   "r_max_ms": 771.438,
+   "slouceno": false,
+   "tick": 31
+  },
+  {
+   "cekal_ms": 4652.632,
+   "edit_ms": 1056.881,
+   "hotovo_us": 12365258,
+   "id": 2,
+   "od_vykopu_ms": 7607.708,
+   "otisk": "4a7b7a866430b24d",
+   "prace_ms": 2955.075,
+   "prevzato_tick": 1099511627776,
+   "prevzato_us": 23146526,
+   "r_kroku": 46,
+   "r_max_ms": 70.115,
+   "slouceno": false,
+   "tick": 32
+  },
+  {
+   "cekal_ms": 7607.656,
+   "edit_ms": 596.237,
+   "hotovo_us": 15891566,
+   "id": 3,
+   "od_vykopu_ms": 11133.95,
+   "otisk": "22fd776439fcf0bc",
+   "prace_ms": 3526.294,
+   "prevzato_tick": 1099511627776,
+   "prevzato_us": 23146566,
+   "r_kroku": 52,
+   "r_max_ms": 702.71,
+   "slouceno": false,
+   "tick": 33
+  },
+  {
+   "cekal_ms": 11133.908,
+   "edit_ms": 751.434,
+   "hotovo_us": 19600129,
+   "id": 4,
+   "od_vykopu_ms": 14842.456,
+   "otisk": "22fd776439fcf0bc",
+   "prace_ms": 3708.548,
+   "prevzato_tick": 1099511627776,
+   "prevzato_us": 23146606,
+   "r_kroku": 76,
+   "r_max_ms": 73.88,
+   "slouceno": false,
+   "tick": 34
+  },
+  {
+   "cekal_ms": 14842.419,
+   "edit_ms": 712.53,
+   "hotovo_us": 23144816,
+   "id": 5,
+   "od_vykopu_ms": 18387.092,
+   "otisk": "22fd776439fcf0bc",
+   "prace_ms": 3544.673,
+   "prevzato_tick": 1099511627776,
+   "prevzato_us": 23146647,
+   "r_kroku": 62,
+   "r_max_ms": 78.776,
+   "slouceno": false,
+   "tick": 35
+  }
+ ],
+ "vykopy": [
+  [
+   7751,
+   30
+  ],
+  [
+   6450,
+   31
+  ],
+  [
+   7611,
+   32
+  ],
+  [
+   8910,
+   33
+  ],
+  [
+   8385,
+   34
+  ],
+  [
+   7612,
+   35
+  ]
+ ],
+ "zatez_ms": 8.0,
+ "zpozdeni": 30
+}
