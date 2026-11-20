@@ -104,3 +104,6 @@
 | 70 | — | Přesunuto do tezba-studie/ZDROJE.md jako [26] (T01, dříve E65). |
 | 71 | — | Přesunuto do tezba-studie/ZDROJE.md jako [27] (T01, dříve E65). |
 | 72 | — | Přesunuto do tezba-studie/ZDROJE.md jako [28] (T01, dříve E65). |
+| 81 | https://docs.godotengine.org/en/stable/tutorials/performance/thread_safe_apis.html | Godot 4.7: Thread-safe APIs – scéna není vláknově bezpečná, u polí a slovníků GDScriptu změna velikosti z více vláken potřebuje mutex (E95). |
+| 82 | https://docs.godotengine.org/en/stable/tutorials/performance/using_multiple_threads.html | Godot: Using multiple threads – Thread, Mutex, Semaphore, wait_to_finish (E95). |
+| 83 | https://docs.godotengine.org/en/stable/classes/class_workerthreadpool.html | Godot: WorkerThreadPool – pool pro krátké úlohy; E95 volí vlastní Thread (dlouhé úlohy za sebou). |

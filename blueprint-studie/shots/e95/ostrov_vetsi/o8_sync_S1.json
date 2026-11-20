@@ -1,0 +1,146 @@
+{
+ "blok_hlavni": {
+  "max": 42478.8,
+  "n": 6,
+  "nad_100ms": 6,
+  "nad_33ms": 6,
+  "p50": 30989.54,
+  "p95": 42478.8,
+  "p99": 42478.8,
+  "prumer": 24944.77
+ },
+ "cas": "virt",
+ "celkem_s": 249.112355,
+ "cpu": 8,
+ "digs": [
+  {
+   "blok_hlavni_ms": 3147.294,
+   "dokonceni_predchoziho_ms": 0.001,
+   "edit_ms": 3147.292,
+   "gi": 20684,
+   "hotovo_ms": 22274.849,
+   "r_kroku": 119,
+   "r_max_ms": 239.348,
+   "t_us": 47196638,
+   "tick": 30
+  },
+  {
+   "blok_hlavni_ms": 16418.445,
+   "dokonceni_predchoziho_ms": 13181.753,
+   "edit_ms": 3236.691,
+   "gi": 12683,
+   "hotovo_ms": 35617.494,
+   "r_kroku": 119,
+   "r_max_ms": 257.141,
+   "t_us": 56289733,
+   "tick": 150
+  },
+  {
+   "blok_hlavni_ms": 16589.484,
+   "dokonceni_predchoziho_ms": 13175.467,
+   "edit_ms": 3414.016,
+   "gi": 10911,
+   "hotovo_ms": 49729.92,
+   "r_kroku": 119,
+   "r_max_ms": 372.442,
+   "t_us": 78731760,
+   "tick": 270
+  },
+  {
+   "blok_hlavni_ms": 42478.799,
+   "dokonceni_predchoziho_ms": 25845.723,
+   "edit_ms": 16633.076,
+   "gi": 10110,
+   "hotovo_ms": 71838.111,
+   "r_kroku": 119,
+   "r_max_ms": 257.9,
+   "t_us": 102615957,
+   "tick": 390
+  },
+  {
+   "blok_hlavni_ms": 30989.537,
+   "dokonceni_predchoziho_ms": 23356.542,
+   "edit_ms": 7632.994,
+   "gi": 16364,
+   "hotovo_ms": 71218.414,
+   "r_kroku": 119,
+   "r_max_ms": 312.023,
+   "t_us": 151097525,
+   "tick": 510
+  },
+  {
+   "blok_hlavni_ms": 40045.084,
+   "dokonceni_predchoziho_ms": 33233.793,
+   "edit_ms": 6811.29,
+   "gi": 7651,
+   "hotovo_ms": 81033.651,
+   "r_kroku": 680,
+   "r_max_ms": 858.467,
+   "t_us": 189082145,
+   "tick": 630
+  }
+ ],
+ "neshod_plny": {
+  "eff": 0,
+  "fill": 0,
+  "to": 0
+ },
+ "otisk_konec": "7a078deffd71c5e3",
+ "otisky": [
+  "7a078deffd71c5e3",
+  "7a078deffd71c5e3",
+  "7a078deffd71c5e3",
+  "7a078deffd71c5e3",
+  "7a078deffd71c5e3",
+  "7a078deffd71c5e3"
+ ],
+ "rezim": "sync",
+ "seq": "S1",
+ "souhrn": {
+  "koryto_sloupcu": 46,
+  "okraj_lps": 26.85676,
+  "podzemni_telesa": 1,
+  "prameny": 9,
+  "tun_sloupcu": 8610,
+  "vodopady": 18,
+  "vodopady_okraj": 6,
+  "volani_podzemi": 4,
+  "vyvery": 1
+ },
+ "svet": "ostrov8x8",
+ "ticku": 1311,
+ "voda_ms": {
+  "celkem": 31145.929,
+  "podzemí: pásma": 4092.666,
+  "povrch + podzemí: plný výpočet": 26369.614,
+  "prameny": 163.56
+ },
+ "vykopy": [
+  [
+   20684,
+   30
+  ],
+  [
+   12683,
+   150
+  ],
+  [
+   10911,
+   270
+  ],
+  [
+   10110,
+   390
+  ],
+  [
+   16364,
+   510
+  ],
+  [
+   7651,
+   630
+  ]
+ ],
+ "zatez_ms": 8.0,
+ "zpozdeni": 30
+}

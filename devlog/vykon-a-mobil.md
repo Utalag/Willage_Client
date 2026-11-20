@@ -37,3 +37,9 @@ Odhad pro telefon z tohoto měření v `PROP.md` ještě není dopsaný (v plán
 ![E50 svět po vygenerování](img/50_svet64_iso.jpg)
 
 *E50 po vygenerování (`blueprint-studie/shots/50_svet64_iso.png`). Časy fází jsou v tabulce výše, ne v tomto snímku.*
+
+## E95 asynchronní voda po kopání (2026-11-20, větev `e95-async-voda`)
+Výkop se provede hned a voda se dopočítá ve vlákně (`scripts/voda/async95.gd`, přepínač `p95_async_voda`, výchozí vypnutý). Zaseknutí při výkopu zmizí:
+ostrov 0,65–1,2 s → pod 1 ms, blok 128 m (jen povrch) 11–38 ms → do 1,3 ms. Výsledek vody je stejný jako synchronně. Voda ale dorazí až po 2–6 s
+(ostrov) a s podzemím na větším území po desítkách sekund (64 m) až minutách (128 m). Podrobně v [`blueprint-studie/PROP.md`](../blueprint-studie/PROP.md) (E95).
+

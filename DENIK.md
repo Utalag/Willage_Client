@@ -216,6 +216,12 @@ Skupiny: 1 Prototyp a buildy · 2 Terén a tvar · 3 Rozlišení bloku · 4 Ská
 - **Komplikace:** koryta jsou krátké úseky (malý svět, malá povodí). Krasová vyvěračka 0. Hráz na svahu tůň nevytvořila (potok ji obtekl). Podzemní tok vede zatím zjednodušeně k nejbližšímu okraji.
 - **Další krok:** Jan rozhodne, jak daleko vést podzemní tok (sledovat propustnou vrstvu?) a jestli má mít krasová vyvěračka vlastní pravidlo. Starší otevřené otázky (eroze po blocích vs hrubý svět, jádro hory přes šev, minerály z hrubého světa) zůstávají.
 
+### 🧪 E95 asynchronní voda po kopání (2026-11-20 12:40 · větev `e95-async-voda`, tag `e95-async-voda`, `scripts/voda/async95.gd`, přepínač `p95_async_voda` vyp, shots `blueprint-studie/shots/e95/`)
+- **Směr:** Jan 11:32: oddělit výpočet vody od kopání. Výkop hned, voda (E68 + podzemí + kroky R) ve vlákně, výsledek se převezme později. Model patří vláknu, hlavní vlákno kreslí z pohledu.
+- **Zlepšení:** blokování hlavního vlákna při výkopu 0,65–1,2 s → 0,1–0,3 ms (ostrov), 11–38 ms → 0,3–1,3 ms (blok 128 m bez podzemí). Ve hře žádný snímek vody nad 33 ms (dřív 139). Režim fronta dává otisk po otisku stejně jako synchronně (S1–S5, ostrovy 4×4 a 8×8, blok 128 m).
+- **Komplikace:** fronta při rychlém kopání hromadí zpoždění (až 22–36 s). Pevné převzetí po 30 tikách jen přesune trhnutí. Sloučení drží ~2 s, ale mezistavy závisí na načasování. S podzemím roste čas vody rychle s plochou (64 m: 23–46 s na výkop). Lokální přepočet ≠ plný výpočet v některých posloupnostech (chyba modelu i synchronně).
+- **Další krok:** Jan rozhodne o převzetí (pevné zpoždění / server určí tik / hned), frontě nebo sloučení a jestli dál zrychlovat podzemí (C#, menší okno), než se svět zvětší na 128 m.
+
 ### 🔄 Voda E74–E77 sloučena, přepínače podle Jana (2026-11-20 04:08 · větev `voda-e74-e77-slouceni`, tag `voda-e74-e77-ready`, `tok.solve74`, `ug67._merge_outs72d`, `ostrov_voda.place76`, data `blueprint-studie/shots/voda_e74_e77/`)
 - **Směr:** Jan 2026-11-20 01:49 a 03:26: sloučit E74–E77, zapnout obsazování pramenů s hladinou, uložené prameny, slučování do 8 m; E75 a těžba na `cas_hry.gd`.
 - **Zlepšení:** výchozí ostrov beze změny otisku (63d7b89a91385a79), 0 neshod, chyba 0 ve všech testech, druhý běh bitově stejný; neobsazený pramen už vodu ze světa nepouští; nové postavení a načtení ostrova = lokální stav; slučování nejdál 8 m.

@@ -2589,3 +2589,89 @@ Zdroje [45]–[72] níže v tomto souboru zůstávají jen jako zástupné čís
   stejném tiku jako klient, jinak se stav vody na chvíli rozejde.
 - **Bublina pro panel (cs):** „Asynchronní voda: po výkopu se voda dopočítá ve vlákně na pozadí, hra se nezasekne. Nová voda se
   ukáže o chvilku později (pevně po N tikách, stejně na serveru i klientovi). Výsledek je stejný jako bez přepínače.“
+
+### E95 výsledky (2026-11-20 12:40)
+
+**Co vzniklo:** `godot-prototyp/scripts/voda/async95.gd` (pracovní vlákno `Thread` + `Mutex` + `Semaphore`, pohled pro
+vykreslení, okamžitý krok, režimy fronta / sloučení), přepínač `p95_async_voda` (výchozí **vypnuto**, + `p95_zpozdeni`,
+`p95_rezim`) v `ostrov_teren.gd` a napojení v `island.gd` (`water_edit` → úloha, `water_step` → převzetí, vykreslení z pohledu,
+`water_finish` před výkopem v asynchronním režimu nečeká). Test `tools/async_e95.gd`, měření ve hře `demo.tscn -- --e95-bench`
+(`scripts/demo/e95_demo.gd`), blok 128 m `scripts/voda/blok128_voda95.gd` (kopie `lod90.gd` a `svah92.gd` z `e92-meritko` beze změny).
+Model vody (`ostrov_voda.gd`) a moduly studie se nezměnily. Snapshot není hluboká kopie: model během výpočtu **vlastní vlákno**
+a hlavní vlákno čte jen pohled (fill, eff, hm, to, výstupy podzemí, vodopády, prameny).
+
+**Determinismus (virtuální čas, `shots/e95/virt/`):** fronta = synchronní verze **otisk po otisku** (H68.otisk po každém výkopu)
+v S1 (12 výkopů), S2 (obráceně), S3 (seed 95 + výkopy pramenů), S4 (dávka 6 výkopů po tiku), S5 (stejný sloupec 2×, pramen,
+další kop během výpočtu), na ostrově 4×4 (12 výkopů), 8×8 (6 výkopů) a na bloku 128 m (B1 12 výkopů, B2 dávka).
+Sloučení: konečný otisk stejný jako synchronně ve všech posloupnostech (S1, S4 dvakrát), mezistavy se liší a závisí na načasování.
+Výchozí ostrov: konec S1 63d7b89a91385a79 všude.
+
+**Blokování hlavního vlákna při výkopu a čas do výsledku (box, ostrov 2×2 = 16 m s podzemím, S1, 60 tiků/s, zátěž 8 ms/snímek, `shots/e95/real/`):**
+
+| | blokování při výkopu p50 / max | nejdelší snímek | snímky > 33 ms | čas od výkopu do výsledku vody |
+|---|---|---|---|---|
+| synchronně, 8 jader | 652 / 1226 ms | 1234 ms | 665 z 1418 (krok R ~65 ms každý snímek) | 2,8–4,4 s (kroky R po snímcích) |
+| fronta, 8 jader | 0,15 / 0,28 ms | 31 ms | 0 | práce 2,1–4,5 s, ale fronta roste: 2,1 → 22 s u 12. výkopu (kop každé 2 s) |
+| sloučení, 8 jader | 0,13 / 0,26 ms | 25 ms | 0 | ~2,0 s u každého výkopu, poslední 5,0 s |
+| synchronně, 1 jádro | 709 / 1333 ms | 1341 ms | 665 | 2,7–5,3 s |
+| fronta, 1 jádro | 0,09 / 5,5 ms | 29 ms (p95 14,7) | 0 | práce 2,6–6,1 s, fronta až 36 s |
+| sloučení, 1 jádro | 0,09 / 0,3 ms | 29 ms (p95 14,6) | 0 | ~2,0–2,3 s, poslední 6,2 s |
+| dávka S4 synchronně (8 j.) | 3324 / 3926 ms | 3934 ms | 68 z 98 | – |
+| dávka S4 fronta / sloučení (8 j.) | 0,07 / 0,22 ms | 9 / 8 ms | 0 | fronta 2,4 → 19,9 s; sloučení 0,9 → 7,9 s |
+
+Pevné převzetí `p95_zpozdeni = 30` tiků (0,5 s) **nestačí**: úloha trvá 2–6 s, hlavní vlákno pak v tiku převzetí čeká 1,4–3,8 s
+(8 jader) / až 5,5 s (1 jádro) – trhnutí se jen přesune. Pro deterministické převzetí musí být zpoždění delší než nejhorší
+úloha, nebo se převzetí určí jinak (otázka pro Jana). Měření s převzetím hned po dokončení (`zpozdeni = -1`) je bez trhnutí.
+
+**Ve hře (`main.tscn`, 8 výkopů po 20 snímcích, `shots/e95/hra/`):** celý herní výkop synchronně 0,79–1,98 s (p50 1,72 s, vč.
+dokončení předchozí vody), asynchronně 0,29–0,86 s. Zbytek není voda: vykreslení vody z pohledu 2,6 ms, `refresh_after_edit` jednoho sloupce
+~151 ms, zbytek je ostatní herní práce po výkopu (síť terénu, vegetace, sousední bloky). Voda na snímek: synchronně p50 40 ms,
+max 107 ms (139 snímků > 33 ms); asynchronně s převzetím hned max 3,6 ms (0 snímků > 33 ms), s `p95_zpozdeni = 30` max 1,66 s
+(čekání v tiku převzetí). Konečný otisk ve hře je stejný (c7dbf253538412ab) s přepínačem i bez něj.
+
+**Blok 128 m z funkce (Jan t708u; dlaždice (14, 5) s největším převýšením, 256 × 256 sloupců po 0,5 m, `shots/e95/blok128/`):**
+jen **povrchová** voda (tok + E68 update, prameny, obsazování), **bez podzemí** – funkce vrstev pro blok 128 m zatím nejsou (E96).
+Postavení 2,5 s (plný výpočet povrchu 1,1–1,2 s), 4 prameny, 8 135 sloupců tůní, 237 koryta. Výkopy B1 (koryta a suché okraje
+tůní, 2 m hluboko):
+
+| blok 128 m | blokování p50 / max | nejdelší snímek | čas do výsledku | pohled |
+|---|---|---|---|---|
+| synchronně 8 j. / 1 j. | 11,2 / 33,4 ms · 10,6 / 37,9 ms | 41 / 46 ms | hned (v hlavním vlákně) | – |
+| fronta 8 j. / 1 j. | 0,31 / 1,25 ms · 0,23 / 4,2 ms | 14 / 16 ms | 10–34 ms · 14–59 ms | 1,9 MB |
+
+**Podzemí na větším území (ostrov N × N bloků po 16 sloupcích s podzemím E64/E68, virtuální čas, `shots/e95/ostrov_vetsi/`):**
+
+| území | plný výpočet vody | edit (blokuje synchronně) | kroků R / nejdelší krok | práce na výkop (= čas do výsledku ve vlákně) | pohled |
+|---|---|---|---|---|---|
+| 2 × 2 (16 m, 32 sl.) | 2,5–2,9 s | 0,4–1,5 s | 23–67 / 0,77 s | 2,1–4,8 s | 0,48 MB |
+| 4 × 4 (32 m, 64 sl.) | 6,0–6,2 s | 0,6–4,4 s | 68–151 / 3,1 s | 4,3–13,0 s | 0,27 MB* |
+| 8 × 8 (64 m, 128 sl.) | 31 s | 3,2–17,3 s | 356–680 / 12,8 s | 23–46 s | 0,75 MB |
+| 16 × 16 (128 m, 256 sl.), jen fronta, 3 výkopy | 125 s | 12,7–21,4 s | 1257–1805 / **82 s** | **90–228 s** | 2,4 MB |
+
+\* mřížka vody má okraj mlhy 1 slot (2 × 2 má 3 sloty), proto je pohled 4 × 4 menší.
+Asynchronně je blokování hlavního vlákna ve všech velikostech 0,02–0,17 ms. Čas do výsledku ale roste rychleji než plocha
+(4× plocha → ~3× čas, pak ~4–5×). Na území 128 m s podzemím trvá voda po výkopu 1,5–3,8 minuty (a synchronně by jeden krok R zasekl hru až na 82 s) – vlákno odstraní zaseknutí,
+ne čekání na vodu. Odhad pro telefon ×1,6–1,9 (střední) a ×4,4–4,6 (slabý) podle E93.
+
+**Paměť:** pohled = fill + eff + hm (3 × 8 B) + to (4 B) + ostrov (1 B) na sloupec + výstupy a vodopády: 0,48 MB (ostrov 2 × 2),
+1,9 MB (blok 128 m povrch). Ve frontě se drží jeden pohled na hotovou nepřevzatou úlohu. Model se nekopíruje (vlastnictví).
+Proces ostrova 16 × 16 s podzemím měl ~1,5 GB RSS (stav podzemí E64), to je problém modelu, ne E95.
+
+**Okamžitý krok:** výkop vedle tůně / koryta s hladinou nad novým dnem dostane v pohledu hladinu souseda (8 sousedů); celé odeslání
+výkopu i s tímto krokem trvá do 0,3 ms. Je to jen vzhled, výsledek úlohy ho přepíše. Počet zachycených případů jsem neměřil zvlášť.
+
+**Negativní a vedlejší nálezy:**
+- Fronta při rychlém kopání hromadí zpoždění (12 výkopů po 2 s → 22 s na 8 jádrech, 36 s na 1 jádře). Sloučení drží ~2 s,
+  ale mezistavy vody závisí na načasování vlákna → pro server nedeterministické (konečný stav ve všech testech stejný).
+- Pevné převzetí po 30 tikách jen přesune trhnutí (čekání 1,4–5,5 s).
+- Na 1 jádře se snímek prodlouží z 8 na p95 14,7 ms (max 29 ms), vlákno a hra se dělí o jádro; úloha je o ~20–40 % pomalejší.
+- **Lokální přepočet ≠ plný výpočet** (stejně synchronně i asynchronně, tedy chyba modelu, ne E95): ostrov S5 (stejný sloupec
+  dvakrát + pramen) `eff` 110 neshod; ve hře `fill` 43 / `to` 38; blok 128 m B1 `fill` 102 / `to` 60, B2 `fill` 93 / `to` 60.
+  Výchozí test `voda_e66` má dál 0 neshod.
+- Statické cache modulů terénu (`geo_fn._perm`, `geo2._nc`, `tok60` statické proměnné) nejsou chráněné zámkem. Při souběhu
+  s generováním bloku v hlavním vlákně by hrozil pád [81]; `island.gd` proto před plným výpočtem a vložením bloku vlákno
+  dokončí a zastaví (`_async_stop`). Vykreslování a scéna zůstávají v hlavním vlákně [81][82].
+- `Thread` místo `WorkerThreadPool` [83]: úlohy jsou dlouhé (sekundy) a jdou za sebou, vlastní vlákno se dá zastavit a nedrží
+  vlákna poolu.
+
+**Kontroly:** `voda_e66` d7aedf3a6d9d10e8 → 63d7b89a91385a79, neshod 0. `port_studie --check` „souborů 81 (78 skriptů), změněno 0“.

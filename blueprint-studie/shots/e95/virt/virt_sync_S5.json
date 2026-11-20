@@ -1,0 +1,128 @@
+{
+ "blok_hlavni": {
+  "max": 1824.1,
+  "n": 6,
+  "nad_100ms": 6,
+  "nad_33ms": 6,
+  "p50": 1668.31,
+  "p95": 1824.1,
+  "p99": 1824.1,
+  "prumer": 1304.09
+ },
+ "cas": "virt",
+ "celkem_s": 15.715754,
+ "cpu": 8,
+ "digs": [
+  {
+   "blok_hlavni_ms": 887.927,
+   "dokonceni_predchoziho_ms": 0.006,
+   "edit_ms": 887.92,
+   "gi": 7363,
+   "hotovo_ms": 1943.826,
+   "r_kroku": 19,
+   "r_max_ms": 67.683,
+   "t_us": 4820537,
+   "tick": 30
+  },
+  {
+   "blok_hlavni_ms": 1069.68,
+   "dokonceni_predchoziho_ms": 213.176,
+   "edit_ms": 856.504,
+   "gi": 7363,
+   "hotovo_ms": 2150.296,
+   "r_kroku": 19,
+   "r_max_ms": 74.361,
+   "t_us": 6551186,
+   "tick": 50
+  },
+  {
+   "blok_hlavni_ms": 1668.311,
+   "dokonceni_predchoziho_ms": 220.23,
+   "edit_ms": 1448.08,
+   "gi": 6467,
+   "hotovo_ms": 2778.252,
+   "r_kroku": 19,
+   "r_max_ms": 70.961,
+   "t_us": 8481251,
+   "tick": 70
+  },
+  {
+   "blok_hlavni_ms": 629.043,
+   "dokonceni_predchoziho_ms": 249.497,
+   "edit_ms": 379.546,
+   "gi": 7364,
+   "hotovo_ms": 2615.706,
+   "r_kroku": 19,
+   "r_max_ms": 71.192,
+   "t_us": 11010005,
+   "tick": 90
+  },
+  {
+   "blok_hlavni_ms": 1745.453,
+   "dokonceni_predchoziho_ms": 1153.28,
+   "edit_ms": 592.173,
+   "gi": 6467,
+   "hotovo_ms": 4005.197,
+   "r_kroku": 19,
+   "r_max_ms": 81.599,
+   "t_us": 12472430,
+   "tick": 110
+  },
+  {
+   "blok_hlavni_ms": 1824.103,
+   "dokonceni_predchoziho_ms": 1456.15,
+   "edit_ms": 367.953,
+   "gi": 7491,
+   "hotovo_ms": 3723.717,
+   "r_kroku": 42,
+   "r_max_ms": 76.325,
+   "t_us": 15021476,
+   "tick": 130
+  }
+ ],
+ "neshod_plny": {
+  "eff": 110,
+  "fill": 0,
+  "to": 0
+ },
+ "otisk_konec": "7d21f03be4482fb5",
+ "otisky": [
+  "d7aedf3a6d9d10e8",
+  "d7aedf3a6d9d10e8",
+  "23ca8bf2d4bf7c47",
+  "3710813ed84a5c04",
+  "7d21f03be4482fb5",
+  "7d21f03be4482fb5"
+ ],
+ "rezim": "sync",
+ "seq": "S5",
+ "ticku": 173,
+ "vykopy": [
+  [
+   7363,
+   30
+  ],
+  [
+   7363,
+   50
+  ],
+  [
+   6467,
+   70
+  ],
+  [
+   7364,
+   90
+  ],
+  [
+   6467,
+   110
+  ],
+  [
+   7491,
+   130
+  ]
+ ],
+ "zatez_ms": 8.0,
+ "zpozdeni": 30
+}
