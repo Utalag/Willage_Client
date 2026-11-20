@@ -216,6 +216,12 @@ Skupiny: 1 Prototyp a buildy · 2 Terén a tvar · 3 Rozlišení bloku · 4 Ská
 - **Komplikace:** koryta jsou krátké úseky (malý svět, malá povodí). Krasová vyvěračka 0. Hráz na svahu tůň nevytvořila (potok ji obtekl). Podzemní tok vede zatím zjednodušeně k nejbližšímu okraji.
 - **Další krok:** Jan rozhodne, jak daleko vést podzemní tok (sledovat propustnou vrstvu?) a jestli má mít krasová vyvěračka vlastní pravidlo. Starší otevřené otázky (eroze po blocích vs hrubý svět, jádro hory přes šev, minerály z hrubého světa) zůstávají.
 
+### 🧪 Blueprint v3 / E86: otočení výřezu po 90° (2026-11-20 06:41 · prototyp `scripts/teren/otoceni86.gd`, `prenos76.place`, `ug_funkce.bands76`, příznak `p86_otoceni`, nástroj `tools/otoceni_e86.gd`, větev `e86-otoceni-90`, data `blueprint-studie/shots/e86/`)
+- **Směr:** TODO Blok 3: výřez se otočí jako hotová data (pole po sloupcích, buňky, dutiny, prameny, výkopy), podzemí otočeného výřezu bere šum hornin v souřadnicích původu.
+- **Zlepšení:** otočení dat přesné (0 neshod, rot⁴ = identita, skládání), ~5 ms. Na ostrově rot 0–3: lokálně = plně, bilance 0, pásma podzemí 256/256 jako v původu, prameny na otočených místech, dva běhy stejné. rot 0 = E76 bitově, výchozí hra beze změny.
+- **Komplikace:** vygenerovat otočené znovu nejde: vrstvy z regionu se liší až o 3,4 m a 19–25 % buněk; znovu vzorkované minerály a dutiny leží jinde a hornina hor se liší v 0,2–0,3 % buněk. Bez `p86` 15–24 z 256 sloupců podzemí jinak. Hranice vrstev přeneseného výřezu na švu skáčou o 1,8–2,7 m (už E76).
+- **Další krok (Jan):** zapnout `p86_otoceni`; rozhodnout napojení vrstev výřezu na nové sousedy; zrcadlení.
+
 ### 🔄 Voda E74–E77 sloučena, přepínače podle Jana (2026-11-20 04:08 · větev `voda-e74-e77-slouceni`, tag `voda-e74-e77-ready`, `tok.solve74`, `ug67._merge_outs72d`, `ostrov_voda.place76`, data `blueprint-studie/shots/voda_e74_e77/`)
 - **Směr:** Jan 2026-11-20 01:49 a 03:26: sloučit E74–E77, zapnout obsazování pramenů s hladinou, uložené prameny, slučování do 8 m; E75 a těžba na `cas_hry.gd`.
 - **Zlepšení:** výchozí ostrov beze změny otisku (63d7b89a91385a79), 0 neshod, chyba 0 ve všech testech, druhý běh bitově stejný; neobsazený pramen už vodu ze světa nepouští; nové postavení a načtení ostrova = lokální stav; slučování nejdál 8 m.
