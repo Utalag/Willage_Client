@@ -402,35 +402,32 @@ static func fill_events(st: Dictionary, comp: PackedInt32Array, lo: float, hi: f
 
 ## nastaví extra odtok na přelivu každé mokré tůně; podzemní voda vyjde na nejbližším okraji ostrova (vyvěračka ve stěně → vodopád do mlhy)
 ## E52: modul podzemí (výchozí podzemi.gd; varianta v ctx.impl má stejné entry / solve + touched)
-## E74 + Jan 2026-11-20 01:49 (p74_vyzvednout + p74_hladina): neobsazený povrchový výtok vodu ze světa nepouští. Sloupec
-## výtoku se vyřadí z výstupů tělesa a těleso se řeší znovu → hladina stoupne k dalšímu výstupu. Opakuje se, dokud výstup
-## není obsazený pramen, okraj / stěna, nebo je těleso plné (uzavřené → tůně přetečou po povrchu); nejvýš 64 kol.
-## Bez přepínače jedno řešení se stejným klíčem jako dřív (otisky beze změny). Vrací [výsledek (kopie), klíč, [[sloupec, z]]].
+## E74 + Jan 2026-11-20 01:49 (p74_vyzvednout + p74_hladina): neobsazený povrchový výtok vodu ze světa nepouští.
+## 1) těleso se vyřeší jako dřív (stejný klíč → bez přepínače otisky beze změny); 2) má-li neobsazený povrchový výtok,
+## vyřeší se znovu se všemi neobsazenými povrchovými sloupci vyřazenými z výstupů → hladina stoupne a voda vyjde jen
+## obsazeným pramenem nebo okrajem; jinak je těleso plné (uzavřené → tůně přetečou po povrchu). Přirozené výtoky z 1)
+## zůstanou vykreslené (vyver74, q 0) a obsadí se jako v E74. Vrací [výsledek (kopie), klíč, [[sloupec, z]]].
 static func solve74(st: Dictionary, vs: PackedInt32Array, q: float, excl0: Dictionary) -> Array:
-	var lift := bool(st.L.get("v74", false)) and bool(st.L.get("h74", false))
-	var excl := excl0
-	var hid := []
+	var sk := "s%s|%.9f|%d" % [str(vs), q, excl0.hash()]
+	if not st.ug_cache.has(sk): st.ug_cache[sk] = _ugi(st).solve(st.ug, vs, q, excl0)
+	var r: Dictionary = st.ug_cache[sk]
+	if not (bool(st.L.get("v74", false)) and bool(st.L.get("h74", false))) or r.closed or float(r.out_q) <= 0.0: return [r.duplicate(), sk, []]
 	var claim: Dictionary = st.get("claim74", {})
-	var r: Dictionary = {}
-	var sk := ""
-	for it in 64:
-		if it == 0: sk = "s%s|%.9f|%d" % [str(vs), q, excl.hash()]
-		else:
-			var ek := excl.keys(); ek.sort()   # E83: přesný klíč (bity q, seřazené buňky)
-			sk = "h%s|%s|%s" % [str(vs), PackedFloat64Array([q]).to_byte_array().hex_encode(), str(ek)]
-		if not st.ug_cache.has(sk): st.ug_cache[sk] = _ugi(st).solve(st.ug, vs, q, excl)
-		r = st.ug_cache[sk]
-		if not lift or r.closed or float(r.out_q) <= 0.0: break
-		var cut := []
-		if r.has("outs67"):
-			for o in r.outs67:
-				if float(o[3]) > 0.0 and String(o[1]) == "povrch" and not claim.has(int(o[2])): cut.append([int(o[2]), float(o[0])])
-		elif String(r.out[3]) == "povrch" and not claim.has(int(r.out[4])): cut.append([int(r.out[4]), float(r.out[0])])
-		if cut.is_empty(): break
-		if it == 0: excl = excl0.duplicate()
-		for cc in cut:
-			excl[cc[0]] = true; hid.append(cc)
-	return [r.duplicate(), sk, hid]
+	var hid := []
+	if r.has("outs67"):
+		for o in r.outs67:
+			if float(o[3]) > 0.0 and String(o[1]) == "povrch" and not claim.has(int(o[2])): hid.append([int(o[2]), float(o[0])])
+	elif String(r.out[3]) == "povrch" and not claim.has(int(r.out[4])): hid.append([int(r.out[4]), float(r.out[0])])
+	if hid.is_empty(): return [r.duplicate(), sk, []]
+	var e0 := excl0.keys(); e0.sort()
+	var ck := claim.keys(); ck.sort()
+	var sk2 := "h%s|%s|%s|%s" % [str(vs), PackedFloat64Array([q]).to_byte_array().hex_encode(), str(e0), str(ck)]   # E83: přesný klíč
+	if not st.ug_cache.has(sk2):
+		var excl := excl0.duplicate()
+		for i in st.W * st.H:
+			if not claim.has(i): excl[i] = true
+		st.ug_cache[sk2] = _ugi(st).solve(st.ug, vs, q, excl)
+	return [st.ug_cache[sk2].duplicate(), sk2, hid]
 
 static func _ugi(st: Dictionary):
 	return st.ug.get("impl", UG)
