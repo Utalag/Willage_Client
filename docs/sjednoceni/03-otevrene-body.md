@@ -307,7 +307,7 @@ Cílový telefon a fps Jan v 1.11 přeskočil; znovu se neptám. Bench APK z E93
 
 **Otázka pro Jana.** Má se LOD řídit kamerou a zoomem (zblízka voxel 0,25 m, dál 0,5 m, zdálky hrubší) a sešití stěn z E90 zůstat?
 
-**Platí:**
+**Platí:** (Jan, hovor 20. 11. 2026) Zatím se nechává jediné rozlišení 0,25 m na buňku, bez úrovní LOD a bez zoomu: celý pohled je v jednom rozlišení.
 
 ---
 
