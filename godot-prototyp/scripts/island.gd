@@ -17,6 +17,7 @@ const TerenBP = preload("res://scripts/teren/ostrov_teren.gd")
 const TerenTridy = preload("res://scripts/teren/tridy.gd")
 const OstrovVoda = preload("res://scripts/voda/ostrov_voda.gd")
 const OstrovVodaRender = preload("res://scripts/voda/ostrov_voda_render.gd")
+const J = preload("res://scripts/jednotky.gd")   # E89
 const BS := 16
 const CELL_H := 0.5
 const SURF_Y := 32 * CELL_H       # výchozí povrch (střed výšky)
@@ -237,6 +238,8 @@ static func _box(st: SurfaceTool, a: Vector3, b: Vector3, with_top: bool) -> voi
 
 ## paprsek -> globální sloupec povrchu (pochod po výškové mapě), nebo null
 func cell_at_ray(origin: Vector3, dir: Vector3):
+	if scale != Vector3.ONE:
+		var rl := _ray_local(origin, dir); origin = rl[0]; dir = rl[1]
 	var p := origin
 	if dir.y < 0 and p.y > 40.0:  # přeskoč prázdný prostor nad ostrovem
 		p += dir * ((p.y - 40.0) / -dir.y)
@@ -262,6 +265,15 @@ func _init() -> void:
 func _ready() -> void:
 	if Engine.is_editor_hint():
 		_editor_rebuild.call_deferred()
+	elif SurfaceParamsS.inst().p89_meritko:
+		scale = J.SCENA_DNES_M_NA_SC   # E89: scéna v metrech (buňka 0,5 × 0,5 × 0,5 m), data beze změny
+
+## E89: paprsek ze scény do místních souřadnic ostrova (bez p89_meritko beze změny)
+func _ray_local(origin: Vector3, dir: Vector3) -> Array:
+	if scale == Vector3.ONE:
+		return [origin, dir]
+	var inv := global_transform.affine_inverse()
+	return [inv * origin, inv.basis * dir]
 
 ## blok z receptu (typ, seed); unikátní blok má bonus rud
 static func make_block(kind: String, seed: int, title: String, category := "běžný") -> Block:
@@ -652,6 +664,8 @@ func hide_preview() -> void:
 
 ## paprsek z kamery -> slot (průsečík s rovinou výchozího povrchu)
 func slot_at_ray(origin: Vector3, dir: Vector3):
+	if scale != Vector3.ONE:
+		var rl := _ray_local(origin, dir); origin = rl[0]; dir = rl[1]
 	if absf(dir.y) < 0.0001:
 		return null
 	var t := (SURF_Y - origin.y) / dir.y
