@@ -2556,3 +2556,35 @@ a `surface.adapt(real)` se bez nových vstupů neprojeví.
 
 Těžba a rozklad hornin jsou samostatná studie. Návrh E65 je teď **T01 (dříve E65)** v `../tezba-studie/` (`README.md`, `PROP.md`, `DENIK.md`, `ZDROJE.md` [1]–[28], tabulka v `data/horniny_tezba_navrh.json`).
 Zdroje [45]–[72] níže v tomto souboru zůstávají jen jako zástupné číslo, aby se neposunulo číslování blueprint-studie.
+
+## E86 otočení výřezu po 90° (plán, zapsáno před pokusem 2026-11-20 06:27; TODO Blok 3 „Otočení výřezu po 90°“)
+- **Rozsah:** jen klient, studie. Výchozí hra (`rot = 0`, `voda_e66`, `port_studie --check`) se nesmí změnit; nové chování jen
+  za příznakem `p86_otoceni` (výchozí vyp). Překryv E78 (`prekryv78.gd`) v main není → výkopy = `hm` proti `hm_gen`.
+- **Co už je:** výřez E76 (`prenos76.cutout/place`) přenáší hotový záznam bloku (hm, hm_f, hm_raw, hm_pre, bs[k], buňky,
+  `geo`, voda, prameny v místních souřadnicích, `gen3` se seznamy buněk minerálů a dutin) a posun dz. Podzemí se staví znovu
+  z funkcí (`ug_funkce.from_world`): pole hm_f / bs ze záznamu, materiál hornin hor (`_mountain_rock`, 3D šum v metrech) se
+  u výřezu vyhodnotí v souřadnicích původu (`bands76`). Otočení se dnes nedělá.
+- **Definice otočení:** `rot ∈ {0, 1, 2, 3}` = 0°, 90°, 180°, 270° kolem středu bloku (4 m, 4 m). Mřížka n × n (sloupce 16,
+  řídicí body 16, jemná 32): rot 1 zobrazí (x, y) → (n − 1 − y, x), tj. směr (dx, dy) → (−dy, dx); strana d (0 −y, 1 +x,
+  2 +y, 3 −x) → (d + rot) mod 4. V metrech (místní X, Y ∈ [0, 8]): (X, Y) → (8 − Y, X). Je to bijekce na buňky (permutace
+  sloupců, z beze změny), rot⁴ = identita, rot a ∘ rot b = rot (a + b).
+- **Otočí se:** všechna pole po sloupcích (hm, hm_gen, hm_f, hm_raw, hm_pre, changed, bs[k]), buňky `cells`/`geo`/voda
+  (sloupec po sloupci), indexy buněk minerálů a dutin v `gen3` / `rec.rep`, prameny výřezu (lx, ly), výkopy (hm proti hm_gen).
+  Podzemí: `bands76` dostane `rot` a cílový bod (X, Y) převede zpět do souřadnic původu inverzní rotací, aby šum hornin
+  byl stejný jako v původu (jinak by se hornina hor „neotočila“).
+- **Hypotézy a měření (`tools/otoceni_e86.gd`, výstupy `shots/e86`):**
+  1. Otočení dat = otočení souřadnic: 0 neshod buněk, povrchu, hranic vrstev, minerálů, dutin, pramenů pro rot 1–3,
+     rot⁴ = identita, skládání. Počty materiálů beze změny.
+  2. Otočená FUNKCE (otočené hm_f / bs) navzorkovaná generátorem (`geo_fn.sample`) proti otočeným buňkám: čekám rozdíly jen
+     tam, kde generátor bere souřadnice světa nebo bloku neotočeně – 3D šum hornin hor (`mnoise`), středy těles (komíny,
+     kupole, žíly z `G2._centers` podle slotu), minerály a dutiny (RNG pozic v místních souřadnicích, rozhodování shod podle
+     indexu buňky). Spočítat neshody po kategoriích.
+  3. „Vygenerovat otočené na místě“: celý pipeline se šablonou povrchu otočenou o rot (bez sousedů) proti otočenému
+     vygenerovanému bloku. Čekám rozdíly: regionální vrstvy a jejich šum jsou ve světových souřadnicích, dorovnání okrajů
+     závisí na stranách, eroze kapek, minerály. Změřit rozdíl povrchu (max, průměr), hranic vrstev a buněk.
+  4. Ostrov: výřez z průzkumného světa otočený rot 0–3 vedle bloků ostrova (2 sloty, dz 0): lokální `place76` = plný
+     výpočet (0 neshod, otisk), chyba bilance 0, švy (skok povrchu hm_f mezi sousedními sloupci přes šev proti vnitřku),
+     pásma podzemí výřezu = otočená pásma původu (100 %), prameny výřezu na otočených místech, dva běhy = stejný otisk.
+     rot 0 s příznakem = E76 bitově.
+  5. Výchozí hra: `voda_e66` a `port_studie --check` beze změny proti main.
+- **Negativy zapsat** i když vyjdou (např. kde se otočená funkce liší od otočených buněk).
