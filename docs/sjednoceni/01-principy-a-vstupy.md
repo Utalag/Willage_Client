@@ -201,7 +201,7 @@ Pojmy: **blueprint** = otisk světa o velikosti bloku. To, čemu se ve studiích
 - **Návrh tabulky:** [`materialy.csv`](materialy.csv), 78 materiálů. Sloučené seznamy: `sdilene/materialy_voda.json` + `horniny_voda.json` (voda, eroze) [13], `tezba-studie/data/horniny_tezba_navrh.json` (hustota, tvrdost, vzácnost, nástroj) [14], `mat.gd` (herní třídy, barvy, skóre rarity) a `poradi_hornin.json` (horniny, barvy) [15], `veg.gd` (povrchy pro vegetaci) [16], `mineraly_hostitele.json` a `tridy.gd` (minerály, převod na herní třídu) [26].
   - Sloupce: id, název, skupina (soil / rock / ore / water / other), propustnost 0–1 = (log10 K + 9) / 6, K v m/s (Darcy), pórovitost, odpor povrchu, eroze (kritická rychlost proudu `ero_v` a třída), hustota kg/m³, tvrdost (Mohs, třída, nejslabší nástroj), vzácnost (+ skóre rarity), vegetace (podle `veg.gd` přes herní třídu), barva hex, poznámka.
   - Hodnoty jsou z dat. Doplněné odhady mají `~` a zdroj [23]–[25]. „–“ znamená, že se na materiál nevztahuje.
-  - Zachovaná pravidla: písek vodu neudrží a trochu zpomalí, tráva hodně zpomalí, jíl a pevná skála vodu drží, pórovitá hornina trochu prosakuje [27]. **Vápenec perm 0** je napsaný podle pravidla z 2026-11-17 19:18 [27]. ⚠ Data v4 mají od pokynu Jana 2026-11-19 04:39 (E61) vápenec 0,246 podle skutečné K [28] a kras (E75, E82) na propustném vápenci stojí. Rozhodne Jan.
+  - Zachovaná pravidla: písek vodu neudrží a trochu zpomalí, tráva hodně zpomalí, jíl a pevná skála vodu drží, pórovitá hornina trochu prosakuje [27]. **Propustnost vápence je 0,246** (skutečná hodnota, E61, Jan 2026-11-19 04:39) [28]. Staré pravidlo „vápenec nepropustný / perm 0“ z 2026-11-17 19:18 [27] se ruší (Jan t732u, viz 1.8).
   - Voda není materiál, ale stav buňky. V tabulce je jen id 250 (dutina s vodou z `tridy.gd`).
 - **Konflikty mezi starými seznamy** (k vyřešení při stavbě tabulky):
   1. Stejné id, jiný materiál: 2 hlína / ornice, 3 písek / štěrk, 4 jíl / zvětralá břidlice, 5 vápenec / jeskynní vápenec, 7 čedič / diabas, 10 sníh / věčný sníh. Barvy těchto id se v `mat.gd` a `poradi_hornin.json` liší.
@@ -269,7 +269,19 @@ Pojmy: **blueprint** = otisk světa o velikosti bloku. To, čemu se ve studiích
 
 **Otázka pro Jana.** Přepneme výchozí podzemí z E58 na E67 (výtok z okrajů vrstev, kras funguje)?
 
-**Platí:**
+**Platí:** *rozhodnuto (2026-11-20, Jan t732u)*
+
+- **Voda je obsah buňky.** Ukládá se v **m³ na buňku**, s jedním převodem z litrů [8].
+- **Povrchová voda** používá priority-flood + D8 [17].
+- **Výchozí model podzemí je E67** [17].
+- **Čas:** 1 herní den = 1 h [3].
+- **Na okraji ostrova** voda padá jako vodopád do mlhy a dál se nesimuluje [21].
+- **Kras** vzniká ze dvou zdrojů: z generátoru (mince E82) a přirozeně erozí E75 během hry [9].
+- **Déšť je událost** (plocha × intenzita × doba), ne trvalý stav.
+- **Prameny** jsou nasazené na mapě ze seedu. Pramen je zvláštní typ buňky. Síla pramene určuje, kolik pramenných buněk pokrývá výtok.
+- **Mince E82:** u jeskynního a hlubokého vápence a dolomitu semínko 50/50 rozhodne, jestli se vrstva zvedne až 2 m pod hladinu podzemní vody. Tím je propustná a může v ní vznikat kras [9].
+- **Jíl nad zvednutou vápencovou vrstvou vyklíní** (ztenčí se a místy chybí), takže tam voda prosakuje do vápence a kras vzniká přirozeně.
+- **Propustnost vápence = 0,246** (skutečná hodnota). Staré pravidlo „vápenec 0“ se ruší [27][28].
 
 ---
 
