@@ -38,10 +38,10 @@ Upřesnění od Jana:
 5. **1.5 Verze generátoru:** *odloženo 2026-11-20 (t726u)*, dokud nebude jeden funkční generátor.
 6. **1.9 Přepočet vody:** lokální = plný, výřez na povodí + asynchronně na pozadí, prodleva 2 s / strop 10 s – *rozhodnuto 2026-11-20 (t734u, t735u)*.
 7. **1.8 Voda jako data:** obsah buňky v m³, povrch priority-flood + D8, výchozí podzemí E67, čas 1 den = 1 h – *rozhodnuto 2026-11-20 (t732u)*.
-8. **1.11 Datový rozpočet:** cílový telefon a čísla.
+8. **1.11 Datový rozpočet:** *přeskočeno 2026-11-20 (t738u)*.
 9. **1.6 Materiály:** jedna tabulka, jedno id – *rozhodnuto 2026-11-20 (t727u)*, návrh `materialy.csv`.
 10. **1.7 Geologie:** útvary jako funkce světa přes švy, vrstvy podle terénu, vyklínění – *rozhodnuto 2026-11-20 (t732u)*.
-11. **1.12 Objektová vrstva:** vegetace na m² ve světových metrech.
+11. **1.12 Objektová vrstva:** oddělené vrstvy, rostliny po segmentu, stavby a cesty po bloku, objekty nepřekračují hranici bloku – *rozhodnuto 2026-11-20 (t739u, t740u)*.
 12. **1.10 Kontrakt:** WVB1 základ, data po segmentech, voda v litrech (1 B), server ukládá hotová data a namátkově kontroluje generátorem – *rozhodnuto 2026-11-20 (t736u, t737u)*.
 13. **1.13 Profil a členitost terénu:** parametry členitosti (rozhodnuto); obrys, bok a spodek ostrova otevřené.
 14. **1.14 Sopka:** největší hora je sopka (kostra).
