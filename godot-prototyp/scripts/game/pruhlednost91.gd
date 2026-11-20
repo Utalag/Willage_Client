@@ -57,7 +57,56 @@ static func uniforms_code(dither: bool) -> String:
 	else:
 		s += "\treturn drop > 0.5 ? 0.0 : 1.0;\n"
 	s += "}\n"
+	s += ZK_REZ_CODE
 	return s
+
+## E95 (zkušební větev, Jan 2026-11-20 11:25): svislý řez rovinou X / Z přes celý ostrov. Nezávislý na p91_mode: zk_rez = 0
+## nic nedělá. Odvrácené stěny za řezem dostanou barvu materiálu buňky v rovině řezu (3D textura bloků), jinak tmavé víko.
+const ZK_REZ_CODE := """
+uniform int zk_rez = 0;
+uniform vec3 zk_rez_n = vec3(1.0, 0.0, 0.0);
+uniform float zk_rez_d = 0.0;
+uniform float zk_rez_side = 1.0;
+uniform bool zk_rez_mat = false;
+uniform vec3 zk_cap = vec3(0.10, 0.08, 0.08);
+uniform mat4 zk_inv = mat4(1.0);
+uniform sampler3D zk_cells : filter_nearest;
+uniform sampler2D zk_slots : filter_nearest;
+uniform sampler2D zk_pal : source_color, filter_nearest;
+bool zk_cut(vec3 w) {
+	return zk_rez > 0 && (dot(zk_rez_n, w) - zk_rez_d) * zk_rez_side > 0.0;
+}
+vec4 zk_cell(vec3 w) {
+	vec3 L = (zk_inv * vec4(w, 1.0)).xyz;
+	int gx = int(floor(L.x)); int gz = int(floor(L.z)); int gy = int(floor(L.y * 2.0));
+	if (gy < 0 || gy >= 64) return vec4(0.0);
+	int sx = int(floor(float(gx) / 16.0)); int sz = int(floor(float(gz) / 16.0));
+	ivec2 si = ivec2(sx + 3, sz + 3);
+	if (si.x < 0 || si.y < 0 || si.x >= 8 || si.y >= 8) return vec4(0.0);
+	int layer = int(texelFetch(zk_slots, si, 0).r * 255.0 + 0.5) - 1;
+	if (layer < 0) return vec4(0.0);
+	int id = int(texelFetch(zk_cells, ivec3(gy, (gx - sx * 16) * 16 + (gz - sz * 16), layer), 0).r * 255.0 + 0.5);
+	return texelFetch(zk_pal, ivec2(id, 0), 0);
+}
+"""
+
+## E95: víko svislého řezu – odvrácená stěna za řezem: bod roviny řezu na paprsku ke kameři → materiál buňky (jen terén)
+const ZK_REZ_TAIL := """
+	if (zk_rez > 0 && !FRONT_FACING) {
+		ALBEDO = zk_cap;
+		if (zk_rez_mat) {
+			vec3 zk_wp = (INV_VIEW_MATRIX * vec4(VERTEX, 1.0)).xyz;
+			vec3 zk_wv = normalize((INV_VIEW_MATRIX * vec4(VIEW, 0.0)).xyz);
+			float zk_dn = dot(zk_rez_n, zk_wv);
+			if (abs(zk_dn) > 0.0001) {
+				vec3 zk_p = zk_wp + zk_wv * ((zk_rez_d - dot(zk_rez_n, zk_wp)) / zk_dn) - zk_rez_n * zk_rez_side * 0.02;
+				vec4 zk_c = zk_cell(zk_p);
+				if (zk_c.a > 0.5) ALBEDO = zk_c.rgb;
+			}
+		}
+		NORMAL = normalize((VIEW_MATRIX * vec4(zk_rez_n * zk_rez_side, 0.0)).xyz);
+	}
+"""
 
 ## kód shaderu s vloženým ořezem; null = shader nelze upravit (ne spatial / bez fragment())
 static func patch_code(code: String, dither: bool) -> String:
@@ -79,7 +128,9 @@ static func patch_code(code: String, dither: bool) -> String:
 	if cb < 0:
 		return ""
 	var head := "\n\tif (p91_mode > 0 && p91_keep((INV_VIEW_MATRIX * vec4(VERTEX, 1.0)).xyz, FRAGCOORD.xy) < 0.5) discard;\n"
+	head += "\tif (zk_rez > 0 && zk_cut((INV_VIEW_MATRIX * vec4(VERTEX, 1.0)).xyz)) discard;\n"   # E95 svislý řez
 	var tail := "\n\tif (p91_mode > 0 && !FRONT_FACING) { ALBEDO = p91_cap; }\n"
+	tail += ZK_REZ_TAIL
 	var out := code.substr(0, fi) + uniforms_code(dither) + code.substr(fi, ob + 1 - fi) + head
 	out += code.substr(ob + 1, cb - ob - 1) + tail + code.substr(cb)
 	# odvrácené stěny musí jít vidět (víko); obrysy s cull_front nechat

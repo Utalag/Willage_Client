@@ -21,6 +21,8 @@ static var OFF := Vector2i(3, 3)   # slot ostrova (0, 0) = slot světa (3, 3); o
 static var SIZE := 8               # svět studie SIZE × SIZE slotů (ostrov −2..3 + prstenec mlhy)
 static var world = null            # svět studie (scripts/teren/world.gd)
 static var p := {}
+## E95 (zkušební panel): přepsané parametry z panelu přepínačů; prázdné = výchozí hra beze změny
+static var over := {}
 
 ## typ bloku prototypu → tvar blueprintu (louka, kopec, hora, písčina) a minerály (Jan 16:02: počty, ne šum)
 const SHAPE := {"louka": "louka", "kopec": "kopec", "hora": "hora_zvrasnena", "piscina": "prohlubeň",
@@ -62,6 +64,7 @@ static func params() -> Dictionary:
 	var d := PR.defaults()
 	d.merge(HRA, true)
 	d = PR.apply_args(d, a)
+	d.merge(over, true)   # E95: panel přepínačů (prázdné = beze změny)
 	if bool(d.get("voda_e67", false)):   # přepínač E67 = p67_okraj + p67_rezim pretok (jednotlivě jdou i --bp.p67_*)
 		d.p67_okraj = true; d.p67_rezim = "pretok"
 	return d
