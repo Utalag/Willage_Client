@@ -64,6 +64,9 @@ Pokus E82 (2026-11-20 02:27, větev `e82-vapenec-hladina`): podle Janova rozhodn
 
 Pokus E83 (2026-11-20 03:34, větev `e83-determinismus`): stejná definice, seed a překryv dávají stejné buňky, překryv i otisky ve dvou bězích i ve dvou procesech. Blok závisí jen na sousedech, kteří leželi před ním. Proto pořadí vložení mění asi 2 % buněk, hlavně u švů, a to je záměr. Změny na různých buňkách nezávisí na pořadí, na stejné buňce ano. Jediná skutečná závislost na pořadí je výchozí lokální přepočet vody; s příznaky E76 a E79 zmizí. Mezi platformami půjde držet bitově buňky, ale ne vodu, protože počítá ve float64 s exp a pow.
 
+Pokus E85 (2026-11-20 06:20, větev `e85-blok2-rozhodnuti`): podle Janova rozhodnutí se mřížka 0,25 m umí počítat přímo z funkcí, dno a obvod ostrova se nesmějí prokopat a vrstva tenčí než 25 cm v blueprintu není. Vše je za příznaky a výchozí hra se nemění. Z funkcí se 0,25 m liší od zjemnění v 7,8 % buněk a výpočet je 65–108× pomalejší. Zákaz okraje nechá vnitřní švy volné. Po odstranění tenkých vrstev se změní 0,65 % buněk 0,5 m a švy zůstanou spojité. Aby lokální voda s obsazováním pramenů E74 seděla s plným výpočtem i po načtení, musí se obsazení výtoků uložit s blokem (`p85_voda`).
+
+
 ## Změny od hráče
 
 **Hypotéza:** definice zůstává nedotčená a změny se ukládají zvlášť jako překryv:

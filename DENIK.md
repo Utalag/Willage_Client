@@ -532,6 +532,13 @@ Skupiny: 1 Prototyp a buildy · 2 Terén a tvar · 3 Rozlišení bloku · 4 Ská
 
 ## 3 Rozlišení bloku
 
+### 🧪 E85: rozhodnutí Bloku 2 – mřížka 0,25 m z funkcí, zákaz dna a okraje, vrstvy ≥ 25 cm (2026-11-20 06:20 · prototyp `tools/blok2_e85.gd`, `okraj_hra_e85.gd`, příznaky `p85_*`, větev `e85-blok2-rozhodnuti`, sloučen `origin/main` 57c7dfb)
+- **Směr:** Rozhodnutí Jana 03:26: počítat mřížku 0,25 m z funkcí a při nové verzi přepočítat i staré bloky; zakázat prokopání dna i okraje ostrova; v blueprintu zakázat vrstvy tenčí než 25 cm. Za příznaky, výchozí vypnuto.
+- **Zlepšení:** výchozí hra beze změny (`voda_e66` d7aedf3a… → 63d7b89a…, 0 neshod, `port_studie --check` 0 rozdílů). S `p85_okraj` dno i obvod ostrova zůstanou, vnitřní šev jde kopat, v hře i v překryvu. S `p85_vrstvy` není v definici žádná vrstva pod 25 cm (17 426 → 0), šev hranic 0, buněk jinak 0,65 %. S `p79` + `p85_voda` je voda lokálně = plně = po načtení; v 11 scénářích chodeb s `p85_blok2` totéž, bilance 0, obě pořadí stejný otisk.
+- **Komplikace:** jemné z funkcí je 65–108× pomalejší (442–784 ms proti 6–8 ms) a liší se v 7,8 % buněk; výřez E76 zůstává zjemněním. Lokální voda s výchozím E74 bez `p85_voda` nesedí. U chodeb je lokální přepočet s `p85_blok2` pomalejší než plný (tunel 12,6 s proti 1,6 s). Po ořezu zbude 775 tenkých viditelných zbytků a 4 330 sloupců bez buňky při 0,5 m.
+- **Další krok (Jan):** zapnout p85_okraj / p85_vrstvy / p85_jemne? p85_voda spolu s p79? výřez E76 z funkcí? u chodeb plný přepočet, nebo nejdřív zrychlit?
+
+
 ### 🧪 E83: determinismus bloku, překryvu, vody a pořadí vložení (2026-11-20 03:34 · prototyp `tools/determinismus_e83.gd`, `tools/audit_e83.py`, oprava klíče mezipaměti v `tok` / `tok60`, větev `e83-determinismus`)
 - **Směr:** TODO Architektura světa: ujasnit Hash(seed, změny, pořadí) a ověřit bitovou shodu napříč běhy, procesy a pořadím.
 - **Zlepšení:** běhy i dva procesy bitově stejné; blok závisí jen na sousedech položených před ním (12/12, diagonála a vzdálený blok 0); překryv na různých buňkách nezávisí na pořadí; pořadí vložení mění 1,9 % buněk záměrně, 63–70 % u švu; klíč mezipaměti podzemí přesný, otisky beze změny.

@@ -358,6 +358,46 @@ Výchozí: 800 kapek na blok, `ero_cap` 1,0, `ero_erode` 0,1, `ero_deposit_rate`
   je 6–9× pomalejší než zjemnění (E80). Vrstvy ≥ 25 cm dělají na konci vyklínění schod. Zmenšení na 0,5 m buňky
   zůstane (vrstva 0,25–0,5 m nemusí dostat střed buňky). Main se neslučuje.
 
+## E85 výsledky (zapsáno 2026-11-20 06:20; `godot-prototyp/tools/blok2_e85.gd`, `okraj_hra_e85.gd`, `chodby_e79.gd`, `voda_e66.gd`, `port_studie.py --check`, `shots/e85/`)
+- **Příznaky (výchozí vypnuto):** `p85_blok2` zapne všechno (včetně `p85_voda`). Jednotlivě `p85_jemne`, `p85_okraj`,
+  `p85_vrstvy` (`p85_min_m` 0,25), `p85_voda`. Výchozí hra beze změny.
+- **Výchozí hra beze změny:** `port_studie.py --check` 81 souborů (78 skriptů), změněno 0. `voda_e66` (12 výkopů,
+  kontrola, příznaky p85 vyp): otisk d7aedf3a6d9d10e8 → 63d7b89a91385a79, 0 neshod, chyba světa 0, 5 pramenů, 1 vývěr,
+  Σ okraj 9,65 l/s, plný výpočet 2,45 s (za 61 s). Stejné otisky jako main po sloučení E74–E77.
+- **`p85_jemne` (mřížka 0,25 m z funkcí):** proti zjemnění buněk 0,5 m je jiných 40 892 z 524 288 buněk (7,80 %),
+  bez minerálů a dutin 39 808, pevné/vzduch 2 598. Po blocích 6,04 / 11,54 / 7,65 / 5,97 %. Čas na blok 442–784 ms
+  proti 6,0–8,1 ms (65–108× pomalejší; hora 586 ms / 11,5 %). Nedotčený blok po sync: geo 0, hm 0, překryv 0. Jedna
+  operace 0,25 m po opravě nemění materiál buňky 0,5 m (geo jinak 0, překryv 1). Výřez E76 (`prenos76` neprázdný) zůstává
+  zjemněním. Při načtení se stará definice 0,25 m spočítá z funkcí a překryv se položí na ni.
+- **`p85_okraj` (zákaz dna a obvodu, švy ano):** díry ve dně 703 → 0, výkop na obvodu 190 → 0, položení na dno šachty
+  neprojde. Šachta: odmítnuto 0 → 16 (vše dno), vykopáno 1 280 → 1 264. Vnitřní šev beze změny (44 vykopáno, 4 odmítnuto).
+  Chodba k boku: sever i západ 84/0 → 80/4 (odmítnuté jsou buňky obvodu). Náhodné kopání: odmítnuto 269 → 1 088,
+  vykopáno 2 731 → 1 912. V herním `digging.gd` (0,5 m): obvod 0 buněk („okraj ostrova: nelze“), šachta i vnitřní šev
+  skončí na lz 1 („dno ostrova: nelze“); bez příznaku dojdou na lz 0.
+- **`p85_vrstvy` (v blueprintu nejméně 0,25 m):** tenkých vrstev v definici 17 426 → 0, viditelných po ořezu 17 229 → 775,
+  vrstev ve sloupci 70 461 → 54 895 (průměr 17,20 → 13,40). Sloupců bez buňky tenké vrstvy 18 400 → 4 330 (0,5 m)
+  a 14 078 → 1 701 (0,25 m). Buňky jinak 425 / 65 536 (0,65 %) při 0,5 m a 3 614 / 524 288 (0,69 %) při 0,25 m; šev
+  hranic 0. Otisk geo d3ff4d43… → 92d7d87b…. Nejtenčí viditelná po ořezu klesne jen na 0,021 mm (ne na 0,25 m).
+- **Voda (výchozí p74/p76 zapnuté, chodba E78, uložení a načtení):** 2× stejné ve všech variantách. Překryv = načtený
+  vždy. Lokálně = plně = načtená jen s `p79_chodby` + (`p85_voda` nebo `p85_blok2`): otisk cbe01a6bc9e2034e (bez p85_blok2)
+  nebo 0072d4a1b9c80408 (s p85_blok2). Samotné `p79` nestačí (lokálně 58c9d1d3…, plně/načteno cbe01a6b…, plocha gw jiná,
+  obsazení po [8781] proti čerstvému [6455]). Bez `p74` nebo bez `p74_vyzvednout` stačí p79. `p85_voda` uloží obsazení
+  výtoků E74 s blokem; po změně dutin se povrch bere od čistého stavu a při novém obsazení i čerstvé podzemí.
+- **Chodby E79 s `p85_blok2`:** lokálně = plně ve všech 11 scénářích, 0 neshod fill/eff/to, bilance 0, obě pořadí stejný
+  konečný otisk (chodba 0072d4a1b9c80408, zvodnělá f774a73b41686ff6, tůň 2a6d3176bf159487). Uzavřená dlouhá chodba vodu
+  nemění (zůstane 958f9334f7d8a9ff). Startovní voda s p85_blok2 je 958f9334… (geo a vrstvy jiné než výchozí d7aedf3a…).
+- **Oprava po cestě:** kopání 0,25 m s `p85_jemne` nesmí změnit materiál buňky 0,5 m — podzemí by změnu bez dutiny
+  nevidělo (n1000 lokálně ≠ plně). Po opravě n1000 sedí (201 ms lokálně, 1 956 ms plně).
+- **Negativa:** (1) jemné z funkcí je 65–108× pomalejší, než čekalo E80 (6–9×), a mění 7,8 % buněk 0,25 m. (2) Výřez E76
+  se pořád počítá zjemněním. (3) Vrstvy ≥ 25 cm pořád nechají 775 viditelných tenkých zbytků po ořezu povrchem a 4 330
+  sloupců bez buňky při 0,5 m; zapnutí mění 0,65 % buněk 0,5 m. (4) Samotné p79 s výchozím E74 nestačí na lokálně = plně
+  = načtená — je k tomu `p85_voda`. (5) S `p85_blok2` je lokální přepočet u chodeb pomalejší než plný: tunel 12,6 s proti
+  1,6 s, šachta do tůně 8,2–8,3 s proti 1,7 s, zvodnělá 5,5–6,0 s proti 1,5–1,6 s; drobné změny sloupců (n1–n1000) zůstanou
+  rychlé (46–206 ms proti ~2 s). (6) Hra kope pořád jen vršek sloupce po 0,5 m; zákaz 0,25 m je v `prekryv78.op`.
+- **Pro Jana:** (1) zapnout `p85_okraj` a `p85_vrstvy` jako výchozí? (2) zapnout i `p85_jemne`, i když je 65–108×
+  pomalejší? (3) zapnout `p85_voda` spolu s `p79_chodby`, aby lokální voda s E74 seděla po načtení? (4) počítat výřez E76
+  taky z funkcí? (5) u chodeb počítat vodu plně, nebo nejdřív zrychlit lokální přepočet?
+
 ## E83 determinismus: blok, překryv, voda, pořadí vložení (plán, zapsáno před pokusem 2026-11-20 03:31; TODO Architektura světa: „Determinismus celého světa, nejen jednoho bloku. Ujasnit Hash(seed, změny, pořadí)… Pořadí pokládání tedy výsledek ovlivňuje záměrně; platí jen, že stejný výřez, transformace a sousedé dají stejný výsledek.“; větev z `e82-vapenec-hladina`)
 - **Co už je:** hashe jsou vlastní (`stable_hash`: SplitMix64 + FNV-1a, celá čísla mod 2^64), náhoda generátoru je
   `Ore.Rng` (SplitMix64) a `FastNoiseLite` se seedem z hashe. `RandomNumberGenerator` je jen ve vzhledu (tráva),
