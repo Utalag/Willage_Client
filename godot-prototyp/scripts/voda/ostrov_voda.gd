@@ -9,6 +9,7 @@ extends RefCounted
 ## (vodopád do mlhy) a odteče přes okraj mapy (edge_out). Tak plovoucí ostrov přepadá všude po obvodu a moduly studie
 ## zůstávají beze změny (tok._border zná jen okraj mapy). Podzemí v mlze nepokračuje (stěna).
 
+const J = preload("res://scripts/jednotky.gd")   # E94: mřížka a metry z jednoho místa
 const T = preload("res://scripts/teren/ostrov_teren.gd")
 const TOK = preload("res://scripts/voda/tok.gd")
 const TOK60 = preload("res://scripts/voda/povrch/tok60.gd")
@@ -18,7 +19,7 @@ const UGO = preload("res://scripts/voda/podzemi_ostrov.gd")
 const H68 = preload("res://scripts/voda/hydro68.gd")   # E68: jednotný krok povrch ↔ podzemí do ustálení (p68_hydro)
 const GW = preload("res://scripts/voda/podzemi/gw74.gd")   # E74: hladina podzemní vody jako plocha gw(x, y) (p74_gw)
 const K75 = preload("res://scripts/voda/podzemi/kras75.gd")   # E75: kras – eroze v podzemí po tělesech (p75_kras)
-const BS := 16
+const BS := J.BS
 const ROCK := 6   # materiál příkopu pro tok (žula, nepropustná)
 
 var p := {}

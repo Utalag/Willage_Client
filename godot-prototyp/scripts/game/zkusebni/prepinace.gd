@@ -50,8 +50,10 @@ const SEZNAM := [
 	{"k": "p86_otoceni", "g": "Výřez", "t": "b", "cil": "zive", "n": "E86 otočení výřezu po 90°",
 		"tip": "E86: podzemí otočeného výřezu bere šum hornin v souřadnicích původu (inverzní rotace), takže pásma podzemí sedí 256/256.\nCena: žádná, bez přegenerování.\nVedlejší účinky: projeví se jen při přenosu výřezu s otočením (E76/E86); startovní ostrov se nemění. Ve hře zatím není akce přenosu výřezu."},
 	# ------------------------------------------------------------------ měřítko a zobrazení
-	{"k": "p89_meritko", "g": "Měřítko a zobrazení", "t": "b", "cil": "meritko", "n": "E89 scéna v metrech",
-		"tip": "E89: ostrov se vodorovně zmenší na skutečných 16 × 16 m na blok (buňka 0,5 × 0,5 × 0,5 m místo dnešní 1 × 1 × 0,5).\nCena: okamžitě, bez přegenerování.\nVedlejší účinky: jen náhled – stromy a domky se zúží, kamera, cesty a mlha jsou ve starých jednotkách, hora vypadá nižší."},
+	{"k": "p89_meritko", "g": "Měřítko a zobrazení", "t": "b", "cil": "teren", "n": "Metry (E94)",
+		"tip": "E89 + E94 (Jan 11:04): scéna v metrech – 1 jednotka = 1 m, buňka 0,5 × 0,5 × 0,5 m (dnes 1 × 1 × 0,5, tedy vodorovně natažená 2×). Stromy, stavby, kamera, tráva a mlha jsou v metrech.\nCena: znovu načtení scény ~{teren} s (data ostrova a voda se nemění, otisky vody stejné).\nVedlejší účinky: ostrov vypadá menší a hora strmější; stromy 3,5–4 m zakryjí louku. Na větvi e94-metry je výchozí zap, tady vyp."},
+	{"k": "p94_hora_k", "g": "Měřítko a zobrazení", "t": "f", "min": 1.0, "max": 2.5, "krok": 0.1, "cil": "teren", "n": "E94 výška hory ×",
+		"tip": "E94: převýšení hory nad její patou (1 = beze změny). Startovní hora je v bloku 8 m jen ~9 m nad loukou; 1,5 dá vrchol ~10,5 m (strop sloupce 61 buněk = 30,5 m).\nCena: přegenerování ostrova ~{teren} s.\nVedlejší účinky: mění terén hory i vodu; s vyšší horou má lokální přepočet vody neshody (stará chyba vody, i na main)."},
 	{"k": "p92_svah", "g": "Měřítko a zobrazení", "t": "b", "cil": "teren", "n": "E92 omezovač sklonu",
 		"tip": "E92: omezí sklon povrchu šablony bloku na strop (výchozí 1,0 = 45°).\nCena: přestavba ~{teren} s.\nVedlejší účinky: mění vodu (podzemní těleso a vývěr mohou zmizet, vodopády 8 → 1–5), hora se sníží 9,5 → 6 m."},
 	{"k": "p92_max_sklon", "g": "Měřítko a zobrazení", "t": "f", "min": 0.3, "max": 1.5, "krok": 0.05, "rodic": "p92_svah", "cil": "teren", "n": "strop sklonu (m/m)",
@@ -85,7 +87,7 @@ const SEZNAM := [
 ]
 
 ## výchozí hodnoty mimo ostrov_teren.params()
-const VYCHOZI_JINE := {"p89_meritko": false, "p90_lod": false, "p90_okoli": 1, "p90_slupka": 3, "p90_daleko_m": 8.0, "p90_barvy": true,
+const VYCHOZI_JINE := {"p90_lod": false, "p90_okoli": 1, "p90_slupka": 3, "p90_daleko_m": 8.0, "p90_barvy": true,
 	"p91_pruhlednost": false, "p91_mode": 1, "p91_r": 3.0, "p91_cut_r": 10.0, "p91_ceil": 1.25, "zk_rez": 0, "zk_rez_pos": 0.5}
 
 static func zaznam(k: String) -> Dictionary:

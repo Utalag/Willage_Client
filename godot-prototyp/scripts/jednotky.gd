@@ -13,9 +13,17 @@ const U_M := 0.5             # řídicí mřížka geologie (= geo_fn.U)
 const HJ_M := 0.25           # herní jednotka (Jan 2026-11-19 20:12)
 const HJ_NA_BLOK := 32       # 8 m / 0,25 m
 const N_RIDICI := 16         # hustota řídicí mřížky
-const L_NA_M3 := 1000.0      # 1 m³ = 1000 l
+const LI = preload("res://scripts/voda/litry.gd")   # E94: jediný převod l → m³ (kopie studie)
+const L_NA_M3 := LI.L_NA_M3  # 1 m³ = 1000 l
 const POSTAVA_HJ := 7        # 1,75 m
 const DVERE_HJ := 8
+
+## E94: mřížka hry a vykreslení (hustota 16 = řídicí mřížka 0,5 m). Ve vnitřních smyčkách používat tyto konstanty
+## (překladač je dosadí jako literál), ne volání funkcí modulu po buňkách (3–4× dražší, E89).
+const BS := 16               # buněk na šířku / hloubku bloku (= N_RIDICI)
+const BH := 64               # buněk na výšku bloku (= nz(16))
+const CELL_M := 0.5          # hrana buňky (m), vodorovně i svisle (= bunka_m(16))
+const BLOK_BUNEK := BS * BS * BH
 
 ## měřítko scény: dnes buňka 1 × 1 × 0,5 jednotky scény (vodorovně 1 sc = 0,5 m); p89_meritko: 1 sc = 1 m všude
 const SCENA_DNES_M_NA_SC := Vector3(0.5, 1.0, 0.5)
@@ -77,8 +85,8 @@ static func bunka_m3(n: int) -> float:
 	var c := bunka_m(n)
 	return c * c * c
 
-static func lps_na_m3s(q_lps: float) -> float:
-	return q_lps / L_NA_M3
+static func lps_na_m3s(q_lps: float) -> float:   # = LI.m3 (E94: dělení, ne násobení 0,001)
+	return LI.m3(q_lps)
 
 static func m3_na_l(v_m3: float) -> float:
 	return v_m3 * L_NA_M3

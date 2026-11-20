@@ -5,12 +5,13 @@ extends Node3D
 ## Demo / screenshoty / měření (-- --demo, --video, --*-shots, --*-bench, --res-test, --export-vectors) běží
 ## ve scéně demo.tscn (scripts/demo/demo_runner.gd); Main na ni při takovém přepínači přesměruje.
 
+const J = preload("res://scripts/jednotky.gd")   # E94: mřížka a metry z jednoho místa
 const Mat = preload("res://scripts/mat.gd")
 const Block = preload("res://scripts/block.gd")
 const BlockGen = preload("res://scripts/block_gen.gd")
 const Toon = preload("res://scripts/toon.gd")
 const DemoRunner = preload("res://scripts/demo/demo_runner.gd")
-const BS := 16
+const BS := J.BS
 
 @onready var world = $World
 @onready var island = $Island
@@ -33,6 +34,7 @@ func _ready() -> void:
 	BlockGen.gen_version = island.generator
 	BlockGen.apply_cli()   # -- --gen=proto|v3 (výchozí v3)
 	island.setup()
+	rig.set_meritko(island.m_na_bunku())   # E94: scéna v metrech → kamera v metrech (1 = beze změny)
 	island.generate_start()
 	buildings.add_house(Vector2i(6, 8))   # testovací domek z Blenderu (assets/domek.glb)
 	ui.candidate_picked.connect(placement.pick)

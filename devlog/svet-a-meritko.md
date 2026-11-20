@@ -26,6 +26,10 @@ E92 (2026-11-20 08:11) zkusilo test měřítka v izometrii s postavou 1,75 m a d
 
 Pokus E89 (větev `e89-jednotky`) našel, že prototyp dnes kreslí buňku 1 × 1 × 0,5 jednotky scény, zatímco geologie počítá buňku 0,5 × 0,5 × 0,5 m. Ve scéně je tedy terén vodorovně natažený dvakrát a svahy vypadají poloviční. Příznak `p89_meritko` ukáže ostrov v metrech: dva bloky jsou 16 m, ne 32 jednotek. Postava 1,75 m pak stojí vedle buněk 0,5 m. Snímky jsou v `blueprint-studie/shots/e89/`. Modul `jednotky.gd` drží metry, herní jednotky 0,25 m a hustotu vzorkování na jednom místě. Zatím ho nic nepoužívá.
 
+## E94 scéna v metrech (2026-11-20 11:35)
+
+Jan 20. 11. v 11:04 schválil návrhy z E89. Na větvi `e94-metry` je teď scéna v metrech výchozí: ostrov 2 × 2 bloky má 16 × 16 m a buňka 0,5 m je krychle. Stromy, domky, tráva a popisky se už nezúží, protože modely z Blenderu byly v metrech od začátku. Stromy jsou teď vysoké jako mladé stromy, 3,5–4 m. Domek má půdorys 3,5 m. Kamera, zoom a mlha počítají v metrech. Konstanty mřížky jsou na jednom místě (`jednotky.gd`) a převod litrů na m³ má jeden tvar. Výsledky hry se tím nezměnily ani v jednom bitu. Hora START je ale v bloku 8 m vysoká nejvýš asi 10 m nad loukou. Větší hory dají až E87 nebo E92. Snímky jsou v `blueprint-studie/shots/e94/snimky/`.
+
 ## Zdroje a snímky
 
 - [`DENIK.md`](../DENIK.md) – A/2 E49, nápady 18:03 a 18:35–18:59; A/3 proporční svět

@@ -1,0 +1,20 @@
+{
+ "opakovani": 10,
+ "gen_ms": 865.327,
+ "otisk_bunky": "631c754f4b07783b",
+ "cas_ms": {
+  "mesh": 185.199,
+  "discovery": 2.048,
+  "veg": 1.465
+ },
+ "otisk_site": "3452e4cdb33ddb50",
+ "otisk_odkryti": "db706a1c2d1b9ddb",
+ "otisk_vegetace": "483dc33fa9ea0a18",
+ "smycka_ns": {
+  "literal": 20.013,
+  "konstanta_lokalni": 19.815,
+  "J_konstanta": 19.922,
+  "J_funkce": 84.497,
+  "_": 0
+ }
+}

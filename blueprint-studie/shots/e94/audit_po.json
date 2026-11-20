@@ -1,0 +1,336 @@
+{
+ "souboru": 138,
+ "konstanty_geometrie": {
+  "BS": [
+   [
+    "scripts/block.gd",
+    "J.BS"
+   ],
+   [
+    "scripts/block_gen.gd",
+    "J.BS"
+   ],
+   [
+    "scripts/demo/e66_demo.gd",
+    "J.BS"
+   ],
+   [
+    "scripts/demo/flow_demo.gd",
+    "J.BS"
+   ],
+   [
+    "scripts/demo/genv3_demo.gd",
+    "J.BS"
+   ],
+   [
+    "scripts/demo/main_demo.gd",
+    "J.BS"
+   ],
+   [
+    "scripts/demo/skryti_demo.gd",
+    "J.BS"
+   ],
+   [
+    "scripts/discovery.gd",
+    "J.BS"
+   ],
+   [
+    "scripts/game/buildings.gd",
+    "J.BS"
+   ],
+   [
+    "scripts/game/digging.gd",
+    "J.BS"
+   ],
+   [
+    "scripts/gen3/cave_v0.gd",
+    "16"
+   ],
+   [
+    "scripts/gen3/gen3_proto.gd",
+    "J.BS"
+   ],
+   [
+    "scripts/gen3/gen_v3.gd",
+    "16"
+   ],
+   [
+    "scripts/gen3/ore_v0.gd",
+    "16"
+   ],
+   [
+    "scripts/gen3/water_flow.gd",
+    "J.BS"
+   ],
+   [
+    "scripts/grass.gd",
+    "J.BS"
+   ],
+   [
+    "scripts/island.gd",
+    "J.BS"
+   ],
+   [
+    "scripts/main.gd",
+    "J.BS"
+   ],
+   [
+    "scripts/mesher.gd",
+    "J.BS"
+   ],
+   [
+    "scripts/roads.gd",
+    "J.BS"
+   ],
+   [
+    "scripts/surface/dual_grid_mesher.gd",
+    "J.BS"
+   ],
+   [
+    "scripts/surface/shore_fields.gd",
+    "J.BS"
+   ],
+   [
+    "scripts/teren/ostrov_teren.gd",
+    "J.BS"
+   ],
+   [
+    "scripts/teren/zaklad/block.gd",
+    "16"
+   ],
+   [
+    "scripts/teren/zaklad/block_gen.gd",
+    "16"
+   ],
+   [
+    "scripts/teren/zaklad/cave_v0.gd",
+    "16"
+   ],
+   [
+    "scripts/teren/zaklad/gen_v3.gd",
+    "16"
+   ],
+   [
+    "scripts/teren/zaklad/ore_v0.gd",
+    "16"
+   ],
+   [
+    "scripts/teren/zaklad/veg.gd",
+    "16"
+   ],
+   [
+    "scripts/veg.gd",
+    "J.BS"
+   ],
+   [
+    "scripts/voda/ostrov_voda.gd",
+    "J.BS"
+   ],
+   [
+    "scripts/voda/ostrov_voda_render.gd",
+    "J.BS"
+   ],
+   [
+    "scripts/voda/prenos76.gd",
+    "J.BS"
+   ]
+  ],
+  "BH": [
+   [
+    "scripts/block.gd",
+    "J.BH"
+   ],
+   [
+    "scripts/block_gen.gd",
+    "J.BH"
+   ],
+   [
+    "scripts/demo/flow_demo.gd",
+    "J.BH"
+   ],
+   [
+    "scripts/demo/genv3_demo.gd",
+    "J.BH"
+   ],
+   [
+    "scripts/discovery.gd",
+    "J.BH"
+   ],
+   [
+    "scripts/gen3/cave_v0.gd",
+    "64"
+   ],
+   [
+    "scripts/gen3/gen3_proto.gd",
+    "J.BH"
+   ],
+   [
+    "scripts/gen3/gen_v3.gd",
+    "64"
+   ],
+   [
+    "scripts/gen3/ore_v0.gd",
+    "64"
+   ],
+   [
+    "scripts/gen3/water_flow.gd",
+    "J.BH"
+   ],
+   [
+    "scripts/mesher.gd",
+    "J.BH"
+   ],
+   [
+    "scripts/surface/shore_fields.gd",
+    "J.BH"
+   ],
+   [
+    "scripts/teren/zaklad/block.gd",
+    "64"
+   ],
+   [
+    "scripts/teren/zaklad/block_gen.gd",
+    "64"
+   ],
+   [
+    "scripts/teren/zaklad/cave_v0.gd",
+    "64"
+   ],
+   [
+    "scripts/teren/zaklad/gen_v3.gd",
+    "64"
+   ],
+   [
+    "scripts/teren/zaklad/ore_v0.gd",
+    "64"
+   ],
+   [
+    "scripts/voda/prenos76.gd",
+    "J.BH"
+   ]
+  ],
+  "CELL_H": [
+   [
+    "scripts/block.gd",
+    "J.CELL_M"
+   ],
+   [
+    "scripts/demo/e66_demo.gd",
+    "J.CELL_M"
+   ],
+   [
+    "scripts/game/buildings.gd",
+    "J.CELL_M"
+   ],
+   [
+    "scripts/grass.gd",
+    "J.CELL_M"
+   ],
+   [
+    "scripts/island.gd",
+    "J.CELL_M"
+   ],
+   [
+    "scripts/mesher.gd",
+    "J.CELL_M"
+   ],
+   [
+    "scripts/roads.gd",
+    "J.CELL_M"
+   ],
+   [
+    "scripts/surface/shore_fields.gd",
+    "J.CELL_M"
+   ],
+   [
+    "scripts/teren/zaklad/block.gd",
+    "0.5"
+   ],
+   [
+    "scripts/veg_render.gd",
+    "J.CELL_M"
+   ],
+   [
+    "scripts/voda/ostrov_voda_render.gd",
+    "J.CELL_M"
+   ]
+  ],
+  "SURF_Y": [
+   [
+    "scripts/island.gd",
+    "32 * CELL_H"
+   ]
+  ],
+  "U": [
+   [
+    "scripts/teren/geo2.gd",
+    "0.5"
+   ],
+   [
+    "scripts/teren/geo_fn.gd",
+    "0.5"
+   ],
+   [
+    "scripts/voda/podzemi/ug64.gd",
+    "preload(\"res://scripts/voda/podzemi/ug58.gd\")"
+   ],
+   [
+    "scripts/voda/podzemi_ostrov.gd",
+    "preload(\"res://scripts/voda/podzemi/ug58.gd\")"
+   ]
+  ],
+  "BW": [
+   [
+    "scripts/teren/geo_fn.gd",
+    "8.0"
+   ]
+  ],
+  "BHT": [
+   [
+    "scripts/teren/geo_fn.gd",
+    "32.0"
+   ]
+  ],
+  "CELL": [
+   [
+    "scripts/voda/eroze/hydro.gd",
+    "0.5"
+   ],
+   [
+    "scripts/voda/podzemi/gw74.gd",
+    "0.25"
+   ],
+   [
+    "scripts/voda/podzemi/kras75.gd",
+    "0.25"
+   ]
+  ]
+ },
+ "konstanty_pocet_mist": {
+  "BS": 33,
+  "BH": 18,
+  "CELL_H": 11,
+  "SURF_Y": 1,
+  "U": 4,
+  "BW": 1,
+  "BHT": 1,
+  "CELL": 3
+ },
+ "index_hra_y_nahoru_mist": 18,
+ "index_hra_souboru": 7,
+ "index_geo_z_nahoru_mist": 66,
+ "index_geo_souboru": 22,
+ "p_get_klicu": 105,
+ "p_get_ruzne_vychozi": 3,
+ "p_get_ruzne_vychozi_cisla": {
+  "ug_cell_m3": [
+   "0.125",
+   "1.0"
+  ]
+ },
+ "v_params_klicu": 221,
+ "v_params_s_jednotkou_v_nazvu": 22,
+ "voda_l_m3_deleni_1000_mist": 6,
+ "voda_l_m3_nasobeni_0_001_mist": 4,
+ "nasobeni_0_5_nebo_CELL_H_mist": 103
+}

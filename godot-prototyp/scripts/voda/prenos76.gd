@@ -5,13 +5,14 @@ extends RefCounted
 ## v novém okolí (ostrov_voda.place76 lokálně nebo build plně) a z ustáleného stavu se znovu naplánují události.
 ## Otočení po 90°: E86 (scripts/teren/otoceni86.gd) otočí výřez před vložením; rot ≠ 0 se zapíše do t76 / prenos76.
 
+const J = preload("res://scripts/jednotky.gd")   # E94: mřížka a metry z jednoho místa
 const Block = preload("res://scripts/block.gd")
 const T = preload("res://scripts/teren/ostrov_teren.gd")
 const H68 = preload("res://scripts/voda/hydro68.gd")
 const MC = preload("res://scripts/voda/eroze/mech.gd")
 const HY = preload("res://scripts/voda/eroze/hydro.gd")
-const BS := 16
-const BH := 64
+const BS := J.BS
+const BH := J.BH
 
 ## výřez z bloku průzkumného světa; v = voda toho světa (ostrov_voda) → prameny ležící v bloku
 static func cutout(b, v) -> Dictionary:
@@ -136,7 +137,7 @@ static func _arrival(v) -> Dictionary:
 			var dx := 1.4142 if (j / v.H != i / v.H and j % v.H != i % v.H) else 1.0
 			var dist: float = dx * HY.CELL   # sloupec i buňka 0,5 m
 			var s_ := maxf((float(st.hm[i]) - float(st.hm[j])) * HY.CELL / dist, float(v.p.get("e51_s_min", 0.005)))
-			var vel: float = HY.manning(maxf(float(st.eff[i]), 1e-6) / 1000.0, s_, v.p).v
+			var vel: float = HY.manning(maxf(float(st.eff[i]), 1e-6) / J.L_NA_M3, s_, v.p).v
 			t += dist / maxf(vel, 1e-6)
 			tmax = maxf(tmax, t)
 			i = j

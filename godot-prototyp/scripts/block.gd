@@ -3,10 +3,11 @@ extends RefCounted
 ## Data jednoho bloku 16 × 16 × 64 buněk (+ volby vložení). Server by ukládal jen typ, seed, volby a změny.
 
 const Mat = preload("res://scripts/mat.gd")
+const J = preload("res://scripts/jednotky.gd")
 
-const BS := 16      # šířka / hloubka v buňkách
-const BH := 64      # výška v buňkách
-const CELL_H := 0.5 # buňka 1 × 1 × 0,5
+const BS := J.BS        # šířka / hloubka v buňkách (16)
+const BH := J.BH        # výška v buňkách (64)
+const CELL_H := J.CELL_M # hrana buňky 0,5 m (E94: scéna v metrech, buňka 0,5 × 0,5 × 0,5)
 
 var kind := "louka"         # recept: louka, kopec, hora, piscina
 var seed := 0

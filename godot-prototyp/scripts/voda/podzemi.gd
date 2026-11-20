@@ -7,6 +7,7 @@ extends RefCounted
 ## Objem buňky: dutina = celá buňka, hornina = pórovitost por ze sdílené tabulky (kras bez por = 0,05).
 
 const VS = preload("res://scripts/voda/voda_svet.gd")
+const LI = preload("res://scripts/voda/litry.gd")   # E94: jeden tvar l → m³
 const D6 := [Vector3i(1, 0, 0), Vector3i(-1, 0, 0), Vector3i(0, 1, 0), Vector3i(0, -1, 0), Vector3i(0, 0, 1), Vector3i(0, 0, -1)]
 
 static var _SOL := {}
@@ -32,7 +33,7 @@ static func ctx_world(w, p: Dictionary) -> Dictionary:
 
 static func make(W: int, H: int, NZ: int, mat, top: PackedInt32Array, wall: PackedByteArray, p: Dictionary) -> Dictionary:
 	return {"W": W, "H": H, "NZ": NZ, "mat": mat, "top": top, "wall": wall, "perm_min": float(p.ponor_perm), "leak_q": float(p.ug_leak_q),
-		"depth": int(p.ug_hloubka), "cell_m3": float(p.get("ug_cell_m3", 0.125)), "q_to_m3": float(p.get("ug_q_to_m3", 0.001))}
+		"depth": int(p.ug_hloubka), "cell_m3": float(p.get("ug_cell_m3", 0.125)), "q_to_m3": float(p.get("ug_q_to_m3", 0.001)), "l_na_m3": LI.z_parametru(p)}
 
 static func _perm(m: int) -> float:
 	return float(VS.table().get(m, [0.0])[0])
@@ -94,7 +95,7 @@ static func solve(ctx: Dictionary, entries: PackedInt32Array, q: float, excl := 
 	var ev := []; var cum := 0.0; var t := 0.0
 	for z in range(zmin, z_out + 1):
 		cum += float(vz.get(z, 0.0)) * float(ctx.cell_m3)
-		t = (cum / (net * float(ctx.q_to_m3))) if net > 0.0 else -1.0
+		t = (cum / (net / float(ctx.l_na_m3))) if net > 0.0 else -1.0
 		ev.append({"z": z, "objem_m3": cum, "cas_s": t})
 	var path := PackedInt32Array()
 	if not out.is_empty():

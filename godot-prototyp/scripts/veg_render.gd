@@ -3,15 +3,28 @@ extends RefCounted
 ## Vykreslení vegetace bloku: každý druh jeden MultiMeshInstance3D (trsy, květiny, suchá tráva, mech procedurálně,
 ## stromy/keř/kaktus z .glb vytvořených Blenderem). Výška buňky 0,5.
 
+const J = preload("res://scripts/jednotky.gd")   # E94: mřížka a metry z jednoho místa
 const Veg = preload("res://scripts/veg.gd")
 const Toon = preload("res://scripts/toon.gd")
 const Grass = preload("res://scripts/grass.gd")
-const CELL_H := 0.5
+const CELL_H := J.CELL_M
 const MODELS := {Veg.BUSH: "ker", Veg.CONIFER: "jehlicnan", Veg.DECIDUOUS: "listnac", Veg.CACTUS: "kaktus"}
 const FLOWER_COLORS := [Color(1.0, 0.62, 0.78), Color(1.0, 0.92, 0.45), Color(0.98, 0.98, 1.0), Color(0.75, 0.62, 1.0)]
 
 # jen vykreslení (data se nemění): kaktus a suchá tráva větší, ať jsou na písčině vidět
 const RENDER_SCALE := {Veg.CACTUS: 1.7, Veg.DRY_GRASS: 1.5}
+## E94 (scéna v metrech): průměrná výška modelu v metrech (instance ještě ×0,8–1,2 z dat). Modely .glb jsou v metrech
+## (listnáč 2,3 m, jehličnan 2,25 m, keř 0,84 m, kaktus 1,3 m), stromy se zvětší na výšku mladého stromu.
+const VYSKA_M := {Veg.DECIDUOUS: 3.5, Veg.CONIFER: 4.0, Veg.BUSH: 1.0, Veg.CACTUS: 1.5}
+const MODEL_VYSKA_M := {Veg.DECIDUOUS: 2.3, Veg.CONIFER: 2.25, Veg.BUSH: 0.84, Veg.CACTUS: 1.3}
+static var proti := Vector3.ONE   # protiměřítko ostrova (nastaví Island._ready)
+static var metry := false         # scéna v metrech (p89_meritko)
+
+## měřítko modelu druhu s: v metrech z VYSKA_M, jinak dnešní RENDER_SCALE
+static func meritko_druhu(s: int) -> float:
+	if metry and VYSKA_M.has(s):
+		return float(VYSKA_M[s]) / float(MODEL_VYSKA_M[s])
+	return RENDER_SCALE.get(s, 1.0)
 
 static var _meshes := {}
 static var _wind: ShaderMaterial
@@ -145,10 +158,14 @@ static func build(veg: Array, b = null, occ := Callable(), surf = null) -> Node3
 		if mm.mesh == null:
 			continue
 		mm.instance_count = list.size()
+		var ks := meritko_druhu(s)
+		var pro := Basis.from_scale(proti)
 		for i in list.size():
 			var v = list[i]
-			var sc: float = v.scale * RENDER_SCALE.get(s, 1.0)
+			var sc: float = v.scale * ks
 			var basis := Basis(Vector3.UP, deg_to_rad(v.yaw)).scaled(Vector3(sc, sc, sc))
+			if metry:
+				basis = pro * basis   # E94: v ostrově s měřítkem zpět na metry
 			var pos := Vector3(v.lx + 0.5 + v.ox, v.lz * CELL_H, v.ly + 0.5 + v.oy)
 			if surf:
 				pos.y = surf.height_local(pos.x, pos.z)

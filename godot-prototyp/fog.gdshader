@@ -3,6 +3,7 @@ render_mode unshaded, blend_mix, depth_draw_never, cull_disabled, shadows_disabl
 
 uniform float layer_alpha = 0.16;
 uniform float seed = 0.0;
+uniform float noise_k = 0.12;   // E94: frekvence šumu na jednotku scény (0,12 na buňku; v metrech 0,24)
 varying vec3 wpos;
 
 float hash(vec2 p) { return fract(sin(dot(p, vec2(127.1, 311.7))) * 43758.5453); }
@@ -21,7 +22,7 @@ void fragment() {
 	vec2 uv = UV;
 	float e = 0.18;
 	float edge = smoothstep(0.0, e, uv.x) * smoothstep(0.0, e, 1.0 - uv.x) * smoothstep(0.0, e, uv.y) * smoothstep(0.0, e, 1.0 - uv.y);
-	float n = fbm(wpos.xz * 0.12 + vec2(seed * 3.7, seed * 1.3));
+	float n = fbm(wpos.xz * noise_k + vec2(seed * 3.7, seed * 1.3));
 	ALBEDO = vec3(0.96, 0.97, 1.0);
 	ALPHA = clamp(layer_alpha * edge * (0.25 + 1.3 * n), 0.0, 1.0);
 }

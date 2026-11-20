@@ -9,6 +9,7 @@ extends RefCounted
 ##   je teď součástí louky (žádný zvláštní velký trs). Mech, keře, stromy a kaktusy beze změny (veg_render.gd).
 ## - Jeden sdílený materiál; postavičky volají touch(), hra jednou za snímek tick(dt).
 
+const J = preload("res://scripts/jednotky.gd")   # E94: mřížka a metry z jednoho místa
 const Par = preload("res://scripts/grass_params.gd")
 const Trail = preload("res://scripts/grass_trail.gd")
 const Veg = preload("res://scripts/veg.gd")
@@ -16,8 +17,8 @@ const Mat = preload("res://scripts/mat.gd")
 const H = preload("res://scripts/stable_hash.gd")
 const Toon = preload("res://scripts/toon.gd")
 const SurfPar = preload("res://scripts/surface/surface_params.gd")
-const BS := 16
-const CELL_H := 0.5
+const BS := J.BS
+const CELL_H := J.CELL_M
 const FLOWER_COLORS := [Color(1.0, 0.62, 0.78), Color(1.0, 0.92, 0.45), Color(0.98, 0.98, 1.0), Color(0.75, 0.62, 1.0)]
 enum { GREEN, DRY, FLOWER }
 
@@ -336,8 +337,13 @@ static func build(b, veg: Array, occ: Callable, surf = null) -> Array:
 	return out
 
 ## jedna instance do bufferu: transform 3 × 4 (řádky), barva, custom (fáze, odstín, klidový náklon xy)
+## E94: protiměřítko ostrova (scéna v metrech: trs se vyrovná vodorovně ×2); nastaví Island._ready
+static var proti := Vector3.ONE
+
 static func _put(a: PackedFloat32Array, rng: RandomNumberGenerator, pos: Vector3, hh: float, ww: float, col: Color, yaw := -1.0) -> void:
 	var bs := Basis(Vector3.UP, rng.randf() * TAU if yaw < 0.0 else yaw).scaled_local(Vector3(ww, hh, ww))
+	if proti != Vector3.ONE:
+		bs = Basis.from_scale(proti) * bs
 	var la := rng.randf() * TAU
 	var lm := rng.randf_range(0.0, 0.2)
 	a.append_array([bs.x.x, bs.y.x, bs.z.x, pos.x, bs.x.y, bs.y.y, bs.z.y, pos.y, bs.x.z, bs.y.z, bs.z.z, pos.z,
