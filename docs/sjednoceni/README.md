@@ -31,7 +31,7 @@ Upřesnění od Jana:
 
 ## Pořadí bodů kapitoly 1 k projití s Janem
 
-1. **1.1 Pojmy:** ostrov, blok, segment, buňka – *rozhodnuto 2026-11-20 (t713u, t714u)*.
+1. **1.1 Pojmy:** ostrov, blok, segment, buňka; hierarchie ukládání ostrov → blok → segment → buňka, ostrov jako jednotka ukládání, svět (1.4) se s ostrovem nesmí zaměňovat – *rozhodnuto 2026-11-20 (t713u, t714u), doplněno (t741u–t743u)*.
 2. **1.3 Výška sloupce:** výčet 32 / 64 / 128 m, výchozí 128 m, neutrální úroveň v polovině – *rozhodnuto 2026-11-20 (t716u, t717u)*.
 3. **1.4 Zdroj pravdy o terénu:** herní svět z funkce jako celek, blueprint = otisk světa o velikosti bloku, test 3 × 3 bloky – *rozhodnuto 2026-11-20 (t718u, t719u)*.
 4. **1.2 Jednotky a jemná mřížka:** definice 0,5 m a 0,25 m jen u kopání (přehodnocení 03:26).
@@ -41,7 +41,7 @@ Upřesnění od Jana:
 8. **1.11 Datový rozpočet:** *přeskočeno 2026-11-20 (t738u)*.
 9. **1.6 Materiály:** jedna tabulka, jedno id – *rozhodnuto 2026-11-20 (t727u)*, návrh `materialy.csv`.
 10. **1.7 Geologie:** útvary jako funkce světa přes švy, vrstvy podle terénu, vyklínění – *rozhodnuto 2026-11-20 (t732u)*.
-11. **1.12 Objektová vrstva:** oddělené vrstvy, rostliny po segmentu, stavby a cesty po bloku, objekty nepřekračují hranici bloku – *rozhodnuto 2026-11-20 (t739u, t740u)*.
+11. **1.12 Objektová vrstva:** terén a rostliny po segmentu (otáčejí se s blokem), stavby a cesty seznam na ostrově, smějí přes hranici bloku – *rozhodnuto 2026-11-20 (t739u, t740u), změněno (t741u–t743u)*.
 12. **1.10 Kontrakt:** WVB1 základ, data po segmentech, voda v litrech (1 B), server ukládá hotová data a namátkově kontroluje generátorem – *rozhodnuto 2026-11-20 (t736u, t737u)*.
 13. **1.13 Profil a členitost terénu:** parametry členitosti (rozhodnuto); obrys, bok a spodek ostrova otevřené.
 14. **1.14 Sopka:** největší hora je sopka (kostra).
