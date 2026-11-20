@@ -299,7 +299,7 @@ Pojmy: **blueprint** = otisk světa o velikosti bloku. To, čemu se ve studiích
 
 **Otázka pro Jana.** Přepneme výchozí podzemí z E58 na E67 (výtok z okrajů vrstev, kras funguje)?
 
-**Platí:** *rozhodnuto (2026-11-20, Jan t732u); doplněno (2026-11-20, Jan t765u–t778u)*
+**Platí:** *rozhodnuto (2026-11-20, Jan t732u); doplněno (2026-11-20, Jan t765u–t782u)*
 
 - **Voda je obsah buňky.** Ukládá se v **m³ na buňku**, s jedním převodem z litrů [8].
 - **Povrchová voda** používá priority-flood + D8 [17].
@@ -311,6 +311,10 @@ Pojmy: **blueprint** = otisk světa o velikosti bloku. To, čemu se ve studiích
 - **Prameny** jsou nasazené na mapě ze seedu. Pramen je zvláštní typ buňky, která sama vytváří vodu. Síla pramene určuje, kolik pramenných buněk pokrývá výtok.
   - Když ho hráč ucpe nepropustným materiálem, přestane téct; po otevření teče znovu.
   - Když ho hráč vykope, stane se předmětem, který lze přenést a položit jinde, kde znovu vytváří vodu (hra má přednost před realitou, volba Jana, t776u–t778u).
+  - Pramen má **jmenovitý výkon** (např. 10 l/s), ale skutečně vydá nanejvýš to, co okolí propustí: součet toků přes jeho stěny podle pravidel 1.8.1. Příklad: skála s jednou polopropustnou buňkou 1 l/s dá 1 l/s; po vykopání okolí plných 10 l/s; úplně ucpaný pramen dá 0.
+  - **Výchozí je jednoduchý model:** spád z pramene do sousedů je 1 a nevyužitý výkon se nevydá.
+  - **Tlakový model je pod přepínačem:** nevydaný výkon se hromadí jako tlaková výška (strop např. ve výšce oblasti doplňování) a přičítá se ke spádu podle 1.8.1, takže pramen tlačí silněji přes okolí a po otevření vytryskne mohutněji (jako artéská studna). Pramen pak má jednu navíc hodnotu — tlakovou výšku. Výpočet okolí je u obou modelů stejný, liší se jen spád (t779u–t782u).
+  - **Žádná zvláštní „tlaková“ eroze:** průsak v pórech erozi nespouští ani pod tlakem. U volného výtoku (otvor, trhlina, koryto) platí běžná povrchová eroze (Manning, práh `ero_v`), takže silný proud může odnést měkký materiál (hlínu, písek) kolem otvoru, ale ne skálu.
 - **Mince E82:** u jeskynního a hlubokého vápence a dolomitu semínko 50/50 rozhodne, jestli se vrstva zvedne až 2 m pod hladinu podzemní vody. Tím je propustná a může v ní vznikat kras [9].
 - **Jíl nad zvednutou vápencovou vrstvou vyklíní** (ztenčí se a místy chybí), takže tam voda prosakuje do vápence a kras vzniká přirozeně.
 - **Propustnost vápence = 0,246** (skutečná hodnota). Staré pravidlo „vápenec 0“ se ruší [27][28].
