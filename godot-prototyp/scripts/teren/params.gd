@@ -16,6 +16,9 @@ static func defaults() -> Dictionary:
 		# u začátku jádra, u plného jádra, buněk jádra pod povrchem, λ ztenčení sedimentů] = hora_vyzdvizena; hora_zvrasnena [a spodní, a horní, mocnina útlumu s hloubkou]; sopka [R, γ, sbíhání spodní, horní, buněk pod povrchem]
 		"profiles": {"mirne": [0.1, 0.85], "hora_vyzdvizena": [0.3, 0.6, 2.0, 9.0, 0.0, 2.5], "hora_zvrasnena": [0.2, 1.0, 1.5], "sopka": [11.0, 0.8, 0.35, 1.0, 1.5]},
 		"uplift_blur": 2,
+		# E87: masiv vyzdvižené hory jako funkce ve světových metrech (p87_jadro_hory, výchozí vyp): výška nad základem
+		# = zaklad + amp · šum(freq) + detail · šum(dfreq) v buňkách (před surface_shift), freq v 1/m
+		"p87_jadro_hory": false, "p87_zaklad": 32.0, "p87_amp": 18.0, "p87_freq": 0.03, "p87_detail": 1.5, "p87_dfreq": 0.25,
 		"snowline": 52,
 		"treeline": 50,
 		"rocks_on": [],
