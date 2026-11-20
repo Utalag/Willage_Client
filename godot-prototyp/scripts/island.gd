@@ -18,8 +18,8 @@ const TerenTridy = preload("res://scripts/teren/tridy.gd")
 const OstrovVoda = preload("res://scripts/voda/ostrov_voda.gd")
 const OstrovVodaRender = preload("res://scripts/voda/ostrov_voda_render.gd")
 const J = preload("res://scripts/jednotky.gd")   # E89
-const BS := 16
-const CELL_H := 0.5
+const BS := J.BS
+const CELL_H := J.CELL_M
 const SURF_Y := 32 * CELL_H       # výchozí povrch (střed výšky)
 const CENTER := Vector2(1.0, 1.0) # střed rozložení ve slotech (start 2 × 2 = sloty 0..1)
 const RADIUS := 2.6
