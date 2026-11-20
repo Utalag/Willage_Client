@@ -235,7 +235,12 @@ Pojmy: **blueprint** = otisk světa o velikosti bloku. To, čemu se ve studiích
 
 **Otázka pro Jana.** Mají útvary (žíly, kras, jádro hory) být funkce celého světa, které jdou přes švy bloků (E84 + E87)?
 
-**Platí:**
+**Platí:** *rozhodnuto (2026-11-20, Jan t732u)*
+
+- **Útvary** jsou **funkce celého světa** (varianta B). Jdou přes švy bloků i segmentů. Měření: ~89 ms na segment [9].
+- Přístup **„jeden útvar na blok“** se ruší.
+- **Vrstvy se přizpůsobují tvaru terénu.**
+- Chybějící vrstvy končí **vyklíněním**: vrstva se do strany zužuje, až zmizí. Neskončí svislou stěnou.
 
 ---
 
