@@ -13,16 +13,17 @@ Značení: [n] = zdroj na konci. K1–K12 = konflikty z `00-mapa-vetvi.md`. Čas
 ## Pořadí otevřených bodů
 
 1. **6.1** Co server ověřuje a zda posílat snímek buněk (E88 č. 4) — společně s Willage-backend.
-2. **6.2** Tvar verze generátoru `gen_ver` (E88 č. 11).
-3. **4.1** Zapisovat erozi E51 do překryvu (E88 č. 7).
-4. **5.1** Rohoví sousedé v kontraktu (E88 č. 6).
-5. **5.2** Výchozí režim napojení švů (Auto / Blend / Keep) u přeneseného výřezu.
-6. **3.1** Práh, kdy místo přepočtu na povodí jít rovnou do plného výpočtu vody (E88 č. 8).
-7. **3.2** Slučovat drobné výstupy v dosahu 8 m i mezi sebou?
-8. **7.1** Pohled 2D (dlaždice), nebo 3D (modely)?
-9. **7.2** LOD prezentační vrstvy.
-10. **7.3** Průhlednost a řez v izometrii (E91).
-11. **8.1** Pořadí slučování větví do hry.
+2. **6.3** Serverová kontrola a mazání ověřených dat (Jan, hovor 20. 11. 2026).
+3. **6.2** Tvar verze generátoru `gen_ver` (E88 č. 11).
+4. **4.1** Zapisovat erozi E51 do překryvu (E88 č. 7).
+5. **5.1** Rohoví sousedé v kontraktu (E88 č. 6).
+6. **5.2** Výchozí režim napojení švů (Auto / Blend / Keep) u přeneseného výřezu.
+7. **3.1** Práh, kdy místo přepočtu na povodí jít rovnou do plného výpočtu vody (E88 č. 8).
+8. **3.2** Slučovat drobné výstupy v dosahu 8 m i mezi sebou?
+9. **7.1** Pohled 2D (dlaždice), nebo 3D (modely)?
+10. **7.2** LOD prezentační vrstvy.
+11. **7.3** Průhlednost a řez v izometrii (E91).
+12. **8.1** Pořadí slučování větví do hry.
 
 ---
 
@@ -246,6 +247,24 @@ Návrh E88 s Willage-backend **ještě nebyl projednán** [2]. Body 6.1 a 6.2 js
 **Doporučení.** Varianta B: v datech zůstane jedno číslo `gen_ver`, ale každá verze má dokumentovaný profil (které parametry a pravidla mění). Server i klient podle čísla profil najdou. Samotný přepočet starých ostrovů se teď neotevírá (1.5).
 
 **Otázka pro Jana.** Má `gen_ver` zůstat jedno číslo, ke kterému patří dokumentovaný profil změn (aby server poznal, co je jiné), aniž bychom teď rozhodovali o přepočtu starých ostrovů?
+
+**Platí:**
+
+---
+
+### 6.3 Serverová kontrola a mazání ověřených dat
+
+**Téma.** Jak dlouho server drží původní hodnoty změněných buněk a co s nimi udělá po kontrole (navrhl Jan v hovoru 20. 11. 2026).
+
+**Návrh Jana**
+- Server je jediný zdroj pravdy.
+- Klient ke každé změněné buňce pošle i její původní hodnotu: 1 B materiálu na změněnou buňku (navazuje na 6.1, varianta B).
+- Server dělá namátkovou kontrolu v nastaveném časovém intervalu (parametr).
+- Buňky, které kontrolou projdou, se po ověření smažou nebo vynulují. Shoda je výchozí stav a jejich data už nejsou potřeba.
+- Buňky, kde kontrola najde rozpor, se nemažou. Data zůstanou, protože se rozpor musí dořešit a server k nim má referenci pro pozdější spor.
+- Tím se ušetří místo a zůstává mechanismus pro odhalení podvodu.
+
+**Otázka pro Jana.** Platí tento postup jako pravidlo kontraktu? Projedná se spolu s 6.1 s Willage-backend.
 
 **Platí:**
 
