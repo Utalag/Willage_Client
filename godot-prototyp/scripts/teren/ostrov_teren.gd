@@ -15,6 +15,7 @@ const PL = preload("res://scripts/teren/pipeline.gd")
 const WD = preload("res://scripts/teren/world.gd")
 const BP = preload("res://scripts/teren/blueprint.gd")
 const TR = preload("res://scripts/teren/tridy.gd")
+const BGZ = preload("res://scripts/teren/zaklad/block_gen.gd")   # E94: výšková mapa hory pro p94_hora_k
 const BS := J.BS
 
 static var OFF := Vector2i(3, 3)   # slot ostrova (0, 0) = slot světa (3, 3); ostrov má sloty −2..3
@@ -47,6 +48,7 @@ const HRA := {
 	"voda_e67": false,                   # E67 (studie, jen větev e67): podzemí jako přetoky ve 3D + výstup ve stěně ostrova
 	"p67_min_vytok_render": 0.02,        # E67b: vývěr podzemní vody ve stěně / pramen slabší než tolik l/s se nekreslí (simulace beze změny)
 	"p67_min_tok_render": 0.02,          # E67b: protékající větev podzemní vody slabší než tolik l/s se v řezech nekreslí
+	"p94_hora_k": 1.0,                   # E94: převýšení hory nad její patou (1 = beze změny; strop sloupce 61 buněk = 30,5 m)
 }
 
 static func params() -> Dictionary:
@@ -92,6 +94,16 @@ static func build(b) -> void:
 	var bp := blueprint(b)
 	var pp: Dictionary = p.duplicate()
 	pp.surface_shift = float(p.surface_shift) + float(b.shift)
+	var hk := float(p.get("p94_hora_k", 1.0))
+	if hk != 1.0 and String(bp.shape).begins_with("hora"):
+		# E94: hora START je v bloku 8 m jen ~3 m (medián) / 9 m (vrchol) nad loukou. Výšková mapa tvaru „hora“ (stejná jako
+		# blueprint.raw_height) natažená nad patou × hk, posun výšky jako ve studii, strop 61 buněk; jde cestou base_hm (E49).
+		var hm0 := BGZ.base_heightmap("hora", b.seed)
+		var lo := 1e9
+		for v in hm0: lo = minf(lo, float(v))
+		var arr := []
+		for k in 256: arr.append(minf(lo + (float(hm0[k]) - lo) * hk + float(pp.surface_shift), 61.0))
+		bp.base_hm = arr; bp.detail = 0.0
 	var ctx := PL.new_ctx(world, wslot(b.slot), bp, pp)
 	var st := PL.steps(ctx)
 	var i := 0
