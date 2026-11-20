@@ -334,6 +334,29 @@ Výchozí: 800 kapek na blok, `ero_cap` 1,0, `ero_erode` 0,1, `ero_deposit_rate`
   plný. Dutina sloupce je jedno pásmo od nejnižšího po nejvyšší vzduch (dvě chodby nad sebou se spojí) – stejné jako plný
   výpočet, neopravuji. Buňka 0,5 m je dutina, jen když je vykopaných všech 8 buněk 0,25 m.
 
+## E82 vápenec k hladině v ~50 % bloků (plán, zapsáno před pokusem 2026-11-20 01:59; Rozhodnutí Jana 2026-11-20 01:55: „generátor dává vápenec k hladině zhruba v 50 % případů (náhodně podle seedu bloku)“; větev z `e81-tenke-vrstvy` + sloučený `e75-kras`)
+- **Co už je:** vrstvy v2 = zóny (plášť, krystalinikum, sedimenty), v zóně pořadí z tabulky hornin, mocnost a výskyt podle
+  šumu světa (`geo2.targets`). Pak navázání mocností na sousedy (`strata.continue_thick`, náběh `taper_m` 3 m, klíny),
+  hranice = součet mocností. Na ostrově START je hladina tělesa ~19,5 m (E75), těleso je ve štěrku a spraši nad jílem
+  (perm 0). Jeskynní vápenec (5) má vršek ~14–16 m pod jílovcem (51, perm 0), pískovcem a jílem → voda k němu nedojde,
+  kras E75 nic nedělá (0 rozpustných pásem na cestě).
+- **Návrh (`p82_vapenec`, výchozí vyp):** mince bloku `H.mix(bp.seed, "P82_VAPENEC", 0)` → ano s pravděpodobností
+  `p82_podil` (0,5). V bloku „ano“ se cíl vršku jeskynního vápence zvedne na odhad hladiny: povrch (vyhlazený) − `p82_pod_m`
+  (1,0 m, pod drnem a půdou). Vrstvy nad vápencem, které by ležely pod tímto vrškem (jílovec, pískovec, jíl…), se
+  vyklíní (mocnost 0), pořadí zůstává. Vápenec tak sahá od své spodní hranice až nad hladinu a těleso vody přes něj vede.
+  Blok „ne“ zůstává jako dnes (vápenec hluboko pod těsněním nebo chybí). Totéž zvednutí dostane i regionální základ
+  vlastního bloku (výchozí hodnota u okraje bez souseda), jinak by vápenec do 3 m od volného okraje zase klesl. Soused
+  s jinou mincí se napojí existujícím náběhem mocností (klín přes šev).
+- **Měření (`godot-prototyp/tools/vapenec_e82.gd`):** podíl „ano“ na 1000 seedech; z ~100 vygenerovaných bloků podíl
+  sloupců, kde je vápenec v hloubce hladiny (ano / ne); spojitost švů (E80 `part_svy` se zapnutým příznakem, skok
+  hranic na švu, pořadí vložení); determinismus (dvakrát stejný seed → stejný hash); kras E75 (`kras_e75`) na ostrovech
+  s bloky „ano“ a „ne“: rozpustná pásma na cestě, rychlost, první dutina; čas generování s příznakem a bez; výchozí hra
+  beze změny (otisky).
+- **Rizika / negativa předem:** odhad hladiny z povrchu není hladina z vody (ta vzniká až simulací); vyklínění těsnicích
+  vrstev zvětší těleso a změní prameny; mince na blok dělá skoky geologie po blocích (zmírní je jen náběh 3 m);
+  vápenec u povrchu změní minerály (hostitelé) a dutiny blueprintu; regionální základ s mincí = hodnota okraje závisí na
+  vlastním bloku (pro sousedy bez dat).
+
 ## E81 tenké vrstvy a převzorkování (plán, zapsáno před pokusem 2026-11-20 01:41; TODO Architektura světa: „vrstva tenčí než buňka nesmí zmizet nebo se objevovat podle rozlišení“; větev z `e80-hranice-funkci`)
 - **Co už je:** `geo_fn.material` vybere vrstvu podle středu buňky (Z < bs[k]). Vrstva tenčí než buňka je ve sloupci vidět,
   jen když na ni padne střed buňky → mizí a objevuje se po sloupcích, podle rozlišení i místa. Klíny (vyklínění do ~3 m
