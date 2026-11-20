@@ -34,6 +34,7 @@ func _ready() -> void:
 	BlockGen.gen_version = island.generator
 	BlockGen.apply_cli()   # -- --gen=proto|v3 (výchozí v3)
 	island.setup()
+	rig.set_meritko(island.m_na_bunku())   # E94: scéna v metrech → kamera v metrech (1 = beze změny)
 	island.generate_start()
 	buildings.add_house(Vector2i(6, 8))   # testovací domek z Blenderu (assets/domek.glb)
 	ui.candidate_picked.connect(placement.pick)
