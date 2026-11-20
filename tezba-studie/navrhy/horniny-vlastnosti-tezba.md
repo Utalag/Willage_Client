@@ -140,17 +140,17 @@ Doporučení (hypotéza, kromě bodů už rozhodnutých):
 - Prach a suť: malý podíl `prach` u břidlic; trhaviny můžou převést část kvádrů na štěrk/prach (konfigurovatelné, např. +200 ‰).
 - Rarita-v2 se nemění. Volitelný bonus z nadstandardních podílů cenných surovin je otevřená otázka (nesčítat rudné buňky dvakrát).
 
-Čas na buňku 0,5 m (1 herní den = 10 min reálně, × 144):
+Čas na buňku 0,5 m (čas hry z `blueprint-studie/scripts/voda/cas_hry.gd`: 1 herní den = 1 h reálně, × 24; dřív 10 min, × 144):
 
-| min. nástroj | odhad m³/h | reálně na buňku | po × 144 | návrh ke hře |
-|---|---:|---:|---:|---:|
-| ruka | 0,80 | 9 min | 4 s | 1 s |
-| kámen | 0,25 | 30 min | 13 s | 3 s |
-| bronz | 0,12 | 63 min | 26 s | 6 s |
-| železo | 0,05 | 150 min | 63 s | 12 s |
-| ocel | 0,03 | 250 min | 104 s | 18 s |
+| min. nástroj | odhad m³/h | reálně na buňku | po × 24 | (dřív × 144) | návrh ke hře |
+|---|---:|---:|---:|---:|---:|
+| ruka | 0,80 | 9 min | 23 s | 4 s | 1 s |
+| kámen | 0,25 | 30 min | 75 s | 13 s | 3 s |
+| bronz | 0,12 | 63 min | 156 s | 26 s | 6 s |
+| železo | 0,05 | 150 min | 375 s | 63 s | 12 s |
+| ocel | 0,03 | 250 min | 625 s | 104 s | 18 s |
 
-Odhad m³/h je řádový: ruční zemina podle 0,6–1,2 m³/h [10][11]; tvrdá skála je pomalejší než nakládání sypké zeminy, středověké ražení šachet bylo metry za měsíc [12]. Historický čas po × 144 je u žuly pořád ~1 min na buňku, na streamu to může vadit. Proto je v tabulce zvlášť kratší `t_navrh_s`. Jan vybere měřítko.
+Odhad m³/h je řádový: ruční zemina podle 0,6–1,2 m³/h [10][11]; tvrdá skála je pomalejší než nakládání sypké zeminy, středověké ražení šachet bylo metry za měsíc [12]. Historický čas po × 24 je u žuly ~6 min na buňku (po dřívějších × 144 ~1 min), na streamu to vadí ještě víc. Proto je v tabulce zvlášť kratší `t_navrh_s`. Jan vybere měřítko.
 
 ## Varianty času a nástrojů
 
@@ -276,14 +276,14 @@ flowchart LR
 - Horské „pojmenované“ horniny (hřeben, věže, velehory) dědí vlastnosti žuly / ruly / kvarcitu. Nejsou to vždy samostatné litologie.
 - Hlubinný vápenec / křída má v pořadí název křídy, ale load 100/5 je jako kompetentní vápenec, ne křída (~1 MPa) [3]. V návrhu jsou hodnoty vápence.
 - Podíly surovin u ordinary hornin jsou herní, opřené o typické použití, ne o laboratoř.
-- Historický čas po × 144 může být na streamu dlouhý. Návrh proto nabízí kratší `t_navrh_s`.
+- Historický čas po × 24 (dřív × 144) může být na streamu dlouhý. Návrh proto nabízí kratší `t_navrh_s`.
 - Pole jsem ve hře nezkoušel. Žádný běh kódu to nečte.
 
 ## Otevřené otázky pro Jana
 
 1. Kopání dvoukrokově (1 buňka, pak zpracování), nebo rozklad hned při kopání (hypotéza 13:27)?
 2. Varianta času A, B, C, nebo hybrid A+B?
-3. Měřítko času: historické × 144, nebo kratší `t_navrh_s`?
+3. Měřítko času: historické × 24 (čas hry E77), nebo kratší `t_navrh_s`?
 4. Mají ve hře být bronz a trhaviny jako stupně nástrojů?
 5. Má kvalita výnosu (přepis podílů, kvalita krystalů) ovlivnit raritu-v2?
 6. WVB1: souhlasí samostatné pole `yield_overrides`?

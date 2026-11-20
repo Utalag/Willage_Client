@@ -76,7 +76,7 @@ Hypotézy:
 
 1. Kopání dvoukrokově (1 buňka, pak zpracování), nebo rozklad hned při kopání (hypotéza 13:27)?
 2. Varianta času nástrojů A (brána tříd), B (čas podle síly), C (práce / energie), nebo hybrid A+B?
-3. Měřítko času: historické × 144, nebo kratší `t_navrh_s` ke hře?
+3. Měřítko času: historické × 24 (čas hry E77, `cas_hry.gd`), nebo kratší `t_navrh_s` ke hře?
 4. Mají ve hře být bronz a trhaviny jako stupně nástrojů?
 5. Má kvalita výnosu (přepis podílů, kvalita krystalů) ovlivnit raritu-v2?
 6. WVB1: souhlasí samostatné pole `yield_overrides`?

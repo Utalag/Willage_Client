@@ -34,8 +34,8 @@ První záznam je přesunutý návrh z blueprint-studie E65.
   - Čas i výnos úměrné objemu (0,5 m = 0,125 m³; při 0,125 m vše × 1/64).
   - Třídy tvrdosti: ruka / kámen / bronz / železo / ocel. Trhaviny jen zrychlení a víc suti.
   - Hybrid času A+B: slabší nástroj o 1–2 stupně kopat nemůže, jinak čas podle síly.
-  - Zvlášť historický čas po × 144 a kratší `t_navrh_s` ke hře (žula historicky ~63 s na
-    buňku 0,5 m, návrh 12 s).
+  - Zvlášť historický čas po × 24 (čas hry E77 z `cas_hry.gd`; dřív × 144) a kratší `t_navrh_s` ke hře
+    (žula historicky ~375 s na buňku 0,5 m, dřív ~63 s; návrh 12 s).
   - Přepis podílů jako volitelné pole WVB1 (nový bit flags), ne do `params` zásobníku.
   - Rarita-v2 se nemění; bonus z kvality výnosu je otevřená otázka.
 - **Výsledek / soubory:**
