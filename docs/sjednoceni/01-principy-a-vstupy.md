@@ -1,0 +1,342 @@
+# 01 – Základní principy a vstupní data (kostra k rozhodnutí)
+
+Stav: **kostra**, 2026-11-20 14:20 SEČ. Každý bod obsahuje současný stav, varianty z větví s naměřenými čísly, doporučení a otázku pro Jana. Pole **Platí:** je zatím prázdné. Vyplní se až po Janově rozhodnutí v chatu (Jan t712u). Do té doby nic z tohoto souboru neplatí jako pravidlo.
+
+Rozsah (Jan t710u): jen **datový model světa**. Vykreslování, LOD, průhlednost, shadery, draw calls a velikost modelů jsou prezentační vrstva, která data jen čte (viz `00-mapa-vetvi.md` §5). Datový model nesmí záviset na tom, jestli bude pohled 2D, nebo 3D.
+
+Značení: „rozhodnuto (datum)“ = Jan už rozhodl. ⚠ = novější měření to zpochybňuje. K1–K12 = konflikty z mapy větví. Body jsou seřazené v pořadí, ve kterém je navrhuju procházet: nejdřív to, na čem závisí nejvíc ostatních.
+
+---
+
+## 1.1 Pojmy: blok, dlaždice, ostrov, výřez
+
+**Současný stav.** „Blok“ má dnes tři významy (K1). Blok blueprintu má 8 × 8 × 32 m (16 × 16 × 64 buněk). Je jednotkou vkládání, receptu, seedu, rotace, sousedů i formátu WVB1 [1][2]. „Blok vesnice 128 m“ byl Janova preference z 2026-11-19 19:56 [3] a od 2026-11-20 11:48 je rozhodnuto „generovat celý blok 128 m“ [4]. E96 ho ale složilo z 16 × 16 bloků po 8 m [5]. Ostrov má podle konceptu začínat na 4 blocích a mít nejvýš ~16 [1]. TODO uvádí „4 × 4 bloky = 512 × 512 m“ [3].
+
+**Varianty**
+
+| | A: blok = 8 m (dnes) | B: blok = 128 m, uvnitř kousky 8 m (E96) | C: blok = 128 m, uvnitř kousky 16/32 m (návrh E96 §3) |
+|---|---|---|---|
+| co hráč vkládá | blok 8 m | blok 128 m (výřez) | blok 128 m |
+| ostrov 4 → 16 bloků | 16 × 16 → 32 × 32 m | 256 × 256 → 512 × 512 m | jako B |
+| WVB1 / E88 | platí beze změny | nutná nová verze (dims) | nová verze |
+| čísla | ostrov START 4 s načtení [6] | 138–142 s načtení, 2,5 GB [5] | neměřeno |
+
+**Doporučení.** Zavést tři slova: **blok** (128 m, jednotka vkládání a vlastnictví), **kousek** (vnitřní dělení bloku pro výpočet a ukládání, dnes 8 m) a **ostrov** (sada bloků). „Dlaždice“ nechat pro svět výprav. Pravidla vkládání (rotace, sousedé, recept) přesunout z 8 m na blok 128 m. Velikost kousku řešit v 1.12 podle výkonu, ne jako princip.
+
+**Otázka pro Jana.** Je blok 128 m jednotka, kterou hráč vkládá a otáčí, a ostrov se skládá z 4 až 16 takových bloků? Nebo je 128 m celý ostrov?
+
+**Platí:**
+
+---
+
+## 1.2 Jednotky a mřížky
+
+**Současný stav**
+- *rozhodnuto (2026-11-19 20:12):* herní jednotka a kopací buňka 0,25 m, postava 1,75 m = 7 jednotek. Hierarchie: 1 m hrubý svět, 0,5 m řídicí mřížka geologie, 0,25 m kopání, terén sám rozlišení nemá [3].
+- *rozhodnuto (2026-11-19 20:40):* kopání zůstává po 0,25 m [3].
+- *rozhodnuto (2026-11-20 ~11:04, t699u):* 1 jednotka scény = 1 m, převod na `jednotky.gd` postupně, jeden tvar l → m³, stavby a stromy v metrech [7]. Hotovo na `e94-metry` (otisky beze změny ve 40 commitech, l → m³ bez změny otisků) [8].
+- *rozhodnuto (2026-11-20 03:26):* mřížku 0,25 m počítat z funkcí [3]. ⚠ E85: 65–108× pomalejší (442–784 ms na blok 8 m) a jiných 7,8 % buněk [9]. E84 doporučuje nechat definici 0,5 m [9].
+- Hra pořád kope po 0,5 m. Mřížka 0,25 m je jen v `prekryv78` [9].
+- K2: `U` = 0,5 m v geologii, `hj` = 0,25 m [8].
+
+**Varianty jemné mřížky 0,25 m**
+
+| | A: zjemnění buněk 0,5 m (dnes) | B: vzorek funkcí 0,25 m (Jan 03:26, `p85_jemne`) | C: definice 0,5 m, 0,25 m jen překryv hráče (E80, E84) |
+|---|---|---|---|
+| čas na blok 8 m | 6–8 ms | 442–784 ms | 6–8 ms |
+| odhad na blok 128 m (× 256) | ~2 s | ~1,9–3,3 min | ~2 s |
+| věrnost funkci | 7,8 % buněk jinak | přesná | jako A, rozdíl jen u výkopu |
+| závislost na otočení | ne | musí se počítat v souřadnicích původu (E86) | ne |
+
+**Doporučení.** Jednotky: **metr** pro fyziku a vodu, **buňka 0,5 m** jako definice terénu, **0,25 m** jen pro kopání a překryv. Jedno jméno pro každou jednotku (`m`, `b05`, `b025`) a zrušit `U` v textech. Pro jemnou mřížku varianta C: zachová rozhodnutí o kopání 0,25 m a nestojí minuty na blok. Variantu B vrátit, jen až bude generátor v rychlejším jazyce.
+
+**Otázka pro Jana.** Necháme definici terénu po 0,5 m a jemných 0,25 m jen tam, kde hráč kope? Tím se mění tvoje rozhodnutí z 03:26 „0,25 m z funkcí“.
+
+**Platí:**
+
+---
+
+## 1.3 Výška sloupce
+
+**Současný stav.** Sloupec má 64 buněk × 0,5 m = 32 m a pevně je zapsaný v WVB1 (`dims` 16, 16, 64) [2], v E88 [10] i v `jednotky.gd` (BH 64) [8]. Povrch může mít nejvýš 61 buněk = 30,5 m [8]. E96 kvůli tomu snížilo reliéf funkce z × 3 (7–50 m) na × 1 (16–30 m) a vrchol hory je uříznutý [5]. Charakter krajiny (kompaktní / vyvážená / velkolepá) Jan nerozhodl (Blok 5) [3].
+
+**Varianty**
+
+| | 32 m (dnes) | 64 m | 128 m |
+|---|---|---|---|
+| buněk 0,5 m ve sloupci | 64 | 128 | 256 |
+| hora nad loukou | ~10 m (E94) | ~40 m | ~100 m |
+| paměť buněk bloku 128 m (u8, 0,5 m) | 4 MB | 8 MB | 16 MB |
+| index 0,25 m na kousek 8 m | 17 bitů | 18 bitů | 19 bitů |
+
+Paměť je výpočet (256 × 256 × výška × 1 B), ne měření. Skutečná paměť E96 byla 2,5 GB RSS, hlavně kvůli scéně [5].
+
+**Doporučení.** 64 m. Vejde se hora z E90/E96 bez ořezu. Ukládá se jen definice a překryv (1.11), takže výška stojí hlavně při generování. 128 m až po rozhodnutí o charakteru krajiny.
+
+**Otázka pro Jana.** Zvětšíme sloupec na 64 m? Nebo nejdřív rozhodneme charakter krajiny?
+
+**Platí:**
+
+---
+
+## 1.4 Zdroj pravdy o terénu: funkce světa, šablony a hora
+
+**Současný stav**
+- Terén jsou funkce ve světových metrech (`geo_fn`: povrch, hranice vrstev na řídicí mřížce 0,5 m, materiál bodu). Buňky jsou z nich vzorky [9]. Princip „funkce jsou jediný zdroj pravdy, buňky, voda a vykreslení jsou odvozené“ je v TODO jako návrh (ChatGPT 2026-11-19) [3].
+- Povrch dnes dávají **šablony blueprintu** (louka, kopec, hora, písčina) na blok 8 m. Okraje se dorovnávají na sousedy, sousedé se nikdy nemění (*rozhodnuto 2026-11-17*) [1].
+- *rozhodnuto (2026-11-20 11:48):* blok 128 m z funkce světa místo šablon [4].
+- K6/K7: hora a funkce světa existují ve více verzích.
+
+**Varianty povrchu**
+
+| | A: šablony 8 m + dorovnání (dnes) | B: funkce světa `h_m` (E90/E96) | C: B + masiv jako funkce (E87) |
+|---|---|---|---|
+| švy | 0 skok; hora má na každém švu sedlo (20 m) [11] | 0 skok, bez sedel | 0 skok, pořadí vložení 0 neshod [11] |
+| závislost na pořadí vložení | 1,9 % buněk (záměr) [9] | jen geologie | 0 u masivu |
+| svahy | 26 % bodů nad 45° (kvantování) [12] | p50 9°, p95 28° (× 4 / × 1) [5] | hladší, bez teras [11] |
+| negativa | hora malá (9 m) | tůně 22 % plochy [5] | stěna 5–6 m vedle nížiny [11] |
+| parametry | – | E90 × 8 / × 3; E96 × 4 / × 1 | U, nezávislé na E90 |
+
+**Doporučení.** Jedna funkce světa pro povrch i masiv (B + C sloučit do jedné funkce v metrech s jedním nastavením). Šablony blueprintu nechat jako **recept**, který funkci jen moduluje (typ bloku řídí geologii a jemný tvar, jako cesta `base_hm` v E49). `p94_hora_k` a omezovač sklonu E92 zrušit: řeší totéž hůř a mění vodu. Svět výprav a ostrov musí brát stejnou funkci.
+
+**Otázka pro Jana.** Má povrch bloku dávat jedna funkce světa a recept (louka, hora…) jen upravovat geologii a detail? Nebo chceš šablony zachovat jako hlavní tvar?
+
+**Platí:**
+
+---
+
+## 1.5 Determinismus, seed, pořadí a verze generátoru
+
+**Současný stav**
+- Blok = f(definice, seed, sousedé položení před ním). 12/12 bitově, 2 procesy stejně [9].
+- *rozhodnuto (2026-11-17):* sousedé se nemění, pořadí vložení výsledek mění záměrně (1,9 % buněk u švů, s E82 dvakrát víc) [3][9].
+- Hash = f(definice, překryv), ne f(historie). Na stejné buňce rozhoduje pořadí (vykopat → zasypat ≠ zasypat → vykopat) [9].
+- Otisk vody hashuje surové float64. Shoda je jen na stejné platformě, telefon a .NET nejsou změřené [9][10].
+- *rozhodnuto (2026-11-20 03:26):* nová verze generátoru přepočítá i staré bloky [3]. ⚠ K4: E80 změřilo, že se změní okolí výkopů (313 z 1 787 buněk) a 32 položených buněk skončí ve skále [9]. Podle E88 je každý přepínač terénu nová verze [10].
+
+**Varianty verze generátoru**
+
+| | A: přepočítat vše (Jan 03:26) | B: blok drží svou verzi (E80) | C: přepočítat jen bloky bez změn hráče |
+|---|---|---|---|
+| konzistence světa | jedna verze | víc verzí vedle sebe | skoro jedna |
+| zásah do hráčových výkopů | ano (měřeno) | ne | ne |
+| cena | ostrov 16 bloků 8 m ~10–19 s; 128 m neměřeno [10] | 0 | malá |
+| kód | jen nejnovější generátor | všechny verze navždy | nejnovější + staré pro dotčené |
+
+**Doporučení.** Pro buňky a překryv bitový determinismus: f64, žádný float32, řazené slovníky, celočíselné hashe [9]. Vodu hashovat po zaokrouhlení (1/4096 buňky, 1e-6 l/s) [10]. U verze generátoru varianta C. Výjimkou budou opravy chyb, kde se přepočítá vše a konflikty se hráči ohlásí.
+
+**Otázka pro Jana.** Při nové verzi generátoru přepočítat jen bloky, do kterých hráč nezasáhl, a ostatní nechat na staré verzi?
+
+**Platí:**
+
+---
+
+## 1.6 Materiály a sdílená tabulka
+
+**Současný stav (K10)**
+- `sdilene/materialy_voda.json` v4 obsahuje 13 základních materiálů a `horniny_voda.json` 63 hornin (id 20–107). Mají propustnost `perm` = (log10 K + 9)/6, pórovitost, zadržení, odpor, pevnost (`load`, `cantilever`), erozi (`ero_v`, `sed_v`), režim a čas průsaku pro čas × 24 [13].
+- Rozpustnost a hustota jsou jen u 5 hornin (E75) [13].
+- `tezba-studie/data/horniny_tezba_navrh.json` (T01, návrh) má 83 položek s hustotou, Mohsem, UCS, vzácností a výtěžkem [14].
+- `mat.gd` ve hře má 13 id, barvy a skóre rarity. `poradi_hornin.json` má 65 id [15].
+- `materialy_voda_navrh.json` (E59) je nepřijatý návrh, nahradila ho v4 [13].
+- Kopie `/workspace/willage-ideas/sdilene/` je zastaralá: ještě čas × 144 a bez rozpustnosti.
+- Vegetace zná jen základní id (`SURFACES` v `veg.gd`) [16].
+
+**Varianty**
+
+| | A: dnešní stav (více souborů) | B: jedna tabulka materiálů, pole po skupinách (voda, těžba, pevnost, vzhled) | C: B + generovaná z jednoho zdroje pro GDScript i C# |
+|---|---|---|---|
+| zdroj id | 3 seznamy | 1 | 1 |
+| riziko rozjetí | už nastalo | malé | nejmenší |
+
+**Doporučení.** B, později C. Jedno `MaterialId` (u8, rezerva do 255), jeden soubor `sdilene/materialy.json` s poli voda / těžba / pevnost / rarita / vzhled (barva jen pro prezentaci). Hustota pro všechny materiály z T01. Mlhu a ložiskový jíl ponechat jako speciální id. Starou kopii ve willage-ideas zrušit, nebo synchronizovat skriptem.
+
+**Otázka pro Jana.** Sloučíme vodní, těžební a herní vlastnosti do jedné tabulky materiálů s jedním číslem id?
+
+**Platí:**
+
+---
+
+## 1.7 Geologie
+
+**Současný stav**
+- Vrstvy jsou uspořádané funkce mocností ve sloupci (20 vrstev), mají klíny a vyklínění. Regionální základ je ve světových souřadnicích [11].
+- *rozhodnuto (2026-11-20 03:26):* v blueprintu zakázat vrstvy < 25 cm. Implementace `p85_vrstvy` má tenkých vrstev 17 426 → 0 a mění 0,65 % buněk. Po ořezu povrchem ale zůstane 775 tenkých zbytků [9].
+- *rozhodnuto (2026-11-20 01:55, 03:26):* vápenec k hladině v ~50 % bloků (mince), i pro jeskynní a hluboký vápenec a dolomit, vršek 2 m. ⚠ Ve výchozím podzemí E58 kras skoro nevzniká (2 ze 63 bloků „ano“), v E67 ano [9].
+- Jádro hory: E87 masiv přes švy (viz 1.4) [11].
+- Útvary (žíly, pegmatity, skarny, kras): dnes `cavity_one` po buňkách, jen v bloku. E84 navrhuje strom SDF z hashe světové mřížky (+51 ms na blok, útvar 176–296 B, přes šev funguje) [9].
+- Přenesený výřez: vrstvy na švu skáčou o 1,8–2,7 m (E86) [11].
+
+**Varianty útvarů**
+
+| | A: `cavity_one` (dnes) | B: SDF z hashe světa (E84 R1) | C: B + intervaly pro vodu (E84 R2) |
+|---|---|---|---|
+| přes šev | ne | ano | ano |
+| čas na blok 8 m (0,5 m) | 38 ms | 89 ms | 355 ms stavba |
+| stálost mezi rozlišeními | 56–75 % | 50–68 % (pravda je v SDF) | přesná v intervalech |
+
+**Doporučení.** Geologie = funkce světa (vrstvy, masiv, útvary SDF). Bloky z ní jen vzorkují. Minimum 25 cm uplatnit v definici a zbytky po ořezu povrchem tolerovat. Mince vápence zapnout spolu s rozhodnutím o podzemí (1.8). Klín u švu výřezu řešit v 1.11 / přenosu.
+
+**Otázka pro Jana.** Mají útvary (žíly, kras, jádro hory) být funkce celého světa, které jdou přes švy bloků (E84 + E87)?
+
+**Platí:**
+
+---
+
+## 1.8 Voda jako data
+
+**Současný stav**
+- Voda je odvozený stav. Zdrojem jsou prameny (uložené, `p76_prameny`), materiály a geometrie. Neukládá se, po načtení se přepočítá [3].
+- Povrch: priority-flood + D8, tůně a eroze jsou plněné událostmi. Podzemí: pásma z funkcí a tělesa, výchozí E58, režim E67 `pretok` je volitelný (K9). Hladina podzemí je plocha `gw` (E74) [17].
+- E68 orchestrátor: jedna bilance, kola do ustálení (max 64), otisk. Bilance ≤ 1e-12 l/s [3].
+- *rozhodnuto (2026-11-20 01:49):* neobsazený pramen zvedá hladinu tělesa, obsazování pramenů je zapnuté [3].
+- *rozhodnuto (2026-11-19 22:19):* 1 herní den = 1 h (`cas_hry.gd`, faktor 24). První dutina krasu za 13,8 reálného dne [3].
+- *rozhodnuto (t699u):* jeden převod l → m³ (`/ 1000`, E94). Otisky se nezměnily [8].
+- Jednotky: průtok l/s, objem m³, výška m. WVB1 navrhuje vodu jako u16 pevnou čárku (1/65535 buňky) [2].
+- K12: `voda-studie` (buňky a tiky) je jiný model.
+
+**Varianty podzemí**
+
+| | E58 (výchozí) | E67 `pretok` |
+|---|---|---|
+| kras (E75/E82) | skoro ne (2/63) | 19 z 30 ostrovů |
+| výtok z okrajů vrstev | ne | ano (Jan 2026-11-19 15:54 „voda na krajích bloku měla vytékat z vrstev“) |
+| plný výpočet ostrov START | ~2,5 s | 0,85 s [5] |
+| mince vápence | skoro bez účinku | funguje, ale i v blocích „ne“ |
+
+**Doporučení.** Podzemí sjednotit na E67 jako výchozí: odpovídá Janovu zadání o okrajích, kras v něm funguje a bylo rychlejší. Před přepnutím ale vyřešit K5 (1.9). Model „prameny → povrch + podzemí → bilance → události“ zapsat jako princip. `voda-studie` označit jako archiv. Otisk vody zaokrouhlovat (viz 1.5).
+
+**Otázka pro Jana.** Přepneme výchozí podzemí z E58 na E67 (výtok z okrajů vrstev, kras funguje)?
+
+**Platí:**
+
+---
+
+## 1.9 Přepočet vody po změně: lokální, plný, synchronní, asynchronní
+
+**Současný stav**
+- Po výkopu se dělá lokální přepočet (E64 + E68). Plný výpočet je referencí.
+- ⚠ K5: lokální ≠ plný v pěti nálezech. E83: pořadí bez `p79`. E85: `p79` sám nestačí. E94: 162 neshod při vyšší hoře, i na main. E95: S5 110 `eff`, ve hře 43 `fill` / 38 `to`, blok 128 m 102 / 60. Výchozí test `voda_e66` má 0 neshod, takže chybu nezachytí [8][9][18].
+- E95 (studie, nerozhodnuto): vlákno sníží blokování 652 ms → 0,15 ms. Fronta = synchronní výsledek otisk po otisku. Sloučení má stejný konec, ale mezistavy závisí na čase. Pevné převzetí po 30 ticích nestačí [18].
+- Škálování podzemí: 16 m 2,1–4,8 s, 64 m 23–46 s, 128 m 90–228 s do výsledku. Povrch na 128 m 10–34 ms [18]. E96 výkop 27–41 s [5].
+
+**Varianty**
+
+| | A: synchronně (dnes) | B: vlákno, fronta | C: vlákno, sloučení | D: B/C + přepočet jen dotčeného tělesa |
+|---|---|---|---|---|
+| zaseknutí hry | 0,65–1,2 s (16 m) | < 1 ms | < 1 ms | < 1 ms |
+| determinismus mezistavů | ano | ano | ne | podle B/C |
+| 128 m s podzemím | hra stojí minuty | voda za 1,5–3,8 min | ~2 s mezi výkopy, konec stejný | neměřeno, cíl sekundy |
+
+**Doporučení.** Princip: **voda se přepočítává mimo herní smyčku a převezme se v deterministickém tiku** (B). Výsledek lokálního přepočtu musí být bitově roven plnému výpočtu, s testem na celém bloku 128 m a s vyšší horou. Nejdřív opravit K5, pak D (okno jen dotčeného tělesa), pak teprve přepnout na 128 m. Sloučení (C) jen pro klienta, server bere frontu.
+
+**Otázka pro Jana.** Platí pravidlo „lokální přepočet = plný výpočet, jinak je to chyba“ a opravíme to před dalšími studiemi? Bereme frontu ve vlákně s převzetím v tiku jako cíl?
+
+**Platí:**
+
+---
+
+## 1.10 Kontrakt klient / server
+
+**Současný stav**
+- *rozhodnuto (2026-11-17 18:12, potvrzeno 2026-11-18 20:09):* generuje a simuluje klient, server ukládá a validuje [19].
+- *rozhodnuto (2026-11-17 20:39):* validátor při každém vložení [19].
+- *rozhodnuto (2026-11-17):* materiál se zachovává. Výnos kopání je 1 blok + šance na nález (17:53) [1].
+- WVB1 (návrh, čeká): celé pole buněk, deflate, SHA-256, `gen_ver`, zásobník gen-v3 a `stack_hash`, rudy proti cíli ze serveru [2].
+- E88 (návrh, neprojednáno s Willage-backend): definice + překryv místo pole (WTI1), blok bez změn ~400–450 B, hashe buněk bitově, voda bez hashe, server ověřuje strukturu, zachování materiálu a dno/obvod (`p85_okraj`) [10].
+- *rozhodnuto (2026-11-20 03:26):* zákaz prokopání dna a okraje ostrova [3].
+- ⚠ K1/K3: obojí počítá s blokem 16 × 16 × 64.
+
+**Varianty**
+
+| | WVB1 (pole) | WTI1 (definice + překryv, E88) |
+|---|---|---|
+| blok 8 m bez změn | 1,4–2,2 kB | ~400–450 B |
+| chodba 70 m | 13–17 kB (4 bloky) | 244 B |
+| server zná geometrii | ano | jen se snímkem buněk (volitelný) nebo s portem generátoru |
+| závislost na determinismu | malá | velká (1.5) |
+
+**Doporučení.** Jako směr pro jednání s Willage-backend vzít WTI1. Hlavičku (rozměry, výška sloupce, velikost kousku) parametrizovat podle 1.1 a 1.3 a nepsat ji natvrdo. Vodu serveru neposílat, jen horní meze. Návrh poslat backendu až po 1.1–1.5.
+
+**Otázka pro Jana.** Ukládat a posílat jen definici + změny hráče (WTI1) místo celého pole buněk? A smí se to projednat s Willage-backend?
+
+**Platí:**
+
+---
+
+## 1.11 Cílová platforma a datový rozpočet výkonu
+
+Jen datová strana: generování, voda, kopání, paměť, CPU. Vykreslování je v prezentační vrstvě.
+
+**Současný stav**
+- Logika běží v jednom vlákně GDScriptu, rozhoduje jedno velké jádro. Střední telefon je ~1,6–1,9× pomalejší než box, slabý 4,4–4,6×. Odhad podle Geekbenche, telefon neměřen (Jan má spustit APK) [20].
+- Ostrov START (16 m): generování 0,9 s, voda 2,5 s, výkop ~0,7 s. Odhad pro střední telefon: voda 3,9–5,0 s, výkop 1,1–1,5 s [20].
+- Blok 128 m (E96, box): generování 58–61 s, plná voda 49–53 s, výkop 27–41 s, logika bez scény 345 MB RSS. Odhad pro střední telefon: načtení 3,7–4,5 min, výkop 43–78 s [5].
+- Testovat na celém bloku 128 m (Jan t708u) [4].
+
+**Varianty rozpočtu (návrh cílů, ne měření)**
+
+| | přísný | střední | volný |
+|---|---|---|---|
+| zaseknutí hlavního vlákna výkopem | < 16 ms | < 33 ms | < 100 ms |
+| voda po výkopu viditelná do | 1 s | 5 s | 30 s |
+| první hratelné okolí po startu | 2 s | 5 s | 15 s |
+| logika bloku 128 m v paměti | 128 MB | 256 MB | 512 MB |
+
+**Doporučení.** Střední rozpočet pro střední telefon. Dnes ho plní jen asynchronní voda na 16 m. Pro blok 128 m vychází postup z E96: nejdřív 3 × 3 kousky u startu (~2 s), zbytek na pozadí, uložená definice místo generování při každém startu, podzemí jen kolem výkopu. Pokud to v GDScriptu nestačí, otázka C# / GDExtension pro generátor a vodu.
+
+**Otázka pro Jana.** Jaký telefon je cíl a jaký rozpočet (tabulka)? Spustíš bench APK z E93?
+
+**Platí:**
+
+---
+
+## 1.12 Objektová vrstva: vegetace, stavby, cesty
+
+Jen data. Velikost modelů je prezentace (`p94_meritko_veg`, Jan 11:39).
+
+**Současný stav**
+- *rozhodnuto (2026-11-17):* rostliny, cesty a stavby jsou samostatná vrstva nad terénem, ne buňky bloku [1].
+- Vegetace (`veg.gd`): záznam `{druh, lx, ly, lz, posun, natočení, měřítko}`, deterministicky ze seedu bloku (účel „VEG“). Druh smí jen na povrch ze seznamu `SURFACES` (tráva, hlína, písek, skála) [16].
+- Hustota je pravděpodobnost na **sloupec** podle receptu (louka, kopec, hora, písčina). Stromy jen na sudé mřížce [16]. ⚠ E94: hustota na sloupec se mění s velikostí buňky, má být na m² [8]. ⚠ E87: recept `hora_vyzdvizena` chybí, blok je bez vegetace [11]. E96: rostliny v tůních a korytech se nevysadí [5].
+- Stavby mají půdorys v metrech (domek 3,5 m = 7 buněk), cesty po buňkách 0,5 m [8].
+- Vegetace není ve WVB1 ani E88 [10].
+
+**Varianty umístění vegetace**
+
+| | A: na sloupec bloku (dnes) | B: body na m² ve světových souřadnicích (hash světa) |
+|---|---|---|
+| závislost na buňce | ano | ne |
+| přes šev, po otočení | po bloku (otáčí se s ním) | spojitá; u výřezu v souřadnicích původu |
+| pravidlo povrchu | materiál horní buňky | materiál v bodě + voda (ne v tůni) |
+
+**Doporučení.** B. Objekt = typ + pozice v metrech + natočení + seed. Pravidlo výskytu = materiál povrchu, sklon, voda a recept (hustota na m²). Ve vrstvě objektů se ukládají jen změny hráče (vykácení, výsadba), stejně jako překryv terénu. Stavby a cesty: půdorys v metrech, kotva na buňku 0,5 m.
+
+**Otázka pro Jana.** Má vegetace být objektová vrstva ve světových metrech (hustota na m², pravidlo podle materiálu a vody) a ukládat se jen změny od hráče?
+
+**Platí:**
+
+---
+
+## Zdroje
+
+1. `devlog/koncept.md`, `teren-bloky-bunky.md` (main 0e8aa00).
+2. `navrhy/format-bloku-wvb1.md` (main).
+3. `TODO.md` (main 0e8aa00): Měřítko, Model světa, Voda, Rozhodnutí Jana.
+4. Chat s Janem 2026-11-20 11:48 (t707u) a t708u; PROP E96 plán (`e96-blok128`).
+5. `blueprint-studie/PROP.md` „E96 výsledky“, větev `e96-blok128` 64dbbcd.
+6. PROP E93 a E95 (načtení ostrova START), `zkusebni-vse` 7e2a06f, `e93-telefon` 7cbcf68.
+7. Chat s Janem 2026-11-20 (t699u, k E89).
+8. PROP E89 (`e89-jednotky` e8fff3c), E94 a E94b (`e94-metry` 96f2310).
+9. PROP E78–E85 (`zkusebni-vse` 7e2a06f; větve e78-prekryv … e85-blok2-rozhodnuti).
+10. `navrhy/navrh-terrainsource-kontrakt.md` (`e88-kontrakt-navrh` 72e9ff3).
+11. PROP E86, E87 (`e86-otoceni-90` c458886, `e87-jadro-hory` ff97a9f).
+12. PROP E92 (`e92-meritko` ffd6e44).
+13. `sdilene/materialy_voda.json`, `horniny_voda.json`, `materialy_voda_navrh.json` (main).
+14. `tezba-studie/data/horniny_tezba_navrh.json`, `tezba-studie/README.md` (main).
+15. `godot-prototyp/scripts/mat.gd`, `blueprint-studie/data/poradi_hornin.json` (main).
+16. `godot-prototyp/scripts/veg.gd` (main).
+17. `devlog/voda.md`, `devlog/voda-algoritmy.md`, PROP E58, E67, E74, E77 (main).
+18. PROP E95 (`e95-async-voda` 597342d).
+19. `devlog/architektura.md` (main).
+20. PROP E93 (`e93-telefon` 7cbcf68), `shots/e93/cpu_limit_souhrn.json`.
