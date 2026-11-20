@@ -2556,3 +2556,29 @@ a `surface.adapt(real)` se bez nových vstupů neprojeví.
 
 Těžba a rozklad hornin jsou samostatná studie. Návrh E65 je teď **T01 (dříve E65)** v `../tezba-studie/` (`README.md`, `PROP.md`, `DENIK.md`, `ZDROJE.md` [1]–[28], tabulka v `data/horniny_tezba_navrh.json`).
 Zdroje [45]–[72] níže v tomto souboru zůstávají jen jako zástupné číslo, aby se neposunulo číslování blueprint-studie.
+
+## E92 test měřítka v izometrii a mírnější svahy ostrova (plán, zapsáno před pokusem 2026-11-20 07:58)
+
+- **Zadání (TODO, Blok 4):** „Test měřítka v izometrické kameře: jedna postava, modelový dům, kopec a hora ve stejné scéně,
+  pro každou variantu jednotky a bloku. Porovnat podle snímků.“ a „blok 128 m“ (Jan 2026-11-19 19:56). Dřívější přání Jana
+  (21:12): parametr největšího sklonu, měkčí reliéf, širší paty hor, před / po s postavou 2 m.
+- **Co už je hotové (neopakuju):**
+  - **E56** (blueprint-studie, `svah56`, port `scripts/teren/svet/svah.gd`, `s56_*` výchozí vyp): omezovač sklonu hrubé mapy
+    světa 8 × 8 (E49), profil s postavou 2 m, p95 63° → 42–50°. Otevřené: strop sklonu, typy dlaždic. **Neměřilo se, co to
+    udělá s vodou a prameny, a nepoužívá to herní ostrov** (ostrov START jde přes šablony blueprintů, ne přes hrubý svět).
+  - **E89** (větev `e89-jednotky`): scéna kreslí buňku 1 × 1 × 0,5 jednotky (vodorovně natažená 2×); `p89_meritko` = buňka
+    0,5 m ve všech osách, postava 1,75 m a dům 4 × 4 × 3 m. Hora START je proti postavě nízká (4–5 m nad loukou).
+  - **E90** (větev `e90-lod`): funkce světa `h_m(x, y)` v metrech (E49 × 8 vodorovně, reliéf × 3), dlaždice 128 m.
+- **Co E92 přidá:**
+  1. **Omezovač sklonu na herním ostrově** (příznak `p92_svah`, výchozí vyp, v `ostrov_teren.gd` po kroku „povrch: šablona
+     blueprintu“): stejný algoritmus jako E56 (hmota se zachová), strop `p92_max_sklon` 1,0 (45°) a 0,6 (31°), volitelně
+     vyhlazení. Měřím na celém ostrově 2 × 2 bloky (buňka 0,5 m): sklon p50 / p95 / max, podíl nad 30° a 45°, největší schod,
+     reliéf (max − min), šířka paty hory, validátor, **voda**: prameny (počet, l/s), sloupce koryta a tůní, vodopády, odtok
+     přes okraj, výstupy podzemí. Výchozí hra beze změny.
+  2. **Blok 128 m** z funkce E90 (kopie `lod90.gd` z větve `e90-lod`): dlaždice s největším převýšením, vzorky 0,5 m,
+     stejné statistiky před / po omezovači (na 1 m mřížce).
+  3. **Snímky** (xvfb, opengl3): postava 1,75 m a dům 4 × 4 × 3 m; ostrov dnes (1 × 1 × 0,5), v metrech (0,5 m), v metrech
+     s omezovačem; blok 128 m před / po.
+- **Negativa předem:** blok ostrova 8 m je na mírné svahy malý: hora 10+ m se do 8 m se sklonem 45° nevejde, okraje
+  dorovnává `adapt` na sousedy, takže strmý pás se přesune na švy. Omezovač mění vodu (jiná koryta) → otisky se s příznakem
+  změní (bez příznaku ne). Funkce E90 je jen test (natažení × 8, reliéf × 3).
