@@ -229,9 +229,14 @@ func diag74(flags: Dictionary) -> Dictionary:
 	var vf := OV.new(); vf.build(blocks)
 	var c2 := vf.claims.keys(); c2.sort()
 	r.cerstvy = vf.hydro().otisk; r.obsazeno_cerstvy = c2
-	r.gw_lokalne = str(v.gw.hash()); r.gw_cerstvy = str(vf.gw.hash())
+	r.gw_lokalne = gw_hash(v.gw); r.gw_cerstvy = gw_hash(vf.gw); r.gw_stejne = r.gw_lokalne == r.gw_cerstvy
 	v.dispose(); vf.dispose()
 	return r
+
+## plocha gw bez času stavby („ms“), jinak se hash liší v každém běhu
+static func gw_hash(g: Dictionary) -> String:
+	var d := g.duplicate(); d.erase("ms")
+	return str(d.hash())
 
 func part_diag74() -> Dictionary:
 	var out := {}
