@@ -78,10 +78,11 @@ static func bilance(st: Dictionary) -> Dictionary:
 		var l: float = ain[i] - eff[i]
 		if ex[i] > 0.0: tune += l
 		else: ponory += l
-	var ug_in := 0.0; var ug_pov := 0.0; var ug_stena := 0.0; var ug_prusak := 0.0; var zavrena := 0
+	var ug_in := 0.0; var ug_pov := 0.0; var ug_stena := 0.0; var ug_vyv := 0.0; var ug_prusak := 0.0; var zavrena := 0
 	for u in st.get("under", []):
 		if String(u.typ) == "povrch": ug_pov += float(u.q)
 		else: ug_stena += float(u.q)
+		if String(u.typ) == "vyver74": ug_vyv += float(u.q)
 	if st.get("ug") == null:
 		ug_in = ug_stena
 	else:
@@ -91,7 +92,7 @@ static func bilance(st: Dictionary) -> Dictionary:
 	var deep := float(st.get("lost_deep", 0.0))
 	return {"zdroje": zdroje, "prameny_z_podzemi": prameny, "okraj": okraj, "konec_jinde": jinde, "ponory": ponory,
 		"odtok_tuni": tune, "podzemi_vstup": ug_in, "podzemi_prameny": ug_pov, "podzemi_stena": ug_stena,
-		"podzemi_prusak": ug_prusak, "do_hloubky": deep, "zavrena_telesa": zavrena,
+		"podzemi_prusak": ug_prusak, "podzemi_vyver74_ven": ug_vyv, "do_hloubky": deep, "zavrena_telesa": zavrena,
 		"chyba_povrch": zdroje + prameny - okraj - jinde - ponory - tune,
 		"chyba_dolu": tune - ug_in - deep,
 		"chyba_nahoru": prameny - ug_pov,

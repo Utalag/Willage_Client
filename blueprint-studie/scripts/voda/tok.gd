@@ -23,7 +23,7 @@ static func _soluble(m: int) -> bool:
 ## ztráty L = {thr, cap (kras naráz), inf (propustná · perm na sloupec), perm_min}
 static func losses(p: Dictionary, springs: bool) -> Dictionary:
 	if springs: return {"thr": float(p.strz_thr_q), "cap": float(p.ponor_cap_q), "inf": float(p.ponor_inf_q), "perm_min": float(p.ponor_perm), "springs": true, "pit_q": float(p.pit_drain_q), "cell_m2": pow(float(p.get("voda_cell_m", 0.5)), 2.0), "u_m": float(p.get("voda_cell_m", 0.5)),
-		"q73": bool(p.get("p73_pritok", false)), "v73": bool(p.get("p73_vyver", false)), "v74": bool(p.get("p74_vyzvednout", false))}
+		"q73": bool(p.get("p73_pritok", false)), "v73": bool(p.get("p73_vyver", false)), "v74": bool(p.get("p74_vyzvednout", false)), "h74": bool(p.get("p74_hladina", true))}
 	return {"thr": float(p.strz_thr), "cap": float(p.ponor_cap), "inf": float(p.ponor_inf), "perm_min": float(p.ponor_perm), "springs": false, "pit_q": 0.0}
 
 static func make(hm: PackedFloat64Array, W: int, H: int, wall: PackedByteArray, mats: PackedInt32Array, src: PackedFloat64Array, L: Dictionary, edge_out: bool) -> Dictionary:
@@ -402,6 +402,36 @@ static func fill_events(st: Dictionary, comp: PackedInt32Array, lo: float, hi: f
 
 ## nastaví extra odtok na přelivu každé mokré tůně; podzemní voda vyjde na nejbližším okraji ostrova (vyvěračka ve stěně → vodopád do mlhy)
 ## E52: modul podzemí (výchozí podzemi.gd; varianta v ctx.impl má stejné entry / solve + touched)
+## E74 + Jan 2026-11-20 01:49 (p74_vyzvednout + p74_hladina): neobsazený povrchový výtok vodu ze světa nepouští. Sloupec
+## výtoku se vyřadí z výstupů tělesa a těleso se řeší znovu → hladina stoupne k dalšímu výstupu. Opakuje se, dokud výstup
+## není obsazený pramen, okraj / stěna, nebo je těleso plné (uzavřené → tůně přetečou po povrchu); nejvýš 64 kol.
+## Bez přepínače jedno řešení se stejným klíčem jako dřív (otisky beze změny). Vrací [výsledek (kopie), klíč, [[sloupec, z]]].
+static func solve74(st: Dictionary, vs: PackedInt32Array, q: float, excl0: Dictionary) -> Array:
+	var lift := bool(st.L.get("v74", false)) and bool(st.L.get("h74", false))
+	var excl := excl0
+	var hid := []
+	var claim: Dictionary = st.get("claim74", {})
+	var r: Dictionary = {}
+	var sk := ""
+	for it in 64:
+		if it == 0: sk = "s%s|%.9f|%d" % [str(vs), q, excl.hash()]
+		else:
+			var ek := excl.keys(); ek.sort()   # E83: přesný klíč (bity q, seřazené buňky)
+			sk = "h%s|%s|%s" % [str(vs), PackedFloat64Array([q]).to_byte_array().hex_encode(), str(ek)]
+		if not st.ug_cache.has(sk): st.ug_cache[sk] = _ugi(st).solve(st.ug, vs, q, excl)
+		r = st.ug_cache[sk]
+		if not lift or r.closed or float(r.out_q) <= 0.0: break
+		var cut := []
+		if r.has("outs67"):
+			for o in r.outs67:
+				if float(o[3]) > 0.0 and String(o[1]) == "povrch" and not claim.has(int(o[2])): cut.append([int(o[2]), float(o[0])])
+		elif String(r.out[3]) == "povrch" and not claim.has(int(r.out[4])): cut.append([int(r.out[4]), float(r.out[0])])
+		if cut.is_empty(): break
+		if it == 0: excl = excl0.duplicate()
+		for cc in cut:
+			excl[cc[0]] = true; hid.append(cc)
+	return [r.duplicate(), sk, hid]
+
 static func _ugi(st: Dictionary):
 	return st.ug.get("impl", UG)
 
@@ -514,9 +544,10 @@ static func _apply_drains(st: Dictionary, dirty = null) -> PackedInt32Array:
 					vs.append(ents[j][0]); q += ents[j][1].podzemi_lps
 					if _fed73(st, ents[j][1], r0, fed): continue   # E73 p73_vyver: tůň zavodněná pramenem tohoto tělesa – pramen v ní smí zůstat
 					for c in ents[j][1].cells: excl[c] = true
-				var sk := "s%s|%.9f|%d" % [str(vs), q, excl.hash()]
-				if not st.ug_cache.has(sk): st.ug_cache[sk] = _ugi(st).solve(st.ug, vs, q, excl)
-				var r: Dictionary = st.ug_cache[sk].duplicate()
+				var s74 := solve74(st, vs, q, excl)   # E74 + Jan 01:49: neobsazený výtok zvedá hladinu tělesa (p74_hladina)
+				var sk: String = s74[1]
+				var r: Dictionary = s74[0]
+				for hv in s74[2]: st.under.append({"v0": ents[grp[0]][0], "from": ents[grp[0]][1].outlet, "exit": int(hv[0]), "q": 0.0, "z": float(hv[1]), "typ": "vyver74"})
 				for j in grp:
 					var x: Dictionary = ents[j][1]
 					if not r.closed: _set_drain(st, x, wr)   # uzavřené plné těleso nic nepřijímá → vše přeteče po povrchu

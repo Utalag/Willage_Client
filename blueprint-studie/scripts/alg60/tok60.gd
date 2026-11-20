@@ -529,9 +529,10 @@ static func _apply_drains(st: Dictionary, dirty = null) -> PackedInt32Array:
 					vs.append(ents[j][0]); q += ents[j][1].podzemi_lps
 					if T._fed73(st, ents[j][1], r0, fed): continue   # E73 p73_vyver: tůň zavodněná pramenem tohoto tělesa – pramen v ní smí zůstat
 					for c in ents[j][1].cells: excl[c] = true
-				var sk := "s%s|%.9f|%d" % [str(vs), q, excl.hash()]
-				if not st.ug_cache.has(sk): st.ug_cache[sk] = _ugi(st).solve(st.ug, vs, q, excl)
-				var r: Dictionary = st.ug_cache[sk].duplicate()
+				var s74 := T.solve74(st, vs, q, excl)   # E74 + Jan 01:49: neobsazený výtok zvedá hladinu tělesa (p74_hladina)
+				var sk: String = s74[1]
+				var r: Dictionary = s74[0]
+				for hv in s74[2]: st.under.append({"v0": ents[grp[0]][0], "from": ents[grp[0]][1].outlet, "exit": int(hv[0]), "q": 0.0, "z": float(hv[1]), "typ": "vyver74"})
 				for j in grp:
 					var x: Dictionary = ents[j][1]
 					if not r.closed: T._set_drain(st, x, wr)   # uzavřené plné těleso nic nepřijímá → vše přeteče po povrchu
