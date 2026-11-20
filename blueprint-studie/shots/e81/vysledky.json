@@ -1,0 +1,1638 @@
+{
+  "mineraly": {
+    "16_bez": {
+      "granáty": {
+        "cil": 14,
+        "hostitel": 1051,
+        "schodek": 0,
+        "umisteno": 14
+      },
+      "měděná ruda": {
+        "cil": 70,
+        "hostitel": 8054,
+        "schodek": 0,
+        "umisteno": 70
+      },
+      "vzduch (jeskyně)": {
+        "cil": 90,
+        "hostitel": 6994,
+        "schodek": 0,
+        "umisteno": 90
+      },
+      "černé uhlí": {
+        "cil": 90,
+        "hostitel": 4976,
+        "schodek": 0,
+        "umisteno": 90
+      },
+      "železná ruda": {
+        "cil": 72,
+        "hostitel": 6501,
+        "schodek": 0,
+        "umisteno": 72
+      }
+    },
+    "16_s": {
+      "granáty": {
+        "cil": 14,
+        "hostitel": 1077,
+        "schodek": 0,
+        "umisteno": 14
+      },
+      "měděná ruda": {
+        "cil": 70,
+        "hostitel": 7801,
+        "schodek": 0,
+        "umisteno": 70
+      },
+      "vzduch (jeskyně)": {
+        "cil": 90,
+        "hostitel": 6869,
+        "schodek": 0,
+        "umisteno": 90
+      },
+      "černé uhlí": {
+        "cil": 90,
+        "hostitel": 5040,
+        "schodek": 0,
+        "umisteno": 90
+      },
+      "železná ruda": {
+        "cil": 72,
+        "hostitel": 6173,
+        "schodek": 0,
+        "umisteno": 72
+      }
+    },
+    "32_bez": {
+      "granáty": {
+        "cil": 112,
+        "hostitel": 8403,
+        "schodek": 0,
+        "umisteno": 112
+      },
+      "měděná ruda": {
+        "cil": 560,
+        "hostitel": 64359,
+        "schodek": 0,
+        "umisteno": 560
+      },
+      "vzduch (jeskyně)": {
+        "cil": 720,
+        "hostitel": 55749,
+        "schodek": 0,
+        "umisteno": 720
+      },
+      "černé uhlí": {
+        "cil": 720,
+        "hostitel": 39834,
+        "schodek": 0,
+        "umisteno": 720
+      },
+      "železná ruda": {
+        "cil": 576,
+        "hostitel": 52072,
+        "schodek": 0,
+        "umisteno": 576
+      }
+    },
+    "32_s": {
+      "granáty": {
+        "cil": 112,
+        "hostitel": 8221,
+        "schodek": 0,
+        "umisteno": 112
+      },
+      "měděná ruda": {
+        "cil": 560,
+        "hostitel": 63716,
+        "schodek": 0,
+        "umisteno": 560
+      },
+      "vzduch (jeskyně)": {
+        "cil": 720,
+        "hostitel": 55138,
+        "schodek": 0,
+        "umisteno": 720
+      },
+      "černé uhlí": {
+        "cil": 720,
+        "hostitel": 40032,
+        "schodek": 0,
+        "umisteno": 720
+      },
+      "železná ruda": {
+        "cil": 576,
+        "hostitel": 51463,
+        "schodek": 0,
+        "umisteno": 576
+      }
+    }
+  },
+  "ostrov": {
+    "bez": {
+      "geo_hash": "d3ff4d43528ea357",
+      "otisk_vody": "d7aedf3a6d9d10e8",
+      "zmenenych_bunek": 0
+    },
+    "s": {
+      "geo_hash": "47b22d8c905ae800",
+      "otisk_vody": "c3f579ee9ecbd891",
+      "zmenenych_bunek": 1524
+    }
+  },
+  "voda": {
+    "16": {
+      "bunky_bez": {
+        "objem_m3": 1217.0,
+        "pasem": 5618,
+        "teles": 34
+      },
+      "bunky_s": {
+        "objem_m3": 1260.0,
+        "pasem": 6348,
+        "teles": 48
+      },
+      "diry_bez": 932,
+      "diry_s": 109,
+      "fn": {
+        "objem_m3": 1323.24462280971,
+        "pasem": 7702,
+        "teles": 30
+      },
+      "tenka_nepropustna_sloupcu": 1451
+    },
+    "32": {
+      "bunky_bez": {
+        "objem_m3": 1219.109375,
+        "pasem": 24886,
+        "teles": 185
+      },
+      "bunky_s": {
+        "objem_m3": 1229.546875,
+        "pasem": 26419,
+        "teles": 192
+      },
+      "diry_bez": 2054,
+      "diry_s": 65,
+      "fn": {
+        "objem_m3": 1323.08550248314,
+        "pasem": 32746,
+        "teles": 137
+      },
+      "tenka_nepropustna_sloupcu": 4029
+    }
+  },
+  "vyskyt": {
+    "souhrn": {
+      "16_bez": {
+        "chybi": 1662,
+        "k81": {
+          "konflikt": 0,
+          "kryt": 0,
+          "odebrano": 0,
+          "posun": 0,
+          "pridano": 0
+        },
+        "kusu": 221,
+        "ms": 169.719,
+        "navic": 62,
+        "tenkych": 2679,
+        "tenkych_chybi": 1599
+      },
+      "16_s": {
+        "chybi": 213,
+        "k81": {
+          "konflikt": 206,
+          "kryt": 968,
+          "odebrano": 60,
+          "posun": 345,
+          "pridano": 1460
+        },
+        "kusu": 114,
+        "ms": 237.793,
+        "navic": 25,
+        "tenkych": 2679,
+        "tenkych_chybi": 203
+      },
+      "32_bez": {
+        "chybi": 3494,
+        "k81": {
+          "konflikt": 0,
+          "kryt": 0,
+          "odebrano": 0,
+          "posun": 0,
+          "pridano": 0
+        },
+        "kusu": 669,
+        "ms": 1450.713,
+        "navic": 689,
+        "tenkych": 6986,
+        "tenkych_chybi": 3383
+      },
+      "32_s": {
+        "chybi": 165,
+        "k81": {
+          "konflikt": 117,
+          "kryt": 4021,
+          "odebrano": 659,
+          "posun": 703,
+          "pridano": 3390
+        },
+        "kusu": 152,
+        "ms": 1720.354,
+        "navic": 273,
+        "tenkych": 6986,
+        "tenkych_chybi": 163
+      },
+      "kusu_fn_025": 60,
+      "kusu_fn_05": 87,
+      "rozdil_bez": 6081,
+      "rozdil_fn": 1892,
+      "rozdil_s": 2820
+    },
+    "tmin_m": 0.05,
+    "vrstvy": [
+      {
+        "16_bez": {
+          "chybi": 135,
+          "kusu": 9,
+          "navic": 1,
+          "sev": {
+            "sev": 0.171875,
+            "uvnitr": 0.134895833333333
+          },
+          "sloupcu_fn": 643,
+          "tenkych": 254,
+          "tenkych_chybi": 135
+        },
+        "16_s": {
+          "chybi": 4,
+          "kusu": 11,
+          "navic": 5,
+          "sev": {
+            "sev": 0.1875,
+            "uvnitr": 0.135416666666667
+          },
+          "sloupcu_fn": 643,
+          "tenkych": 254,
+          "tenkych_chybi": 4
+        },
+        "32_bez": {
+          "chybi": 283,
+          "kusu": 42,
+          "navic": 32,
+          "sev": {
+            "sev": 0.1484375,
+            "uvnitr": 0.0834173387096774
+          },
+          "sloupcu_fn": 2630,
+          "tenkych": 650,
+          "tenkych_chybi": 283
+        },
+        "32_s": {
+          "chybi": 21,
+          "kusu": 6,
+          "navic": 21,
+          "sev": {
+            "sev": 0.1640625,
+            "uvnitr": 0.0573336693548387
+          },
+          "sloupcu_fn": 2630,
+          "tenkych": 650,
+          "tenkych_chybi": 21
+        },
+        "hist_025_05_1_vic": [
+          650,
+          418,
+          705,
+          857
+        ],
+        "jmeno": "gravel_sand",
+        "kusu_fn_025": 7,
+        "kusu_fn_05": 11,
+        "mat": 3,
+        "mocnost_prumer_m": 0.729091631241511,
+        "rozdil_05_025_bez": 481,
+        "rozdil_05_025_fn": 196,
+        "rozdil_05_025_s": 184,
+        "sev_fn_025": {
+          "sev": 0.1640625,
+          "uvnitr": 0.0582157258064516
+        },
+        "sloupcu_fn_025": 2630
+      },
+      {
+        "16_bez": {
+          "chybi": 13,
+          "kusu": 1,
+          "navic": 0,
+          "sev": {
+            "sev": 0.0,
+            "uvnitr": 0.0192708333333333
+          },
+          "sloupcu_fn": 1016,
+          "tenkych": 34,
+          "tenkych_chybi": 13
+        },
+        "16_s": {
+          "chybi": 0,
+          "kusu": 1,
+          "navic": 0,
+          "sev": {
+            "sev": 0.0,
+            "uvnitr": 0.00416666666666667
+          },
+          "sloupcu_fn": 1016,
+          "tenkych": 34,
+          "tenkych_chybi": 0
+        },
+        "32_bez": {
+          "chybi": 17,
+          "kusu": 1,
+          "navic": 1,
+          "sev": {
+            "sev": 0.0,
+            "uvnitr": 0.00529233870967742
+          },
+          "sloupcu_fn": 4071,
+          "tenkych": 39,
+          "tenkych_chybi": 17
+        },
+        "32_s": {
+          "chybi": 1,
+          "kusu": 1,
+          "navic": 1,
+          "sev": {
+            "sev": 0.0,
+            "uvnitr": 0.00189012096774194
+          },
+          "sloupcu_fn": 4071,
+          "tenkych": 39,
+          "tenkych_chybi": 1
+        },
+        "hist_025_05_1_vic": [
+          39,
+          76,
+          538,
+          3418
+        ],
+        "jmeno": "weathered_clay",
+        "kusu_fn_025": 1,
+        "kusu_fn_05": 1,
+        "mat": 4,
+        "mocnost_prumer_m": 1.27562529220445,
+        "rozdil_05_025_bez": 53,
+        "rozdil_05_025_fn": 7,
+        "rozdil_05_025_s": 7,
+        "sev_fn_025": {
+          "sev": 0.0,
+          "uvnitr": 0.00214213709677419
+        },
+        "sloupcu_fn_025": 4071
+      },
+      {
+        "16_bez": {
+          "chybi": 89,
+          "kusu": 7,
+          "navic": 0,
+          "sev": {
+            "sev": 0.0,
+            "uvnitr": 0.0911458333333333
+          },
+          "sloupcu_fn": 912,
+          "tenkych": 138,
+          "tenkych_chybi": 82
+        },
+        "16_s": {
+          "chybi": 5,
+          "kusu": 2,
+          "navic": 0,
+          "sev": {
+            "sev": 0.0,
+            "uvnitr": 0.0671875
+          },
+          "sloupcu_fn": 912,
+          "tenkych": 138,
+          "tenkych_chybi": 5
+        },
+        "32_bez": {
+          "chybi": 189,
+          "kusu": 22,
+          "navic": 18,
+          "sev": {
+            "sev": 0.0,
+            "uvnitr": 0.0546875
+          },
+          "sloupcu_fn": 3731,
+          "tenkych": 374,
+          "tenkych_chybi": 177
+        },
+        "32_s": {
+          "chybi": 3,
+          "kusu": 3,
+          "navic": 4,
+          "sev": {
+            "sev": 0.0,
+            "uvnitr": 0.0278477822580645
+          },
+          "sloupcu_fn": 3731,
+          "tenkych": 374,
+          "tenkych_chybi": 3
+        },
+        "hist_025_05_1_vic": [
+          374,
+          218,
+          872,
+          2267
+        ],
+        "jmeno": "cave_limestone",
+        "kusu_fn_025": 3,
+        "kusu_fn_05": 1,
+        "mat": 5,
+        "mocnost_prumer_m": 1.06496156981658,
+        "rozdil_05_025_bez": 326,
+        "rozdil_05_025_fn": 113,
+        "rozdil_05_025_s": 134,
+        "sev_fn_025": {
+          "sev": 0.0,
+          "uvnitr": 0.0270917338709677
+        },
+        "sloupcu_fn_025": 3731
+      },
+      {
+        "16_bez": {
+          "chybi": 0,
+          "kusu": 1,
+          "navic": 0,
+          "sev": {
+            "sev": 0.0,
+            "uvnitr": 0.0
+          },
+          "sloupcu_fn": 1024,
+          "tenkych": 1,
+          "tenkych_chybi": 0
+        },
+        "16_s": {
+          "chybi": 0,
+          "kusu": 1,
+          "navic": 0,
+          "sev": {
+            "sev": 0.0,
+            "uvnitr": 0.0
+          },
+          "sloupcu_fn": 1024,
+          "tenkych": 1,
+          "tenkych_chybi": 0
+        },
+        "32_bez": {
+          "chybi": 0,
+          "kusu": 1,
+          "navic": 0,
+          "sev": {
+            "sev": 0.0,
+            "uvnitr": 0.0
+          },
+          "sloupcu_fn": 4096,
+          "tenkych": 0,
+          "tenkych_chybi": 0
+        },
+        "32_s": {
+          "chybi": 0,
+          "kusu": 1,
+          "navic": 0,
+          "sev": {
+            "sev": 0.0,
+            "uvnitr": 0.0
+          },
+          "sloupcu_fn": 4096,
+          "tenkych": 0,
+          "tenkych_chybi": 0
+        },
+        "hist_025_05_1_vic": [
+          0,
+          0,
+          35,
+          4061
+        ],
+        "jmeno": "granite",
+        "kusu_fn_025": 1,
+        "kusu_fn_05": 1,
+        "mat": 6,
+        "mocnost_prumer_m": 2.20822795227286,
+        "rozdil_05_025_bez": 0,
+        "rozdil_05_025_fn": 0,
+        "rozdil_05_025_s": 0,
+        "sev_fn_025": {
+          "sev": 0.0,
+          "uvnitr": 0.0
+        },
+        "sloupcu_fn_025": 4096
+      },
+      {
+        "16_bez": {
+          "chybi": 2,
+          "kusu": 1,
+          "navic": 0,
+          "sev": {
+            "sev": 0.0,
+            "uvnitr": 0.00416666666666667
+          },
+          "sloupcu_fn": 1024,
+          "tenkych": 11,
+          "tenkych_chybi": 2
+        },
+        "16_s": {
+          "chybi": 0,
+          "kusu": 1,
+          "navic": 0,
+          "sev": {
+            "sev": 0.0,
+            "uvnitr": 0.0
+          },
+          "sloupcu_fn": 1024,
+          "tenkych": 11,
+          "tenkych_chybi": 0
+        },
+        "32_bez": {
+          "chybi": 0,
+          "kusu": 1,
+          "navic": 0,
+          "sev": {
+            "sev": 0.0,
+            "uvnitr": 0.0
+          },
+          "sloupcu_fn": 4096,
+          "tenkych": 2,
+          "tenkych_chybi": 0
+        },
+        "32_s": {
+          "chybi": 0,
+          "kusu": 1,
+          "navic": 0,
+          "sev": {
+            "sev": 0.0,
+            "uvnitr": 0.0
+          },
+          "sloupcu_fn": 4096,
+          "tenkych": 2,
+          "tenkych_chybi": 0
+        },
+        "hist_025_05_1_vic": [
+          2,
+          36,
+          78,
+          3980
+        ],
+        "jmeno": "diabase",
+        "kusu_fn_025": 1,
+        "kusu_fn_05": 1,
+        "mat": 7,
+        "mocnost_prumer_m": 1.86530158496316,
+        "rozdil_05_025_bez": 8,
+        "rozdil_05_025_fn": 0,
+        "rozdil_05_025_s": 0,
+        "sev_fn_025": {
+          "sev": 0.0,
+          "uvnitr": 0.0
+        },
+        "sloupcu_fn_025": 4096
+      },
+      {
+        "16_bez": {
+          "chybi": 0,
+          "kusu": 1,
+          "navic": 0,
+          "sev": {
+            "sev": 0.0,
+            "uvnitr": 0.0
+          },
+          "sloupcu_fn": 1024,
+          "tenkych": 0,
+          "tenkych_chybi": 0
+        },
+        "16_s": {
+          "chybi": 0,
+          "kusu": 1,
+          "navic": 0,
+          "sev": {
+            "sev": 0.0,
+            "uvnitr": 0.0
+          },
+          "sloupcu_fn": 1024,
+          "tenkych": 0,
+          "tenkych_chybi": 0
+        },
+        "32_bez": {
+          "chybi": 0,
+          "kusu": 1,
+          "navic": 0,
+          "sev": {
+            "sev": 0.0,
+            "uvnitr": 0.0
+          },
+          "sloupcu_fn": 4096,
+          "tenkych": 0,
+          "tenkych_chybi": 0
+        },
+        "32_s": {
+          "chybi": 0,
+          "kusu": 1,
+          "navic": 0,
+          "sev": {
+            "sev": 0.0,
+            "uvnitr": 0.0
+          },
+          "sloupcu_fn": 4096,
+          "tenkych": 0,
+          "tenkych_chybi": 0
+        },
+        "hist_025_05_1_vic": [
+          0,
+          0,
+          0,
+          4096
+        ],
+        "jmeno": "peridotite",
+        "kusu_fn_025": 1,
+        "kusu_fn_05": 1,
+        "mat": 20,
+        "mocnost_prumer_m": 2.11937294417294,
+        "rozdil_05_025_bez": 0,
+        "rozdil_05_025_fn": 0,
+        "rozdil_05_025_s": 0,
+        "sev_fn_025": {
+          "sev": 0.0,
+          "uvnitr": 0.0
+        },
+        "sloupcu_fn_025": 4096
+      },
+      {
+        "16_bez": {
+          "chybi": 52,
+          "kusu": 2,
+          "navic": 0,
+          "sev": {
+            "sev": 0.0,
+            "uvnitr": 0.0619791666666667
+          },
+          "sloupcu_fn": 931,
+          "tenkych": 103,
+          "tenkych_chybi": 52
+        },
+        "16_s": {
+          "chybi": 0,
+          "kusu": 1,
+          "navic": 0,
+          "sev": {
+            "sev": 0.0,
+            "uvnitr": 0.0458333333333333
+          },
+          "sloupcu_fn": 931,
+          "tenkych": 103,
+          "tenkych_chybi": 0
+        },
+        "32_bez": {
+          "chybi": 106,
+          "kusu": 10,
+          "navic": 15,
+          "sev": {
+            "sev": 0.0,
+            "uvnitr": 0.0308719758064516
+          },
+          "sloupcu_fn": 3790,
+          "tenkych": 219,
+          "tenkych_chybi": 106
+        },
+        "32_s": {
+          "chybi": 0,
+          "kusu": 1,
+          "navic": 0,
+          "sev": {
+            "sev": 0.0,
+            "uvnitr": 0.0194052419354839
+          },
+          "sloupcu_fn": 3790,
+          "tenkych": 219,
+          "tenkych_chybi": 0
+        },
+        "hist_025_05_1_vic": [
+          219,
+          242,
+          432,
+          2897
+        ],
+        "jmeno": "gabbro",
+        "kusu_fn_025": 1,
+        "kusu_fn_05": 1,
+        "mat": 26,
+        "mocnost_prumer_m": 1.3780363634209,
+        "rozdil_05_025_bez": 211,
+        "rozdil_05_025_fn": 88,
+        "rozdil_05_025_s": 88,
+        "sev_fn_025": {
+          "sev": 0.0,
+          "uvnitr": 0.0194052419354839
+        },
+        "sloupcu_fn_025": 3790
+      },
+      {
+        "16_bez": {
+          "chybi": 146,
+          "kusu": 41,
+          "navic": 18,
+          "sev": {
+            "sev": 0.0,
+            "uvnitr": 0.117708333333333
+          },
+          "sloupcu_fn": 204,
+          "tenkych": 201,
+          "tenkych_chybi": 146
+        },
+        "16_s": {
+          "chybi": 0,
+          "kusu": 16,
+          "navic": 0,
+          "sev": {
+            "sev": 0.0,
+            "uvnitr": 0.1203125
+          },
+          "sloupcu_fn": 204,
+          "tenkych": 201,
+          "tenkych_chybi": 0
+        },
+        "32_bez": {
+          "chybi": 428,
+          "kusu": 153,
+          "navic": 117,
+          "sev": {
+            "sev": 0.0,
+            "uvnitr": 0.129662298387097
+          },
+          "sloupcu_fn": 784,
+          "tenkych": 730,
+          "tenkych_chybi": 428
+        },
+        "32_s": {
+          "chybi": 0,
+          "kusu": 16,
+          "navic": 6,
+          "sev": {
+            "sev": 0.0,
+            "uvnitr": 0.0511592741935484
+          },
+          "sloupcu_fn": 784,
+          "tenkych": 730,
+          "tenkych_chybi": 0
+        },
+        "hist_025_05_1_vic": [
+          730,
+          42,
+          12,
+          0
+        ],
+        "jmeno": "fe_ti_zone",
+        "kusu_fn_025": 11,
+        "kusu_fn_05": 16,
+        "mat": 28,
+        "mocnost_prumer_m": 0.118712321897893,
+        "rozdil_05_025_bez": 533,
+        "rozdil_05_025_fn": 174,
+        "rozdil_05_025_s": 180,
+        "sev_fn_025": {
+          "sev": 0.0,
+          "uvnitr": 0.0483870967741935
+        },
+        "sloupcu_fn_025": 784
+      },
+      {
+        "16_bez": {
+          "chybi": 99,
+          "kusu": 2,
+          "navic": 0,
+          "sev": {
+            "sev": 0.0,
+            "uvnitr": 0.0739583333333333
+          },
+          "sloupcu_fn": 949,
+          "tenkych": 147,
+          "tenkych_chybi": 99
+        },
+        "16_s": {
+          "chybi": 0,
+          "kusu": 1,
+          "navic": 0,
+          "sev": {
+            "sev": 0.0,
+            "uvnitr": 0.0390625
+          },
+          "sloupcu_fn": 949,
+          "tenkych": 147,
+          "tenkych_chybi": 0
+        },
+        "32_bez": {
+          "chybi": 118,
+          "kusu": 3,
+          "navic": 27,
+          "sev": {
+            "sev": 0.0,
+            "uvnitr": 0.0272177419354839
+          },
+          "sloupcu_fn": 3847,
+          "tenkych": 332,
+          "tenkych_chybi": 118
+        },
+        "32_s": {
+          "chybi": 0,
+          "kusu": 1,
+          "navic": 0,
+          "sev": {
+            "sev": 0.0,
+            "uvnitr": 0.0171370967741935
+          },
+          "sloupcu_fn": 3847,
+          "tenkych": 332,
+          "tenkych_chybi": 0
+        },
+        "hist_025_05_1_vic": [
+          332,
+          276,
+          547,
+          2692
+        ],
+        "jmeno": "amphibolite",
+        "kusu_fn_025": 1,
+        "kusu_fn_05": 1,
+        "mat": 30,
+        "mocnost_prumer_m": 1.2587857439287,
+        "rozdil_05_025_bez": 394,
+        "rozdil_05_025_fn": 65,
+        "rozdil_05_025_s": 65,
+        "sev_fn_025": {
+          "sev": 0.0,
+          "uvnitr": 0.0171370967741935
+        },
+        "sloupcu_fn_025": 3847
+      },
+      {
+        "16_bez": {
+          "chybi": 0,
+          "kusu": 1,
+          "navic": 0,
+          "sev": {
+            "sev": 0.0,
+            "uvnitr": 0.0
+          },
+          "sloupcu_fn": 1024,
+          "tenkych": 0,
+          "tenkych_chybi": 0
+        },
+        "16_s": {
+          "chybi": 0,
+          "kusu": 1,
+          "navic": 0,
+          "sev": {
+            "sev": 0.0,
+            "uvnitr": 0.0
+          },
+          "sloupcu_fn": 1024,
+          "tenkych": 0,
+          "tenkych_chybi": 0
+        },
+        "32_bez": {
+          "chybi": 0,
+          "kusu": 1,
+          "navic": 0,
+          "sev": {
+            "sev": 0.0,
+            "uvnitr": 0.0
+          },
+          "sloupcu_fn": 4096,
+          "tenkych": 0,
+          "tenkych_chybi": 0
+        },
+        "32_s": {
+          "chybi": 0,
+          "kusu": 1,
+          "navic": 0,
+          "sev": {
+            "sev": 0.0,
+            "uvnitr": 0.0
+          },
+          "sloupcu_fn": 4096,
+          "tenkych": 0,
+          "tenkych_chybi": 0
+        },
+        "hist_025_05_1_vic": [
+          0,
+          0,
+          0,
+          4096
+        ],
+        "jmeno": "orthogneiss",
+        "kusu_fn_025": 1,
+        "kusu_fn_05": 1,
+        "mat": 33,
+        "mocnost_prumer_m": 2.27500029423391,
+        "rozdil_05_025_bez": 0,
+        "rozdil_05_025_fn": 0,
+        "rozdil_05_025_s": 0,
+        "sev_fn_025": {
+          "sev": 0.0,
+          "uvnitr": 0.0
+        },
+        "sloupcu_fn_025": 4096
+      },
+      {
+        "16_bez": {
+          "chybi": 92,
+          "kusu": 10,
+          "navic": 4,
+          "sev": {
+            "sev": 0.0,
+            "uvnitr": 0.0848958333333333
+          },
+          "sloupcu_fn": 914,
+          "tenkych": 137,
+          "tenkych_chybi": 92
+        },
+        "16_s": {
+          "chybi": 0,
+          "kusu": 1,
+          "navic": 0,
+          "sev": {
+            "sev": 0.0,
+            "uvnitr": 0.0572916666666667
+          },
+          "sloupcu_fn": 914,
+          "tenkych": 137,
+          "tenkych_chybi": 0
+        },
+        "32_bez": {
+          "chybi": 233,
+          "kusu": 30,
+          "navic": 25,
+          "sev": {
+            "sev": 0.0,
+            "uvnitr": 0.0568296370967742
+          },
+          "sloupcu_fn": 3731,
+          "tenkych": 421,
+          "tenkych_chybi": 233
+        },
+        "32_s": {
+          "chybi": 0,
+          "kusu": 1,
+          "navic": 0,
+          "sev": {
+            "sev": 0.0,
+            "uvnitr": 0.0243195564516129
+          },
+          "sloupcu_fn": 3731,
+          "tenkych": 421,
+          "tenkych_chybi": 0
+        },
+        "hist_025_05_1_vic": [
+          421,
+          182,
+          406,
+          2722
+        ],
+        "jmeno": "granodiorite",
+        "kusu_fn_025": 1,
+        "kusu_fn_05": 1,
+        "mat": 36,
+        "mocnost_prumer_m": 1.43745538879299,
+        "rozdil_05_025_bez": 321,
+        "rozdil_05_025_fn": 99,
+        "rozdil_05_025_s": 99,
+        "sev_fn_025": {
+          "sev": 0.0,
+          "uvnitr": 0.0243195564516129
+        },
+        "sloupcu_fn_025": 3731
+      },
+      {
+        "16_bez": {
+          "chybi": 196,
+          "kusu": 20,
+          "navic": 8,
+          "sev": {
+            "sev": 0.0,
+            "uvnitr": 0.175
+          },
+          "sloupcu_fn": 812,
+          "tenkych": 310,
+          "tenkych_chybi": 196
+        },
+        "16_s": {
+          "chybi": 1,
+          "kusu": 2,
+          "navic": 0,
+          "sev": {
+            "sev": 0.0,
+            "uvnitr": 0.0916666666666667
+          },
+          "sloupcu_fn": 812,
+          "tenkych": 310,
+          "tenkych_chybi": 1
+        },
+        "32_bez": {
+          "chybi": 403,
+          "kusu": 27,
+          "navic": 35,
+          "sev": {
+            "sev": 0.0,
+            "uvnitr": 0.0962701612903226
+          },
+          "sloupcu_fn": 3359,
+          "tenkych": 857,
+          "tenkych_chybi": 403
+        },
+        "32_s": {
+          "chybi": 0,
+          "kusu": 2,
+          "navic": 0,
+          "sev": {
+            "sev": 0.0,
+            "uvnitr": 0.0375504032258065
+          },
+          "sloupcu_fn": 3359,
+          "tenkych": 857,
+          "tenkych_chybi": 0
+        },
+        "hist_025_05_1_vic": [
+          857,
+          457,
+          476,
+          1569
+        ],
+        "jmeno": "mica_schist",
+        "kusu_fn_025": 2,
+        "kusu_fn_05": 2,
+        "mat": 40,
+        "mocnost_prumer_m": 0.909835299113768,
+        "rozdil_05_025_bez": 739,
+        "rozdil_05_025_fn": 165,
+        "rozdil_05_025_s": 169,
+        "sev_fn_025": {
+          "sev": 0.0,
+          "uvnitr": 0.0375504032258065
+        },
+        "sloupcu_fn_025": 3359
+      },
+      {
+        "16_bez": {
+          "chybi": 129,
+          "kusu": 11,
+          "navic": 2,
+          "sev": {
+            "sev": 0.0,
+            "uvnitr": 0.1359375
+          },
+          "sloupcu_fn": 523,
+          "tenkych": 134,
+          "tenkych_chybi": 90
+        },
+        "16_s": {
+          "chybi": 11,
+          "kusu": 7,
+          "navic": 10,
+          "sev": {
+            "sev": 0.0,
+            "uvnitr": 0.136979166666667
+          },
+          "sloupcu_fn": 523,
+          "tenkych": 134,
+          "tenkych_chybi": 3
+        },
+        "32_bez": {
+          "chybi": 214,
+          "kusu": 17,
+          "navic": 111,
+          "sev": {
+            "sev": 0.0,
+            "uvnitr": 0.0800151209677419
+          },
+          "sloupcu_fn": 2129,
+          "tenkych": 339,
+          "tenkych_chybi": 149
+        },
+        "32_s": {
+          "chybi": 2,
+          "kusu": 3,
+          "navic": 48,
+          "sev": {
+            "sev": 0.0,
+            "uvnitr": 0.0623739919354839
+          },
+          "sloupcu_fn": 2129,
+          "tenkych": 339,
+          "tenkych_chybi": 0
+        },
+        "hist_025_05_1_vic": [
+          339,
+          212,
+          584,
+          994
+        ],
+        "jmeno": "deep_limestone",
+        "kusu_fn_025": 4,
+        "kusu_fn_05": 7,
+        "mat": 44,
+        "mocnost_prumer_m": 0.86845913100349,
+        "rozdil_05_025_bez": 586,
+        "rozdil_05_025_fn": 207,
+        "rozdil_05_025_s": 211,
+        "sev_fn_025": {
+          "sev": 0.0,
+          "uvnitr": 0.0621219758064516
+        },
+        "sloupcu_fn_025": 2129
+      },
+      {
+        "16_bez": {
+          "chybi": 162,
+          "kusu": 38,
+          "navic": 12,
+          "sev": {
+            "sev": 0.0,
+            "uvnitr": 0.119791666666667
+          },
+          "sloupcu_fn": 240,
+          "tenkych": 240,
+          "tenkych_chybi": 162
+        },
+        "16_s": {
+          "chybi": 48,
+          "kusu": 18,
+          "navic": 0,
+          "sev": {
+            "sev": 0.0,
+            "uvnitr": 0.147916666666667
+          },
+          "sloupcu_fn": 240,
+          "tenkych": 240,
+          "tenkych_chybi": 48
+        },
+        "32_bez": {
+          "chybi": 388,
+          "kusu": 139,
+          "navic": 129,
+          "sev": {
+            "sev": 0.0,
+            "uvnitr": 0.124747983870968
+          },
+          "sloupcu_fn": 896,
+          "tenkych": 714,
+          "tenkych_chybi": 388
+        },
+        "32_s": {
+          "chybi": 22,
+          "kusu": 12,
+          "navic": 32,
+          "sev": {
+            "sev": 0.0,
+            "uvnitr": 0.0524193548387097
+          },
+          "sloupcu_fn": 896,
+          "tenkych": 714,
+          "tenkych_chybi": 22
+        },
+        "hist_025_05_1_vic": [
+          714,
+          182,
+          0,
+          0
+        ],
+        "jmeno": "siltstone",
+        "kusu_fn_025": 7,
+        "kusu_fn_05": 11,
+        "mat": 45,
+        "mocnost_prumer_m": 0.155356081668288,
+        "rozdil_05_025_bez": 559,
+        "rozdil_05_025_fn": 126,
+        "rozdil_05_025_s": 346,
+        "sev_fn_025": {
+          "sev": 0.0,
+          "uvnitr": 0.0360383064516129
+        },
+        "sloupcu_fn_025": 896
+      },
+      {
+        "16_bez": {
+          "chybi": 123,
+          "kusu": 23,
+          "navic": 9,
+          "sev": {
+            "sev": 0.0,
+            "uvnitr": 0.0864583333333333
+          },
+          "sloupcu_fn": 181,
+          "tenkych": 181,
+          "tenkych_chybi": 123
+        },
+        "16_s": {
+          "chybi": 57,
+          "kusu": 17,
+          "navic": 6,
+          "sev": {
+            "sev": 0.0,
+            "uvnitr": 0.126041666666667
+          },
+          "sloupcu_fn": 181,
+          "tenkych": 181,
+          "tenkych_chybi": 57
+        },
+        "32_bez": {
+          "chybi": 273,
+          "kusu": 83,
+          "navic": 56,
+          "sev": {
+            "sev": 0.0,
+            "uvnitr": 0.0816532258064516
+          },
+          "sloupcu_fn": 704,
+          "tenkych": 547,
+          "tenkych_chybi": 273
+        },
+        "32_s": {
+          "chybi": 36,
+          "kusu": 44,
+          "navic": 64,
+          "sev": {
+            "sev": 0.0,
+            "uvnitr": 0.0632560483870968
+          },
+          "sloupcu_fn": 704,
+          "tenkych": 547,
+          "tenkych_chybi": 36
+        },
+        "hist_025_05_1_vic": [
+          547,
+          157,
+          0,
+          0
+        ],
+        "jmeno": "conglomerate",
+        "kusu_fn_025": 4,
+        "kusu_fn_05": 8,
+        "mat": 46,
+        "mocnost_prumer_m": 0.166818237545985,
+        "rozdil_05_025_bez": 383,
+        "rozdil_05_025_fn": 100,
+        "rozdil_05_025_s": 392,
+        "sev_fn_025": {
+          "sev": 0.0,
+          "uvnitr": 0.0259576612903226
+        },
+        "sloupcu_fn_025": 704
+      },
+      {
+        "16_bez": {
+          "chybi": 157,
+          "kusu": 23,
+          "navic": 4,
+          "sev": {
+            "sev": 0.0,
+            "uvnitr": 0.0989583333333333
+          },
+          "sloupcu_fn": 232,
+          "tenkych": 232,
+          "tenkych_chybi": 157
+        },
+        "16_s": {
+          "chybi": 59,
+          "kusu": 13,
+          "navic": 1,
+          "sev": {
+            "sev": 0.0,
+            "uvnitr": 0.139583333333333
+          },
+          "sloupcu_fn": 232,
+          "tenkych": 232,
+          "tenkych_chybi": 59
+        },
+        "32_bez": {
+          "chybi": 339,
+          "kusu": 89,
+          "navic": 81,
+          "sev": {
+            "sev": 0.0,
+            "uvnitr": 0.0942540322580645
+          },
+          "sloupcu_fn": 890,
+          "tenkych": 644,
+          "tenkych_chybi": 339
+        },
+        "32_s": {
+          "chybi": 40,
+          "kusu": 35,
+          "navic": 45,
+          "sev": {
+            "sev": 0.0,
+            "uvnitr": 0.063508064516129
+          },
+          "sloupcu_fn": 890,
+          "tenkych": 644,
+          "tenkych_chybi": 40
+        },
+        "hist_025_05_1_vic": [
+          644,
+          246,
+          0,
+          0
+        ],
+        "jmeno": "gypsum",
+        "kusu_fn_025": 4,
+        "kusu_fn_05": 8,
+        "mat": 48,
+        "mocnost_prumer_m": 0.174307842268033,
+        "rozdil_05_025_bez": 464,
+        "rozdil_05_025_fn": 86,
+        "rozdil_05_025_s": 369,
+        "sev_fn_025": {
+          "sev": 0.0,
+          "uvnitr": 0.030241935483871
+        },
+        "sloupcu_fn_025": 890
+      },
+      {
+        "16_bez": {
+          "chybi": 125,
+          "kusu": 17,
+          "navic": 2,
+          "sev": {
+            "sev": 0.0,
+            "uvnitr": 0.143229166666667
+          },
+          "sloupcu_fn": 522,
+          "tenkych": 229,
+          "tenkych_chybi": 108
+        },
+        "16_s": {
+          "chybi": 18,
+          "kusu": 8,
+          "navic": 3,
+          "sev": {
+            "sev": 0.0,
+            "uvnitr": 0.135416666666667
+          },
+          "sloupcu_fn": 522,
+          "tenkych": 229,
+          "tenkych_chybi": 16
+        },
+        "32_bez": {
+          "chybi": 283,
+          "kusu": 34,
+          "navic": 34,
+          "sev": {
+            "sev": 0.0,
+            "uvnitr": 0.0846774193548387
+          },
+          "sloupcu_fn": 2168,
+          "tenkych": 516,
+          "tenkych_chybi": 249
+        },
+        "32_s": {
+          "chybi": 11,
+          "kusu": 16,
+          "navic": 41,
+          "sev": {
+            "sev": 0.0,
+            "uvnitr": 0.0647681451612903
+          },
+          "sloupcu_fn": 2168,
+          "tenkych": 516,
+          "tenkych_chybi": 11
+        },
+        "hist_025_05_1_vic": [
+          516,
+          485,
+          637,
+          530
+        ],
+        "jmeno": "dolomite",
+        "kusu_fn_025": 3,
+        "kusu_fn_05": 5,
+        "mat": 49,
+        "mocnost_prumer_m": 0.629474131715212,
+        "rozdil_05_025_bez": 479,
+        "rozdil_05_025_fn": 202,
+        "rozdil_05_025_s": 298,
+        "sev_fn_025": {
+          "sev": 0.0,
+          "uvnitr": 0.0510332661290323
+        },
+        "sloupcu_fn_025": 2168
+      },
+      {
+        "16_bez": {
+          "chybi": 12,
+          "kusu": 1,
+          "navic": 1,
+          "sev": {
+            "sev": 0.0,
+            "uvnitr": 0.0104166666666667
+          },
+          "sloupcu_fn": 1022,
+          "tenkych": 22,
+          "tenkych_chybi": 12
+        },
+        "16_s": {
+          "chybi": 0,
+          "kusu": 1,
+          "navic": 0,
+          "sev": {
+            "sev": 0.0,
+            "uvnitr": 0.00416666666666667
+          },
+          "sloupcu_fn": 1022,
+          "tenkych": 22,
+          "tenkych_chybi": 0
+        },
+        "32_bez": {
+          "chybi": 20,
+          "kusu": 2,
+          "navic": 0,
+          "sev": {
+            "sev": 0.0,
+            "uvnitr": 0.00529233870967742
+          },
+          "sloupcu_fn": 4095,
+          "tenkych": 46,
+          "tenkych_chybi": 20
+        },
+        "32_s": {
+          "chybi": 0,
+          "kusu": 1,
+          "navic": 0,
+          "sev": {
+            "sev": 0.0,
+            "uvnitr": 0.000504032258064516
+          },
+          "sloupcu_fn": 4095,
+          "tenkych": 46,
+          "tenkych_chybi": 0
+        },
+        "hist_025_05_1_vic": [
+          46,
+          37,
+          645,
+          3367
+        ],
+        "jmeno": "shale",
+        "kusu_fn_025": 1,
+        "kusu_fn_05": 1,
+        "mat": 51,
+        "mocnost_prumer_m": 1.28543877775834,
+        "rozdil_05_025_bez": 43,
+        "rozdil_05_025_fn": 7,
+        "rozdil_05_025_s": 7,
+        "sev_fn_025": {
+          "sev": 0.0,
+          "uvnitr": 0.000504032258064516
+        },
+        "sloupcu_fn_025": 4095
+      },
+      {
+        "16_bez": {
+          "chybi": 51,
+          "kusu": 3,
+          "navic": 1,
+          "sev": {
+            "sev": 0.0,
+            "uvnitr": 0.0578125
+          },
+          "sloupcu_fn": 990,
+          "tenkych": 109,
+          "tenkych_chybi": 51
+        },
+        "16_s": {
+          "chybi": 0,
+          "kusu": 1,
+          "navic": 0,
+          "sev": {
+            "sev": 0.0,
+            "uvnitr": 0.0223958333333333
+          },
+          "sloupcu_fn": 990,
+          "tenkych": 109,
+          "tenkych_chybi": 0
+        },
+        "32_bez": {
+          "chybi": 65,
+          "kusu": 5,
+          "navic": 2,
+          "sev": {
+            "sev": 0.0,
+            "uvnitr": 0.0230594758064516
+          },
+          "sloupcu_fn": 3998,
+          "tenkych": 206,
+          "tenkych_chybi": 65
+        },
+        "32_s": {
+          "chybi": 0,
+          "kusu": 1,
+          "navic": 0,
+          "sev": {
+            "sev": 0.0,
+            "uvnitr": 0.00907258064516129
+          },
+          "sloupcu_fn": 3998,
+          "tenkych": 206,
+          "tenkych_chybi": 0
+        },
+        "hist_025_05_1_vic": [
+          206,
+          233,
+          943,
+          2616
+        ],
+        "jmeno": "quartz_sandstone",
+        "kusu_fn_025": 1,
+        "kusu_fn_05": 1,
+        "mat": 52,
+        "mocnost_prumer_m": 1.13199734358791,
+        "rozdil_05_025_bez": 189,
+        "rozdil_05_025_fn": 46,
+        "rozdil_05_025_s": 46,
+        "sev_fn_025": {
+          "sev": 0.0,
+          "uvnitr": 0.00907258064516129
+        },
+        "sloupcu_fn_025": 3998
+      },
+      {
+        "16_bez": {
+          "chybi": 79,
+          "kusu": 9,
+          "navic": 0,
+          "sev": {
+            "sev": 0.203125,
+            "uvnitr": 0.14375
+          },
+          "sloupcu_fn": 487,
+          "tenkych": 196,
+          "tenkych_chybi": 79
+        },
+        "16_s": {
+          "chybi": 10,
+          "kusu": 10,
+          "navic": 0,
+          "sev": {
+            "sev": 0.234375,
+            "uvnitr": 0.138020833333333
+          },
+          "sloupcu_fn": 487,
+          "tenkych": 196,
+          "tenkych_chybi": 10
+        },
+        "32_bez": {
+          "chybi": 135,
+          "kusu": 8,
+          "navic": 6,
+          "sev": {
+            "sev": 0.21875,
+            "uvnitr": 0.0618699596774194
+          },
+          "sloupcu_fn": 1981,
+          "tenkych": 350,
+          "tenkych_chybi": 135
+        },
+        "32_s": {
+          "chybi": 29,
+          "kusu": 5,
+          "navic": 11,
+          "sev": {
+            "sev": 0.2109375,
+            "uvnitr": 0.0592237903225806
+          },
+          "sloupcu_fn": 1981,
+          "tenkych": 350,
+          "tenkych_chybi": 29
+        },
+        "hist_025_05_1_vic": [
+          350,
+          446,
+          630,
+          555
+        ],
+        "jmeno": "loess",
+        "kusu_fn_025": 5,
+        "kusu_fn_05": 8,
+        "mat": 54,
+        "mocnost_prumer_m": 0.729547573801681,
+        "rozdil_05_025_bez": 312,
+        "rozdil_05_025_fn": 211,
+        "rozdil_05_025_s": 225,
+        "sev_fn_025": {
+          "sev": 0.2109375,
+          "uvnitr": 0.0592237903225806
+        },
+        "sloupcu_fn_025": 1981
+      }
+    ]
+  }
+}
