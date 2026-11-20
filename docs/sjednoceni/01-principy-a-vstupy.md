@@ -130,7 +130,7 @@ Paměť je výpočet (256 × 256 × výška × 1 B), ne měření. Skutečná pa
 
 **Otázka pro Jana.** Má povrch bloku dávat jedna funkce světa a recept (louka, hora…) jen upravovat geologii a detail? Nebo chceš šablony zachovat jako hlavní tvar?
 
-**Platí:** *rozhodnuto (2026-11-20 15:09–15:12, Jan t718u, t719u)*
+**Platí:** *rozhodnuto (2026-11-20 15:09–15:12, Jan t718u, t719u); doplněno (2026-11-20, Jan t744u–t748u)*
 
 Jde o dvě oddělené věci:
 
@@ -145,6 +145,12 @@ Jde o dvě oddělené věci:
    - Lze spustit celé (test světa i Willage zároveň), nebo zvlášť: jen svět, nebo jen ostrov z hotových blueprintů, podle fáze testování.
 
 Pojmy: **blueprint** = otisk světa o velikosti bloku. To, čemu se ve studiích říkalo „šablona blueprintu“ (louka, kopec…), je dnes **šablona povrchu / recept** a pro tvar terénu se už nepoužívá. Vložený blueprint na ostrově je **blok**.
+
+- **Doplněno (Jan t744u–t748u):**
+  - Herní svět je **velká mapa ze spojité funkce**. Vlastní bloky nemá; na blueprinty se dělí řezáním.
+  - Segmenty uvnitř blueprintu vzorkují svou část funkce do buněk 0,5 m a ukládají výsledná data, ne funkci. Při vložení se buňky jen otočí nebo zrcadlí. Od té chvíle se data segmentu mění kopáním a vodou. Funkce zůstává zdrojem pro regeneraci a pro namátkovou kontrolu na serveru (1.10).
+  - Svět začíná na výchozí velikosti (parametr, v blocích; testovací svět je 3 × 3) a při potřebě se dogenerovává. Funkce je definovaná všude, takže nové části navazují plynule.
+  - **Rozlišení rozšiřování:** rozšiřovat svět znamená nové blueprinty z funkce. Rozšiřovat ostrov znamená, že hráč vloží další blueprint jako blok. Ten blueprint může pocházet z jiného místa světa a být otočený, takže sousedé na ostrově se napojují dorovnáním okrajů, ne funkcí.
 
 ---
 
