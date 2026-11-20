@@ -5,14 +5,15 @@ extends RefCounted
 ## Index buňky: (lx * 16 + ly) * 64 + lz, smyčky vždy v pořadí lx, ly, lz.
 ## Pořadí transformací: zrcadlení X → rotace 90°·k → posun výšky → dorovnání stran. Mlha není v generátoru.
 
+const J = preload("res://scripts/jednotky.gd")   # E94: mřížka a metry z jednoho místa
 const Mat = preload("res://scripts/mat.gd")
 const Block = preload("res://scripts/block.gd")
 const H = preload("res://scripts/stable_hash.gd")
 const Veg = preload("res://scripts/veg.gd")
 const Gen3 = preload("res://scripts/gen3/gen3_proto.gd")
 const TerenBP = preload("res://scripts/teren/ostrov_teren.gd")
-const BS := 16
-const BH := 64
+const BS := J.BS
+const BH := J.BH
 const GENERATOR_VERSION := 2
 
 const BLEND_MAX := 6     # auto: |rozdíl| <= 6 buněk se dorovná, větší = útes
