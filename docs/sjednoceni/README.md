@@ -20,7 +20,7 @@ Upřesnění od Jana:
 |---|---|---|
 | [`00-mapa-vetvi.md`](00-mapa-vetvi.md) | všechny větve a studie, přepínače, čísla, rozhodnutí, konflikty K1–K12, prezentační vrstva | hotový podklad |
 | [`01-principy-a-vstupy.md`](01-principy-a-vstupy.md) | kapitola 1: pojmy, jednotky, výška sloupce, funkce světa, determinismus a verze, materiály, geologie, voda, přepočet vody, kontrakt, datový rozpočet, objektová vrstva | kostra, čeká na Jana |
-| `02-…` (plán) | model světa a generování bloku 128 m (pipeline, kousky, pořadí vložení, recept) | po kapitole 1 |
+| `02-…` (plán) | model světa a generování bloku 128 m (pipeline, segmenty, pořadí vložení, recept) | po kapitole 1 |
 | `03-…` (plán) | voda: jeden algoritmus podzemí, oprava lokálního přepočtu, vlákno | po 1.8–1.9 |
 | `04-…` (plán) | kopání a překryv 0,25 m, zákaz dna a okraje, ukládání | po 1.2 |
 | `05-…` (plán) | přenos výřezu: otočení, švy vrstev, prameny | po 1.4–1.5 |
@@ -30,7 +30,7 @@ Upřesnění od Jana:
 
 ## Pořadí bodů kapitoly 1 k projití s Janem
 
-1. **1.1 Pojmy:** co je blok, kousek a ostrov (blok 128 m jako jednotka vkládání?).
+1. **1.1 Pojmy:** ostrov, blok, segment, buňka – *rozhodnuto 2026-11-20 (t713u, t714u)*.
 2. **1.3 Výška sloupce:** 32 / 64 / 128 m.
 3. **1.4 Zdroj pravdy o terénu:** jedna funkce světa + recept, nebo šablony; hora jen jednou.
 4. **1.2 Jednotky a jemná mřížka:** definice 0,5 m a 0,25 m jen u kopání (přehodnocení 03:26).

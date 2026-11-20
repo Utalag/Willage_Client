@@ -8,24 +8,35 @@ Značení: „rozhodnuto (datum)“ = Jan už rozhodl. ⚠ = novější měřen�
 
 ---
 
-## 1.1 Pojmy: blok, dlaždice, ostrov, výřez
+## 1.1 Pojmy: ostrov, blok, segment, buňka
 
-**Současný stav.** „Blok“ má dnes tři významy (K1). Blok blueprintu má 8 × 8 × 32 m (16 × 16 × 64 buněk). Je jednotkou vkládání, receptu, seedu, rotace, sousedů i formátu WVB1 [1][2]. „Blok vesnice 128 m“ byl Janova preference z 2026-11-19 19:56 [3] a od 2026-11-20 11:48 je rozhodnuto „generovat celý blok 128 m“ [4]. E96 ho ale složilo z 16 × 16 bloků po 8 m [5]. Ostrov má podle konceptu začínat na 4 blocích a mít nejvýš ~16 [1]. TODO uvádí „4 × 4 bloky = 512 × 512 m“ [3].
+**Současný stav (před rozhodnutím).** „Blok“ měl tři významy (K1). Dnešní „blok blueprintu“ v kódu má 8 × 8 × 32 m (16 × 16 × 64 buněk), podle nových pojmů je to **segment**. Je jednotkou vkládání, receptu, seedu, rotace, sousedů i formátu WVB1 [1][2]. „Blok vesnice 128 m“ byl Janova preference z 2026-11-19 19:56 [3] a od 2026-11-20 11:48 je rozhodnuto „generovat celý blok 128 m“ [4]. E96 ho ale složilo z 16 × 16 bloků po 8 m [5]. Ostrov má podle konceptu začínat na 4 blocích a mít nejvýš ~16 [1]. TODO uvádí „4 × 4 bloky = 512 × 512 m“ [3].
 
 **Varianty**
 
-| | A: blok = 8 m (dnes) | B: blok = 128 m, uvnitř kousky 8 m (E96) | C: blok = 128 m, uvnitř kousky 16/32 m (návrh E96 §3) |
+| | A: blok = 8 m (stav kódu) | B: blok = 128 m, uvnitř segmenty 8 m (E96) | C: blok = 128 m, uvnitř segmenty 16/32 m (návrh E96 §3) |
 |---|---|---|---|
 | co hráč vkládá | blok 8 m | blok 128 m (výřez) | blok 128 m |
 | ostrov 4 → 16 bloků | 16 × 16 → 32 × 32 m | 256 × 256 → 512 × 512 m | jako B |
 | WVB1 / E88 | platí beze změny | nutná nová verze (dims) | nová verze |
 | čísla | ostrov START 4 s načtení [6] | 138–142 s načtení, 2,5 GB [5] | neměřeno |
 
-**Doporučení.** Zavést tři slova: **blok** (128 m, jednotka vkládání a vlastnictví), **kousek** (vnitřní dělení bloku pro výpočet a ukládání, dnes 8 m) a **ostrov** (sada bloků). „Dlaždice“ nechat pro svět výprav. Pravidla vkládání (rotace, sousedé, recept) přesunout z 8 m na blok 128 m. Velikost kousku řešit v 1.12 podle výkonu, ne jako princip.
+**Doporučení (před rozhodnutím).** Zavést tři slova: **blok** (128 m, jednotka vkládání a vlastnictví), **segment** (vnitřní dělení bloku pro výpočet a ukládání, dnes 8 m) a **ostrov** (sada bloků). „Dlaždice“ nechat pro svět výprav. Pravidla vkládání (rotace, sousedé, recept) přesunout ze segmentu 8 m na blok 128 m. Velikost segmentu řešit v 1.11 podle výkonu, ne jako princip.
 
 **Otázka pro Jana.** Je blok 128 m jednotka, kterou hráč vkládá a otáčí, a ostrov se skládá z 4 až 16 takových bloků? Nebo je 128 m celý ostrov?
 
-**Platí:**
+**Platí:** *rozhodnuto (2026-11-20 14:34–14:39, Jan t713u, t714u)*
+
+| Pojem | Co to je | Velikost (výchozí) |
+|---|---|---|
+| **Ostrov** | proměnný počet bloků | – |
+| **Blok** | jeden stavební dílek, ze kterého se ostrov skládá. Hráč ho vkládá, zrcadlí a otáčí | 128 × 128 m (256 × 256 buněk) |
+| **Segment** | vnitřní část bloku. Jednotka výpočtu, ukládání a načítání. Segmenty vykreslují buňky | parametr, výchozí 8 m (16 × 16 buněk). 16 a 32 m jsou kandidáti, doladí se v bodě o výkonu (1.11) |
+| **Buňka (voxel)** | nese materiál a vodu | 0,5 m |
+
+- **Pravidlo:** velikost bloku, segmentu i buňky jsou parametry a v buňkách musí být mocninou 2. Blok se musí beze zbytku dělit na segmenty a segment na buňky. Blok 100 m tedy nejde, 64, 128 nebo 256 m ano.
+- **Proč:** indexy jdou bitovými posuny, přehledy a LOD se půlí až na jednu buňku, quadtree slouží pro načítání a slučované vykreslování, a velikosti sedí na 2D tilesety 16/32/64 px (Jan t714u).
+- **Důsledek:** dnešní „blok“ 8 m v kódu (`BS` 16, WVB1 `dims`, `veg.gd`, E88) je od teď segment. Vkládání, zrcadlení, rotace, recept a sousedé patří bloku. „Dlaždice“ zůstává pro svět výprav.
 
 ---
 
@@ -35,7 +46,7 @@ Značení: „rozhodnuto (datum)“ = Jan už rozhodl. ⚠ = novější měřen�
 - *rozhodnuto (2026-11-19 20:12):* herní jednotka a kopací buňka 0,25 m, postava 1,75 m = 7 jednotek. Hierarchie: 1 m hrubý svět, 0,5 m řídicí mřížka geologie, 0,25 m kopání, terén sám rozlišení nemá [3].
 - *rozhodnuto (2026-11-19 20:40):* kopání zůstává po 0,25 m [3].
 - *rozhodnuto (2026-11-20 ~11:04, t699u):* 1 jednotka scény = 1 m, převod na `jednotky.gd` postupně, jeden tvar l → m³, stavby a stromy v metrech [7]. Hotovo na `e94-metry` (otisky beze změny ve 40 commitech, l → m³ bez změny otisků) [8].
-- *rozhodnuto (2026-11-20 03:26):* mřížku 0,25 m počítat z funkcí [3]. ⚠ E85: 65–108× pomalejší (442–784 ms na blok 8 m) a jiných 7,8 % buněk [9]. E84 doporučuje nechat definici 0,5 m [9].
+- *rozhodnuto (2026-11-20 03:26):* mřížku 0,25 m počítat z funkcí [3]. ⚠ E85: 65–108× pomalejší (442–784 ms na segment 8 m) a jiných 7,8 % buněk [9]. E84 doporučuje nechat definici 0,5 m [9].
 - Hra pořád kope po 0,5 m. Mřížka 0,25 m je jen v `prekryv78` [9].
 - K2: `U` = 0,5 m v geologii, `hj` = 0,25 m [8].
 
@@ -43,7 +54,7 @@ Značení: „rozhodnuto (datum)“ = Jan už rozhodl. ⚠ = novější měřen�
 
 | | A: zjemnění buněk 0,5 m (dnes) | B: vzorek funkcí 0,25 m (Jan 03:26, `p85_jemne`) | C: definice 0,5 m, 0,25 m jen překryv hráče (E80, E84) |
 |---|---|---|---|
-| čas na blok 8 m | 6–8 ms | 442–784 ms | 6–8 ms |
+| čas na segment 8 m | 6–8 ms | 442–784 ms | 6–8 ms |
 | odhad na blok 128 m (× 256) | ~2 s | ~1,9–3,3 min | ~2 s |
 | věrnost funkci | 7,8 % buněk jinak | přesná | jako A, rozdíl jen u výkopu |
 | závislost na otočení | ne | musí se počítat v souřadnicích původu (E86) | ne |
@@ -67,7 +78,7 @@ Značení: „rozhodnuto (datum)“ = Jan už rozhodl. ⚠ = novější měřen�
 | buněk 0,5 m ve sloupci | 64 | 128 | 256 |
 | hora nad loukou | ~10 m (E94) | ~40 m | ~100 m |
 | paměť buněk bloku 128 m (u8, 0,5 m) | 4 MB | 8 MB | 16 MB |
-| index 0,25 m na kousek 8 m | 17 bitů | 18 bitů | 19 bitů |
+| index 0,25 m na segment 8 m | 17 bitů | 18 bitů | 19 bitů |
 
 Paměť je výpočet (256 × 256 × výška × 1 B), ne měření. Skutečná paměť E96 byla 2,5 GB RSS, hlavně kvůli scéně [5].
 
@@ -83,13 +94,13 @@ Paměť je výpočet (256 × 256 × výška × 1 B), ne měření. Skutečná pa
 
 **Současný stav**
 - Terén jsou funkce ve světových metrech (`geo_fn`: povrch, hranice vrstev na řídicí mřížce 0,5 m, materiál bodu). Buňky jsou z nich vzorky [9]. Princip „funkce jsou jediný zdroj pravdy, buňky, voda a vykreslení jsou odvozené“ je v TODO jako návrh (ChatGPT 2026-11-19) [3].
-- Povrch dnes dávají **šablony blueprintu** (louka, kopec, hora, písčina) na blok 8 m. Okraje se dorovnávají na sousedy, sousedé se nikdy nemění (*rozhodnuto 2026-11-17*) [1].
+- Povrch dnes dávají **šablony blueprintu** (louka, kopec, hora, písčina) na segment 8 m (v kódu „blok“). Okraje se dorovnávají na sousedy, sousedé se nikdy nemění (*rozhodnuto 2026-11-17*) [1].
 - *rozhodnuto (2026-11-20 11:48):* blok 128 m z funkce světa místo šablon [4].
 - K6/K7: hora a funkce světa existují ve více verzích.
 
 **Varianty povrchu**
 
-| | A: šablony 8 m + dorovnání (dnes) | B: funkce světa `h_m` (E90/E96) | C: B + masiv jako funkce (E87) |
+| | A: šablony na segment 8 m + dorovnání (dnes) | B: funkce světa `h_m` (E90/E96) | C: B + masiv jako funkce (E87) |
 |---|---|---|---|
 | švy | 0 skok; hora má na každém švu sedlo (20 m) [11] | 0 skok, bez sedel | 0 skok, pořadí vložení 0 neshod [11] |
 | závislost na pořadí vložení | 1,9 % buněk (záměr) [9] | jen geologie | 0 u masivu |
@@ -120,7 +131,7 @@ Paměť je výpočet (256 × 256 × výška × 1 B), ne měření. Skutečná pa
 |---|---|---|---|
 | konzistence světa | jedna verze | víc verzí vedle sebe | skoro jedna |
 | zásah do hráčových výkopů | ano (měřeno) | ne | ne |
-| cena | ostrov 16 bloků 8 m ~10–19 s; 128 m neměřeno [10] | 0 | malá |
+| cena | ostrov 16 segmentů 8 m ~10–19 s; 128 m neměřeno [10] | 0 | malá |
 | kód | jen nejnovější generátor | všechny verze navždy | nejnovější + staré pro dotčené |
 
 **Doporučení.** Pro buňky a překryv bitový determinismus: f64, žádný float32, řazené slovníky, celočíselné hashe [9]. Vodu hashovat po zaokrouhlení (1/4096 buňky, 1e-6 l/s) [10]. U verze generátoru varianta C. Výjimkou budou opravy chyb, kde se přepočítá vše a konflikty se hráči ohlásí.
@@ -172,7 +183,7 @@ Paměť je výpočet (256 × 256 × výška × 1 B), ne měření. Skutečná pa
 | | A: `cavity_one` (dnes) | B: SDF z hashe světa (E84 R1) | C: B + intervaly pro vodu (E84 R2) |
 |---|---|---|---|
 | přes šev | ne | ano | ano |
-| čas na blok 8 m (0,5 m) | 38 ms | 89 ms | 355 ms stavba |
+| čas na segment 8 m (0,5 m) | 38 ms | 89 ms | 355 ms stavba |
 | stálost mezi rozlišeními | 56–75 % | 50–68 % (pravda je v SDF) | přesná v intervalech |
 
 **Doporučení.** Geologie = funkce světa (vrstvy, masiv, útvary SDF). Bloky z ní jen vzorkují. Minimum 25 cm uplatnit v definici a zbytky po ořezu povrchem tolerovat. Mince vápence zapnout spolu s rozhodnutím o podzemí (1.8). Klín u švu výřezu řešit v 1.11 / přenosu.
@@ -251,12 +262,12 @@ Paměť je výpočet (256 × 256 × výška × 1 B), ne měření. Skutečná pa
 
 | | WVB1 (pole) | WTI1 (definice + překryv, E88) |
 |---|---|---|
-| blok 8 m bez změn | 1,4–2,2 kB | ~400–450 B |
+| segment 8 m bez změn | 1,4–2,2 kB | ~400–450 B |
 | chodba 70 m | 13–17 kB (4 bloky) | 244 B |
 | server zná geometrii | ano | jen se snímkem buněk (volitelný) nebo s portem generátoru |
 | závislost na determinismu | malá | velká (1.5) |
 
-**Doporučení.** Jako směr pro jednání s Willage-backend vzít WTI1. Hlavičku (rozměry, výška sloupce, velikost kousku) parametrizovat podle 1.1 a 1.3 a nepsat ji natvrdo. Vodu serveru neposílat, jen horní meze. Návrh poslat backendu až po 1.1–1.5.
+**Doporučení.** Jako směr pro jednání s Willage-backend vzít WTI1. Hlavičku (rozměry, výška sloupce, velikost segmentu) parametrizovat podle 1.1 a 1.3 a nepsat ji natvrdo. Vodu serveru neposílat, jen horní meze. Návrh poslat backendu až po 1.1–1.5.
 
 **Otázka pro Jana.** Ukládat a posílat jen definici + změny hráče (WTI1) místo celého pole buněk? A smí se to projednat s Willage-backend?
 
@@ -283,7 +294,7 @@ Jen datová strana: generování, voda, kopání, paměť, CPU. Vykreslování j
 | první hratelné okolí po startu | 2 s | 5 s | 15 s |
 | logika bloku 128 m v paměti | 128 MB | 256 MB | 512 MB |
 
-**Doporučení.** Střední rozpočet pro střední telefon. Dnes ho plní jen asynchronní voda na 16 m. Pro blok 128 m vychází postup z E96: nejdřív 3 × 3 kousky u startu (~2 s), zbytek na pozadí, uložená definice místo generování při každém startu, podzemí jen kolem výkopu. Pokud to v GDScriptu nestačí, otázka C# / GDExtension pro generátor a vodu.
+**Doporučení.** Střední rozpočet pro střední telefon. Dnes ho plní jen asynchronní voda na 16 m. Pro blok 128 m vychází postup z E96: nejdřív 3 × 3 segmenty u startu (~2 s), zbytek na pozadí, uložená definice místo generování při každém startu, podzemí jen kolem výkopu. Pokud to v GDScriptu nestačí, otázka C# / GDExtension pro generátor a vodu.
 
 **Otázka pro Jana.** Jaký telefon je cíl a jaký rozpočet (tabulka)? Spustíš bench APK z E93?
 
