@@ -1,0 +1,5 @@
+Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+
+vrstvy vypnuto: {"bez_bunky_025":14078,"bez_bunky_05":18400,"min_viditelna_m":0.00000152833012911913,"otisk_geo":"d3ff4d43528ea357","sloupcu":4096,"tenkych_def":17426,"tenkych_viditelnych":17229,"vrstev_sloupec_prumer":17.202392578125,"vrstev_ve_sloupci":70461}
+vrstvy zapnuto: {"bez_bunky_025":1701,"bez_bunky_05":4330,"min_viditelna_m":0.0000206310607815396,"otisk_geo":"92d7d87bc44b3d4d","sloupcu":4096,"tenkych_def":0,"tenkych_viditelnych":775,"vrstev_sloupec_prumer":13.402099609375,"vrstev_ve_sloupci":54895}
+vrstvy buňky jinak 0,5 m 425 / 65 536, 0,25 m 3614 / 524 288; šev hranic jinak 0

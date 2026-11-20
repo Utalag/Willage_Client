@@ -1,0 +1,84 @@
+{
+  "jemne": {
+    "bloky": [
+      {
+        "def85_stejne_jako_attach": true,
+        "jine": 7911,
+        "jine_bez_mineralu_dutin": 7717,
+        "jine_proc": 6.03561401367188,
+        "ms_z_funkci": 441.741,
+        "ms_zjemneni": 5.961,
+        "pevne_vzduch": 256,
+        "prekryv_nedotceny": 0,
+        "slot": [
+          0,
+          0
+        ],
+        "sync_geo_sloupcu": 0,
+        "sync_hm": 0,
+        "sync_zmeneno_geo": 0
+      },
+      {
+        "def85_stejne_jako_attach": true,
+        "jine": 15125,
+        "jine_bez_mineralu_dutin": 14781,
+        "jine_proc": 11.5394592285156,
+        "ms_z_funkci": 586.042,
+        "ms_zjemneni": 8.06,
+        "pevne_vzduch": 1467,
+        "prekryv_nedotceny": 0,
+        "slot": [
+          1,
+          0
+        ],
+        "sync_geo_sloupcu": 0,
+        "sync_hm": 0,
+        "sync_zmeneno_geo": 0
+      },
+      {
+        "def85_stejne_jako_attach": true,
+        "jine": 10032,
+        "jine_bez_mineralu_dutin": 9696,
+        "jine_proc": 7.65380859375,
+        "ms_z_funkci": 783.705,
+        "ms_zjemneni": 7.265,
+        "pevne_vzduch": 688,
+        "prekryv_nedotceny": 0,
+        "slot": [
+          0,
+          1
+        ],
+        "sync_geo_sloupcu": 0,
+        "sync_hm": 0,
+        "sync_zmeneno_geo": 0
+      },
+      {
+        "def85_stejne_jako_attach": true,
+        "jine": 7824,
+        "jine_bez_mineralu_dutin": 7614,
+        "jine_proc": 5.96923828125,
+        "ms_z_funkci": 473.91,
+        "ms_zjemneni": 7.266,
+        "pevne_vzduch": 187,
+        "prekryv_nedotceny": 0,
+        "slot": [
+          1,
+          1
+        ],
+        "sync_geo_sloupcu": 0,
+        "sync_hm": 0,
+        "sync_zmeneno_geo": 0
+      }
+    ],
+    "celkem": {
+      "bunek": 524288,
+      "jine": 40892,
+      "jine_bez_min_dutin": 39808,
+      "pevne_vzduch": 2598
+    },
+    "jedna_operace": {
+      "geo_jinak": 0,
+      "prekryv": 1
+    }
+  }
+}

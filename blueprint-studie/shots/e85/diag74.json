@@ -1,0 +1,52 @@
+{
+  "diag74": {
+    "p79": {
+      "cerstvy": "cbe01a6bc9e2034e",
+      "cesta": "dutiny",
+      "check_full": {
+        "eff": 0,
+        "fill": 0,
+        "to": 0
+      },
+      "gw_cerstvy": "388525799",
+      "gw_lokalne": "1619706572",
+      "gw_stejne": false,
+      "lokalne": "58c9d1d33c7cc07b",
+      "obsazeno_cerstvy": [
+        6455
+      ],
+      "obsazeno_po": [
+        8781
+      ],
+      "obsazeno_pred": [
+        8781
+      ],
+      "plny_se_stejnymi": "58c9d1d33c7cc07b"
+    },
+    "p79_p85": {
+      "cerstvy": "0072d4a1b9c80408",
+      "cesta": "dutiny",
+      "check_full": {
+        "eff": 0,
+        "fill": 0,
+        "to": 0
+      },
+      "gw_cerstvy": "887550617",
+      "gw_lokalne": "887550617",
+      "gw_stejne": true,
+      "lokalne": "0072d4a1b9c80408",
+      "obsazeno_cerstvy": [
+        6455,
+        8781
+      ],
+      "obsazeno_po": [
+        6455,
+        8781
+      ],
+      "obsazeno_pred": [
+        8781
+      ],
+      "plny_se_stejnymi": "0072d4a1b9c80408"
+    }
+  }
+}

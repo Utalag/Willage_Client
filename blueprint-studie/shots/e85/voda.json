@@ -1,0 +1,119 @@
+{
+  "voda": {
+    "p79": {
+      "druhy_beh_stejny": true,
+      "lokalne_plne_nacteno": false,
+      "otisky": {
+        "cells": "06eeb79af3a761f7",
+        "geo": "d3ff4d43528ea357",
+        "hm": "f2159c9887f0fcf9",
+        "nacteno": "2ac857ac2aab4f1f",
+        "prekryv": "2ac857ac2aab4f1f",
+        "prekryv_05": "7cc45613ae122aed",
+        "voda": "d7aedf3a6d9d10e8",
+        "voda_lokalne": "58c9d1d33c7cc07b",
+        "voda_nacteno": "cbe01a6bc9e2034e",
+        "voda_plne": "cbe01a6bc9e2034e",
+        "zaznam": "c2b04db52b8afcd5"
+      },
+      "prepinace": {
+        "p74_gw": true,
+        "p74_hladina": true,
+        "p74_vyzvednout": true,
+        "p76_prameny": true
+      }
+    },
+    "p79_p85_voda": {
+      "druhy_beh_stejny": true,
+      "lokalne_plne_nacteno": true,
+      "otisky": {
+        "cells": "06eeb79af3a761f7",
+        "geo": "d3ff4d43528ea357",
+        "hm": "f2159c9887f0fcf9",
+        "nacteno": "2ac857ac2aab4f1f",
+        "prekryv": "2ac857ac2aab4f1f",
+        "prekryv_05": "7cc45613ae122aed",
+        "voda": "d7aedf3a6d9d10e8",
+        "voda_lokalne": "cbe01a6bc9e2034e",
+        "voda_nacteno": "cbe01a6bc9e2034e",
+        "voda_plne": "cbe01a6bc9e2034e",
+        "zaznam": "6d510d73f883de3d"
+      },
+      "prepinace": {
+        "p74_gw": true,
+        "p74_hladina": true,
+        "p74_vyzvednout": true,
+        "p76_prameny": true
+      }
+    },
+    "p85_blok2": {
+      "druhy_beh_stejny": true,
+      "lokalne_plne_nacteno": false,
+      "otisky": {
+        "cells": "9ab94058afce520b",
+        "geo": "92d7d87bc44b3d4d",
+        "hm": "f2159c9887f0fcf9",
+        "nacteno": "444c00760ea87ea5",
+        "prekryv": "444c00760ea87ea5",
+        "prekryv_05": "872a9e89554b1ccf",
+        "voda": "958f9334f7d8a9ff",
+        "voda_lokalne": "c8254c3e6728019d",
+        "voda_nacteno": "0072d4a1b9c80408",
+        "voda_plne": "0072d4a1b9c80408",
+        "zaznam": "cf99ca2a71b0f68c"
+      },
+      "prepinace": {
+        "p74_gw": true,
+        "p74_hladina": true,
+        "p74_vyzvednout": true,
+        "p76_prameny": true
+      }
+    },
+    "p85_blok2_p79": {
+      "druhy_beh_stejny": true,
+      "lokalne_plne_nacteno": true,
+      "otisky": {
+        "cells": "9ab94058afce520b",
+        "geo": "92d7d87bc44b3d4d",
+        "hm": "f2159c9887f0fcf9",
+        "nacteno": "444c00760ea87ea5",
+        "prekryv": "444c00760ea87ea5",
+        "prekryv_05": "872a9e89554b1ccf",
+        "voda": "958f9334f7d8a9ff",
+        "voda_lokalne": "0072d4a1b9c80408",
+        "voda_nacteno": "0072d4a1b9c80408",
+        "voda_plne": "0072d4a1b9c80408",
+        "zaznam": "16598c15798e6521"
+      },
+      "prepinace": {
+        "p74_gw": true,
+        "p74_hladina": true,
+        "p74_vyzvednout": true,
+        "p76_prameny": true
+      }
+    },
+    "vychozi": {
+      "druhy_beh_stejny": true,
+      "lokalne_plne_nacteno": false,
+      "otisky": {
+        "cells": "06eeb79af3a761f7",
+        "geo": "d3ff4d43528ea357",
+        "hm": "f2159c9887f0fcf9",
+        "nacteno": "2ac857ac2aab4f1f",
+        "prekryv": "2ac857ac2aab4f1f",
+        "prekryv_05": "7cc45613ae122aed",
+        "voda": "d7aedf3a6d9d10e8",
+        "voda_lokalne": "1c2292db8ec1a7da",
+        "voda_nacteno": "cbe01a6bc9e2034e",
+        "voda_plne": "cbe01a6bc9e2034e",
+        "zaznam": "c2b04db52b8afcd5"
+      },
+      "prepinace": {
+        "p74_gw": true,
+        "p74_hladina": true,
+        "p74_vyzvednout": true,
+        "p76_prameny": true
+      }
+    }
+  }
+}

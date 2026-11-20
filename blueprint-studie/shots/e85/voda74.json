@@ -1,0 +1,40 @@
+{
+  "voda74": {
+    "bez_gw": {
+      "lokalne_plne": false,
+      "voda_lokalne": "58c9d1d33c7cc07b",
+      "voda_nacteno": "cbe01a6bc9e2034e",
+      "voda_plne": "cbe01a6bc9e2034e"
+    },
+    "bez_hladina": {
+      "lokalne_plne": false,
+      "voda_lokalne": "069f6931420a2c4b",
+      "voda_nacteno": "cbe01a6bc9e2034e",
+      "voda_plne": "cbe01a6bc9e2034e"
+    },
+    "bez_p74": {
+      "lokalne_plne": true,
+      "voda_lokalne": "cbe01a6bc9e2034e",
+      "voda_nacteno": "cbe01a6bc9e2034e",
+      "voda_plne": "cbe01a6bc9e2034e"
+    },
+    "bez_prameny": {
+      "lokalne_plne": false,
+      "voda_lokalne": "58c9d1d33c7cc07b",
+      "voda_nacteno": "4a9d582e36651155",
+      "voda_plne": "4a9d582e36651155"
+    },
+    "bez_vyzvednout": {
+      "lokalne_plne": true,
+      "voda_lokalne": "cbe01a6bc9e2034e",
+      "voda_nacteno": "cbe01a6bc9e2034e",
+      "voda_plne": "cbe01a6bc9e2034e"
+    },
+    "p79": {
+      "lokalne_plne": false,
+      "voda_lokalne": "58c9d1d33c7cc07b",
+      "voda_nacteno": "cbe01a6bc9e2034e",
+      "voda_plne": "cbe01a6bc9e2034e"
+    }
+  }
+}
