@@ -17,6 +17,13 @@ const L_NA_M3 := 1000.0      # 1 m³ = 1000 l
 const POSTAVA_HJ := 7        # 1,75 m
 const DVERE_HJ := 8
 
+## E94: mřížka hry a vykreslení (hustota 16 = řídicí mřížka 0,5 m). Ve vnitřních smyčkách používat tyto konstanty
+## (překladač je dosadí jako literál), ne volání funkcí modulu po buňkách (3–4× dražší, E89).
+const BS := 16               # buněk na šířku / hloubku bloku (= N_RIDICI)
+const BH := 64               # buněk na výšku bloku (= nz(16))
+const CELL_M := 0.5          # hrana buňky (m), vodorovně i svisle (= bunka_m(16))
+const BLOK_BUNEK := BS * BS * BH
+
 ## měřítko scény: dnes buňka 1 × 1 × 0,5 jednotky scény (vodorovně 1 sc = 0,5 m); p89_meritko: 1 sc = 1 m všude
 const SCENA_DNES_M_NA_SC := Vector3(0.5, 1.0, 0.5)
 const SCENA_M_NA_SC := Vector3(1.0, 1.0, 1.0)
