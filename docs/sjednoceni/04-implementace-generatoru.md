@@ -197,7 +197,7 @@ Stav: **návrh k odsouhlasení**, 2026-11-20 23:50 SEČ. Podklad pro stavbu nov�
 - Kras během hry se ukládá stejnou cestou offsetu, ne jako vzduch v překryvu buněk. **V tomto kroku se ověří**, jestli offset stačí i pro podzemní dutiny (Jan 2026-11-21 00:24: „Zkusíme jít cestou offsetu“).
 - Přepočet: lokální = plný na sjednoceném povodí (oprava K5 včetně `p79_chodby` a `p85_voda`), asynchronně na pozadí, prodleva 2 s, strop 10 s, fronta výkopů (1.9, úkoly 6–7).
 - Slučování výtoků pod prahem 0,1 l/s (laditelný parametr) v dosahu 8 m, i mezi sebou (3.2).
-- Výchozí voda v ustáleném stavu po vygenerování, uloží se jen odchylka v celých litrech, rozsah 0–15,625 l (1 B) (2.5, 1.10).
+- Výchozí voda v ustáleném stavu po vygenerování, uloží se jen odchylka v krocích 1/16 l, hodnota 0–250 = 0–15,625 l (1 B) (2.5, 1.10).
 
 **Odkud kód:** `voda/hydro68.gd`, `ostrov_voda.gd`, `ug67.gd`, `kras75.gd`, `prameny.gd`, `eroze/mech.gd` (main), `voda/async95.gd` a `tools/async_e95.gd` (`e95-async-voda`), `tools/chodby_e79.gd` (`e79-chodby-voda`), slučování E72 (`p72_*`, main).
 
@@ -328,7 +328,7 @@ Nic z toho není rozhodnutí. Jde o návrhy úprav textu nebo otázky pro Jana. 
 ### A.1 Rozpory
 
 1. **Velikost buňky v datech: 0,5 m, nebo 0,25 m?** **Rozhodnuto (Jan 2026-11-21 00:19):** datová buňka je **0,25 m**, stejně jako viditelný voxel a dlaždice (1.1, 2.3, 7.2). Segment 8 m = 32 × 32 buněk, blok 128 m = 512 × 512, sloupec 128 m = 512 buněk. Plná buňka vody je 15,625 l. Výřez okna je malý (pevný zoom 64 dlaždic), delší jsou jen vstupní výpočty. Starý návrh „definice a voda po 0,5 m, kopání po 0,25 m“ se nepoužije.
-2. **Voda v buňce 0–125 l platí jen pro buňku 0,5 m.** **Vyřešeno s bodem 1:** u buňky 0,25 m je rozsah **0–15,625 l** a plocha stěny **0,0625 m²** (1.8.1, 1.10). Zůstává otevřené, jak skloubit maximum 15,625 l s krokem 1 l v 1 bytu.
+2. **Voda v buňce 0–125 l platí jen pro buňku 0,5 m.** **Vyřešeno s bodem 1:** u buňky 0,25 m je rozsah **0–15,625 l** a plocha stěny **0,0625 m²** (1.8.1, 1.10). Krok je *rozhodnutý (Jan 2026-11-21 00:39)*: 1/16 l, plná buňka = 250 v 1 bytu.
 3. **Voda v m³, nebo v celých litrech?** `01` 1.8: „Ukládá se v m³ na buňku“; 1.10: „celé číslo litrů (pevný krok 1 l)… v 1 bytu“. Návrh: 1.8 = jednotka výpočtu, 1.10 = uložený tvar; doplnit odkaz.
 4. **Ukládání hotových dat segmentů (zastaralé, ale nepřeškrtnuté).**
    - `01` 1.4: „Segmenty uvnitř blueprintu vzorkují svou část funkce do buněk 0,25 m a ukládají výsledná data, ne funkci.“ (velikost buňky už je 0,25 m). O tři odrážky níž: „Tím se mění předchozí bod“ (uložení jen rozdílu, tohle zůstává zastaralé).
@@ -362,4 +362,4 @@ Nic z toho není rozhodnutí. Jde o návrhy úprav textu nebo otázky pro Jana. 
 3. **7.1** – 2D, nebo 3D: odloženo. Datový model na tom nezávisí.
 4. **1.5** – přepočet světa při nové verzi generátoru: odloženo (t726u).
 5. **1.11** – datový rozpočet: přeskočeno (t738u).
-6. Velikost buňky dat (A.1 bod 1) je rozhodnutá (0,25 m, Jan 2026-11-21 00:19). Kras cestou offsetu a kladný posun eroze (A.1 bod 8) i dvě nastavení Blendu (A.1 bod 6) jsou rozhodnuté (Jan 2026-11-21 00:24); kras se v kroku 7 ověří. Auto v metrech (A.1 bod 7, Jan 00:35: 3 m a 1,5 m) a přepočet propustností `materialy.csv` × 1/4 v kroku 3 (Jan 00:35) jsou rozhodnuté. Krok vody 1 l při maximu 15,625 l zůstává otevřený.
+6. Velikost buňky dat (A.1 bod 1) je rozhodnutá (0,25 m, Jan 2026-11-21 00:19). Kras cestou offsetu a kladný posun eroze (A.1 bod 8) i dvě nastavení Blendu (A.1 bod 6) jsou rozhodnuté (Jan 2026-11-21 00:24); kras se v kroku 7 ověří. Auto v metrech (A.1 bod 7, Jan 00:35: 3 m a 1,5 m) a přepočet propustností `materialy.csv` × 1/4 v kroku 3 (Jan 00:35) jsou rozhodnuté. Krok vody 1/16 l (plná buňka = 250, Jan 00:39) je rozhodnutý.
