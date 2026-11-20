@@ -48,13 +48,17 @@ static func op(b, fx: int, fy: int, fz: int, mat: int) -> bool:
 
 ## buňky 0,5 m z jemné mřížky; vrací sloupce (ci), kterým se změnila výška
 static func sync(b) -> Array:
+	return sync79(b).hm
+
+## E79: totéž, navíc sloupce (ci), ve kterých se změnila jakákoli buňka 0,5 m (i pod povrchem: chodba, dutina)
+static func sync79(b) -> Dictionary:
 	var f := fine(b)
-	var changed := []
+	var changed := []; var geo_ch := []
 	var cnt := PackedInt32Array(); cnt.resize(256)
 	for x in 16:
 		for y in 16:
 			var ci := x * 16 + y
-			var top := 0
+			var top := 0; var gch := false
 			for z in 64:
 				var best := 0; var bc := 0
 				var ids := []; var cs := []
@@ -68,12 +72,14 @@ static func sync(b) -> Array:
 							else: cs[k] += 1
 				for k in ids.size():
 					if cs[k] > bc or (cs[k] == bc and ids[k] < best): best = ids[k]; bc = cs[k]
+				if b.geo[ci * 64 + z] != best: gch = true
 				b.geo[ci * 64 + z] = best
 				if best != 0: top = z + 1
 			if top != b.hm[ci]: changed.append(ci)
+			if gch: geo_ch.append(ci)
 			b.hm[ci] = top
 	b.cells = TR.to_classes(b.geo)
-	return changed
+	return {"hm": changed, "geo": geo_ch}
 
 ## překryv = rozdíl živé mřížky proti definici (seřazené klíče)
 static func overlay(b) -> Dictionary:
