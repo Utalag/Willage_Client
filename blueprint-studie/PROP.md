@@ -357,6 +357,43 @@ Výchozí: 800 kapek na blok, `ero_cap` 1,0, `ero_erode` 0,1, `ero_deposit_rate`
   vápenec u povrchu změní minerály (hostitelé) a dutiny blueprintu; regionální základ s mincí = hodnota okraje závisí na
   vlastním bloku (pro sousedy bez dat).
 
+## E82 výsledky (zapsáno 2026-11-20 02:27; `godot-prototyp/tools/vapenec_e82.gd -- --bp.p82_vapenec=true --n=100 --ostrovu=30`, `shots/e82/`)
+- **Změna proti plánu:** s `p82_pod_m` 1,0 m ležel vápenec hned pod půdou. Vápenec má perm 0,246 < `ponor_perm` 0,3, takže
+  pod ním nebyly ponory a na START nevzniklo žádné těleso (0 těles). Výchozí je proto 2,0 m (nad vápencem zůstane
+  propustný kryt). Přidáno `p82_tesneni` (výchozí zap): v bloku „ano“ se vyklíní i nepropustné vrstvy nad vápencem
+  (jílovec, jíl), jinak by voda z krytu do vápence nedošla.
+- **Podíl:** seedy 1–1000 → 495 „ano“, 1000 náhodných seedů → 499. START: 101 ano, 202 ne, 303 ano, 404 ano.
+- **Bloky (100 seedů, louka / kopec / hora / sopka, jeden blok):** 43 ano, 57 ne. Vršek vápence v bloku „ano“ v průměru
+  2,0 m pod povrchem, v bloku „ne“ 5,6 m. Bloky „ne“ jsou se zapnutým příznakem bitově stejné jako bez něj (57 z 57),
+  bloky „ano“ se liší (43 z 43). Determinismus: 0 rozdílů při druhém generování. Čas generování 272 → 285 ms na blok (+5 %).
+- **Švy:** skok hranic vrstev na švu 0 m (funkce dál spojité). Jiný materiál přes šev 1,4–3,7 %, uvnitř bloku 7–12 %.
+  Vápenec z bloku „ano“ (vršek 2,0 m) klesá v bloku „ne“ na 3,1–3,3 m hned za švem a na 4–6 m do 3 m (náběh `taper_m`).
+  Závislost na pořadí vložení roste: obrácené pořadí změní 2276–3662 buněk, bez příznaku 1246–1275 (rozhoduje, kdo je
+  první a od koho se náběh počítá).
+- **Kras E75 (30 ostrovů 2 × 2, 63 bloků ano / 57 ne, `p75_kras` zap):**
+
+| voda | příznak | ostrovů s krasem | bloky ano s krasem | bloky ne s krasem | m³/herní den ano / ne | 1. dutina (herní dny, nejkratší) |
+|---|---|---|---|---|---|---|
+| E58 (výchozí) | bez | 0 | 0 | 0 | 0 / 0 | – |
+| E58 (výchozí) | s | 1 | 2 | 0 | 1,0e-4 / 0 | 601 |
+| E67 (pretok) | bez | 7 | 9 | 6 | 1,9e-4 / 3,0e-4 | 1224 |
+| E67 (pretok) | s | 19 | 27 | 13 | 1,7e-3 / 1,4e-3 | 190 |
+
+  START s příznakem v E67: 57 pásem jen v blocích ano, 1. dutina za 857 dní; ostrov 4 × ano 204 pásem, 210 dní.
+- **Negativa:** ve výchozím režimu vody (E58) se kras skoro nespustí ani v blocích „ano“ (2 z 63). Cesta tělesa vede
+  krytem (štěrk, spraš) u hladiny, ne vápencem. V E67 se kras rozběhne, ale i v blocích „ne“ (13 z 57; voda z
+  vápence souseda teče do jejich hlubokého vápence a dolomitu), takže mince neurčuje kras čistě po blocích. Odhad hladiny
+  = povrch − 2 m, není to hladina z vody. Vyklínění těsnění mění tělesa a prameny (START: 3 → 6 pramenů, přítok
+  0 → 1,23 l/s v E58). Závislost na pořadí vložení se zdvojnásobí. Statistika „u hladiny“ v nástroji (okno 1–2 m)
+  po změně na 2,0 m skoro nic neukazuje, platí vršek vápence.
+- **Výchozí hra beze změny** (`p82_vapenec` vyp): geo d3ff4d43…, otisk vody d7aedf3a… a po výkopech 63d7b89a… (voda_e66),
+  stejně jako E75 / E81.
+- **Doporučení:** příznak zatím nezapínat. Kras potřebuje i cestu vody vápencem: buď E67 jako výchozí podzemí, nebo E58
+  s cestou přes celé nasycené těleso. Jinak mince sama nestačí.
+- **Pro Jana:** (1) má mince platit jen pro vápenec u hladiny (teď), nebo i pro hluboký vápenec a dolomit? (2) smí blok
+  „ano“ vyklínit jíl a jílovec nad vápencem (víc pramenů, jiná voda)? (3) hloubka vršku 2 m pod povrchem; (4) kras ve
+  výchozí vodě E58 nevzniká – přepnout podzemí na E67, nebo upravit cestu E58?
+
 ## E81 tenké vrstvy a převzorkování (plán, zapsáno před pokusem 2026-11-20 01:41; TODO Architektura světa: „vrstva tenčí než buňka nesmí zmizet nebo se objevovat podle rozlišení“; větev z `e80-hranice-funkci`)
 - **Co už je:** `geo_fn.material` vybere vrstvu podle středu buňky (Z < bs[k]). Vrstva tenčí než buňka je ve sloupci vidět,
   jen když na ni padne střed buňky → mizí a objevuje se po sloupcích, podle rozlišení i místa. Klíny (vyklínění do ~3 m

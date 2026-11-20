@@ -516,6 +516,12 @@ Skupiny: 1 Prototyp a buildy · 2 Terén a tvar · 3 Rozlišení bloku · 4 Ská
 
 ## 3 Rozlišení bloku
 
+### 🧪 E82: vápenec k hladině v ~50 % bloků (2026-11-20 02:27 · prototyp `tools/vapenec_e82.gd`, `geo2.coin82` / `lift82`, příznak `p82_vapenec`, větev `e82-vapenec-hladina`, sloučen `e75-kras`)
+- **Směr:** Rozhodnutí Jana 01:55: generátor dává vápenec k hladině zhruba v 50 % bloků podle seedu. Mince z hashe seedu; v bloku „ano“ se vršek jeskynního vápence zvedne na povrch − 2 m a nepropustné vrstvy nad ním se vyklíní. Soused se napojí náběhem mocností.
+- **Zlepšení:** 495 / 1000 ano; bloky „ne“ beze změny; vršek vápence 2,0 m proti 5,6 m; švy bez skoku; deterministické; +5 % času. V E67 kras na 19 z 30 ostrovů (bez příznaku 7).
+- **Komplikace:** ve výchozí vodě E58 kras skoro nevzniká (2 bloky z 63); v E67 i v blocích „ne“; závislost na pořadí vložení 2×; vyklínění jílu mění prameny.
+- **Další krok (Jan):** jak vést vodu vápencem (E67 nebo cesta E58), zda smí blok vyklínit těsnění, hloubka 2 m.
+
 ### 🧪 E81: tenké vrstvy a převzorkování (2026-11-20 01:48 · prototyp `tools/tenke_e81.gd`, `geo_fn.keep_thin`, příznak `p81_tenke`, větev `e81-tenke-vrstvy`)
 - **Směr:** TODO Architektura světa: vrstva tenčí než buňka nesmí zmizet nebo se objevovat podle rozlišení. Konzervativní vzorkování: vrstva z funkce (> 0,05 m) bez buňky dostane jednu buňku, pod prahem žádnou.
 - **Zlepšení:** chybějící tenké vrstvy 60 % → 7,6 % (0,5 m), 48 % → 2,3 % (0,25 m); kusů 221 → 114 a 669 → 152 (funkce 87 / 60); díry v tenké nepropustné vrstvě 64 % → 8 %. Výchozí hra beze změny, švy nejsou horší než vnitřek.

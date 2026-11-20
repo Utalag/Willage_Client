@@ -60,6 +60,8 @@ Pokus E80 (2026-11-20 01:39, větev `e80-hranice-funkci`): funkce jsou zdrojem p
 
 Pokus E81 (2026-11-20 01:48, větev `e81-tenke-vrstvy`): vrstva se do buňky dostane, jen když na ni padne střed buňky. Tenké vrstvy (7 z 20 mají v průměru pod 0,8 m) proto v buňkách chybějí v polovině sloupců, kde jsou tenčí než buňka, a rozpadají se na kusy jinak při 0,5 a 0,25 m. Voda to v hře necítí, protože bere pásma přímo z funkcí. Oprava za příznakem `p81_tenke` dává vrstvě nad 0,05 m aspoň jednu buňku a vrstvu pod prahem vynechá. Chybění klesne na 2–8 %, kusy skoro na počet z funkce. Za to je tenká vrstva nafouklá na celou buňku a tři tenké vrstvy nad sebou se do 0,5 m nevejdou.
 
+Pokus E82 (2026-11-20 02:27, větev `e82-vapenec-hladina`): podle Janova rozhodnutí hází generátor u každého bloku minci ze seedu (495 z 1000 „ano“). V bloku „ano“ sahá jeskynní vápenec až 2 m pod povrch a jíl s jílovcem nad ním se vyklíní, jinak by voda k vápenci nedošla. Sousední blok se napojí stávajícím náběhem 3 m, funkce zůstanou spojité a bloky „ne“ se nezmění. Kras se ale ve výchozím podzemí E58 skoro nespustí, protože voda teče krytem nad vápencem. V podzemí E67 vznikne na 19 z 30 ostrovů (bez mince na 7).
+
 ## Změny od hráče
 
 **Hypotéza:** definice zůstává nedotčená a změny se ukládají zvlášť jako překryv:
