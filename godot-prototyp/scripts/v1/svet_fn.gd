@@ -139,9 +139,9 @@ func vahy(x: float, y: float) -> PackedFloat64Array:
 
 # ---------------------------------------------------------------- reliéf z parametrů biomu (1.13)
 ## max |∇n| na jednotku frekvence, změřené na pevné sadě bodů (deterministické); n v [−1, 1]
-static func _grad_sumu(n: FastNoiseLite, freq: float, vzorku := 3000) -> float:
+static func _grad_sumu(n: FastNoiseLite, freq: float, vzorku := 8000) -> float:
 	var g := 0.0
-	var e := 0.02 / freq
+	var e := 0.001 / freq   # krok diference ≪ vlnová délka nejjemnější oktávy (0,02/f podhodnotilo gradient až 1,4×)
 	for i in vzorku:
 		var x := (float(i % 61) * 7.31 + float(i) * 0.137) / freq
 		var y := (float(i / 61) * 5.77 + float(i % 7) * 0.71) / freq
