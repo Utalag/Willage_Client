@@ -173,7 +173,7 @@ Otočení hotových dat je změřené (0 neshod, ~5 ms). Skok vrstev 1,8–2,7 m
 **Současný stav**
 - Přenesený výřez nese klíny ze sousedů **původu**, ne z nových sousedů na ostrově. Bloky vygenerované na místě mají šev vrstev 0 U. U výřezu (i rot 0) je skok 1,8–2,7 m proti kroku uvnitř 0,7–1,15 m [10].
 - 1.7.1: pořadí vrstev na švu ostrova se nemusí shodovat; vrstvy se zaklíní nebo napojí na úseku 1/16 bloku.
-- Keep by skok nechal být. Blend by ho vzal klínem z 1.7.1. Auto v kódu zatím není definované.
+- Keep by skok nechal být. Blend by ho vzal klínem z 1.7.1. Auto je v prototypu definované (`block_gen.gd`: rozdíl ≤ 6 buněk dorovná rampou na 3 buňkách, větší nechá jako útes, po sloupcích).
 
 **Varianty**
 
@@ -185,7 +185,7 @@ Otočení hotových dat je změřené (0 neshod, ~5 ms). Skok vrstev 1,8–2,7 m
 
 **Otázka pro Jana.** Má být výchozí napojení švu při vložení blueprintu Blend (klín na 1/16 bloku podle 1.7.1) a Keep jen na výslovnou volbu?
 
-**Platí:**
+**Platí:** (Jan, hovor 20. 11. 2026) Výchozí režim je **Auto**. Auto se rozhoduje podle rozdílu výšek v každém sloupci zvlášť: rozdíl do 6 buněk vyhladí rampou na 3 buňkách, větší rozdíl nechá jako útes. Blend (dorovnat na 1–4 buňkách) a Keep (ponechat, schod) zůstávají jako volitelné alternativy.
 
 ---
 
