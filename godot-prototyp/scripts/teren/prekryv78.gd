@@ -123,19 +123,21 @@ static func sync79(b) -> Dictionary:
 				var best := 0; var bc := 0
 				var ids := []; var cs := []
 				var same := not d85.is_empty()   # E85: všech 8 buněk jako definice z funkcí → buňka 0,5 m = definice pipeline
+				var dug := not d85.is_empty()    # E85: buňky jen vykopané (jinak jako definice) → materiál zůstane podle pipeline
 				for dx in 2:
 					for dy in 2:
 						for dz in 2:
 							var o := fidx(2 * x + dx, 2 * y + dy, 2 * z + dz)
 							var m := f[o]
 							if same and m != d85[o]: same = false
+							if dug and m != 0 and m != d85[o]: dug = false
 							if m == 0: continue
 							var k := ids.find(m)
 							if k < 0: ids.append(m); cs.append(1)
 							else: cs[k] += 1
 				for k in ids.size():
 					if cs[k] > bc or (cs[k] == bc and ids[k] < best): best = ids[k]; bc = cs[k]
-				if same: best = b.def78[ci * 64 + z]
+				if same or (dug and not ids.is_empty()): best = b.def78[ci * 64 + z]   # kopání materiál nemění (jinak by se změnil bez dutiny a podzemí by to nevidělo)
 				if b.geo[ci * 64 + z] != best: gch = true
 				b.geo[ci * 64 + z] = best
 				if best != 0: top = z + 1
