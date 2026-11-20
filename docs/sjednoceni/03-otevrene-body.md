@@ -330,7 +330,7 @@ Cílový telefon a fps Jan v 1.11 přeskočil; znovu se neptám. Bench APK z E93
 
 **Otázka pro Jana.** Má být v izometrii na povrchu průhlednost (dither) a v podzemí skutečný řez kolem postavy, s vegetací a vodopády oříznutými v tom samém okruhu?
 
-**Platí:**
+**Platí:** (Jan, hovor 20. 11. 2026) Ponechává se stávající nastavení z prototypu: průhlednost jako válec od postavy ke kameře s jemnou mřížkou vyřezávajících pixelů a řez, který prořízne terén a ukáže podzemní prostory. Obojí má vlastní přepínač, výchozí stav je vypnuto, takže se ve výchozí hře neprojevuje. Do nového řešení se implementuje v tomto stavu, úpravy později podle potřeby.
 
 ---
 
