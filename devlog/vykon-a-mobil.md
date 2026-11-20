@@ -26,6 +26,8 @@ Render izometrie se měřil zvlášť, na už vygenerovaných datech: síť 522 
 
 Odhad pro telefon z tohoto měření v `PROP.md` ještě není dopsaný (v plánu bylo: odhad z GDScriptu na jednom jádru Xeonu, pak C# a vlákna, a podle fází rozhodnout, co optimalizovat napřed). V deníku C je jako návrh C# nebo GDExtension: benchmark skály ukázal asi 10× (983 ms na 65–120 ms na blok). Stavba bloků ve vlákně, sekce a LOD jsou taky návrhy, ne hotové řešení. Všechna starší čísla z prototypu jsou ze softwarového vykreslování (llvmpipe), dokud se nezměří na Janově grafice.
 
+E91 (2026-11-20 07:55) zkusilo průhlednost překážek v izometrii. Nejlepší je zahodit pixely v shaderu: válec 3 m kolem paprsku od postavy ke kameře se sítem (dither) a v podzemí řez nad úrovní postavy. Postava za kopcem je vidět ze 67 %, v chodbě ze 100 %. Přepnutí stojí 0,45 ms (jen uniformy), snímek na software GPU je dražší o 3–14 % (na hraně šumu). Řez sítí na CPU dá skutečné víko, ale přestavba trvá ~200 ms. Skrytí celých bloků nepomůže. Je to hypotéza, Jan nerozhodl.
+
 ## Zdroje a snímky
 
 - [`DENIK.md`](../DENIK.md) – A/3 požadavek 20:07–20:09; C/7 návrhy optimalizací

@@ -236,6 +236,11 @@ Skupiny: 1 Prototyp a buildy · 2 Terén a tvar · 3 Rozlišení bloku · 4 Ská
 - **Zlepšení:** mapa 3072 m, 4 hráči: 2277 kousků, 2,27 M trojúhelníků, stavba 4,9 s, RSS 270 MB. Se sešitím 0 děr ve švech. Krok hráče 16 m za 296 ms. Výchozí hashe beze změny.
 - **Komplikace:** bez sešití 6982 úseků s dírou (max 5 m). Síť ≈ 94 % paměti. Snímky jen s vypnutým cullingem. Daleko schodovité 8 m sloupce. 1 m všude by bylo ≈ 57 s a 2,6 GB.
 - **Další krok:** Jan rozhodne: LOD podle hráče nebo kamery, poloměry pásem, daleko 8 m nebo 1 m, slučování stěn nebo síť z výškové mapy, sešití stěnami, měřítko reliéfu, měření na telefonu.
+### 🧪 E91: průhlednost překážek v izometrii (2026-11-20 07:55 · větev `e91-pruhlednost`, tag `e91-pruhlednost`, `scripts/game/pruhlednost91.gd`, `tools/pruhlednost_e91.gd`, shots `blueprint-studie/shots/e91/`)
+- **Směr:** Jan 2026-11-19 21:03: zprůhlednit buňky mezi kamerou a postavou; v podzemí řez nad úrovní postavy. Za příznakem `p91_pruhlednost` (výchozí vyp), shadery na disku beze změny.
+- **Zlepšení:** A (válec 3 m s ditherem v shaderu) ukáže postavu za kopcem z 67 % a v chodbě ze 100 %, přepnutí 0,45 ms. B (řez shaderem) 53 % a 87 %. Výchozí hashe beze změny.
+- **Komplikace:** C (řez sítí) 38 % a 73 %, ~200 ms na přestavbu. C2 (skrytí bloků) 0 %. Překlad upravených shaderů 4 s. Čas snímku na software GPU +3 až +14 % (na hraně šumu). Díra je jen tmavá barva víka.
+- **Další krok:** Jan rozhodne: A na povrchu + B v podzemí? poloměr válce, výška řezu, víko barvou nebo skutečné řezy, co s vegetací a vodopády.
 
 ### 🔄 Voda E74–E77 sloučena, přepínače podle Jana (2026-11-20 04:08 · větev `voda-e74-e77-slouceni`, tag `voda-e74-e77-ready`, `tok.solve74`, `ug67._merge_outs72d`, `ostrov_voda.place76`, data `blueprint-studie/shots/voda_e74_e77/`)
 - **Směr:** Jan 2026-11-20 01:49 a 03:26: sloučit E74–E77, zapnout obsazování pramenů s hladinou, uložené prameny, slučování do 8 m; E75 a těžba na `cas_hry.gd`.
