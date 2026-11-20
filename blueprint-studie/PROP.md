@@ -2556,3 +2556,23 @@ a `surface.adapt(real)` se bez nových vstupů neprojeví.
 
 Těžba a rozklad hornin jsou samostatná studie. Návrh E65 je teď **T01 (dříve E65)** v `../tezba-studie/` (`README.md`, `PROP.md`, `DENIK.md`, `ZDROJE.md` [1]–[28], tabulka v `data/horniny_tezba_navrh.json`).
 Zdroje [45]–[72] níže v tomto souboru zůstávají jen jako zástupné číslo, aby se neposunulo číslování blueprint-studie.
+
+## E93 výkon na telefonu (plán, zapsáno před pokusem 2026-11-20 08:15)
+
+- **Zadání (TODO, Blok 4):** „Výkon na telefonu: hierarchie rozlišení (region, blok, sekce 16³ nebo 32³, jemné buňky jen
+  u hráče), všechny úrovně ze stejných funkcí. Změřit generování bloku na slabém zařízení.“ Telefon nemáme.
+- **(a) Scéna `bench_telefon.tscn`** (samostatná, hra se nemění): vygeneruje ostrov START jako hra (`main.tscn`), změří
+  generování bloků, síť, plnou vodu E66, pak čas snímku v několika pohledech (přehled, zoom, otočení, poloviční 3D rozlišení),
+  počty objektů / trojúhelníků / draw calls z `Performance`, paměť (Godot statická, video, RSS z /proc), kopání (lokální
+  přepočet vody E66/E68) a znovu plnou vodu. Výsledek na obrazovku, do `user://bench_telefon.json` a do schránky.
+  E90 (LOD) a E91 (průhlednost) nejsou na main (jen větve) → v benchmarku nejsou, jen poznámka.
+- **(b) APK pro Android (časový limit ~20 min):** šablony 4.7.2 (už na boxu), JDK 17 a Android SDK (build-tools, platform-tools)
+  do `/workspace/tools/android`. Ladicí podpis debug.keystore. Vlastní preset `Android (bench)` s vlastní značkou
+  `bench_telefon` → `run/main_scene.bench_telefon` = scéna benchmarku (desktop a hra beze změny). APK jen do
+  `/workspace/willage-ideas/telefon-e93/`, ne do gitu. Když to nepůjde: přesný postup pro Jana.
+- **(c) Odhad na boxu:** headless logika (generování 4 bloků, plná voda, 12 výkopů s lokálním přepočtem E68) plnou rychlostí,
+  na 1 jádře (`taskset`) a se škrcením CPU (`cpulimit`, pokud půjde) → přepočet na telefon podle jednojádrového skóre
+  (Geekbench) se zdroji. Render: trojúhelníky a draw calls scény proti rozpočtům pro mobilní GPU ze zdrojů (ZDROJE.md).
+- **Výchozí hra beze změny:** `voda_e66` d7aedf3a6d9d10e8 → 63d7b89a91385a79, `port_studie --check` 0 změn.
+- **Negativa předem:** bez telefonu jsou všechna čísla odhad. Škrcení CPU nezmění paměťovou propustnost ani termiku telefonu.
+  GDScript na ARM může být jinak rychlý než na x86. Software GPU na boxu neříká nic o mobilní GPU.
