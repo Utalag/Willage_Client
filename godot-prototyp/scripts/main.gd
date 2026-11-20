@@ -71,7 +71,7 @@ func _start_b96() -> void:
 	rig.center = top
 	rig.zoom_max_k = 2.0   # 160 × 0,5 × 2 = 160 m záběr: celý blok 128 m
 
-, co běží po snímcích (kamera WASD, tok vody, čas větru)
+## demo / testy: zastaví vše, co běží po snímcích (kamera WASD, tok vody, čas větru)
 func set_game_process(on: bool) -> void:
 	set_process(on)
 	for n in [rig, water, world]:
