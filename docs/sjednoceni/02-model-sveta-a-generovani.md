@@ -207,7 +207,13 @@ Minerály, žíly, kras i dutiny jsou útvary funkce světa (1.7), ne krok „po
 
 **Otázka pro Jana.** Má výchozí voda zůstat funkcí a spočítat se až ve slupce nebo při přepočtu na povodí, s uložením jen pramenů a odchylek? Nebo se má povrchová voda (tůně a koryta) spočítat jednou pro celý ostrov už při vložení bloku?
 
-**Platí:**
+**Platí:** *vyplývá z rozhodnutí 1.2, 1.4, 1.8, 1.9 (Jan t825u, 21:38)*
+
+- Podzemní hladina a propustnost jsou **čistá funkce**, neukládají se (1.2).
+- **Prameny** se nasazují ze seedu a ukládají se, protože je hráč může ucpat, vykopat a přenést (1.8).
+- **Povrchová voda** (koryta, tůně) se dopočítá, až ji potřebuje slupka nebo přepočet, **na celém povodí asynchronně** (1.9). První zobrazení nového území může trvat déle.
+- Ukládá se **jen odchylka** od výchozího výpočtu (1.4). Plný výpočet bloku při každém načtení odpadá.
+
 
 ---
 
