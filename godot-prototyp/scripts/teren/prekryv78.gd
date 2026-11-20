@@ -37,8 +37,13 @@ static func fine(b) -> PackedByteArray:
 	if b.jemne78.is_empty(): b.jemne78 = refine(b.geo)
 	return b.jemne78
 
-## jemná operace na živém bloku: mat 0 = vykopat; položit jde jen do vzduchu (jinak no-op, vrací false)
+static func inside(fx: int, fy: int, fz: int) -> bool:
+	return fx >= 0 and fy >= 0 and fz >= 0 and fx < N and fy < N and fz < NZ
+
+## jemná operace na živém bloku: mat 0 = vykopat; položit jde jen do vzduchu (jinak no-op, vrací false).
+## E80: mimo blok (z < 0 pod dnem ostrova, z ≥ 128 nad stropem bloku, x/y mimo) → false; dřív index přetekl do sousedního sloupce.
 static func op(b, fx: int, fy: int, fz: int, mat: int) -> bool:
+	if not inside(fx, fy, fz): return false
 	var f := fine(b)
 	var i := fidx(fx, fy, fz)
 	if mat != 0 and f[i] != 0: return false
