@@ -1,5 +1,6 @@
 extends Node
-## E89: měřítko scény. `-- --meritko-shots [--surface.p89_meritko=true]` → shots/89_meritko_<vyp|zap>_*.png.
+## E89: měřítko scény. `-- --meritko-shots [--surface.p89_meritko=true|false] [--shot-prefix=94_]` → shots/<prefix><vyp|zap>_*.png
+## (výchozí prefix 89_meritko_). E94: navíc záběr hory START izometricky.
 ## Postava 1,75 m (kapsle) a dům 4 × 4 × 3 m stojí ve scéně v metrech (1 jednotka Godotu = 1 m), terén podle příznaku:
 ## vyp = dnešní buňka 1 × 1 × 0,5 jednotky (vodorovně natažená 2×), zap = 0,5 × 0,5 × 0,5 (metry).
 const Block = preload("res://scripts/block.gd")
@@ -9,10 +10,14 @@ const BS := J.BS
 
 var m
 var p
+var pre := "89_meritko_"
+var tit := "E89"
 
 func _ready() -> void:
 	m = get_parent()
 	p = Params.inst()
+	for a in OS.get_cmdline_user_args():
+		if a.begins_with("--shot-prefix="): pre = a.split("=", true, 1)[1]; tit = "E" + pre.trim_suffix("_").get_slice("_", 0)
 	m.set_game_process(false)
 	_shots.call_deferred()
 
@@ -71,19 +76,35 @@ func _shots() -> void:
 	_mesh(box, ph + Vector3(0, 1.5, 0), Color(0.95, 0.9, 0.75))
 	var mid: Vector3 = m.island.to_global(Vector3(16, 16, 16))
 	var w_m: float = 32.0 * sc.x   # šířka ostrova 2 × 2 bloky ve scéně
-	lab.text = "E89 p89_meritko %s: ostrov 2 × 2 bloky = %.0f × %.0f jednotek scény, buňka %.2f × %.2f × %.2f; postava 1,75 m, dům 4 × 4 × 3 m" % [tag, w_m, w_m, sc.x, Block.CELL_H, sc.z]
+	lab.text = tit + " p89_meritko %s: ostrov 2 × 2 bloky = %.0f × %.0f jednotek scény, buňka %.2f × %.2f × %.2f; postava 1,75 m, dům 4 × 4 × 3 m" % [tag, w_m, w_m, sc.x, Block.CELL_H, sc.z]
+	var lab0 := lab.text
+	lab.text = "%s p89_meritko %s: výchozí kamera hry (střed %s, záběr %.0f)" % [tit, tag, str(m.rig.center), m.cam.size]
+	await _snap("%s%s_hra_kamera.png" % [pre, tag])
+	lab.text = lab0
 	_cam(mid, w_m * 2.2)
-	await _snap("89_meritko_%s_ostrov.png" % tag)
-	lab.text = "E89 p89_meritko %s: detail 16 m, postava 1,75 m (červená), dům 4 × 4 × 3 m" % tag
+	await _snap("%s%s_ostrov.png" % [pre, tag])
+	lab.text = tit + " p89_meritko %s: detail 16 m, postava 1,75 m (červená), dům 4 × 4 × 3 m" % tag
 	_cam(pf + Vector3(0, 1.0, 0), 16.0)
-	await _snap("89_meritko_%s_detail.png" % tag)
-	lab.text = "E89 p89_meritko %s: hora (blok (1, 0)) z boku, stejná velikost záběru 24 m" % tag
+	await _snap("%s%s_detail.png" % [pre, tag])
+	lab.text = tit + " p89_meritko %s: hora (blok (1, 0)) z boku, stejná velikost záběru 24 m" % tag
 	_cam(m.island.to_global(Vector3(24, 16, 8)), 24.0, 90.0, -10.0)
-	await _snap("89_meritko_%s_hora_bok.png" % tag)
+	await _snap("%s%s_hora_bok.png" % [pre, tag])
+	# E94: druhá postava na vrcholu hory START (nejvyšší sloupec bloku (1, 0)) pro srovnání výšky
+	var hb: Block = m.island.blocks[Vector2i(1, 0)]
+	var top_g := Vector2i(16, 0); var top_h := -1
+	for lx in BS:
+		for lz in BS:
+			if hb.hm[lx * BS + lz] > top_h: top_h = hb.hm[lx * BS + lz]; top_g = Vector2i(16 + lx, lz)
+	var pt := _top(top_g)
+	_mesh(cap, pt + Vector3(0, cap.height / 2.0, 0), Color(0.85, 0.2, 0.2))
+	print(tit, " vrchol hory START: sloupec ", top_g, " výška ", top_h * Block.CELL_H, " m, louka u postavy ", pf.y, " m (scéna y)")
+	lab.text = "%s p89_meritko %s: hora START (blok (1, 0)) izometricky, záběr 20 m; postava 1,75 m, dům 4 × 4 × 3 m" % [tit, tag]
+	_cam(m.island.to_global(Vector3(24, 22, 8)), 20.0)
+	await _snap("%s%s_hora.png" % [pre, tag])
 	# paprsek myši: střed obrazovky → sloupec (kontrola převodu do místních souřadnic)
 	var vp: Vector2 = m.get_viewport().get_visible_rect().size / 2.0
 	_cam(pf, 16.0)
 	await RenderingServer.frame_post_draw
 	var g = m.island.cell_at_ray(m.cam.project_ray_origin(vp), m.cam.project_ray_normal(vp))
-	print("E89 paprsek středem na postavu: sloupec ", g, " (čekám ", gf, ")")
+	print(tit, " paprsek středem na postavu: sloupec ", g, " (čekám ", gf, ")")
 	get_tree().quit()
