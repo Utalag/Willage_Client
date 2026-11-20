@@ -145,6 +145,7 @@ Minerály, žíly, kras i dutiny jsou útvary funkce světa (1.7), ne krok „po
 - Šířku okraje a počty buněk slupky změřit v 2.7, nehádat.
 - **Poznámka pro kapitolu 7 (Jan t820u–t822u, 21:03–21:08):** viditelný voxel je **0,25 m** (postava 1,75 m = 7 voxelů). **128 / 256 / 512 px** je rozlišení textury dlaždice podle kvality a monitoru (Full HD, 2K, 27"), ne velikost dlaždice na obrazovce. Kolik terénu je vidět, určuje zoom. Datový model to neomezuje. Obrázek: `obrazky/voxel-meritko.png`.
 - **Výchozí zoom (Jan t823u, t824u, 21:08–21:35):** v axonometrii kolem **64 dlaždic (voxelů 0,25 m) vodorovně**, tedy asi 16 m na šířku obrazovky (~30 px na voxel u Full HD, ~40 px u 2K).
+- **Pevný zoom (Jan, hovor 20. 11. 2026):** zoom je pevný na 64 dlaždicích (voxelech 0,25 m) napříč. Je to v podstatě jediná úroveň detailu (LOD), v souladu s rozhodnutím 7.2 (`03-otevrene-body.md`): jedno rozlišení 0,25 m, bez úrovní LOD a bez zoomu.
 
 
 ---
