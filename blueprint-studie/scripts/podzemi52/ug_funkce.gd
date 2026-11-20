@@ -75,7 +75,15 @@ static func bands76(info: Dictionary, col: Dictionary, X: float, Y: float, s: Ve
 	for k in bs.size(): bs[k] -= dzm
 	var c2 := {"h": float(col.h) - dzm, "bs": bs}
 	var out := []
-	for b in bands(info, c2, X + (o.x - s.x) * FN.BW, Y + (o.y - s.y) * FN.BW):
+	var Xo := X + (o.x - s.x) * FN.BW; var Yo := Y + (o.y - s.y) * FN.BW
+	var r86 := int(t76.get("rot", 0)) % 4
+	if r86 != 0 and bool(info.p.get("p86_otoceni", false)):
+		# E86: otočený výřez (rot 1 = (X, Y) → (8 − Y, X) v místních metrech) → cílový bod inverzní rotací do souřadnic
+		# původu, aby šum hornin byl stejný jako v původu
+		var lx: float = X - s.x * FN.BW; var ly: float = Y - s.y * FN.BW
+		var l := Vector2(ly, FN.BW - lx) if r86 == 1 else (Vector2(FN.BW - lx, FN.BW - ly) if r86 == 2 else Vector2(FN.BW - ly, lx))
+		Xo = o.x * FN.BW + l.x; Yo = o.y * FN.BW + l.y
+	for b in bands(info, c2, Xo, Yo):
 		var lo: float = maxf(float(b[0]) + dzm, 0.0); var hi: float = float(b[1]) + dzm
 		if hi > lo + E: out.append([lo, hi, b[2]])
 	if not out.is_empty() and float(out[0][0]) > E: out[0][0] = 0.0

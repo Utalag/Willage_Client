@@ -3,7 +3,7 @@ extends RefCounted
 ## Výřez v paměti = blueprint (typ, seed, posun) + slot původu + záznam bloku (hm, hm_f, bs, buňky) + prameny výřezu
 ## (místní souřadnice). Geometrie, materiály a zdroje se přenesou hotové, STAV VODY NE: po vložení se voda přepočítá
 ## v novém okolí (ostrov_voda.place76 lokálně nebo build plně) a z ustáleného stavu se znovu naplánují události.
-## Otočení po 90° se nedělá (není triviální: pole, šum hornin i tělesa by se musela otáčet).
+## Otočení po 90°: E86 (scripts/teren/otoceni86.gd) otočí výřez před vložením; rot ≠ 0 se zapíše do t76 / prenos76.
 
 const Block = preload("res://scripts/block.gd")
 const T = preload("res://scripts/teren/ostrov_teren.gd")
@@ -57,6 +57,7 @@ static func place(cut: Dictionary, slot: Vector2i, dz: int):
 	rec.cells = _shift_cells(cut.rec.cells, dz)
 	if rec.has("water"): rec.water = _shift_cells(cut.rec.water, dz)
 	rec.t76 = {"puvod": cut.puvod, "dz": dz}
+	if int(cut.get("rot", 0)) != 0: rec.t76.rot = int(cut.rot)   # E86: otočený výřez (rot 0 = beze změny proti E76)
 	b.bp_rec = rec
 	b.geo = _shift_cells(cut.geo, dz)
 	b.cells = _shift_cells(cut.cells, dz)
@@ -69,6 +70,7 @@ static func place(cut: Dictionary, slot: Vector2i, dz: int):
 	for e in cut.prameny: sp.append([e[0], e[1], int(e[2]) + dz, e[3], e[4]])
 	b.prameny76 = sp
 	b.prenos76 = {"puvod": cut.puvod, "dz": dz}
+	if int(cut.get("rot", 0)) != 0: b.prenos76.rot = int(cut.rot); b.rot = int(cut.rot)
 	return b
 
 ## voda v oblasti jednoho bloku: prameny, tůně, koryto, vodopády, odtok přes okraj ostrova / do sousedů, výstupy podzemí
