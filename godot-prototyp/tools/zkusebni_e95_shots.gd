@@ -29,6 +29,8 @@ func _snap(name: String) -> void:
 	print("snímek ", name)
 
 func _hover(c: Control) -> void:
+	PN.aktivni.body.ensure_control_visible(c)
+	for i in 4: await process_frame
 	var p := c.get_global_rect().get_center()
 	var ev := InputEventMouseMotion.new()
 	ev.position = p; ev.global_position = p

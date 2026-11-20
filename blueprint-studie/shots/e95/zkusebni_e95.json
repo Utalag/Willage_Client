@@ -1,0 +1,989 @@
+{
+ "dvojice": [
+  {
+   "k": [
+    "p79_chodby",
+    "p85_voda"
+   ],
+   "ms": 6151.678,
+   "otisk": "d7aedf3a6d9d10e8"
+  },
+  {
+   "k": [
+    "p79_chodby",
+    "p81_tenke"
+   ],
+   "ms": 5771.191,
+   "otisk": "c3f579ee9ecbd891"
+  },
+  {
+   "k": [
+    "p79_chodby",
+    "p82_vapenec"
+   ],
+   "ms": 5607.963,
+   "otisk": "9050f199fa0b4b0a"
+  },
+  {
+   "k": [
+    "p79_chodby",
+    "p85_vrstvy"
+   ],
+   "ms": 5976.402,
+   "otisk": "958f9334f7d8a9ff"
+  },
+  {
+   "k": [
+    "p79_chodby",
+    "p85_jemne"
+   ],
+   "ms": 5832.35,
+   "otisk": "d7aedf3a6d9d10e8"
+  },
+  {
+   "k": [
+    "p79_chodby",
+    "p85_blok2"
+   ],
+   "ms": 6181.352,
+   "otisk": "958f9334f7d8a9ff"
+  },
+  {
+   "k": [
+    "p79_chodby",
+    "p87_jadro_hory"
+   ],
+   "ms": 5454.007,
+   "otisk": "4fe27cd3b8d83ac9"
+  },
+  {
+   "k": [
+    "p79_chodby",
+    "p89_meritko"
+   ],
+   "ms": 5661.748,
+   "otisk": "d7aedf3a6d9d10e8"
+  },
+  {
+   "k": [
+    "p79_chodby",
+    "p92_svah"
+   ],
+   "ms": 3605.977,
+   "otisk": "8f60ffd5a397e505"
+  },
+  {
+   "k": [
+    "p79_chodby",
+    "p94_hora_k"
+   ],
+   "ms": 5318.076,
+   "otisk": "6976996a24e60fab"
+  },
+  {
+   "k": [
+    "p85_voda",
+    "p81_tenke"
+   ],
+   "ms": 6648.142,
+   "otisk": "c3f579ee9ecbd891"
+  },
+  {
+   "k": [
+    "p85_voda",
+    "p82_vapenec"
+   ],
+   "ms": 6537.934,
+   "otisk": "9050f199fa0b4b0a"
+  },
+  {
+   "k": [
+    "p85_voda",
+    "p85_vrstvy"
+   ],
+   "ms": 5792.889,
+   "otisk": "958f9334f7d8a9ff"
+  },
+  {
+   "k": [
+    "p85_voda",
+    "p85_jemne"
+   ],
+   "ms": 7255.309,
+   "otisk": "d7aedf3a6d9d10e8"
+  },
+  {
+   "k": [
+    "p85_voda",
+    "p85_blok2"
+   ],
+   "ms": 6635.367,
+   "otisk": "958f9334f7d8a9ff"
+  },
+  {
+   "k": [
+    "p85_voda",
+    "p87_jadro_hory"
+   ],
+   "ms": 6213.392,
+   "otisk": "4fe27cd3b8d83ac9"
+  },
+  {
+   "k": [
+    "p85_voda",
+    "p89_meritko"
+   ],
+   "ms": 6617.234,
+   "otisk": "d7aedf3a6d9d10e8"
+  },
+  {
+   "k": [
+    "p85_voda",
+    "p92_svah"
+   ],
+   "ms": 3627.174,
+   "otisk": "8f60ffd5a397e505"
+  },
+  {
+   "k": [
+    "p85_voda",
+    "p94_hora_k"
+   ],
+   "ms": 6085.267,
+   "otisk": "6976996a24e60fab"
+  },
+  {
+   "k": [
+    "p81_tenke",
+    "p82_vapenec"
+   ],
+   "ms": 3513.462,
+   "otisk": "85afb63eaa561323"
+  },
+  {
+   "k": [
+    "p81_tenke",
+    "p85_vrstvy"
+   ],
+   "ms": 5159.807,
+   "otisk": "28ba63f690099282"
+  },
+  {
+   "k": [
+    "p81_tenke",
+    "p85_jemne"
+   ],
+   "ms": 5671.841,
+   "otisk": "c3f579ee9ecbd891"
+  },
+  {
+   "k": [
+    "p81_tenke",
+    "p85_blok2"
+   ],
+   "ms": 6199.273,
+   "otisk": "28ba63f690099282"
+  },
+  {
+   "k": [
+    "p81_tenke",
+    "p87_jadro_hory"
+   ],
+   "ms": 5528.079,
+   "otisk": "80e1901a3075c416"
+  },
+  {
+   "k": [
+    "p81_tenke",
+    "p89_meritko"
+   ],
+   "ms": 6070.334,
+   "otisk": "c3f579ee9ecbd891"
+  },
+  {
+   "k": [
+    "p81_tenke",
+    "p92_svah"
+   ],
+   "ms": 3737.712,
+   "otisk": "5a7394b24d642ec6"
+  },
+  {
+   "k": [
+    "p81_tenke",
+    "p94_hora_k"
+   ],
+   "ms": 5681.202,
+   "otisk": "43e41100b795e1b2"
+  },
+  {
+   "k": [
+    "p82_vapenec",
+    "p85_vrstvy"
+   ],
+   "ms": 3794.363,
+   "otisk": "f56ae77eb1c092f6"
+  },
+  {
+   "k": [
+    "p82_vapenec",
+    "p85_jemne"
+   ],
+   "ms": 5683.587,
+   "otisk": "9050f199fa0b4b0a"
+  },
+  {
+   "k": [
+    "p82_vapenec",
+    "p85_blok2"
+   ],
+   "ms": 3599.652,
+   "otisk": "f56ae77eb1c092f6"
+  },
+  {
+   "k": [
+    "p82_vapenec",
+    "p87_jadro_hory"
+   ],
+   "ms": 3823.566,
+   "otisk": "e97c0f4702dc1c19"
+  },
+  {
+   "k": [
+    "p82_vapenec",
+    "p89_meritko"
+   ],
+   "ms": 75439.205,
+   "otisk": "9050f199fa0b4b0a"
+  },
+  {
+   "k": [
+    "p82_vapenec",
+    "p92_svah"
+   ],
+   "ms": 3905.919,
+   "otisk": "e1d1a22f2995ad28"
+  },
+  {
+   "k": [
+    "p82_vapenec",
+    "p94_hora_k"
+   ],
+   "ms": 16350.768,
+   "otisk": "30a395b868b269ca"
+  },
+  {
+   "k": [
+    "p85_vrstvy",
+    "p85_jemne"
+   ],
+   "ms": 5350.507,
+   "otisk": "958f9334f7d8a9ff"
+  },
+  {
+   "k": [
+    "p85_vrstvy",
+    "p85_blok2"
+   ],
+   "ms": 5869.137,
+   "otisk": "958f9334f7d8a9ff"
+  },
+  {
+   "k": [
+    "p85_vrstvy",
+    "p87_jadro_hory"
+   ],
+   "ms": 4692.569,
+   "otisk": "be09bfafeeffca66"
+  },
+  {
+   "k": [
+    "p85_vrstvy",
+    "p89_meritko"
+   ],
+   "ms": 5362.996,
+   "otisk": "958f9334f7d8a9ff"
+  },
+  {
+   "k": [
+    "p85_vrstvy",
+    "p92_svah"
+   ],
+   "ms": 3402.801,
+   "otisk": "f11fa5c18f46f52e"
+  },
+  {
+   "k": [
+    "p85_vrstvy",
+    "p94_hora_k"
+   ],
+   "ms": 4851.987,
+   "otisk": "0e50bcbeae8486e0"
+  },
+  {
+   "k": [
+    "p85_jemne",
+    "p85_blok2"
+   ],
+   "ms": 5875.49,
+   "otisk": "958f9334f7d8a9ff"
+  },
+  {
+   "k": [
+    "p85_jemne",
+    "p87_jadro_hory"
+   ],
+   "ms": 5074.73,
+   "otisk": "4fe27cd3b8d83ac9"
+  },
+  {
+   "k": [
+    "p85_jemne",
+    "p89_meritko"
+   ],
+   "ms": 5305.203,
+   "otisk": "d7aedf3a6d9d10e8"
+  },
+  {
+   "k": [
+    "p85_jemne",
+    "p92_svah"
+   ],
+   "ms": 3497.338,
+   "otisk": "8f60ffd5a397e505"
+  },
+  {
+   "k": [
+    "p85_jemne",
+    "p94_hora_k"
+   ],
+   "ms": 5255.144,
+   "otisk": "6976996a24e60fab"
+  },
+  {
+   "k": [
+    "p85_blok2",
+    "p87_jadro_hory"
+   ],
+   "ms": 5151.446,
+   "otisk": "be09bfafeeffca66"
+  },
+  {
+   "k": [
+    "p85_blok2",
+    "p89_meritko"
+   ],
+   "ms": 5796.209,
+   "otisk": "958f9334f7d8a9ff"
+  },
+  {
+   "k": [
+    "p85_blok2",
+    "p92_svah"
+   ],
+   "ms": 3620.378,
+   "otisk": "f11fa5c18f46f52e"
+  },
+  {
+   "k": [
+    "p85_blok2",
+    "p94_hora_k"
+   ],
+   "ms": 5716.162,
+   "otisk": "0e50bcbeae8486e0"
+  },
+  {
+   "k": [
+    "p87_jadro_hory",
+    "p89_meritko"
+   ],
+   "ms": 5341.463,
+   "otisk": "4fe27cd3b8d83ac9"
+  },
+  {
+   "k": [
+    "p87_jadro_hory",
+    "p92_svah"
+   ],
+   "ms": 5319.09,
+   "otisk": "d80a20d303051daf"
+  },
+  {
+   "k": [
+    "p87_jadro_hory",
+    "p94_hora_k"
+   ],
+   "ms": 5074.575,
+   "otisk": "4fe27cd3b8d83ac9"
+  },
+  {
+   "k": [
+    "p89_meritko",
+    "p92_svah"
+   ],
+   "ms": 3457.152,
+   "otisk": "8f60ffd5a397e505"
+  },
+  {
+   "k": [
+    "p89_meritko",
+    "p94_hora_k"
+   ],
+   "ms": 5343.413,
+   "otisk": "6976996a24e60fab"
+  },
+  {
+   "k": [
+    "p92_svah",
+    "p94_hora_k"
+   ],
+   "ms": 7039.205,
+   "otisk": "94b406a00582aed5"
+  }
+ ],
+ "jednotlive": [
+  {
+   "cil": "teren",
+   "k": "p79_chodby",
+   "vyp": {
+    "ms": 5832.163,
+    "otisk": "d7aedf3a6d9d10e8",
+    "prestavba": true
+   },
+   "zap": {
+    "ms": 5914.028,
+    "otisk": "d7aedf3a6d9d10e8",
+    "prestavba": true
+   },
+   "zpet_ok": true,
+   "zpet_otisk": "d7aedf3a6d9d10e8"
+  },
+  {
+   "cil": "teren",
+   "k": "p85_voda",
+   "vyp": {
+    "ms": 5444.711,
+    "otisk": "d7aedf3a6d9d10e8",
+    "prestavba": true
+   },
+   "zap": {
+    "ms": 8093.186,
+    "otisk": "d7aedf3a6d9d10e8",
+    "prestavba": true
+   },
+   "zpet_ok": true,
+   "zpet_otisk": "d7aedf3a6d9d10e8"
+  },
+  {
+   "cil": "teren",
+   "k": "p81_tenke",
+   "vyp": {
+    "ms": 5681.214,
+    "otisk": "d7aedf3a6d9d10e8",
+    "prestavba": true
+   },
+   "zap": {
+    "ms": 6037.58,
+    "otisk": "c3f579ee9ecbd891",
+    "prestavba": true
+   },
+   "zpet_ok": true,
+   "zpet_otisk": "d7aedf3a6d9d10e8"
+  },
+  {
+   "cil": "teren",
+   "k": "p81_min_m",
+   "vyp": {
+    "ms": 6291.588,
+    "otisk": "c3f579ee9ecbd891",
+    "prestavba": true
+   },
+   "zap": {
+    "ms": 5930.885,
+    "otisk": "0fcf041bec91258b",
+    "prestavba": true
+   },
+   "zpet_ok": true,
+   "zpet_otisk": "d7aedf3a6d9d10e8"
+  },
+  {
+   "cil": "teren",
+   "k": "p82_vapenec",
+   "vyp": {
+    "ms": 5855.032,
+    "otisk": "d7aedf3a6d9d10e8",
+    "prestavba": true
+   },
+   "zap": {
+    "ms": 5587.85,
+    "otisk": "9050f199fa0b4b0a",
+    "prestavba": true
+   },
+   "zpet_ok": true,
+   "zpet_otisk": "d7aedf3a6d9d10e8"
+  },
+  {
+   "cil": "teren",
+   "k": "p82_podil",
+   "vyp": {
+    "ms": 6343.323,
+    "otisk": "9050f199fa0b4b0a",
+    "prestavba": true
+   },
+   "zap": {
+    "ms": 6131.166,
+    "otisk": "9050f199fa0b4b0a",
+    "prestavba": true
+   },
+   "zpet_ok": true,
+   "zpet_otisk": "d7aedf3a6d9d10e8"
+  },
+  {
+   "cil": "teren",
+   "k": "p82_pod_m",
+   "vyp": {
+    "ms": 5534.598,
+    "otisk": "9050f199fa0b4b0a",
+    "prestavba": true
+   },
+   "zap": {
+    "ms": 5785.868,
+    "otisk": "569fea2702898ae0",
+    "prestavba": true
+   },
+   "zpet_ok": true,
+   "zpet_otisk": "d7aedf3a6d9d10e8"
+  },
+  {
+   "cil": "teren",
+   "k": "p82_tesneni",
+   "vyp": {
+    "ms": 5965.278,
+    "otisk": "9050f199fa0b4b0a",
+    "prestavba": true
+   },
+   "zap": {
+    "ms": 7435.227,
+    "otisk": "9050f199fa0b4b0a",
+    "prestavba": true
+   },
+   "zpet_ok": true,
+   "zpet_otisk": "d7aedf3a6d9d10e8"
+  },
+  {
+   "cil": "teren",
+   "k": "p85_vrstvy",
+   "vyp": {
+    "ms": 5637.492,
+    "otisk": "d7aedf3a6d9d10e8",
+    "prestavba": true
+   },
+   "zap": {
+    "ms": 5469.425,
+    "otisk": "958f9334f7d8a9ff",
+    "prestavba": true
+   },
+   "zpet_ok": true,
+   "zpet_otisk": "d7aedf3a6d9d10e8"
+  },
+  {
+   "cil": "teren",
+   "k": "p85_min_m",
+   "vyp": {
+    "ms": 5303.413,
+    "otisk": "958f9334f7d8a9ff",
+    "prestavba": true
+   },
+   "zap": {
+    "ms": 4939.31,
+    "otisk": "4ca2337595578e46",
+    "prestavba": true
+   },
+   "zpet_ok": true,
+   "zpet_otisk": "d7aedf3a6d9d10e8"
+  },
+  {
+   "cil": "teren",
+   "k": "p85_jemne",
+   "vyp": {
+    "ms": 5411.081,
+    "otisk": "d7aedf3a6d9d10e8",
+    "prestavba": true
+   },
+   "zap": {
+    "ms": 5302.538,
+    "otisk": "d7aedf3a6d9d10e8",
+    "prestavba": true
+   },
+   "zpet_ok": true,
+   "zpet_otisk": "d7aedf3a6d9d10e8"
+  },
+  {
+   "cil": "zive",
+   "k": "p85_okraj",
+   "vyp": {
+    "ms": 1.253,
+    "otisk": "d7aedf3a6d9d10e8",
+    "prestavba": false
+   },
+   "zap": {
+    "ms": 1.447,
+    "otisk": "d7aedf3a6d9d10e8",
+    "prestavba": false
+   },
+   "zpet_ok": true,
+   "zpet_otisk": "d7aedf3a6d9d10e8"
+  },
+  {
+   "cil": "teren",
+   "k": "p85_blok2",
+   "vyp": {
+    "ms": 5807.214,
+    "otisk": "d7aedf3a6d9d10e8",
+    "prestavba": true
+   },
+   "zap": {
+    "ms": 6992.791,
+    "otisk": "958f9334f7d8a9ff",
+    "prestavba": true
+   },
+   "zpet_ok": true,
+   "zpet_otisk": "d7aedf3a6d9d10e8"
+  },
+  {
+   "cil": "teren",
+   "k": "p87_jadro_hory",
+   "vyp": {
+    "ms": 5533.134,
+    "otisk": "d7aedf3a6d9d10e8",
+    "prestavba": true
+   },
+   "zap": {
+    "ms": 5516.814,
+    "otisk": "4fe27cd3b8d83ac9",
+    "prestavba": true
+   },
+   "zpet_ok": true,
+   "zpet_otisk": "d7aedf3a6d9d10e8"
+  },
+  {
+   "cil": "teren",
+   "k": "p87_amp",
+   "vyp": {
+    "ms": 6064.589,
+    "otisk": "4fe27cd3b8d83ac9",
+    "prestavba": true
+   },
+   "zap": {
+    "ms": 5823.233,
+    "otisk": "44dd4ac35bc8047b",
+    "prestavba": true
+   },
+   "zpet_ok": true,
+   "zpet_otisk": "d7aedf3a6d9d10e8"
+  },
+  {
+   "cil": "zive",
+   "k": "p86_otoceni",
+   "vyp": {
+    "ms": 1.383,
+    "otisk": "d7aedf3a6d9d10e8",
+    "prestavba": false
+   },
+   "zap": {
+    "ms": 1.499,
+    "otisk": "d7aedf3a6d9d10e8",
+    "prestavba": false
+   },
+   "zpet_ok": true,
+   "zpet_otisk": "d7aedf3a6d9d10e8"
+  },
+  {
+   "cil": "teren",
+   "k": "p89_meritko",
+   "vyp": {
+    "ms": 6141.833,
+    "otisk": "d7aedf3a6d9d10e8",
+    "prestavba": true
+   },
+   "zap": {
+    "ms": 6067.254,
+    "otisk": "d7aedf3a6d9d10e8",
+    "prestavba": true
+   },
+   "zpet_ok": true,
+   "zpet_otisk": "d7aedf3a6d9d10e8"
+  },
+  {
+   "cil": "teren",
+   "k": "p94_hora_k",
+   "vyp": {
+    "ms": 5756.463,
+    "otisk": "d7aedf3a6d9d10e8",
+    "prestavba": true
+   },
+   "zap": {
+    "ms": 6259.957,
+    "otisk": "cf297a06445cd828",
+    "prestavba": true
+   },
+   "zpet_ok": true,
+   "zpet_otisk": "d7aedf3a6d9d10e8"
+  },
+  {
+   "cil": "teren",
+   "k": "p92_svah",
+   "vyp": {
+    "ms": 5648.656,
+    "otisk": "d7aedf3a6d9d10e8",
+    "prestavba": true
+   },
+   "zap": {
+    "ms": 3729.286,
+    "otisk": "8f60ffd5a397e505",
+    "prestavba": true
+   },
+   "zpet_ok": true,
+   "zpet_otisk": "d7aedf3a6d9d10e8"
+  },
+  {
+   "cil": "teren",
+   "k": "p92_max_sklon",
+   "vyp": {
+    "ms": 3727.672,
+    "otisk": "8f60ffd5a397e505",
+    "prestavba": true
+   },
+   "zap": {
+    "ms": 3752.369,
+    "otisk": "d7fe60351835a4cc",
+    "prestavba": true
+   },
+   "zpet_ok": true,
+   "zpet_otisk": "d7aedf3a6d9d10e8"
+  },
+  {
+   "cil": "teren",
+   "k": "p92_hladit",
+   "vyp": {
+    "ms": 3440.232,
+    "otisk": "8f60ffd5a397e505",
+    "prestavba": true
+   },
+   "zap": {
+    "ms": 3392.485,
+    "otisk": "dd545f7a52a6aa9f",
+    "prestavba": true
+   },
+   "zpet_ok": true,
+   "zpet_otisk": "d7aedf3a6d9d10e8"
+  },
+  {
+   "cil": "lod",
+   "k": "p90_lod",
+   "vyp": {
+    "ms": 3.345,
+    "otisk": "d7aedf3a6d9d10e8",
+    "prestavba": false
+   },
+   "zap": {
+    "ms": 1202.903,
+    "otisk": "d7aedf3a6d9d10e8",
+    "prestavba": false
+   },
+   "zpet_ok": true,
+   "zpet_otisk": "d7aedf3a6d9d10e8"
+  },
+  {
+   "cil": "lod",
+   "k": "p90_okoli",
+   "vyp": {
+    "ms": 1229.116,
+    "otisk": "d7aedf3a6d9d10e8",
+    "prestavba": false
+   },
+   "zap": {
+    "ms": 1226.762,
+    "otisk": "d7aedf3a6d9d10e8",
+    "prestavba": false
+   },
+   "zpet_ok": true,
+   "zpet_otisk": "d7aedf3a6d9d10e8"
+  },
+  {
+   "cil": "lod",
+   "k": "p90_slupka",
+   "vyp": {
+    "ms": 1248.508,
+    "otisk": "d7aedf3a6d9d10e8",
+    "prestavba": false
+   },
+   "zap": {
+    "ms": 1320.704,
+    "otisk": "d7aedf3a6d9d10e8",
+    "prestavba": false
+   },
+   "zpet_ok": true,
+   "zpet_otisk": "d7aedf3a6d9d10e8"
+  },
+  {
+   "cil": "lod",
+   "k": "p90_daleko_m",
+   "vyp": {
+    "ms": 1226.035,
+    "otisk": "d7aedf3a6d9d10e8",
+    "prestavba": false
+   },
+   "zap": {
+    "ms": 1215.971,
+    "otisk": "d7aedf3a6d9d10e8",
+    "prestavba": false
+   },
+   "zpet_ok": true,
+   "zpet_otisk": "d7aedf3a6d9d10e8"
+  },
+  {
+   "cil": "lod",
+   "k": "p90_barvy",
+   "vyp": {
+    "ms": 1220.151,
+    "otisk": "d7aedf3a6d9d10e8",
+    "prestavba": false
+   },
+   "zap": {
+    "ms": 1414.031,
+    "otisk": "d7aedf3a6d9d10e8",
+    "prestavba": false
+   },
+   "zpet_ok": true,
+   "zpet_otisk": "d7aedf3a6d9d10e8"
+  },
+  {
+   "cil": "pruhl",
+   "k": "p91_pruhlednost",
+   "vyp": {
+    "ms": 1.954,
+    "otisk": "d7aedf3a6d9d10e8",
+    "prestavba": false
+   },
+   "zap": {
+    "ms": 30.228,
+    "otisk": "d7aedf3a6d9d10e8",
+    "prestavba": false
+   },
+   "zpet_ok": true,
+   "zpet_otisk": "d7aedf3a6d9d10e8"
+  },
+  {
+   "cil": "pruhl",
+   "k": "p91_mode",
+   "vyp": {
+    "ms": 2.249,
+    "otisk": "d7aedf3a6d9d10e8",
+    "prestavba": false
+   },
+   "zap": {
+    "ms": 2.077,
+    "otisk": "d7aedf3a6d9d10e8",
+    "prestavba": false
+   },
+   "zpet_ok": true,
+   "zpet_otisk": "d7aedf3a6d9d10e8"
+  },
+  {
+   "cil": "pruhl",
+   "k": "p91_r",
+   "vyp": {
+    "ms": 2.009,
+    "otisk": "d7aedf3a6d9d10e8",
+    "prestavba": false
+   },
+   "zap": {
+    "ms": 2.169,
+    "otisk": "d7aedf3a6d9d10e8",
+    "prestavba": false
+   },
+   "zpet_ok": true,
+   "zpet_otisk": "d7aedf3a6d9d10e8"
+  },
+  {
+   "cil": "pruhl",
+   "k": "p91_cut_r",
+   "vyp": {
+    "ms": 2.053,
+    "otisk": "d7aedf3a6d9d10e8",
+    "prestavba": false
+   },
+   "zap": {
+    "ms": 2.007,
+    "otisk": "d7aedf3a6d9d10e8",
+    "prestavba": false
+   },
+   "zpet_ok": true,
+   "zpet_otisk": "d7aedf3a6d9d10e8"
+  },
+  {
+   "cil": "pruhl",
+   "k": "p91_ceil",
+   "vyp": {
+    "ms": 2.006,
+    "otisk": "d7aedf3a6d9d10e8",
+    "prestavba": false
+   },
+   "zap": {
+    "ms": 2.006,
+    "otisk": "d7aedf3a6d9d10e8",
+    "prestavba": false
+   },
+   "zpet_ok": true,
+   "zpet_otisk": "d7aedf3a6d9d10e8"
+  },
+  {
+   "cil": "rez",
+   "k": "zk_rez",
+   "vyp": {
+    "ms": 1.643,
+    "otisk": "d7aedf3a6d9d10e8",
+    "prestavba": false
+   },
+   "zap": {
+    "ms": 5.174,
+    "otisk": "d7aedf3a6d9d10e8",
+    "prestavba": false
+   },
+   "zpet_ok": true,
+   "zpet_otisk": "d7aedf3a6d9d10e8"
+  },
+  {
+   "cil": "rez",
+   "k": "zk_rez_pos",
+   "vyp": {
+    "ms": 2.107,
+    "otisk": "d7aedf3a6d9d10e8",
+    "prestavba": false
+   },
+   "zap": {
+    "ms": 1.973,
+    "otisk": "d7aedf3a6d9d10e8",
+    "prestavba": false
+   },
+   "zpet_ok": true,
+   "zpet_otisk": "d7aedf3a6d9d10e8"
+  }
+ ],
+ "kombinace": [
+  {
+   "k": "vše terénu",
+   "ms": 5412.874,
+   "otisk": "83db8b8f0cd3d44c"
+  },
+  {
+   "k": "živé + metry",
+   "ms": 6959.997,
+   "otisk": "d7aedf3a6d9d10e8"
+  }
+ ],
+ "konec_ok": true,
+ "konec_otisk": "d7aedf3a6d9d10e8",
+ "start_otisk": "d7aedf3a6d9d10e8"
+}

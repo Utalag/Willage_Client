@@ -2,7 +2,7 @@ extends SceneTree
 ## E95: test zkušebního panelu bez obrazu. Spustí hru (main.tscn), každý přepínač zapne a vypne (číselný parametr nastaví
 ## se zapnutým rodičem), změří čas přestavby a otisk vody, po vypnutí ověří návrat na výchozí otisk. Pak dvojice
 ## přepínačů terénu, vše najednou a živé přepínače spolu. Chyby skriptu hledej ve výstupu (SCRIPT ERROR).
-## --out=cesta.json (výchozí ../blueprint-studie/shots/e95/zkusebni_e95.json), --dvojice=0|1, --jen=klic,klic
+## --out=cesta.json (výchozí ../blueprint-studie/shots/e95/zkusebni_e95.json), --dvojice=0|1, --jen=klic,klic, --tb=klic,… (dvojice jen z těchto)
 const PN = preload("res://scripts/game/zkusebni/panel.gd")
 const P = preload("res://scripts/game/zkusebni/prepinace.gd")
 
@@ -73,6 +73,7 @@ func _run() -> void:
 		for e in P.SEZNAM:
 			if e.cil == "teren" and e.t == "b" and not e.has("rodic"): tb.append(e.k)
 		tb.append("p94_hora_k")
+		if _arg("tb", "") != "": tb = Array(_arg("tb", "").split(","))
 		for i in tb.size():
 			for j in range(i + 1, tb.size()):
 				var st := {}

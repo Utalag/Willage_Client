@@ -11,8 +11,12 @@ const LOD = preload("res://scripts/game/zkusebni/lod_okoli.gd")
 const SP = preload("res://scripts/surface/surface_params.gd")
 
 ## odhad ceny do bublin (změřeno headless tools/zkusebni_e95.gd, viz blueprint-studie/shots/e95/)
-const CENY := {"teren": "4–6", "lod": "1–3", "pruhl": "1–4", "rez": "1–4"}
-const CASY := {}
+const CENY := {"teren": "4–8", "lod": "1,2–1,4", "pruhl": "~4", "rez": "~4"}
+## změřené časy zapnutí v s (headless, box; přestavba = znovu načtení scény, samotný výchozí ostrov ~5,5 s)
+const CASY := {"p79_chodby": "5,9", "p85_voda": "8,1", "p81_tenke": "6,0", "p81_min_m": "5,9", "p82_vapenec": "5,6", "p82_podil": "6,1",
+	"p82_pod_m": "5,8", "p82_tesneni": "7,4", "p85_vrstvy": "5,5", "p85_min_m": "4,9", "p85_jemne": "5,3", "p85_blok2": "7,0",
+	"p87_jadro_hory": "5,4", "p87_amp": "6,0", "p89_meritko": "5,7", "p94_hora_k": "6,3", "p94_meritko_veg": "5,7", "p92_svah": "3,7",
+	"p92_max_sklon": "3,8", "p92_hladit": "3,4", "p90_lod": "1,2", "p90_okoli": "1,2", "p90_slupka": "1,3", "p90_daleko_m": "1,2", "p90_barvy": "1,4"}
 
 const SURF := ["p89_meritko", "p94_meritko_veg"]   # klíče SurfaceParams (ne ostrov_teren)
 static var stav := {}          # klíč → hodnota (jen to, co se liší od výchozí hry)

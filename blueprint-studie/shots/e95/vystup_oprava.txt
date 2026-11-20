@@ -1,0 +1,60 @@
+E95 test: start otisk d7aedf3a6d9d10e8
+E95 přestavba (p87_jadro_hory): 5416 ms, otisk vody 4fe27cd3b8d83ac9
+E95 přestavba (p87_jadro_hory): 5360 ms, otisk vody d7aedf3a6d9d10e8
+E95 p87_jadro_hory: zap 5416 ms (přestavba) otisk 4fe27cd3b8d83ac9 · vyp 5360 ms · zpět OK
+E95 přestavba (p87_jadro_hory): 5274 ms, otisk vody 4fe27cd3b8d83ac9
+E95 přestavba (p87_amp): 5968 ms, otisk vody 44dd4ac35bc8047b
+E95 přestavba (p87_amp): 5668 ms, otisk vody 4fe27cd3b8d83ac9
+E95 přestavba (p87_jadro_hory): 6716 ms, otisk vody d7aedf3a6d9d10e8
+E95 p87_amp: zap 5968 ms (přestavba) otisk 44dd4ac35bc8047b · vyp 5668 ms · zpět OK
+E95 přestavba (p89_meritko): 5654 ms, otisk vody d7aedf3a6d9d10e8
+E95 přestavba (p89_meritko): 5887 ms, otisk vody d7aedf3a6d9d10e8
+E95 p89_meritko: zap 5654 ms (přestavba) otisk d7aedf3a6d9d10e8 · vyp 5887 ms · zpět OK
+E95 přestavba (p89_meritko): 6187 ms, otisk vody d7aedf3a6d9d10e8
+E95 přestavba (p94_meritko_veg): 5680 ms, otisk vody d7aedf3a6d9d10e8
+E95 přestavba (p94_meritko_veg): 5278 ms, otisk vody d7aedf3a6d9d10e8
+E95 přestavba (p89_meritko): 5415 ms, otisk vody d7aedf3a6d9d10e8
+E95 p94_meritko_veg: zap 5680 ms (přestavba) otisk d7aedf3a6d9d10e8 · vyp 5278 ms · zpět OK
+E95 shadery: 396 materiálů upraveno za 29.6 ms
+E95 p91_pruhlednost: zap 35 ms (za běhu) otisk d7aedf3a6d9d10e8 · vyp 3 ms · zpět OK
+E95 shadery: 396 materiálů upraveno za 2.8 ms
+E95 p91_mode: zap 2 ms (za běhu) otisk d7aedf3a6d9d10e8 · vyp 2 ms · zpět OK
+E95 přestavba (p87_jadro_hory+p82_vapenec): 3886 ms, otisk vody e97c0f4702dc1c19
+E95 dvojice p87_jadro_hory + p82_vapenec: 3886 ms otisk e97c0f4702dc1c19
+E95 přestavba (p87_jadro_hory+p89_meritko): 5279 ms, otisk vody 4fe27cd3b8d83ac9
+E95 dvojice p87_jadro_hory + p89_meritko: 5279 ms otisk 4fe27cd3b8d83ac9
+E95 přestavba (p87_jadro_hory+p94_hora_k): 5231 ms, otisk vody 4fe27cd3b8d83ac9
+E95 dvojice p87_jadro_hory + p94_hora_k: 5231 ms otisk 4fe27cd3b8d83ac9
+E95 přestavba (p87_jadro_hory+p92_svah): 5245 ms, otisk vody d80a20d303051daf
+E95 dvojice p87_jadro_hory + p92_svah: 5245 ms otisk d80a20d303051daf
+E95 přestavba (p87_jadro_hory+p81_tenke): 5239 ms, otisk vody 80e1901a3075c416
+E95 dvojice p87_jadro_hory + p81_tenke: 5239 ms otisk 80e1901a3075c416
+E95 přestavba (p82_vapenec+p89_meritko): 5459 ms, otisk vody 9050f199fa0b4b0a
+E95 dvojice p82_vapenec + p89_meritko: 5459 ms otisk 9050f199fa0b4b0a
+E95 přestavba (p82_vapenec+p94_hora_k): 15943 ms, otisk vody 30a395b868b269ca
+E95 dvojice p82_vapenec + p94_hora_k: 15943 ms otisk 30a395b868b269ca
+E95 přestavba (p82_vapenec+p92_svah): 3571 ms, otisk vody e1d1a22f2995ad28
+E95 dvojice p82_vapenec + p92_svah: 3571 ms otisk e1d1a22f2995ad28
+E95 přestavba (p82_vapenec+p81_tenke): 3565 ms, otisk vody 85afb63eaa561323
+E95 dvojice p82_vapenec + p81_tenke: 3565 ms otisk 85afb63eaa561323
+E95 přestavba (p89_meritko+p94_hora_k): 5382 ms, otisk vody 6976996a24e60fab
+E95 dvojice p89_meritko + p94_hora_k: 5382 ms otisk 6976996a24e60fab
+E95 přestavba (p89_meritko+p92_svah): 3569 ms, otisk vody 8f60ffd5a397e505
+E95 dvojice p89_meritko + p92_svah: 3569 ms otisk 8f60ffd5a397e505
+E95 přestavba (p89_meritko+p81_tenke): 5753 ms, otisk vody c3f579ee9ecbd891
+E95 dvojice p89_meritko + p81_tenke: 5753 ms otisk c3f579ee9ecbd891
+E95 přestavba (p94_hora_k+p92_svah): 6994 ms, otisk vody 94b406a00582aed5
+E95 dvojice p94_hora_k + p92_svah: 6994 ms otisk 94b406a00582aed5
+E95 přestavba (p94_hora_k+p81_tenke): 5341 ms, otisk vody 43e41100b795e1b2
+E95 dvojice p94_hora_k + p81_tenke: 5341 ms otisk 43e41100b795e1b2
+E95 přestavba (p92_svah+p81_tenke): 3727 ms, otisk vody 5a7394b24d642ec6
+E95 dvojice p92_svah + p81_tenke: 3727 ms otisk 5a7394b24d642ec6
+E95 přestavba (vše terénu): 5382 ms, otisk vody 70ce23c8e1fdf809
+E95 vše terénu: 5382 ms otisk 70ce23c8e1fdf809
+E95 LOD: 1273.511 ms, 553610 tri
+E95 shadery: 469 materiálů upraveno za 9.9 ms
+E95 přestavba (živé + metry): 6759 ms, otisk vody d7aedf3a6d9d10e8
+E95 živé + metry: 6759 ms otisk d7aedf3a6d9d10e8
+E95 přestavba (vše vypnout): 5303 ms, otisk vody d7aedf3a6d9d10e8
+E95 konec: otisk d7aedf3a6d9d10e8 OK
+E95 zapsáno /tmp/e95b.json

@@ -3572,3 +3572,31 @@ Výchozí hra se nezměnila. Výsledky jsou v `shots/e93/`: `bench_box_*.json`, 
   otisky buněk, sítí, odkrytí a vegetace stejné (631c754f…, 3452e4cd…, db706a1c…, 483dc33f…).
 - **Negativum:** stromy 1,75–2 m jsou spíš keře nebo mladé stromky. Jsou menší než domek (3 m) a skutečné stromy. Je to herní volba.
 - **Snímky:** `94_vegm05_zap_{ostrov,detail,hra_kamera}.png` (+ `_hora`, `_hora_bok`).
+
+### E95 výsledky (2026-11-20 12:40; větev `zkusebni-vse`, tag `zkusebni-vse-1`, data `blueprint-studie/shots/e95/`)
+- **Sloučeno:** e85 (E78–E83), e84, e86, e87, e89, e90, e91, e92, e93 a e94-metry (vč. E94b `p94_meritko_veg`, 96f2310).
+  Konflikty: texty (DENIK, PROP, devlogy, ZDROJE) sloučeny obě strany beze ztráty řádku; `geo2.gd` E82 `lift82` + E87 `massif87`
+  obojí; `ostrov_teren.HRA` p86 + p92 + p94; `lod90.gd` verze E90 (E92 měla jen kopii s komentářem); `digging.gd` /
+  `ostrov_teren.gd` E85 importy + `BS := J.BS` z E94; `surface_params.p89_meritko` na této větvi **vyp** (na e94-metry zap)
+  + `p94_meritko_veg` z E94b. Kopie studie znovu přeneseny, `port_studie --check` „souborů 82 (79 skriptů), změněno 0“ (82 = +1 soubor z E94).
+- **Výchozí hra beze změny:** `voda_e66` d7aedf3a6d9d10e8 → 63d7b89a91385a79, 12 výkopů 0 neshod. Hra ze scény se zapnutým
+  panelem: start d7aedf3a6d9d10e8, po každém vypnutí a po „Vše vypnout“ opět d7aedf3a6d9d10e8.
+- **Panel:** 34 ovládacích prvků (CheckBox / HSlider / SpinBox / OptionButton), každý s bublinou (co, pokus, cena, vedlejší účinky,
+  klíč). Přestavba = `ostrov_teren.over` + `T.reset()` + znovu načtení scény (kamera a stav ve statických proměnných).
+- **Čas zapnutí (headless box):** přestavba 3,4–8,1 s (samotný výchozí ostrov ~5,5 s; E92 3,4–3,8 s; E85 voda 8,1 s; E82 těsnění
+  7,4 s; E85 blok2 7,0 s). Za běhu: E85 okraj, E86 1–2 ms; E90 LOD 1,2–1,4 s (583 ploch, 554 tis. trojúhelníků); E91 a řez
+  úprava 396 materiálů 30–47 ms + překlad shaderů na GPU při prvním snímku; posun řezu ~2 ms.
+- **Otisky po zapnutí (start):** beze změny p79, p85_voda, p85_jemne, p89, p94_meritko_veg (mění jen kopání / vzhled);
+  jiné p81 c3f579ee…, p82 9050f199…, p85_vrstvy / blok2 958f9334…, p87 4fe27cd3…, p92 8f60ffd5…, p94_hora_k 1,75 cf297a06….
+- **Dvojice:** 55 dvojic 11 přepínačů terénu + vše najednou + živé spolu (metry, LOD, E91 A+B, řez X→Z, E85 okraj, E86): žádný pád.
+  - Chyba nalezená a opravená: E87 v panelu měnil startovní horu na typ `hora_vyzdvizena` → `veg.gd:43` neznal klíč (11× SCRIPT
+    ERROR). Oprava: tvar blueprintu se mění v `ostrov_teren.blueprint`, typ bloku zůstává „hora“. Opakovaný test 0 chyb.
+  - Kolize: **E87 + p94_hora_k** – výška hory se nezmění (otisk = jen E87), masiv přepíše `base_hm`.
+  - **E82 + p94_hora_k** přestavba ~16 s (2× změřeno), jinak 3,5–7 s. **E82 + metry** jednou 75 s, podruhé 5,5 s (nezopakováno).
+  - p85_blok2 přebije jednotlivé p85 (záměr E85); p85_jemne + cokoli = otisk toho druhého (jemná mřížka vodu startu nemění).
+- **Svislý řez:** osa X / Z, poloha 0–1 přes ostrov; plocha řezu barvou materiálu z 3D textury bloků (64 × 256 × bloky, R8) +
+  paleta; voda v rezervoáru modře; StandardMaterial3D (voda, domek, cesty, plochý terén) převedeny za běhu na ShaderMaterial.
+  Snímky `e95_rez_x*.png`, `e95_rez_z*.png`.
+- **Negativa:** řez ukazuje data 0,5 m, ne překryv 0,25 m; povrchová síť (duální mřížka) a buňky se na hraně řezu mírně liší;
+  LOD krajina má na švech drobné mezery (sešití jen boků) a je to jiná funkce než ostrov; přestavba zahodí kopání a stavby;
+  časy jsou z boxu bez GPU (llvmpipe), překlad shaderů není změřený.

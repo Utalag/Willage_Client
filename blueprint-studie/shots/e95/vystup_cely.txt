@@ -1,0 +1,227 @@
+E95 test: start otisk d7aedf3a6d9d10e8
+E95 přestavba (p79_chodby): 5914 ms, otisk vody d7aedf3a6d9d10e8
+E95 přestavba (p79_chodby): 5832 ms, otisk vody d7aedf3a6d9d10e8
+E95 p79_chodby: zap 5914 ms (přestavba) otisk d7aedf3a6d9d10e8 · vyp 5832 ms · zpět OK
+E95 přestavba (p85_voda): 8093 ms, otisk vody d7aedf3a6d9d10e8
+E95 přestavba (p85_voda): 5445 ms, otisk vody d7aedf3a6d9d10e8
+E95 p85_voda: zap 8093 ms (přestavba) otisk d7aedf3a6d9d10e8 · vyp 5445 ms · zpět OK
+E95 přestavba (p81_tenke): 6038 ms, otisk vody c3f579ee9ecbd891
+E95 přestavba (p81_tenke): 5681 ms, otisk vody d7aedf3a6d9d10e8
+E95 p81_tenke: zap 6038 ms (přestavba) otisk c3f579ee9ecbd891 · vyp 5681 ms · zpět OK
+E95 přestavba (p81_tenke): 6551 ms, otisk vody c3f579ee9ecbd891
+E95 přestavba (p81_min_m): 5931 ms, otisk vody 0fcf041bec91258b
+E95 přestavba (p81_min_m): 6292 ms, otisk vody c3f579ee9ecbd891
+E95 přestavba (p81_tenke): 5894 ms, otisk vody d7aedf3a6d9d10e8
+E95 p81_min_m: zap 5931 ms (přestavba) otisk 0fcf041bec91258b · vyp 6292 ms · zpět OK
+E95 přestavba (p82_vapenec): 5588 ms, otisk vody 9050f199fa0b4b0a
+E95 přestavba (p82_vapenec): 5855 ms, otisk vody d7aedf3a6d9d10e8
+E95 p82_vapenec: zap 5588 ms (přestavba) otisk 9050f199fa0b4b0a · vyp 5855 ms · zpět OK
+E95 přestavba (p82_vapenec): 5853 ms, otisk vody 9050f199fa0b4b0a
+E95 přestavba (p82_podil): 6131 ms, otisk vody 9050f199fa0b4b0a
+E95 přestavba (p82_podil): 6343 ms, otisk vody 9050f199fa0b4b0a
+E95 přestavba (p82_vapenec): 6284 ms, otisk vody d7aedf3a6d9d10e8
+E95 p82_podil: zap 6131 ms (přestavba) otisk 9050f199fa0b4b0a · vyp 6343 ms · zpět OK
+E95 přestavba (p82_vapenec): 5943 ms, otisk vody 9050f199fa0b4b0a
+E95 přestavba (p82_pod_m): 5786 ms, otisk vody 569fea2702898ae0
+E95 přestavba (p82_pod_m): 5535 ms, otisk vody 9050f199fa0b4b0a
+E95 přestavba (p82_vapenec): 6067 ms, otisk vody d7aedf3a6d9d10e8
+E95 p82_pod_m: zap 5786 ms (přestavba) otisk 569fea2702898ae0 · vyp 5535 ms · zpět OK
+E95 přestavba (p82_vapenec): 7592 ms, otisk vody 9050f199fa0b4b0a
+E95 přestavba (p82_tesneni): 7435 ms, otisk vody 9050f199fa0b4b0a
+E95 přestavba (p82_tesneni): 5965 ms, otisk vody 9050f199fa0b4b0a
+E95 přestavba (p82_vapenec): 5746 ms, otisk vody d7aedf3a6d9d10e8
+E95 p82_tesneni: zap 7435 ms (přestavba) otisk 9050f199fa0b4b0a · vyp 5965 ms · zpět OK
+E95 přestavba (p85_vrstvy): 5469 ms, otisk vody 958f9334f7d8a9ff
+E95 přestavba (p85_vrstvy): 5637 ms, otisk vody d7aedf3a6d9d10e8
+E95 p85_vrstvy: zap 5469 ms (přestavba) otisk 958f9334f7d8a9ff · vyp 5637 ms · zpět OK
+E95 přestavba (p85_vrstvy): 5617 ms, otisk vody 958f9334f7d8a9ff
+E95 přestavba (p85_min_m): 4939 ms, otisk vody 4ca2337595578e46
+E95 přestavba (p85_min_m): 5303 ms, otisk vody 958f9334f7d8a9ff
+E95 přestavba (p85_vrstvy): 5304 ms, otisk vody d7aedf3a6d9d10e8
+E95 p85_min_m: zap 4939 ms (přestavba) otisk 4ca2337595578e46 · vyp 5303 ms · zpět OK
+E95 přestavba (p85_jemne): 5303 ms, otisk vody d7aedf3a6d9d10e8
+E95 přestavba (p85_jemne): 5411 ms, otisk vody d7aedf3a6d9d10e8
+E95 p85_jemne: zap 5303 ms (přestavba) otisk d7aedf3a6d9d10e8 · vyp 5411 ms · zpět OK
+E95 p85_okraj: zap 1 ms (za běhu) otisk d7aedf3a6d9d10e8 · vyp 1 ms · zpět OK
+E95 přestavba (p85_blok2): 6993 ms, otisk vody 958f9334f7d8a9ff
+E95 přestavba (p85_blok2): 5807 ms, otisk vody d7aedf3a6d9d10e8
+E95 p85_blok2: zap 6993 ms (přestavba) otisk 958f9334f7d8a9ff · vyp 5807 ms · zpět OK
+E95 přestavba (p87_jadro_hory): 5517 ms, otisk vody 4fe27cd3b8d83ac9
+E95 přestavba (p87_jadro_hory): 5533 ms, otisk vody d7aedf3a6d9d10e8
+E95 p87_jadro_hory: zap 5517 ms (přestavba) otisk 4fe27cd3b8d83ac9 · vyp 5533 ms · zpět OK
+E95 přestavba (p87_jadro_hory): 5296 ms, otisk vody 4fe27cd3b8d83ac9
+E95 přestavba (p87_amp): 5823 ms, otisk vody 44dd4ac35bc8047b
+E95 přestavba (p87_amp): 6065 ms, otisk vody 4fe27cd3b8d83ac9
+E95 přestavba (p87_jadro_hory): 6321 ms, otisk vody d7aedf3a6d9d10e8
+E95 p87_amp: zap 5823 ms (přestavba) otisk 44dd4ac35bc8047b · vyp 6065 ms · zpět OK
+E95 p86_otoceni: zap 1 ms (za běhu) otisk d7aedf3a6d9d10e8 · vyp 1 ms · zpět OK
+E95 přestavba (p89_meritko): 6067 ms, otisk vody d7aedf3a6d9d10e8
+E95 přestavba (p89_meritko): 6142 ms, otisk vody d7aedf3a6d9d10e8
+E95 p89_meritko: zap 6067 ms (přestavba) otisk d7aedf3a6d9d10e8 · vyp 6142 ms · zpět OK
+E95 přestavba (p94_hora_k): 6260 ms, otisk vody cf297a06445cd828
+E95 přestavba (p94_hora_k): 5756 ms, otisk vody d7aedf3a6d9d10e8
+E95 p94_hora_k: zap 6260 ms (přestavba) otisk cf297a06445cd828 · vyp 5756 ms · zpět OK
+E95 přestavba (p92_svah): 3729 ms, otisk vody 8f60ffd5a397e505
+E95 přestavba (p92_svah): 5649 ms, otisk vody d7aedf3a6d9d10e8
+E95 p92_svah: zap 3729 ms (přestavba) otisk 8f60ffd5a397e505 · vyp 5649 ms · zpět OK
+E95 přestavba (p92_svah): 3803 ms, otisk vody 8f60ffd5a397e505
+E95 přestavba (p92_max_sklon): 3752 ms, otisk vody d7fe60351835a4cc
+E95 přestavba (p92_max_sklon): 3728 ms, otisk vody 8f60ffd5a397e505
+E95 přestavba (p92_svah): 5286 ms, otisk vody d7aedf3a6d9d10e8
+E95 p92_max_sklon: zap 3752 ms (přestavba) otisk d7fe60351835a4cc · vyp 3728 ms · zpět OK
+E95 přestavba (p92_svah): 3451 ms, otisk vody 8f60ffd5a397e505
+E95 přestavba (p92_hladit): 3392 ms, otisk vody dd545f7a52a6aa9f
+E95 přestavba (p92_hladit): 3440 ms, otisk vody 8f60ffd5a397e505
+E95 přestavba (p92_svah): 5229 ms, otisk vody d7aedf3a6d9d10e8
+E95 p92_hladit: zap 3392 ms (přestavba) otisk dd545f7a52a6aa9f · vyp 3440 ms · zpět OK
+E95 LOD: 1197.653 ms, 553610 tri
+E95 p90_lod: zap 1203 ms (za běhu) otisk d7aedf3a6d9d10e8 · vyp 3 ms · zpět OK
+E95 LOD: 1230.796 ms, 553610 tri
+E95 LOD: 1218.717 ms, 553610 tri
+E95 LOD: 1220.647 ms, 553610 tri
+E95 p90_okoli: zap 1227 ms (za běhu) otisk d7aedf3a6d9d10e8 · vyp 1229 ms · zpět OK
+E95 LOD: 1231.872 ms, 553610 tri
+E95 LOD: 1311.742 ms, 553610 tri
+E95 LOD: 1240.039 ms, 553610 tri
+E95 p90_slupka: zap 1321 ms (za běhu) otisk d7aedf3a6d9d10e8 · vyp 1249 ms · zpět OK
+E95 LOD: 1218.743 ms, 553610 tri
+E95 LOD: 1206.562 ms, 551888 tri
+E95 LOD: 1217.786 ms, 553610 tri
+E95 p90_daleko_m: zap 1216 ms (za běhu) otisk d7aedf3a6d9d10e8 · vyp 1226 ms · zpět OK
+E95 LOD: 1239.276 ms, 553610 tri
+E95 LOD: 1405.611 ms, 553610 tri
+E95 LOD: 1211.468 ms, 553610 tri
+E95 p90_barvy: zap 1414 ms (za běhu) otisk d7aedf3a6d9d10e8 · vyp 1220 ms · zpět OK
+E95 shadery: 396 materiálů upraveno za 24.7 ms
+E95 p91_pruhlednost: zap 30 ms (za běhu) otisk d7aedf3a6d9d10e8 · vyp 2 ms · zpět OK
+E95 shadery: 396 materiálů upraveno za 2.7 ms
+E95 p91_mode: zap 2 ms (za běhu) otisk d7aedf3a6d9d10e8 · vyp 2 ms · zpět OK
+E95 shadery: 396 materiálů upraveno za 2.7 ms
+E95 p91_r: zap 2 ms (za běhu) otisk d7aedf3a6d9d10e8 · vyp 2 ms · zpět OK
+E95 shadery: 396 materiálů upraveno za 2.8 ms
+E95 p91_cut_r: zap 2 ms (za běhu) otisk d7aedf3a6d9d10e8 · vyp 2 ms · zpět OK
+E95 shadery: 396 materiálů upraveno za 2.7 ms
+E95 p91_ceil: zap 2 ms (za běhu) otisk d7aedf3a6d9d10e8 · vyp 2 ms · zpět OK
+E95 shadery: 396 materiálů upraveno za 2.8 ms
+E95 zk_rez: zap 5 ms (za běhu) otisk d7aedf3a6d9d10e8 · vyp 2 ms · zpět OK
+E95 shadery: 396 materiálů upraveno za 2.6 ms
+E95 zk_rez_pos: zap 2 ms (za běhu) otisk d7aedf3a6d9d10e8 · vyp 2 ms · zpět OK
+E95 přestavba (p79_chodby+p85_voda): 6152 ms, otisk vody d7aedf3a6d9d10e8
+E95 dvojice p79_chodby + p85_voda: 6152 ms otisk d7aedf3a6d9d10e8
+E95 přestavba (p79_chodby+p81_tenke): 5771 ms, otisk vody c3f579ee9ecbd891
+E95 dvojice p79_chodby + p81_tenke: 5771 ms otisk c3f579ee9ecbd891
+E95 přestavba (p79_chodby+p82_vapenec): 5608 ms, otisk vody 9050f199fa0b4b0a
+E95 dvojice p79_chodby + p82_vapenec: 5608 ms otisk 9050f199fa0b4b0a
+E95 přestavba (p79_chodby+p85_vrstvy): 5976 ms, otisk vody 958f9334f7d8a9ff
+E95 dvojice p79_chodby + p85_vrstvy: 5976 ms otisk 958f9334f7d8a9ff
+E95 přestavba (p79_chodby+p85_jemne): 5832 ms, otisk vody d7aedf3a6d9d10e8
+E95 dvojice p79_chodby + p85_jemne: 5832 ms otisk d7aedf3a6d9d10e8
+E95 přestavba (p79_chodby+p85_blok2): 6181 ms, otisk vody 958f9334f7d8a9ff
+E95 dvojice p79_chodby + p85_blok2: 6181 ms otisk 958f9334f7d8a9ff
+E95 přestavba (p79_chodby+p87_jadro_hory): 5454 ms, otisk vody 4fe27cd3b8d83ac9
+E95 dvojice p79_chodby + p87_jadro_hory: 5454 ms otisk 4fe27cd3b8d83ac9
+E95 přestavba (p79_chodby+p89_meritko): 5662 ms, otisk vody d7aedf3a6d9d10e8
+E95 dvojice p79_chodby + p89_meritko: 5662 ms otisk d7aedf3a6d9d10e8
+E95 přestavba (p79_chodby+p92_svah): 3606 ms, otisk vody 8f60ffd5a397e505
+E95 dvojice p79_chodby + p92_svah: 3606 ms otisk 8f60ffd5a397e505
+E95 přestavba (p79_chodby+p94_hora_k): 5318 ms, otisk vody 6976996a24e60fab
+E95 dvojice p79_chodby + p94_hora_k: 5318 ms otisk 6976996a24e60fab
+E95 přestavba (p85_voda+p81_tenke): 6648 ms, otisk vody c3f579ee9ecbd891
+E95 dvojice p85_voda + p81_tenke: 6648 ms otisk c3f579ee9ecbd891
+E95 přestavba (p85_voda+p82_vapenec): 6538 ms, otisk vody 9050f199fa0b4b0a
+E95 dvojice p85_voda + p82_vapenec: 6538 ms otisk 9050f199fa0b4b0a
+E95 přestavba (p85_voda+p85_vrstvy): 5793 ms, otisk vody 958f9334f7d8a9ff
+E95 dvojice p85_voda + p85_vrstvy: 5793 ms otisk 958f9334f7d8a9ff
+E95 přestavba (p85_voda+p85_jemne): 7255 ms, otisk vody d7aedf3a6d9d10e8
+E95 dvojice p85_voda + p85_jemne: 7255 ms otisk d7aedf3a6d9d10e8
+E95 přestavba (p85_voda+p85_blok2): 6635 ms, otisk vody 958f9334f7d8a9ff
+E95 dvojice p85_voda + p85_blok2: 6635 ms otisk 958f9334f7d8a9ff
+E95 přestavba (p85_voda+p87_jadro_hory): 6213 ms, otisk vody 4fe27cd3b8d83ac9
+E95 dvojice p85_voda + p87_jadro_hory: 6213 ms otisk 4fe27cd3b8d83ac9
+E95 přestavba (p85_voda+p89_meritko): 6617 ms, otisk vody d7aedf3a6d9d10e8
+E95 dvojice p85_voda + p89_meritko: 6617 ms otisk d7aedf3a6d9d10e8
+E95 přestavba (p85_voda+p92_svah): 3627 ms, otisk vody 8f60ffd5a397e505
+E95 dvojice p85_voda + p92_svah: 3627 ms otisk 8f60ffd5a397e505
+E95 přestavba (p85_voda+p94_hora_k): 6085 ms, otisk vody 6976996a24e60fab
+E95 dvojice p85_voda + p94_hora_k: 6085 ms otisk 6976996a24e60fab
+E95 přestavba (p81_tenke+p82_vapenec): 3513 ms, otisk vody 85afb63eaa561323
+E95 dvojice p81_tenke + p82_vapenec: 3513 ms otisk 85afb63eaa561323
+E95 přestavba (p81_tenke+p85_vrstvy): 5160 ms, otisk vody 28ba63f690099282
+E95 dvojice p81_tenke + p85_vrstvy: 5160 ms otisk 28ba63f690099282
+E95 přestavba (p81_tenke+p85_jemne): 5672 ms, otisk vody c3f579ee9ecbd891
+E95 dvojice p81_tenke + p85_jemne: 5672 ms otisk c3f579ee9ecbd891
+E95 přestavba (p81_tenke+p85_blok2): 6199 ms, otisk vody 28ba63f690099282
+E95 dvojice p81_tenke + p85_blok2: 6199 ms otisk 28ba63f690099282
+E95 přestavba (p81_tenke+p87_jadro_hory): 5528 ms, otisk vody 80e1901a3075c416
+E95 dvojice p81_tenke + p87_jadro_hory: 5528 ms otisk 80e1901a3075c416
+E95 přestavba (p81_tenke+p89_meritko): 6070 ms, otisk vody c3f579ee9ecbd891
+E95 dvojice p81_tenke + p89_meritko: 6070 ms otisk c3f579ee9ecbd891
+E95 přestavba (p81_tenke+p92_svah): 3738 ms, otisk vody 5a7394b24d642ec6
+E95 dvojice p81_tenke + p92_svah: 3738 ms otisk 5a7394b24d642ec6
+E95 přestavba (p81_tenke+p94_hora_k): 5681 ms, otisk vody 43e41100b795e1b2
+E95 dvojice p81_tenke + p94_hora_k: 5681 ms otisk 43e41100b795e1b2
+E95 přestavba (p82_vapenec+p85_vrstvy): 3794 ms, otisk vody f56ae77eb1c092f6
+E95 dvojice p82_vapenec + p85_vrstvy: 3794 ms otisk f56ae77eb1c092f6
+E95 přestavba (p82_vapenec+p85_jemne): 5684 ms, otisk vody 9050f199fa0b4b0a
+E95 dvojice p82_vapenec + p85_jemne: 5684 ms otisk 9050f199fa0b4b0a
+E95 přestavba (p82_vapenec+p85_blok2): 3600 ms, otisk vody f56ae77eb1c092f6
+E95 dvojice p82_vapenec + p85_blok2: 3600 ms otisk f56ae77eb1c092f6
+E95 přestavba (p82_vapenec+p87_jadro_hory): 3824 ms, otisk vody e97c0f4702dc1c19
+E95 dvojice p82_vapenec + p87_jadro_hory: 3824 ms otisk e97c0f4702dc1c19
+E95 přestavba (p82_vapenec+p89_meritko): 75439 ms, otisk vody 9050f199fa0b4b0a
+E95 dvojice p82_vapenec + p89_meritko: 75439 ms otisk 9050f199fa0b4b0a
+E95 přestavba (p82_vapenec+p92_svah): 3906 ms, otisk vody e1d1a22f2995ad28
+E95 dvojice p82_vapenec + p92_svah: 3906 ms otisk e1d1a22f2995ad28
+E95 přestavba (p82_vapenec+p94_hora_k): 16351 ms, otisk vody 30a395b868b269ca
+E95 dvojice p82_vapenec + p94_hora_k: 16351 ms otisk 30a395b868b269ca
+E95 přestavba (p85_vrstvy+p85_jemne): 5351 ms, otisk vody 958f9334f7d8a9ff
+E95 dvojice p85_vrstvy + p85_jemne: 5351 ms otisk 958f9334f7d8a9ff
+E95 přestavba (p85_vrstvy+p85_blok2): 5869 ms, otisk vody 958f9334f7d8a9ff
+E95 dvojice p85_vrstvy + p85_blok2: 5869 ms otisk 958f9334f7d8a9ff
+E95 přestavba (p85_vrstvy+p87_jadro_hory): 4693 ms, otisk vody be09bfafeeffca66
+E95 dvojice p85_vrstvy + p87_jadro_hory: 4693 ms otisk be09bfafeeffca66
+E95 přestavba (p85_vrstvy+p89_meritko): 5363 ms, otisk vody 958f9334f7d8a9ff
+E95 dvojice p85_vrstvy + p89_meritko: 5363 ms otisk 958f9334f7d8a9ff
+E95 přestavba (p85_vrstvy+p92_svah): 3403 ms, otisk vody f11fa5c18f46f52e
+E95 dvojice p85_vrstvy + p92_svah: 3403 ms otisk f11fa5c18f46f52e
+E95 přestavba (p85_vrstvy+p94_hora_k): 4852 ms, otisk vody 0e50bcbeae8486e0
+E95 dvojice p85_vrstvy + p94_hora_k: 4852 ms otisk 0e50bcbeae8486e0
+E95 přestavba (p85_jemne+p85_blok2): 5875 ms, otisk vody 958f9334f7d8a9ff
+E95 dvojice p85_jemne + p85_blok2: 5875 ms otisk 958f9334f7d8a9ff
+E95 přestavba (p85_jemne+p87_jadro_hory): 5075 ms, otisk vody 4fe27cd3b8d83ac9
+E95 dvojice p85_jemne + p87_jadro_hory: 5075 ms otisk 4fe27cd3b8d83ac9
+E95 přestavba (p85_jemne+p89_meritko): 5305 ms, otisk vody d7aedf3a6d9d10e8
+E95 dvojice p85_jemne + p89_meritko: 5305 ms otisk d7aedf3a6d9d10e8
+E95 přestavba (p85_jemne+p92_svah): 3497 ms, otisk vody 8f60ffd5a397e505
+E95 dvojice p85_jemne + p92_svah: 3497 ms otisk 8f60ffd5a397e505
+E95 přestavba (p85_jemne+p94_hora_k): 5255 ms, otisk vody 6976996a24e60fab
+E95 dvojice p85_jemne + p94_hora_k: 5255 ms otisk 6976996a24e60fab
+E95 přestavba (p85_blok2+p87_jadro_hory): 5151 ms, otisk vody be09bfafeeffca66
+E95 dvojice p85_blok2 + p87_jadro_hory: 5151 ms otisk be09bfafeeffca66
+E95 přestavba (p85_blok2+p89_meritko): 5796 ms, otisk vody 958f9334f7d8a9ff
+E95 dvojice p85_blok2 + p89_meritko: 5796 ms otisk 958f9334f7d8a9ff
+E95 přestavba (p85_blok2+p92_svah): 3620 ms, otisk vody f11fa5c18f46f52e
+E95 dvojice p85_blok2 + p92_svah: 3620 ms otisk f11fa5c18f46f52e
+E95 přestavba (p85_blok2+p94_hora_k): 5716 ms, otisk vody 0e50bcbeae8486e0
+E95 dvojice p85_blok2 + p94_hora_k: 5716 ms otisk 0e50bcbeae8486e0
+E95 přestavba (p87_jadro_hory+p89_meritko): 5341 ms, otisk vody 4fe27cd3b8d83ac9
+E95 dvojice p87_jadro_hory + p89_meritko: 5341 ms otisk 4fe27cd3b8d83ac9
+E95 přestavba (p87_jadro_hory+p92_svah): 5319 ms, otisk vody d80a20d303051daf
+E95 dvojice p87_jadro_hory + p92_svah: 5319 ms otisk d80a20d303051daf
+E95 přestavba (p87_jadro_hory+p94_hora_k): 5075 ms, otisk vody 4fe27cd3b8d83ac9
+E95 dvojice p87_jadro_hory + p94_hora_k: 5075 ms otisk 4fe27cd3b8d83ac9
+E95 přestavba (p89_meritko+p92_svah): 3457 ms, otisk vody 8f60ffd5a397e505
+E95 dvojice p89_meritko + p92_svah: 3457 ms otisk 8f60ffd5a397e505
+E95 přestavba (p89_meritko+p94_hora_k): 5343 ms, otisk vody 6976996a24e60fab
+E95 dvojice p89_meritko + p94_hora_k: 5343 ms otisk 6976996a24e60fab
+E95 přestavba (p92_svah+p94_hora_k): 7039 ms, otisk vody 94b406a00582aed5
+E95 dvojice p92_svah + p94_hora_k: 7039 ms otisk 94b406a00582aed5
+E95 přestavba (vše terénu): 5413 ms, otisk vody 83db8b8f0cd3d44c
+E95 vše terénu: 5413 ms otisk 83db8b8f0cd3d44c
+E95 LOD: 1314.877 ms, 553610 tri
+E95 shadery: 469 materiálů upraveno za 9.7 ms
+E95 přestavba (živé + metry): 6960 ms, otisk vody d7aedf3a6d9d10e8
+E95 živé + metry: 6960 ms otisk d7aedf3a6d9d10e8
+E95 přestavba (vše vypnout): 5381 ms, otisk vody d7aedf3a6d9d10e8
+E95 konec: otisk d7aedf3a6d9d10e8 OK
+E95 zapsáno /tmp/wc-zk/godot-prototyp/../blueprint-studie/shots/e95/zkusebni_e95.json
