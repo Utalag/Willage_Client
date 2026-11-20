@@ -516,6 +516,12 @@ Skupiny: 1 Prototyp a buildy · 2 Terén a tvar · 3 Rozlišení bloku · 4 Ská
 
 ## 3 Rozlišení bloku
 
+### 🧪 E83: determinismus bloku, překryvu, vody a pořadí vložení (2026-11-20 03:34 · prototyp `tools/determinismus_e83.gd`, `tools/audit_e83.py`, oprava klíče mezipaměti v `tok` / `tok60`, větev `e83-determinismus`)
+- **Směr:** TODO Architektura světa: ujasnit Hash(seed, změny, pořadí) a ověřit bitovou shodu napříč běhy, procesy a pořadím.
+- **Zlepšení:** běhy i dva procesy bitově stejné; blok závisí jen na sousedech položených před ním (12/12, diagonála a vzdálený blok 0); překryv na různých buňkách nezávisí na pořadí; pořadí vložení mění 1,9 % buněk záměrně, 63–70 % u švu; klíč mezipaměti podzemí přesný, otisky beze změny.
+- **Komplikace:** výchozí lokální voda (bez p79) závisí na pořadí změn a po načtení se liší; přesné remízy v krytu (2–5 buněk na 65 536) a float voda → bitová shoda mezi platformami jen pro buňky, ne pro vodu.
+- **Další krok (Jan):** zapnout p76 + p79; otisk vody pro server zaokrouhlit?; sousedé jen hrany nebo i rohy.
+
 ### 🧪 E82: vápenec k hladině v ~50 % bloků (2026-11-20 02:27 · prototyp `tools/vapenec_e82.gd`, `geo2.coin82` / `lift82`, příznak `p82_vapenec`, větev `e82-vapenec-hladina`, sloučen `e75-kras`)
 - **Směr:** Rozhodnutí Jana 01:55: generátor dává vápenec k hladině zhruba v 50 % bloků podle seedu. Mince z hashe seedu; v bloku „ano“ se vršek jeskynního vápence zvedne na povrch − 2 m a nepropustné vrstvy nad ním se vyklíní. Soused se napojí náběhem mocností.
 - **Zlepšení:** 495 / 1000 ano; bloky „ne“ beze změny; vršek vápence 2,0 m proti 5,6 m; švy bez skoku; deterministické; +5 % času. V E67 kras na 19 z 30 ostrovů (bez příznaku 7).

@@ -62,6 +62,8 @@ Pokus E81 (2026-11-20 01:48, větev `e81-tenke-vrstvy`): vrstva se do buňky dos
 
 Pokus E82 (2026-11-20 02:27, větev `e82-vapenec-hladina`): podle Janova rozhodnutí hází generátor u každého bloku minci ze seedu (495 z 1000 „ano“). V bloku „ano“ sahá jeskynní vápenec až 2 m pod povrch a jíl s jílovcem nad ním se vyklíní, jinak by voda k vápenci nedošla. Sousední blok se napojí stávajícím náběhem 3 m, funkce zůstanou spojité a bloky „ne“ se nezmění. Kras se ale ve výchozím podzemí E58 skoro nespustí, protože voda teče krytem nad vápencem. V podzemí E67 vznikne na 19 z 30 ostrovů (bez mince na 7).
 
+Pokus E83 (2026-11-20 03:34, větev `e83-determinismus`): stejná definice, seed a překryv dávají stejné buňky, překryv i otisky ve dvou bězích i ve dvou procesech. Blok závisí jen na sousedech, kteří leželi před ním. Proto pořadí vložení mění asi 2 % buněk, hlavně u švů, a to je záměr. Změny na různých buňkách nezávisí na pořadí, na stejné buňce ano. Jediná skutečná závislost na pořadí je výchozí lokální přepočet vody; s příznaky E76 a E79 zmizí. Mezi platformami půjde držet bitově buňky, ale ne vodu, protože počítá ve float64 s exp a pow.
+
 ## Změny od hráče
 
 **Hypotéza:** definice zůstává nedotčená a změny se ukládají zvlášť jako překryv:

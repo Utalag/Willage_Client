@@ -357,6 +357,49 @@ Výchozí: 800 kapek na blok, `ero_cap` 1,0, `ero_erode` 0,1, `ero_deposit_rate`
 - **Negativa předem:** jinou platformu (ARM, telefon, .NET) tu otestovat nejde – jen audit a citlivost. Pořadí vložení
   ovlivňuje výsledek záměrně (Jan 2026-11-17).
 
+## E83 výsledky (zapsáno 2026-11-20 03:34; `godot-prototyp/tools/determinismus_e83.gd`, `tools/audit_e83.py`, `shots/e83/`)
+- **Hash(seed, změny, pořadí) – jak to je:**
+  - *Blok* = f(definice, seed, sousedé položení před ním). Pravidlo platí: blok postavený jen se svými skutečnými
+    sousedy (bez ostatních bloků) je bitově stejný ve 12 z 12 případů (3 pořadí × 4 bloky). Diagonální soused 0 buněk,
+    vzdálený blok 0. Vzorek 0,25 m z funkcí u prvního bloku se po příchodu sousedů nezmění (0), protože soused bere
+    okraj přesně z něj.
+  - *Pořadí vložení* mění výsledek záměrně (Jan 2026-11-17). START obráceně: 274–349 buněk na blok, celkem 1250 z 65 536
+    (1,9 %); 63–70 % do 1 sloupce od švu s už položeným sousedem, 26–39 % ve 2–5, 2–3 % dál. Výšky povrchu 0 rozdílů,
+    mění se jen hranice vrstev. Otisk vody jiný. To je nález E82 (1246–1275) – záměr, ne chyba.
+  - *Překryv* = konečný stav. 400 operací na různých buňkách ve dvou pořadích: stejný překryv i plný přepočet vody. Na
+    stejné buňce rozhoduje pořadí (vykopat → zasypat = hlína, zasypat → vykopat = vzduch, položení do plné buňky selže).
+  - *Voda* je odvozená. Plný přepočet = funkce buněk. **Výchozí lokální přepočet (bez `p79_chodby`) závisí na pořadí:
+    tytéž změny ve dvou pořadích → dva různé otisky, oba jiné než plný přepočet; po uložení a načtení je voda jiná než
+    živá.** S `p76_prameny` + `p79_chodby` je lokální = plný = po načtení a nezávisí na pořadí.
+- **Běhy a procesy:** 2 ostrovy × 2 nastavení, otisky geo, cells, hm, překryv, záznam, voda před, po výkopech, po
+  načtení: 2× v procesu stejné, ve dvou procesech stejné (proces1 = proces2). Vlákna kód nepoužívá. Jiná platforma tu
+  není (jen Linux x86_64 headless).
+- **Citlivost na float:** posun povrchu a hranic o ±1e-12 m změní 2–5 buněk z 65 536 při 0,5 m a 74–146 z 524 288 při
+  0,25 m; ±1e-9 a ±1e-6 m skoro stejně (2–5 / 74–147), ±1e-3 m 27–35 / 365–456. Jsou to přesné remízy: hloubka pod
+  povrchem d = h − Z přesně na prahu krytu (0,5 / 1,5 m), protože povrch i středy buněk jsou násobky 1/8 m. IEEE double
+  je dá všude stejně, ale port musí počítat h a Z stejným vzorcem (lerp a + (b − a)·t, žádný float32). Mimo remízy
+  posun 1e-6 m přidá nejvýš 1 buňku → ulp rozdíly šumu buňky skoro nemění.
+- **Audit (herní kód teren + voda):** exp/log/pow 26 míst, sin/cos 4, sqrt/délky 33, šum FastNoiseLite 125 (float32),
+  `sort_custom` 16, iterace slovníku bez řazení 5, float ve formátu klíče / hashe 4 (např. `hydro68.otisk` „%.12f“), `hash()`
+  Godotu 4 (mezipaměť podzemí – opraveno; `voda_sim` starého gen-v3), RandomNumberGenerator 0, čas 102 (jen měření, nic
+  na něm nezávisí). Celé tabulky v `shots/e83/audit.md`.
+- **Oprava (bez příznaku):** klíč mezipaměti podzemí v `tok.gd` / `tok60.gd` byl `"%.9f" % q` + 32bitový `excl.hash()`
+  → dva různé vstupy mohly sdílet výsledek. Teď přesné bity q a seřazené buňky. Všechny otisky beze změny (START
+  d7aedf3a…, voda_e66 63d7b89a…, běhy a překryv stejné jako před opravou). Kolize se v testech nestala, oprava je
+  preventivní.
+- **Rizika pro telefon / ARM / C# server:** (1) otisk vody hashuje surové bity float64 a voda používá exp/pow → mezi
+  platformami bitově stejná nebude (libm se liší v posledním bitu); (2) FastNoiseLite ve float32, na ARM může překladač
+  slučovat násobení a sčítání (FMA) → jiné poslední bity šumu, dopad na buňky malý (viz citlivost); (3) C# Dictionary
+  nemá pořadí vložení, GDScript ano → port musí řadit; (4) `sort_custom` je nestabilní → porovnání musí mít úplné
+  pořadí; (5) hashe jsou celá čísla mod 2^64 (C# `unchecked ulong`, popsáno v `stable_hash`).
+- **Negativa:** platformu ani počet vláken tu změnit nejde; doporučení pro telefon a server jsou z auditu, ne z měření.
+  Výchozí lokální voda je na pořadí závislá – oprava je E79 za příznakem (čeká na zapnutí).
+- **Doporučení:** zapnout `p76_prameny` + `p79_chodby` jako výchozí (jediná nalezená skutečná nedeterminističnost).
+  Pro server a jiné platformy: buňky a překryv lze držet bitově (celočíselné hashe, přesné remízy), vodu porovnávat
+  s tolerancí nebo hashovat zaokrouhlené hodnoty (např. pevná řádová čárka jako WVB1 u16).
+- **Pro Jana:** (1) zapnout p76 + p79 jako výchozí? (2) otisk vody: surové bity (jen stejná platforma), nebo zaokrouhlit
+  pro server / telefon? (3) má být „stejní sousedé“ jen 4 hrany (teď), nebo i rohy?
+
 ## E82 vápenec k hladině v ~50 % bloků (plán, zapsáno před pokusem 2026-11-20 01:59; Rozhodnutí Jana 2026-11-20 01:55: „generátor dává vápenec k hladině zhruba v 50 % případů (náhodně podle seedu bloku)“; větev z `e81-tenke-vrstvy` + sloučený `e75-kras`)
 - **Co už je:** vrstvy v2 = zóny (plášť, krystalinikum, sedimenty), v zóně pořadí z tabulky hornin, mocnost a výskyt podle
   šumu světa (`geo2.targets`). Pak navázání mocností na sousedy (`strata.continue_thick`, náběh `taper_m` 3 m, klíny),
