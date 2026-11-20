@@ -284,7 +284,14 @@ Dokud 2.1–2.6 nebudou rozhodnuté, test nestavět.
 
 **Otázka pro Jana.** Stačí jako povinný test svět 3 × 3 bloky, řez na 9 blueprintů a složení ostrova (včetně zrcadlení a jednoho blueprintu z jiného světa), s měřením slupky, rozdílu, vody a determinismu? Maximum 4 096 m necháme až později?
 
-**Platí:**
+**Platí:** *rozhodnuto (2026-11-20 21:48–21:50, Jan t828u, t829u)*
+
+- Povinný test: **svět 3 × 3 bloky → řez na 9 blueprintů → ostrov** (náhodné pořadí, otočení, zrcadlení, aspoň jeden blueprint z jiného světa). Spouští se celý, jen svět, nebo jen ostrov (1.4).
+- Měří se a zapisuje do PROP vše z výčtu výše (svět, řez, vložení, slupka, donačtení, rozdíl, voda, determinismus, paměť, segment 8/16/32 m).
+- Ověří se i, že **vygenerovaný svět má vodu hned v ustáleném stavu** a voda se pohne až po vložení nebo kopání (2.5).
+- **Maximální svět 4096 m** slouží jen pro první fáze a rozvržení (mapa biomů a hornin). Celý se nestaví ani negeneruje.
+- Test se staví až po dokončení celého dokumentu.
+
 
 ---
 
