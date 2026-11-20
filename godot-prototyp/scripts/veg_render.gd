@@ -3,10 +3,11 @@ extends RefCounted
 ## Vykreslení vegetace bloku: každý druh jeden MultiMeshInstance3D (trsy, květiny, suchá tráva, mech procedurálně,
 ## stromy/keř/kaktus z .glb vytvořených Blenderem). Výška buňky 0,5.
 
+const J = preload("res://scripts/jednotky.gd")   # E94: mřížka a metry z jednoho místa
 const Veg = preload("res://scripts/veg.gd")
 const Toon = preload("res://scripts/toon.gd")
 const Grass = preload("res://scripts/grass.gd")
-const CELL_H := 0.5
+const CELL_H := J.CELL_M
 const MODELS := {Veg.BUSH: "ker", Veg.CONIFER: "jehlicnan", Veg.DECIDUOUS: "listnac", Veg.CACTUS: "kaktus"}
 const FLOWER_COLORS := [Color(1.0, 0.62, 0.78), Color(1.0, 0.92, 0.45), Color(0.98, 0.98, 1.0), Color(0.75, 0.62, 1.0)]
 
