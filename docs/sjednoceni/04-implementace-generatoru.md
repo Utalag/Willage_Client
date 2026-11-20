@@ -90,7 +90,7 @@ Stav: **návrh k odsouhlasení**, 2026-11-20 23:50 SEČ. Podklad pro stavbu nov�
 ## Krok 3 – Funkce světa II: geologie a útvary
 
 **Obsah**
-- Pásma vrstev z úrovní 0–40 (`poradi_hornin.json`), 1–3 zástupci podle mapy hornin, vrstvy podle tvaru terénu, vyklínění, mocnost min. 0,5 m (2 buňky) a max. 1/4 výšky (1.7, 1.7.1).
+- Pásma vrstev z úrovní 0–40 (`poradi_hornin.json`), 1–3 zástupci podle mapy hornin, vrstvy podle tvaru terénu, vyklínění, mocnost min. 1 buňka (0,25 m, Jan 2026-11-21 00:34) a max. 1/4 výšky (1.7, 1.7.1).
 - Mince E82 (jeskynní a hluboký vápenec a dolomit 50/50 až 2 m pod hladinu) a vyklínění jílu nad ní (1.8).
 - Útvary jako funkce celého světa přes švy (SDF z hashe světové mřížky, E84): žíly, pně, skarny, dómy, kras, dutiny, minerály. `cavity_one` se ruší (1.7, 2.1).
 - Sopka uvnitř: průduch id 75 od kráteru po z = 0, kuželovité slupky lávy a popela, těleso vrstvy propíchne (1.14).

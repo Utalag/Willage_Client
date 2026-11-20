@@ -269,7 +269,7 @@ Pojmy: **blueprint** = otisk světa o velikosti bloku. To, čemu se ve studiích
 - Přístup **„jeden útvar na blok“** se ruší.
 - **Vrstvy se přizpůsobují tvaru terénu.**
 - Chybějící vrstvy končí **vyklíněním**: vrstva se do strany zužuje, až zmizí. Neskončí svislou stěnou.
-- Minimální mocnost vrstvy je nově 0,5 m (2 buňky); dřívější zákaz vrstev < 25 cm se ruší, viz 1.7.1.
+- Minimální mocnost vrstvy je 1 buňka, tedy 0,25 m (Jan 2026-11-21 00:34: „buňka podle stanoveného měřítka“); dřívější zákaz vrstev < 25 cm se ruší, viz 1.7.1.
 
 ### 1.7.1 Skladba vrstev
 
