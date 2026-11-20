@@ -2,7 +2,7 @@
 
 Větev `gen-v1-krok02-funkce-sveta` (z `gen-v1-krok01-zaklady` c3f9b77). Plán: `04-implementace-generatoru.md`, krok 2 (větev `sjednoceni` 6e0fec6). Pravidla: 01 – 1.4, 1.7.1, 1.13, 1.14; 02 – 2.1, 2.2.
 
-## PROP (napsáno 2026-11-21 00:45 SEČ, před experimentem)
+## PROP (napsáno 2026-11-21 00:30 SEČ, před experimentem)
 
 **Cíl.** Jedna čistá funkce světa V1.0 v metrech bez mřížky sousedů: dotaz na sloupec `(x, y)` vrátí povrch, biom a zastoupení hornin, dotaz na bod `(x, y, z)` materiál. Vrstvy (krok 3) a hladina (krok 4) se doplní bez změny rozhraní. Výchozí hra se nemění: nový kód hra nevolá.
 
@@ -35,7 +35,7 @@ Větev `gen-v1-krok02-funkce-sveta` (z `gen-v1-krok01-zaklady` c3f9b77). Plán: 
 
 **Regrese po sloučení E87 a E96 (před kódem kroku 2):** `voda_e66` d7aedf3a6d9d10e8 → 63d7b89a91385a79, 0 neshod (65 s); `port_studie --check` 82 souborů, 0 změn.
 
-## Výsledky (2026-11-21 01:25 SEČ)
+## Výsledky (2026-11-21 00:50 SEČ)
 
 Všechna kritéria kroku 2 prošla a regrese kroku 1 je beze změny. Nový kód hra nevolá, takže se výchozí hra nemění a nová reference `voda_e66` nevznikla. Testy běžely lokálně na boxu (Godot 4.7.2 headless, Python 3), bez CI.
 
