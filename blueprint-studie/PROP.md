@@ -356,6 +356,47 @@ Výchozí: 800 kapek na blok, `ero_cap` 1,0, `ero_erode` 0,1, `ero_deposit_rate`
   pravidlu „sousedé se nemění“. Minerály a dutiny nejsou funkce (výběr buněk) → při jiném rozlišení jiná místa. Změna
   verze funkcí pod překryvem bez pravidla rozbije výkopy. Bez rozhodnutí Jana jen návrh.
 
+## E80 výsledky (zapsáno 2026-11-20 01:39; `godot-prototyp/tools/hranice_e80.gd -- --bp.p76_prameny=true --bp.p79_chodby=true`, `shots/e80/`)
+- **Hranice (jak to je v kódu):** zdroj pravdy = funkce v metrech světa (`geo_fn`: povrch, hranice vrstev na řídicí mřížce
+  0,5 m, materiál bodu, tělesa) + seed bloku. Při 0,5 m jsou buňky přesně vzorky funkcí (16 = pipeline ve všech 4 blocích).
+  Minerály a dutiny z generátoru už funkce nejsou (výběr buněk podle φ), vsakování taky ne. Mřížka 0,25 m v `prekryv78` je
+  zjemnění buněk 0,5 m, ne vzorek funkcí. Překryv hráče je konečný stav buněk 0,25 m. Voda (podzemí) čte pásma z funkcí
+  + jednu dutinu na sloupec 0,5 m z buněk.
+- **Rozlišení:** funkce při 0,25 m proti zjemnění 0,5 m: jiné buňky 7,8 % (bez minerálů 7,5 %, jen geometrie 7,6 %),
+  pevné/vzduch 0,47 %, povrch Ø 0,05–0,36 m, max 0,5 m (louka) až 1,75 m (hora). Rozdíly jsou na hranicích vrstev a ve
+  strmém povrchu. Vzorek 0,25 m stojí 0,46–0,81 s na blok (0,5 m 58–94 ms).
+- **Švy:** povrch i hranice vrstev bez skoku (0 m), materiál se mění přes šev méně než uvnitř (3,4 % proti 11,2 % dvojic).
+  Pořadí vložení: první blok vzorkovaný sám a po vložení sousedů = 0 jiných buněk při 0,5 i 0,25 m (sousedé přebírají okraj).
+- **Překryv po převzorkování a nové verzi funkcí (chodba E78, 2175 položek):** položky zůstanou platné (0 výkopů ve
+  vzduchu, 0 položek = nové definici), ale okolí se změní: nad funkcemi 0,25 m 313 z 1787 sousedních buněk, půda +0,5 m
+  32, povrch +0,5 m 421 a 32 položení skončí uvnitř skály (bývala na povrchu). Stejná verze: 0.
+- **Okraje a dno:** dno ostrova (z = 0) je plné ve všech 1024 sloupcích. Díra dnem (šachta 1 × 1 m až na z = 0): voda v ní
+  stojí jako v tůni (4 sloupce mokré, `hm` 0), nevyteče ven, 0,04 l/s „do hloubky“. Chodba ze zvodnělé vrstvy (hladina
+  19,5 m, chodba 15–17 m) ven bokem ostrova: voda beze změny (otisk d7aedf3a…, 0 výstupů „okraj“) – bok ostrova podzemí
+  neotevírá (bez `p67_okraj`; s ním se zvodnělá vrstva nenašla, ostrov má jinou vodu). Lokálně = plně v obou.
+- **Kritérium (třídy sloupců 0,5 m pro vodu, změněné sloupce):** chodba 55 jedna dutina / 8 výška / 1 jemnější;
+  dlouhá 288 / 4 / 0; převis 11 / 5 / 4; oblouk 10 / 9 / 0; nepravidelná jeskyně 1 / 0 / **109 jemnější než 0,5 m**;
+  1000 náhodných **637 jemnějších**; dvě chodby nad sebou **32 víc dutin** (pásmo vody je spojí). Úseků změn na sloupec
+  0,25 m 1,0–1,14 (dvě chodby 2,0).
+- **Uložení (deflate, B; syrově v json):** klíče (E78) / intervaly / octree / cihly 8³:
+  chodba 124 / 451 / 241 / 342; dlouhá 244 / 1865 / **157** / 353; 1000 náhodných **1792** / 3341 / 2825 / 4894;
+  převis 66 / 165 / **60** / 63; oblouk 82 / 154 / **63** / 83; jeskyně **663** / 1256 / 744 / 865; dvě chodby 99 / 408 / 129 / 168.
+- **Závěr:** funkce končí u buňky 0,5 m. Plné buňky (= překryv) jsou potřeba všude, kde hráč něco změnil; vykreslení a
+  kolize to už umí. Problém je jen voda: sloupec 0,5 m, kde (a) víc než jedna dutina pod povrchem, nebo (b) změna jemnější
+  než 0,5 m, pásma vody nepopíšou. Uložení: klíče + deflate stačí (nejmenší nebo do 1,6× nejmenšího); octree je lepší jen u
+  velkých souvislých objemů, intervaly po deflate nejhorší. Řídký objem / octree zatím nedělat.
+- **Opraveno:** `prekryv78.op` nehlídal meze – z = 128 zapsal do sloupce vedle (index přetekl). Teď vrací false.
+- **Negativa / otevřené:**
+  - Mřížka 0,25 m není z funkcí (7,8 % buněk jinak). Sjednotit: buď 0,25 m z funkcí (pomalejší 6–9×, voda a pipeline jsou
+    na 0,5 m), nebo zůstat u zjemnění. Rozhodne Jan.
+  - Změna verze funkcí pod překryvem rozbije okolí výkopů a zasype položené buňky. Návrh: blok drží verzi generátoru, se
+    kterou vznikl (WVB1 má `gen_ver`), nová verze jen pro nové bloky. Rozhodne Jan.
+  - Díra dnem a chodba bokem: voda neodteče z ostrova. Model nezná otevřené dno ani bok. Rozhodne Jan, jestli kopat do z = 0
+    a ven bokem vůbec jde.
+  - Víc dutin ve sloupci a jemné změny < 0,5 m voda nevidí (jeskyně 109 sloupců, dvě chodby 32). Oprava = dutiny jako víc
+    pásem na sloupec (a vzorek 0,25 m pro vodu), nedělal jsem.
+  - Měřil jsem jen 4 bloky jednoho ostrova a jen dvě změny verze; 0,125 m jsem nezkoušel.
+
 ## E79 výsledky (zapsáno 2026-11-20 01:30; `godot-prototyp/tools/chodby_e79.gd -- --bp.p76_prameny=true --bp.p79_chodby=true`, `shots/e79/vysledky.json`, `vystup.txt`)
 - **Shoda lokálně = plně (otisk vody, `fill/eff/to` 0 neshod) po KAŽDÉ dávce ve všech 11 scénářích s `edit79`.** Stará cesta
   (E78, `edit` po sloupcích) nesedí v 6 z 11: chodba 153 / 102 `eff` (podle pořadí), zvodnělá vrstva a šachta do dna tůně

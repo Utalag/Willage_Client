@@ -56,6 +56,8 @@ Funkce `bs[k](x, y)` dává pro každé místo jednu výšku. Sama proto neumí 
 
 **Hypotéza:** tam, kde změna přestane jít popsat funkcemi a pásmy, vznikne lokální oblast s plnými buňkami, a jen tam. Celý ostrov kvůli jedné jeskyni do voxelů převádět nechceme.
 
+Pokus E80 (2026-11-20 01:39, větev `e80-hranice-funkci`): funkce jsou zdrojem pravdy jen do buňky 0,5 m. Tam jsou buňky přesné vzorky funkcí, přes švy bez skoku a nezávislé na pořadí vložení. Minerály a dutiny z generátoru už jsou výběr buněk. Mřížka 0,25 m pro kopání je zjemnění buněk 0,5 m; vzorek funkcí při 0,25 m se od ní liší v 7,8 % buněk. Plné buňky tvoří překryv hráče, a ten stačí uložit jako seřazené klíče s kompresí. Octree pomůže jen u velkých souvislých výkopů. Pásma přestanou stačit jen vodě: když má sloupec 0,5 m víc dutin pod sebou nebo změnu jemnější než 0,5 m (nepravidelná jeskyně 109 sloupců, dvě chodby nad sebou 32).
+
 ## Změny od hráče
 
 **Hypotéza:** definice zůstává nedotčená a změny se ukládají zvlášť jako překryv:

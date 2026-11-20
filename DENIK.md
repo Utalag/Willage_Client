@@ -510,6 +510,12 @@ Skupiny: 1 Prototyp a buildy · 2 Terén a tvar · 3 Rozlišení bloku · 4 Ská
 
 ## 3 Rozlišení bloku
 
+### 🧪 E80: kde končí funkce a pásma (2026-11-20 01:39 · prototyp `tools/hranice_e80.gd`, oprava mezí `prekryv78.op`, větev `e80-hranice-funkci`)
+- **Směr:** TODO Model světa a kopání: kritérium, kdy změna potřebuje plné buňky, a jak je uložit. Ověřena hranice funkce → buňka 0,5 m → zjemnění 0,25 m → překryv: rozlišení, švy, pořadí vložení, nová verze funkcí pod překryvem, okraje a dno ostrova.
+- **Zlepšení:** švy bez skoku, pořadí vložení nemění buňky (0 při 0,5 i 0,25 m). Kritérium: pásma vody nestačí při víc dutinách ve sloupci 0,5 m nebo změně jemnější než 0,5 m; jinde stačí. Uložení: klíče + deflate stačí, octree jen u velkých objemů. Opraven přetok indexu z = 128.
+- **Komplikace:** 0,25 m z funkcí ≠ zjemnění 0,5 m (7,8 % buněk); nová verze funkcí mění okolí výkopů (až 421 buněk, 32 položení ve skále); díra dnem a chodba bokem vodu z ostrova nevypustí.
+- **Další krok (Jan):** zdroj mřížky 0,25 m; verze generátoru zamčená u bloku; dno a bok ostrova; pak dutiny jako víc pásem na sloupec.
+
 ### 🧪 E79: voda po změně dutin – chodby a šachty v lokálním přepočtu (2026-11-20 01:30 · prototyp `ostrov_voda.edit79`, `ug_funkce.from_world` s mezipamětí, `prekryv78.sync79`, příznak `p79_chodby`, větev `e79-chodby-voda`)
 - **Směr:** nález E78: lokální přepočet vody neviděl chodbu se vstupem z povrchu. Po dávce změn buněk se při změně dutiny nebo výšky postaví podzemí znovu (funkční pásma z mezipaměti) a do lokálního přepočtu E68 jdou změněné sloupce, odtoky, vývěry a tůně dotčených těles.
 - **Zlepšení:** lokálně = plně po každé dávce ve všech 11 scénářích (chodba, zvodnělá vrstva, šachta do dna tůně, obě pořadí), bilance 0; stará cesta nesedí v 6. Uzavřená chodba vodu nemění. Výchozí hra beze změny.
