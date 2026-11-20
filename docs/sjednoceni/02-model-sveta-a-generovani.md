@@ -143,6 +143,7 @@ Minerály, žíly, kras i dutiny jsou útvary funkce světa (1.7), ne krok „po
 - Při kopání nebo poklesu vody se nově obnažené buňky **donačtou z funkce**. Jednou uložený rozdíl se znovu nepočítá.
 - **Rozlišení 0,5 m je pro data a výpočty** (poměry, objemy, voda), ne pro zobrazení. Prezentace může kreslit jinak (2D dlaždice i 3D).
 - Šířku okraje a počty buněk slupky změřit v 2.7, nehádat.
+- **Poznámka pro kapitolu 7 (Jan t820u–t822u, 21:03–21:08):** viditelný voxel je **0,25 m** (postava 1,75 m = 7 voxelů). **128 / 256 / 512 px** je rozlišení textury dlaždice podle kvality a monitoru (Full HD, 2K, 27"), ne velikost dlaždice na obrazovce. Kolik terénu je vidět, určuje zoom. Datový model to neomezuje. Obrázek: `obrazky/voxel-meritko.png`.
 
 
 ---
