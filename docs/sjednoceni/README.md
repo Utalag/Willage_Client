@@ -36,7 +36,7 @@ Upřesnění od Jana:
 3. **1.4 Zdroj pravdy o terénu:** herní svět z funkce jako celek, blueprint = otisk světa o velikosti bloku, test 3 × 3 bloky – *rozhodnuto 2026-11-20 (t718u, t719u)*.
 4. **1.2 Jednotky a jemná mřížka:** definice 0,5 m a 0,25 m jen u kopání (přehodnocení 03:26).
 5. **1.5 Verze generátoru:** *odloženo 2026-11-20 (t726u)*, dokud nebude jeden funkční generátor.
-6. **1.9 Přepočet vody:** pravidlo „lokální = plný“, fronta ve vlákně.
+6. **1.9 Přepočet vody:** lokální = plný, výřez na povodí + asynchronně na pozadí, prodleva 2 s / strop 10 s – *rozhodnuto 2026-11-20 (t734u, t735u)*.
 7. **1.8 Voda jako data:** obsah buňky v m³, povrch priority-flood + D8, výchozí podzemí E67, čas 1 den = 1 h – *rozhodnuto 2026-11-20 (t732u)*.
 8. **1.11 Datový rozpočet:** cílový telefon a čísla.
 9. **1.6 Materiály:** jedna tabulka, jedno id – *rozhodnuto 2026-11-20 (t727u)*, návrh `materialy.csv`.
