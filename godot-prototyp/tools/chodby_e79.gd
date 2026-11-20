@@ -171,6 +171,10 @@ func run79(name: String, mode: String) -> Dictionary:
 	var bil_loc: Dictionary = v.hydro().bilance
 	var vf := OV.new(); var t1 := Time.get_ticks_usec(); vf.build(blocks); var full_ms := (Time.get_ticks_usec() - t1) / 1000.0
 	var w_full: String = vf.hydro().otisk
+	if _arg("ladit", "") == "1":   # E85: obsazení a plný výpočet se stejným obsazením (check_full) proti čerstvému
+		var c1 := v.claims.keys(); c1.sort(); var c2 := vf.claims.keys(); c2.sort()
+		var cf: Dictionary = v.check_full()
+		print("  ladění: obsazeno lokálně %s čerstvě %s; check_full %s %s; čerstvý %s" % [str(c1), str(c2), JSON.stringify(cf), v.full_otisk, w_full])
 	var bil_full: Dictionary = vf.hydro().bilance
 	var d := diff(v.st, vf.st)
 	var dd := diff2(v.st, vf.st)
