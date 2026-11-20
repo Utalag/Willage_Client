@@ -248,7 +248,7 @@ Návrh E88 s Willage-backend **ještě nebyl projednán** [2]. Body 6.1 a 6.2 js
 
 **Otázka pro Jana.** Má `gen_ver` zůstat jedno číslo, ke kterému patří dokumentovaný profil změn (aby server poznal, co je jiné), aniž bychom teď rozhodovali o přepočtu starých ostrovů?
 
-**Platí:**
+**Platí:** (Jan, hovor 20. 11. 2026) Verze generátoru se zapisuje ve tvaru `Vmajor.minor`: velké V, číslo před tečkou je hlavní verze (zásadní, nekompatibilní změna), číslo za tečkou je minoritní verze (drobná změna) a přičítá se postupně. Číslo zůstává jednoduché na uložení a porovnání. Význam změny (nekompatibilní, nebo drobná) se nese v metadatech verze nebo v poznámce ke commitu. Přepočet starých ostrovů zůstává odložený (1.5).
 
 ---
 
