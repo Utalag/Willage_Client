@@ -3412,3 +3412,71 @@ Zdroje [45]–[72] níže v tomto souboru zůstávají jen jako zástupné čís
   - Vrchol bloku 128 m je ořez funkce E49 (50 m), proto se převýšení nemění. Natažení × 8 a reliéf × 3 jsou předpoklad E90.
   - Vegetace a domek hry se v pohledu „v metrech“ zúží jako v E89. Postava v pohledu na horu z boku je malá a tmavá (proti světlu).
   - Vodu na bloku 128 m jsem neměřil (voda ostrova umí jen bloky 16 × 16).
+## E93 výkon na telefonu (plán, zapsáno před pokusem 2026-11-20 08:15)
+
+- **Zadání (TODO, Blok 4):** „Výkon na telefonu: hierarchie rozlišení (region, blok, sekce 16³ nebo 32³, jemné buňky jen
+  u hráče), všechny úrovně ze stejných funkcí. Změřit generování bloku na slabém zařízení.“ Telefon nemáme.
+- **(a) Scéna `bench_telefon.tscn`** (samostatná, hra se nemění): vygeneruje ostrov START jako hra (`main.tscn`), změří
+  generování bloků, síť, plnou vodu E66, pak čas snímku v několika pohledech (přehled, zoom, otočení, poloviční 3D rozlišení),
+  počty objektů / trojúhelníků / draw calls z `Performance`, paměť (Godot statická, video, RSS z /proc), kopání (lokální
+  přepočet vody E66/E68) a znovu plnou vodu. Výsledek na obrazovku, do `user://bench_telefon.json` a do schránky.
+  E90 (LOD) a E91 (průhlednost) nejsou na main (jen větve) → v benchmarku nejsou, jen poznámka.
+- **(b) APK pro Android (časový limit ~20 min):** šablony 4.7.2 (už na boxu), JDK 17 a Android SDK (build-tools, platform-tools)
+  do `/workspace/tools/android`. Ladicí podpis debug.keystore. Vlastní preset `Android (bench)` s vlastní značkou
+  `bench_telefon` → `run/main_scene.bench_telefon` = scéna benchmarku (desktop a hra beze změny). APK jen do
+  `/workspace/willage-ideas/telefon-e93/`, ne do gitu. Když to nepůjde: přesný postup pro Jana.
+- **(c) Odhad na boxu:** headless logika (generování 4 bloků, plná voda, 12 výkopů s lokálním přepočtem E68) plnou rychlostí,
+  na 1 jádře (`taskset`) a se škrcením CPU (`cpulimit`, pokud půjde) → přepočet na telefon podle jednojádrového skóre
+  (Geekbench) se zdroji. Render: trojúhelníky a draw calls scény proti rozpočtům pro mobilní GPU ze zdrojů (ZDROJE.md).
+- **Výchozí hra beze změny:** `voda_e66` d7aedf3a6d9d10e8 → 63d7b89a91385a79, `port_studie --check` 0 změn.
+- **Negativa předem:** bez telefonu jsou všechna čísla odhad. Škrcení CPU nezmění paměťovou propustnost ani termiku telefonu.
+  GDScript na ARM může být jinak rychlý než na x86. Software GPU na boxu neříká nic o mobilní GPU.
+
+### E93 výsledky (2026-11-20 08:33)
+
+Telefon nemáme, takže všechno níže je odhad z boxu. Skutečné číslo dá až Jan spuštěním APK.
+
+**(a) Scéna `bench_telefon`** (`godot-prototyp/bench_telefon.tscn`, `scripts/bench/bench_telefon.gd`). Spustí `main.tscn` (ostrov START) a změří:
+generování (bloky, sítě, voda), paměť (Godot, video, RSS z `/proc`), 4 průchody po 240 snímcích (přehled, přiblížení,
+otočení, 3D v polovičním rozlišení: průměr, p50/p95/p99, fps, trojúhelníky, draw calls) a 8 výkopů s dopočtem vody.
+Výsledek ukáže na obrazovce, uloží jako `user://bench_telefon.json` a dá do schránky. E90 (LOD) a E91 (průhlednost) nejsou na `main`,
+takže v benchmarku nejsou (scéna to do výsledku zapíše).
+
+**(b) APK:** povedlo se (šablony 4.7.2, JDK 17, SDK build-tools 35.0.1 a platforma 35, za ~20 min). Soubory jsou mimo git
+v `/workspace/willage-ideas/telefon-e93/`: release 30,6 MB (na měření) a debug 32,4 MB. Obě mají arm64-v8a, GLES 3.0, podpis ladicím klíčem
+a `apksigner verify` prošel. Preset „Android (bench)“ přepne hlavní scénu přes vlastní značku `bench_telefon`. Desktop a hra mají dál `main.tscn`.
+Do `project.godot` přibylo `import_etc2_astc=true`, Android ho vyžaduje. Návod je v `shots/e93/NAVOD_TELEFON.md`.
+
+**(c) Logika s omezeným CPU** (`tools/voda_e66.gd --kontrola=0`, binárka editoru, `shots/e93/cpu_limit_souhrn.json`):
+
+| běh | generování bloků | voda celkem | výkop (průměr / medián / max) | krok dopočtu R (medián max) |
+|---|---|---|---|---|
+| plná rychlost (8 jader), 2 běhy | 879–923 ms | 2457–2610 ms | 726–818 / 666–787 / 1220–1327 ms | 64–73 ms |
+| 1 jádro (`taskset -c 0`), 2 běhy | 905–920 ms | 2527–2557 ms | 739–742 / 653–676 / 1212–1326 ms | 64–67 ms |
+| 1 jádro + `cpulimit 50 %` | 1698 ms | 4963 ms | 1458 / 1354 / 2491 ms | 267 ms* |
+| 1 jádro + `cpulimit 25 %` | 3014 ms | 10564 ms | 2676 / 2579 / 4340 ms | 767 ms* |
+
+\* `cpulimit` proces zastavuje po časových úsecích, takže krátké události zkresluje (ve 25 % jeden krok 50 s). Dlouhé součty sedí (50 % ≈ 2×, 25 % ≈ 3,3–4×).
+Jedno jádro je stejně rychlé jako osm: logika běží v jednom vlákně a na telefonu rozhoduje jedno velké jádro.
+I na plné rychlosti má dopočet R občas jeden krok 0,67–0,77 s (výkopy 2 a 4), to je trhnutí.
+
+Přepočet přes Geekbench 6 na jedno jádro: box (Xeon Platinum 8581C) 1818–1883 [73]. Střední třída: Exynos 1480 1161 [74], Snapdragon 7s Gen 2 1015 [75]
+→ zhruba 1,6–1,9× pomaleji. Slabý telefon: Snapdragon 680 412 [76] → asi 4,4–4,6× pomaleji.
+
+| odhad (z plné rychlosti boxu) | generování | voda celkem | výkop medián | nejhorší krok R |
+|---|---|---|---|---|
+| střední třída (1,6–1,9×) | 1,4–1,8 s | 3,9–5,0 s | 1,1–1,5 s | 1,1–1,5 s |
+| slabý (4,4–4,6×) | 3,9–4,2 s | 10,8–12,0 s | 2,9–3,6 s | 3,0–3,5 s |
+
+Exportní release šablona je na boxu rychlejší než binárka editoru: v `bench_telefon` voda 780 ms místo 1914 ms a generování 3,9 s místo 6,7 s.
+Skutečné APK tak může být lepší než tento odhad. Netestoval jsem paměťovou propustnost ani zahřívání, `cpulimit` je neemuluje.
+
+**Vykreslování** (počty z `bench_telefon`, přehled ostrova START): 269 359 trojúhelníků, 173 draw calls, 384 objektů, video paměť 41,4 MB.
+Snímek na boxu trvá 127–215 ms, ale jde o llvmpipe, tedy GPU v softwaru, takže to o telefonu nic neříká.
+Doporučený strop pro OpenGL ES je pod 500 draw calls [77], takže 173 je v pořádku. Trojúhelníků je víc než v ukázce Android Armies:
+ta má ~210 000 a ~30 fps [78]. Silné mobilní SoC (Quest 2) zvládnou 0,75–1 M [79]. Odhad: střední telefon 30 fps spíš ano, 60 fps nejisté, slabý telefon pod 30 fps.
+Nejdražší jsou nejspíš stíny (mapa 8192, měkké stíny kvalita 3) a MSAA 2×. Průchod se 3D v polovičním rozlišení ukáže, jestli telefon brzdí pixely.
+E90 LOD by trojúhelníky snížil, na `main` ale zatím není.
+
+**Kontroly:** `port_studie --check` „souborů 81 (78 skriptů), změněno 0“. `voda_e66` d7aedf3a6d9d10e8 → 63d7b89a91385a79, neshod 0.
+Výchozí hra se nezměnila. Výsledky jsou v `shots/e93/`: `bench_box_*.json`, `93_bench_telefon_box.png`, `cpu/`, `cpu_limit_souhrn.json`.

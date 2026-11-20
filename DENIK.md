@@ -246,6 +246,12 @@ Skupiny: 1 Prototyp a buildy · 2 Terén a tvar · 3 Rozlišení bloku · 4 Ská
 - **Zlepšení:** blok 128 m z funkce E90 je mírný už sám (p50 17,5°, nad 45° 5,5 %, převýšení 43 m, pata 53 m); strop 0,6 → nad 45° 0 %, p95 46 → 34°. Snímky s postavou 1,75 m a domem 4 × 4 × 3 m: ostrov dnes / v metrech / s omezovačem, blok 128 m před / po. Výchozí hashe beze změny.
 - **Komplikace:** na ostrově 8 m omezovač skoro nepomůže (nad 45° 26 → 18 %), hora se jen sníží 9,5 → 6 m, pata zůstane 1,5 m. Voda se změní: podzemní těleso a vývěr zmizí, vodopády 8 → 1–5, tůně 159 → 110–133 sloupců.
 - **Další krok:** Jan rozhodne: blok ostrova 128 m (mírné svahy z funkce) místo šablon 8 m? strop sklonu 0,6? scéna v metrech (E89)?
+### 🧪 E93 výkon na telefonu: benchmark scéna a APK, odhad bez telefonu (2026-11-20 08:33 · větev `e93-telefon`, tag `e93-telefon`, `godot-prototyp/bench_telefon.tscn`, shots `blueprint-studie/shots/e93/`)
+- **Směr:** poslední bod bloku 4 v TODO je výkon na telefonu. Telefon nemáme, proto vznikla měřicí scéna, APK pro Jana a odhad z boxu.
+- **Zlepšení:** scéna `bench_telefon` měří generování, vodu, paměť, 4 průchody snímků a 8 výkopů. Výsledek ukáže na obrazovce, uloží do JSON a dá do schránky. Vzniklo APK release 30,6 MB a debug 32,4 MB (arm64, GLES 3), obě jsou mimo git.
+- **Zlepšení:** logika běží jen na jednom jádru (1 jádro = 8 jader). Odhad pro střední telefon: generování 1,4–1,8 s, voda 3,9–5,0 s, výkop ~1,1–1,5 s. Pro slabý telefon ~3–4× víc. Vykreslování: 269 tis. trojúhelníků a 173 draw calls, tedy draw calls v limitu a trojúhelníků víc než v ukázce Androidu pro 30 fps.
+- **Komplikace:** je to jen odhad (llvmpipe, `cpulimit`). Krok dopočtu vody R má občas 0,7 s i na boxu. APK nemá ikonu a má ladicí podpis. Do `project.godot` přibylo `import_etc2_astc`. E90 a E91 v benchmarku nejsou.
+- **Další krok:** Jan spustí release APK na telefonu a pošle obsah schránky. Pak se rozhodne o stínech, LOD (E90) a C#/vláknech pro vodu.
 
 ### 🔄 Voda E74–E77 sloučena, přepínače podle Jana (2026-11-20 04:08 · větev `voda-e74-e77-slouceni`, tag `voda-e74-e77-ready`, `tok.solve74`, `ug67._merge_outs72d`, `ostrov_voda.place76`, data `blueprint-studie/shots/voda_e74_e77/`)
 - **Směr:** Jan 2026-11-20 01:49 a 03:26: sloučit E74–E77, zapnout obsazování pramenů s hladinou, uložené prameny, slučování do 8 m; E75 a těžba na `cas_hry.gd`.

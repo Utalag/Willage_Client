@@ -1,0 +1,196 @@
+{
+ "generovani": {
+  "bloky_gen_ms": [
+   208.6,
+   238.0,
+   232.3,
+   204.3
+  ],
+  "bloky_sit_ms": [
+   67.6,
+   75.0,
+   62.4,
+   46.9
+  ],
+  "celkem_ms": 6653.8,
+  "voda_ms": {
+   "celkem": 1913.949,
+   "podzemí: pásma": 246.789,
+   "povrch + podzemí: plný výpočet": 1630.559,
+   "prameny": 5.897
+  }
+ },
+ "hotovo": "2026-11-20T08:17:25",
+ "kopani": {
+  "max_ms": 1970.2,
+  "plna_voda_znovu_ms": 1917.8,
+  "prumer_ms": 1743.0,
+  "vykopy": [
+   {
+    "ms": 1885.8,
+    "sloupec": [
+     5,
+     5
+    ],
+    "zprava": "vykopáno tráva (lz 40)"
+   },
+   {
+    "ms": 1496.3,
+    "sloupec": [
+     9,
+     3
+    ],
+    "zprava": "vykopáno tráva (lz 39)"
+   },
+   {
+    "ms": 1885.7,
+    "sloupec": [
+     12,
+     12
+    ],
+    "zprava": "vykopáno tráva (lz 38)"
+   },
+   {
+    "ms": 1876.3,
+    "sloupec": [
+     20,
+     20
+    ],
+    "zprava": "vykopáno tráva (lz 39)"
+   },
+   {
+    "ms": 1453.4,
+    "sloupec": [
+     26,
+     22
+    ],
+    "zprava": "vykopáno tráva (lz 40)"
+   },
+   {
+    "ms": 1631.6,
+    "sloupec": [
+     4,
+     20
+    ],
+    "zprava": "vykopáno tráva (lz 42)"
+   },
+   {
+    "ms": 1970.2,
+    "sloupec": [
+     14,
+     27
+    ],
+    "zprava": "vykopáno tráva (lz 39)"
+   },
+   {
+    "ms": 1744.3,
+    "sloupec": [
+     22,
+     9
+    ],
+    "zprava": "vykopáno sníh (lz 55)"
+   }
+  ]
+ },
+ "pamet_konec": {
+  "buffery_mb": 19.8,
+  "godot_static_mb": 128.7,
+  "godot_static_peak_mb": 136.4,
+  "textury_mb": 21.5,
+  "video_mb": 41.4
+ },
+ "pamet_po_generovani": {
+  "buffery_mb": 10.9,
+  "godot_static_mb": 82.5,
+  "godot_static_peak_mb": 111.6,
+  "textury_mb": 52.8,
+  "video_mb": 63.7
+ },
+ "pamet_po_snimcich": {
+  "buffery_mb": 10.9,
+  "godot_static_mb": 82.6,
+  "godot_static_peak_mb": 111.6,
+  "textury_mb": 21.5,
+  "video_mb": 32.5
+ },
+ "pamet_start": {
+  "buffery_mb": 6.1,
+  "godot_static_mb": 31.2,
+  "godot_static_peak_mb": 31.8,
+  "textury_mb": 8.0,
+  "video_mb": 14.1
+ },
+ "poznamka": "E90 LOD a E91 průhlednost nejsou na main (jen větve), v benchmarku nejsou.",
+ "snimky": {
+  "otoceni": {
+   "draw_calls": 174,
+   "fps": 7.5,
+   "objekty": 488,
+   "p50_ms": 130.14,
+   "p95_ms": 153.03,
+   "p99_ms": 165.05,
+   "render_cpu_ms": 130.81,
+   "render_gpu_ms": 131.8,
+   "snimek_prumer_ms": 133.39,
+   "trojuhelniky": 269639
+  },
+  "polovicni_3d": {
+   "draw_calls": 174,
+   "fps": 7.5,
+   "objekty": 540,
+   "p50_ms": 131.66,
+   "p95_ms": 154.25,
+   "p99_ms": 154.75,
+   "render_cpu_ms": 128.87,
+   "render_gpu_ms": 130.01,
+   "snimek_prumer_ms": 133.24,
+   "trojuhelniky": 269743
+  },
+  "prehled": {
+   "draw_calls": 174,
+   "fps": 6.9,
+   "objekty": 386,
+   "p50_ms": 146.02,
+   "p95_ms": 165.61,
+   "p99_ms": 171.69,
+   "render_cpu_ms": 137.93,
+   "render_gpu_ms": 138.94,
+   "snimek_prumer_ms": 144.46,
+   "trojuhelniky": 269435
+  },
+  "zoom": {
+   "draw_calls": 163,
+   "fps": 5.0,
+   "objekty": 430,
+   "p50_ms": 199.13,
+   "p95_ms": 216.09,
+   "p99_ms": 237.69,
+   "render_cpu_ms": 196.98,
+   "render_gpu_ms": 197.76,
+   "snimek_prumer_ms": 200.0,
+   "trojuhelniky": 376385
+  }
+ },
+ "verze": "E93 bench_telefon v1",
+ "zarizeni": {
+  "api": "4.5 (Core Profile) Mesa 25.0.7-2+deb13u1",
+  "cpu": "Intel(R) Xeon(R) Processor",
+  "debug": true,
+  "godot": "4.7.2-stable (official)",
+  "gpu": "llvmpipe (LLVM 19.1.7, 256 bits)",
+  "gpu_vyrobce": "Mesa",
+  "jader": 8,
+  "model": "GenericDevice",
+  "obrazovka": [
+   1280,
+   800
+  ],
+  "okno": [
+   1280.0,
+   800.0
+  ],
+  "os": "Linux 13",
+  "renderer": "gl_compatibility",
+  "vsync": 0
+ }
+}
