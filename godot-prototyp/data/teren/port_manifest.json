@@ -152,10 +152,10 @@
   "scripts/voda/podzemi/ug_mrizka.gd": "5dc4cc593895623a",
   "scripts/voda/podzemi/ug_pole.gd": "b859e034e1e8c3b6",
   "scripts/voda/podzemi/ug_slovnik.gd": "216ea9618b0b5f47",
-  "scripts/voda/povrch/tok60.gd": "056f793a9be5e522",
+  "scripts/voda/povrch/tok60.gd": "bf4db787f79cd694",
   "scripts/voda/prameny.gd": "d116031b5118a30a",
   "scripts/voda/strze.gd": "a203d2438b871d8f",
-  "scripts/voda/tok.gd": "1720530eee93ec78",
+  "scripts/voda/tok.gd": "1d453cf629970e25",
   "scripts/voda/voda_svet.gd": "92ea2ea0a97df8a0",
   "tools/studie_alg64_ug.gd": "77a121b074a0cdb2"
  }

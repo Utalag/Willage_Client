@@ -530,7 +530,9 @@ static func _apply_drains(st: Dictionary, dirty = null) -> PackedInt32Array:
 					vs.append(ents[j][0]); q += ents[j][1].podzemi_lps
 					if T._fed73(st, ents[j][1], r0, fed): continue   # E73 p73_vyver: tůň zavodněná pramenem tohoto tělesa – pramen v ní smí zůstat
 					for c in ents[j][1].cells: excl[c] = true
-				var sk := "s%s|%.9f|%d" % [str(vs), q, excl.hash()]
+				# E83: přesný klíč (bity q, seřazené buňky), dřív "%.9f" a 32bitový excl.hash() – kolize = výsledek z mezipaměti jiného vstupu
+				var ek := excl.keys(); ek.sort()
+				var sk := "s%s|%s|%s" % [str(vs), PackedFloat64Array([q]).to_byte_array().hex_encode(), str(ek)]
 				if not st.ug_cache.has(sk): st.ug_cache[sk] = _ugi(st).solve(st.ug, vs, q, excl)
 				var r: Dictionary = st.ug_cache[sk].duplicate()
 				for j in grp:
