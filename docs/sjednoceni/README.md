@@ -33,7 +33,7 @@ Upřesnění od Jana:
 
 1. **1.1 Pojmy:** ostrov, blok, segment, buňka; hierarchie ukládání ostrov → blok → segment → buňka, ostrov jako jednotka ukládání, svět (1.4) se s ostrovem nesmí zaměňovat – *rozhodnuto 2026-11-20 (t713u, t714u), doplněno (t741u–t743u)*.
 2. **1.3 Výška sloupce:** výčet 32 / 64 / 128 m, výchozí 128 m, neutrální úroveň v polovině – *rozhodnuto 2026-11-20 (t716u, t717u)*.
-3. **1.4 Zdroj pravdy o terénu:** herní svět z funkce jako celek, blueprint = otisk světa o velikosti bloku, test 3 × 3 bloky – *rozhodnuto 2026-11-20 (t718u, t719u)*.
+3. **1.4 Zdroj pravdy o terénu:** herní svět ze spojité funkce bez vlastních bloků, blueprint řezáním, segmenty ukládají buňky; svět se dogenerovává, ostrov se rozšiřuje vkládáním – *rozhodnuto 2026-11-20 (t718u, t719u), doplněno (t744u–t748u)*.
 4. **1.2 Jednotky a jemná mřížka:** definice 0,5 m a 0,25 m jen u kopání (přehodnocení 03:26).
 5. **1.5 Verze generátoru:** *odloženo 2026-11-20 (t726u)*, dokud nebude jeden funkční generátor.
 6. **1.9 Přepočet vody:** lokální = plný, výřez na povodí + asynchronně na pozadí, prodleva 2 s / strop 10 s – *rozhodnuto 2026-11-20 (t734u, t735u)*.
