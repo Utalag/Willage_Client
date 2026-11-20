@@ -201,10 +201,10 @@ Paměť je výpočet (256 × 256 × výška × 1 B), ne měření. Skutečná pa
 |---|---|---|
 | kras (E75/E82) | skoro ne (2/63) | 19 z 30 ostrovů |
 | výtok z okrajů vrstev | ne | ano (Jan 2026-11-19 15:54 „voda na krajích bloku měla vytékat z vrstev“) |
-| plný výpočet ostrov START | ~2,5 s | 0,85 s [5] |
+| plný výpočet (E77, různé nástroje, jen orientačně) | ~2,7 s (`voda_e66`) | 0,85 s (`tools/e67.gd`) [17] |
 | mince vápence | skoro bez účinku | funguje, ale i v blocích „ne“ |
 
-**Doporučení.** Podzemí sjednotit na E67 jako výchozí: odpovídá Janovu zadání o okrajích, kras v něm funguje a bylo rychlejší. Před přepnutím ale vyřešit K5 (1.9). Model „prameny → povrch + podzemí → bilance → události“ zapsat jako princip. `voda-studie` označit jako archiv. Otisk vody zaokrouhlovat (viz 1.5).
+**Doporučení.** Podzemí sjednotit na E67 jako výchozí: odpovídá Janovu zadání o okrajích a kras v něm funguje. Čas na stejném ostrově je potřeba změřit znovu. Před přepnutím ale vyřešit K5 (1.9). Model „prameny → povrch + podzemí → bilance → události“ zapsat jako princip. `voda-studie` označit jako archiv. Otisk vody zaokrouhlovat (viz 1.5).
 
 **Otázka pro Jana.** Přepneme výchozí podzemí z E58 na E67 (výtok z okrajů vrstev, kras funguje)?
 
