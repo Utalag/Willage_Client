@@ -2697,3 +2697,33 @@ Zdroje [45]–[72] níže v tomto souboru zůstávají jen jako zástupné čís
   otisky buněk, sítí, odkrytí a vegetace stejné (631c754f…, 3452e4cd…, db706a1c…, 483dc33f…).
 - **Negativum:** stromy 1,75–2 m jsou spíš keře nebo mladé stromky. Jsou menší než domek (3 m) a skutečné stromy. Je to herní volba.
 - **Snímky:** `94_vegm05_zap_{ostrov,detail,hra_kamera}.png` (+ `_hora`, `_hora_bok`).
+
+## E96 ostrov = jeden blok 128 m z funkce světa (plán, zapsáno před pokusem 2026-11-20 11:51; Jan 2026-11-20 11:48: „Začneme generovat už celý jeden blok 128m“ = ano k E92 otázce 1; větev `e96-blok128` z `e94-metry` 96f2310)
+- **Co už je hotové (neopakuju, beru):**
+  - **E90** `scripts/teren/lod90.gd` (z větve `e90-lod` beze změny): funkce světa `h_m(x, y)` v metrech (E49 natažená vodorovně,
+    reliéf kolem 20 m), LOD a sešití švů pro dlaždice 128 m.
+  - **E92** změřil blok 128 m z této funkce (sklon p50 17,5° při natažení × 8 a reliéfu × 3), vodu na něm neměřil.
+  - **E94** scéna v metrech, buňka 0,5 m, `jednotky.gd` (BS 16, BH 64), vegetace × 0,5.
+  - **E49** cesta blueprintu `base_hm` (povrch z hrubého světa, typ bloku řídí jen geologii) – tou půjde povrch z funkce do
+    stávající pipeline (vrstvy, minerály, dutiny, navázání na sousedy), takže geologie, voda (E68 orchestrátor, povrch + podzemí),
+    kopání, vegetace a kamera zůstanou stejné moduly.
+- **Návrh:** příznak `p96_blok128` (surface_params, výchozí vyp). Se zapnutým: ostrov = 16 × 16 herních bloků po 8 m (= 128 × 128 m,
+  256 × 256 sloupců po 0,5 m), každý blok z `lod90.h_m` vzorkovaného ve středech buněk (bez šablon, `detail` 0). Svět studie
+  (`ostrov_teren`) 18 × 18 slotů s posunem (1, 1) (prstenec mlhy / příkopu). Pořadí vložení po řádcích. Typ bloku (jen geologie):
+  hora / kopec / prohlubeň / louka podle průměru a rozpětí výšky. Kamera: střed na místě startu, zoom až na celý blok.
+  Postava (v ukázce) a domek na zemi u středu.
+- **Výška se nevejde:** sloupec je 64 buněk = 32 m (strop povrchu 61 buněk = 30,5 m). Funkce E90 s reliéfem × 3 má 7–50 m.
+  Proto pro E96 `p96_relief` 1 (= rozsah E49 14–30 m) a menší natažení `p96_natazeni` 4 (aby svahy nebyly jen 1/3 E92).
+  Dlaždice `p96_dlazdice` (7, 4) z průzkumu 16 × 16 dlaždic: rozpětí 14,2 m, sklon p50 9°, p95 28,5° (vzorky 4 m, sklon přes 1 m).
+- **Měřím:** čas generování (bloky, sítě, povrch, vegetace), plnou vodu (povrch + podzemí, části), kopání + lokální přepočet vody
+  (8 výkopů), paměť (statická Godot, RSS), trojúhelníky a draw calls (xvfb, opengl3, přehled a herní kamera); srovnání
+  s ostrovem START a odhadem E93 (střední telefon 1,6–1,9× pomaleji než box); kde to neškáluje, návrh optimalizace.
+- **Snímky** do `/workspace/willage-ideas/shots-e96/`: celý blok shora / izometricky, detail s postavou 1,75 m a domem 4 × 4 × 3 m,
+  detail vody / vodopádu, herní kamera.
+- **Výchozí hra beze změny:** `voda_e66` d7aedf3a6d9d10e8 → 63d7b89a91385a79, `port_studie --check` 0 změn.
+- **Negativa předem:** 256 bloků v GDScriptu (~220 ms / blok) → generování ~1 min na boxu. Plná voda na mřížce 288 × 288
+  bude řádově delší než 2,5 s. Každý blok je vlastní síť → stovky draw calls. Hora max 16 m nad nejnižším místem (strop sloupce).
+  E90 LOD použiju jen, když bez něj nepůjde vykreslit; jinak jen změřím a navrhnu.
+- **Bublina pro zkušební panel (`p96_blok128`):** „Blok 128 m (E96): ostrov je jeden velký blok 128 × 128 m z funkce světa
+  místo čtyř šablon 8 m. Buňka 0,5 m, vrstvy, voda, kopání a vegetace jako dnes. Načítání trvá déle (desítky sekund).
+  Změna se projeví až po novém spuštění hry.“
