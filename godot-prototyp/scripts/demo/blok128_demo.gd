@@ -90,6 +90,20 @@ func _shots() -> void:
 	lab.text = "E96 %s: celý ostrov %.0f × %.0f m izometricky" % [tag, w_m, w_m]
 	_cam(mid, w_m * 1.5)
 	await _snap("96_%s_cely_iso" % tag)
+	# bez LOD přehledu (256 bloků s vegetací), pak rozpad: bez vegetace, jen terén
+	m.island.lod96_set(false)
+	lab.text = "E96 %s: celý ostrov izometricky bez LOD (256 bloků, vegetace)" % tag
+	await _snap("96_%s_cely_iso_bez_lod" % tag)
+	# rozpad vykreslení: bez vegetace (VegRender po blocích), pak bez vegetace a vody (jen terén a povrch)
+	for k in m.island.vegs: m.island.vegs[k].visible = false
+	lab.text = "E96 %s: celý ostrov izometricky bez vegetace (měření rozpadu)" % tag
+	await _snap("96_%s_cely_iso_bez_veg" % tag)
+	for k in m.island.voda_mi: m.island.voda_mi[k].visible = false
+	lab.text = "E96 %s: celý ostrov izometricky jen terén (bez vegetace a vody)" % tag
+	await _snap("96_%s_cely_iso_jen_teren" % tag)
+	for k in m.island.voda_mi: m.island.voda_mi[k].visible = true
+	for k in m.island.vegs: m.island.vegs[k].visible = true
+	res.lod96 = {"ms": m.island.lod96_ms, "trojuhelniky": m.island.lod96_tri}
 	lab.text = "E96 %s: detail 16 m, postava 1,75 m (červená), dům 4 × 4 × 3 m (béžový), domek hry" % tag
 	_cam(_top(gf) + Vector3(0, 1.0, 0), 16.0)
 	await _snap("96_%s_detail" % tag)
@@ -119,7 +133,7 @@ func _shots() -> void:
 	res.voda_ms = m.island.voda.ms if m.island.voda != null else {}
 	# kopání ve hře: 4 výkopy u postavy (Digging + lokální přepočet vody + přestavba povrchu)
 	var dig := []
-	if m.digging.has_method("dig"):
+	if m.digging.has_method("dig") and _arg("kopat", "1") == "1":
 		for k in 4:
 			var g := gf + Vector2i(3 + k, 2)
 			var t := Time.get_ticks_usec()
