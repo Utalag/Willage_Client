@@ -1,0 +1,4 @@
+litry_e94: e94-metry 96f2310 proti gen-v1-krok01-zaklady
+řádků 79496 / 79496, rozdílných 1
+ug/stats/build_ms=245.318  |  ug/stats/build_ms=237.34
+(jediný rozdíl je čas stavby v ms, ne hodnota vody)
