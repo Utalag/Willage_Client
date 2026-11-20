@@ -30,8 +30,8 @@
    "K_ms": 1e-05,
    "Sy": 0.15,
    "skupina": "drn",
-   "t_1m_realne_min": 1.7361,
-   "rezim": "okamzite"
+   "t_1m_realne_min": 10.4166,
+   "rezim": "udalost"
   },
   "dirt": {
    "id": 2,
@@ -47,8 +47,8 @@
    "K_ms": 3.7e-06,
    "Sy": 0.15,
    "skupina": "hlina",
-   "t_1m_realne_min": 4.6922,
-   "rezim": "okamzite"
+   "t_1m_realne_min": 28.1532,
+   "rezim": "udalost"
   },
   "sand": {
    "id": 3,
@@ -64,7 +64,7 @@
    "K_ms": 0.0001,
    "Sy": 0.26,
    "skupina": "pisek",
-   "t_1m_realne_min": 0.3009,
+   "t_1m_realne_min": 1.8054,
    "rezim": "okamzite"
   },
   "clay": {
@@ -81,8 +81,8 @@
    "K_ms": 1e-10,
    "Sy": 0.02,
    "skupina": "jil",
-   "t_1m_realne_min": 23148.1481,
-   "rezim": "udalost"
+   "t_1m_realne_min": 138888.8886,
+   "rezim": "nepropustne"
   },
   "limestone": {
    "id": 5,
@@ -100,7 +100,7 @@
    "K_ms": 3e-08,
    "Sy": 0.02,
    "skupina": "vapenec",
-   "t_1m_realne_min": 77.1605,
+   "t_1m_realne_min": 462.963,
    "rezim": "udalost"
   },
   "granite": {
@@ -117,7 +117,7 @@
    "K_ms": 1e-12,
    "Sy": 0.005,
    "skupina": "krystal",
-   "t_1m_realne_min": 578703.7037,
+   "t_1m_realne_min": 3472222.2222,
    "rezim": "nepropustne"
   },
   "basalt": {
@@ -134,7 +134,7 @@
    "K_ms": 1e-09,
    "Sy": 0.02,
    "skupina": "cedic",
-   "t_1m_realne_min": 2314.8148,
+   "t_1m_realne_min": 13888.8888,
    "rezim": "udalost"
   },
   "copper": {
@@ -151,7 +151,7 @@
    "K_ms": 1e-12,
    "Sy": 0.005,
    "skupina": "krystal",
-   "t_1m_realne_min": 578703.7037,
+   "t_1m_realne_min": 3472222.2222,
    "rezim": "nepropustne"
   },
   "iron": {
@@ -168,7 +168,7 @@
    "K_ms": 1e-12,
    "Sy": 0.005,
    "skupina": "krystal",
-   "t_1m_realne_min": 578703.7037,
+   "t_1m_realne_min": 3472222.2222,
    "rezim": "nepropustne"
   },
   "snow": {
@@ -197,16 +197,16 @@
    "K_ms": 1e-10,
    "Sy": 0.02,
    "skupina": "jil",
-   "t_1m_realne_min": 23148.1481,
-   "rezim": "udalost"
+   "t_1m_realne_min": 138888.8886,
+   "rezim": "nepropustne"
   }
  },
  "perched_depth": 2,
  "_pevnost": "Rozšíření 2026-11-18 (Jan 16:58, blueprint-studie), zpětně kompatibilní: load = kolik buněk (0,5 m) nad sebou materiál unese jako strop dutiny, cantilever = kolik buněk převisne bez podpory. Vzduch a voda 0. Staré čtenáře nová pole nezajímají.",
  "_eroze": "Rozšíření 2026-11-18 (Jan 20:18–20:37, blueprint-studie E51), zpětně kompatibilní: ero_v = kritická rychlost proudu (m/s), od které voda buňku eroduje; ero_vol = kolik m³ vody musí přes buňku (0,5 m) protéct při v ≥ ero_v, než ji odnese (odpočet událostí, kopání/položení ho vynuluje); sed_v = rychlost (m/s), pod kterou se tento materiál ze stojaté/pomalé vody usazuje (0 = neusazuje se). Odhad podle Hjulströmova diagramu (písek nejsnáz erodovatelný, jíl soudržný, ale usazuje se až skoro ve stojaté vodě), skály prakticky ne.",
- "_e61": "Od v4 (Jan 04:39, blueprint-studie E61): vodní pole podle reálných hodnot (výzkum E59, ZDROJE [32], [38]–[41]). perm = (log10 K + 9) / 6 v [0, 1] (K ≤ 1e-9 m/s → 0, K ≥ 1e-3 → 1); por = pórovitost n; ret = n − Sy (zadržená voda); K_ms = typická hydraulická vodivost m/s; Sy = specifická vydatnost; t_1m_realne_min = průsak 1 m při spádu 1 v reálných minutách při čase hry × 144 (1 herní den = 10 min); rezim = okamzite (< 10 min reálně: ustálený stav) / udalost (halda E51) / nepropustne (> 30 dní reálně). ero_v, sed_v odečteny z Hjulströmova diagramu (řádově). Dřívější hodnoty byly zkušební (záloha blueprint-studie/shots/e61/).",
+ "_e61": "Od v4 (Jan 04:39, blueprint-studie E61): vodní pole podle reálných hodnot (výzkum E59, ZDROJE [32], [38]–[41]). perm = (log10 K + 9) / 6 v [0, 1] (K ≤ 1e-9 m/s → 0, K ≥ 1e-3 → 1); por = pórovitost n; ret = n − Sy (zadržená voda); K_ms = typická hydraulická vodivost m/s; Sy = specifická vydatnost; t_1m_realne_min = průsak 1 m při spádu 1 v reálných minutách při čase hry × 24 (1 herní den = 60 min, E77); rezim = okamzite (< 10 min reálně: ustálený stav) / udalost (halda E51) / nepropustne (> 30 dní reálně). ero_v, sed_v odečteny z Hjulströmova diagramu (řádově). Dřívější hodnoty byly zkušební (záloha blueprint-studie/shots/e61/).",
  "perm_mapovani": "(log10 K_ms + 9) / 6",
- "cas_faktor": 144,
+ "cas_faktor": 24,
  "rezim_okamzite_min": 10.0,
  "rezim_nepropustne_min": 43200.0
 }

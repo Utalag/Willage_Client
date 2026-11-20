@@ -13,7 +13,9 @@ const H68 = preload("res://scripts/hydro68/hydro68.gd")
 const K75 = preload("res://scripts/kras75/kras75.gd")
 const M0 := 9300   # nepropustná
 const MC := 9302   # polopropustná krycí vrstva (pod ponor_perm)
-const DEN := 86400.0
+const CH = preload("res://scripts/voda/cas_hry.gd")   # sloučení E75 + E77: čas hry na jednom místě
+const DEN := CH.DEN_S
+var pcas := {}   # parametry pro převod na reálný čas (p71_cas)
 var MS := 5
 
 func _arg(k: String, d: String) -> String:
@@ -100,7 +102,7 @@ func _run(W: int, p: Dictionary, zdroj: float, pit_q: float, digs: Array, nev: i
 	for r in st.ug_bodies: q += float(r.q_in)
 	var ne := K75.next_event(K)
 	var out := {"plny_ms": full_ms, "prutok_l_s": q, "pasem": K.rate.size(), "rychlost_m3_s": tot, "m3_za_den": tot * DEN, "max_m3_s": q * 0.001 * float(K75.sol().get(MS, 0.0)),
-		"po_materialech": pm, "prvni_dni": float(ne[0]) / DEN, "prvni_min_realne": float(ne[0]) / DEN * 10.0, "rates_ms": K.stats.rates_ms, "udalosti": []}
+		"po_materialech": pm, "prvni_dni": float(ne[0]) / DEN, "prvni_min_realne": CH.realne_min(float(ne[0]), pcas), "rates_ms": K.stats.rates_ms, "udalosti": []}
 	var bad := 0; var bad_tol := 0
 	for k in nev:
 		var ev := K75.next_event(K)
@@ -143,7 +145,7 @@ func _run(W: int, p: Dictionary, zdroj: float, pit_q: float, digs: Array, nev: i
 		if not same: bad += 1
 		if dmax > 1e-12: bad_tol += 1
 		var b := H68.bilance(st)
-		out.udalosti.append({"dni": float(ev[0]) / DEN, "min_realne": float(ev[0]) / DEN * 10.0, "pasmo": int(ev[1]), "dutina_m3": float(K.dut[int(ev[1])]),
+		out.udalosti.append({"dni": float(ev[0]) / DEN, "min_realne": CH.realne_min(float(ev[0]), pcas), "pasmo": int(ev[1]), "dutina_m3": float(K.dut[int(ev[1])]),
 			"lokalne_ms": lms, "max_rozdil": dmax, "plny_ms": fms, "shoda": same, "chyba": b.chyba_svet, "prameny": b.prameny_z_podzemi, "objem_m3": float(st.ug_bodies[0].volume_m3) if not st.ug_bodies.is_empty() else 0.0})
 		s2.ug.clear(); s2.clear()
 	out.neshod = bad; out.neshod_1e12 = bad_tol; out.otisk_kras = K75.otisk(K); out.otisk_voda = H68.otisk(st)
@@ -164,6 +166,7 @@ func _init() -> void:
 		p.p52_rezim = "auto"; p.ponor_perm = float(_arg("ponor", "0.3"))
 		if rz == "pretok": p.p67_rezim = "pretok"
 		p = bp_args(p)
+		pcas = p
 		var a := _run(W, p, zdroj, pit_q, [], nev)
 		var d1 := _run(W, p, zdroj, pit_q, digs, 2)
 		var rd := digs.duplicate(); rd.reverse()

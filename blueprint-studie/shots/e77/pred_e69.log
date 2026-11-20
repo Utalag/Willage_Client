@@ -1,0 +1,14 @@
+Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+
+plocha  pretok+O                 bilance chyba 0.000000000000 (výstupy 1.000000000, průsak 0.000000000) | sym výstupy 0.0000 (0) tok 0.0000 (0) hladina 0.0000 (0) | výstupů 80 | {"L5 okraj":1.0}
+plocha  pretok+O bez slucovani   bilance chyba 0.000000000000 (výstupy 1.000000000, průsak 0.000000000) | sym výstupy 0.0000 (0) tok 0.0000 (0) hladina 0.0000 (0) | výstupů 80 | {"L5 okraj":1.0}
+plocha  E58 ABC+O                bilance chyba 0.000000000000 (výstupy 1.000000000, průsak 0.000000000) | sym výstupy 1.0000 (1) tok 0.0000 (0) hladina 0.0000 (0) | výstupů 1 | {}
+plocha  E58 base+O               bilance chyba 0.000000000000 (výstupy 1.000000000, průsak 0.000000000) | sym výstupy 1.0000 (1) tok 0.0000 (0) hladina 0.0000 (0) | výstupů 1 | {}
+kupole  pretok+O                 bilance chyba 0.000000000000 (výstupy 1.000000000, průsak 0.000000000) | sym výstupy 0.0000 (0) tok 0.0000 (0) hladina 0.0000 (0) | výstupů 8 | {"L3 okraj":1.0}
+kupole  pretok+O bez slucovani   bilance chyba 0.000000000000 (výstupy 1.000000000, průsak 0.000000000) | sym výstupy 0.0000 (0) tok 0.0000 (0) hladina 0.0000 (0) | výstupů 76 | {"L5 okraj":0.999999992}
+kupole  E58 ABC+O                bilance chyba 0.000000000000 (výstupy 1.000000000, průsak 0.000000000) | sym výstupy 1.0000 (1) tok 0.0000 (0) hladina 0.0000 (0) | výstupů 1 | {}
+kupole  E58 base+O               bilance chyba 0.000000000000 (výstupy 1.000000000, průsak 0.000000000) | sym výstupy 1.0000 (1) tok 0.0000 (0) hladina 0.0000 (0) | výstupů 1 | {}
+misa    pretok+O                 bilance chyba 0.000000000000 (výstupy 1.000000000, průsak 0.000000000) | sym výstupy 0.0000 (0) tok 0.0000 (0) hladina 0.0000 (0) | výstupů 4 | {"past okraj":1.0}
+misa    pretok+O bez slucovani   bilance chyba 0.000000000000 (výstupy 1.000000000, průsak 0.000000000) | sym výstupy 0.0000 (0) tok 0.0000 (0) hladina 0.0000 (0) | výstupů 4 | {"past okraj":1.0}
+misa    E58 ABC+O                bilance chyba 0.000000000000 (výstupy 1.000000000, průsak 0.000000000) | sym výstupy 1.0000 (1) tok 0.0000 (0) hladina 0.0000 (0) | výstupů 1 | {}
+misa    E58 base+O               bilance chyba 0.000000000000 (výstupy 1.000000000, průsak 0.000000000) | sym výstupy 1.0000 (1) tok 0.0000 (0) hladina 0.0000 (0) | výstupů 1 | {}

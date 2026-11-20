@@ -18,7 +18,7 @@
     12,
     23
   ],
-  "cas_hry_faktor": 144.0,
+  "cas_hry_faktor": 24.0,
   "bunka_m": 0.5,
   "objem_bunky_m3": 0.125,
   "nastroje": [
@@ -633,7 +633,7 @@
       "cas": {
         "prod_m3_h": 0.8,
         "t_real_min_bunka_05": 9.38,
-        "t_herni_s_bunka_05": 3.91,
+        "t_herni_s_bunka_05": 23.44,
         "t_navrh_s_bunka_05": 1.0
       },
       "netezitelne": false,
@@ -684,7 +684,7 @@
       "cas": {
         "prod_m3_h": 0.8,
         "t_real_min_bunka_05": 9.38,
-        "t_herni_s_bunka_05": 3.91,
+        "t_herni_s_bunka_05": 23.44,
         "t_navrh_s_bunka_05": 1.0
       },
       "netezitelne": false,
@@ -735,7 +735,7 @@
       "cas": {
         "prod_m3_h": 0.8,
         "t_real_min_bunka_05": 9.38,
-        "t_herni_s_bunka_05": 3.91,
+        "t_herni_s_bunka_05": 23.44,
         "t_navrh_s_bunka_05": 1.0
       },
       "netezitelne": false,
@@ -783,7 +783,7 @@
       "cas": {
         "prod_m3_h": 0.8,
         "t_real_min_bunka_05": 9.38,
-        "t_herni_s_bunka_05": 3.91,
+        "t_herni_s_bunka_05": 23.44,
         "t_navrh_s_bunka_05": 1.0
       },
       "netezitelne": false,
@@ -830,7 +830,7 @@
       "cas": {
         "prod_m3_h": 0.8,
         "t_real_min_bunka_05": 9.38,
-        "t_herni_s_bunka_05": 3.91,
+        "t_herni_s_bunka_05": 23.44,
         "t_navrh_s_bunka_05": 1.0
       },
       "netezitelne": false,
@@ -877,7 +877,7 @@
       "cas": {
         "prod_m3_h": 0.8,
         "t_real_min_bunka_05": 9.38,
-        "t_herni_s_bunka_05": 3.91,
+        "t_herni_s_bunka_05": 23.44,
         "t_navrh_s_bunka_05": 1.0
       },
       "netezitelne": false,
@@ -924,7 +924,7 @@
       "cas": {
         "prod_m3_h": 0.8,
         "t_real_min_bunka_05": 9.38,
-        "t_herni_s_bunka_05": 3.91,
+        "t_herni_s_bunka_05": 23.44,
         "t_navrh_s_bunka_05": 1.0
       },
       "netezitelne": false,
@@ -976,7 +976,7 @@
       "cas": {
         "prod_m3_h": 0.12,
         "t_real_min_bunka_05": 62.5,
-        "t_herni_s_bunka_05": 26.04,
+        "t_herni_s_bunka_05": 156.25,
         "t_navrh_s_bunka_05": 6.0
       },
       "netezitelne": false,
@@ -1029,7 +1029,7 @@
       "cas": {
         "prod_m3_h": 0.12,
         "t_real_min_bunka_05": 62.5,
-        "t_herni_s_bunka_05": 26.04,
+        "t_herni_s_bunka_05": 156.25,
         "t_navrh_s_bunka_05": 6.0
       },
       "netezitelne": false,
@@ -1083,7 +1083,7 @@
       "cas": {
         "prod_m3_h": 0.05,
         "t_real_min_bunka_05": 150.0,
-        "t_herni_s_bunka_05": 62.5,
+        "t_herni_s_bunka_05": 375.0,
         "t_navrh_s_bunka_05": 12.0
       },
       "netezitelne": false,
@@ -1132,7 +1132,7 @@
       "cas": {
         "prod_m3_h": 0.05,
         "t_real_min_bunka_05": 150.0,
-        "t_herni_s_bunka_05": 62.5,
+        "t_herni_s_bunka_05": 375.0,
         "t_navrh_s_bunka_05": 12.0
       },
       "netezitelne": false,
@@ -1180,7 +1180,7 @@
       "cas": {
         "prod_m3_h": 0.05,
         "t_real_min_bunka_05": 150.0,
-        "t_herni_s_bunka_05": 62.5,
+        "t_herni_s_bunka_05": 375.0,
         "t_navrh_s_bunka_05": 12.0
       },
       "netezitelne": false,
@@ -1227,7 +1227,7 @@
       "cas": {
         "prod_m3_h": 0.12,
         "t_real_min_bunka_05": 62.5,
-        "t_herni_s_bunka_05": 26.04,
+        "t_herni_s_bunka_05": 156.25,
         "t_navrh_s_bunka_05": 6.0
       },
       "netezitelne": false,
@@ -1274,7 +1274,7 @@
       "cas": {
         "prod_m3_h": 0.05,
         "t_real_min_bunka_05": 150.0,
-        "t_herni_s_bunka_05": 62.5,
+        "t_herni_s_bunka_05": 375.0,
         "t_navrh_s_bunka_05": 12.0
       },
       "netezitelne": false,
@@ -1317,7 +1317,7 @@
       "cas": {
         "prod_m3_h": 0.8,
         "t_real_min_bunka_05": 9.38,
-        "t_herni_s_bunka_05": 3.91,
+        "t_herni_s_bunka_05": 23.44,
         "t_navrh_s_bunka_05": 1.0
       },
       "netezitelne": false,
@@ -1358,7 +1358,7 @@
       "cas": {
         "prod_m3_h": 0.8,
         "t_real_min_bunka_05": 9.38,
-        "t_herni_s_bunka_05": 3.91,
+        "t_herni_s_bunka_05": 23.44,
         "t_navrh_s_bunka_05": 1.0
       },
       "netezitelne": false,
@@ -1400,7 +1400,7 @@
       "cas": {
         "prod_m3_h": 0.8,
         "t_real_min_bunka_05": 9.38,
-        "t_herni_s_bunka_05": 3.91,
+        "t_herni_s_bunka_05": 23.44,
         "t_navrh_s_bunka_05": 1.0
       },
       "netezitelne": false,
@@ -1447,7 +1447,7 @@
       "cas": {
         "prod_m3_h": 0.05,
         "t_real_min_bunka_05": 150.0,
-        "t_herni_s_bunka_05": 62.5,
+        "t_herni_s_bunka_05": 375.0,
         "t_navrh_s_bunka_05": 12.0
       },
       "netezitelne": false,
@@ -1494,7 +1494,7 @@
       "cas": {
         "prod_m3_h": 0.12,
         "t_real_min_bunka_05": 62.5,
-        "t_herni_s_bunka_05": 26.04,
+        "t_herni_s_bunka_05": 156.25,
         "t_navrh_s_bunka_05": 6.0
       },
       "netezitelne": false,
@@ -1541,7 +1541,7 @@
       "cas": {
         "prod_m3_h": 0.05,
         "t_real_min_bunka_05": 150.0,
-        "t_herni_s_bunka_05": 62.5,
+        "t_herni_s_bunka_05": 375.0,
         "t_navrh_s_bunka_05": 12.0
       },
       "netezitelne": false,
@@ -1588,7 +1588,7 @@
       "cas": {
         "prod_m3_h": 0.03,
         "t_real_min_bunka_05": 250.0,
-        "t_herni_s_bunka_05": 104.17,
+        "t_herni_s_bunka_05": 625.0,
         "t_navrh_s_bunka_05": 18.0
       },
       "netezitelne": false,
@@ -1635,7 +1635,7 @@
       "cas": {
         "prod_m3_h": 0.03,
         "t_real_min_bunka_05": 250.0,
-        "t_herni_s_bunka_05": 104.17,
+        "t_herni_s_bunka_05": 625.0,
         "t_navrh_s_bunka_05": 18.0
       },
       "netezitelne": false,
@@ -1682,7 +1682,7 @@
       "cas": {
         "prod_m3_h": 0.12,
         "t_real_min_bunka_05": 62.5,
-        "t_herni_s_bunka_05": 26.04,
+        "t_herni_s_bunka_05": 156.25,
         "t_navrh_s_bunka_05": 6.0
       },
       "netezitelne": false,
@@ -1728,7 +1728,7 @@
       "cas": {
         "prod_m3_h": 0.03,
         "t_real_min_bunka_05": 250.0,
-        "t_herni_s_bunka_05": 104.17,
+        "t_herni_s_bunka_05": 625.0,
         "t_navrh_s_bunka_05": 18.0
       },
       "netezitelne": false,
@@ -1775,7 +1775,7 @@
       "cas": {
         "prod_m3_h": 0.03,
         "t_real_min_bunka_05": 250.0,
-        "t_herni_s_bunka_05": 104.17,
+        "t_herni_s_bunka_05": 625.0,
         "t_navrh_s_bunka_05": 18.0
       },
       "netezitelne": false,
@@ -1822,7 +1822,7 @@
       "cas": {
         "prod_m3_h": 0.03,
         "t_real_min_bunka_05": 250.0,
-        "t_herni_s_bunka_05": 104.17,
+        "t_herni_s_bunka_05": 625.0,
         "t_navrh_s_bunka_05": 18.0
       },
       "netezitelne": false,
@@ -1870,7 +1870,7 @@
       "cas": {
         "prod_m3_h": 0.05,
         "t_real_min_bunka_05": 150.0,
-        "t_herni_s_bunka_05": 62.5,
+        "t_herni_s_bunka_05": 375.0,
         "t_navrh_s_bunka_05": 12.0
       },
       "netezitelne": false,
@@ -1915,7 +1915,7 @@
       "cas": {
         "prod_m3_h": 0.03,
         "t_real_min_bunka_05": 250.0,
-        "t_herni_s_bunka_05": 104.17,
+        "t_herni_s_bunka_05": 625.0,
         "t_navrh_s_bunka_05": 18.0
       },
       "netezitelne": false,
@@ -1961,7 +1961,7 @@
       "cas": {
         "prod_m3_h": 0.05,
         "t_real_min_bunka_05": 150.0,
-        "t_herni_s_bunka_05": 62.5,
+        "t_herni_s_bunka_05": 375.0,
         "t_navrh_s_bunka_05": 12.0
       },
       "netezitelne": false,
@@ -2009,7 +2009,7 @@
       "cas": {
         "prod_m3_h": 0.05,
         "t_real_min_bunka_05": 150.0,
-        "t_herni_s_bunka_05": 62.5,
+        "t_herni_s_bunka_05": 375.0,
         "t_navrh_s_bunka_05": 12.0
       },
       "netezitelne": false,
@@ -2057,7 +2057,7 @@
       "cas": {
         "prod_m3_h": 0.05,
         "t_real_min_bunka_05": 150.0,
-        "t_herni_s_bunka_05": 62.5,
+        "t_herni_s_bunka_05": 375.0,
         "t_navrh_s_bunka_05": 12.0
       },
       "netezitelne": false,
@@ -2105,7 +2105,7 @@
       "cas": {
         "prod_m3_h": 0.05,
         "t_real_min_bunka_05": 150.0,
-        "t_herni_s_bunka_05": 62.5,
+        "t_herni_s_bunka_05": 375.0,
         "t_navrh_s_bunka_05": 12.0
       },
       "netezitelne": false,
@@ -2153,7 +2153,7 @@
       "cas": {
         "prod_m3_h": 0.05,
         "t_real_min_bunka_05": 150.0,
-        "t_herni_s_bunka_05": 62.5,
+        "t_herni_s_bunka_05": 375.0,
         "t_navrh_s_bunka_05": 12.0
       },
       "netezitelne": false,
@@ -2205,7 +2205,7 @@
       "cas": {
         "prod_m3_h": 0.05,
         "t_real_min_bunka_05": 150.0,
-        "t_herni_s_bunka_05": 62.5,
+        "t_herni_s_bunka_05": 375.0,
         "t_navrh_s_bunka_05": 12.0
       },
       "netezitelne": false,
@@ -2254,7 +2254,7 @@
       "cas": {
         "prod_m3_h": 0.05,
         "t_real_min_bunka_05": 150.0,
-        "t_herni_s_bunka_05": 62.5,
+        "t_herni_s_bunka_05": 375.0,
         "t_navrh_s_bunka_05": 12.0
       },
       "netezitelne": false,
@@ -2307,7 +2307,7 @@
       "cas": {
         "prod_m3_h": 0.05,
         "t_real_min_bunka_05": 150.0,
-        "t_herni_s_bunka_05": 62.5,
+        "t_herni_s_bunka_05": 375.0,
         "t_navrh_s_bunka_05": 12.0
       },
       "netezitelne": false,
@@ -2361,7 +2361,7 @@
       "cas": {
         "prod_m3_h": 0.03,
         "t_real_min_bunka_05": 250.0,
-        "t_herni_s_bunka_05": 104.17,
+        "t_herni_s_bunka_05": 625.0,
         "t_navrh_s_bunka_05": 18.0
       },
       "netezitelne": false,
@@ -2410,7 +2410,7 @@
       "cas": {
         "prod_m3_h": 0.05,
         "t_real_min_bunka_05": 150.0,
-        "t_herni_s_bunka_05": 62.5,
+        "t_herni_s_bunka_05": 375.0,
         "t_navrh_s_bunka_05": 12.0
       },
       "netezitelne": false,
@@ -2461,7 +2461,7 @@
       "cas": {
         "prod_m3_h": 0.12,
         "t_real_min_bunka_05": 62.5,
-        "t_herni_s_bunka_05": 26.04,
+        "t_herni_s_bunka_05": 156.25,
         "t_navrh_s_bunka_05": 6.0
       },
       "netezitelne": false,
@@ -2511,7 +2511,7 @@
       "cas": {
         "prod_m3_h": 0.05,
         "t_real_min_bunka_05": 150.0,
-        "t_herni_s_bunka_05": 62.5,
+        "t_herni_s_bunka_05": 375.0,
         "t_navrh_s_bunka_05": 12.0
       },
       "netezitelne": false,
@@ -2561,7 +2561,7 @@
       "cas": {
         "prod_m3_h": 0.05,
         "t_real_min_bunka_05": 150.0,
-        "t_herni_s_bunka_05": 62.5,
+        "t_herni_s_bunka_05": 375.0,
         "t_navrh_s_bunka_05": 12.0
       },
       "netezitelne": false,
@@ -2613,7 +2613,7 @@
       "cas": {
         "prod_m3_h": 0.12,
         "t_real_min_bunka_05": 62.5,
-        "t_herni_s_bunka_05": 26.04,
+        "t_herni_s_bunka_05": 156.25,
         "t_navrh_s_bunka_05": 6.0
       },
       "netezitelne": false,
@@ -2667,7 +2667,7 @@
       "cas": {
         "prod_m3_h": 0.12,
         "t_real_min_bunka_05": 62.5,
-        "t_herni_s_bunka_05": 26.04,
+        "t_herni_s_bunka_05": 156.25,
         "t_navrh_s_bunka_05": 6.0
       },
       "netezitelne": false,
@@ -2717,7 +2717,7 @@
       "cas": {
         "prod_m3_h": 0.12,
         "t_real_min_bunka_05": 62.5,
-        "t_herni_s_bunka_05": 26.04,
+        "t_herni_s_bunka_05": 156.25,
         "t_navrh_s_bunka_05": 6.0
       },
       "netezitelne": false,
@@ -2763,7 +2763,7 @@
       "cas": {
         "prod_m3_h": 0.25,
         "t_real_min_bunka_05": 30.0,
-        "t_herni_s_bunka_05": 12.5,
+        "t_herni_s_bunka_05": 75.0,
         "t_navrh_s_bunka_05": 3.0
       },
       "netezitelne": false,
@@ -2810,7 +2810,7 @@
       "cas": {
         "prod_m3_h": 0.25,
         "t_real_min_bunka_05": 30.0,
-        "t_herni_s_bunka_05": 12.5,
+        "t_herni_s_bunka_05": 75.0,
         "t_navrh_s_bunka_05": 3.0
       },
       "netezitelne": false,
@@ -2860,7 +2860,7 @@
       "cas": {
         "prod_m3_h": 0.12,
         "t_real_min_bunka_05": 62.5,
-        "t_herni_s_bunka_05": 26.04,
+        "t_herni_s_bunka_05": 156.25,
         "t_navrh_s_bunka_05": 6.0
       },
       "netezitelne": false,
@@ -2907,7 +2907,7 @@
       "cas": {
         "prod_m3_h": 0.25,
         "t_real_min_bunka_05": 30.0,
-        "t_herni_s_bunka_05": 12.5,
+        "t_herni_s_bunka_05": 75.0,
         "t_navrh_s_bunka_05": 3.0
       },
       "netezitelne": false,
@@ -2958,7 +2958,7 @@
       "cas": {
         "prod_m3_h": 0.25,
         "t_real_min_bunka_05": 30.0,
-        "t_herni_s_bunka_05": 12.5,
+        "t_herni_s_bunka_05": 75.0,
         "t_navrh_s_bunka_05": 3.0
       },
       "netezitelne": false,
@@ -3010,7 +3010,7 @@
       "cas": {
         "prod_m3_h": 0.12,
         "t_real_min_bunka_05": 62.5,
-        "t_herni_s_bunka_05": 26.04,
+        "t_herni_s_bunka_05": 156.25,
         "t_navrh_s_bunka_05": 6.0
       },
       "netezitelne": false,
@@ -3059,7 +3059,7 @@
       "cas": {
         "prod_m3_h": 0.25,
         "t_real_min_bunka_05": 30.0,
-        "t_herni_s_bunka_05": 12.5,
+        "t_herni_s_bunka_05": 75.0,
         "t_navrh_s_bunka_05": 3.0
       },
       "netezitelne": false,
@@ -3109,7 +3109,7 @@
       "cas": {
         "prod_m3_h": 0.8,
         "t_real_min_bunka_05": 9.38,
-        "t_herni_s_bunka_05": 3.91,
+        "t_herni_s_bunka_05": 23.44,
         "t_navrh_s_bunka_05": 1.0
       },
       "netezitelne": false,
@@ -3155,7 +3155,7 @@
       "cas": {
         "prod_m3_h": 0.8,
         "t_real_min_bunka_05": 9.38,
-        "t_herni_s_bunka_05": 3.91,
+        "t_herni_s_bunka_05": 23.44,
         "t_navrh_s_bunka_05": 1.0
       },
       "netezitelne": false,
@@ -3206,7 +3206,7 @@
       "cas": {
         "prod_m3_h": 0.12,
         "t_real_min_bunka_05": 62.5,
-        "t_herni_s_bunka_05": 26.04,
+        "t_herni_s_bunka_05": 156.25,
         "t_navrh_s_bunka_05": 6.0
       },
       "netezitelne": false,
@@ -3259,7 +3259,7 @@
       "cas": {
         "prod_m3_h": 0.25,
         "t_real_min_bunka_05": 30.0,
-        "t_herni_s_bunka_05": 12.5,
+        "t_herni_s_bunka_05": 75.0,
         "t_navrh_s_bunka_05": 3.0
       },
       "netezitelne": false,
@@ -3309,7 +3309,7 @@
       "cas": {
         "prod_m3_h": 0.12,
         "t_real_min_bunka_05": 62.5,
-        "t_herni_s_bunka_05": 26.04,
+        "t_herni_s_bunka_05": 156.25,
         "t_navrh_s_bunka_05": 6.0
       },
       "netezitelne": false,
@@ -3359,7 +3359,7 @@
       "cas": {
         "prod_m3_h": 0.12,
         "t_real_min_bunka_05": 62.5,
-        "t_herni_s_bunka_05": 26.04,
+        "t_herni_s_bunka_05": 156.25,
         "t_navrh_s_bunka_05": 6.0
       },
       "netezitelne": false,
@@ -3412,7 +3412,7 @@
       "cas": {
         "prod_m3_h": 0.25,
         "t_real_min_bunka_05": 30.0,
-        "t_herni_s_bunka_05": 12.5,
+        "t_herni_s_bunka_05": 75.0,
         "t_navrh_s_bunka_05": 3.0
       },
       "netezitelne": false,
@@ -3459,7 +3459,7 @@
       "cas": {
         "prod_m3_h": 0.05,
         "t_real_min_bunka_05": 150.0,
-        "t_herni_s_bunka_05": 62.5,
+        "t_herni_s_bunka_05": 375.0,
         "t_navrh_s_bunka_05": 12.0
       },
       "netezitelne": false,
@@ -3507,7 +3507,7 @@
       "cas": {
         "prod_m3_h": 0.05,
         "t_real_min_bunka_05": 150.0,
-        "t_herni_s_bunka_05": 62.5,
+        "t_herni_s_bunka_05": 375.0,
         "t_navrh_s_bunka_05": 12.0
       },
       "netezitelne": false,
@@ -3558,7 +3558,7 @@
       "cas": {
         "prod_m3_h": 0.05,
         "t_real_min_bunka_05": 150.0,
-        "t_herni_s_bunka_05": 62.5,
+        "t_herni_s_bunka_05": 375.0,
         "t_navrh_s_bunka_05": 12.0
       },
       "netezitelne": false,
@@ -3611,7 +3611,7 @@
       "cas": {
         "prod_m3_h": 0.05,
         "t_real_min_bunka_05": 150.0,
-        "t_herni_s_bunka_05": 62.5,
+        "t_herni_s_bunka_05": 375.0,
         "t_navrh_s_bunka_05": 12.0
       },
       "netezitelne": false,
@@ -3660,7 +3660,7 @@
       "cas": {
         "prod_m3_h": 0.05,
         "t_real_min_bunka_05": 150.0,
-        "t_herni_s_bunka_05": 62.5,
+        "t_herni_s_bunka_05": 375.0,
         "t_navrh_s_bunka_05": 12.0
       },
       "netezitelne": false,
@@ -3708,7 +3708,7 @@
       "cas": {
         "prod_m3_h": 0.8,
         "t_real_min_bunka_05": 9.38,
-        "t_herni_s_bunka_05": 3.91,
+        "t_herni_s_bunka_05": 23.44,
         "t_navrh_s_bunka_05": 1.0
       },
       "netezitelne": false,
@@ -3754,7 +3754,7 @@
       "cas": {
         "prod_m3_h": 0.05,
         "t_real_min_bunka_05": 150.0,
-        "t_herni_s_bunka_05": 62.5,
+        "t_herni_s_bunka_05": 375.0,
         "t_navrh_s_bunka_05": 12.0
       },
       "netezitelne": false,
@@ -3806,7 +3806,7 @@
       "cas": {
         "prod_m3_h": 0.05,
         "t_real_min_bunka_05": 150.0,
-        "t_herni_s_bunka_05": 62.5,
+        "t_herni_s_bunka_05": 375.0,
         "t_navrh_s_bunka_05": 12.0
       },
       "netezitelne": false,
@@ -3859,7 +3859,7 @@
       "cas": {
         "prod_m3_h": 0.03,
         "t_real_min_bunka_05": 250.0,
-        "t_herni_s_bunka_05": 104.17,
+        "t_herni_s_bunka_05": 625.0,
         "t_navrh_s_bunka_05": 18.0
       },
       "netezitelne": false,
@@ -3912,7 +3912,7 @@
       "cas": {
         "prod_m3_h": 0.05,
         "t_real_min_bunka_05": 150.0,
-        "t_herni_s_bunka_05": 62.5,
+        "t_herni_s_bunka_05": 375.0,
         "t_navrh_s_bunka_05": 12.0
       },
       "netezitelne": false,
@@ -3965,7 +3965,7 @@
       "cas": {
         "prod_m3_h": 0.05,
         "t_real_min_bunka_05": 150.0,
-        "t_herni_s_bunka_05": 62.5,
+        "t_herni_s_bunka_05": 375.0,
         "t_navrh_s_bunka_05": 12.0
       },
       "netezitelne": false,
@@ -4018,7 +4018,7 @@
       "cas": {
         "prod_m3_h": 0.05,
         "t_real_min_bunka_05": 150.0,
-        "t_herni_s_bunka_05": 62.5,
+        "t_herni_s_bunka_05": 375.0,
         "t_navrh_s_bunka_05": 12.0
       },
       "netezitelne": false,
@@ -4071,7 +4071,7 @@
       "cas": {
         "prod_m3_h": 0.05,
         "t_real_min_bunka_05": 150.0,
-        "t_herni_s_bunka_05": 62.5,
+        "t_herni_s_bunka_05": 375.0,
         "t_navrh_s_bunka_05": 12.0
       },
       "netezitelne": false,
@@ -4124,7 +4124,7 @@
       "cas": {
         "prod_m3_h": 0.05,
         "t_real_min_bunka_05": 150.0,
-        "t_herni_s_bunka_05": 62.5,
+        "t_herni_s_bunka_05": 375.0,
         "t_navrh_s_bunka_05": 12.0
       },
       "netezitelne": false,
@@ -4174,7 +4174,7 @@
       "cas": {
         "prod_m3_h": 0.05,
         "t_real_min_bunka_05": 150.0,
-        "t_herni_s_bunka_05": 62.5,
+        "t_herni_s_bunka_05": 375.0,
         "t_navrh_s_bunka_05": 12.0
       },
       "netezitelne": false,
@@ -4222,7 +4222,7 @@
       "cas": {
         "prod_m3_h": 0.03,
         "t_real_min_bunka_05": 250.0,
-        "t_herni_s_bunka_05": 104.17,
+        "t_herni_s_bunka_05": 625.0,
         "t_navrh_s_bunka_05": 18.0
       },
       "netezitelne": false,
@@ -4275,7 +4275,7 @@
       "cas": {
         "prod_m3_h": 0.03,
         "t_real_min_bunka_05": 250.0,
-        "t_herni_s_bunka_05": 104.17,
+        "t_herni_s_bunka_05": 625.0,
         "t_navrh_s_bunka_05": 18.0
       },
       "netezitelne": false,
@@ -4327,7 +4327,7 @@
       "cas": {
         "prod_m3_h": 0.12,
         "t_real_min_bunka_05": 62.5,
-        "t_herni_s_bunka_05": 26.04,
+        "t_herni_s_bunka_05": 156.25,
         "t_navrh_s_bunka_05": 6.0
       },
       "netezitelne": false,
@@ -4374,7 +4374,7 @@
       "cas": {
         "prod_m3_h": 0.05,
         "t_real_min_bunka_05": 150.0,
-        "t_herni_s_bunka_05": 62.5,
+        "t_herni_s_bunka_05": 375.0,
         "t_navrh_s_bunka_05": 12.0
       },
       "netezitelne": false,
@@ -4420,7 +4420,7 @@
       "cas": {
         "prod_m3_h": 0.25,
         "t_real_min_bunka_05": 30.0,
-        "t_herni_s_bunka_05": 12.5,
+        "t_herni_s_bunka_05": 75.0,
         "t_navrh_s_bunka_05": 3.0
       },
       "netezitelne": false,
@@ -4467,7 +4467,7 @@
       "cas": {
         "prod_m3_h": 0.03,
         "t_real_min_bunka_05": 250.0,
-        "t_herni_s_bunka_05": 104.17,
+        "t_herni_s_bunka_05": 625.0,
         "t_navrh_s_bunka_05": 18.0
       },
       "netezitelne": false,
@@ -4523,7 +4523,7 @@
       "cas": {
         "prod_m3_h": 0.12,
         "t_real_min_bunka_05": 62.5,
-        "t_herni_s_bunka_05": 26.04,
+        "t_herni_s_bunka_05": 156.25,
         "t_navrh_s_bunka_05": 6.0
       },
       "netezitelne": false,

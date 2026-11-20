@@ -9,6 +9,7 @@ extends RefCounted
 ## Pasti, které se při stoupání potkají, se spojí (fill-spill-merge). Ustálený stav, žádná simulace po krocích; časy plnění
 ## pastí = objem / čistý průtok. Pořadí: halda (hodnota, id) → výsledek nezávisí na pořadí sousedů ani vstupů.
 const F = preload("res://scripts/voda/podzemi/ug_funkce.gd")
+const CH = preload("res://scripts/voda/cas_hry.gd")   # E77: čas hry na jednom místě
 const VS = preload("res://scripts/voda/voda_svet.gd")
 const HP = preload("res://scripts/voda/podzemi/heap64.gd")
 const E := 1e-6
@@ -66,8 +67,12 @@ static func _merge2(a: float, b: float, pmin: float) -> float:
 
 ## E72: výstupy < pmin se přičtou nejbližšímu silnému výstupu (q ≥ pmin; vzdálenost sloupců, pak větší q); shoda vzdálenosti
 ## i q → rovným dílem (symetrie). Když žádný silný není, všechno do největšího (shoda → rovným dílem). Hmota zůstává.
+## Jan 2026-11-20 03:26 (p72_dosah_m, 8 m): slučuje se jen do vzdálenosti dosahu (středy sloupců řídicí mřížky); drobný
+## výstup bez cíle v dosahu zůstane samostatný. 0 = bez limitu (chování E72).
 static func _merge_outs(c: Dictionary, outs: Dictionary, pmin: float) -> Array:
 	var H: int = c.H
+	var dos := float(c.get("dosah72", 0.0))
+	if dos > 0.0: return _merge_outs72d(c, outs, pmin, dos)
 	var ks := outs.keys(); ks.sort()
 	var strong := []; var weak := []
 	for k in ks:
@@ -100,6 +105,52 @@ static func _merge_outs(c: Dictionary, outs: Dictionary, pmin: float) -> Array:
 	for k in weak: outs.erase(k)
 	for k in add: outs[k][3] = float(outs[k][3]) + float(add[k])
 	return [weak.size(), sqrt(float(dmax))]   # počet sloučených, největší vzdálenost (sloupce řídicí mřížky)
+
+## E72 + limit dosahu (m): cíle = silné výstupy, a když žádný není, největší (shoda → všechny největší). Drobný výstup jde
+## k nejbližšímu cíli v dosahu (shoda vzdálenosti a q → rovným dílem; bez silných rovným dílem všem největším v dosahu),
+## jinak zůstane. Vrací [počet sloučených, největší vzdálenost ve sloupcích, počet ponechaných].
+static func _merge_outs72d(c: Dictionary, outs: Dictionary, pmin: float, dos: float) -> Array:
+	var H: int = c.H
+	var side := float(c.get("side", 1.0))
+	var lim2 := (dos / side) * (dos / side)
+	var ks := outs.keys(); ks.sort()
+	var tg := []; var weak := []
+	var none_strong := true
+	for k in ks:
+		if typeof(outs[k]) != TYPE_ARRAY: continue
+		if float(outs[k][3]) >= pmin: none_strong = false
+	if none_strong:
+		var mx := 0.0
+		for k in ks:
+			if typeof(outs[k]) == TYPE_ARRAY: mx = maxf(mx, float(outs[k][3]))
+		for k in ks:
+			if typeof(outs[k]) != TYPE_ARRAY: continue
+			if float(outs[k][3]) >= mx * (1.0 - 1e-12): tg.append(k)
+			else: weak.append(k)
+	else:
+		for k in ks:
+			if typeof(outs[k]) != TYPE_ARRAY: continue
+			if float(outs[k][3]) >= pmin: tg.append(k)
+			else: weak.append(k)
+	if weak.is_empty(): return [0, 0.0, 0]
+	var add := {}; var dmax := 0; var moved := []; var kept := 0
+	for k in weak:
+		var cw: int = outs[k][2]; var xw := cw / H; var yw := cw % H
+		var best := []; var bd := -1; var bq := 0.0
+		for k2 in tg:
+			var cs: int = outs[k2][2]; var dx := cs / H - xw; var dy := cs % H - yw
+			var d := dx * dx + dy * dy
+			if float(d) > lim2: continue
+			var qq := float(outs[k2][3])
+			if none_strong: best.append(k2); bd = maxi(bd, d); continue
+			if bd < 0 or d < bd or (d == bd and qq > bq * (1.0 + 1e-12)): best = [k2]; bd = d; bq = qq
+			elif d == bd and qq >= bq * (1.0 - 1e-12): best.append(k2)
+		if best.is_empty(): kept += 1; continue
+		for k2 in best: add[k2] = float(add.get(k2, 0.0)) + float(outs[k][3]) / best.size()
+		dmax = maxi(dmax, bd); moved.append(k)
+	for k in moved: outs.erase(k)
+	for k in add: outs[k][3] = float(outs[k][3]) + float(add[k])
+	return [moved.size(), sqrt(float(dmax)), kept]
 
 ## E71: přičte průtok a vloží do haldy jen tehdy, když tam pásmo ještě nečeká (bez duplicit → méně kroků sestupu)
 static func _qpush(c: Dictionary, qb: Dictionary, down, g: int, d: float) -> void:
@@ -134,7 +185,7 @@ static func solve(c: Dictionary, entries: PackedInt32Array, q: float, ex: Dictio
 	var slu := prune and bool(c.get("slu72", true))         # E72: drobné větve kapacity / průsaku a výstupy < p67_prune_min slučovat
 	c._slu72 = pmin if slu and bool(c.get("slu72p", true)) else 0.0   # E72: průsak protékané vody taky (p72_prusak)
 	if kap: outs["_z71"] = true
-	c._k71 = {"on": kap, "harm": harm, "sc": 1000.0 * float(c.get("cas71", 144.0)) * float(c.A), "capu": {}, "lku": {}, "wl": 0.0, "t": t, "prus": prus}
+	c._k71 = {"on": kap, "harm": harm, "sc": 1000.0 * CH.faktor(c) * float(c.A), "capu": {}, "lku": {}, "wl": 0.0, "t": t, "prus": prus}
 	var guard := 0
 	var gmax := 40 * NB + 1000
 	var defer := []              # E71 K: dna pastí ve stejné výšce se zakládají až po ostatních pásmech té výšky (nezávislost na id)
@@ -220,7 +271,7 @@ static func solve(c: Dictionary, entries: PackedInt32Array, q: float, ex: Dictio
 	for b in r.wet67: wq.append(float(qtot.get(b, 0.0)) * (0.0 if trace else 1.0))
 	r.wetq67 = wq
 	r.leak67w = float(c._k71.wl)
-	r.slouceno72 = slo[0]; r.slouceno72_d = slo[1]
+	r.slouceno72 = slo[0]; r.slouceno72_d = slo[1]; r.ponechano72 = int(slo[2]) if slo.size() > 2 else 0
 	c.erase("_k71")
 	return r
 

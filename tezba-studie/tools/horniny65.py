@@ -1,17 +1,20 @@
 #!/usr/bin/env python3
 # T01 (dříve E65): návrh vlastností a těžby hornin (tezba-studie; jen tabulka + graf).
 # Nepřepisuje sdilene/materialy_voda.json ani horniny_voda.json.
-# 1 herní den = 10 min reálně, faktor 144. Buňka 0,5 m = 0,125 m³; výnos a čas ~ objemu.
+# Čas hry z jednoho místa: blueprint-studie/scripts/voda/cas_hry.gd (E77, 1 herní den = 1 h reálně, faktor 24).
+# Buňka 0,5 m = 0,125 m³; výnos a čas ~ objemu.
 
 from __future__ import annotations
 import json
+import re
 from pathlib import Path
 
-STUDY = Path("/workspace/willage-ideas/tezba-studie")
+STUDY = Path(__file__).resolve().parent.parent
 OUT_JSON = STUDY / "data" / "horniny_tezba_navrh.json"
 OUT_PNG = STUDY / "shots" / "65_horniny_tezba.png"
 
-CAS_FAKTOR = 144.0
+CAS_HRY = STUDY.parent / "blueprint-studie" / "scripts" / "voda" / "cas_hry.gd"
+CAS_FAKTOR = float(re.search(r"const FAKTOR := ([0-9.]+)", CAS_HRY.read_text(encoding="utf-8")).group(1))  # herních dní za reálný den
 BUNKA_M = 0.5
 OBJEM = BUNKA_M ** 3  # 0.125 m³
 

@@ -1,0 +1,431 @@
+{
+ "e66_vychozi": {
+  "otisk_po": "63d7b89a91385a79",
+  "otisk_pred": "d7aedf3a6d9d10e8",
+  "neshod": 0,
+  "chyba_pred": 0.0,
+  "chyba_po": 0.0,
+  "vyver_ven": null,
+  "vystupy": [
+   [
+    "povrch",
+    18.5,
+    0.1815
+   ]
+  ],
+  "souhrn_po": {
+   "koryto_sloupcu": 26,
+   "okraj_lps": 9.65191,
+   "podzemni_telesa": 1,
+   "prameny": 5,
+   "tun_sloupcu": 160,
+   "vodopady": 8,
+   "vodopady_okraj": 5,
+   "volani_podzemi": 12,
+   "vyvery": 1
+  },
+  "plny_ms": 1662.333,
+  "vykop_ms_prumer": 685.7
+ },
+ "e66_obracene": {
+  "otisk_po": "63d7b89a91385a79",
+  "otisk_pred": "d7aedf3a6d9d10e8",
+  "neshod": 0,
+  "chyba_pred": 0.0,
+  "chyba_po": 0.0,
+  "vyver_ven": null,
+  "vystupy": [
+   [
+    "povrch",
+    18.5,
+    0.1815
+   ]
+  ],
+  "souhrn_po": {
+   "koryto_sloupcu": 26,
+   "okraj_lps": 9.65191,
+   "podzemni_telesa": 1,
+   "prameny": 5,
+   "tun_sloupcu": 160,
+   "vodopady": 8,
+   "vodopady_okraj": 5,
+   "volani_podzemi": 9,
+   "vyvery": 1
+  },
+  "plny_ms": 1615.489,
+  "vykop_ms_prumer": 654.1
+ },
+ "e66_e67": {
+  "otisk_po": "905eec578834b4ff",
+  "otisk_pred": "cbabcb300ca290f1",
+  "neshod": 0,
+  "chyba_pred": 7.49400541621981e-16,
+  "chyba_po": -1.66533453693773e-16,
+  "vyver_ven": null,
+  "vystupy": [
+   [
+    "okraj",
+    18.09,
+    0.0808
+   ],
+   [
+    "okraj",
+    12.53,
+    0.0808
+   ]
+  ],
+  "souhrn_po": {
+   "koryto_sloupcu": 26,
+   "okraj_lps": 9.65191,
+   "podzemni_telesa": 1,
+   "prameny": 5,
+   "tun_sloupcu": 160,
+   "vodopady": 8,
+   "vodopady_okraj": 5,
+   "volani_podzemi": 9,
+   "vyvery": 0
+  },
+  "plny_ms": 495.59,
+  "vykop_ms_prumer": 74.4
+ },
+ "e66_e67_obr": {
+  "otisk_po": "905eec578834b4ff",
+  "otisk_pred": "cbabcb300ca290f1",
+  "neshod": 0,
+  "chyba_pred": 7.49400541621981e-16,
+  "chyba_po": -1.66533453693773e-16,
+  "vyver_ven": null,
+  "vystupy": [
+   [
+    "okraj",
+    18.09,
+    0.0808
+   ],
+   [
+    "okraj",
+    12.53,
+    0.0808
+   ]
+  ],
+  "souhrn_po": {
+   "koryto_sloupcu": 26,
+   "okraj_lps": 9.65191,
+   "podzemni_telesa": 1,
+   "prameny": 5,
+   "tun_sloupcu": 160,
+   "vodopady": 8,
+   "vodopady_okraj": 5,
+   "volani_podzemi": 7,
+   "vyvery": 0
+  },
+  "plny_ms": 480.169,
+  "vykop_ms_prumer": 16.5
+ },
+ "e68_auto": {
+  "kola": "10",
+  "okraj": "0.062240",
+  "prusak": "0.037760",
+  "stena": "0.000000",
+  "prameny": "0.704240",
+  "chyba": "0.000000000",
+  "opakovani": [
+   "true"
+  ]
+ },
+ "e68_pretok": {
+  "kola": "10",
+  "okraj": "0.062240",
+  "prusak": "0.037760",
+  "stena": "0.000000",
+  "prameny": "0.704240",
+  "chyba": "0.000000000",
+  "opakovani": [
+   "true"
+  ]
+ },
+ "e68_auto05": {
+  "kola": "19",
+  "okraj": "0.012240",
+  "prusak": "0.037760",
+  "stena": "0.000000",
+  "prameny": "0.704240",
+  "chyba": "0.000000000",
+  "opakovani": [
+   "true"
+  ]
+ },
+ "e68_pretok05": {
+  "kola": "19",
+  "okraj": "0.012240",
+  "prusak": "0.037760",
+  "stena": "0.000000",
+  "prameny": "0.704240",
+  "chyba": "0.000000000",
+  "opakovani": [
+   "true"
+  ]
+ },
+ "e68_vyzv": {
+  "kola": "2",
+  "okraj": "0.000000",
+  "prusak": "0.039440",
+  "stena": "0.060560",
+  "prameny": "0.000000",
+  "chyba": "0.000000000",
+  "opakovani": [
+   "true"
+  ]
+ },
+ "e69": {
+  "radku": 12,
+  "nenulova_chyba": 0,
+  "sym_tok_nenul": 0,
+  "vystupy": [
+   [
+    "plocha",
+    "pretok+O",
+    "80"
+   ],
+   [
+    "plocha",
+    "pretok+O bez slucovani",
+    "160"
+   ],
+   [
+    "kupole",
+    "pretok+O",
+    "8"
+   ],
+   [
+    "kupole",
+    "pretok+O bez slucovani",
+    "132"
+   ],
+   [
+    "misa",
+    "pretok+O",
+    "4"
+   ],
+   [
+    "misa",
+    "pretok+O bez slucovani",
+    "4"
+   ]
+  ]
+ },
+ "e72": {
+  "varianty": [
+   [
+    "stara (auto)",
+    {
+     "okraj": 0,
+     "povrch": 1
+    },
+    0,
+    0.0,
+    null,
+    "4f53cda18c2baa0c",
+    {
+     "okraj": 0.0,
+     "povrch": 4.1
+    }
+   ],
+   [
+    "stara + O",
+    {
+     "okraj": 1,
+     "povrch": 0
+    },
+    0,
+    0.0,
+    null,
+    "4f53cda18c2baa0c",
+    {
+     "okraj": 4.1,
+     "povrch": 0.0
+    }
+   ],
+   [
+    "pretok + O",
+    {
+     "okraj": 5,
+     "povrch": 1
+    },
+    95,
+    19.31,
+    null,
+    "c7435717612bf664",
+    {
+     "okraj": 3.85,
+     "povrch": 0.25
+    }
+   ],
+   [
+    "pretok bez O",
+    {
+     "okraj": 0,
+     "povrch": 2
+    },
+    1,
+    9.49,
+    null,
+    "720a6b532c9930b6",
+    {
+     "okraj": 0.0,
+     "povrch": 4.1
+    }
+   ],
+   [
+    "stara, kras jen perm>=0.3",
+    {
+     "okraj": 0,
+     "povrch": 1
+    },
+    0,
+    0.0,
+    null,
+    "4f53cda18c2baa0c",
+    {
+     "okraj": 0.0,
+     "povrch": 4.096556
+    }
+   ],
+   [
+    "pretok + O, kras jen perm>=0.3",
+    {
+     "okraj": 5,
+     "povrch": 1
+    },
+    93,
+    19.31,
+    null,
+    "8cdd1cc0be074cc9",
+    {
+     "okraj": 3.859670971204,
+     "povrch": 0.24
+    }
+   ]
+  ],
+  "vykopy": {
+   "pretok_O": [
+    0,
+    "f11de83a41d71173"
+   ],
+   "pretok_O_obracene": [
+    0,
+    "f11de83a41d71173"
+   ],
+   "stara_base": [
+    0,
+    "23b823aa710c9942"
+   ]
+  },
+  "poradi": true
+ },
+ "e74": {
+  "plocha": "5fae39823f8074f9",
+  "hydro": "63d7b89a91385a79",
+  "neshod": "0",
+  "otisk_ne": "0",
+  "plocha_ne": "0",
+  "vyver74": "0",
+  "obsazeno": "0",
+  "chyba": "0.0"
+ },
+ "e74_e67": {
+  "plocha": "48f0107942d715ef",
+  "hydro": "905eec578834b4ff",
+  "neshod": "0",
+  "otisk_ne": "0",
+  "plocha_ne": "0",
+  "vyver74": "0",
+  "obsazeno": "0",
+  "chyba": "-0.0"
+ },
+ "e74_vyzv": {
+  "plocha": "5fae39823f8074f9",
+  "hydro": "63d7b89a91385a79",
+  "neshod": "0",
+  "otisk_ne": "0",
+  "plocha_ne": "0",
+  "vyver74": "0",
+  "obsazeno": "3",
+  "chyba": "0.0"
+ },
+ "e74_vyzv_obr": {
+  "plocha": "5fae39823f8074f9",
+  "hydro": "63d7b89a91385a79",
+  "neshod": "0",
+  "otisk_ne": "0",
+  "plocha_ne": "0",
+  "vyver74": "0",
+  "obsazeno": "2",
+  "chyba": "0.0"
+ },
+ "e75_syn": {
+  "krasy": [
+   [
+    "8243c14e4a19b461",
+    "true"
+   ],
+   [
+    "43c9aeea0c243dc8",
+    "true"
+   ]
+  ],
+  "neshod": [
+   [
+    "0",
+    "0"
+   ],
+   [
+    "0",
+    "0"
+   ]
+  ],
+  "prvni": [
+   [
+    "330.68",
+    "3307"
+   ],
+   [
+    "328.73",
+    "3287"
+   ]
+  ],
+  "chyby_nenul": 0
+ },
+ "e75_ostrov": "E75 konec: den 365.00, událostí 0, neshod 0, otisk≠plný 0, otisk krasu 7e31419afd6c5cdc, vody 63d7b89a91385a79, chyba 0.0",
+ "e76": {
+  "A": [
+   "A: první otisk d7aedf3a6d9d10e8, prameny 5; 12 výkopů 30542 ms → lokálně 63d7b89a91385a79 (check_full { \"fill\": 0, \"eff\": 0, \"to\": 0 })",
+   "A: nové postavení c65671b2f1147f27 (1706 ms) neshod { \"fill\": 0, \"eff\": 371, \"to\": 0 }, prameny jinak 8 (5 → 5); načtení c65671b2f1147f27 (1736 ms) neshod { \"fill\": 0, \"eff\": 371, \"to\": 0 }, uloženo 419 B"
+  ],
+  "B": [
+   "B slot (2, 0) dz 0: lokálně 1825 ms , plný 2199 ms; otisk c590206e3f472bdb / 3a0fb7abffae7a1d neshod { \"fill\": 0, \"eff\": 158, \"to\": 0 }; bilance chyba -1.5 / 0.0; okraj 9.7968 → 9.7301 l/s",
+   "B slot (2, 0) dz 4: lokálně 1395 ms , plný 3124 ms; otisk f50c23b3f6c92f29 / 5fac37d44c675f21 neshod { \"fill\": 0, \"eff\": 155, \"to\": 0 }; bilance chyba -3.0 / 0.0; okraj 9.7968 → 9.6968 l/s",
+   "B slot (2, 0) dz -4: lokálně 1556 ms , plný 2409 ms; otisk 5ce41b076a84879f / 053524dea174d84c neshod { \"fill\": 0, \"eff\": 263, \"to\": 0 }; bilance chyba -3.0 / 0.0; okraj 9.7968 → 9.8401 l/s",
+   "B slot (0, -1) dz 0: lokálně 2539 ms , plný 764 ms; otisk 1c2fc266f26618cd / 8b852f631d5bcd08 neshod { \"fill\": 0, \"eff\": 193, \"to\": 0 }; bilance chyba -1.5 / 0.0; okraj 9.7968 → 9.8134 l/s",
+   "B slot (0, -1) dz 4: lokálně 2441 ms , plný 675 ms; otisk 16b5915d6f51549e / 0afde9924e230d33 neshod { \"fill\": 0, \"eff\": 208, \"to\": 0 }; bilance chyba -1.5 / 0.0; okraj 9.7968 → 9.8134 l/s",
+   "B slot (0, -1) dz -4: lokálně 1899 ms , plný 617 ms; otisk 885b568ff02c1501 / 5975920f9b4d47af neshod { \"fill\": 0, \"eff\": 193, \"to\": 0 }; bilance chyba -1.5 / 0.0; okraj 9.7968 → 9.8134 l/s"
+  ]
+ },
+ "e76_p76": {
+  "A": [
+   "A: první otisk d7aedf3a6d9d10e8, prameny 5; 12 výkopů 30578 ms → lokálně 63d7b89a91385a79 (check_full { \"fill\": 0, \"eff\": 0, \"to\": 0 })",
+   "A: nové postavení 63d7b89a91385a79 (1684 ms) neshod { \"fill\": 0, \"eff\": 0, \"to\": 0 }, prameny jinak 0 (5 → 5); načtení 63d7b89a91385a79 (1660 ms) neshod { \"fill\": 0, \"eff\": 0, \"to\": 0 }, uloženo 524 B"
+  ],
+  "B": [
+   "B slot (2, 0) dz 0: lokálně 1306 ms , plný 2155 ms; otisk af8fdf0f2eeca11d / af8fdf0f2eeca11d neshod { \"fill\": 0, \"eff\": 0, \"to\": 0 }; bilance chyba 0.0 / 0.0; okraj 9.7968 → 12.7135 l/s",
+   "B slot (2, 0) dz 4: lokálně 1422 ms , plný 2147 ms; otisk b0ee03fc840390d6 / b0ee03fc840390d6 neshod { \"fill\": 0, \"eff\": 0, \"to\": 0 }; bilance chyba 0.0 / 0.0; okraj 9.7968 → 12.6801 l/s",
+   "B slot (2, 0) dz -4: lokálně 1483 ms , plný 1988 ms; otisk 7a9f2cad61d62dfd / 7a9f2cad61d62dfd neshod { \"fill\": 0, \"eff\": 0, \"to\": 0 }; bilance chyba 0.0 / 0.0; okraj 9.7968 → 12.7468 l/s",
+   "B slot (0, -1) dz 0: lokálně 2357 ms , plný 2337 ms; otisk e70753ebb47ff563 / e70753ebb47ff563 neshod { \"fill\": 0, \"eff\": 0, \"to\": 0 }; bilance chyba 0.0 / 0.0; okraj 9.7968 → 12.7968 l/s",
+   "B slot (0, -1) dz 4: lokálně 2204 ms , plný 2205 ms; otisk 0a598e2ef85ee322 / 0a598e2ef85ee322 neshod { \"fill\": 0, \"eff\": 0, \"to\": 0 }; bilance chyba 0.0 / 0.0; okraj 9.7968 → 12.7968 l/s",
+   "B slot (0, -1) dz -4: lokálně 1649 ms , plný 2197 ms; otisk 91777e6fe52ac55c / 91777e6fe52ac55c neshod { \"fill\": 0, \"eff\": 0, \"to\": 0 }; bilance chyba 0.0 / 0.0; okraj 9.7968 → 12.7968 l/s"
+  ]
+ },
+ "e77": [
+  "E77 stav: prameny 5, výstupy 1 (0.17316 l/s), mokrá pásma 0, objem 201.30 m³, přítok těles 0.17316 l/s, okraj 9.79676 l/s, chyba 0.0, plný 1993 ms",
+  "E77 p71_cas 24: první tůň 92.8 s = 0.0011 herních dní = 0.06 min reálně (5 událostí plnění); první eroze E51 200000 s = 2.31 herních dní = 138.9 min reálně (8 aktivních), otisk d7aedf3a6d9d10e8"
+ ]
+}

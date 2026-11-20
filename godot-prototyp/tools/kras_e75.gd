@@ -2,7 +2,7 @@ extends SceneTree
 ## E75: kras na ostrově prototypu (scripts/voda/podzemi/kras75.gd, p75_kras zapnuté). Postaví vodu, vypíše rozpustná
 ## pásma na cestách těles a rychlosti rozpouštění, provede výkopy jako voda_e66 (seed 66, --poradi=obracene) v čase 0,
 ## pak pustí kras do --dni herních dní nebo --udalosti událostí. Po každé události kontrola proti čerstvému plnému výpočtu
-## (fill / eff / to a otisk vody) a otisk krasu. 1 herní den = 86 400 herních s = 10 min reálně (p71_cas 144).
+## (fill / eff / to a otisk vody) a otisk krasu. Reálný čas přes scripts/voda/cas_hry.gd (p71_cas, výchozí 24: 1 herní den = 1 h).
 ## Volby: --vykopu=12 --hloubka=2 --dni=365 --udalosti=12 --kontrola=1 --bp.<param>=hodnota --out=cesta
 const Block = preload("res://scripts/block.gd")
 const BlockGen = preload("res://scripts/block_gen.gd")
@@ -10,7 +10,8 @@ const T = preload("res://scripts/teren/ostrov_teren.gd")
 const OV = preload("res://scripts/voda/ostrov_voda.gd")
 const K75 = preload("res://scripts/voda/podzemi/kras75.gd")
 const H68 = preload("res://scripts/voda/hydro68.gd")
-const DEN := 86400.0
+const CH = preload("res://scripts/voda/cas_hry.gd")   # sloučení E75 + E77: čas hry na jednom místě
+const DEN := CH.DEN_S
 
 func _arg(k: String, d: String) -> String:
 	for s in OS.get_cmdline_user_args():
@@ -40,7 +41,7 @@ func _init() -> void:
 	var tot := 0.0
 	for b in v.kras.rate: tot += float(v.kras.rate[b])
 	var ne := K75.next_event(v.kras)
-	res.rychlost = {"celkem_m3_s": tot, "m3_za_herni_den": tot * DEN, "po_materialech": _per_mat(v), "prvni_udalost_dni": float(ne[0]) / DEN, "prvni_udalost_realne_min": float(ne[0]) / DEN * 10.0, "pasmo": ne[1]}
+	res.rychlost = {"celkem_m3_s": tot, "m3_za_herni_den": tot * DEN, "po_materialech": _per_mat(v), "prvni_udalost_dni": float(ne[0]) / DEN, "prvni_udalost_realne_min": CH.realne_min(float(ne[0]), v.p), "pasmo": ne[1]}
 	var tq := 0.0
 	for r in v.st.get("ug_bodies", []): tq += float(r.q_in)
 	res.pruttok_l_s = tq
@@ -79,7 +80,7 @@ func _init() -> void:
 		var got: Array = v.kras_run(dni * DEN, 1)
 		if got.is_empty(): break
 		var e: Dictionary = got[0]
-		e.dni = float(e.t_s) / DEN; e.realne_min = e.dni * 10.0
+		e.dni = float(e.t_s) / DEN; e.realne_min = CH.realne_min(float(e.t_s), v.p)
 		if chk:
 			var bad: Dictionary = v.check_full()
 			e.neshod = bad; bad_tot += int(bad.fill) + int(bad.eff) + int(bad.to)

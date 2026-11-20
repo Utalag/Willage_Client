@@ -23,7 +23,7 @@ static func _soluble(m: int) -> bool:
 ## ztráty L = {thr, cap (kras naráz), inf (propustná · perm na sloupec), perm_min}
 static func losses(p: Dictionary, springs: bool) -> Dictionary:
 	if springs: return {"thr": float(p.strz_thr_q), "cap": float(p.ponor_cap_q), "inf": float(p.ponor_inf_q), "perm_min": float(p.ponor_perm), "springs": true, "pit_q": float(p.pit_drain_q), "cell_m2": pow(float(p.get("voda_cell_m", 0.5)), 2.0), "u_m": float(p.get("voda_cell_m", 0.5)),
-		"q73": bool(p.get("p73_pritok", false)), "v73": bool(p.get("p73_vyver", false))}
+		"q73": bool(p.get("p73_pritok", false)), "v73": bool(p.get("p73_vyver", false)), "v74": bool(p.get("p74_vyzvednout", false)), "h74": bool(p.get("p74_hladina", true))}
 	return {"thr": float(p.strz_thr), "cap": float(p.ponor_cap), "inf": float(p.ponor_inf), "perm_min": float(p.ponor_perm), "springs": false, "pit_q": 0.0}
 
 static func make(hm: PackedFloat64Array, W: int, H: int, wall: PackedByteArray, mats: PackedInt32Array, src: PackedFloat64Array, L: Dictionary, edge_out: bool) -> Dictionary:
@@ -402,6 +402,34 @@ static func fill_events(st: Dictionary, comp: PackedInt32Array, lo: float, hi: f
 
 ## nastaví extra odtok na přelivu každé mokré tůně; podzemní voda vyjde na nejbližším okraji ostrova (vyvěračka ve stěně → vodopád do mlhy)
 ## E52: modul podzemí (výchozí podzemi.gd; varianta v ctx.impl má stejné entry / solve + touched)
+## E74 + Jan 2026-11-20 01:49 (p74_vyzvednout + p74_hladina): neobsazený povrchový výtok vodu ze světa nepouští.
+## 1) těleso se vyřeší jako dřív (stejný klíč → bez přepínače otisky beze změny); 2) má-li neobsazený povrchový výtok,
+## vyřeší se znovu se všemi neobsazenými povrchovými sloupci vyřazenými z výstupů → hladina stoupne a voda vyjde jen
+## obsazeným pramenem nebo okrajem; jinak je těleso plné (uzavřené → tůně přetečou po povrchu). Přirozené výtoky z 1)
+## zůstanou vykreslené (vyver74, q 0) a obsadí se jako v E74. Vrací [výsledek (kopie), klíč, [[sloupec, z]]].
+static func solve74(st: Dictionary, vs: PackedInt32Array, q: float, excl0: Dictionary) -> Array:
+	var e00 := excl0.keys(); e00.sort()
+	var sk := "s%s|%s|%s" % [str(vs), PackedFloat64Array([q]).to_byte_array().hex_encode(), str(e00)]   # E83: přesný klíč (bity q, seřazené buňky), ne "%.9f" + 32bitový hash()
+	if not st.ug_cache.has(sk): st.ug_cache[sk] = _ugi(st).solve(st.ug, vs, q, excl0)
+	var r: Dictionary = st.ug_cache[sk]
+	if not (bool(st.L.get("v74", false)) and bool(st.L.get("h74", false))) or r.closed or float(r.out_q) <= 0.0: return [r.duplicate(), sk, []]
+	var claim: Dictionary = st.get("claim74", {})
+	var hid := []
+	if r.has("outs67"):
+		for o in r.outs67:
+			if float(o[3]) > 0.0 and String(o[1]) == "povrch" and not claim.has(int(o[2])): hid.append([int(o[2]), float(o[0])])
+	elif String(r.out[3]) == "povrch" and not claim.has(int(r.out[4])): hid.append([int(r.out[4]), float(r.out[0])])
+	if hid.is_empty(): return [r.duplicate(), sk, []]
+	var e0 := excl0.keys(); e0.sort()
+	var ck := claim.keys(); ck.sort()
+	var sk2 := "h%s|%s|%s|%s" % [str(vs), PackedFloat64Array([q]).to_byte_array().hex_encode(), str(e0), str(ck)]   # E83: přesný klíč
+	if not st.ug_cache.has(sk2):
+		var excl := excl0.duplicate()
+		for i in st.W * st.H:
+			if not claim.has(i): excl[i] = true
+		st.ug_cache[sk2] = _ugi(st).solve(st.ug, vs, q, excl)
+	return [st.ug_cache[sk2].duplicate(), sk2, hid]
+
 static func _ugi(st: Dictionary):
 	return st.ug.get("impl", UG)
 
@@ -514,11 +542,10 @@ static func _apply_drains(st: Dictionary, dirty = null) -> PackedInt32Array:
 					vs.append(ents[j][0]); q += ents[j][1].podzemi_lps
 					if _fed73(st, ents[j][1], r0, fed): continue   # E73 p73_vyver: tůň zavodněná pramenem tohoto tělesa – pramen v ní smí zůstat
 					for c in ents[j][1].cells: excl[c] = true
-				# E83: přesný klíč (bity q, seřazené buňky), dřív "%.9f" a 32bitový excl.hash() – kolize = výsledek z mezipaměti jiného vstupu
-				var ek := excl.keys(); ek.sort()
-				var sk := "s%s|%s|%s" % [str(vs), PackedFloat64Array([q]).to_byte_array().hex_encode(), str(ek)]
-				if not st.ug_cache.has(sk): st.ug_cache[sk] = _ugi(st).solve(st.ug, vs, q, excl)
-				var r: Dictionary = st.ug_cache[sk].duplicate()
+				var s74 := solve74(st, vs, q, excl)   # E74 + Jan 01:49: neobsazený výtok zvedá hladinu tělesa (p74_hladina)
+				var sk: String = s74[1]
+				var r: Dictionary = s74[0]
+				for hv in s74[2]: st.under.append({"v0": ents[grp[0]][0], "from": ents[grp[0]][1].outlet, "exit": int(hv[0]), "q": 0.0, "z": float(hv[1]), "typ": "vyver74"})
 				for j in grp:
 					var x: Dictionary = ents[j][1]
 					if not r.closed: _set_drain(st, x, wr)   # uzavřené plné těleso nic nepřijímá → vše přeteče po povrchu
@@ -526,12 +553,16 @@ static func _apply_drains(st: Dictionary, dirty = null) -> PackedInt32Array:
 					for o in r.outs67:
 						var col67: int = o[2]
 						if float(o[3]) <= 0.0: continue
-						if o[1] == "povrch": st.src2[col67] += float(o[3]); wr.append(col67)
-						st.under.append({"v0": ents[grp[0]][0], "from": ents[grp[0]][1].outlet, "exit": col67, "q": float(o[3]), "z": float(o[0]), "typ": o[1]})
+						var ty67: String = o[1]
+						if ty67 == "povrch" and bool(st.L.get("v74", false)) and not st.get("claim74", {}).has(col67): ty67 = "vyver74"   # E74: neobsazený výtok jen k vykreslení
+						if ty67 == "povrch": st.src2[col67] += float(o[3]); wr.append(col67)
+						st.under.append({"v0": ents[grp[0]][0], "from": ents[grp[0]][1].outlet, "exit": col67, "q": float(o[3]), "z": float(o[0]), "typ": ty67})
 				elif not r.closed and r.out_q > 0.0:
 					var col: int = r.out[4]
-					if r.out[3] == "povrch": st.src2[col] += r.out_q; wr.append(col)
-					st.under.append({"v0": ents[grp[0]][0], "from": ents[grp[0]][1].outlet, "exit": col, "q": r.out_q, "z": float(r.out[0]), "typ": r.out[3]})
+					var ty: String = r.out[3]
+					if ty == "povrch" and bool(st.L.get("v74", false)) and not st.get("claim74", {}).has(col): ty = "vyver74"   # E74: neobsazený výtok jen k vykreslení
+					if ty == "povrch": st.src2[col] += r.out_q; wr.append(col)
+					st.under.append({"v0": ents[grp[0]][0], "from": ents[grp[0]][1].outlet, "exit": col, "q": r.out_q, "z": float(r.out[0]), "typ": ty})
 				r.erase("members"); r.entries = vs; r.cache_key = sk
 				st.ug_bodies.append(r)
 	var chg := PackedInt32Array()

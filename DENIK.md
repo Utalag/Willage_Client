@@ -216,6 +216,17 @@ Skupiny: 1 Prototyp a buildy · 2 Terén a tvar · 3 Rozlišení bloku · 4 Ská
 - **Komplikace:** koryta jsou krátké úseky (malý svět, malá povodí). Krasová vyvěračka 0. Hráz na svahu tůň nevytvořila (potok ji obtekl). Podzemní tok vede zatím zjednodušeně k nejbližšímu okraji.
 - **Další krok:** Jan rozhodne, jak daleko vést podzemní tok (sledovat propustnou vrstvu?) a jestli má mít krasová vyvěračka vlastní pravidlo. Starší otevřené otázky (eroze po blocích vs hrubý svět, jádro hory přes šev, minerály z hrubého světa) zůstávají.
 
+### 🔄 Voda E74–E77 sloučena, přepínače podle Jana (2026-11-20 04:08 · větev `voda-e74-e77-slouceni`, tag `voda-e74-e77-ready`, `tok.solve74`, `ug67._merge_outs72d`, `ostrov_voda.place76`, data `blueprint-studie/shots/voda_e74_e77/`)
+- **Směr:** Jan 2026-11-20 01:49 a 03:26: sloučit E74–E77, zapnout obsazování pramenů s hladinou, uložené prameny, slučování do 8 m; E75 a těžba na `cas_hry.gd`.
+- **Zlepšení:** výchozí ostrov beze změny otisku (63d7b89a91385a79), 0 neshod, chyba 0 ve všech testech, druhý běh bitově stejný; neobsazený pramen už vodu ze světa nepouští; nové postavení a načtení ostrova = lokální stav; slučování nejdál 8 m.
+- **Komplikace:** plný výpočet +0,6 s; první verze hladiny 25,7 s (zamítnuta); 12 drobných výstupů na okraji E67 zůstává; testy bez hráče (smyčka E68, kras E75) mají těleso plné.
+- **Další krok (Jan):** fast-forward `main`; rozhodnout slučování drobných výstupů mezi sebou a vykreslení neobsazeného pramene.
+
+### 🔄 Blueprint v3 / E77: čas hry 1 herní den = 1 hodina (2026-11-20 00:57 · `blueprint-studie/scripts/voda/cas_hry.gd`, `p71_cas` 24, `sdilene/*_voda.json`, větev `e77-cas-hodina`)
+- **Směr:** rozhodnutí Jana 2026-11-19 22:19 po testech vody: faktor času 144 → 24, jedno místo pro převody.
+- **Zlepšení:** výchozí hra beze změny (stejný otisk, 0 neshod). E67 jen jiný objem v pasti a otisk. Události reálně 6× delší (eroze E51 23 → 139 min).
+- **Komplikace:** v E69 voda u E67 vyteče o vrstvu výš (kapacita dolů 6× menší). E75, E76 a studie těžby mají vlastní převod, upraví se při sloučení.
+- **Další krok:** sloučení; pak převést E75 a těžbu na `cas_hry.gd`.
 ### 🔄 Blueprint v3 / E76: voda po přenosu výřezu, uložené prameny (2026-11-20 00:49 · prototyp `scripts/voda/prenos76.gd`, `ostrov_voda.gd`, `ug_funkce.gd` (`bands76`), příznak `p76_prameny`, větev `e76-voda-po-prenosu`)
 - **Směr:** TODO Přenos terénu „Voda se nepřenáší hotová“ a nález E74: výřez nese zdroje, materiály a geometrii, voda se po vložení počítá znovu a události se plánují z ustáleného stavu.
 - **Zlepšení:** nové postavení i načtení po výkopech = lokální stav (0 neshod, uloženo 524 B). Výřez vložený vedle bloků i o ±4 buňky: lokální = plný, bilance 0, horniny 100 % jako v původu. Přeplánování 61–104 ms, jen ~380 z 1280 sloupců, stejný plán jako úplné.
@@ -227,6 +238,11 @@ Skupiny: 1 Prototyp a buildy · 2 Terén a tvar · 3 Rozlišení bloku · 4 Ská
 - **Zlepšení:** události jako E51 (odpočet do prahu jedné buňky), dutina u hladiny, zpětná vazba do vody (pórovitost, propustnost) s lokálním přepočtem E68. Test: vápenec první buňka za 331 herních dní (55 h hraní), sádrovec 22 dní (3,8 h), sůl 0,15 dne (1,5 min); 0 neshod, stejný otisk v obou pořadích výkopů. Výchozí hra beze změny.
 - **Komplikace:** na ostrově voda k rozpustné hornině nedojde (hladina v půdě a písku) → 0 rozpouštění. S krycí vrstvou v tělese dá lokální přepočet jiné bity (≤ 9e-17). Propojení těles dutinou chybí.
 - **Další krok:** Jan rozhodne o zrychlení (`p75_zrychleni`) a jestli má ostrov mít vápenec u hladiny (kras ve generátoru).
+### 🧪 Blueprint v3 / E74: hladina podzemní vody jako plocha gw(x, y) (2026-11-20 00:20 · `blueprint-studie/scripts/gw74/gw74.gd`, prototyp `scripts/voda/podzemi/gw74.gd`, příznaky `p74_gw`, `p74_vyzvednout`, větev `e74-gw-plocha`)
+- **Směr:** Jan 20:47 / 20:49: řešiče dávají jen hrubý stav po tělesech, voda v podzemí se drží jako plocha (jako `bs[k]`), buňky se vzorkují až při kontaktu, výtok se jen vykreslí, dokud se pramen neobsadí.
+- **Zlepšení:** kompaktní plocha 9,4 kB proti 1,6 MB pásem a 108 kB výsledků těles. Objem sedí s E52 / E58 / E67 (float32). Vzorkování výkopu ~50 µs. Po výkopech 0 neshod a stejný otisk v obou pořadích. Výchozí hra beze změny.
+- **Komplikace:** jedna výška nestačí (těleso přes víc vrstev → 2–3 intervaly ve sloupci; řešeno pravidlem z geologie + výjimkami). E67 vodu skoro neukládá, jeho výtoky musí dál dávat řešič. Neobsazený výtok zatím voda opouští svět.
+- **Další krok:** Jan rozhodne, jestli neobsazený výtok má zvedat hladinu tělesa, a jestli zapnout obsazování pramenů ve hře. Plochu stavět jen pro dotčené těleso.
 
 ### 🔄 Blueprint v3 / E73: opravy nálezů E68 (2026-11-19 23:45 · `blueprint-studie/scripts/voda/tok.gd`, `alg60/tok60.gd`, `hydro68/hydro68.gd`, `podzemi52/ug67.gd`, příznaky `p73_vyver`, `p73_pritok`, `p73_zrychleni`, `p73_prusak_tok`, větev `e73-nalezy-e68`)
 - **Směr:** TODO Voda: pramen ve vlastní tůni, přítok tůně jako součet, zrychlení pomalé smyčky, E67 „vše prosákne“ ≠ uzavřené.
