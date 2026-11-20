@@ -1,0 +1,551 @@
+{
+  "kriterium": [
+    {
+      "cihel_8": 35,
+      "info": {},
+      "plneni_cihel_proc": 12.1372767857143,
+      "polozek": 2175,
+      "scenar": "tunel",
+      "tridy": {
+        "sloupce_0_25": {
+          "beze_zmeny": 2816,
+          "intervaly": 224,
+          "vyska": 32
+        },
+        "sloupce_0_5_voda": {
+          "beze_zmeny": 704,
+          "jedna_dutina": 55,
+          "jemnejsi_nez_0_5": 1,
+          "vic_dutin": 0,
+          "vyska": 8
+        },
+        "useku_zmen": 256,
+        "zmenenych_sloupcu_0_25": 256
+      },
+      "useku_na_sloupec": 1.0,
+      "velikost_raw_deflate": {
+        "A_klice": [
+          4421,
+          124
+        ],
+        "B_intervaly": [
+          1300,
+          451
+        ],
+        "C_octree": [
+          1626,
+          241
+        ],
+        "D_cihly_8": [
+          17990,
+          342
+        ]
+      },
+      "zmen": 2185
+    },
+    {
+      "cihel_8": 35,
+      "info": {},
+      "plneni_cihel_proc": 51.8303571428571,
+      "polozek": 9288,
+      "scenar": "dlouhy",
+      "tridy": {
+        "sloupce_0_25": {
+          "beze_zmeny": 2928,
+          "intervaly": 1168,
+          "vyska": 0
+        },
+        "sloupce_0_5_voda": {
+          "beze_zmeny": 732,
+          "jedna_dutina": 288,
+          "jemnejsi_nez_0_5": 0,
+          "vic_dutin": 0,
+          "vyska": 4
+        },
+        "useku_zmen": 1184,
+        "zmenenych_sloupcu_0_25": 1168
+      },
+      "useku_na_sloupec": 1.01369863013699,
+      "velikost_raw_deflate": {
+        "A_klice": [
+          18831,
+          244
+        ],
+        "B_intervaly": [
+          5920,
+          1865
+        ],
+        "C_octree": [
+          670,
+          157
+        ],
+        "D_cihly_8": [
+          17990,
+          353
+        ]
+      },
+      "zmen": 9288
+    },
+    {
+      "cihel_8": 525,
+      "info": {},
+      "plneni_cihel_proc": 0.37202380952381,
+      "polozek": 1000,
+      "scenar": "n1000",
+      "tridy": {
+        "sloupce_0_25": {
+          "beze_zmeny": 3219,
+          "intervaly": 870,
+          "vyska": 7
+        },
+        "sloupce_0_5_voda": {
+          "beze_zmeny": 387,
+          "jedna_dutina": 0,
+          "jemnejsi_nez_0_5": 637,
+          "vic_dutin": 0,
+          "vyska": 0
+        },
+        "useku_zmen": 996,
+        "zmenenych_sloupcu_0_25": 877
+      },
+      "useku_na_sloupec": 1.13568985176739,
+      "velikost_raw_deflate": {
+        "A_klice": [
+          2779,
+          1792
+        ],
+        "B_intervaly": [
+          4980,
+          3341
+        ],
+        "C_octree": [
+          21296,
+          2825
+        ],
+        "D_cihly_8": [
+          269850,
+          4894
+        ]
+      },
+      "zmen": 1000
+    },
+    {
+      "cihel_8": 4,
+      "info": {
+        "schod_bunek_0_25": 14,
+        "x": 36,
+        "y": 8,
+        "z": 88
+      },
+      "plneni_cihel_proc": 18.75,
+      "polozek": 384,
+      "scenar": "previs",
+      "tridy": {
+        "sloupce_0_25": {
+          "beze_zmeny": 952,
+          "intervaly": 52,
+          "vyska": 20
+        },
+        "sloupce_0_5_voda": {
+          "beze_zmeny": 236,
+          "jedna_dutina": 11,
+          "jemnejsi_nez_0_5": 4,
+          "vic_dutin": 0,
+          "vyska": 5
+        },
+        "useku_zmen": 72,
+        "zmenenych_sloupcu_0_25": 72
+      },
+      "useku_na_sloupec": 1.0,
+      "velikost_raw_deflate": {
+        "A_klice": [
+          782,
+          66
+        ],
+        "B_intervaly": [
+          360,
+          165
+        ],
+        "C_octree": [
+          297,
+          60
+        ],
+        "D_cihly_8": [
+          2056,
+          63
+        ]
+      },
+      "zmen": 384
+    },
+    {
+      "cihel_8": 6,
+      "info": {
+        "vrchol": 116,
+        "x": 48,
+        "y": 22
+      },
+      "plneni_cihel_proc": 16.1458333333333,
+      "polozek": 496,
+      "scenar": "oblouk",
+      "tridy": {
+        "sloupce_0_25": {
+          "beze_zmeny": 948,
+          "intervaly": 40,
+          "vyska": 36
+        },
+        "sloupce_0_5_voda": {
+          "beze_zmeny": 237,
+          "jedna_dutina": 10,
+          "jemnejsi_nez_0_5": 0,
+          "vic_dutin": 0,
+          "vyska": 9
+        },
+        "useku_zmen": 76,
+        "zmenenych_sloupcu_0_25": 76
+      },
+      "useku_na_sloupec": 1.0,
+      "velikost_raw_deflate": {
+        "A_klice": [
+          1018,
+          82
+        ],
+        "B_intervaly": [
+          380,
+          154
+        ],
+        "C_octree": [
+          282,
+          63
+        ],
+        "D_cihly_8": [
+          3084,
+          83
+        ]
+      },
+      "zmen": 496
+    },
+    {
+      "cihel_8": 27,
+      "info": {
+        "stred": [
+          48,
+          16,
+          80
+        ]
+      },
+      "plneni_cihel_proc": 24.5081018518519,
+      "polozek": 3388,
+      "scenar": "jeskyne",
+      "tridy": {
+        "sloupce_0_25": {
+          "beze_zmeny": 643,
+          "intervaly": 381,
+          "vyska": 0
+        },
+        "sloupce_0_5_voda": {
+          "beze_zmeny": 146,
+          "jedna_dutina": 1,
+          "jemnejsi_nez_0_5": 109,
+          "vic_dutin": 0,
+          "vyska": 0
+        },
+        "useku_zmen": 426,
+        "zmenenych_sloupcu_0_25": 381
+      },
+      "useku_na_sloupec": 1.11811023622047,
+      "velikost_raw_deflate": {
+        "A_klice": [
+          6811,
+          663
+        ],
+        "B_intervaly": [
+          2130,
+          1256
+        ],
+        "C_octree": [
+          4640,
+          744
+        ],
+        "D_cihly_8": [
+          13878,
+          865
+        ]
+      },
+      "zmen": 3388
+    },
+    {
+      "cihel_8": 15,
+      "info": {
+        "chodba1": [
+          62,
+          70
+        ],
+        "chodba2": [
+          50,
+          58
+        ]
+      },
+      "plneni_cihel_proc": 26.6666666666667,
+      "polozek": 2048,
+      "scenar": "dve",
+      "tridy": {
+        "sloupce_0_25": {
+          "beze_zmeny": 1920,
+          "intervaly": 128,
+          "vyska": 0
+        },
+        "sloupce_0_5_voda": {
+          "beze_zmeny": 480,
+          "jedna_dutina": 0,
+          "jemnejsi_nez_0_5": 0,
+          "vic_dutin": 32,
+          "vyska": 0
+        },
+        "useku_zmen": 256,
+        "zmenenych_sloupcu_0_25": 128
+      },
+      "useku_na_sloupec": 2.0,
+      "velikost_raw_deflate": {
+        "A_klice": [
+          4134,
+          99
+        ],
+        "B_intervaly": [
+          1280,
+          408
+        ],
+        "C_octree": [
+          686,
+          129
+        ],
+        "D_cihly_8": [
+          7710,
+          168
+        ]
+      },
+      "zmen": 2048
+    }
+  ],
+  "okraje": {
+    "chodba_bokem": {
+      "cesta": "dutiny",
+      "chyba_bilance": 0.0,
+      "do_hloubky_po": 0.0,
+      "info": {
+        "gx": 58,
+        "gy": 14,
+        "hladina_m": 19.468988686126,
+        "lo_m": 14.5158144575726,
+        "m": 2.8282813669775,
+        "mat": 5,
+        "q_in": 0.17316,
+        "teleso": 1,
+        "z0": 60,
+        "z1": 68
+      },
+      "okraj_lps_po": 9.79676,
+      "okraj_lps_pred": 9.79676,
+      "plne": "d7aedf3a6d9d10e8",
+      "shoda": true,
+      "stena_po": 0.0,
+      "voda_po": "d7aedf3a6d9d10e8",
+      "voda_pred": "d7aedf3a6d9d10e8",
+      "voda_v_dire_sloupcu": 0,
+      "vystupu_okraj": 0,
+      "zmen": 1888
+    },
+    "dira_dnem": {
+      "cesta": "dutiny",
+      "chyba_bilance": 0.000000000000000922872889219661,
+      "do_hloubky_po": 0.04,
+      "info": {
+        "hm_2_21": 0.0,
+        "hm_2_22": 0.0,
+        "hm_3_21": 0.0,
+        "hm_3_22": 0.0,
+        "sx": 4,
+        "sy": 42
+      },
+      "okraj_lps_po": 9.75676,
+      "okraj_lps_pred": 9.79676,
+      "plne": "79f381a9f3e243de",
+      "shoda": true,
+      "stena_po": 0.0,
+      "voda_po": "79f381a9f3e243de",
+      "voda_pred": "d7aedf3a6d9d10e8",
+      "voda_v_dire_sloupcu": 4,
+      "vystupu_okraj": 0,
+      "zmen": 1344
+    },
+    "dno_plnych_sloupcu": {
+      "(0, 0)": 256,
+      "(0, 1)": 256,
+      "(1, 0)": 256,
+      "(1, 1)": 256
+    },
+    "meze": {
+      "polozit_z=127": true,
+      "x=32": false,
+      "z=-1": false,
+      "z=128": false,
+      "zmenenych_bunek": 1
+    }
+  },
+  "prekryv": {
+    "funkce_0_25m": {
+      "definice": "funkce 0,25 m",
+      "definice_jine_proc": 7.79953002929688,
+      "okoli_bunek": 1787,
+      "okoli_zmeneno": 313,
+      "polozek": 2175,
+      "polozeni_do_skaly": 0,
+      "rovno_nove_definici": 0,
+      "visi_polozene": 0,
+      "vykop_ve_vzduchu": 0
+    },
+    "povrch_plus_1": {
+      "definice": "verze: povrch +0,5 m (surface_shift +1)",
+      "definice_jine_proc": 6.0699462890625,
+      "okoli_bunek": 1787,
+      "okoli_zmeneno": 421,
+      "polozek": 2175,
+      "polozeni_do_skaly": 32,
+      "rovno_nove_definici": 0,
+      "visi_polozene": 0,
+      "vykop_ve_vzduchu": 0
+    },
+    "puda_plus_1": {
+      "definice": "verze: půda +0,5 m (soil 3)",
+      "definice_jine_proc": 0.78125,
+      "okoli_bunek": 1787,
+      "okoli_zmeneno": 32,
+      "polozek": 2175,
+      "polozeni_do_skaly": 0,
+      "rovno_nove_definici": 0,
+      "visi_polozene": 0,
+      "vykop_ve_vzduchu": 0
+    },
+    "stejna_verze": {
+      "definice": "stejná verze (kontrola)",
+      "definice_jine_proc": 0.0,
+      "okoli_bunek": 1787,
+      "okoli_zmeneno": 0,
+      "polozek": 2175,
+      "polozeni_do_skaly": 0,
+      "rovno_nove_definici": 0,
+      "visi_polozene": 0,
+      "vykop_ve_vzduchu": 0
+    }
+  },
+  "rozliseni": {
+    "bloky": [
+      {
+        "c16_jinych": 0,
+        "c16_rovno_pipeline": true,
+        "geom_jine_proc": 5.914306640625,
+        "geom_pevne_vzduch_proc": 0.1953125,
+        "jine_bez_mineralu_proc": 5.88760375976562,
+        "jine_proc": 6.03561401367188,
+        "kind": "louka",
+        "ms_16": 57.817,
+        "ms_32": 457.402,
+        "pevne_vzduch_proc": 0.1953125,
+        "povrch_max_m": 0.5,
+        "povrch_prumer_m": 0.0625,
+        "slot": [
+          0,
+          0
+        ]
+      },
+      {
+        "c16_jinych": 0,
+        "c16_rovno_pipeline": true,
+        "geom_jine_proc": 11.3899230957031,
+        "geom_pevne_vzduch_proc": 1.11923217773438,
+        "jine_bez_mineralu_proc": 11.2770080566406,
+        "jine_proc": 11.5394592285156,
+        "kind": "hora",
+        "ms_16": 82.228,
+        "ms_32": 578.316,
+        "pevne_vzduch_proc": 1.11923217773438,
+        "povrch_max_m": 1.75,
+        "povrch_prumer_m": 0.358154296875,
+        "slot": [
+          1,
+          0
+        ]
+      },
+      {
+        "c16_jinych": 0,
+        "c16_rovno_pipeline": true,
+        "geom_jine_proc": 7.45010375976562,
+        "geom_pevne_vzduch_proc": 0.4150390625,
+        "jine_bez_mineralu_proc": 6.87255859375,
+        "jine_proc": 7.65380859375,
+        "kind": "kopec",
+        "ms_16": 94.347,
+        "ms_32": 808.951,
+        "pevne_vzduch_proc": 0.52490234375,
+        "povrch_max_m": 1.0,
+        "povrch_prumer_m": 0.1328125,
+        "slot": [
+          0,
+          1
+        ]
+      },
+      {
+        "c16_jinych": 0,
+        "c16_rovno_pipeline": true,
+        "geom_jine_proc": 5.82656860351562,
+        "geom_pevne_vzduch_proc": 0.142669677734375,
+        "jine_bez_mineralu_proc": 5.80902099609375,
+        "jine_proc": 5.96923828125,
+        "kind": "louka",
+        "ms_16": 72.769,
+        "ms_32": 520.503,
+        "pevne_vzduch_proc": 0.142669677734375,
+        "povrch_max_m": 0.5,
+        "povrch_prumer_m": 0.045654296875,
+        "slot": [
+          1,
+          1
+        ]
+      }
+    ],
+    "celkem": {
+      "geom_jine_proc": 7.64522552490234,
+      "geom_pevne_vzduch_proc": 0.468063354492188,
+      "jine_bez_mineralu_proc": 7.4615478515625,
+      "jine_proc": 7.79953002929688,
+      "pevne_vzduch_proc": 0.495529174804688
+    }
+  },
+  "svy": {
+    "funkce": {
+      "max_krok_0_25m_uvnitr_m": {
+        "hranice": 0.00000763448461427174,
+        "povrch": 0.0000147357346840238
+      },
+      "skok_na_svu_m": {
+        "hranice": 0.0,
+        "povrch": 0.0
+      }
+    },
+    "material": {
+      "sev_jine_proc": 3.359375,
+      "uvnitr_jine_proc": 11.171875
+    },
+    "poradi_vlozeni": {
+      "16": {
+        "jinych": 0,
+        "max_vzdalenost_od_svu_bunek": 0,
+        "proc": 0.0
+      },
+      "32": {
+        "jinych": 0,
+        "max_vzdalenost_od_svu_bunek": 0,
+        "proc": 0.0
+      }
+    }
+  }
+}
