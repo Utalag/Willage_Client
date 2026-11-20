@@ -16,6 +16,7 @@ const PRM = preload("res://scripts/voda/prameny.gd")
 const V64 = preload("res://scripts/teren/svet64/voda64.gd")
 const UGO = preload("res://scripts/voda/podzemi_ostrov.gd")
 const H68 = preload("res://scripts/voda/hydro68.gd")   # E68: jednotný krok povrch ↔ podzemí do ustálení (p68_hydro)
+const GW = preload("res://scripts/voda/podzemi/gw74.gd")   # E74: hladina podzemní vody jako plocha gw(x, y) (p74_gw)
 const BS := 16
 const ROCK := 6   # materiál příkopu pro tok (žula, nepropustná)
 
@@ -32,6 +33,10 @@ var ug := {}
 var falls := []                   # [{top, bot, q, drop_u, edge}] vodopády (edge = přes okraj ostrova do mlhy)
 var ms := {}
 var last_edit := {}
+var gw := {}                      # E74: plocha podzemní vody (p74_gw), jinak prázdné
+var full_otisk := ""              # E74: otisk posledního čerstvého plného výpočtu (check_full)
+var full_gw := {}                 # E74: plocha z čerstvého plného výpočtu
+var claims := {}                  # E74: obsazené výtoky (sloupec povrchu), přežijí přestavbu (p74_vyzvednout)
 
 func gi_of(s: Vector2i, x: int, y: int) -> int:
 	var ws := T.wslot(s)
@@ -91,6 +96,7 @@ func build(bl: Dictionary) -> void:
 	var mats := PackedInt32Array(); mats.resize(n)
 	for i in n: mats[i] = _mat_d(i, dd)
 	st = TOK.make(hm.duplicate(), W, H, wall, mats, src, TOK.losses(p, true), true)
+	st.claim74 = claims
 	var t1 := Time.get_ticks_usec()
 	ug = {}
 	if bool(p.get("podzemi_vrstva", true)) and not blocks.is_empty():
@@ -100,7 +106,11 @@ func build(bl: Dictionary) -> void:
 	ms["podzemí: pásma"] = (Time.get_ticks_usec() - t1) / 1000.0
 	t1 = Time.get_ticks_usec()
 	_route(st)
+	var nc := _claims(-1)
+	while not nc.is_empty():   # E74: obsazení napojením na koryto / tůň mění povrch → znovu (obsazení jen přibývá)
+		_route(st); nc = _claims(-1)
 	ms["povrch + podzemí: plný výpočet"] = (Time.get_ticks_usec() - t1) / 1000.0
+	_gw()
 	_falls()
 	ms["celkem"] = (Time.get_ticks_usec() - t0) / 1000.0
 
@@ -168,7 +178,12 @@ func edit(s: Vector2i, lx: int, ly: int, new_h: int) -> Dictionary:
 	var ch := PackedInt32Array([gi]); var hh := PackedFloat64Array([hv])
 	if out.has("ug") and bool(out.ug.changed): _add_drains(ch, hh)
 	var r := _update(ch, hh, src_new)
+	_claim_update(gi)
 	out.surf_ms = (Time.get_ticks_usec() - t1) / 1000.0
+	if bool(p.get("p74_gw", false)):
+		var tg := Time.get_ticks_usec()
+		_gw()
+		out.gw_ms = (Time.get_ticks_usec() - tg) / 1000.0
 	out.surf = r
 	_falls()
 	out.ms = (Time.get_ticks_usec() - t0) / 1000.0
@@ -197,18 +212,71 @@ func step() -> bool:
 		var ch := PackedInt32Array([gi]); var hh := PackedFloat64Array([st.hm[gi]])
 		_add_drains(ch, hh)
 		_update(ch, hh, st.src)
+		_claim_update(gi)
 		_falls()
+		_gw()
 	return more
+
+## E74 p74_vyzvednout: nové obsazení výtoků – výkop vedle (Chebyshev ≤ 1, dug ≥ 0) nebo napojení na koryto / tůň
+## (výtok nebo jeho 8 sousedů má průtok ≥ práh koryta nebo je tůň). Vrací nově obsazené sloupce (seřazené).
+func _claims(dug: int) -> PackedInt32Array:
+	var nw := PackedInt32Array()
+	if not bool(p.get("p74_vyzvednout", false)): return nw
+	var thr: float = st.L.thr
+	for u in st.get("under", []):
+		if String(u.typ) != "vyver74": continue
+		var e: int = u.exit
+		if claims.has(e) or nw.has(e): continue
+		var ex := e / H; var ey := e % H; var ok := false
+		if dug >= 0 and absi(dug / H - ex) <= 1 and absi(dug % H - ey) <= 1: ok = true
+		for dx in [-1, 0, 1]:
+			for dy in [-1, 0, 1]:
+				if ok: break
+				var qx: int = ex + dx; var qy: int = ey + dy
+				if qx < 0 or qy < 0 or qx >= W or qy >= H: continue
+				var j := qx * H + qy
+				if island[j] == 1 and (is_pond(j) or st.eff[j] >= thr): ok = true
+		if ok: nw.append(e)
+	nw.sort()
+	for e in nw: claims[e] = true
+	return nw
+
+func _claim_update(dug: int) -> void:
+	var nc := _claims(dug)
+	while not nc.is_empty():
+		var ch := PackedInt32Array(); var hh := PackedFloat64Array()
+		for e in nc: ch.append(e); hh.append(st.hm[e])
+		_add_drains(ch, hh)
+		_update(ch, hh, st.src)
+		nc = _claims(-1)
+
+## E74: ruční obsazení výtoku (zachycení pramene hráčem) → voda začne téct po povrchu
+func claim(gi: int) -> void:
+	if claims.has(gi): return
+	claims[gi] = true
+	var ch := PackedInt32Array([gi]); var hh := PackedFloat64Array([st.hm[gi]])
+	_add_drains(ch, hh)
+	_update(ch, hh, st.src)
+	_claim_update(-1)
+	_falls(); _gw()
+
+## E74 p74_gw: plocha podzemní vody z výsledků těles
+func _gw() -> void:
+	if not bool(p.get("p74_gw", false)) or ug.is_empty(): gw = {}; return
+	gw = GW.build(ug, st.get("ug_bodies", []))
 
 ## kontrola: stav po lokálních přepočtech = čerstvý plný výpočet (stejné výkopy přehrané do čerstvého podzemí). Vrací počet neshod.
 func check_full() -> Dictionary:
 	var n := W * H
 	var st2 := TOK.make(st.hm.duplicate(), W, H, wall, st.mats, st.src, TOK.losses(p, true), true)
+	st2.claim74 = claims.duplicate()
 	if not ug.is_empty():
 		var u2 := UGO.make(T.world, T.fine(blocks), p, W, st2.hm, wall, float(p.voda_cell_m))
 		for d in ug._digs: UGO.F.touched(u2, {}, PackedInt32Array([d[0]]), PackedFloat64Array([d[1]]))
 		st2.ug = u2
 	_route(st2)
+	full_otisk = H68.otisk(st2)   # E74: přísnější kontrola (i extra, src2, výstupy podzemí)
+	full_gw = GW.build(st2.ug, st2.get("ug_bodies", [])) if bool(p.get("p74_gw", false)) and st2.has("ug") else {}
 	if st2.has("ug"): st2.ug.clear()   # cyklus Members.ctx (viz dispose)
 	var bad := {"fill": 0, "eff": 0, "to": 0}
 	for i in n:

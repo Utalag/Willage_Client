@@ -293,6 +293,62 @@ Výchozí: 800 kapek na blok, `ero_cap` 1,0, `ero_erode` 0,1, `ero_deposit_rate`
 - **Hypotéza:** parita bit po bitu (kopie se mění jen v cestách). Vložení bloku bp ≈ 0,25–0,4 s jako E49 detail
   (+ povrch a tráva prototypu ~0,4 s), voda ostrova 7 bloků (≈ 112 × 112 sloupců) plně < 1 s, kopání u vody desítky ms.
 
+## E74 hladina podzemní vody jako plocha funkce gw(x, y) (plán, zapsáno před pokusem 2026-11-19 23:55; TODO Model světa, Jan 2026-11-19 20:47 / 20:49, hypotéza)
+- **Co už je:** pásma `ug_funkce` (geologie ze `bs[k]` vzorkovaná po sloupcích řídicí mřížky 0,5 m), tělesa a řešiče
+  E52 (nadrž / přeliv), E58 auto, E67 pretok (+ E73); výsledek tělesa = objem, výtok, průsak, výstupy (`st.under`),
+  hladina L (E52 / E58) nebo pasti s hladinou a mokrý film (E67). `c.wt` je dnes jen ladicí maximum hladiny.
+- **Pokus (`scripts/gw74/gw74.gd`, beze změny řešičů):**
+  1. *Hrubý stav po tělesech* = dnešní výsledek řešiče (objem, výtok, prameny pro povrch) – při položení bloku nic navíc.
+  2. *Plocha* `gw`: na sloupec řídicí mřížky `top` a `bot` (float32) nejvyššího nasyceného intervalu; kde je ve sloupci víc
+     oddělených intervalů (zavěšená voda nad nepropustnou vrstvou), zbytek jako řídký „tvar“ `extra[sloupec] = [lo, hi, …]`.
+     Mokrý film E67 zvlášť (`film`). Objem se z plochy počítá přes geologii (pórovitost pásma ve výšce z).
+  3. *Vzorkování při kontaktu:* výkop sloupce → buňky 0,25 m ve stěnách 4 sousedů a dno: suchá / výtok (nasycená buňka
+     u vzduchu) / mokrá (film, 1 buňka nad hladinou = kapání) + hladina v jámě, když gw ve sloupci sahá nad dno výkopu.
+  4. *Výtoky:* kde `gw` protne povrch nebo stěnu (soused níž než `top`) → výtok jen k vykreslení. Přepínač
+     `p74_vyzvednout` (výchozí vyp): pramen řešiče teče po povrchu jen když je obsazený (výkop vedle, napojení na koryto
+     nebo tůň, ruční `claim`), jinak se počítá jako vykreslený výtok (`typ` „vyver74“, bilance přesná, odtéká ze světa).
+- **Měření (ostrov prototypu, výchozí hra E58 a E67 + E73, E52 nadrž / přeliv nad stejnými vstupy):** paměť plochy proti
+  pásmům (bajty stavu vody v tělesech a geologie pásem), čas stavby plochy a vzorkování při kontaktu, shoda objemu
+  plochy s objemem řešičů, shoda výtoků plochy s výstupy řešičů, otisk plochy po výkopech v obou pořadích a proti
+  plnému přepočtu.
+- **Hypotéza:** plocha má řádově méně bajtů než pásma + výsledky, objem sedí na 1e-6, vzorkování jednoho výkopu < 1 ms,
+  výstupy řešičů leží na výtocích plochy (plocha jich ukáže víc – průsakové linie), otisk nezávisí na pořadí.
+- Beze změny: `p71_cas` 144, `p72_prusak`, vzdálenost slučování.
+
+## E74 výsledky (2026-11-20 00:20, větev `e74-gw-plocha` z `e73-nalezy`, do main až po schválení Janem)
+Data `blueprint-studie/shots/e74/` (souhrn `tools/e74_souhrn.py`), nástroj `godot-prototyp/tools/gw_e74.gd`
+(ostrov, 12 výkopů, kontrola proti plnému přepočtu po každém výkopu, obě pořadí), test smyčky `tools/e68.gd`.
+- **Co vzniklo:** `scripts/gw74/gw74.gd` (port `voda/podzemi/gw74.gd`) – plocha z výsledků těles bez změny řešičů;
+  `ostrov_voda` ji při `p74_gw` staví po plném výpočtu i po výkopu. Přepínač `p74_vyzvednout`: neobsazený pramen podzemí
+  je jen vykreslený výtok (`typ` „vyver74“, v bilanci jako stěna), obsadí se výkopem vedle, napojením na koryto / tůň
+  nebo `claim(sloupec)`.
+- **Paměť (výchozí hra E58, 16 384 sloupců řídicí mřížky, 18 886 pásem, 1 těleso):** pásma (geologie + graf sousedů)
+  1 640 140 B, výsledky těles 108 228 B; plocha hustá 165 932 B, řídká (jen 1 024 sloupců s vodou) 47 148 B,
+  **kompaktní 9 372 B** (top + 27 výjimek; zbytek tvaru se dopočítá z geologie). E67: 332 B (voda skoro jen protéká).
+- **Jedna výška nestačí:** v E58 je těleso jedna nádrž přes několik propustných vrstev oddělených nepropustnými →
+  každý zasažený sloupec má 2–3 nasycené intervaly (1 024 z 1 024). Pravidlo „pod top je plné vše propustné“ to
+  pokryje kromě 27 sloupců (18 v E52 / E58 po výkopech, E67 pasti 82 ze 82). Tvar v prostoru je tedy nutný,
+  ale stačí jako řídké výjimky.
+- **Čas:** stavba plochy 29–58 ms (plný výpočet vody 1,8–2,6 s), po výkopu znovu ⌀ 29–35 ms (celá plocha, ne jen
+  dotčené těleso). Vzorkování při kontaktu (výkop, stěny 4 sousedů po 0,25 m): ⌀ 44–63 µs, max 133 µs, 12–20 buněk.
+  Vzorek všech sloupců s vodou (32 809 buněk) 34–41 ms.
+- **Shoda:** objem plochy = objem řešiče na float32 (E58 201,295 m³, Δ −6,8e-5; E52 nadrž 116,748 / přeliv 116,317,
+  E58 auto, E67 pretok 116,367 a 3,749, Δ ≤ 3,6e-5). Výstup řešiče E58 leží na výtoku plochy (1 z 1); plocha ukazuje
+  12 výtoků (4 povrch, 8 stěna = průsakové linie). Po každém výkopu otisk vody i plochy = čerstvý plný přepočet
+  (0 neshod ze 12, obě pořadí), otisk plochy 5fae39823f8074f9 v obou pořadích, hydro 63d7b89a91385a79 (= E73).
+  Kontrola `check_full` nově porovná i otisk (extra, src2, výstupy), nejen fill / eff / to.
+- **`p74_vyzvednout`:** ostrov beze změny (jediný pramen podzemí ústí do tůně → obsazen hned při stavbě), plný výpočet
+  +0,7 s (jeden průchod navíc). Počet obsazení závisí na pořadí výkopů (3 / 2) – záměrně, je to historie hráče.
+  Test smyčky: pramen neobsazený → prameny 0, smyčka 2 kola místo 10 / 19, 0,061 l/s jako vykreslený výtok, bilance 0.
+- **Negativy:** (1) E67 pretok vodu skoro neukládá (0,0085 m³), výstup „okraj“ E67 na ploše není → výtoky E67 musí dál
+  dávat řešič, ne plocha. (2) Neobsazený výtok voda opouští svět (jako stěna); jestli má místo toho stoupat hladina
+  tělesa, rozhodne Jan. (3) Nové postavení ostrova po výkopech najde povrchové prameny znovu z terénu → jiný stav než
+  lokální přepočet (to není chyba E74, ale pozor pro „položení bloku“). (4) Plocha se po výkopu staví celá (~30 ms);
+  stačilo by dotčené těleso.
+- **Výchozí hodnoty:** `p74_gw` a `p74_vyzvednout` vypnuté (mění hratelnost / jen měření). Se zapnutým `p74_gw` je
+  výchozí hra beze změny (stejný otisk, 0 neshod). Test smyčky a E69 (výchozí, `--ponor=0.3`, referenční sloupec) beze změny bit po bitu (kromě časů).
+- Beze změny: `p71_cas` 144, `p72_prusak`, vzdálenost slučování.
+
 ## E73 nálezy E68: pramen ve vlastní tůni, přítok tůně jako součet, zrychlení smyčky, E67 „vše prosákne“ (plán, zapsáno před pokusem 2026-11-19 23:15; TODO Voda, Jan: nejdřív dodělat vodu)
 - **1. Pramen v prohlubni, kterou sám zavodní (`p73_vyver`):** cyklus ostrova s periodou 2 (E68) vzniká tím, že
   zavodněná prohlubeň se v dalším kole stane vstupem téhož tělesa a její buňky se vyloučí z výstupů (`excl`). Pravidlo:

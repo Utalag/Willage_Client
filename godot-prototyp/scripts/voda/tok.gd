@@ -24,7 +24,7 @@ static func _soluble(m: int) -> bool:
 ## ztráty L = {thr, cap (kras naráz), inf (propustná · perm na sloupec), perm_min}
 static func losses(p: Dictionary, springs: bool) -> Dictionary:
 	if springs: return {"thr": float(p.strz_thr_q), "cap": float(p.ponor_cap_q), "inf": float(p.ponor_inf_q), "perm_min": float(p.ponor_perm), "springs": true, "pit_q": float(p.pit_drain_q), "cell_m2": pow(float(p.get("voda_cell_m", 0.5)), 2.0), "u_m": float(p.get("voda_cell_m", 0.5)),
-		"q73": bool(p.get("p73_pritok", false)), "v73": bool(p.get("p73_vyver", false))}
+		"q73": bool(p.get("p73_pritok", false)), "v73": bool(p.get("p73_vyver", false)), "v74": bool(p.get("p74_vyzvednout", false))}
 	return {"thr": float(p.strz_thr), "cap": float(p.ponor_cap), "inf": float(p.ponor_inf), "perm_min": float(p.ponor_perm), "springs": false, "pit_q": 0.0}
 
 static func make(hm: PackedFloat64Array, W: int, H: int, wall: PackedByteArray, mats: PackedInt32Array, src: PackedFloat64Array, L: Dictionary, edge_out: bool) -> Dictionary:
@@ -525,12 +525,16 @@ static func _apply_drains(st: Dictionary, dirty = null) -> PackedInt32Array:
 					for o in r.outs67:
 						var col67: int = o[2]
 						if float(o[3]) <= 0.0: continue
-						if o[1] == "povrch": st.src2[col67] += float(o[3]); wr.append(col67)
-						st.under.append({"v0": ents[grp[0]][0], "from": ents[grp[0]][1].outlet, "exit": col67, "q": float(o[3]), "z": float(o[0]), "typ": o[1]})
+						var ty67: String = o[1]
+						if ty67 == "povrch" and bool(st.L.get("v74", false)) and not st.get("claim74", {}).has(col67): ty67 = "vyver74"   # E74: neobsazený výtok jen k vykreslení
+						if ty67 == "povrch": st.src2[col67] += float(o[3]); wr.append(col67)
+						st.under.append({"v0": ents[grp[0]][0], "from": ents[grp[0]][1].outlet, "exit": col67, "q": float(o[3]), "z": float(o[0]), "typ": ty67})
 				elif not r.closed and r.out_q > 0.0:
 					var col: int = r.out[4]
-					if r.out[3] == "povrch": st.src2[col] += r.out_q; wr.append(col)
-					st.under.append({"v0": ents[grp[0]][0], "from": ents[grp[0]][1].outlet, "exit": col, "q": r.out_q, "z": float(r.out[0]), "typ": r.out[3]})
+					var ty: String = r.out[3]
+					if ty == "povrch" and bool(st.L.get("v74", false)) and not st.get("claim74", {}).has(col): ty = "vyver74"   # E74: neobsazený výtok jen k vykreslení
+					if ty == "povrch": st.src2[col] += r.out_q; wr.append(col)
+					st.under.append({"v0": ents[grp[0]][0], "from": ents[grp[0]][1].outlet, "exit": col, "q": r.out_q, "z": float(r.out[0]), "typ": ty})
 				r.erase("members"); r.entries = vs; r.cache_key = sk
 				st.ug_bodies.append(r)
 	var chg := PackedInt32Array()

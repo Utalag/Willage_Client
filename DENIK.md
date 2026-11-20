@@ -216,6 +216,12 @@ Skupiny: 1 Prototyp a buildy · 2 Terén a tvar · 3 Rozlišení bloku · 4 Ská
 - **Komplikace:** koryta jsou krátké úseky (malý svět, malá povodí). Krasová vyvěračka 0. Hráz na svahu tůň nevytvořila (potok ji obtekl). Podzemní tok vede zatím zjednodušeně k nejbližšímu okraji.
 - **Další krok:** Jan rozhodne, jak daleko vést podzemní tok (sledovat propustnou vrstvu?) a jestli má mít krasová vyvěračka vlastní pravidlo. Starší otevřené otázky (eroze po blocích vs hrubý svět, jádro hory přes šev, minerály z hrubého světa) zůstávají.
 
+### 🧪 Blueprint v3 / E74: hladina podzemní vody jako plocha gw(x, y) (2026-11-20 00:20 · `blueprint-studie/scripts/gw74/gw74.gd`, prototyp `scripts/voda/podzemi/gw74.gd`, příznaky `p74_gw`, `p74_vyzvednout`, větev `e74-gw-plocha`)
+- **Směr:** Jan 20:47 / 20:49: řešiče dávají jen hrubý stav po tělesech, voda v podzemí se drží jako plocha (jako `bs[k]`), buňky se vzorkují až při kontaktu, výtok se jen vykreslí, dokud se pramen neobsadí.
+- **Zlepšení:** kompaktní plocha 9,4 kB proti 1,6 MB pásem a 108 kB výsledků těles. Objem sedí s E52 / E58 / E67 (float32). Vzorkování výkopu ~50 µs. Po výkopech 0 neshod a stejný otisk v obou pořadích. Výchozí hra beze změny.
+- **Komplikace:** jedna výška nestačí (těleso přes víc vrstev → 2–3 intervaly ve sloupci; řešeno pravidlem z geologie + výjimkami). E67 vodu skoro neukládá, jeho výtoky musí dál dávat řešič. Neobsazený výtok zatím voda opouští svět.
+- **Další krok:** Jan rozhodne, jestli neobsazený výtok má zvedat hladinu tělesa, a jestli zapnout obsazování pramenů ve hře. Plochu stavět jen pro dotčené těleso.
+
 ### 🔄 Blueprint v3 / E73: opravy nálezů E68 (2026-11-19 23:45 · `blueprint-studie/scripts/voda/tok.gd`, `alg60/tok60.gd`, `hydro68/hydro68.gd`, `podzemi52/ug67.gd`, příznaky `p73_vyver`, `p73_pritok`, `p73_zrychleni`, `p73_prusak_tok`, větev `e73-nalezy-e68`)
 - **Směr:** TODO Voda: pramen ve vlastní tůni, přítok tůně jako součet, zrychlení pomalé smyčky, E67 „vše prosákne“ ≠ uzavřené.
 - **Zlepšení:** ostrov bez cyklu, bilance přesně 0 (dřív −0,02 l/s), 3 kola místo 4, výkop ⌀ 1,1 → 0,76 s, 0 neshod, stejný otisk v obou pořadích. Test smyčky 68 → 17 kol, pretok = auto. Opravena chyba plného výpočtu (chyběly prameny E67). Výchozí zapnuto.
