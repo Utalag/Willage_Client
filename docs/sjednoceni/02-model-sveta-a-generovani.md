@@ -50,7 +50,20 @@ Minerály, žíly, kras i dutiny jsou útvary funkce světa (1.7), ne krok „po
 
 **Otázka pro Jana.** Souhlasíš s pořadím: reliéf a sopky ve funkci světa → geologie a útvary (sopka vrstvy propíchne) → výchozí voda jako funkce → vegetace ze seedu, a buňky se vzorkují až ve slupce? Mají minerály a dutiny zůstat součástí funkce světa (jako útvary v 1.7), nebo se mají počítat až při vzorkování slupky?
 
-**Platí:**
+**Platí:** *rozhodnuto (2026-11-20 20:44–20:49, Jan t811u–t814u)*
+
+- **Biomy (varianta C, kombinace):** hrubá **mapa biomů** (např. hornatina, pahorkatina, nížina, mokřad, sopečná oblast) určí oblasti světa a pro každou výběr hornin. Uvnitř oblasti **mapa hornin** rozloží konkrétní zastoupení. Výška, voda a vegetace berou biom i horninu. Biom je zároveň zdrojem parametrů členitosti (1.13) a výskytu sopek (1.14).
+- **Mapa hornin** udává jen to, **kde a v jakém množství** se která hornina vyskytuje. Tvar reliéfu sama neurčuje.
+- **Pořadí kroků generátoru** (vše nejdřív jako funkce, vzorek až nakonec):
+  1. mapa biomů a mapa hornin (hrubé body ze seedu na maximální ploše světa, 1.7.1),
+  2. reliéf a sopky ve funkci světa (parametry členitosti z biomu),
+  3. geologie a útvary podle mapy hornin (sopka vrstvy propíchne, 1.14),
+  4. výchozí voda jako funkce (hladina podzemí, prameny ze seedu),
+  5. vegetace ze seedu jako pravidlo nad povrchem a vodou,
+  6. vzorek jen ve slupce (1.2) a uložení jen rozdílu proti funkci (1.4).
+- Validátor gen-v3 zůstává kontrolou, ne zdrojem tvaru.
+- *Otevřené:* minerály, žíly, kras a dutiny ve funkci světa, nebo až při vzorkování slupky.
+
 
 ---
 
