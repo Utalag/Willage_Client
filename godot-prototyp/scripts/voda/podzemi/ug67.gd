@@ -9,6 +9,7 @@ extends RefCounted
 ## Pasti, které se při stoupání potkají, se spojí (fill-spill-merge). Ustálený stav, žádná simulace po krocích; časy plnění
 ## pastí = objem / čistý průtok. Pořadí: halda (hodnota, id) → výsledek nezávisí na pořadí sousedů ani vstupů.
 const F = preload("res://scripts/voda/podzemi/ug_funkce.gd")
+const CH = preload("res://scripts/voda/cas_hry.gd")   # E77: čas hry na jednom místě
 const VS = preload("res://scripts/voda/voda_svet.gd")
 const HP = preload("res://scripts/voda/podzemi/heap64.gd")
 const E := 1e-6
@@ -134,7 +135,7 @@ static func solve(c: Dictionary, entries: PackedInt32Array, q: float, ex: Dictio
 	var slu := prune and bool(c.get("slu72", true))         # E72: drobné větve kapacity / průsaku a výstupy < p67_prune_min slučovat
 	c._slu72 = pmin if slu and bool(c.get("slu72p", true)) else 0.0   # E72: průsak protékané vody taky (p72_prusak)
 	if kap: outs["_z71"] = true
-	c._k71 = {"on": kap, "harm": harm, "sc": 1000.0 * float(c.get("cas71", 144.0)) * float(c.A), "capu": {}, "lku": {}, "wl": 0.0, "t": t, "prus": prus}
+	c._k71 = {"on": kap, "harm": harm, "sc": 1000.0 * CH.faktor(c) * float(c.A), "capu": {}, "lku": {}, "wl": 0.0, "t": t, "prus": prus}
 	var guard := 0
 	var gmax := 40 * NB + 1000
 	var defer := []              # E71 K: dna pastí ve stejné výšce se zakládají až po ostatních pásmech té výšky (nezávislost na id)

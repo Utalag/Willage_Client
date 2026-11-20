@@ -293,6 +293,43 @@ Výchozí: 800 kapek na blok, `ero_cap` 1,0, `ero_erode` 0,1, `ero_deposit_rate`
 - **Hypotéza:** parita bit po bitu (kopie se mění jen v cestách). Vložení bloku bp ≈ 0,25–0,4 s jako E49 detail
   (+ povrch a tráva prototypu ~0,4 s), voda ostrova 7 bloků (≈ 112 × 112 sloupců) plně < 1 s, kopání u vody desítky ms.
 
+## E77 čas hry: 1 herní den = 1 reálná hodina (plán, zapsáno před pokusem 2026-11-20 00:51; Jan 2026-11-19 22:19 rozhodnutí, použít po testech vody)
+- **Změna:** výchozí `p71_cas` 144 → 24 (faktor zrychlení času: herní den 86 400 s / reálné sekundy za herní den).
+- **Kde je dnes 10 min / 144 natvrdo (main):** `p71_cas` v parametrech studie a prototypu; náhradní hodnota 144 v
+  `ug_funkce._new` a `ug67` (kapacita dolů E71 = K · A · 1000 · faktor); sdílené tabulky `cas_faktor` 144 a odvozená pole
+  `t_1m_realne_min` + `rezim` (jen popis, kód je nečte); generátory `tools/materialy59.py`, `materialy61.py`. Časy E51
+  a plnění tůní jsou ve fyzikálních (herních) sekundách bez faktoru – reálný čas z nich dnes nikde nepočítá kód hry.
+  E75 kras a E76 přeplánování nejsou v main (větve; nástroje tam násobí dny × 10 min) → upraví se až při sloučení.
+  Studie těžby (`tezba-studie/tools/horniny65.py`, návrh T01) má vlastní faktor 144 – mimo vodu, jen zapsat.
+- **Jedno místo:** nový `scripts/voda/cas_hry.gd` (studie, port do prototypu): faktor z `p71_cas` (výchozí 24), převody
+  herní s → herní dny → reálné minuty. Tabulky: `cas_faktor` 24 a přepočtená odvozená pole (generátor čte faktor
+  z jednoho místa).
+- **Měření před / po (144 / 24):** ostrov (prototyp `voda_e66`, výchozí hra i E67): výstupy, prameny, mokrá pásma, objem,
+  Σ průtok, chyba bilance, čas plného výpočtu a výkopu, neshody, otisk; referenční testy E69 (sloupec / plocha, kupole,
+  mísa) a test smyčky `tools/e68.gd`; časy událostí (první naplnění tůně, první eroze E51) v herních dnech a reálně.
+- **Hypotéza:** kapacita dolů E71 klesne 6× → kde omezuje, víc vody zůstane v horní vrstvě / vyteče ve stěně; jinde beze
+  změny. Časy událostí v herních sekundách se nezmění (kromě tůní nad tělesy s omezením), reálně budou 6× delší.
+
+### E77 výsledky (2026-11-20 00:57, větev `e77-cas-hodina`, souhrn `tools/e77_souhrn.py`, shots `shots/e77/`)
+- **Změna:** `p71_cas` 24; faktor jen v `scripts/voda/cas_hry.gd` (studie i prototyp), `ug_funkce` a `ug67` ho berou odtud
+  (dřív náhradní 144 na dvou místech). Tabulky: `cas_faktor` 24, `t_1m_realne_min` × 6, režim jiný u 5 materiálů
+  (tráva, hlína a jedna hornina okamžitě → událost, jíl a jedna hornina událost → nepropustné); kód je nečte.
+- **Ostrov, výchozí hra (E58):** beze změny – otisk d7aedf3a6d9d10e8 / po výkopech 63d7b89a91385a79, 5 pramenů, 1 výstup
+  0,17316 l/s, objem 201,30 m³, okraj 9,79676 l/s, chyba 0, 0 neshod; plný ~2,7 s, výkop ⌀ ~0,73 s (šum měření).
+  Kapacita dolů E71 se ve výchozím režimu nepoužívá.
+- **Ostrov E67:** prameny, výstupy (1, 0,15318 l/s), mokrá pásma (4), okraj 9,64358 l/s a chyba bilance stejné; objem
+  v pasti 0,0085 → 0,0000 m³, otisk 86a2a3ca0c6d4d8d → cbabcb300ca290f1, po výkopech stejný otisk 905eec578834b4ff,
+  0 neshod. Plný 0,72 → 0,85 s, výkop ⌀ 63 → 74 ms (šum).
+- **Test smyčky E68:** stejné otisky (add3c2014e601243), 10 kol, chyba 5,6e-17.
+- **E69:** symetrie 0 a bilance 0 ve všech 12 bězích. 3 běhy E67 (plocha a kupole) mění vrstvu výstupu: dřív vše
+  vrstvou 5, teď vrstvou 4 (plocha) nebo 0,83 / 0,17 a 0,24 / 0,76 (bez slučování) – kapacita dolů je 6× menší, voda
+  vyteče výš. Odpovídá hypotéze.
+- **Časy událostí (ostrov):** v herních sekundách beze změny – první naplnění tůně 92,8 s (0,0011 herního dne), první
+  eroze E51 200 000 s (2,31 herního dne). Reálně: tůň 0,6 s → 3,9 s, eroze 23,1 min → 138,9 min.
+- **Co nefunguje / zbývá:** E75 kras (`kras_e75.gd`, `tools/e75.gd`: herní dny × 10 min) a E76 nejsou v main → převod
+  na `cas_hry.gd` až při sloučení. Studie těžby (`tezba-studie/tools/horniny65.py`, návrh T01) má vlastní faktor 144
+  (čas těžby) – mimo vodu, neměněno. Starší generátory `materialy59.py` / `materialy61.py` a návrh
+  `materialy_voda_navrh.json` zůstávají jako historie (144). Prototypová kopie `data/materialy_voda.json` pole času nemá.
 ## E76 voda po přenosu výřezu na ostrov (plán, zapsáno před pokusem 2026-11-20 00:36; TODO Přenos terénu „Voda se nepřenáší hotová“ + nález E74)
 - **Rozsah:** jen lokální studie klienta, žádná datová smlouva s backendem (`TerrainSource` atd. je pozdější blok).
 - **Co už je:** blok `bp` = blueprint (tvar, seed, minerály) + posun výšky, záznam ve světě studie (`bp_rec`: hm, hm_f, bs,

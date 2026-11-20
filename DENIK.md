@@ -216,6 +216,11 @@ Skupiny: 1 Prototyp a buildy · 2 Terén a tvar · 3 Rozlišení bloku · 4 Ská
 - **Komplikace:** koryta jsou krátké úseky (malý svět, malá povodí). Krasová vyvěračka 0. Hráz na svahu tůň nevytvořila (potok ji obtekl). Podzemní tok vede zatím zjednodušeně k nejbližšímu okraji.
 - **Další krok:** Jan rozhodne, jak daleko vést podzemní tok (sledovat propustnou vrstvu?) a jestli má mít krasová vyvěračka vlastní pravidlo. Starší otevřené otázky (eroze po blocích vs hrubý svět, jádro hory přes šev, minerály z hrubého světa) zůstávají.
 
+### 🔄 Blueprint v3 / E77: čas hry 1 herní den = 1 hodina (2026-11-20 00:57 · `blueprint-studie/scripts/voda/cas_hry.gd`, `p71_cas` 24, `sdilene/*_voda.json`, větev `e77-cas-hodina`)
+- **Směr:** rozhodnutí Jana 2026-11-19 22:19 po testech vody: faktor času 144 → 24, jedno místo pro převody.
+- **Zlepšení:** výchozí hra beze změny (stejný otisk, 0 neshod). E67 jen jiný objem v pasti a otisk. Události reálně 6× delší (eroze E51 23 → 139 min).
+- **Komplikace:** v E69 voda u E67 vyteče o vrstvu výš (kapacita dolů 6× menší). E75, E76 a studie těžby mají vlastní převod, upraví se při sloučení.
+- **Další krok:** sloučení; pak převést E75 a těžbu na `cas_hry.gd`.
 ### 🔄 Blueprint v3 / E76: voda po přenosu výřezu, uložené prameny (2026-11-20 00:49 · prototyp `scripts/voda/prenos76.gd`, `ostrov_voda.gd`, `ug_funkce.gd` (`bands76`), příznak `p76_prameny`, větev `e76-voda-po-prenosu`)
 - **Směr:** TODO Přenos terénu „Voda se nepřenáší hotová“ a nález E74: výřez nese zdroje, materiály a geometrii, voda se po vložení počítá znovu a události se plánují z ustáleného stavu.
 - **Zlepšení:** nové postavení i načtení po výkopech = lokální stav (0 neshod, uloženo 524 B). Výřez vložený vedle bloků i o ±4 buňky: lokální = plný, bilance 0, horniny 100 % jako v původu. Přeplánování 61–104 ms, jen ~380 z 1280 sloupců, stejný plán jako úplné.
