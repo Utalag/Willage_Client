@@ -19,6 +19,10 @@ E50 vzalo stejný svět a navzorkovalo každý blok v 64 × 64 × 256 buňkách 
 - **Blok vesnice 128 × 128 m** (256 × 256 buněk po 0,5 m), uvnitř kousky 32³; hora 1000 m ≈ 16 × 16 bloků (spíš na výpravy), ve vesnici kopce do ~100–200 m. Jan 18:58: líbí se, ale ještě se rozhodne. Velikost bloku v metrech je otevřená.
 - **Svět výprav** (Jan 18:59): tentýž algoritmus (funkce + kousky na vyžádání), dost velký pro víc hráčů najednou. Stejné funkce = stejný terén pro všechny, ukládají se jen změny.
 
+## E89 jednotky v kódu (2026-11-20 07:19)
+
+Pokus E89 (větev `e89-jednotky`) našel, že prototyp dnes kreslí buňku 1 × 1 × 0,5 jednotky scény, zatímco geologie počítá buňku 0,5 × 0,5 × 0,5 m. Ve scéně je tedy terén vodorovně natažený dvakrát a svahy vypadají poloviční. Příznak `p89_meritko` ukáže ostrov v metrech: dva bloky jsou 16 m, ne 32 jednotek. Postava 1,75 m pak stojí vedle buněk 0,5 m. Snímky jsou v `blueprint-studie/shots/e89/`. Modul `jednotky.gd` drží metry, herní jednotky 0,25 m a hustotu vzorkování na jednom místě. Zatím ho nic nepoužívá.
+
 ## Zdroje a snímky
 
 - [`DENIK.md`](../DENIK.md) – A/2 E49, nápady 18:03 a 18:35–18:59; A/3 proporční svět
