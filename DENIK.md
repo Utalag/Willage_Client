@@ -216,6 +216,12 @@ Skupiny: 1 Prototyp a buildy · 2 Terén a tvar · 3 Rozlišení bloku · 4 Ská
 - **Komplikace:** koryta jsou krátké úseky (malý svět, malá povodí). Krasová vyvěračka 0. Hráz na svahu tůň nevytvořila (potok ji obtekl). Podzemní tok vede zatím zjednodušeně k nejbližšímu okraji.
 - **Další krok:** Jan rozhodne, jak daleko vést podzemní tok (sledovat propustnou vrstvu?) a jestli má mít krasová vyvěračka vlastní pravidlo. Starší otevřené otázky (eroze po blocích vs hrubý svět, jádro hory přes šev, minerály z hrubého světa) zůstávají.
 
+### 🔄 Voda E74–E77 sloučena, přepínače podle Jana (2026-11-20 04:08 · větev `voda-e74-e77-slouceni`, tag `voda-e74-e77-ready`, `tok.solve74`, `ug67._merge_outs72d`, `ostrov_voda.place76`, data `blueprint-studie/shots/voda_e74_e77/`)
+- **Směr:** Jan 2026-11-20 01:49 a 03:26: sloučit E74–E77, zapnout obsazování pramenů s hladinou, uložené prameny, slučování do 8 m; E75 a těžba na `cas_hry.gd`.
+- **Zlepšení:** výchozí ostrov beze změny otisku (63d7b89a91385a79), 0 neshod, chyba 0 ve všech testech, druhý běh bitově stejný; neobsazený pramen už vodu ze světa nepouští; nové postavení a načtení ostrova = lokální stav; slučování nejdál 8 m.
+- **Komplikace:** plný výpočet +0,6 s; první verze hladiny 25,7 s (zamítnuta); 12 drobných výstupů na okraji E67 zůstává; testy bez hráče (smyčka E68, kras E75) mají těleso plné.
+- **Další krok (Jan):** fast-forward `main`; rozhodnout slučování drobných výstupů mezi sebou a vykreslení neobsazeného pramene.
+
 ### 🔄 Blueprint v3 / E77: čas hry 1 herní den = 1 hodina (2026-11-20 00:57 · `blueprint-studie/scripts/voda/cas_hry.gd`, `p71_cas` 24, `sdilene/*_voda.json`, větev `e77-cas-hodina`)
 - **Směr:** rozhodnutí Jana 2026-11-19 22:19 po testech vody: faktor času 144 → 24, jedno místo pro převody.
 - **Zlepšení:** výchozí hra beze změny (stejný otisk, 0 neshod). E67 jen jiný objem v pasti a otisk. Události reálně 6× delší (eroze E51 23 → 139 min).

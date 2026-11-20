@@ -320,6 +320,37 @@ Výchozí: 800 kapek na blok, `ero_cap` 1,0, `ero_erode` 0,1, `ero_deposit_rate`
   (E72: nejdál 19,3 sloupce). E76 zapnutý mění jen nové postavení ostrova, ne první.
 - **Negativa předem:** E78–E83 se neslučují (nejsou v rozhodnutí); main sám nepushuju; telefon / jiná platforma netestováno.
 
+### Sloučení vody E74–E77 – výsledky (2026-11-20 04:08, větev `voda-e74-e77-slouceni`, data `shots/voda_e74_e77/`, testy `testy.sh` + `souhrn.py`)
+- **Sloučení (přepínače vypnuté, stav A):** všechny otisky jako na větvích: start d7aedf3a6d9d10e8, po 12 výkopech
+  63d7b89a91385a79 (obě pořadí), E67 905eec578834b4ff, plocha gw 5fae39823f8074f9 / E67 48f0107942d715ef, obsazení 3 / 2
+  (podle pořadí), kras syntetický 8243c14e4a19b461 / 43c9aeea0c243dc8, E76 s `p76_prameny` 0 neshod, E77 beze změny.
+- **Zapnuto (stav B, nový výchozí):**
+
+  | test | výsledek | otisk / poznámka |
+  |---|---|---|
+  | E66 `voda_e66` výchozí, obě pořadí | 0 neshod, chyba 0, ven přes vyver74 0 | d7aedf3a6d9d10e8 → 63d7b89a91385a79 (beze změny) |
+  | E66 E67 (`voda_e67`), obě pořadí | 0 neshod, chyba ≤ 7,5e-16 (zaokrouhlení) | cbabcb300ca290f1 → 905eec578834b4ff (beze změny) |
+  | E68 / E73 test smyčky (auto, pretok, 0,1 a 0,05) | chyba 0, 1 kolo, opakování stejné | **jiné:** pramen neobsazený → těleso plné, tůň přeteče k okraji (0,1 / 0,05 l/s), prameny 0 |
+  | E69 / E71 symetrie a reference | chyba 0, symetrie 0 ve 12 případech | beze změny |
+  | E72 ostrov `e67.gd` | Σ 4,10 l/s, 0 neshod, obě pořadí stejný otisk | pretok + O: výstupů 6 → 18, nejdál 19,3 → 16 sloupců (8 m), f429aaf2aa26d9cd |
+  | E74 `gw_e74` (výchozí, E67, obě pořadí) | 0 neshod, otisk = plný, plocha = plná, chyba 0 | plocha 5fae39823f8074f9, hydro 63d7b89a91385a79, obsazeno 3 / 2 |
+  | E75 syntetický | 0 neshod, chyba 0 | **bez událostí** (neobsazený pramen → těleso plné); s `p74_vyzvednout=false` stejné otisky jako A, první dutina 331 herních dní = 19 841 min (13,8 dne) reálně |
+  | E75 ostrov (`p75_kras`) | 0 událostí, 0 neshod | kras 7e31419afd6c5cdc, voda 63d7b89a91385a79 |
+  | E76 `prenos_e76` | A: nové postavení i načtení 0 neshod; B: 6 × lokálně = plně, chyba 0 | B dz 0 / 4 / −4: af8fdf0f2eeca11d, b0ee03fc840390d6, 7a9f2cad61d62dfd, e70753ebb47ff563, 0a598e2ef85ee322, 91777e6fe52ac55c |
+  | E77 `cas_e77` | chyba 0 | d7aedf3a6d9d10e8, první tůň 92,8 s, eroze 2,31 herních dní |
+
+- **Opakovatelnost:** celá sada B spuštěná podruhé (stav C, jiný proces) dává všechny otisky a hodnoty stejné (20 / 20 testů).
+- **Čas:** plný výpočet výchozí hry 1,62–1,66 → 2,27–2,29 s (jedno přeřešení tělesa navíc, E74 čekal +0,7 s); výkop
+  ⌀ 654–686 → 664–761 ms. První verze „hladiny“ (opakované vyřazování výtoků po jednom) trvala 25,7 s a 66 volání podzemí
+  – **zamítnuto**, nahrazeno jedním přeřešením se všemi neobsazenými povrchovými sloupci vyřazenými.
+- **Negativa:** (1) 8 m nechá 12 drobných výstupů (0,02 l/s v řadě na okraji ostrova E67, Σ 0,26 l/s), protože silný výstup je
+  dál; mezi sebou se neslučují. (2) S hladinou E74 se v testech bez hráče (E68, E75) pramen nikdy neobsadí → těleso je plné
+  a kras ani smyčka nenastanou. Ve hře se pramen obsadí výkopem / korytem / tůní. (3) Vyřazený pramen se kreslí s q 0 (průtok
+  pro vykreslení zatím nemá). (4) Vložení výřezu na slot (0, −1) dz −4 lokálně 3,7 s je pomalejší než plné 3,1 s.
+  (5) E78–E83 nejsou v této větvi (E83 má vlastní opravu klíče mezipaměti; nové klíče `solve74` ji už používají).
+- **Výchozí po sloučení:** `p74_gw`, `p74_vyzvednout`, `p74_hladina`, `p76_prameny` true; `p72_dosah_m` 8; `p72_prusak` true
+  (beze změny); `p75_kras` false, `p75_zrychleni` 1; `p71_cas` 24.
+
 ## E77 čas hry: 1 herní den = 1 reálná hodina (plán, zapsáno před pokusem 2026-11-20 00:51; Jan 2026-11-19 22:19 rozhodnutí, použít po testech vody)
 - **Změna:** výchozí `p71_cas` 144 → 24 (faktor zrychlení času: herní den 86 400 s / reálné sekundy za herní den).
 - **Kde je dnes 10 min / 144 natvrdo (main):** `p71_cas` v parametrech studie a prototypu; náhradní hodnota 144 v
