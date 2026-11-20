@@ -159,13 +159,21 @@ static func set_surface(c: Dictionary, Ws: int, hs: PackedFloat64Array, wall_s: 
 	c.Ws = Ws; c.r = Ws / int(c.W); c.hs = hs; c.wall_s = wall_s; c.cm_s = cm_s
 
 ## svět: záznamy bloků (hm_f, bs) + dutiny z buněk (fine: slot → {cells, hm}, n buněk na blok, vzorek po nu)
-static func from_world(world, fine: Dictionary, n: int, nu: int, p: Dictionary) -> Dictionary:
+## E79: cache (volitelná) = funkční pásma sloupců z prvního volání ({cols, wall, h}); další volání ze stejného světa
+## (jen změna dutin po kopání) funkce nepočítá znovu
+static func from_world(world, fine: Dictionary, n: int, nu: int, p: Dictionary, cache = null) -> Dictionary:
 	var t0 := Time.get_ticks_usec()
 	var T: int = world.w
 	var W := T * 16
 	var c := _new(W, W, FN.U, p)
 	c.depth_m = float(p.ug_hloubka) * FN.U
 	c.leak_m2 = float(p.ug_leak_q) / (FN.U * FN.U)
+	if cache != null and cache.has("cols"):
+		c.wall = cache.wall.duplicate(); c.h = cache.h.duplicate()
+		for gi in W * W: c.cols[gi] = (cache.cols[gi] as Array).duplicate()
+		_cavities(c, fine, n, nu, W)
+		c.stats.build_ms = (Time.get_ticks_usec() - t0) / 1000.0
+		return c
 	var wf := FN.world_fn(world.slots)
 	for s in world.order:
 		var r: Dictionary = world.slots[s]
@@ -177,7 +185,15 @@ static func from_world(world, fine: Dictionary, n: int, nu: int, p: Dictionary) 
 				var gi: int = (s.x * 16 + x) * W + s.y * 16 + y
 				c.wall[gi] = 0; c.h[gi] = col.h
 				c.cols[gi] = bands(info, col, X, Y) if not r.has("t76") else bands76(info, col, X, Y, s, r.t76)
-	# dutiny (zvláštní případ): buňky vzduchu pod povrchem → pásmo s objemem z buněk
+	if cache != null:
+		cache.wall = c.wall.duplicate(); cache.h = c.h.duplicate(); cache.cols = []
+		for gi in W * W: cache.cols.append((c.cols[gi] as Array).duplicate())
+	_cavities(c, fine, n, nu, W)
+	c.stats.build_ms = (Time.get_ticks_usec() - t0) / 1000.0
+	return c
+
+## dutiny (zvláštní případ): buňky vzduchu pod povrchem → pásmo s objemem z buněk; pak _finish
+static func _cavities(c: Dictionary, fine: Dictionary, n: int, nu: int, W: int) -> void:
 	var ncav := 0
 	if nu > 0 and not fine.is_empty():
 		var k := n / nu; var NZ := 4 * n; var cm := FN.BW / nu
@@ -206,9 +222,7 @@ static func from_world(world, fine: Dictionary, n: int, nu: int, p: Dictionary) 
 						c.cols[gi].append([lo, hi, 0, cnt * cm * cm * cm / (c.A * (hi - lo))])
 						ncav += cnt
 	_finish(c)
-	c.stats.build_ms = (Time.get_ticks_usec() - t0) / 1000.0
 	c.stats.cav_cells = ncav
-	return c
 
 ## z buněk (testy E47d, buňka = 1 m, objem 1): pásma = běhy stejného materiálu ve sloupci, vzduch pod top = dutina
 static func from_cells(W: int, H: int, NZ: int, mat, top: PackedInt32Array, wall: PackedByteArray, p: Dictionary) -> Dictionary:

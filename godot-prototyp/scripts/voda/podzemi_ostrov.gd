@@ -10,10 +10,11 @@ const U64 = preload("res://scripts/voda/podzemi/ug64.gd")
 const SELF = preload("res://scripts/voda/podzemi_ostrov.gd")
 
 ## world, fine: svět studie a jemné buňky bloků (scripts/teren/ostrov_teren.gd); W, hs, wall, cm: povrchová mřížka toku
-static func make(world, fine: Dictionary, p: Dictionary, W: int, hs: PackedFloat64Array, wall: PackedByteArray, cm: float) -> Dictionary:
+## cache (E79, volitelná): funkční pásma z prvního postavení, další postavení počítá znovu jen dutiny
+static func make(world, fine: Dictionary, p: Dictionary, W: int, hs: PackedFloat64Array, wall: PackedByteArray, cm: float, cache = null) -> Dictionary:
 	var q: Dictionary = p.duplicate()
 	q.p52_rezim = "auto"
-	var c := F.from_world(world, fine, 16, 16, q)
+	var c := F.from_world(world, fine, 16, 16, q, cache)
 	F.set_surface(c, W, hs, wall, cm)
 	c.impl = SELF
 	c._var = String(p.get("voda_ug_var", "A+B+C+D+K+I+P+R"))
