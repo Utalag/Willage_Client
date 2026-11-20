@@ -299,7 +299,7 @@ Pojmy: **blueprint** = otisk světa o velikosti bloku. To, čemu se ve studiích
 
 **Otázka pro Jana.** Přepneme výchozí podzemí z E58 na E67 (výtok z okrajů vrstev, kras funguje)?
 
-**Platí:** *rozhodnuto (2026-11-20, Jan t732u); doplněno (2026-11-20, Jan t765u–t768u)*
+**Platí:** *rozhodnuto (2026-11-20, Jan t732u); doplněno (2026-11-20, Jan t765u–t773u)*
 
 - **Voda je obsah buňky.** Ukládá se v **m³ na buňku**, s jedním převodem z litrů [8].
 - **Povrchová voda** používá priority-flood + D8 [17].
@@ -316,16 +316,25 @@ Pojmy: **blueprint** = otisk světa o velikosti bloku. To, čemu se ve studiích
 
 ### 1.8.1 Vsakování a průsaky
 
-**Platí:** *rozhodnuto (2026-11-20, Jan t765u–t768u)*
+**Platí:** *rozhodnuto (2026-11-20, Jan t765u–t768u); doplněno (2026-11-20, Jan t769u–t773u)*
 
-- **Propustnost materiálu** je zadaná jako **propustnost buňky**, v **l/s herního času**: maximální průtok buňkou. Fyzikální hodnota K × plocha stěny 0,25 m² × spád (1 u svislého toku) platí přímo na herní sekundu, protože fyzika běží v herním čase. Buňka je krychle, takže stačí jedno číslo na materiál. Příklady: písek K 1e-4 ≈ 0,025 l/s, plná buňka 125 l za ~80 herních s ≈ 3,5 reálných s; tráva / hlína K 1e-5 ≈ 0,0025 l/s, asi 14 herních min ≈ 35 reálných s. Zrychlení 24× (1 herní den = 1 h) se týká jen převodu na reálný čas: herní sekunda trvá 1/24 reálné sekundy.
-- **Boční tok** = propustnost krát skutečný spád.
-- Mezi dvěma materiály se bere **menší z obou hodnot** (přibližně harmonický průměr z E70). Počítá se za běhu a neukládá se.
-- **Tok dolů** jde jen do volné kapacity buňky pod ní (E71).
-- **Boční průsak po svahu** dosahuje až 8 m (E72); z něj vznikají svahové prameny.
+- **Propustnost materiálu** je zadaná jako **propustnost buňky** X, v **l/s herního času**: průtok buňkou **při spádu 1**. Fyzikální hodnota K × plocha stěny 0,25 m² platí přímo na herní sekundu (čistě K × A, bez dalšího násobitele). Buňka je krychle, takže stačí jedno číslo na materiál. Příklady při spádu 1: písek K 1e-4 ≈ 0,025 l/s, plná buňka 125 l za ~80 herních s ≈ 3,5 reálných s; tráva / hlína K 1e-5 ≈ 0,0025 l/s, asi 14 herních min ≈ 35 reálných s. Zrychlení 24× (1 herní den = 1 h) se týká jen převodu na reálný čas: herní sekunda trvá 1/24 reálné sekundy. Při změně časového měřítka se tok upraví sám (t773u).
+- **Skutečný tok** = X × spád, svisle i do stran. Spád je Darcyho hydraulický spád a **zahrnuje výšku vody nad buňkou**: svisle (výška vody + tloušťka vrstvy) / tloušťka vrstvy; bočně skutečný spád hladiny.
+- Mezi dvěma materiály se bere **menší z obou hodnot**. Počítá se za běhu a neukládá se. Dosavadní výchozí „pomer“ (jen spodní buňka nebo soused) i volitelný harmonický průměr z E70 se při zpracování dokumentu nahradí minimem.
+- **Dolní limit** je limit průtoku rozhraní v l/s (E71), ne volný objem buňky pod ní.
+- **E72:** 8 m je vzdálenost, na kterou se slučují drobné výtoky / prameny, ne dosah průsaku.
 - **Zavěšená voda** se drží nad jílem a nepropustnou skálou.
+- **Eroze:** rychlost průsaku v pórech erozi nespouští. Eroze je jen u povrchového / volného toku (Manning, E51, práh `ero_v`). Kras (E75) vzniká rozpouštěním z průtoku, ne z rychlosti.
+- **Přednostní cesty:** soustředění vody do prostřední buňky (Geminiho „dynamická“ varianta) se **zamítá**. Přednostní cesta smí být později vlastností buňky (např. trhlina s vyšší propustností).
 - **Čas je událostový** (herní čas, 1 herní den = 1 h).
-- Sloupec `propustnost_l_s_herni` v [`materialy.csv`](materialy.csv) má přibližné hodnoty spočtené z K skriptem [`prepocet_propustnost_l_s.py`](prepocet_propustnost_l_s.py).
+- Sloupec `propustnost_l_s_herni` v [`materialy.csv`](materialy.csv) má přibližné hodnoty X při spádu 1, spočtené z K skriptem [`prepocet_propustnost_l_s.py`](prepocet_propustnost_l_s.py).
+
+**Rozdíly oproti současnému kódu** (opravit při zpracování dokumentu):
+
+- Svislá kapacita (`ug67._caprem`) má spád natvrdo 1; výška vody nad buňkou se do spádu nepočítá.
+- Kapacita se násobí `p71_cas` / `cas_hry.FAKTOR` (= 24). Tento násobitel se zruší; tok má být čistě K × A v l/s herního času.
+- Spojení dvou materiálů je výchozí „pomer“ (K / perm spodní buňky nebo souseda), volitelně harmonický průměr; má být minimum obou.
+- Boční tok se dělí zbytkem po svislé kapacitě vahou perm × výška překryvu, ne jako X × skutečný spád hladiny.
 
 ---
 

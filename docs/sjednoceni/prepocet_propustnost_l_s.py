@@ -1,12 +1,13 @@
 #!/usr/bin/env python3
 """Spočte sloupec propustnost_l_s_herni v materialy.csv z Darcyho K (1.8.1).
 
-Vzorec (Jan t765u–t768u; oprava převodu):
-  Q_herni = K × 0,25 m² × 1 × 1000   l/s herního času
+Vzorec (Jan t765u–t773u):
+  X = Q_herni = K × 0,25 m² × 1 × 1000   l/s herního času (při spádu 1)
 
-Fyzika běží v herním čase, hodnota platí přímo na herní sekundu.
-Zrychlení 24× (1 herní den = 1 h) se týká jen převodu na reálný čas:
-1 herní s = 1/24 reálné s.
+Skutečný tok ve hře je X × spád (1.8.1). Tento skript počítá jen tabulkové X.
+Fyzika běží v herním čase, hodnota platí přímo na herní sekundu (čistě K × A,
+bez násobitele 24). Zrychlení 24× (1 herní den = 1 h) se týká jen převodu
+na reálný čas: 1 herní s = 1/24 reálné s.
 
 Hodnoty jsou přibližné. K „–“ → „–“. K s předponou „~“ zachová „~“.
 Skript přepíše jen tento sloupec; ostatní pole nechá beze změny.
