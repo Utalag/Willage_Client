@@ -104,3 +104,16 @@
 | 70 | — | Přesunuto do tezba-studie/ZDROJE.md jako [26] (T01, dříve E65). |
 | 71 | — | Přesunuto do tezba-studie/ZDROJE.md jako [27] (T01, dříve E65). |
 | 72 | — | Přesunuto do tezba-studie/ZDROJE.md jako [28] (T01, dříve E65). |
+
+## E93: výkon na telefonu (odhad bez telefonu, 2026-11-20)
+
+| # | odkaz | co jsem převzal |
+|---|---|---|
+| 73 | https://browser.geekbench.com/v6/cpu/6766010 a https://browser.geekbench.com/v6/cpu/18744219 | Xeon Platinum 8581C (Emerald Rapids, rodina 6 model 207 = CPU boxu) Geekbench 6 jedno jádro 1818 a 1883 → základ přepočtu box → telefon |
+| 74 | https://www.notebookcheck.net/Early-Galaxy-A55-review-reveals-considerable-31-GPU-performance-bump-vs-Galaxy-A54-and-disappointing-charging-speed.809844.0.html | střední třída: Exynos 1480 (Galaxy A55) GB6 jedno jádro 1161, Exynos 1380 (A54) 1006 |
+| 75 | https://nanoreview.net/en/soc-compare/samsung-exynos-1480-vs-qualcomm-snapdragon-7s-gen-2 | Snapdragon 7s Gen 2 GB6 jedno jádro 1015 (střední třída) |
+| 76 | https://nanoreview.net/en/soc/qualcomm-snapdragon-680 | slabý telefon: Snapdragon 680 GB6 jedno jádro 412 (Redmi Note 11, Galaxy A23) |
+| 77 | https://documentation-service.arm.com/static/67a62b17091bfc3e0a947695 (Arm GPU Best Practices Developer Guide) | OpenGL ES: méně než 500 draw calls na snímek (Vulkan < 1000); draw calls stojí CPU v ovladači; dlaždicové GPU, overdraw |
+| 78 | https://developer.android.com/games/optimize/geometry | Android: co nejméně trojúhelníků; demo Armies ~210 000 trojúhelníků na snímek ≈ 30 fps; síť do 65 535 vrcholů (16bit indexy) |
+| 79 | https://developers.meta.com/vr/documentation/unity/unity-perf/?device=QUEST | mobilní SoC (Quest 2 = Snapdragon XR2): 200–600 draw calls a 0,75–1 M trojúhelníků na snímek podle zátěže → horní mez pro silné telefony |
+| 80 | https://docs.godotengine.org/en/stable/tutorials/export/exporting_for_android.html | export z Godotu pro Android: JDK 17, Android SDK, ladicí keystore, šablony, ETC2/ASTC |

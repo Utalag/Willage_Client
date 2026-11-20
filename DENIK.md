@@ -216,6 +216,13 @@ Skupiny: 1 Prototyp a buildy · 2 Terén a tvar · 3 Rozlišení bloku · 4 Ská
 - **Komplikace:** koryta jsou krátké úseky (malý svět, malá povodí). Krasová vyvěračka 0. Hráz na svahu tůň nevytvořila (potok ji obtekl). Podzemní tok vede zatím zjednodušeně k nejbližšímu okraji.
 - **Další krok:** Jan rozhodne, jak daleko vést podzemní tok (sledovat propustnou vrstvu?) a jestli má mít krasová vyvěračka vlastní pravidlo. Starší otevřené otázky (eroze po blocích vs hrubý svět, jádro hory přes šev, minerály z hrubého světa) zůstávají.
 
+### 🧪 E93 výkon na telefonu: benchmark scéna a APK, odhad bez telefonu (2026-11-20 08:33 · větev `e93-telefon`, tag `e93-telefon`, `godot-prototyp/bench_telefon.tscn`, shots `blueprint-studie/shots/e93/`)
+- **Směr:** poslední bod bloku 4 v TODO je výkon na telefonu. Telefon nemáme, proto vznikla měřicí scéna, APK pro Jana a odhad z boxu.
+- **Zlepšení:** scéna `bench_telefon` měří generování, vodu, paměť, 4 průchody snímků a 8 výkopů. Výsledek ukáže na obrazovce, uloží do JSON a dá do schránky. Vzniklo APK release 30,6 MB a debug 32,4 MB (arm64, GLES 3), obě jsou mimo git.
+- **Zlepšení:** logika běží jen na jednom jádru (1 jádro = 8 jader). Odhad pro střední telefon: generování 1,4–1,8 s, voda 3,9–5,0 s, výkop ~1,1–1,5 s. Pro slabý telefon ~3–4× víc. Vykreslování: 269 tis. trojúhelníků a 173 draw calls, tedy draw calls v limitu a trojúhelníků víc než v ukázce Androidu pro 30 fps.
+- **Komplikace:** je to jen odhad (llvmpipe, `cpulimit`). Krok dopočtu vody R má občas 0,7 s i na boxu. APK nemá ikonu a má ladicí podpis. Do `project.godot` přibylo `import_etc2_astc`. E90 a E91 v benchmarku nejsou.
+- **Další krok:** Jan spustí release APK na telefonu a pošle obsah schránky. Pak se rozhodne o stínech, LOD (E90) a C#/vláknech pro vodu.
+
 ### 🔄 Voda E74–E77 sloučena, přepínače podle Jana (2026-11-20 04:08 · větev `voda-e74-e77-slouceni`, tag `voda-e74-e77-ready`, `tok.solve74`, `ug67._merge_outs72d`, `ostrov_voda.place76`, data `blueprint-studie/shots/voda_e74_e77/`)
 - **Směr:** Jan 2026-11-20 01:49 a 03:26: sloučit E74–E77, zapnout obsazování pramenů s hladinou, uložené prameny, slučování do 8 m; E75 a těžba na `cas_hry.gd`.
 - **Zlepšení:** výchozí ostrov beze změny otisku (63d7b89a91385a79), 0 neshod, chyba 0 ve všech testech, druhý běh bitově stejný; neobsazený pramen už vodu ze světa nepouští; nové postavení a načtení ostrova = lokální stav; slučování nejdál 8 m.
