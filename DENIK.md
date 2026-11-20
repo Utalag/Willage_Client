@@ -216,6 +216,12 @@ Skupiny: 1 Prototyp a buildy · 2 Terén a tvar · 3 Rozlišení bloku · 4 Ská
 - **Komplikace:** koryta jsou krátké úseky (malý svět, malá povodí). Krasová vyvěračka 0. Hráz na svahu tůň nevytvořila (potok ji obtekl). Podzemní tok vede zatím zjednodušeně k nejbližšímu okraji.
 - **Další krok:** Jan rozhodne, jak daleko vést podzemní tok (sledovat propustnou vrstvu?) a jestli má mít krasová vyvěračka vlastní pravidlo. Starší otevřené otázky (eroze po blocích vs hrubý svět, jádro hory přes šev, minerály z hrubého světa) zůstávají.
 
+### 🧪 Blueprint v3 / E87: jádro vyzdvižené hory přes více bloků (2026-11-20 06:52 · `blueprint-studie/scripts/bp/geo2.gd` (`massif87`), `pipeline.gd`, `geo_fn.gd` + kopie v prototypu, příznak `p87_jadro_hory`, nástroj `tools/jadro_e87.gd`, větev `e87-jadro-hory`, data `blueprint-studie/shots/e87/`)
+- **Směr:** TODO Blok 3: masiv hory jako funkce ve světových metrech; volná strana bloku = masiv, soused masivu předá jen odchylku od funkce, při 0,25 m virtuální soused z funkce.
+- **Zlepšení:** dnes každý šev mezi horami spadne na 20 m (sedlo 1,7–4 m pod průměrem) a jádro se u okraje utne (3–3,6 m v jednom sloupci). S p87 šev leží ve výšce masivu a skoky na švu jsou stejné jako uvnitř bloku; masiv nezávisí na pořadí (0 neshod), 0,25 m se po přidání sousedů nemění, bilance vody 0, dva běhy stejné. Výchozí hra beze změny.
+- **Komplikace:** masiv vedle kopce nebo louky dá stěnu 5–6 m v pásu 2 m; virtuální soused u nížiny nesedí (78–84 buněk 0,25 m); masiv je hladší bez teras; vzorek 0,25 m ~2× pomalejší; jiná voda (2 × 2: 9 → 3 prameny).
+- **Další krok (Jan):** zapnout p87; přechod masiv → nížina (podhůří ve funkci, nebo širší pás); vrátit terasy; jak velký má masiv být.
+
 ### 🔄 Voda E74–E77 sloučena, přepínače podle Jana (2026-11-20 04:08 · větev `voda-e74-e77-slouceni`, tag `voda-e74-e77-ready`, `tok.solve74`, `ug67._merge_outs72d`, `ostrov_voda.place76`, data `blueprint-studie/shots/voda_e74_e77/`)
 - **Směr:** Jan 2026-11-20 01:49 a 03:26: sloučit E74–E77, zapnout obsazování pramenů s hladinou, uložené prameny, slučování do 8 m; E75 a těžba na `cas_hry.gd`.
 - **Zlepšení:** výchozí ostrov beze změny otisku (63d7b89a91385a79), 0 neshod, chyba 0 ve všech testech, druhý běh bitově stejný; neobsazený pramen už vodu ze světa nepouští; nové postavení a načtení ostrova = lokální stav; slučování nejdál 8 m.
