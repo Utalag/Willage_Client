@@ -334,6 +334,30 @@ Výchozí: 800 kapek na blok, `ero_cap` 1,0, `ero_erode` 0,1, `ero_deposit_rate`
   plný. Dutina sloupce je jedno pásmo od nejnižšího po nejvyšší vzduch (dvě chodby nad sebou se spojí) – stejné jako plný
   výpočet, neopravuji. Buňka 0,5 m je dutina, jen když je vykopaných všech 8 buněk 0,25 m.
 
+## E85 rozhodnutí Bloku 2: mřížka 0,25 m z funkcí, zákaz prokopání dna a okraje, vrstvy ≥ 25 cm (plán, zapsáno před pokusem 2026-11-20 04:40; Jan 2026-11-20 03:26: „mřížku 0,25 m počítat z funkcí a při nové verzi přepočítat i staré bloky; zakázat prokopání dna i okraje ostrova“, „v blueprintu zakázat vrstvy tenčí než 25 cm“; větev `e85-blok2-rozhodnuti` z `e83-determinismus` + sloučený `origin/main` 57c7dfb)
+- **Sloučení:** E83 (E78–E83) + main (E74–E77 zapnuté, E72 8 m). Konflikt `tok.gd` / `tok60.gd`: vzít volání `solve74` z main.
+  Jeho první klíč (`"%.9f"` + `excl0.hash()`) přepsat na přesný klíč E83. Parametry sloučit po klíčích (`p76_prameny` = true podle Jana).
+- **Příznaky (výchozí vypnuto, výchozí otisky beze změny):** `p85_blok2` zapne všechno. Jednotlivě: `p85_jemne`, `p85_okraj`,
+  `p85_vrstvy` (+ `p85_min_m` = 0,25).
+  1. *`p85_jemne`:* definice 0,25 m v `prekryv78` = vzorek funkcí `geo_fn` při 32 × 32 × 128 + minerály a dutina stejně jako
+     pipeline (počty × 8). Dnes je to zjemnění buněk 0,5 m. Buňka 0,5 m zůstane podle pipeline, dokud se jí žádná buňka
+     0,25 m nezmění proti definici (kanonické, bez historie). Jinak platí pravidlo E78 (nejčastější plný). Staré bloky se při
+     načtení přepočítají z funkcí, překryv se položí na novou definici (Jan: přepočítat i staré).
+     Výřez E76 (`prenos76`) zatím zjemněním. Měřit čas na blok a rozdíl proti zjemnění.
+  2. *`p85_okraj`:* `prekryv78.op` nesmí vykopat buňku ve vrstvě z = 0 ani v obvodových sloupcích ostrova (strana bez
+     souseda). Vnitřní švy kopat jde. Totéž v herním `digging.gd` (0,5 m: lz 0 a obvodový sloupec). Test: šachta na dno,
+     chodba ven bokem, chodba přes vnitřní šev.
+  3. *`p85_vrstvy`:* v `geo_fn.column` (jediné místo, odkud čtou hranice buňky, pásma vody i skarn) vrstva s mocností
+     < 0,25 m zmizí a místo dostane vrstva nad ní. Projít tabulky (mocnosti v U), zóny, klíny, vyklínění. Spočítat tenké
+     vrstvy před a po, co zbude (ořez povrchem a krytem) a jak se změní vyklínění (schod 0,25 m místo klínu do nuly).
+  4. *Voda:* kopání 0,25 m + `edit79` se zapnutými `p74_gw`, `p74_vyzvednout`, `p74_hladina`, `p76_prameny`: lokálně = plně,
+     po uložení a načtení stejně.
+- **Testy:** celá vodní sada (E66–E77) po sloučení proti výsledkům main. Nástroje E78–E83 a nový `tools/blok2_e85.gd`
+  s příznaky i bez.
+- **Negativa předem:** hra kope jen vršek sloupce po 0,5 m; zákaz v `digging.gd` je jen pro 0,5 m. Jemná mřížka z funkcí
+  je 6–9× pomalejší než zjemnění (E80). Vrstvy ≥ 25 cm dělají na konci vyklínění schod. Zmenšení na 0,5 m buňky
+  zůstane (vrstva 0,25–0,5 m nemusí dostat střed buňky). Main se neslučuje.
+
 ## E83 determinismus: blok, překryv, voda, pořadí vložení (plán, zapsáno před pokusem 2026-11-20 03:31; TODO Architektura světa: „Determinismus celého světa, nejen jednoho bloku. Ujasnit Hash(seed, změny, pořadí)… Pořadí pokládání tedy výsledek ovlivňuje záměrně; platí jen, že stejný výřez, transformace a sousedé dají stejný výsledek.“; větev z `e82-vapenec-hladina`)
 - **Co už je:** hashe jsou vlastní (`stable_hash`: SplitMix64 + FNV-1a, celá čísla mod 2^64), náhoda generátoru je
   `Ore.Rng` (SplitMix64) a `FastNoiseLite` se seedem z hashe. `RandomNumberGenerator` je jen ve vzhledu (tráva),
