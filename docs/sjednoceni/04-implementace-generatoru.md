@@ -115,6 +115,12 @@ Stav: **návrh k odsouhlasení**, 2026-11-20 23:50 SEČ. Podklad pro stavbu nov�
 
 **Velikost:** velký.
 
+**Návrhy na zlepšení** (Jan 2026-11-21 23:52, po měření kroku 3: segment 8 m / 0,25 m / 128 m 2614 ms, srovnatelný s E84 521 ms proti 89 ms, samotné `hranice` 531 ms)
+- Hranice vrstev počítat na řídící mřížce geologie 0,5 m a mezi body interpolovat; dnes se zbytečně počítají po 0,25 m. Odhad zrychlení ~4×, výsledek se nemá měnit.
+- Výšku terénu a mapu hornin spočítat jednou na segment a držet v mezipaměti, místo výpočtu pro každý sloupec znovu ze seedu.
+- Později nejtěžší výpočty šumu přesunout do C# nebo GDExtension (typicky 10–50×), větší zásah.
+- Ověřit na samostatné větvi, schválí Jan.
+
 ---
 
 ## Krok 4 – Funkce světa III: podzemní voda a prameny
