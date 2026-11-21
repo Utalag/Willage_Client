@@ -3,8 +3,7 @@ extends RefCounted
 ## Jedna čistá funkce ve světových metrech (float64), bez mřížky sousedů a bez uložených buněk:
 ##   vyska(x, y)        → povrch v m (0 = dno sloupce, neutrální úroveň = sloupec / 2)
 ##   sloupec(x, y)      → {povrch_m, biom, biom_vahy, horniny, masiv, sopka, hranice (krok 3), hladina_m (krok 4)}
-##   bod(x, y, z)       → id materiálu (krok 2: vzduch nad povrchem, pod ním převažující hornina z mapy hornin;
-##                        vrstvy doplní krok 3 beze změny rozhraní)
+##   bod(x, y, z)       → id materiálu (krok 3: vrstvy, útvary, vnitřek sopky; vzduch nad povrchem)
 ## Pořadí 2.1: mapa biomů a hornin (hrubé body ze seedu na 4096 m) → reliéf z parametrů biomu → masiv E87 + podhůří
 ## → sopky. Klima (1.15) se uplatní před mapou biomů: tabulka presetů upraví vstupy a podíly
 ## reliéfních typů. Pomalá mapa klimatu je háček (klima_vahy); do výšky se v tomto kroku nemísí.
@@ -17,6 +16,7 @@ extends RefCounted
 ## (svet/hruby_teren.gd: c · (1 − r/R)^γ − kráter) zobecněný na parametry 1.14.
 const R = preload("res://scripts/v1/rozmery.gd")
 const KL = preload("res://scripts/v1/klima.gd")
+const GEO = preload("res://scripts/v1/geo_vrstvy.gd")
 const H = preload("res://scripts/stable_hash.gd")
 const BG = preload("res://scripts/teren/zaklad/block_gen.gd")
 const G2 = preload("res://scripts/teren/geo2.gd")
@@ -71,6 +71,9 @@ static func vychozi() -> Dictionary:
 		# první sopka těsně vně výchozího světa 3 × 3 (střed světa zůstává uprostřed maxima)
 		"sopka_od_okraje_startu_m": 100.0,
 		"strop_povrchu_hladkost_m": 2.0,  # měkký strop povrchu = okraj sloupce − rezerva (hladké minimum, sklon nezvětší)
+		# geologie krok 3 (1.7, 1.8, 1.14). p82 ve V1 zapnuté; ve hře zůstává studijní přepínač vypnutý.
+		"p82_vapenec": true, "p82_podil": 0.5, "p82_pod_m": 2.0,
+		"sopka_pruduch_r_m": 2.0, "sopka_lava_id": 7, "sopka_popel_id": 57, "sopka_slupka_m": 5.0,
 	}
 
 # ---------------------------------------------------------------- stav (počítá se jednou ze seedu a parametrů)
@@ -102,6 +105,7 @@ var kS: float; var kB: float; var kN: int
 var kx := PackedFloat64Array(); var ky := PackedFloat64Array(); var kt := PackedByteArray()
 var klima_ids: Array = []
 var klima_idx := 0
+var geo
 
 
 func _init(par := {}) -> void:
@@ -118,6 +122,7 @@ func _init(par := {}) -> void:
 	_masiv()
 	_sopky()
 	_mapa_hornin()
+	geo = GEO.new(self)
 
 # ---------------------------------------------------------------- hash → [0, 1)
 func _u(ucel: String, i: int, j: int, k := 0) -> float:
@@ -639,13 +644,10 @@ func sloupec(x: float, y: float) -> Dictionary:
 		for e in hr: sm += float(e[1])
 		for e in hr: e[1] = float(e[1]) / sm
 	return {"povrch_m": vyska_w(x, y, w), "biom": biom, "biom_vahy": w, "horniny": hr,
-		"masiv": _vaha_masivu(w[HORNATINA]), "sopka": s, "klima": klima_id, "hranice": [], "hladina_m": NAN}
+		"masiv": _vaha_masivu(w[HORNATINA]), "sopka": s, "klima": klima_id, "hranice": geo.hranice(x, y, w), "hladina_m": NAN}
 
 func bod(x: float, y: float, z: float) -> int:
-	var w := vahy(x, y)
-	if z > vyska_w(x, y, w): return VZDUCH
-	var hr := horniny(x, y, w)
-	return int(hr[0][0]) if not hr.is_empty() else VZDUCH
+	return geo.bod(x, y, z)
 
 ## lokální strop sklonu (tan) pro test 2: v přechodu vážený průměr stropů, v kuželu sopky strop sopky
 func strop_tan(x: float, y: float) -> float:
