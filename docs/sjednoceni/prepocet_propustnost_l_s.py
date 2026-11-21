@@ -2,7 +2,7 @@
 """Spočte sloupec propustnost_l_s_herni v materialy.csv z Darcyho K (1.8.1).
 
 Vzorec (Jan t765u–t773u):
-  X = Q_herni = K × 0,25 m² × 1 × 1000   l/s herního času (při spádu 1)
+  X = Q_herni = K × 0,0625 m² × 1 × 1000   l/s herního času (při spádu 1)
 
 Skutečný tok ve hře je X × spád (1.8.1). Tento skript počítá jen tabulkové X.
 Fyzika běží v herním čase, hodnota platí přímo na herní sekundu (čistě K × A,
@@ -19,7 +19,7 @@ import csv
 import math
 from pathlib import Path
 
-PLOCHA_STENY_M2 = 0.25
+PLOCHA_STENY_M2 = 0.0625
 SPAD_SVISLE = 1.0
 LITRU_NA_M3 = 1000.0
 SLOUPEC = "propustnost_l_s_herni"
