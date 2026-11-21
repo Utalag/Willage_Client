@@ -26,4 +26,10 @@ Jan 2026-11-21 22:55 schválil krok 2 ([pt877u] ano). Krok 3 podle 04: vrstvy, m
 - Mají se id 57–74 z tabulky úplně odstranit, nebo jen přemapovat a v geologii nepoužívat?
 
 ## Výsledky
-Doplní se po testech do tohoto souboru a do [`krok03.md`](krok03.md).
+Doplněno 2026-11-21 23:25 SEČ. Podrobnosti v [`krok03.md`](krok03.md).
+
+- Testy 1–4 a 6 prošly. Řezy: 0 neshod na švu, průduch id 75 k z = 0, vrstvy končí na tělese sopky. Definice &lt; 0,25 m: 0; po ořezu &lt; 0,25 m: 8 zbytků (0,246–0,250 m), &lt; 0,5 m: 29. Útvary přes šev: 0 neshod. Mince 521/1024 = 0,5088 (3σ ok). Determinismus dvou procesů: `59e4569309aa8500` (4 718 592 buněk).
+- Čas: segment 8 m / 0,25 m / 128 m 2614 ms; srovnání E84 (0,5 m / 32 m) 521 ms vs 89 ms; `hranice` 531 ms. Odchylka zaznamenána.
+- Regrese: `voda_e66` d7aedf3a6d9d10e8 → 63d7b89a91385a79, 0 neshod; `port_studie` 82 souborů, 0 změn; `zaklad_v1` cc9e412759114af1 oba procesy (otisk neobsahuje `propustnost_l_s_herni`, přepočet × 1/4 tabulku změnil, otisk ne).
+- Obrázky: `godot-prototyp/shots/krok03/`.
+- Otevřené otázky zůstávají: hladina mince po kroku 4; id lávy/popela; odstranit 57–74 z tabulky?

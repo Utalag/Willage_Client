@@ -1,0 +1,15 @@
+Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+
+init_ms=110.117
+řez šev: neshod sousedů ±0,25 m: 0 (mince je po bloku 128 m)
+řez masiv: váha 0.56165205221973 v (2008.0,1944.0)
+řez sopka: vent z=0 id=75 těleso 5 m id=75 vent_buněk=3402
+tenké: definice <0,25 m 0, <0,5 m 233; po ořezu <0,25 m 8, <0,5 m 29
+útvary přes šev: 0 neshod, útvarů na řezu 84
+mince: 3×3 5/9 = 0.55555555555556; více 521/1024 = 0.5087890625 (oček. 0.5 ±3σ 0.046875) ok=true
+čas: segment 8 m / 0,25 m / 128 m 2613.88 ms; srovnání E84 (0,5 m, 32 m) 520.811 ms vs 89 ms; hranice 530.685 ms
+chyb celkem: 0
+WARNING: 13 ObjectDB instances were leaked at exit (run with `--verbose` for details).
+   at: cleanup (core/object/object.cpp:2536)
+ERROR: 3 resources still in use at exit (run with --verbose for details).
+   at: clear (core/io/resource.cpp:822)
