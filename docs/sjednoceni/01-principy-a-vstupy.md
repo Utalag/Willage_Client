@@ -541,6 +541,9 @@ Jen data. Velikost modelů je prezentace (`p94_meritko_veg`, Jan 11:39).
 - **Pojmenované profily** (např. nížina, pahorkatina, hornatina) lze přidat později jako hotové sady parametrů.
 - **Poznámka:** testovací svět 3 × 3 (velká hora, kopec, nížina, vodní plocha) – hledání hodnot odloženo na později (Jan t722u).
 - Sopky (počet a rozteč jako parametry světa) viz 1.14.
+- **Doplněno (Jan 2026-11-21):** Když se zadané převýšení pod strop sklonu biomu nevejde, **prodlouží se vlnová délka** (hora se roztáhne do šířky) a plná výška zůstane. Amplituda se nezplošťuje.
+- **Doplněno (Jan 2026-11-21):** V přechodu mezi biomy platí **vážený průměr stropů** podle vah mísení, ne strop strmějšího biomu.
+- **Doplněno (Jan 2026-11-21):** **Drobné tvary** (skály, jemný detail masivu) do výšky parametru (výchozí 2 m) smí strop sklonu překročit. Strop platí pro celkový tvar hory.
 
 ### 1.13.1 Obrys, bok a spodek ostrova
 
@@ -595,6 +598,7 @@ Jen data. Velikost modelů je prezentace (`p94_meritko_veg`, Jan 11:39).
   - **počet sopek** (výchozí 2),
   - **přibližná rozteč** mezi nimi (výchozí kolem 3 bloků, 384 m).
   Polohy určí seed. Sopka je součást funkce světa a může přesahovat přes hranice bloků (blueprint z ní vyřízne jen svůj díl).
+- **Doplněno (Jan 2026-11-21):** Výchozí svět 3 × 3 zůstává **uprostřed** maxima mapy. Alespoň jedna sopka leží **těsně vně** tohoto výřezu (vzdálenost je parametr), aby byla z výchozího světa vidět. Ostatní polohy dál určí seed a rozteč.
 - **Vnitřek:** *upřesněno (2026-11-20 19:54–19:56, Jan t794u–t796u)*
   - **průduch** (vent, materiál id 75) je svislý útvar uprostřed sopky, od kráteru **až k nejnižšímu bodu sloupce** (dno, z = 0) (Jan t797u); těleso sopky tedy prochází celým sloupcem,
   - kolem průduchu jsou **kuželovité vrstvy lávy a popela**, vnořené do sebe jako slupky, se sklonem podle svahu (útvary podle 1.7),

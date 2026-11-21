@@ -65,9 +65,9 @@ Stav: **návrh k odsouhlasení**, 2026-11-20 23:50 SEČ. Podklad pro stavbu nov�
 **Obsah**
 - Jedno rozhraní funkce světa v metrech: dotaz na bod `(x, y, z)` → materiál, dotaz na sloupec `(x, y)` → povrch, hranice vrstev, hladina (2.2). V kroku 2 vrací povrch a biom, vrstvy a hladinu doplní kroky 3 a 4 bez změny rozhraní.
 - Mapa biomů (varianta C) a mapa hornin: hrubé body ze seedu na maximální ploše 4096 m, plynulá interpolace (2.1, 1.7.1).
-- Reliéf z parametrů členitosti podle biomu: převýšení, vlnová délka, drsnost, podíl ploch, strop sklonu (1.13). Žádné šablony povrchu, `p94_hora_k` ani omezovač E92 (1.4).
+- Reliéf z parametrů členitosti podle biomu: převýšení, vlnová délka, drsnost, podíl ploch, strop sklonu (1.13). Žádné šablony povrchu, `p94_hora_k` ani omezovač E92 (1.4). Když se převýšení pod strop nevejde, tvar se roztáhne do šířky a výška zůstane. V přechodu biomů platí vážený průměr stropů. Drobné tvary do 2 m (parametr) smí strop překročit (Jan 2026-11-21).
 - Masiv E87 a podhůří u jeho stěny jako součást funkce (1.4, úkol 10 v kap. 3).
-- Sopky: počet a rozteč jako parametry světa, polohy ze seedu, tvar mezi strato a štítovou (sklon ~17°), velikost mezi 20 m / 1 blok a 40 m / 2 bloky, kráter, vrchol aspoň 5 m pod okrajem sloupce (1.14).
+- Sopky: počet a rozteč jako parametry světa, polohy ze seedu, tvar mezi strato a štítovou (sklon ~17°), velikost mezi 20 m / 1 blok a 40 m / 2 bloky, kráter, vrchol aspoň 5 m pod okrajem sloupce (1.14). Výchozí svět 3 × 3 zůstává uprostřed maxima, alespoň jedna sopka těsně vně výřezu (Jan 2026-11-21).
 
 **Odkud kód:** `lod90.gd` (`h_m`, E90/E96, větve `e95-async-voda` a `e96-blok128`), masiv `geo2.gd` + `geo_fn.gd` z `e87-jadro-hory` ff97a9f, sopka a biomy z `teren/svet/hruby_teren.gd` (E49, main), `blok96.gd` (E96) jako vzor sestavení bloku 128 m z funkce.
 
@@ -77,9 +77,9 @@ Stav: **návrh k odsouhlasení**, 2026-11-20 23:50 SEČ. Podklad pro stavbu nov�
 
 **Testy**
 1. *Spojitost*: výška na hranici bloků a segmentů bez skoku (rozdíl 0 m). Obrázek řezu přes šev (`tools/rez_profil.py`). Prošlo = 0 skoků.
-2. *Sklony*: histogram sklonů (p50, p95, max) proti stropu sklonu (graf PNG). Prošlo = max ≤ strop + tolerance kvantování.
-3. *Sopky*: počet = parametr, rozteč ± tolerance, vrchol ≤ okraj sloupce − 5 m, kráter na vrcholu. Mapa výšek s vyznačenými sopkami (PNG). Prošlo = všechna kritéria.
-4. *Mapy biomů a hornin*: obrázek map na 4096 m a výřez 3 × 3 (`blueprint-studie/tools/gif_svet8.py` jako vzor). Prošlo = plynulé přechody, různé seedy dají různé mapy.
+2. *Sklony*: histogram sklonů (p50, p95, max) proti stropu sklonu (graf PNG). Prošlo = max sklonu **celkového tvaru** (bez drobného detailu) ≤ vážený strop přechodu + tolerance. Překročení detailem se zaznamená, není to chyba.
+3. *Sopky*: počet = parametr, rozteč ± tolerance, vrchol ≤ okraj sloupce − 5 m, kráter na vrcholu, alespoň jedna sopka těsně u výchozího 3 × 3. Mapa výšek s vyznačenými sopkami (PNG). Prošlo = všechna kritéria.
+4. *Mapy biomů a hornin*: obrázek map na 4096 m a výřez 3 × 3 (`blueprint-studie/tools/gif_svet8.py` jako vzor). Prošlo = plynulé přechody, různé seedy dají různé mapy. Varianta větších oblastí biomů je jen srovnání za přepínačem (výchozí vyp), ne rozhodnutí.
 5. *Determinismus*: hash mřížky výšek 3 × 3 ze dvou procesů. Prošlo = shoda.
 6. *Čas*: dotaz na sloupec a výšky bloku 128 m (graf). Kritérium jen záznam, cíl je srovnání s E90 (4,9 s / 3 km).
 

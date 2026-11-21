@@ -354,6 +354,18 @@ Z rozhodnutí vyplývá výchozí chování; při stavbě modelu se přepínače
 
 E95 (vlákno vody) a E96 (blok 128 m) spolu nikdy neběžely [14]. Zkušební větev `zkusebni-vse` nemá E95 ani E96 a její „E95“ je jiný pokus než `e95-async-voda` (při sloučení přečíslovat na Z1) [14].
 
+## Rozhodnuto při kroku 2 (funkce světa, Jan 2026-11-21)
+
+Tyto body vznikly až z testů kroku 2 (otázky v reportu `krok02.md`) a z pozdější poznámky k rozdrobeným biomům; v původní kostře 03 nebyly. Jsou uzavřené. Pravidla jsou v 1.13, 1.14 a 2.1.
+
+1. **Hory pod stropem sklonu** — *rozhodnuto (Jan 2026-11-21).* Roztáhnout do šířky (prodloužit vlnovou délku), ať mají plnou výšku (hornatina ~24 m, masiv ~12 m). Nezplošťovat. → 1.13.
+2. **Strop v přechodu biomů** — *rozhodnuto (Jan 2026-11-21).* Platí vážený průměr stropů podle vah mísení, ne strop strmějšího biomu. → 1.13.
+3. **Drobný detail masivu (skály)** — *rozhodnuto (Jan 2026-11-21).* Tvarům do výšky parametru (výchozí ~2 m) povolit strmější sklon. Strop platí pro celkový tvar hory. → 1.13.
+4. **Poloha výchozího světa 3 × 3** — *rozhodnuto (Jan 2026-11-21).* Nechat ho uprostřed maxima, sopku přiblížit těsně vně výřezu. → 1.14.
+Větší oblasti biomů (hrubší měřítko a slučování drobných ostrovů) byly jen **srovnány** za přepínačem `biom_velke_oblasti` (výchozí vyp). Jan 2026-11-21 21:21: současné biomy jsou asi v pořádku; **není to rozhodnutí**.
+
+---
+
 ## Úkoly implementace (ne rozhodnutí)
 
 Tohle se s Janem nerozhoduje znovu. Pravidlo už je v kapitolách 1 a 2, v kódu ještě není. Dělat až po dokončení dokumentu, každý zásah s PROP a kontrolou výchozí hry (nebo novou referencí, když se výchozí hra mění záměrně).
