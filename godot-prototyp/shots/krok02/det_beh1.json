@@ -9,7 +9,7 @@
   "bunek": 2359296,
   "max_m": 94.0371500648998,
   "min_m": 67.5076252645849,
-  "ms": 29953.153,
+  "ms": 28991.283,
   "otisk": "04c1d51d4f0cc3d4",
   "sha256": "04c1d51d4f0cc3d4cf69c75d286fba04df5309342462d2e554862b5ad60f57cd"
  },
@@ -72,12 +72,24 @@
    "vlna_zadana_m": 150.0
   }
  },
- "init_ms": 133.077,
+ "init_ms": 117.478,
  "parametry": {
   "biom_meritko_m": 768.0,
   "biom_min_plocha_m2": 90000.0,
   "biom_velke_oblasti": false,
   "detail_max_m": 2.0,
+  "klima": "mirne",
+  "klima_id": "mirne",
+  "klima_k_voda": 1.0,
+  "klima_priklad": false,
+  "klima_ze_seedu": false,
+  "podil": [
+   0.35,
+   0.1,
+   0.3,
+   0.2,
+   0.05
+  ],
   "sopka_od_okraje_startu_m": 100.0,
   "start_blok": [
    14,

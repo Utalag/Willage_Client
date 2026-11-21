@@ -22,4 +22,9 @@ Parametr `klima` má výchozí hodnotu **`mirne`**. Preset `mirne` je identita (
 5. Testy kroku 2 s výchozím `mirne` (švy, sklony, determinismus = `04c1d51d4f0cc3d4`, čas, `voda_e66`, `port_studie`, `zaklad_v1`). Navíc: vynucený nevýchozí preset změní svět deterministicky (dva procesy). Obrázek stejný seed: mírné / poušť / ledovec.
 
 ## Výsledky
-Doplní se po testech do tohoto souboru a do [`krok02.md`](krok02.md).
+2026-11-21 22:35 SEČ. Podrobně v [`krok02.md`](krok02.md), kapitola Klima.
+
+- Výchozí `klima=mirne` (identita). Otisk výchozího světa ve dvou procesech **`04c1d51d4f0cc3d4`** (beze změny). `klima=poust` dá **`6e2a92c42cfc2b50`** v obou procesech.
+- `klima=ze_seedu` u seedu 49 vybere `ledovec` (jen když se to zapne).
+- Testy 1–6 a regrese kroku 1 beze změny (švy 0 m, sklony pod stropem, `voda_e66` 0 neshod, `port_studie` 0 změn, `zaklad_v1` cc9e412759114af1).
+- Obrázek: `godot-prototyp/shots/krok02/klima_srovnani_seed49.png`.

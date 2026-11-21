@@ -1,9 +1,9 @@
 {
  "bloky_ms": [
-  227.008,
-  257.929,
-  261.229,
-  223.952
+  216.204,
+  246.311,
+  272.267,
+  227.458
  ],
  "hydro68_po": {
   "bilance": {
@@ -110,10 +110,10 @@
   "splits": 11
  },
  "voda_ms": {
-  "celkem": 2596.886,
-  "podzemí: pásma": 239.847,
-  "povrch + podzemí: plný výpočet": 2318.025,
-  "prameny": 8.542
+  "celkem": 2615.056,
+  "podzemí: pásma": 279.782,
+  "povrch + podzemí: plný výpočet": 2295.732,
+  "prameny": 10.956
  },
  "vykopy": [
   {
@@ -125,18 +125,18 @@
     "ustaleno": true,
     "zmena": 0.0
    },
-   "ms": 861.895,
+   "ms": 820.039,
    "neshod": {
     "eff": 0,
     "fill": 0,
     "to": 0
    },
    "okno": 169,
-   "r_step_max_ms": 67.988,
+   "r_step_max_ms": 65.296,
    "r_steps": 23,
    "sucho": false,
-   "surf_ms": 625.601,
-   "ug_ms": 208.944
+   "surf_ms": 592.448,
+   "ug_ms": 201.646
   },
   {
    "gi": 6450,
@@ -147,18 +147,18 @@
     "ustaleno": true,
     "zmena": 0.0
    },
-   "ms": 325.873,
+   "ms": 336.055,
    "neshod": {
     "eff": 0,
     "fill": 0,
     "to": 0
    },
    "okno": 0,
-   "r_step_max_ms": 709.989,
+   "r_step_max_ms": 685.611,
    "r_steps": 31,
    "sucho": true,
-   "surf_ms": 0.083,
-   "ug_ms": 298.259
+   "surf_ms": 0.089,
+   "ug_ms": 308.014
   },
   {
    "gi": 7611,
@@ -169,18 +169,18 @@
     "ustaleno": true,
     "zmena": 0.0
    },
-   "ms": 1003.546,
+   "ms": 961.234,
    "neshod": {
     "eff": 0,
     "fill": 0,
     "to": 0
    },
    "okno": 169,
-   "r_step_max_ms": 62.789,
+   "r_step_max_ms": 66.791,
    "r_steps": 46,
    "sucho": false,
-   "surf_ms": 555.474,
-   "ug_ms": 424.847
+   "surf_ms": 534.808,
+   "ug_ms": 404.203
   },
   {
    "gi": 8910,
@@ -191,18 +191,18 @@
     "ustaleno": true,
     "zmena": 0.0
    },
-   "ms": 563.146,
+   "ms": 594.944,
    "neshod": {
     "eff": 0,
     "fill": 0,
     "to": 0
    },
    "okno": 0,
-   "r_step_max_ms": 657.285,
+   "r_step_max_ms": 694.649,
    "r_steps": 52,
    "sucho": true,
-   "surf_ms": 0.101,
-   "ug_ms": 540.256
+   "surf_ms": 0.081,
+   "ug_ms": 570.806
   },
   {
    "gi": 8385,
@@ -213,18 +213,18 @@
     "ustaleno": true,
     "zmena": 0.0
    },
-   "ms": 674.666,
+   "ms": 723.629,
    "neshod": {
     "eff": 0,
     "fill": 0,
     "to": 0
    },
    "okno": 0,
-   "r_step_max_ms": 66.297,
+   "r_step_max_ms": 79.304,
    "r_steps": 76,
    "sucho": true,
-   "surf_ms": 0.126,
-   "ug_ms": 650.898
+   "surf_ms": 0.096,
+   "ug_ms": 698.967
   },
   {
    "gi": 7612,
@@ -235,18 +235,18 @@
     "ustaleno": true,
     "zmena": 0.0
    },
-   "ms": 662.198,
+   "ms": 734.028,
    "neshod": {
     "eff": 0,
     "fill": 0,
     "to": 0
    },
    "okno": 169,
-   "r_step_max_ms": 87.451,
+   "r_step_max_ms": 77.02,
    "r_steps": 62,
    "sucho": false,
-   "surf_ms": 1.299,
-   "ug_ms": 638.479
+   "surf_ms": 1.328,
+   "ug_ms": 708.489
   },
   {
    "gi": 8002,
@@ -257,18 +257,18 @@
     "ustaleno": true,
     "zmena": 0.0
    },
-   "ms": 738.101,
+   "ms": 808.634,
    "neshod": {
     "eff": 0,
     "fill": 0,
     "to": 0
    },
    "okno": 0,
-   "r_step_max_ms": 70.097,
+   "r_step_max_ms": 71.286,
    "r_steps": 62,
    "sucho": true,
-   "surf_ms": 0.094,
-   "ug_ms": 713.151
+   "surf_ms": 0.087,
+   "ug_ms": 784.982
   },
   {
    "gi": 7752,
@@ -279,18 +279,18 @@
     "ustaleno": true,
     "zmena": 0.0
    },
-   "ms": 727.707,
+   "ms": 660.883,
    "neshod": {
     "eff": 0,
     "fill": 0,
     "to": 0
    },
    "okno": 169,
-   "r_step_max_ms": 65.04,
+   "r_step_max_ms": 70.817,
    "r_steps": 62,
    "sucho": false,
-   "surf_ms": 1.404,
-   "ug_ms": 702.622
+   "surf_ms": 1.198,
+   "ug_ms": 637.953
   },
   {
    "gi": 8387,
@@ -301,18 +301,18 @@
     "ustaleno": true,
     "zmena": 0.0
    },
-   "ms": 666.273,
+   "ms": 734.894,
    "neshod": {
     "eff": 0,
     "fill": 0,
     "to": 0
    },
    "okno": 0,
-   "r_step_max_ms": 63.277,
+   "r_step_max_ms": 68.287,
    "r_steps": 62,
    "sucho": true,
-   "surf_ms": 0.086,
-   "ug_ms": 643.159
+   "surf_ms": 0.085,
+   "ug_ms": 711.062
   },
   {
    "gi": 9407,
@@ -323,18 +323,18 @@
     "ustaleno": true,
     "zmena": 0.0
    },
-   "ms": 976.882,
+   "ms": 993.086,
    "neshod": {
     "eff": 0,
     "fill": 0,
     "to": 0
    },
    "okno": 169,
-   "r_step_max_ms": 66.711,
+   "r_step_max_ms": 70.596,
    "r_steps": 62,
    "sucho": false,
-   "surf_ms": 305.818,
-   "ug_ms": 648.237
+   "surf_ms": 304.634,
+   "ug_ms": 665.425
   },
   {
    "gi": 7484,
@@ -345,18 +345,18 @@
     "ustaleno": true,
     "zmena": 0.0
    },
-   "ms": 727.261,
+   "ms": 713.543,
    "neshod": {
     "eff": 0,
     "fill": 0,
     "to": 0
    },
    "okno": 169,
-   "r_step_max_ms": 65.089,
+   "r_step_max_ms": 74.079,
    "r_steps": 67,
    "sucho": false,
-   "surf_ms": 1.436,
-   "ug_ms": 702.505
+   "surf_ms": 1.46,
+   "ug_ms": 689.212
   },
   {
    "gi": 6337,
@@ -367,18 +367,18 @@
     "ustaleno": true,
     "zmena": 0.0
    },
-   "ms": 1435.34,
+   "ms": 1224.053,
    "neshod": {
     "eff": 0,
     "fill": 0,
     "to": 0
    },
    "okno": 169,
-   "r_step_max_ms": 102.216,
+   "r_step_max_ms": 69.316,
    "r_steps": 67,
    "sucho": false,
-   "surf_ms": 626.371,
-   "ug_ms": 785.166
+   "surf_ms": 526.609,
+   "ug_ms": 674.931
   }
  ]
 }

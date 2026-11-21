@@ -134,5 +134,40 @@ Před jakoukoli změnou přechodu (původní krok 2, přechod 192 m) bylo seed 4
 ### Obrázky (`godot-prototyp/shots/krok02/`)
 Stejné jako v původním kroku 2, přegenerované po úpravách, plus `biomy_4096_srovnani.png` (výchozí mapa biomů vlevo, větší oblasti vpravo, seedy 49 a 50, výřez 3 × 3 vyznačený).
 
+## Klima (presety, 2026-11-21 22:09–22:19)
+
+PROP před změnou: [`krok02-prop-klima.md`](krok02-prop-klima.md). Napsáno 2026-11-21 22:20 SEČ, výsledky 22:35 SEČ. Do `main` nic nejde, krok 3 se nezačíná. Rozhodnutí jsou v `01` 1.15, `04` (načtení presetu v kroku 2, nový krok 8 po vodě na povrchové jevy) a `03` (konkrétní hodnoty presetů zůstávají otevřené); větev `sjednoceni`, commit `d5f8717`.
+
+### Jak se volí výchozí klima
+Parametr `klima` má výchozí hodnotu **`mirne`**. Preset `mirne` je identita (násobitele 1, posuny 0, podíly reliéfních biomů 0,35 / 0,10 / 0,30 / 0,20 / 0,05). Výchozí svět proto zůstane bitově stejný. Základní klima ze seedu (`V1_KLIMA_ZAKLAD`) se použije jen při **`klima=ze_seedu`**; u seedu 49 by to teď padlo na `ledovec` (náhoda pořadí v tabulce, hodnoty příkladů se ještě mohou změnit). Pojmenovaný preset (`poust`, `step`, `tundra`, `ledovec`) svět vynutí rovnoměrně. Pomalá mapa je háček `klima_vahy(x, y)`: při vynuceném / výchozím pojmenovaném klimatu vrací váhu 1 na základu, při `ze_seedu` mísí sousedy. **Do výšky ani podílů biomů se mapa v tomto kroku nemísí** — reliéf bere jen základní preset (až budou hodnoty doladěné, půjde míchání zapojit). `k_voda` a `k_horniny` se jen uloží pro pozdější kroky.
+
+Příkladové presety poušť / step / tundra / ledovec jsou v `godot-prototyp/data/klima_presety.csv` označené `priklad=1` (náčrt, nehodnocené hodnoty).
+
+### Testy
+| Test | Výsledek | Stav |
+|---|---|---|
+| 1 spojitost | švy bloků, segmentů, segment proti bloku, šev přes sopku: max **0 m** | prošlo (beze změny) |
+| 2 sklony, celkový tvar | výchozí svět: p50 4,2°, p95 13,2°, max 25,3°, rezerva 6,54°; svět 4096 m: p50 3,8°, p95 11,2°, max 28,6°, rezerva 3,60°, 0 vzorků nad stropem | prošlo (beze změny) |
+| 2 sklony, povrch s detailem | výchozí svět max 29,9°, rezerva 2,09°; svět max 32,5°, rezerva 1,64°, 0 vzorků nad | zaznamenáno (beze změny) |
+| 3 sopky | 2; rozteč 391 m; H 31,2 / 32,3 m; první 102 m vně 3 × 3 / 362 m od středu | prošlo (beze změny) |
+| 4 mapy | Δváha 0,0061 / m, jiný seed 71,5 % | prošlo (beze změny) |
+| 5 determinismus (výchozí `mirne`) | SHA-256 výšek 3 × 3 po 0,25 m (2 359 296 buněk) ve dvou procesech: **`04c1d51d4f0cc3d4`** oba, výšky 67,5–94,0 m | prošlo (bitově shodné s předchozím krokem 2) |
+| 5b determinismus (`klima=poust`) | dva procesy: **`6e2a92c42cfc2b50`** oba, výšky 65,3–86,0 m, jiné než `mirne` | prošlo |
+| 6 čas | výška 12,8 µs, sloupec 60 µs, bod 47 µs; blok 0,25 m 3,6 s; mapa 3 km po 4 m 5,8 s; vytvoření světa 109 ms | zaznamenáno |
+| 7 klima v `vse` | výchozí id `mirne`; háček vah jednotný; poušť na výřezu 3 × 3 po 1 m otisk `aee96e5907bbf4b5` ≠ `mirne` `fd6239c8340bf338`, dva výskyty shoda | prošlo |
+| 7 srovnání presetů (seed 49, 1 m) | `mirne` `fd6239c8340bf338` (67,5–94,0 m); `poust` `aee96e5907bbf4b5` (65,3–86,0 m); `ledovec` `c134c6f77bbab811` (72,7–122,5 m) | prošlo |
+| regrese: `voda_e66` 12 výkopů | d7aedf3a6d9d10e8 → 63d7b89a91385a79, 0 neshod | prošlo |
+| regrese: `port_studie --check` | 82 souborů, 0 změn | prošlo |
+| regrese: `zaklad_v1` ve 2 procesech | otisk cc9e412759114af1 oba, 0 chyb | prošlo |
+
+### Obrázek
+`godot-prototyp/shots/krok02/klima_srovnani_seed49.png` — stejný seed 49, tři sloupce mírné / poušť / ledovec, nahoře mapa reliéfních biomů, dole stínovaný reliéf, výřez 3 × 3 vyznačený. Poušť je plošší a sušší (víc nížiny, málo mokřadů a hor), ledovec má převahu hornatiny a vyšší reliéf. Na mapě 4096 m u ledovce sahá povrch až k měkkému stropu sloupce (123 m) — očekávané u nehodnocených hodnot (posun +4 m a převýšení ×1,3).
+
+### Odchylky
+- Základní klima se ze seedu **nevolí ve výchozím běhu**, právě aby zůstal otisk `04c1d51d4f0cc3d4`. Chce-li Jan seedové klima jako výchozí, stačí změnit výchozí `klima` na `ze_seedu` (výchozí svět se tím změní).
+- Pomalá mapa je zatím jen háček, ne zásah do reliéfu.
+- Příkladové presety nejsou laděné; konkrétní čísla zůstávají otevřená (03).
+- Časy dotazu se proti minulému běhu liší v řádu mikrosekund (šum měření).
+
 ## Další krok
 Krok 3 (geologie a útvary) se nezačíná, čeká na schválení. Do `main` nic nejde.
