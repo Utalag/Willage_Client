@@ -8,7 +8,7 @@ import matplotlib
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 from matplotlib.colors import LightSource
-from matplotlib.patches import Patch
+from matplotlib.patches import Patch, Rectangle
 
 D = sys.argv[1] if len(sys.argv) > 1 else "/tmp/k2/data"
 OUT = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "shots", "krok02")
@@ -192,3 +192,29 @@ lab = ["blok 128 m\n1 m", "blok 128 m\n0,5 m", "blok 128 m\n0,25 m", "blok se so
 ax[1].bar(lab, [c[x] / 1000 for x in k], color=["#468"] * 5 + ["#999"]); ax[1].set_ylabel("s"); ax[1].set_title("Výšky z funkce")
 for i, x in enumerate(k): ax[1].text(i, c[x] / 1000, f"{c[x]/1000:.2f}", ha="center", va="bottom", fontsize=8)
 save(fig, "test6_cas.png")
+
+# ---------------- srovnání klimatu: stejný seed, mírné / poušť / ledovec (reliéf + biomy)
+KLIMA = ["mirne", "poust", "ledovec"]
+KLIMA_NADPIS = {"mirne": "mírné (identita)", "poust": "poušť (příklad)", "ledovec": "ledovec (příklad)"}
+if all(os.path.exists(os.path.join(D, f"biomy_s{SEED}_4096_klima_{k}.f32")) for k in KLIMA):
+    fig, ax = plt.subplots(2, 3, figsize=(15, 10.2))
+    for col, k in enumerate(KLIMA):
+        w = f32(f"biomy_s{SEED}_4096_klima_{k}.f32", 512, 5)
+        h = f32(f"vysky_s{SEED}_4096_klima_{k}.f32", 512)
+        ax[0, col].imshow(img(np.clip(w @ BC, 0, 1)), extent=[0, 4096, 0, 4096])
+        ax[0, col].set_title(f"Biomy — {KLIMA_NADPIS[k]}")
+        ax[0, col].set_xlabel("x (m)"); ax[0, col].set_ylabel("y (m)")
+        st = J.get("parametry", {}).get("start_blok", [14, 14])
+        ax[0, col].add_patch(Rectangle((st[0] * 128, st[1] * 128), 384, 384, fill=False, ec="k", lw=0.8, ls="--"))
+        ax[1, col].imshow(shade(h, 8.0, 4.0), extent=[0, 4096, 0, 4096])
+        ax[1, col].set_title(f"Reliéf — {KLIMA_NADPIS[k]} ({h.min():.0f}–{h.max():.0f} m)")
+        ax[1, col].set_xlabel("x (m)"); ax[1, col].set_ylabel("y (m)")
+        ax[1, col].add_patch(Rectangle((st[0] * 128, st[1] * 128), 384, 384, fill=False, ec="w", lw=0.8, ls="--"))
+        if col == 2:
+            legenda_biomu(ax[0, col])
+    fig.suptitle(f"Srovnání klimatu, seed {SEED}: stejný svět, vynucené presety (poušť a ledovec = náčrt, nehodnocené hodnoty)")
+    fig.tight_layout()
+    save(fig, f"klima_srovnani_seed{SEED}.png")
+    print("klima_srovnani:", os.path.join(OUT, f"klima_srovnani_seed{SEED}.png"))
+else:
+    print("klima_srovnani: chybí mřížky, přeskakuji")

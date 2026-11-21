@@ -2,7 +2,9 @@ extends SceneTree
 ## Krok 2 (V1.0): testy funkce světa I podle 04-implementace-generatoru.md, krok 2, podbod Testy.
 ## --rezim=det   … test 5: SHA-256 mřížky výšek výchozího světa 3 × 3 po 0,25 m (středy buněk), pro dva procesy
 ## --rezim=sklony_svet … test 2 na celém maximu světa 4096 m: mřížka 4 m, sklon diferencí ±0,25 m v každém bodě
-## --rezim=vse   … testy 1, 2, 3, 4, 6 (spojitost, sklony, sopky, mapy, čas)
+## --rezim=vse   … testy 1, 2, 3, 4, 6, 7 (spojitost, sklony, sopky, mapy, čas, klima)
+## --rezim=klima_srovnani … mapy 4096 m stejný seed: mirne / poust / ledovec
+## --klima=ID    … vynutit preset (výchozí mirne; ze_seedu = základ ze seedu)
 ## --out=adresář (JSON), --data=adresář (binární mřížky float32 pro grafy, mimo git), --seed=N
 const S = preload("res://scripts/v1/svet_fn.gd")
 const B = preload("res://scripts/v1/blok_v1.gd")
@@ -28,6 +30,8 @@ func _init() -> void:
 	data_dir = _arg("data", data_dir)
 	DirAccess.make_dir_recursive_absolute(data_dir)
 	var par := {"seed": int(_arg("seed", "49"))}
+	var klima_arg := _arg("klima", "")
+	if klima_arg != "": par["klima"] = klima_arg
 	var t0 := Time.get_ticks_usec()
 	var svet = S.new(par)
 	out["init_ms"] = _ms(t0)
@@ -37,8 +41,16 @@ func _init() -> void:
 	out["biom_slouceni"] = svet.biom_slouceni
 	out["parametry"] = {"biom_velke_oblasti": svet.p.biom_velke_oblasti, "biom_meritko_m": svet.p.biom_meritko_m,
 		"biom_min_plocha_m2": svet.p.biom_min_plocha_m2, "detail_max_m": svet.p.detail_max_m,
-		"sopka_od_okraje_startu_m": svet.p.sopka_od_okraje_startu_m, "start_blok": svet.p.start_blok}
+		"sopka_od_okraje_startu_m": svet.p.sopka_od_okraje_startu_m, "start_blok": svet.p.start_blok,
+		"klima": svet.p.klima, "klima_id": svet.klima_id, "klima_ze_seedu": svet.klima_ze_seedu,
+		"klima_priklad": bool(svet.p.get("klima_priklad", false)), "podil": svet.p.podil,
+		"klima_k_voda": svet.p.get("klima_k_voda", 1.0)}
 	var chyb := 0
+	if rezim == "klima_srovnani":
+		chyb += _klima_srovnani(int(par.seed))
+		var fk := FileAccess.open(ProjectSettings.globalize_path(od + "/" + _arg("jmeno", "klima_srovnani.json")), FileAccess.WRITE)
+		fk.store_string(JSON.stringify(out, " "))
+		quit(1 if chyb > 0 else 0); return
 	if rezim == "det":
 		chyb += _det(svet)
 		var f := FileAccess.open(ProjectSettings.globalize_path(od + "/" + _arg("jmeno", "det.json")), FileAccess.WRITE)
@@ -53,6 +65,7 @@ func _init() -> void:
 	chyb += _sklony(svet)
 	chyb += _sopky(svet)
 	chyb += _mapy(svet)
+	chyb += _klima_overeni(svet)
 	_cas(svet)
 	out["chyb"] = chyb
 	var f2 := FileAccess.open(ProjectSettings.globalize_path(od + "/svet_v1.json"), FileAccess.WRITE)
@@ -608,3 +621,67 @@ func _sklony_svet(svet) -> int:
 	print("sklony svět (s detailem): p50 %.1f p95 %.1f max %.1f, nad stropem max %.2f° (%d vzorků)" % [p50, p95, mx, mxp, nad])
 	print("sklony svět (tvar bez detailu): p50 %.1f p95 %.1f max %.1f, nad stropem max %.2f° (%d vzorků), biomy %s, %.0f s" % [p50_t, p95_t, mx_t, mxp_t, nad_t, str(podle_biomu_t), _ms(t0) / 1000.0])
 	return 1 if mxp_t > 1.0 else 0
+
+# ------------------------------------------------------------ test 7 klima
+func _otisk_vyrezu(svet, krok: float) -> Dictionary:
+	var o: Vector2 = svet.start_m()
+	var a: PackedFloat64Array = B.stredy(svet, o, 384.0, krok)
+	var hc := HashingContext.new(); hc.start(HashingContext.HASH_SHA256); hc.update(a.to_byte_array())
+	var hx: String = hc.finish().hex_encode()
+	var mn := 1e9; var mx := -1e9
+	for v in a: mn = minf(mn, v); mx = maxf(mx, v)
+	return {"sha256": hx, "otisk": hx.substr(0, 16), "bunek": a.size(), "min_m": mn, "max_m": mx, "krok_m": krok}
+
+func _klima_overeni(svet) -> int:
+	var chyb := 0
+	if svet.klima_id != "mirne" or svet.klima_ze_seedu:
+		print("klima: výchozí běh nemá mirne (id=", svet.klima_id, " ze_seedu=", svet.klima_ze_seedu, ")")
+		chyb += 1
+	var kw: PackedFloat64Array = svet.klima_vahy(svet.start_m().x + 192.0, svet.start_m().y + 192.0)
+	var w0 := 0.0
+	if svet.klima_idx >= 0 and svet.klima_idx < kw.size(): w0 = kw[svet.klima_idx]
+	if absf(w0 - 1.0) > 1e-12:
+		print("klima: háček vah není jednotný při mirne (", w0, ")")
+		chyb += 1
+	var t0 := Time.get_ticks_usec()
+	var zakl := _otisk_vyrezu(svet, 1.0)
+	var poust_a = S.new({"seed": svet.sd, "klima": "poust"})
+	var poust_b = S.new({"seed": svet.sd, "klima": "poust"})
+	var pa := _otisk_vyrezu(poust_a, 1.0)
+	var pb := _otisk_vyrezu(poust_b, 1.0)
+	var ms := _ms(t0)
+	var zmena := pa.otisk != zakl.otisk
+	var shoda := pa.sha256 == pb.sha256
+	if not zmena:
+		print("klima: poust nezměnila výřez (otisk ", pa.otisk, ")")
+		chyb += 1
+	if not shoda:
+		print("klima: poust není deterministická: ", pa.otisk, " vs ", pb.otisk)
+		chyb += 1
+	out["klima"] = {"vychozi_id": svet.klima_id, "ze_seedu": svet.klima_ze_seedu, "mirne_1m": zakl,
+		"poust_1m_a": pa, "poust_1m_b": pb, "poust_zmena": zmena, "poust_shoda": shoda, "ms": ms,
+		"k_voda": svet.p.get("klima_k_voda", 1.0), "podil": svet.p.podil}
+	print("klima: výchozí ", svet.klima_id, ", poust ", pa.otisk, (" ≠ " if zmena else " == "), "mirne ", zakl.otisk, ", 2× shoda=", shoda, " ", ms, " ms")
+	return chyb
+
+func _klima_srovnani(sd: int) -> int:
+	var chyb := 0
+	var ids := ["mirne", "poust", "ledovec"]
+	var rec: Array = []
+	for id in ids:
+		var t0 := Time.get_ticks_usec()
+		var s = S.new({"seed": sd, "klima": id})
+		var init_ms := _ms(t0)
+		var m: Dictionary = _mapa_svet(s, "s%d_4096_klima_%s" % [sd, id], 8.0)
+		var ot := _otisk_vyrezu(s, 1.0)
+		rec.append({"id": id, "nazev": s.p.get("klima_nazev", id), "priklad": bool(s.p.get("klima_priklad", false)),
+			"podil": s.p.podil, "otisk_1m": ot, "init_ms": init_ms, "mapa_ms": m.ms,
+			"k_prevyseni": float(s.p.biomy[3].prevyseni_m), "klima_k_voda": s.p.get("klima_k_voda", 1.0)})
+		print("klima_srovnani: ", id, " otisk ", ot.otisk, " mapa ", m.ms, " ms")
+	if rec[0]["otisk_1m"]["otisk"] == rec[1]["otisk_1m"]["otisk"]:
+		print("klima_srovnani: poust má stejný otisk jako mirne"); chyb += 1
+	if rec[0]["otisk_1m"]["otisk"] == rec[2]["otisk_1m"]["otisk"]:
+		print("klima_srovnani: ledovec má stejný otisk jako mirne"); chyb += 1
+	out["klima_srovnani"] = rec
+	out["chyb"] = chyb
+	return chyb

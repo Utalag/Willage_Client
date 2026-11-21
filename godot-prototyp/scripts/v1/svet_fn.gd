@@ -1,12 +1,14 @@
 extends RefCounted
-## Generátor V1.0, krok 2: funkce světa I (docs/sjednoceni 2.1, 2.2, 1.4, 1.7.1, 1.13, 1.14).
+## Generátor V1.0, krok 2: funkce světa I (docs/sjednoceni 2.1, 2.2, 1.4, 1.7.1, 1.13, 1.14, 1.15).
 ## Jedna čistá funkce ve světových metrech (float64), bez mřížky sousedů a bez uložených buněk:
 ##   vyska(x, y)        → povrch v m (0 = dno sloupce, neutrální úroveň = sloupec / 2)
 ##   sloupec(x, y)      → {povrch_m, biom, biom_vahy, horniny, masiv, sopka, hranice (krok 3), hladina_m (krok 4)}
 ##   bod(x, y, z)       → id materiálu (krok 2: vzduch nad povrchem, pod ním převažující hornina z mapy hornin;
 ##                        vrstvy doplní krok 3 beze změny rozhraní)
 ## Pořadí 2.1: mapa biomů a hornin (hrubé body ze seedu na 4096 m) → reliéf z parametrů biomu → masiv E87 + podhůří
-## → sopky. Žádné šablony povrchu, p94_hora_k ani omezovač E92 (1.4). Strop sklonu (1.13) se dodrží volbou
+## → sopky. Klima (1.15) se uplatní před mapou biomů: tabulka presetů upraví vstupy a podíly
+## reliéfních typů. Pomalá mapa klimatu je háček (klima_vahy); do výšky se v tomto kroku nemísí.
+## Povrchové jevy klimatu patří až do kroku 8 po vodě. Žádné šablony povrchu, p94_hora_k ani omezovač E92 (1.4). Strop sklonu (1.13) se dodrží volbou
 ## efektivní vlnové délky: když se zadané převýšení pod strop nevejde, tvar se roztáhne do šířky a výška zůstane.
 ## Drobný detail do detail_max_m smí strop překročit; strop platí pro celkový tvar. V přechodu biomů je strop
 ## vážený průměr. Gradient šumu se změří při vytvoření světa, hotový povrch se neořezává.
@@ -14,6 +16,7 @@ extends RefCounted
 ## geo2.n01 (šum MASSIF87 / MASSIF87D, E87 ff97a9f) – jen v metrech a ve sloupci 128 m; kužel s kráterem E49
 ## (svet/hruby_teren.gd: c · (1 − r/R)^γ − kráter) zobecněný na parametry 1.14.
 const R = preload("res://scripts/v1/rozmery.gd")
+const KL = preload("res://scripts/v1/klima.gd")
 const H = preload("res://scripts/stable_hash.gd")
 const BG = preload("res://scripts/teren/zaklad/block_gen.gd")
 const G2 = preload("res://scripts/teren/geo2.gd")
@@ -32,6 +35,11 @@ static func vychozi() -> Dictionary:
 		"seed": 49,
 		"rozmery": R.vychozi(),
 		"start_blok": [14, 14],          # levý dolní blok výchozího světa 3 × 3 (blok 128 m) v maximu 32 × 32
+		# klima (1.15): výchozí mirne je identita, výchozí svět zůstane bitově stejný.
+		# klima=ze_seedu vybere základní klima ze seedu a zapne pomalou mapu (háček klima_vahy).
+		# Pojmenovaný preset vynutí stejnorodé klima (mapa se neuplatní).
+		"klima": "mirne",
+		"klima_mapa_roztec_m": 2048.0, "klima_mapa_prechod_m": 768.0, "klima_mapa_sila": 0.25,
 		# mapa biomů (varianta C, 2.1): stanice (rozteč) a měkké Voroného váhy (šířka přechodu).
 		# biom_velke_oblasti (výchozí vyp): jen ke srovnání — typ z hrubé mřížky o rozteči biom_meritko_m
 		# a ostrovy pod biom_min_plocha_m2 se sloučí do souseda. Výchozí mapa typů je po stanicích (256 m).
@@ -87,6 +95,14 @@ var sopky: Array = []               # [{x, y, H, R, rc, d, gamma, vyska_okoli}]
 var sx := PackedFloat64Array(); var sy := PackedFloat64Array(); var sR := PackedFloat64Array()
 var tan_sopka: float
 var hladkost: float
+var klima_id := "mirne"
+var klima_ze_seedu := false
+var klima_tab: Dictionary = {}
+var kS: float; var kB: float; var kN: int
+var kx := PackedFloat64Array(); var ky := PackedFloat64Array(); var kt := PackedByteArray()
+var klima_ids: Array = []
+var klima_idx := 0
+
 
 func _init(par := {}) -> void:
 	p = vychozi()
@@ -96,6 +112,7 @@ func _init(par := {}) -> void:
 	sloupec_m = float(rz.sloupec_m); neutral_m = sloupec_m * 0.5; svet_m = float(rz.svet_max_m)
 	strop_povrchu_m = sloupec_m - float(p.sopka_rezerva_m)
 	hladkost = float(p.strop_povrchu_hladkost_m)
+	_klima()
 	_mapa_biomu()
 	_relief()
 	_masiv()
@@ -106,6 +123,95 @@ func _init(par := {}) -> void:
 func _u(ucel: String, i: int, j: int, k := 0) -> float:
 	var h := H.mix(sd, ucel, ((i + 4096) << 24) ^ ((j + 4096) << 8) ^ k)
 	return float(H.shr(h, 11)) / 9007199254740992.0   # 53 bitů
+
+# ---------------------------------------------------------------- klima: načtení presetu, základní klima, háček pomalé mapy (1.15)
+func _klima() -> void:
+	klima_tab = KL.nacti()
+	if klima_tab.has("chyba"):
+		push_error("klima: " + String(klima_tab.chyba))
+		klima_id = "mirne"
+		klima_ze_seedu = false
+		return
+	for c in klima_tab.chyby:
+		push_warning("klima: " + String(c))
+	klima_ids = klima_tab.ids
+	var chtene := String(p.klima)
+	klima_ze_seedu = (chtene == "ze_seedu")
+	if klima_ze_seedu:
+		if klima_ids.is_empty():
+			klima_id = "mirne"
+		else:
+			var u := _u("V1_KLIMA_ZAKLAD", 0, 0)
+			var i := int(floor(u * float(klima_ids.size())))
+			if i < 0: i = 0
+			if i >= klima_ids.size(): i = klima_ids.size() - 1
+			klima_id = String(klima_ids[i])
+	elif klima_tab.podle_id.has(chtene):
+		klima_id = chtene
+	else:
+		push_error("neznámé klima '" + chtene + "', použije se mirne")
+		klima_id = "mirne"
+	if not klima_tab.podle_id.has(klima_id):
+		push_error("chybí preset " + klima_id)
+		return
+	KL.uplatni(p, klima_tab.podle_id[klima_id])
+	klima_idx = klima_ids.find(klima_id)
+	if klima_idx < 0: klima_idx = 0
+	_klima_mapa()
+
+func _klima_mapa() -> void:
+	kS = float(p.klima_mapa_roztec_m); kB = float(p.klima_mapa_prechod_m)
+	kN = int(ceil(svet_m / kS)) + 4
+	kx.resize(kN * kN); ky.resize(kN * kN); kt.resize(kN * kN)
+	# při vynuceném pojmenovaném klimatu je mapa stejnorodá (háček existuje, svět se nemění)
+	var sila := float(p.klima_mapa_sila) if klima_ze_seedu else 0.0
+	var n := klima_ids.size()
+	for a in kN:
+		for b in kN:
+			var i := a - 2; var j := b - 2
+			var k := a * kN + b
+			kx[k] = (i + 0.15 + 0.7 * _u("V1_KLIMA_X", i, j)) * kS
+			ky[k] = (j + 0.15 + 0.7 * _u("V1_KLIMA_Y", i, j)) * kS
+			var typ := klima_idx
+			if sila > 0.0 and n > 0 and _u("V1_KLIMA_MAPA", i, j) < sila:
+				var u2 := _u("V1_KLIMA_MAPA_T", i, j)
+				var t2 := int(floor(u2 * float(n)))
+				if t2 < 0: t2 = 0
+				if t2 >= n: t2 = n - 1
+				typ = t2
+			kt[k] = typ
+
+## Váhy podnebí v bodě (háček pomalé mapy). Při vynuceném / výchozím pojmenovaném klimatu je váha 1 na základu.
+## Do výšky a podílů biomů se v kroku 2 nemísí; reliéf bere jen základní preset.
+func klima_vahy(x: float, y: float) -> PackedFloat64Array:
+	var n := klima_ids.size()
+	if n <= 0: n = 1
+	var w := PackedFloat64Array(); w.resize(n)
+	if not klima_ze_seedu or kN <= 0 or kS <= 0.0:
+		w[klima_idx if klima_idx >= 0 and klima_idx < n else 0] = 1.0
+		return w
+	var ci := floori(x / kS) + 2; var cj := floori(y / kS) + 2
+	var ds := PackedFloat64Array(); var ts := PackedByteArray()
+	var dmin := 1e30
+	for a in range(ci - 2, ci + 3):
+		for b in range(cj - 2, cj + 3):
+			if a < 0 or b < 0 or a >= kN or b >= kN: continue
+			var k := a * kN + b
+			var d := sqrt((x - kx[k]) * (x - kx[k]) + (y - ky[k]) * (y - ky[k]))
+			ds.append(d); ts.append(kt[k])
+			if d < dmin: dmin = d
+	var sum := 0.0
+	for i in ds.size():
+		var q := 1.0 - (ds[i] - dmin) / kB
+		if q > 0.0:
+			var ti: int = ts[i]
+			if ti >= 0 and ti < n:
+				w[ti] += q * q; sum += q * q
+	if sum > 0.0:
+		for t in n: w[t] /= sum
+	else:
+		w[klima_idx if klima_idx >= 0 and klima_idx < n else 0] = 1.0
+	return w
 
 # ---------------------------------------------------------------- mapa biomů (stanice ze seedu; typ ze stanice, nebo při biom_velke_oblasti z hrubé mřížky)
 func _mapa_biomu() -> void:
@@ -533,7 +639,7 @@ func sloupec(x: float, y: float) -> Dictionary:
 		for e in hr: sm += float(e[1])
 		for e in hr: e[1] = float(e[1]) / sm
 	return {"povrch_m": vyska_w(x, y, w), "biom": biom, "biom_vahy": w, "horniny": hr,
-		"masiv": _vaha_masivu(w[HORNATINA]), "sopka": s, "hranice": [], "hladina_m": NAN}
+		"masiv": _vaha_masivu(w[HORNATINA]), "sopka": s, "klima": klima_id, "hranice": [], "hladina_m": NAN}
 
 func bod(x: float, y: float, z: float) -> int:
 	var w := vahy(x, y)
