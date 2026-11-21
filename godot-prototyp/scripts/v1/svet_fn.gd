@@ -6,8 +6,10 @@ extends RefCounted
 ##   bod(x, y, z)       → id materiálu (krok 2: vzduch nad povrchem, pod ním převažující hornina z mapy hornin;
 ##                        vrstvy doplní krok 3 beze změny rozhraní)
 ## Pořadí 2.1: mapa biomů a hornin (hrubé body ze seedu na 4096 m) → reliéf z parametrů biomu → masiv E87 + podhůří
-## → sopky. Žádné šablony povrchu, p94_hora_k ani omezovač E92 (1.4). Strop sklonu (1.13) se dodrží volbou efektivní
-## amplitudy šumu (gradient šumu změřený při vytvoření světa), ne úpravou hotového povrchu.
+## → sopky. Žádné šablony povrchu, p94_hora_k ani omezovač E92 (1.4). Strop sklonu (1.13) se dodrží volbou
+## efektivní vlnové délky: když se zadané převýšení pod strop nevejde, tvar se roztáhne do šířky a výška zůstane.
+## Drobný detail do detail_max_m smí strop překročit; strop platí pro celkový tvar. V přechodu biomů je strop
+## vážený průměr. Gradient šumu se změří při vytvoření světa, hotový povrch se neořezává.
 ## Převzato: vzorec reliéfu E49/E90 (lod90.h49: základní šum, hřbet (1 − |n|)²) – větev e96-blok128; masiv
 ## geo2.n01 (šum MASSIF87 / MASSIF87D, E87 ff97a9f) – jen v metrech a ve sloupci 128 m; kužel s kráterem E49
 ## (svet/hruby_teren.gd: c · (1 − r/R)^γ − kráter) zobecněný na parametry 1.14.
@@ -30,8 +32,11 @@ static func vychozi() -> Dictionary:
 		"seed": 49,
 		"rozmery": R.vychozi(),
 		"start_blok": [14, 14],          # levý dolní blok výchozího světa 3 × 3 (blok 128 m) v maximu 32 × 32
-		# mapa biomů (varianta C, 2.1): hrubé body (rozteč), měkké Voroného váhy (šířka přechodu)
-		"biom_roztec_m": 256.0, "biom_prechod_m": 192.0,
+		# mapa biomů (varianta C, 2.1): stanice (rozteč) a měkké Voroného váhy (šířka přechodu).
+		# biom_velke_oblasti (výchozí vyp): jen ke srovnání — typ z hrubé mřížky o rozteči biom_meritko_m
+		# a ostrovy pod biom_min_plocha_m2 se sloučí do souseda. Výchozí mapa typů je po stanicích (256 m).
+		"biom_roztec_m": 256.0, "biom_prechod_m": 320.0,  # 192 m nestačilo pod váženým stropem při plné výšce hor (skok nížina/mokřad × masiv)
+		"biom_velke_oblasti": false, "biom_meritko_m": 768.0, "biom_min_plocha_m2": 90000.0,
 		"podil": [0.35, 0.10, 0.30, 0.20, 0.05],   # podíl ploch nížina / mokřad / pahorkatina / hornatina / sopečná
 		# parametry členitosti podle biomu (1.13): posun nad neutrální úrovní, převýšení, vlnová délka, drsnost, strop sklonu
 		"biomy": [
@@ -49,11 +54,14 @@ static func vychozi() -> Dictionary:
 		# masiv E87 v hornatině (1.4, úkol 10): váha = smoothstep(m0, m1, váha hornatiny); výška = zdvih + amp · n01 + detail
 		"masiv_m0": 0.35, "masiv_m1": 1.0, "masiv_zdvih_m": 8.0, "p87_amp_m": 12.0, "p87_freq": 0.008, "p87_detail_m": 0.75,
 		"p87_dfreq": 0.05, "masiv_podil_stropu": 0.4, "masiv_podil_detail": 0.2,	# E87 mělo freq 0,03 / dfreq 0,25 (sloupec 32 m)
+		"detail_max_m": 2.0,            # drobné tvary do této výšky smí překročit strop sklonu
 		"podhuri_m": 4.0, "podhuri_vlna_m": 48.0,   # podhůří v pásu přechodu masivu (4 · w · (1 − w))
 		# sopky (1.14)
 		"sopek": 2, "sopky_roztec_m": 384.0, "sopky_roztec_tol": 0.10, "sopka_vyska_min_m": 20.0, "sopka_vyska_max_m": 40.0,
 		"sopka_sklon_deg": 17.0, "sopka_gamma": 1.5, "sopka_strop_deg": 35.0, "krater_r_podil": 0.12,
 		"krater_hloubka_podil": 0.25, "sopka_rezerva_m": 5.0, "sopky_okraj_m": 320.0,
+		# první sopka těsně vně výchozího světa 3 × 3 (střed světa zůstává uprostřed maxima)
+		"sopka_od_okraje_startu_m": 100.0,
 		"strop_povrchu_hladkost_m": 2.0,  # měkký strop povrchu = okraj sloupce − rezerva (hladké minimum, sklon nezvětší)
 	}
 
@@ -72,8 +80,9 @@ var rel_noise: Array = []           # FastNoiseLite podle biomu
 var rel_posun := PackedFloat64Array(); var rel_amp := PackedFloat64Array(); var rel_hreben := PackedByteArray()
 var tan_strop := PackedFloat64Array()
 var gradient: Dictionary = {}       # změřený gradient šumů (na jednotku amplitudy, 1/m)
-var m87_amp: float; var m87_det: float; var m87_zdvih: float
+var m87_amp: float; var m87_det: float; var m87_zdvih: float; var m87_freq: float
 var pod_noise: FastNoiseLite; var pod_amp: float
+var biom_slouceni: Dictionary = {}   # statistika sloučení drobných ostrovů biomů
 var sopky: Array = []               # [{x, y, H, R, rc, d, gamma, vyska_okoli}]
 var sx := PackedFloat64Array(); var sy := PackedFloat64Array(); var sR := PackedFloat64Array()
 var tan_sopka: float
@@ -98,7 +107,7 @@ func _u(ucel: String, i: int, j: int, k := 0) -> float:
 	var h := H.mix(sd, ucel, ((i + 4096) << 24) ^ ((j + 4096) << 8) ^ k)
 	return float(H.shr(h, 11)) / 9007199254740992.0   # 53 bitů
 
-# ---------------------------------------------------------------- mapa biomů (hrubé body ze seedu na celé ploše)
+# ---------------------------------------------------------------- mapa biomů (stanice ze seedu; typ ze stanice, nebo při biom_velke_oblasti z hrubé mřížky)
 func _mapa_biomu() -> void:
 	bS = float(p.biom_roztec_m); bB = float(p.biom_prechod_m)
 	bN = int(ceil(svet_m / bS)) + 4
@@ -112,9 +121,121 @@ func _mapa_biomu() -> void:
 			bx[k] = (i + 0.15 + 0.7 * _u("V1_BIOM_X", i, j)) * bS
 			by[k] = (j + 0.15 + 0.7 * _u("V1_BIOM_Y", i, j)) * bS
 			var u := _u("V1_BIOM_T", i, j) * s
-			var t := 0
-			while t < 4 and u >= cum[t]: t += 1
-			bt[k] = t
+			var typ := 0
+			while typ < 4 and u >= cum[typ]: typ += 1
+			bt[k] = typ
+	if bool(p.biom_velke_oblasti):
+		_typy_z_meritka(cum, s)
+		_sloucit_drobne_biomy()
+	else:
+		biom_slouceni = {"zapnuto": false, "sloucenych": 0, "min_plocha_m2": float(p.biom_min_plocha_m2), "meritko_m": float(p.biom_meritko_m)}
+
+## typ stanice z nejbližšího bodu hrubé mřížky o rozteči biom_meritko_m (jen když je zapnuté biom_velke_oblasti)
+func _typy_z_meritka(cum: PackedFloat64Array, s: float) -> void:
+	var mS := float(p.biom_meritko_m)
+	var mN := int(ceil(svet_m / mS)) + 4
+	var mx := PackedFloat64Array(); var my := PackedFloat64Array(); var mt := PackedByteArray()
+	mx.resize(mN * mN); my.resize(mN * mN); mt.resize(mN * mN)
+	for a in mN:
+		for b in mN:
+			var i := a - 2; var j := b - 2
+			var k := a * mN + b
+			mx[k] = (i + 0.15 + 0.7 * _u("V1_BIOM_MX", i, j)) * mS
+			my[k] = (j + 0.15 + 0.7 * _u("V1_BIOM_MY", i, j)) * mS
+			var u := _u("V1_BIOM_MT", i, j) * s
+			var typ := 0
+			while typ < 4 and u >= cum[typ]: typ += 1
+			mt[k] = typ
+	for a in bN:
+		for b in bN:
+			var k := a * bN + b
+			var ci := floori(bx[k] / mS) + 2
+			var cj := floori(by[k] / mS) + 2
+			var nej := 1e30
+			var typ2 := 0
+			for ia in range(ci - 2, ci + 3):
+				for ib in range(cj - 2, cj + 3):
+					if ia < 0 or ib < 0 or ia >= mN or ib >= mN: continue
+					var kk := ia * mN + ib
+					var dx := bx[k] - mx[kk]; var dy := by[k] - my[kk]
+					var d2 := dx * dx + dy * dy
+					if d2 < nej:
+						nej = d2; typ2 = int(mt[kk])
+			bt[k] = typ2
+
+## ostrovy stejného biomu pod minimální plochou se sloučí do typově nejčastějšího 4-souseda (při shodě nižší id)
+func _sloucit_drobne_biomy() -> void:
+	var min_a := float(p.biom_min_plocha_m2)
+	var bunka := bS * bS
+	var slouceni := 0
+	var preskoc := {}
+	while true:
+		var lab := PackedInt32Array(); lab.resize(bN * bN)
+		for i in lab.size(): lab[i] = -1
+		var comps: Array = []
+		for k in bN * bN:
+			if lab[k] >= 0: continue
+			var typ := int(bt[k])
+			var fronta := PackedInt32Array(); fronta.append(k)
+			lab[k] = comps.size()
+			var qi := 0
+			var plocha := 0.0
+			var min_k := k
+			while qi < fronta.size():
+				var cur := int(fronta[qi]); qi += 1
+				if bx[cur] >= -bS and bx[cur] <= svet_m + bS and by[cur] >= -bS and by[cur] <= svet_m + bS:
+					plocha += bunka
+				if cur < min_k: min_k = cur
+				var aa := int(cur / bN)
+				var bb := cur % bN
+				for d in [[-1, 0], [1, 0], [0, -1], [0, 1]]:
+					var na: int = aa + int(d[0])
+					var nb: int = bb + int(d[1])
+					if na < 0 or nb < 0 or na >= bN or nb >= bN: continue
+					var nk := na * bN + nb
+					if lab[nk] < 0 and int(bt[nk]) == typ:
+						lab[nk] = lab[k]
+						fronta.append(nk)
+			comps.append({"sites": fronta, "typ": typ, "plocha": plocha, "min_k": min_k})
+		var best := -1
+		var best_a := 1e30
+		var best_k := 1 << 30
+		for i in comps.size():
+			var c: Dictionary = comps[i]
+			if float(c.plocha) + 1e-9 >= min_a: continue
+			if preskoc.has(int(c.min_k)): continue
+			if float(c.plocha) < best_a - 1e-9 or (absf(float(c.plocha) - best_a) <= 1e-9 and int(c.min_k) < best_k):
+				best = i; best_a = float(c.plocha); best_k = int(c.min_k)
+		if best < 0: break
+		var c2: Dictionary = comps[best]
+		var pocty := {}
+		var sites: PackedInt32Array = c2.sites
+		for idx in sites.size():
+			var cur2 := int(sites[idx])
+			var aa2 := int(cur2 / bN)
+			var bb2 := cur2 % bN
+			for d2 in [[-1, 0], [1, 0], [0, -1], [0, 1]]:
+				var na2: int = aa2 + int(d2[0])
+				var nb2: int = bb2 + int(d2[1])
+				if na2 < 0 or nb2 < 0 or na2 >= bN or nb2 >= bN: continue
+				var nk2 := na2 * bN + nb2
+				var nt0 := int(bt[nk2])
+				if nt0 != int(c2.typ):
+					pocty[nt0] = int(pocty.get(nt0, 0)) + 1
+		if pocty.is_empty():
+			preskoc[int(c2.min_k)] = true
+			continue
+		var nt := 99
+		var nc := -1
+		for t in pocty:
+			var v := int(pocty[t])
+			if v > nc or (v == nc and int(t) < nt):
+				nt = int(t); nc = v
+		for idx2 in sites.size():
+			bt[sites[idx2]] = nt
+		slouceni += 1
+		if slouceni > bN * bN: break
+	biom_slouceni = {"zapnuto": true, "sloucenych": slouceni, "min_plocha_m2": min_a, "meritko_m": float(p.biom_meritko_m)}
 
 ## váhy biomů v bodě (5 čísel, součet 1): měkký Voronoi w_i = (1 − (d_i − d_min)/B)², spojitý v x, y
 func vahy(x: float, y: float) -> PackedFloat64Array:
@@ -153,22 +274,34 @@ static func _grad_sumu(n: FastNoiseLite, freq: float, vzorku := 8000) -> float:
 func _relief() -> void:
 	var bi: Array = p.biomy
 	rel_posun.resize(5); rel_amp.resize(5); rel_hreben.resize(5); tan_strop.resize(5)
+	rel_noise.clear()
 	for t in 5:
 		var b: Dictionary = bi[t]
 		var f := 1.0 / float(b.vlna_m)
 		var n := BG.noise(sd, "V1_RELIEF_%d" % t, 0, f, int(p.oktav))
 		n.fractal_gain = float(b.drsnost)
-		rel_noise.append(n)
-		var g := _grad_sumu(n, f)
 		var hreben := bool(b.hreben)
-		var gk := g * (2.0 if hreben else 1.0)          # hřbet (1 − |n|)²: |∇| ≤ 2 |∇n|
+		var hk := 2.0 if hreben else 1.0          # hřbet (1 − |n|)²: |∇| ≤ 2 |∇n|
 		tan_strop[t] = tan(deg_to_rad(float(b.strop_deg)))
 		var podil := float(p.rezerva_sklonu) * (1.0 - (float(p.masiv_podil_stropu) if t == HORNATINA else 0.0))
-		var a_max := podil * tan_strop[t] / gk
-		rel_amp[t] = minf(float(b.prevyseni_m), a_max)
+		var rozpocet := podil * tan_strop[t]
+		var a_want := float(b.prevyseni_m)
+		var g := _grad_sumu(n, f)
+		var a_max := (rozpocet / (g * hk)) if g > 1e-15 else a_want
+		var it := 0
+		while a_want > a_max * 1.001 and a_max > 1e-15 and it < 3:
+			f *= a_max / a_want
+			n = BG.noise(sd, "V1_RELIEF_%d" % t, 0, f, int(p.oktav))
+			n.fractal_gain = float(b.drsnost)
+			g = _grad_sumu(n, f)
+			a_max = rozpocet / (g * hk)
+			it += 1
+		rel_noise.append(n)
+		rel_amp[t] = minf(a_want, a_max)
 		rel_posun[t] = float(b.posun_m)
 		rel_hreben[t] = 1 if hreben else 0
-		gradient["relief_%d" % t] = {"g_1_m": g, "amp_pozadovana_m": float(b.prevyseni_m), "amp_m": rel_amp[t]}
+		gradient["relief_%d" % t] = {"g_1_m": g, "amp_pozadovana_m": a_want, "amp_m": rel_amp[t],
+			"vlna_zadana_m": float(b.vlna_m), "vlna_efektivni_m": (1.0 / f if f > 0.0 else 0.0), "sirit_iter": it}
 
 func _rel(t: int, x: float, y: float) -> float:
 	var n: float = rel_noise[t].get_noise_2d(x, y)
@@ -180,37 +313,61 @@ func _rel(t: int, x: float, y: float) -> float:
 # ---------------------------------------------------------------- masiv E87 + podhůří
 func _masiv() -> void:
 	# E87 n01 = 0,5 · šum + 0,5 → |∇n01| = 0,5 |∇šum|; šumy z geo2 (domain warp) se změří stejně jako reliéf
-	var na := G2._noise(sd, "MASSIF87", 0, float(p.p87_freq))
-	var nd := G2._noise(sd, "MASSIF87D", 0, float(p.p87_dfreq))
-	var ga := 0.5 * _grad_sumu(na, float(p.p87_freq))
-	var gd := _grad_sumu(nd, float(p.p87_dfreq))           # detail · (2 n01 − 1) = detail · šum
+	# celkový tvar (amp masivu, podhůří) se při nedostatku stropu roztáhne; detail do detail_max_m strop neřeže
+	m87_freq = float(p.p87_freq)
+	var na := G2._noise(sd, "MASSIF87", 0, m87_freq)
+	var ga := 0.5 * _grad_sumu(na, m87_freq)
 	var rozpocet := float(p.rezerva_sklonu) * float(p.masiv_podil_stropu) * tan(deg_to_rad(float(p.biomy[HORNATINA].strop_deg)))
-	var pd := float(p.masiv_podil_detail)
-	m87_amp = minf(float(p.p87_amp_m), (1.0 - pd) * rozpocet / ga)
-	m87_det = minf(float(p.p87_detail_m), pd * rozpocet / gd)
+	var a_want := float(p.p87_amp_m)
+	var a_max := (rozpocet / ga) if ga > 1e-15 else a_want
+	var it := 0
+	while a_want > a_max * 1.001 and a_max > 1e-15 and it < 3:
+		m87_freq *= a_max / a_want
+		na = G2._noise(sd, "MASSIF87", 0, m87_freq)
+		ga = 0.5 * _grad_sumu(na, m87_freq)
+		a_max = rozpocet / ga
+		it += 1
+	m87_amp = minf(a_want, a_max)
+	m87_det = minf(float(p.p87_detail_m), float(p.detail_max_m))
 	m87_zdvih = float(p.masiv_zdvih_m)
+	var nd := G2._noise(sd, "MASSIF87D", 0, float(p.p87_dfreq))
+	var gd := _grad_sumu(nd, float(p.p87_dfreq))           # jen záznam: detail smí strop překročit
 	var fp := 1.0 / float(p.podhuri_vlna_m)
 	pod_noise = BG.noise(sd, "V1_PODHURI", 0, fp, 3)
 	var gp := _grad_sumu(pod_noise, fp)
-	pod_amp = minf(float(p.podhuri_m), 0.5 * rozpocet / gp)
-	gradient["masiv"] = {"g87_1_m": ga, "gdet_1_m": gd, "amp_pozadovana_m": float(p.p87_amp_m), "detail_pozadovany_m": float(p.p87_detail_m), "amp_m": m87_amp, "detail_m": m87_det,
-		"podhuri_g_1_m": gp, "podhuri_amp_m": pod_amp}
+	var pod_want := float(p.podhuri_m)
+	var pod_max := (0.5 * rozpocet / gp) if gp > 1e-15 else pod_want
+	var itp := 0
+	while pod_want > pod_max * 1.001 and pod_max > 1e-15 and itp < 3:
+		fp *= pod_max / pod_want
+		pod_noise = BG.noise(sd, "V1_PODHURI", 0, fp, 3)
+		gp = _grad_sumu(pod_noise, fp)
+		pod_max = 0.5 * rozpocet / gp
+		itp += 1
+	pod_amp = minf(pod_want, pod_max)
+	gradient["masiv"] = {"g87_1_m": ga, "gdet_1_m": gd, "amp_pozadovana_m": a_want, "detail_pozadovany_m": float(p.p87_detail_m),
+		"amp_m": m87_amp, "detail_m": m87_det, "detail_max_m": float(p.detail_max_m),
+		"freq_zadana": float(p.p87_freq), "freq_efektivni": m87_freq, "sirit_iter": it,
+		"podhuri_g_1_m": gp, "podhuri_amp_m": pod_amp, "podhuri_vlna_zadana_m": float(p.podhuri_vlna_m),
+		"podhuri_vlna_efektivni_m": (1.0 / fp if fp > 0.0 else 0.0), "podhuri_sirit_iter": itp}
 
 func _vaha_masivu(wh: float) -> float:
 	return smoothstep(float(p.masiv_m0), float(p.masiv_m1), wh)
 
-func _masiv_h(x: float, y: float) -> float:
-	return m87_zdvih + m87_amp * G2.n01(sd, "MASSIF87", 0, float(p.p87_freq), x, y) \
-		+ m87_det * (2.0 * G2.n01(sd, "MASSIF87D", 0, float(p.p87_dfreq), x, y) - 1.0)
+func _masiv_h(x: float, y: float, detaily := true) -> float:
+	var h := m87_zdvih + m87_amp * G2.n01(sd, "MASSIF87", 0, m87_freq, x, y)
+	if detaily and m87_det != 0.0:
+		h += m87_det * (2.0 * G2.n01(sd, "MASSIF87D", 0, float(p.p87_dfreq), x, y) - 1.0)
+	return h
 
 # ---------------------------------------------------------------- výška bez sopek a se sopkami
-func _vyska_bez_sopek(x: float, y: float, w: PackedFloat64Array) -> float:
+func _vyska_bez_sopek(x: float, y: float, w: PackedFloat64Array, detaily := true) -> float:
 	var h := neutral_m
 	for t in 5:
 		if w[t] > 0.0: h += w[t] * _rel(t, x, y)
 	var wm := _vaha_masivu(w[HORNATINA])
 	if wm > 0.0:
-		h += wm * _masiv_h(x, y)
+		h += wm * _masiv_h(x, y, detaily)
 		h += 4.0 * wm * (1.0 - wm) * pod_amp * pod_noise.get_noise_2d(x, y)
 	return h
 
@@ -230,10 +387,14 @@ func _smin(h: float) -> float:
 	return m - k * log(1.0 + exp(-absf(h - c) / k))
 
 func vyska(x: float, y: float) -> float:
-	return vyska_w(x, y, vahy(x, y))
+	return vyska_w(x, y, vahy(x, y), true)
 
-func vyska_w(x: float, y: float, w: PackedFloat64Array) -> float:
-	var h := _vyska_bez_sopek(x, y, w)
+## celkový tvar bez drobného detailu masivu (pro kontrolu stropu sklonu)
+func vyska_tvar(x: float, y: float) -> float:
+	return vyska_w(x, y, vahy(x, y), false)
+
+func vyska_w(x: float, y: float, w: PackedFloat64Array, detaily := true) -> float:
+	var h := _vyska_bez_sopek(x, y, w, detaily)
 	for i in sx.size():
 		var dx := x - sx[i]; var dy := y - sy[i]
 		var r2 := dx * dx + dy * dy
@@ -248,15 +409,31 @@ func _sopky() -> void:
 	tan_sopka = tan(deg_to_rad(float(p.sopka_strop_deg)))
 	var tan_rel := tan_strop[SOPECNA]
 	var stred: Array = []
-	for i in n:
+	# první sopka na obvodu čtverce těsně vně výchozího světa 3 × 3; úhel / místo ze seedu
+	var st0: Vector2 = start_m()
+	var d_out := float(p.sopka_od_okraje_startu_m)
+	var strana := 384.0 + 2.0 * d_out
+	var t0 := _u("V1_SOPKA_START", 0, 0) * 4.0 * strana
+	var x0 := st0.x - d_out
+	var y0 := st0.y - d_out
+	var c0 := Vector2.ZERO
+	if t0 < strana:
+		c0 = Vector2(x0 + t0, y0)
+	elif t0 < 2.0 * strana:
+		c0 = Vector2(x0 + strana, y0 + (t0 - strana))
+	elif t0 < 3.0 * strana:
+		c0 = Vector2(x0 + strana - (t0 - 2.0 * strana), y0 + strana)
+	else:
+		c0 = Vector2(x0, y0 + strana - (t0 - 3.0 * strana))
+	c0.x = clampf(c0.x, okraj, svet_m - okraj)
+	c0.y = clampf(c0.y, okraj, svet_m - okraj)
+	stred.append(c0)
+	for i in range(1, n):
 		var c := Vector2.ZERO
 		for pokus in 64:
-			if i == 0:
-				c = Vector2(okraj + _u("V1_SOPKA_X", i, pokus) * (svet_m - 2.0 * okraj), okraj + _u("V1_SOPKA_Y", i, pokus) * (svet_m - 2.0 * okraj))
-			else:
-				var uh := _u("V1_SOPKA_U", i, pokus) * TAU
-				var dd := d * (1.0 + tol * 0.8 * (2.0 * _u("V1_SOPKA_D", i, pokus) - 1.0))
-				c = Vector2(stred[i - 1]) + Vector2(cos(uh), sin(uh)) * dd
+			var uh := _u("V1_SOPKA_U", i, pokus) * TAU
+			var dd := d * (1.0 + tol * 0.8 * (2.0 * _u("V1_SOPKA_D", i, pokus) - 1.0))
+			c = Vector2(stred[i - 1]) + Vector2(cos(uh), sin(uh)) * dd
 			var ok := c.x >= okraj and c.y >= okraj and c.x <= svet_m - okraj and c.y <= svet_m - okraj
 			for q in stred:
 				if c.distance_to(q) < d * (1.0 - tol): ok = false
@@ -364,12 +541,12 @@ func bod(x: float, y: float, z: float) -> int:
 	var hr := horniny(x, y, w)
 	return int(hr[0][0]) if not hr.is_empty() else VZDUCH
 
-## lokální strop sklonu (tan) pro test 2: přechod patří strmějšímu biomu, v kuželu sopky strop sopky
+## lokální strop sklonu (tan) pro test 2: v přechodu vážený průměr stropů, v kuželu sopky strop sopky
 func strop_tan(x: float, y: float) -> float:
 	var w := vahy(x, y)
 	var s := 0.0
 	for t in 5:
-		if w[t] > 0.0: s = maxf(s, tan_strop[t])
+		s += w[t] * tan_strop[t]
 	for i in sx.size():
 		if (x - sx[i]) * (x - sx[i]) + (y - sy[i]) * (y - sy[i]) < sR[i] * sR[i]: s = maxf(s, tan_sopka)
 	return s

@@ -34,6 +34,10 @@ func _init() -> void:
 	out["seed"] = svet.sd
 	out["gradient"] = svet.gradient
 	out["sopky"] = svet.sopky
+	out["biom_slouceni"] = svet.biom_slouceni
+	out["parametry"] = {"biom_velke_oblasti": svet.p.biom_velke_oblasti, "biom_meritko_m": svet.p.biom_meritko_m,
+		"biom_min_plocha_m2": svet.p.biom_min_plocha_m2, "detail_max_m": svet.p.detail_max_m,
+		"sopka_od_okraje_startu_m": svet.p.sopka_od_okraje_startu_m, "start_blok": svet.p.start_blok}
 	var chyb := 0
 	if rezim == "det":
 		chyb += _det(svet)
@@ -160,7 +164,6 @@ func _sklony_okna(svet, jmeno: String, mrizka: Callable, nx: int, krok: float, o
 	var hist := PackedInt64Array(); hist.resize(181)   # po 0,5° do 90°
 	var vals := PackedFloat32Array()
 	var mx := 0.0; var mx_pres := -1e9; var nad := 0; var n := 0; var kde := Vector2.ZERO
-	var strop_cache := {}
 	for i in range(1, nx - 1):
 		for j in range(1, nx - 1):
 			var gx: float = (mrizka.call(i + 1, j) - mrizka.call(i - 1, j)) / (2.0 * krok)
@@ -170,17 +173,9 @@ func _sklony_okna(svet, jmeno: String, mrizka: Callable, nx: int, krok: float, o
 			hist[mini(180, int(deg * 2.0))] += 1
 			n += 1
 			if (i % 4) == 0 and (j % 4) == 0: vals.append(deg)
-			var key := Vector2i(i / 4, j / 4)       # strop po 4 vzorcích (1 nebo 2 m), konzervativně max ze 4 rohů níže
 			var x := o.x + i * krok; var y := o.y + j * krok
 			if g > 0.0:
-				if not strop_cache.has(key):
-					var x0 := o.x + key.x * 4 * krok; var y0 := o.y + key.y * 4 * krok
-					var s := 0.0
-					for dx in [0.0, 4.0 * krok]:
-						for dy in [0.0, 4.0 * krok]:
-							s = maxf(s, svet.strop_tan(x0 + dx, y0 + dy))
-					strop_cache[key] = s
-				var cap: float = strop_cache[key]
+				var cap: float = svet.strop_tan(x, y)
 				var pres := deg - rad_to_deg(atan(cap))
 				if pres > mx_pres: mx_pres = pres; kde = Vector2(x, y)
 				if pres > 0.0: nad += 1
@@ -195,8 +190,25 @@ func _sklony_okna(svet, jmeno: String, mrizka: Callable, nx: int, krok: float, o
 	return {"vzorku": n, "krok_m": krok, "p50_deg": p50, "p95_deg": p95, "p99_deg": p99, "max_deg": mx,
 		"max_nad_stropem_deg": mx_pres, "kde_max_nad": kde, "vzorku_nad_stropem": nad, "hist_0_5deg": hist}
 
-func _okno_vysky(svet, o: Vector2, delka: float, krok: float) -> PackedFloat64Array:
-	return B.rohy(svet, o, delka, krok)
+func _okno_vysky(svet, o: Vector2, delka: float, krok: float, tvar := false) -> PackedFloat64Array:
+	if not tvar:
+		return B.rohy(svet, o, delka, krok)
+	var n := int(round(delka / krok)) + 1
+	var outh := PackedFloat64Array(); outh.resize(n * n)
+	for i in n:
+		var x := o.x + i * krok
+		for j in n:
+			outh[i * n + j] = svet.vyska_tvar(x, o.y + j * krok)
+	return outh
+
+func _vzdalenost_od_ctverce(p: Vector2, a: Vector2, b: Vector2) -> float:
+	var dx := 0.0
+	if p.x < a.x: dx = a.x - p.x
+	elif p.x > b.x: dx = p.x - b.x
+	var dy := 0.0
+	if p.y < a.y: dy = a.y - p.y
+	elif p.y > b.y: dy = p.y - b.y
+	return sqrt(dx * dx + dy * dy)
 
 var _masiv_stred := Vector2.ZERO
 
@@ -218,6 +230,8 @@ func _sklony(svet) -> int:
 	var ov := Vector2(float(s0.x) - 192.0, float(s0.y) - 192.0)
 	var av := _okno_vysky(svet, ov, 384.0, 0.5)
 	res["sopka"] = _sklony_okna(svet, "sopka", func(i, j): return av[i * 769 + j], 769, 0.5, ov)
+	var avt := _okno_vysky(svet, ov, 384.0, 0.5, true)
+	res["sopka_tvar"] = _sklony_okna(svet, "sopka_tvar", func(i, j): return avt[i * 769 + j], 769, 0.5, ov)
 	# masiv: bod mapy s největší váhou masivu (mřížka 32 m na celém světě)
 	var best := -1.0
 	for a in 128:
@@ -231,6 +245,14 @@ func _sklony(svet) -> int:
 	var om := _masiv_stred - Vector2(192, 192)
 	var am := _okno_vysky(svet, om, 384.0, 0.5)
 	res["masiv"] = _sklony_okna(svet, "masiv", func(i, j): return am[i * 769 + j], 769, 0.5, om)
+	var amt := _okno_vysky(svet, om, 384.0, 0.5, true)
+	res["masiv_tvar"] = _sklony_okna(svet, "masiv_tvar", func(i, j): return amt[i * 769 + j], 769, 0.5, om)
+	# celkový tvar výchozího světa (bez drobného detailu); ok_n = 3×512+1 rohů, ne n jednoho bloku (513)
+	var start_tvar := PackedFloat64Array(); start_tvar.resize(ok_n * ok_n)
+	for i in ok_n:
+		for j in ok_n:
+			start_tvar[i * ok_n + j] = svet.vyska_tvar(st.x + i * 0.25, st.y + j * 0.25)
+	res["start_tvar"] = _sklony_okna(svet, "start_tvar", func(i, j): return start_tvar[i * ok_n + j], ok_n, 0.25, st)
 	res["masiv_stred"] = _masiv_stred
 	res["ms"] = _ms(t0)
 	# kvantovaná výška (buňka 0,25 m) jen pro informaci: sklon přes 2 m z výšek zaokrouhlených na 0,25 m
@@ -246,10 +268,12 @@ func _sklony(svet) -> int:
 	res["tolerance_deg"] = tol
 	out["sklony"] = res
 	var ch := 0
-	for k in ["start", "sopka", "masiv"]:
+	for k in ["start", "sopka", "masiv", "start_tvar", "sopka_tvar", "masiv_tvar"]:
 		var r: Dictionary = res[k]
 		print("sklony %s: p50 %.1f° p95 %.1f° max %.1f°, max nad stropem %.2f° (%d vzorků)" % [k, r.p50_deg, r.p95_deg, r.max_deg, r.max_nad_stropem_deg, r.vzorku_nad_stropem])
-		if float(r.max_nad_stropem_deg) > tol: ch += 1
+	# kritérium: celkový tvar pod váženým stropem; povrch s detailem se jen zaznamená
+	for k in ["start_tvar", "sopka_tvar", "masiv_tvar"]:
+		if float(res[k].max_nad_stropem_deg) > tol: ch += 1
 	return ch
 
 # ------------------------------------------------------------ test 3
@@ -284,10 +308,14 @@ func _sopky(svet) -> int:
 		var r_vrcholu := kde.distance_to(Vector2(a.x, a.y))
 		var hloubka := vrchol - stred
 		var okoli := float(a.vyska_okoli)
+		var st3: Vector2 = svet.start_m()
+		var c3 := st3 + Vector2(192, 192)
 		var e := {"x": a.x, "y": a.y, "H_m": a.H, "H_seed_m": a.H_seed, "prumer_upati_m": a.prumer_upati_m,
 			"vrchol_m": vrchol, "strop_m": okraj, "pod_okrajem_sloupce_m": float(svet.sloupec_m) - vrchol,
 			"krater_hloubka_m": hloubka, "krater_r_m": rc, "r_nejvyssiho_bodu_m": r_vrcholu, "nejblizsi_m": nej,
-			"vyska_nad_okolim_m": vrchol - okoli}
+			"vyska_nad_okolim_m": vrchol - okoli,
+			"vzdalenost_od_stredu_3x3_m": Vector2(a.x, a.y).distance_to(c3),
+			"vzdalenost_od_okraje_3x3_m": _vzdalenost_od_ctverce(Vector2(a.x, a.y), st3, st3 + Vector2(384, 384))}
 		var ok := vrchol <= okraj + 1e-9 and hloubka >= 1.0 and r_vrcholu <= rc + 1.0
 		if svet.sopky.size() > 1: ok = ok and absf(nej - d) <= d * tol
 		e["prošlo"] = ok
@@ -300,7 +328,18 @@ func _sopky(svet) -> int:
 			rez.x_m.append(t); rez.z_m.append(svet.vyska(float(a.x) + t, float(a.y))); t += 0.5
 		e["rez"] = rez
 		r.sopky.append(e)
-		print("sopka %d: H %.1f m, vrchol %.2f m (strop %.1f), kráter %.2f m, nejbližší %.0f m, %s" % [i, a.H, vrchol, okraj, hloubka, nej, "OK" if ok else "CHYBA"])
+		print("sopka %d: H %.1f m, vrchol %.2f m (strop %.1f), kráter %.2f m, nejbližší %.0f m, od středu 3×3 %.0f m (od okraje %.0f m), %s" % [i, a.H, vrchol, okraj, hloubka, nej, e.vzdalenost_od_stredu_3x3_m, e.vzdalenost_od_okraje_3x3_m, "OK" if ok else "CHYBA"])
+	var nejbliz_okraj := 1e9
+	var nejbliz_stred := 1e9
+	for e2 in r.sopky:
+		nejbliz_okraj = minf(nejbliz_okraj, float(e2.vzdalenost_od_okraje_3x3_m))
+		nejbliz_stred = minf(nejbliz_stred, float(e2.vzdalenost_od_stredu_3x3_m))
+	r["nejblizsi_od_okraje_3x3_m"] = nejbliz_okraj
+	r["nejblizsi_od_stredu_3x3_m"] = nejbliz_stred
+	# aspoň jedna sopka těsně u výchozího 3 × 3 (na obvodu nebo blíž)
+	if nejbliz_okraj > float(svet.p.sopka_od_okraje_startu_m) + 20.0:
+		ch += 1
+		print("CHYBA: žádná sopka není u výchozího 3 × 3 (nejbližší od okraje %.0f m)" % nejbliz_okraj)
 	out["sopky_test"] = r
 	return ch
 
@@ -331,6 +370,53 @@ func _mapa_svet(svet, tag: String, krok: float) -> Dictionary:
 
 var _barvy := {}
 
+## souvislé oblasti převažujícího biomu (4-sousedé) na mřížce vah
+func _oblasti(w5: PackedFloat32Array, n: int, krok: float) -> Dictionary:
+	var videl := PackedByteArray(); videl.resize(n * n)
+	var plochy := []
+	var typy := []
+	for i in n:
+		for j in n:
+			var i0 := i * n + j
+			if videl[i0] == 1: continue
+			var typ := 0
+			for t in 5:
+				if w5[i0 * 5 + t] > w5[i0 * 5 + typ]: typ = t
+			var fronta := PackedInt32Array(); fronta.append(i0)
+			videl[i0] = 1
+			var qi := 0
+			var bunek := 0
+			while qi < fronta.size():
+				var cur := int(fronta[qi]); qi += 1
+				bunek += 1
+				var ci := int(cur / n); var cj := cur % n
+				for d in [[-1, 0], [1, 0], [0, -1], [0, 1]]:
+					var ni: int = ci + int(d[0]); var nj: int = cj + int(d[1])
+					if ni < 0 or nj < 0 or ni >= n or nj >= n: continue
+					var nk := ni * n + nj
+					if videl[nk] == 1: continue
+					var nt := 0
+					for t2 in 5:
+						if w5[nk * 5 + t2] > w5[nk * 5 + nt]: nt = t2
+					if nt != typ: continue
+					videl[nk] = 1
+					fronta.append(nk)
+			plochy.append(float(bunek) * krok * krok)
+			typy.append(typ)
+	plochy.sort()
+	var m := plochy.size()
+	var soucet := 0.0
+	for v in plochy: soucet += float(v)
+	var med := 0.0
+	if m > 0:
+		var mid := int(m / 2)
+		if m % 2 == 1: med = float(plochy[mid])
+		else: med = 0.5 * (float(plochy[mid - 1]) + float(plochy[mid]))
+	return {"ulomku": m, "median_plocha_m2": med, "median_prumer_m": sqrt(med) if med > 0.0 else 0.0,
+		"prumer_plocha_m2": (soucet / m if m > 0 else 0.0), "prumer_prumer_m": (sqrt(soucet / m) if m > 0 else 0.0),
+		"min_plocha_m2": (float(plochy[0]) if m > 0 else 0.0), "max_plocha_m2": (float(plochy[m - 1]) if m > 0 else 0.0),
+		"krok_m": krok}
+
 func _mapy(svet) -> int:
 	var M = load("res://scripts/v1/materialy.gd")
 	var tab: Dictionary = M.nacti()
@@ -340,6 +426,20 @@ func _mapy(svet) -> int:
 	var svet2 = S.new({"seed": svet.sd + 1})
 	var b := _mapa_svet(svet2, "s%d_4096" % svet2.sd, 8.0)
 	res["sopky_seed2"] = svet2.sopky
+	res["biom_slouceni_seed_b"] = svet2.biom_slouceni
+	res["oblasti_seed_a"] = _oblasti(a.w5, a.n, 8.0)
+	res["oblasti_seed_b"] = _oblasti(b.w5, b.n, 8.0)
+	# srovnání: stejné seedy s přepínačem biom_velke_oblasti (výchozí test běží s vypnutým)
+	var av := _mapa_svet(S.new({"seed": svet.sd, "biom_velke_oblasti": true}), "s%d_4096_velke" % svet.sd, 8.0)
+	var bv := _mapa_svet(S.new({"seed": svet2.sd, "biom_velke_oblasti": true}), "s%d_4096_velke" % svet2.sd, 8.0)
+	res["oblasti_velke_seed_a"] = _oblasti(av.w5, av.n, 8.0)
+	res["oblasti_velke_seed_b"] = _oblasti(bv.w5, bv.n, 8.0)
+	print("oblasti výchozí seed %d: %d úlomků, medián √ %.0f m; seed %d: %d úlomků, medián √ %.0f m" % [
+		svet.sd, res.oblasti_seed_a.ulomku, res.oblasti_seed_a.median_prumer_m,
+		svet2.sd, res.oblasti_seed_b.ulomku, res.oblasti_seed_b.median_prumer_m])
+	print("oblasti velké seed %d: %d úlomků, medián √ %.0f m; seed %d: %d úlomků, medián √ %.0f m" % [
+		svet.sd, res.oblasti_velke_seed_a.ulomku, res.oblasti_velke_seed_a.median_prumer_m,
+		svet2.sd, res.oblasti_velke_seed_b.ulomku, res.oblasti_velke_seed_b.median_prumer_m])
 	# různé seedy: podíl buněk s jiným převažujícím biomem / horninou
 	var n: int = a.n
 	var jiny_b := 0; var jiny_h := 0; var podily := [0, 0, 0, 0, 0]
@@ -458,31 +558,53 @@ func _sklony_svet(svet) -> int:
 	var krok := float(_arg("krok", "4")); var e := 0.25
 	var n := int(4096.0 / krok)
 	var hist := PackedInt64Array(); hist.resize(181)
+	var hist_t := PackedInt64Array(); hist_t.resize(181)
 	var mx := 0.0; var mxp := -1e9; var kde := Vector2.ZERO; var nad := 0; var cnt := 0
+	var mx_t := 0.0; var mxp_t := -1e9; var kde_t := Vector2.ZERO; var nad_t := 0
 	var podle_biomu := [0.0, 0.0, 0.0, 0.0, 0.0]
+	var podle_biomu_t := [0.0, 0.0, 0.0, 0.0, 0.0]
 	var t0 := Time.get_ticks_usec()
 	for i in n:
 		for j in n:
 			var x := (i + 0.5) * krok; var y := (j + 0.5) * krok
+			var cap := rad_to_deg(atan(svet.strop_tan(x, y)))
+			var gx_t: float = (svet.vyska_tvar(x + e, y) - svet.vyska_tvar(x - e, y)) / (2.0 * e)
+			var gy_t: float = (svet.vyska_tvar(x, y + e) - svet.vyska_tvar(x, y - e)) / (2.0 * e)
+			var deg_t := rad_to_deg(atan(sqrt(gx_t * gx_t + gy_t * gy_t)))
 			var gx: float = (svet.vyska(x + e, y) - svet.vyska(x - e, y)) / (2.0 * e)
 			var gy: float = (svet.vyska(x, y + e) - svet.vyska(x, y - e)) / (2.0 * e)
 			var deg := rad_to_deg(atan(sqrt(gx * gx + gy * gy)))
-			hist[mini(180, int(deg * 2.0))] += 1; cnt += 1
+			hist[mini(180, int(deg * 2.0))] += 1
+			hist_t[mini(180, int(deg_t * 2.0))] += 1
+			cnt += 1
 			mx = maxf(mx, deg)
+			mx_t = maxf(mx_t, deg_t)
 			var w: PackedFloat64Array = svet.vahy(x, y)
 			var bi := 0
 			for t in 5: if w[t] > w[bi]: bi = t
 			podle_biomu[bi] = maxf(podle_biomu[bi], deg)
-			var pr := deg - rad_to_deg(atan(svet.strop_tan(x, y)))
+			podle_biomu_t[bi] = maxf(podle_biomu_t[bi], deg_t)
+			var pr := deg - cap
 			if pr > mxp: mxp = pr; kde = Vector2(x, y)
 			if pr > 0.0: nad += 1
+			var pr_t := deg_t - cap
+			if pr_t > mxp_t: mxp_t = pr_t; kde_t = Vector2(x, y)
+			if pr_t > 0.0: nad_t += 1
 	var cum := 0; var p50 := 0.0; var p95 := 0.0
+	var cum_t := 0; var p50_t := 0.0; var p95_t := 0.0
 	for b in 181:
 		cum += hist[b]
+		cum_t += hist_t[b]
 		if p50 == 0.0 and cum >= cnt * 0.5: p50 = b * 0.5 + 0.25
 		if p95 == 0.0 and cum >= cnt * 0.95: p95 = b * 0.5 + 0.25
+		if p50_t == 0.0 and cum_t >= cnt * 0.5: p50_t = b * 0.5 + 0.25
+		if p95_t == 0.0 and cum_t >= cnt * 0.95: p95_t = b * 0.5 + 0.25
 	out["sklony_svet"] = {"krok_m": krok, "diference_m": e, "vzorku": cnt, "p50_deg": p50, "p95_deg": p95, "max_deg": mx,
 		"max_podle_prevazujiciho_biomu_deg": podle_biomu, "max_nad_stropem_deg": mxp, "kde": kde, "vzorku_nad_stropem": nad,
-		"hist_0_5deg": hist, "ms": _ms(t0)}
-	print("sklony svět: p50 %.1f p95 %.1f max %.1f, nad stropem max %.2f° (%d vzorků), biomy %s, %.0f s" % [p50, p95, mx, mxp, nad, str(podle_biomu), _ms(t0) / 1000.0])
-	return 1 if mxp > 1.0 else 0
+		"hist_0_5deg": hist, "ms": _ms(t0),
+		"tvar": {"p50_deg": p50_t, "p95_deg": p95_t, "max_deg": mx_t,
+			"max_podle_prevazujiciho_biomu_deg": podle_biomu_t, "max_nad_stropem_deg": mxp_t, "kde": kde_t,
+			"vzorku_nad_stropem": nad_t, "hist_0_5deg": hist_t}}
+	print("sklony svět (s detailem): p50 %.1f p95 %.1f max %.1f, nad stropem max %.2f° (%d vzorků)" % [p50, p95, mx, mxp, nad])
+	print("sklony svět (tvar bez detailu): p50 %.1f p95 %.1f max %.1f, nad stropem max %.2f° (%d vzorků), biomy %s, %.0f s" % [p50_t, p95_t, mx_t, mxp_t, nad_t, str(podle_biomu_t), _ms(t0) / 1000.0])
+	return 1 if mxp_t > 1.0 else 0

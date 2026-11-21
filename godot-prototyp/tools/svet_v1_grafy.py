@@ -52,7 +52,40 @@ for s in (SEED, SEED + 1):
     for a in ax: a.set_xlabel("x (m)"); a.set_ylabel("y (m)")
     save(fig, f"mapy_4096_seed{s}.png")
 
+# srovnání výchozí mapy biomů a varianty biom_velke_oblasti (přepínač, výchozí vyp)
+velke_ok = all(os.path.exists(os.path.join(D, f"biomy_s{s}_4096_velke.f32")) for s in (SEED, SEED + 1))
+if velke_ok:
+    obl = J.get("mapy", {})
+    fig, ax = plt.subplots(2, 2, figsize=(14, 14))
+    for row, s in enumerate((SEED, SEED + 1)):
+        wa = f32(f"biomy_s{s}_4096.f32", 512, 5)
+        wv = f32(f"biomy_s{s}_4096_velke.f32", 512, 5)
+        key_a = "oblasti_seed_a" if s == SEED else "oblasti_seed_b"
+        key_v = "oblasti_velke_seed_a" if s == SEED else "oblasti_velke_seed_b"
+        sa = obl.get(key_a, {})
+        sv_ = obl.get(key_v, {})
+        cap_a = ""
+        cap_v = ""
+        if sa:
+            cap_a = f", {sa.get('ulomku', '?')} úlomků, medián √ {sa.get('median_prumer_m', 0):.0f} m"
+        if sv_:
+            cap_v = f", {sv_.get('ulomku', '?')} úlomků, medián √ {sv_.get('median_prumer_m', 0):.0f} m"
+        ax[row, 0].imshow(img(np.clip(wa @ BC, 0, 1)), extent=[0, 4096, 0, 4096])
+        ax[row, 0].set_title(f"Seed {s} výchozí (stanice 256 m){cap_a}")
+        ax[row, 1].imshow(img(np.clip(wv @ BC, 0, 1)), extent=[0, 4096, 0, 4096])
+        ax[row, 1].set_title(f"Seed {s} větší oblasti (měřítko {J.get('parametry', {}).get('biom_meritko_m', 768):.0f} m){cap_v}")
+        for a in ax[row]:
+            a.set_xlabel("x (m)"); a.set_ylabel("y (m)")
+            if "start_m" in J.get("mapy", {}):
+                st = J["mapy"]["start_m"]
+                st = [float(x) for x in st.strip("()").split(",")] if isinstance(st, str) else st
+                a.add_patch(plt.Rectangle(st, 384, 384, fill=False, color="black", lw=1.2))
+            legenda_biomu(a)
+    fig.suptitle("Srovnání mapy biomů 4096 m: výchozí měřítko (vlevo) a varianta větších oblastí za přepínačem (vpravo)")
+    save(fig, "biomy_4096_srovnani.png")
+
 def vec(s):
+
     return [float(x) for x in s.strip("()").split(",")] if isinstance(s, str) else s
 
 # ---------------- výchozí svět 3 × 3: biomy, horniny, stínovaný reliéf (0,25 m)
@@ -92,19 +125,25 @@ ax.set_title(f"Test 1: řez přes šev, krok 0,25 m. Max rozdíl na švech blok�
 ax.set_xlabel("x (m)"); ax.set_ylabel("výška (m)"); ax.legend(); ax.grid(alpha=0.3)
 save(fig, "test1_sev_profil.png")
 
-# ---------------- test 2: histogramy sklonů
+# ---------------- test 2: histogramy sklonů (povrch s detailem; v titulku i překročení detailem a tvar)
 sk = dict(J["sklony"])
-sk["celý svět 4096 m (4 m)"] = json.load(open(os.path.join(OUT, "sklony_svet.json")))["sklony_svet"]
-fig, ax = plt.subplots(1, 4, figsize=(24, 4.5))
+svet_sk = json.load(open(os.path.join(OUT, "sklony_svet.json")))["sklony_svet"]
+sk["celý svět 4096 m (4 m)"] = svet_sk
+tvar_key = {"start": "start_tvar", "sopka": "sopka_tvar", "masiv": "masiv_tvar"}
+fig, ax = plt.subplots(1, 4, figsize=(24, 5.0))
 for a, k in zip(ax, ["start", "sopka", "masiv", "celý svět 4096 m (4 m)"]):
     r = sk[k]; hst = np.array(r["hist_0_5deg"], dtype=float)
     a.bar(np.arange(181) * 0.5 + 0.25, hst / hst.sum() * 100, width=0.5, color="#557")
     for q, c in (("p50_deg", "g"), ("p95_deg", "orange"), ("max_deg", "r")):
         a.axvline(r[q], color=c, ls="--", label=f"{q[:-4]} {r[q]:.1f}°")
-    a.set_xlim(0, 50); a.set_xlabel("sklon (°)"); a.set_ylabel("% vzorků")
-    a.set_title(f"{k}: max nad lokálním stropem {r['max_nad_stropem_deg']:.2f}° ({r['vzorku_nad_stropem']} vzorků)")
+    a.set_xlim(0, 55); a.set_xlabel("sklon (°)"); a.set_ylabel("% vzorků")
+    tv = r.get("tvar") if k.startswith("celý") else sk.get(tvar_key.get(k, ""), {})
+    tv_s = ""
+    if tv:
+        tv_s = f"\ntvar: max {tv['max_deg']:.1f}°, nad stropem {tv['max_nad_stropem_deg']:.2f}° ({tv['vzorku_nad_stropem']} vz.)"
+    a.set_title(f"{k}: s detailem max {r['max_deg']:.1f}°, nad stropem {r['max_nad_stropem_deg']:.2f}° ({r['vzorku_nad_stropem']} vz.){tv_s}")
     a.legend(fontsize=8)
-fig.suptitle("Test 2: sklony (výchozí svět 0,25 m; okno sopky a masivu 0,5 m); strop: nížina 12°, mokřad 6°, pahorkatina 25°, hornatina 40°, sopka 35°")
+fig.suptitle("Test 2: sklony povrchu s detailem. Strop v přechodu = vážený průměr. Kritérium platí pro celkový tvar; drobný detail do 2 m smí strop překročit.")
 save(fig, "test2_sklony_histogram.png")
 
 # ---------------- test 3: sopky (mapa + řezy)
