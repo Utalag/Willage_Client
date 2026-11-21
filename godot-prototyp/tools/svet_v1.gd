@@ -650,8 +650,8 @@ func _klima_overeni(svet) -> int:
 	var pa := _otisk_vyrezu(poust_a, 1.0)
 	var pb := _otisk_vyrezu(poust_b, 1.0)
 	var ms := _ms(t0)
-	var zmena := pa.otisk != zakl.otisk
-	var shoda := pa.sha256 == pb.sha256
+	var zmena: bool = pa.otisk != zakl.otisk
+	var shoda: bool = pa.sha256 == pb.sha256
 	if not zmena:
 		print("klima: poust nezměnila výřez (otisk ", pa.otisk, ")")
 		chyb += 1
