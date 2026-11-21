@@ -2,7 +2,7 @@
 
 Stav: **návrh k odsouhlasení**, 2026-11-20 23:50 SEČ. Podklad pro stavbu nové verze generátoru podle kapitol 1–3. Žádné rozhodnutí se tu nemění ani nepřidává. Kde dokument narazí na rozpor nebo chybějící rozhodnutí, odkáže na přílohu A.
 
-**Verze.** Nový generátor dostane `gen_ver` = **V1.0** (tvar `Vmajor.minor` podle 6.2). Je to první verze, která staví na sjednoceném modelu, a s dnešními bloky není kompatibilní (jiná velikost bloku, výška sloupce, ukládání jen rozdílu). Proto hlavní číslo 1. Kroky 1–8 běží pod označením V1.0-vývoj. Číslo V1.0 se uzavře až po povinném testu 2.7 (krok 9).
+**Verze.** Nový generátor dostane `gen_ver` = **V1.0** (tvar `Vmajor.minor` podle 6.2). Je to první verze, která staví na sjednoceném modelu, a s dnešními bloky není kompatibilní (jiná velikost bloku, výška sloupce, ukládání jen rozdílu). Proto hlavní číslo 1. Kroky 1–9 běží pod označením V1.0-vývoj. Číslo V1.0 se uzavře až po povinném testu 2.7 (krok 10).
 
 **Zásady pořadí**
 - Od základů nahoru. Každý krok staví jen na předchozích a nic hotového se v pozdějším kroku nepřepisuje.
@@ -20,16 +20,17 @@ Stav: **návrh k odsouhlasení**, 2026-11-20 23:50 SEČ. Podklad pro stavbu nov�
 | Krok | Obsah | Stav | Závisí na | Schválení |
 |---|---|---|---|---|
 | 1 | Základy: jednotky, rozměry, verze, tabulka materiálů, determinismus | částečně | – | Jan po kroku |
-| 2 | Funkce světa I: API, mapa biomů a hornin, reliéf, masiv, sopky | částečně | 1 | Jan po kroku |
+| 2 | Funkce světa I: API, mapa biomů a hornin, reliéf, masiv, sopky, klima (presety) | částečně | 1 | Jan po kroku |
 | 3 | Funkce světa II: geologie a útvary | částečně | 2 | Jan po kroku |
 | 4 | Funkce světa III: podzemní voda a prameny jako funkce | částečně | 3 | Jan po kroku |
 | 5 | Vložení blueprintu a ostrov | částečně | 2–4 | Jan po kroku |
 | 6 | Buňky: slupka, kopání, rozdíl a ukládání | částečně | 5 | Jan po kroku |
 | 7 | Voda na ostrově: simulace, eroze, přepočet | částečně | 6 | Jan po kroku |
-| 8 | Vegetace jako funkce a vrstva změn | částečně | 7 | Jan po kroku |
-| 9 | Povinný test 3 × 3 a uzavření V1.0 | jen rozhodnuto | 1–8 | Jan: ano do main |
-| 10 | Kontrakt se serverem | otevřené (6.1 zápis, 6.3 backend) | 6, 9 | Jan + Willage-backend |
-| 11 | Prezentace | jen rozhodnuto (7.1 odloženo) | 9 | Jan po kroku |
+| 8 | Povrchové jevy klimatu (písek, led, sníh, výpar, zamrzání) | jen rozhodnuto | 7 | Jan po kroku |
+| 9 | Vegetace jako funkce a vrstva změn | částečně | 7–8 | Jan po kroku |
+| 10 | Povinný test 3 × 3 a uzavření V1.0 | jen rozhodnuto | 1–9 | Jan: ano do main |
+| 11 | Kontrakt se serverem | otevřené (6.1 zápis, 6.3 backend) | 6, 10 | Jan + Willage-backend |
+| 12 | Prezentace | jen rozhodnuto (7.1 odloženo) | 10 | Jan po kroku |
 
 ---
 
@@ -60,7 +61,7 @@ Stav: **návrh k odsouhlasení**, 2026-11-20 23:50 SEČ. Podklad pro stavbu nov�
 
 ---
 
-## Krok 2 – Funkce světa I: rozhraní, mapy, reliéf, masiv a sopky
+## Krok 2 – Funkce světa I: rozhraní, mapy, reliéf, masiv, sopky a klima
 
 **Obsah**
 - Jedno rozhraní funkce světa v metrech: dotaz na bod `(x, y, z)` → materiál, dotaz na sloupec `(x, y)` → povrch, hranice vrstev, hladina (2.2). V kroku 2 vrací povrch a biom, vrstvy a hladinu doplní kroky 3 a 4 bez změny rozhraní.
@@ -68,6 +69,7 @@ Stav: **návrh k odsouhlasení**, 2026-11-20 23:50 SEČ. Podklad pro stavbu nov�
 - Reliéf z parametrů členitosti podle biomu: převýšení, vlnová délka, drsnost, podíl ploch, strop sklonu (1.13). Žádné šablony povrchu, `p94_hora_k` ani omezovač E92 (1.4). Když se převýšení pod strop nevejde, tvar se roztáhne do šířky a výška zůstane. V přechodu biomů platí vážený průměr stropů. Drobné tvary do 2 m (parametr) smí strop překročit (Jan 2026-11-21).
 - Masiv E87 a podhůří u jeho stěny jako součást funkce (1.4, úkol 10 v kap. 3).
 - Sopky: počet a rozteč jako parametry světa, polohy ze seedu, tvar mezi strato a štítovou (sklon ~17°), velikost mezi 20 m / 1 blok a 40 m / 2 bloky, kráter, vrchol aspoň 5 m pod okrajem sloupce (1.14). Výchozí svět 3 × 3 zůstává uprostřed maxima, alespoň jedna sopka těsně vně výřezu (Jan 2026-11-21).
+- Klima: načtení tabulky presetů, uplatnění základního klimatu (a háček pomalé mapy) **před** generováním reliéfu (1.15). Povrchové jevy klimatu do tohoto kroku nepatří (krok 8, po vodě).
 
 **Odkud kód:** `lod90.gd` (`h_m`, E90/E96, větve `e95-async-voda` a `e96-blok128`), masiv `geo2.gd` + `geo_fn.gd` z `e87-jadro-hory` ff97a9f, sopka a biomy z `teren/svet/hruby_teren.gd` (E49, main), `blok96.gd` (E96) jako vzor sestavení bloku 128 m z funkce.
 
@@ -82,6 +84,7 @@ Stav: **návrh k odsouhlasení**, 2026-11-20 23:50 SEČ. Podklad pro stavbu nov�
 4. *Mapy biomů a hornin*: obrázek map na 4096 m a výřez 3 × 3 (`blueprint-studie/tools/gif_svet8.py` jako vzor). Prošlo = plynulé přechody, různé seedy dají různé mapy. Varianta větších oblastí biomů je jen srovnání za přepínačem (výchozí vyp), ne rozhodnutí.
 5. *Determinismus*: hash mřížky výšek 3 × 3 ze dvou procesů. Prošlo = shoda.
 6. *Čas*: dotaz na sloupec a výšky bloku 128 m (graf). Kritérium jen záznam, cíl je srovnání s E90 (4,9 s / 3 km).
+7. *Klima*: výchozí preset `mirne` (identita) zachová otisk výšek výchozího světa. Vynucený jiný preset svět deterministicky změní (shoda ve dvou procesech). Obrázek stejný seed: mírné / poušť / ledovec.
 
 **Velikost:** střední až velký.
 
@@ -172,7 +175,7 @@ Stav: **návrh k odsouhlasení**, 2026-11-20 23:50 SEČ. Podklad pro stavbu nov�
 
 **Odkud kód:** `teren/prekryv78.gd` a `tools/prekryv_e78.gd` (`e78-prekryv` / `zkusebni-vse`), slupka z E90 (`lod90.gd`, výpočet „vrchní buňka + 2 pod ní“), `p85_okraj` (`e85-blok2-rozhodnuti`, `tools/okraj_hra_e85.gd`), formát WVB1 (`navrhy/format-bloku-wvb1.md`), hlavička WTI1 (E88).
 
-**Proč tady:** buňky vznikají až z hotového vloženého bloku (krok 5). Simulace vody (krok 7) a vegetace (krok 8) potřebují buňky a uložený rozdíl.
+**Proč tady:** buňky vznikají až z hotového vloženého bloku (krok 5). Simulace vody (krok 7), povrchové jevy klimatu (krok 8) a vegetace (krok 9) potřebují buňky a uložený rozdíl.
 
 **Stav:** částečně. Překryv E78 hotový na studijní větvi. Slupka jen pro výšku (E90). Hra kope po 0,5 m a vzorkuje celý sloupec. Zákaz dna a okraje hotový na větvi E85.
 
@@ -201,7 +204,7 @@ Stav: **návrh k odsouhlasení**, 2026-11-20 23:50 SEČ. Podklad pro stavbu nov�
 
 **Odkud kód:** `voda/hydro68.gd`, `ostrov_voda.gd`, `ug67.gd`, `kras75.gd`, `prameny.gd`, `eroze/mech.gd` (main), `voda/async95.gd` a `tools/async_e95.gd` (`e95-async-voda`), `tools/chodby_e79.gd` (`e79-chodby-voda`), slučování E72 (`p72_*`, main).
 
-**Proč tady:** simulace potřebuje buňky a rozdíl z kroku 6. Eroze jako posun výšky potřebuje hotovou vodu. Vegetace (krok 8) potřebuje znát tůně a koryta.
+**Proč tady:** simulace potřebuje buňky a rozdíl z kroku 6. Eroze jako posun výšky potřebuje hotovou vodu. Povrchové jevy klimatu (krok 8) a vegetace (krok 9) potřebují znát tůně a koryta.
 
 **Stav:** částečně. E67, kras, E68 a E72 jsou v main (E67 a kras vypnuté). Asynchronní voda jen na `e95-async-voda`, nikdy neběžela s blokem 128 m. K5 neopravené. Eroze dnes mění buňky (`mech.gd`), vrstva posunu jen rozhodnuto.
 
@@ -222,7 +225,28 @@ Výchozí hra se tu mění záměrně. Vznikne nová reference otisku `voda_e66`
 
 ---
 
-## Krok 8 – Vegetace jako funkce a vrstva změn
+## Krok 8 – Povrchové jevy klimatu (písek, led, sníh, výpar, zamrzání)
+
+**Obsah**
+- Po vodě na ostrově (krok 7) se z klimatu a stavu vody odvodí povrchové jevy: písek, led, sníh, výpar, zamrzání (1.15). Preset a pomalá mapa klimatu už jsou z kroku 2; tento krok je jen povrch, ne tvar reliéfu.
+- Konkrétní prahy a násobitele (kdy vznikne led nebo písek, jak silný je výpar) zůstávají otevřené (03).
+
+**Odkud kód:** tabulka presetů z kroku 2 (`data/klima_presety.csv`); nový kód tohoto kroku zatím není.
+
+**Proč tady:** jevy závisí na hotové vodě (hladina, tůně, teplota/výpar). Vegetace (krok 9) je může číst. Reliéf se znovu negeneruje.
+
+**Stav:** jen rozhodnuto. Hodnoty otevřené.
+
+**Testy**
+1. *Nezávislost reliéfu*: zapnutí povrchových jevů nezmění otisk výšky. Prošlo = shoda výšek s krokem 2.
+2. *Determinismus*: otisk povrchových materiálů ve dvou procesech. Prošlo = shoda.
+3. *Po vodě*: bez vody (nebo před krokem 7) se jevy nepočítají. Prošlo = žádný výstup před vodou.
+
+**Velikost:** střední.
+
+---
+
+## Krok 9 – Vegetace jako funkce a vrstva změn
 
 **Obsah**
 - Základní porost je funkce seedu, souřadnic původu, materiálu, sklonu a výchozí vody. Hustota na m², pravidlo pro každý biom, v tůních se nevysazuje, vyhodnocuje se jen ve slupce (2.6, 1.12).
@@ -230,7 +254,7 @@ Výchozí hra se tu mění záměrně. Vznikne nová reference otisku `voda_e66`
 
 **Odkud kód:** `veg.gd` a `teren/zaklad/veg.gd` (main, převod souřadnic `_to_src`), `tools/veg_stats.gd`.
 
-**Proč tady:** vegetace čte povrch, materiál a vodu, tedy výsledky kroků 2–7. Nic jiného na ní nezávisí, takže nic nebude potřeba opravovat.
+**Proč tady:** vegetace čte povrch, materiál a vodu, tedy výsledky kroků 2–8. Nic jiného na ní nezávisí, takže nic nebude potřeba opravovat.
 
 **Stav:** částečně. `veg.gd` je deterministický, ale hustota je na sloupec podle receptu a recept `hora_vyzdvizena` chybí.
 
@@ -245,14 +269,14 @@ Výchozí hra se tu mění záměrně. Vznikne nová reference otisku `voda_e66`
 
 ---
 
-## Krok 9 – Povinný test 3 × 3 a uzavření V1.0
+## Krok 10 – Povinný test 3 × 3 a uzavření V1.0
 
 **Obsah**
 - Svět 3 × 3 bloky → řez na 9 blueprintů → ostrov (náhodné pořadí, otočení, zrcadlení, aspoň jeden blueprint z jiného světa). Tři režimy spuštění: celý, jen svět, jen ostrov (2.7).
 - Měření do PROP: svět, řez, vložení, slupka, donačtení, rozdíl, voda, determinismus, paměť, segment 8 / 16 / 32 m.
 - Uzavření verze V1.0 (tag), nová reference výchozí hry.
 
-**Odkud kód:** výsledky kroků 1–8, `tools/blok128_e96.gd` a `tools/zkusebni_e95.gd` jako vzor měřicího běhu.
+**Odkud kód:** výsledky kroků 1–9, `tools/blok128_e96.gd` a `tools/zkusebni_e95.gd` jako vzor měřicího běhu.
 
 **Proč tady:** test ověřuje celý řetězec najednou, takže dává smysl až po všech datových krocích.
 
@@ -268,7 +292,7 @@ Výchozí hra se tu mění záměrně. Vznikne nová reference otisku `voda_e66`
 
 ---
 
-## Krok 10 – Kontrakt se serverem (s Willage-backend)
+## Krok 11 – Kontrakt se serverem (s Willage-backend)
 
 **Obsah**
 - Kontrakt podle 1.10: server ukládá seed, parametry, verzi, seznam vložení a rozdíl; namátková kontrola generátorem jde vypnout.
@@ -287,7 +311,7 @@ Výchozí hra se tu mění záměrně. Vznikne nová reference otisku `voda_e66`
 
 ---
 
-## Krok 11 – Prezentace
+## Krok 12 – Prezentace
 
 **Obsah**
 - Vykreslení čte jen data. Pevný zoom 64 voxelů 0,25 m napříč, jedno rozlišení bez LOD (2.3, 7.2).
@@ -317,7 +341,7 @@ Výchozí hra se tu mění záměrně. Vznikne nová reference otisku `voda_e66`
 5. Po každém kroku vznikne **report** `docs/sjednoceni/reporty/krokNN.md`: co se udělalo, odkud je kód, výsledky testů s čísly, cesty k obrázkům a grafům v repu.
 6. Po reportu se čeká na **Janovo schválení**. Teprve pak začne další krok (hlídání usage, modely na Slow).
 7. Do `main` jen s Janovým výslovným ano (nejdřív po kroku 9).
-8. Krok 10 jen společně s Willage-backend.
+8. Krok 11 jen společně s Willage-backend.
 
 ---
 

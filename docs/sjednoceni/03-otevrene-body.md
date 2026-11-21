@@ -22,6 +22,7 @@ Značení: [n] = zdroj na konci. K1–K12 = konflikty z `00-mapa-vetvi.md`. Čas
 8. **7.1** Pohled 2D (dlaždice), nebo 3D (modely)?
 9. **7.2** LOD prezentační vrstvy.
 10. **7.3** Průhlednost a řez v izometrii (E91).
+11. **Klima** Konkrétní hodnoty klimatických presetů (násobitele, posuny, podíly reliéfních biomů, voda) mimo výchozí identitu mírného klimatu.
 
 ---
 
@@ -363,6 +364,9 @@ Tyto body vznikly až z testů kroku 2 (otázky v reportu `krok02.md`) a z pozd�
 3. **Drobný detail masivu (skály)** — *rozhodnuto (Jan 2026-11-21).* Tvarům do výšky parametru (výchozí ~2 m) povolit strmější sklon. Strop platí pro celkový tvar hory. → 1.13.
 4. **Poloha výchozího světa 3 × 3** — *rozhodnuto (Jan 2026-11-21).* Nechat ho uprostřed maxima, sopku přiblížit těsně vně výřezu. → 1.14.
 Větší oblasti biomů (hrubší měřítko a slučování drobných ostrovů) byly jen **srovnány** za přepínačem `biom_velke_oblasti` (výchozí vyp). Jan 2026-11-21 21:21: současné biomy jsou asi v pořádku; **není to rozhodnutí**.
+
+Pravidla klimatu (samostatná osa, preset, základní klima, pomalá mapa, uplatnění před reliéfem, povrchové jevy až po vodě) jsou rozhodnutá → 1.15. **Otevřené zůstávají konkrétní hodnoty presetů** (násobitele, posuny, podíly reliéfních biomů, množství vody) mimo výchozí identitu mírného klimatu (`mirne`). Příkladové presety poušť / step / tundra / ledovec v kódu jsou jen náčrt, nehodnocené hodnoty.
+
 
 ---
 

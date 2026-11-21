@@ -606,6 +606,21 @@ Jen data. Velikost modelů je prezentace (`p94_meritko_veg`, Jan 11:39).
 
 ---
 
+## 1.15 Klima (podnebí)
+
+**Téma.** Podnebí světa jako samostatná osa vedle členitosti terénu (1.13): základní klima, jeho mírné mísení uvnitř světa a pozdější povrchové jevy (písek, led, sníh, výpar, zamrzání).
+
+**Platí:** *rozhodnuto (2026-11-21 22:09–22:19, Jan)*
+
+- Reliéf a klima jsou **nezávislé osy**. Stávající biomy varianty C (nížina, mokřad, pahorkatina, hornatina, sopečná oblast) zůstávají **typy reliéfu**, ne typy podnebí.
+- Každý svět dostane **základní klima**. Uvnitř světa ho **pomalá mapa klimatu** mírně posouvá mísením k sousedním podnebím (kombinace základu a mapy).
+- Klima je **tabulka presetů** (soubor dat, ne konstanty v kódu). Preset
+  - upravuje vstupní parametry generátoru násobiteli a posuny (převýšení reliéfu, podíly typů, zastoupení hornin, množství vody, …),
+  - a nese, **které reliéfní biomy se v daném podnebí vyskytnou a s jakou vahou** (Jan 22:19).
+- Preset se uplatní **před generováním reliéfu** (začátek kroku 2 implementace).
+- **Povrchové jevy** klimatu (písek, led, sníh, výpar, zamrzání) přijdou až v **samostatném kroku po vodě**. Nejsou součástí kroku 2.
+- Konkrétní hodnoty presetů (kromě výchozí identity mírného klimatu) zůstávají otevřené (viz 03).
+
 ## Zdroje
 
 1. `devlog/koncept.md`, `teren-bloky-bunky.md` (main 0e8aa00).
