@@ -3,14 +3,14 @@
  "index": {
   "bity": 19,
   "chyb": 0,
-  "ms": 128.977,
+  "ms": 128.67,
   "n": 32,
   "nz": 512,
   "pocet": 524288
  },
  "materialy": {
   "chyby": [],
-  "nacteni_ms": 2.359,
+  "nacteni_ms": 2.431,
   "perm_odchylky": [],
   "pocet": 78
  },

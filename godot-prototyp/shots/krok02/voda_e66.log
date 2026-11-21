@@ -1,23 +1,23 @@
 Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
 
-blok (0, 0) louka seed 101: 212 ms
-blok (1, 0) hora seed 202: 239 ms
-blok (0, 1) kopec seed 303: 242 ms
-blok (1, 1) louka seed 404: 207 ms
-voda plný výpočet: { "prameny": 8.744, "podzemí: pásma": 231.337, "povrch + podzemí: plný výpočet": 2231.782, "celkem": 2502.676 }
+blok (0, 0) louka seed 101: 227 ms
+blok (1, 0) hora seed 202: 258 ms
+blok (0, 1) kopec seed 303: 261 ms
+blok (1, 1) louka seed 404: 224 ms
+voda plný výpočet: { "prameny": 8.542, "podzemí: pásma": 239.847, "povrch + podzemí: plný výpočet": 2318.025, "celkem": 2596.886 }
 souhrn: { "prameny": 5, "koryto_sloupcu": 27, "tun_sloupcu": 159, "vodopady": 8, "vodopady_okraj": 5, "okraj_lps": 9.64358, "podzemni_telesa": 1, "vyvery": 1, "volani_podzemi": 4 }
-výkop 1 sloupec 7751 39→37: 837.8 ms (povrch 608.4, podzemí 202.5), kroků R 23 (max 62.9 ms) neshod { "fill": 0, "eff": 0, "to": 0 }
-výkop 2 sloupec 6450 39→37: 322.6 ms (povrch 0.1, podzemí 295.4), kroků R 31 (max 729.9 ms) neshod { "fill": 0, "eff": 0, "to": 0 }
-výkop 3 sloupec 7611 39→37: 996.8 ms (povrch 548.0, podzemí 425.4), kroků R 46 (max 67.1 ms) neshod { "fill": 0, "eff": 0, "to": 0 }
-výkop 4 sloupec 8910 39→37: 573.8 ms (povrch 0.1, podzemí 548.2), kroků R 52 (max 687.8 ms) neshod { "fill": 0, "eff": 0, "to": 0 }
-výkop 5 sloupec 8385 40→38: 661.1 ms (povrch 0.1, podzemí 637.5), kroků R 76 (max 65.8 ms) neshod { "fill": 0, "eff": 0, "to": 0 }
-výkop 6 sloupec 7612 39→37: 639.5 ms (povrch 1.5, podzemí 614.9), kroků R 62 (max 64.0 ms) neshod { "fill": 0, "eff": 0, "to": 0 }
-výkop 7 sloupec 8002 40→38: 682.7 ms (povrch 0.1, podzemí 657.5), kroků R 62 (max 65.8 ms) neshod { "fill": 0, "eff": 0, "to": 0 }
-výkop 8 sloupec 7752 39→37: 717.0 ms (povrch 1.5, podzemí 688.3), kroků R 62 (max 74.7 ms) neshod { "fill": 0, "eff": 0, "to": 0 }
-výkop 9 sloupec 8387 40→38: 657.6 ms (povrch 0.1, podzemí 634.2), kroků R 62 (max 67.9 ms) neshod { "fill": 0, "eff": 0, "to": 0 }
-výkop 10 sloupec 9407 40→38: 985.9 ms (povrch 292.9, podzemí 669.9), kroků R 62 (max 69.8 ms) neshod { "fill": 0, "eff": 0, "to": 0 }
-výkop 11 sloupec 7484 39→37: 742.8 ms (povrch 1.4, podzemí 717.6), kroků R 67 (max 72.1 ms) neshod { "fill": 0, "eff": 0, "to": 0 }
-výkop 12 sloupec 6337 39→37: 1244.3 ms (povrch 540.9, podzemí 680.1), kroků R 67 (max 68.0 ms) neshod { "fill": 0, "eff": 0, "to": 0 }
+výkop 1 sloupec 7751 39→37: 861.9 ms (povrch 625.6, podzemí 208.9), kroků R 23 (max 68.0 ms) neshod { "fill": 0, "eff": 0, "to": 0 }
+výkop 2 sloupec 6450 39→37: 325.9 ms (povrch 0.1, podzemí 298.3), kroků R 31 (max 710.0 ms) neshod { "fill": 0, "eff": 0, "to": 0 }
+výkop 3 sloupec 7611 39→37: 1003.5 ms (povrch 555.5, podzemí 424.8), kroků R 46 (max 62.8 ms) neshod { "fill": 0, "eff": 0, "to": 0 }
+výkop 4 sloupec 8910 39→37: 563.1 ms (povrch 0.1, podzemí 540.3), kroků R 52 (max 657.3 ms) neshod { "fill": 0, "eff": 0, "to": 0 }
+výkop 5 sloupec 8385 40→38: 674.7 ms (povrch 0.1, podzemí 650.9), kroků R 76 (max 66.3 ms) neshod { "fill": 0, "eff": 0, "to": 0 }
+výkop 6 sloupec 7612 39→37: 662.2 ms (povrch 1.3, podzemí 638.5), kroků R 62 (max 87.5 ms) neshod { "fill": 0, "eff": 0, "to": 0 }
+výkop 7 sloupec 8002 40→38: 738.1 ms (povrch 0.1, podzemí 713.2), kroků R 62 (max 70.1 ms) neshod { "fill": 0, "eff": 0, "to": 0 }
+výkop 8 sloupec 7752 39→37: 727.7 ms (povrch 1.4, podzemí 702.6), kroků R 62 (max 65.0 ms) neshod { "fill": 0, "eff": 0, "to": 0 }
+výkop 9 sloupec 8387 40→38: 666.3 ms (povrch 0.1, podzemí 643.2), kroků R 62 (max 63.3 ms) neshod { "fill": 0, "eff": 0, "to": 0 }
+výkop 10 sloupec 9407 40→38: 976.9 ms (povrch 305.8, podzemí 648.2), kroků R 62 (max 66.7 ms) neshod { "fill": 0, "eff": 0, "to": 0 }
+výkop 11 sloupec 7484 39→37: 727.3 ms (povrch 1.4, podzemí 702.5), kroků R 67 (max 65.1 ms) neshod { "fill": 0, "eff": 0, "to": 0 }
+výkop 12 sloupec 6337 39→37: 1435.3 ms (povrch 626.4, podzemí 785.2), kroků R 67 (max 102.2 ms) neshod { "fill": 0, "eff": 0, "to": 0 }
 souhrn po výkopech: { "prameny": 5, "koryto_sloupcu": 26, "tun_sloupcu": 160, "vodopady": 8, "vodopady_okraj": 5, "okraj_lps": 9.65191, "podzemni_telesa": 1, "vyvery": 1, "volani_podzemi": 15 }
 podzemí počítadla: { "builds": 1, "floods": 13, "results": 0, "fallback": 128, "exact": 128, "skipped": 0, "rebuilds": 0, "deltas": 12, "gone": 14, "reach": 293, "splits": 11, &"d_hit": 12 }
 neshod s plným výpočtem celkem: 0
@@ -27,7 +27,3 @@ WARNING: 18 ObjectDB instances were leaked at exit (run with `--verbose` for det
    at: cleanup (core/object/object.cpp:2536)
 ERROR: 1 resources still in use at exit (run with --verbose for details).
    at: clear (core/io/resource.cpp:822)
-
-real	1m1.808s
-user	1m1.635s
-sys	0m0.152s

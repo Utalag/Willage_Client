@@ -88,10 +88,51 @@ Všechna kritéria kroku 2 prošla a regrese kroku 1 je beze změny. Nový kód 
 - Data: `svet_v1.json`, `sklony_svet.json`, `det_beh1.json`, `det_beh2.json`, `zaklad_v1_beh1.json`, `zaklad_v1_beh2.json`, `voda_e66.json` + `.log`, `port_check.txt`. Binární mřížky pro grafy jsou mimo git (`/tmp/k2/data`, znovu je vytvoří `svet_v1.gd`).
 
 ### Otázky pro Jana
-1. Strop sklonu ořezává převýšení (hornatina 24 → 12,7 m). Mám nechat ořez, nebo prodloužit vlnovou délku hor, aby se převýšení vešlo pod 40°?
-2. V přechodu mezi biomy platí strop strmějšího biomu. Souhlasíš, nebo má platit vážený průměr stropů?
-3. Detail masivu E87 (0,75 m na 20 m) se do stropu nevejde a vychází 0,025 m. Vypustit ho, nebo povolit drobným tvarům strmější sklon (skály)?
-4. Výchozí svět 3 × 3 jsem dal doprostřed maxima (bloky 14–16). Sopky tam s výchozím seedem nejsou (leží u x 386 a 790 m). Má výchozí svět stát u sopky, nebo stačí, že ji svět má?
+1–4 rozhodnuté 2026-11-21 (viz následující oddíl). Měřítko biomů Jan večer (21:21) nechal jako srovnání, ne jako rozhodnutí.
+
+## Úpravy po rozhodnutích Jana (2026-11-21)
+
+PROP před změnou: [`krok02-prop-upravy.md`](krok02-prop-upravy.md). Napsáno 2026-11-21 21:15 SEČ, výsledky 21:46 SEČ. Hlavní testy běžely s výchozími biomy (přepínač `biom_velke_oblasti` vypnutý). Do `main` nic nejde, krok 3 se nezačíná.
+
+### Co platí
+1. Hory se pod stropem **roztáhnou do šířky** a nechají si plnou výšku. Hornatina má zadaných 24 m (efektivní vlnová délka 360 → 680 m), pahorkatina 10 m (140 → 172 m), masiv 12 m (freq 0,008 → 0,00524 /m). Nížina, mokřad a sopečný reliéf se vešly bez změny vlny. Podhůří si nechalo 4 m (vlna 48 → 192 m).
+2. V přechodu platí **vážený průměr** stropů podle vah mísení. V kuželu sopky dál strop sopky (35°).
+3. Parametr `detail_max_m` (výchozí 2 m). Detail masivu je znovu **0,75 m** (předtím ořezem 0,025 m) a smí strop překročit. Strop se kontroluje na celkovém tvaru (`vyska_tvar`).
+4. Výchozí 3 × 3 zůstává uprostřed (bloky 14–16, počátek 1792 m). První sopka leží těsně vně výřezu (parametr `sopka_od_okraje_startu_m` = 100 m; naměřeno 102 m od okraje, 362 m od středu 3 × 3). Druhá dál podle rozteče (725 m od středu).
+5. Větší biomy jsou jen **srovnání** za přepínačem `biom_velke_oblasti` (výchozí vyp, měřítko 768 m, minimum 90 000 m²). Jan 21:21: současné biomy jsou asi v pořádku; do 01/02 se to jako rozhodnutí nezapisuje.
+
+**Doladění k bodům 1 a 2:** po zapnutí váženého stropu a plné výšky hor byl původní přechod 192 m v pásu mokřad/hornatina moc prudký (tvar na světě až 6,7° nad stropem). Výchozí `biom_prechod_m` je proto **320 m**. Typ stanic a velikost oblastí se nemění, jen jsou okraje měkčí.
+
+### Testy (výchozí biomy)
+| Test | Výsledek | Stav |
+|---|---|---|
+| 1 spojitost | 12 švů bloků, 480 švů segmentů, segment proti bloku, šev přes sopku 1: max rozdíl **0 m** | prošlo |
+| 2 sklony, celkový tvar | výchozí svět 0,25 m: p50 4,2°, p95 13,2°, max 25,3°, rezervy pod váženým stropem 6,54° (0 vzorků nad); okno sopky 0,5 m: max 25,5°, rezerva 7,0°; okno masivu: max 20,6°, rezerva 13,7°. Celý svět 4096 m (mřížka 4 m, 1 048 576 bodů): p50 3,8°, p95 11,2°, max 28,6°, rezerva 3,60°, **0 vzorků nad stropem**. Max podle převažujícího biomu (tvar): nížina 21,5°, mokřad 13,4°, pahorkatina 20,7°, hornatina 28,6°, sopečná 27,9° | prošlo |
+| 2 sklony, povrch s detailem | výchozí svět: p50 4,2°, p95 13,8°, max 29,9°, rezerva 2,09° (0 vzorků nad); sopka max 25,5°; masiv max 26,6° (tvar tam 20,6° — detail přidá až ~6°). Celý svět: p50 3,8°, p95 11,2°, max 32,5°, rezerva 1,64°, 0 vzorků nad. Detail smí strop překročit; v těchto měřeních zůstal pod ním | zaznamenáno |
+| 3 sopky | počet 2; rozteč 391 m (384 ± 10 % = 346–422 m); sopka 1: H 31,2 m, Ø úpatí 229 m, vrchol 97,76 m (30,0 m pod okrajem sloupce), kráter 3,20 m, nejvyšší bod na okraji kráteru (r 12,22 m, rc 12,24 m), 362 m od středu 3 × 3 / 102 m od okraje; sopka 2: H 32,3 m, Ø 237 m, vrchol 101,20 m, kráter 3,82 m, 725 m od středu | prošlo |
+| 4 mapy | plynulost: Δváha biomu 0,0061 / m, Δhornina 0,0064 / m (mez 0,05). Jiný seed: jiný převažující biom na 71,5 % plochy, jiná hornina na 87,8 %. Podíl biomů 0,31 / 0,06 / 0,39 / 0,19 / 0,05 (parametr 0,35 / 0,10 / 0,30 / 0,20 / 0,05) | prošlo |
+| 5 determinismus | SHA-256 výšek 3 × 3 po 0,25 m (2 359 296 buněk) ve dvou procesech: `04c1d51d4f0cc3d4…` oba (jiný než před úpravami, to se čekalo) | prošlo |
+| 6 čas | dotaz na výšku 13,6 µs, sloupec 62 µs, bod 49 µs; blok 128 m: 1 m 0,22 s, 0,5 m 0,88 s, 0,25 m 3,6 s; blok se sopkou 0,5 m 0,64 s; výchozí 3 × 3 po 0,25 m 30 s; mapa 3 km po 4 m 6,0 s; vytvoření světa 108 ms | zaznamenáno |
+| regrese: `voda_e66` 12 výkopů | d7aedf3a6d9d10e8 → 63d7b89a91385a79, 0 neshod | prošlo |
+| regrese: `port_studie --check` | 82 souborů, 0 změn | prošlo |
+| regrese: `zaklad_v1` ve 2 procesech | otisk cc9e412759114af1 oba, 0 chyb | prošlo |
+
+Kvantovaný sklon ve výchozím světě (výška na 0,25 m, sklon přes 2 m): max 29,2°.
+
+### Srovnání větších biomů (`biom_velke_oblasti` zap, není rozhodnutí)
+Souvislé oblasti převažujícího biomu, mřížka 8 m, 4-sousedé. Výchozí stav po rozšíření přechodu na 320 m (stejné přiřazení typů ke stanicím jako dřív, jen měkčí okraj):
+
+| Seed | Varianta | Úlomků | Medián plochy | Typická velikost (√ mediánu) | Průměr √ |
+|---|---|---|---|---|---|
+| 49 | výchozí | 100 | 44 512 m² | **211 m** | 410 m |
+| 50 | výchozí | 99 | 41 216 m² | **203 m** | 412 m |
+| 49 | větší oblasti | 19 | 485 568 m² | **697 m** | 940 m |
+| 50 | větší oblasti | 26 | 164 160 m² | **405 m** | 803 m |
+
+Před jakoukoli změnou přechodu (původní krok 2, přechod 192 m) bylo seed 49: 118 úlomků, medián √ 241 m; seed 50: 112 úlomků, medián √ 247 m. Obrázek vedle sebe: `biomy_4096_srovnani.png`.
+
+### Obrázky (`godot-prototyp/shots/krok02/`)
+Stejné jako v původním kroku 2, přegenerované po úpravách, plus `biomy_4096_srovnani.png` (výchozí mapa biomů vlevo, větší oblasti vpravo, seedy 49 a 50, výřez 3 × 3 vyznačený).
 
 ## Další krok
 Krok 3 (geologie a útvary) se nezačíná, čeká na schválení. Do `main` nic nejde.
