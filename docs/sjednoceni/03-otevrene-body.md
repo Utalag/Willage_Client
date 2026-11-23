@@ -175,7 +175,7 @@ Původní plán: kontrakt WTI1, společně s Willage-backend.
 **Už vyřešeno v kap. 1–2**
 
 - Klient generuje a simuluje, server ukládá, načítá a validuje → 1.10.
-- Server ukládá a posílá seed, parametry, verzi generátoru, seznam vložení a rozdíl proti funkci (ne hotová pole segmentů). WVB1 je balík změn segmentu. Namátková kontrola generátorem jde vypnout → 1.10 (t801u–t803u).
+- Server ukládá a posílá seed, parametry, verzi generátoru, seznam vložení a rozdíl proti funkci (ne hotová pole segmentů). WVB1 je balík změn segmentu. Kontrola generátorem jde vypnout → 1.10 (t801u–t803u); kdy kontrola běží (zásobník, ne namátkově) → 6.3.
 - Voda v buňce: krok 1/16 l, hodnota 0–250 = 0–15,625 l, 1 B, 251–255 rezerva (Jan 2026-11-21 00:39; záloha 2 B). Determinismus povinný, změny i vložení nesou verzi → 1.5, 1.10 (sjednoceno s buňkou 0,25 m, Jan 2026-11-21 00:19).
 - Objekty Source / Transform / Placement, bez řídicí mřížky, zrcadlení platí → 2.2.
 - Výška sloupce a velikost segmentu jsou parametry (32/64/128 m a 8/16/32 m), ne natvrdo 16 × 16 × 64 → 1.1, 1.3, 1.10.

@@ -301,7 +301,7 @@ Výchozí hra se tu mění záměrně. Vznikne nová reference otisku `voda_e66`
 ## Krok 11 – Kontrakt se serverem (s Willage-backend)
 
 **Obsah**
-- Kontrakt podle 1.10: server ukládá seed, parametry, verzi, seznam vložení a rozdíl; namátková kontrola generátorem jde vypnout.
+- Kontrakt podle 1.10: server ukládá seed, parametry, verzi, seznam vložení a rozdíl; kontrola generátorem jde vypnout (kdy běží, viz 6.3 v dalším bodě).
 - 6.1 (původní materiál +1 B na změněnou buňku, snímek buněk volitelný) a 6.3 (zásobník změn: kontrola, když je zásobník plný nebo po intervalu, podle toho, co nastane dřív; bez zvláštní kontroly rud při každém zápisu; po ověření se maže jen pole původního materiálu, rozpory zůstanou).
 - Testovací vektory pro port generátoru do C# (determinismus .NET).
 

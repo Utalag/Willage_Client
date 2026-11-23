@@ -240,12 +240,16 @@ Tyto body neřekl GPT, napsal je Jan. Nejsou zatím v 01–04. Uvádím je zvlá
 
 ---
 
-## Úklid dokumentace (zjištěno při ověřování, neopraveno)
+## Úklid dokumentace (opraveno 2026-11-23 po souhlasu Jana)
 
-Zjištěno při kontrole, jen k zápisu. Kapitoly 01–04 tento soubor nemění.
-- **01 §1.4, ř. ~166:** stále tvrdí, že segment se vzorkuje na buňky 0,5 m, ukládá výsledná data a kontroluje se namátkou. Další bod to ruší („Tím se mění předchozí bod“). Starý bod škrtnout.
-- **01 §1.10, ř. ~455–458:** zmiňuje namátkovou kontrolu, kterou nahradilo 03 §6.3 (zásobník, kontrola po naplnění nebo intervalu).
-- **`kontext/datovy-model.md`, krok 11:** také „namátkově“. Opravit podle 03 §6.3.
+Jan 2026-11-23 13:03 schválil opravu zastaralých zmínek o namátkové kontrole. Opraveno podle 03 §6.1 a §6.3 v:
+- 01 §1.4 (ř. ~166),
+- 01 §1.10 (odrážky „Přenos dat“, „Změněno“, „Zamítnuté varianty“),
+- 03 §6 „Už vyřešeno“,
+- 04 krok 11,
+- `kontext/datovy-model.md` krok 11.
+
+Oprava k původnímu zápisu: 01 §1.4 na tomto místě už měla buňku 0,25 m. Zastaralá tam byla jen věta o ukládání hotových dat segmentu a o namátkové kontrole.
 
 ## Zdroje
 

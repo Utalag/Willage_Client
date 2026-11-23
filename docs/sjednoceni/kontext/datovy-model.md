@@ -63,7 +63,7 @@ Rozhraní: dotaz na bod (x, y, z) vrátí materiál, dotaz na sloupec (x, y) vr�
 - Krok 8: povrchové jevy klimatu po vodě (písek, led, sníh, výpar, zamrzání). Prahy zatím otevřené.
 - Krok 9: vegetace jako funkce seedu, materiálu, sklonu a výchozí vody, hustota na m², v tůních nic. Ukládají se jen změny (kácení, výsadba, růst).
 - Krok 10: povinný test. Svět 3 × 3 bloky se rozřeže na 9 blueprintů a složí do ostrova (náhodné pořadí, otočení, zrcadlení, aspoň jeden blueprint z jiného světa). Měří se determinismus, paměť, časy a velikost rozdílu. Pak se uzavře V1.0.
-- Krok 11: kontrakt se serverem. Server ukládá seed, parametry, verzi, seznam vložení a rozdíl a namátkově to ověřuje generátorem (dá se vypnout). Ověřené změny se ukládají do zásobníku. Testovací vektory zajistí stejný hash v GDScriptu i C#.
+- Krok 11: kontrakt se serverem. Server ukládá seed, parametry, verzi, seznam vložení a rozdíl a ověřuje to generátorem (dá se vypnout, výchozí stav zapnuto). Změny se sbírají do zásobníku; kontrola doběhne, když je zásobník plný, nebo po uplynutí intervalu, podle toho, co nastane dřív (03 §6.3). Testovací vektory zajistí stejný hash v GDScriptu i C#.
 
 ## Otázky k diskuzi
 Je tenhle model (funkce světa + ukládání jen rozdílu + vkládání blueprintů s transformací) rozumný? Kde jsou rizika pro determinismus mezi GDScriptem a C#, pro velikost ukládaných dat a pro výkon funkce světa (dotaz po sloupcích ze seedu je pomalý)? A jak dobře spolu fungují eroze jako vrstva posunu a uložený rozdíl buněk?
