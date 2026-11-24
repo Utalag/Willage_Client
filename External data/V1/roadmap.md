@@ -1,0 +1,21 @@
+# Roadmap
+- [x] Fáze 1 jádro (materiály, sedimentace, vrásnění, zlom, evaluator)
+- [x] Fáze 2 voxelizace (64³ vzorkování, mesh)
+- [x] Fáze 3 vizualizace (3D, průřezy) – Three.js jen zobrazuje
+- [x] Fáze 4 UI (timeline, parametry, scénáře, diagnostika, testy)
+- [x] Fáze 5 dokumentace (GEOLOGICAL_ENGINE, ALGORITHMS, ROADMAP) – skutečný "backend" = TS jádro v prohlížeči/Workeru, přenositelné do C#
+- [x] Závěrem vypsat seznam matematických zjednodušení (vč. 3D konzistence vrásnění)
+- [x] 18.1 Osy: Y nahoru, X/Z vodorovně (přepsat jádro)
+- [x] 18.3 Periodicita X/Z v šumu i vrásnění + test Sample(x)==Sample(x+P)
+- [x] 18.6 Diskordance ve scénáři E (erozní plocha)
+- [x] 18.7 Export/import verzovaného JSON (schemaVersion)
+- [x] 18.8 Golden vectors A–E (materiál + p0…pN)
+- [x] 18.10 Velikost objemu 64/128 m, cílové rozlišení 0,25 m
+- [x] 18.11 Inspektor po kliknutí na voxel
+- [x] 18.12 Eroze/intruze/sopky/voda jen rozhraní + dokumentace
+- [x] Dokumentovat: jen opakovatelnost na jednom stroji, bitová shoda až v C# fixed-point
+- [x] Návrh architektury v1: hierarchie, kontrakty, kompilace, index, API, migrace a rizika
+- [x] Vyhodnotit vizualizace A/B podle skutečného kódu a předložit plán
+- [x] Realizovat schválenou fázi 2: vizualizace A, průřezy, inspekce, viditelnost a oddělené výpočty
+- [x] Zapracovat upřesnění: explicitní uložená sequence v návrhu, null identita těles v0, periodicita/neomezené zlomy jako samostatný limit
+- [x] Předložit skutečné testy, výsledky a odchylky (VISUALIZATION_A_RESULTS.md); fáze 3–7 pouze návrh
