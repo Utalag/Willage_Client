@@ -64,7 +64,7 @@ Podrobné oddíly níže mají původní čísla; v nadpisu je uvedeno nové č�
 
 **Obsah**
 - Jednotky v metrech a jeden převod l → m³: převzít modul `scripts/jednotky.gd` a `scripts/voda/litry.gd` z větve `e94-metry` (E89 + E94, otisky beze změny).
-- Nový modul rozměrů modelu V1.0 (vedle dnešních konstant, které hra zatím potřebuje): blok 128 m, segment 8 m (parametr 8 / 16 / 32), buňka 0,25 m, výška sloupce jako výčet 32 / 64 / 128 m (výchozí 128 m = 512 buněk), neutrální úroveň v polovině, maximální svět 4096 m, výchozí svět 3 × 3 bloky. Kontrola pravidla mocnin 2 a dělitelnosti (1.1, 1.3, 1.4).
+- Nový modul rozměrů modelu V1.0 (vedle dnešních konstant, které hra zatím potřebuje): blok 128 m, segment 8 m (parametr 8 / 16 / 32), buňka 0,25 m, výška sloupce jako výčet 32 / 64 / 128 m (výchozí 128 m = 512 buněk), neutrální úroveň v polovině, maximální svět 4096 m, výchozí svět 3 × 3 bloky. *Upřesnění (2026-11-26, Jan [pt981u], plán 05):* 4096 m je výchozí `ParametrySveta.SvetMaxM` (plocha map biomů a hornin kroků 1–5 a oblast výřezů kolem startu). Od kroku 6 je **planeta** konečný torus **31 360 × 15 616 m** (`eroze_v1.json`: `PlanetaXM`, `PlanetaYM`); pro svět planety se `SvetMaxM` zvětší na max(31 360, 15 616) + pás prolnutí 512 m (`ErozePlanety.SvetPlanety`). Start 3 × 3 se tím nemění (ověřeno v kroku 6). Kontrola pravidla mocnin 2 a dělitelnosti (1.1, 1.3, 1.4).
 - `gen_ver` ve tvaru `Vmajor.minor`: čtení, porovnání, uložení (6.2). Výchozí hodnota V1.0.
 - Jedna tabulka materiálů: `materialy.csv` (78 id) jako jediný zdroj, načítání podle id, kontrola (unikátní id 0–255, rozsahy, propustnost podle vzorce (log10 K + 9) / 6) (1.6). Konflikty starých seznamů se jen vypíšou, opraví se v kroku 3, kde se tabulka poprvé použije pro geologii.
 - Pravidla determinismu na jednom místě: float64, řazené klíče, celočíselné hashe (`stable_hash.gd`, main) (1.5).
@@ -91,7 +91,7 @@ Podrobné oddíly níže mají původní čísla; v nadpisu je uvedeno nové č�
 
 **Obsah**
 - Jedno rozhraní funkce světa v metrech: dotaz na bod `(x, y, z)` → materiál, dotaz na sloupec `(x, y)` → povrch, hranice vrstev, hladina (2.2). V kroku 2 vrací povrch a biom, vrstvy a hladinu doplní kroky 3 a 4 bez změny rozhraní.
-- Mapa biomů (varianta C) a mapa hornin: hrubé body ze seedu na maximální ploše 4096 m, plynulá interpolace (2.1, 1.7.1).
+- Mapa biomů (varianta C) a mapa hornin: hrubé body ze seedu na maximální ploše 4096 m, plynulá interpolace (2.1, 1.7.1). Od kroku 6 se pro planetu (torus 31 360 × 15 616 m) plocha zvětší, viz upřesnění v kroku 1.
 - Reliéf z parametrů členitosti podle biomu: převýšení, vlnová délka, drsnost, podíl ploch, strop sklonu (1.13). Žádné šablony povrchu, `p94_hora_k` ani omezovač E92 (1.4). Když se převýšení pod strop nevejde, tvar se roztáhne do šířky a výška zůstane. V přechodu biomů platí vážený průměr stropů. Drobné tvary do 2 m (parametr) smí strop překročit (Jan 2026-11-21).
 - Masiv E87 a podhůří u jeho stěny jako součást funkce (1.4, úkol 10 v kap. 3).
 - Sopky: počet a rozteč jako parametry světa, polohy ze seedu, tvar mezi strato a štítovou (sklon ~17°), velikost mezi 20 m / 1 blok a 40 m / 2 bloky, kráter, vrchol aspoň 5 m pod okrajem sloupce (1.14). Výchozí svět 3 × 3 zůstává uprostřed maxima, alespoň jedna sopka těsně vně výřezu (Jan 2026-11-21).
@@ -221,6 +221,7 @@ Podrobné oddíly níže mají původní čísla; v nadpisu je uvedeno nové č�
 - **6e (11:15–11:22):** výchozí podíl moře **35 %** (± 5 p. b.), zvlnění okraje pásu švu zpět **400 m** (ladící parametry `SevZvlneniM`, `SevZvlneniLambdaMinM`, `SevZvlneniLambdaMaxM` v `more_v1.json`, v klíči keše), **hladina podzemní vody svázaná s hladinou moře 60 m** (v moři a u pobřeží = 60 m, plynulý přechod do vnitrozemí přes `HladinaPrechodM` = 600 m ve `voda_v1.json`; start 3 × 3 chráněn → otisky startu bez eroze beze změny).
 - **6f (11:33–11:34):** přechod hladiny podzemní vody na hladinu moře jen v pásu **`HladinaPrechodM` = 5 m** od břehu (parametr ve `voda_v1.json`); dál platí původní hladina ze spádu (krok 4); výjimka startu (`StartVodaOchranaM`) odpadla, protože start je stovky metrů od moře.
 - **6g (11:55–12:14):** oprava: vzdálenost k moři pro hladinu se měří ke **skutečnému břehu** (`JeMore`: k < 0,5 a povrch pod 60 m), ne k vrstevnici masky k = 0,5 (ta leží desítky metrů ve vnitrozemí). V pásu 5 m napojení na původní spád, dál jen terénní hladina, žádný fallback 60 m.
+- **Pozn. (Jan [pt981u], 2026-11-26 15:58):** oprava hladiny podzemní vody u pobřeží (u břehu jen strop na hladině moře 60 m, žádné stahování pevninské hladiny mořským dnem) patří do kroku **7d**, viz plán 05.
 - **Do TODO (nezpracováno):** náplavy a delty (ukládání sedimentu v jezerech, nivách a u ústí) a **mořské usazeniny na dně moře** jako jeden samostatný krok (stream power s depozicí, ukládání do mapy WGER).
 
 ---
