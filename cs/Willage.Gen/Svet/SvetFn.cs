@@ -26,7 +26,7 @@ public sealed class SvetFn
     public string KlimaId { get; } = "mirne";
     /// <summary>Krok 6: eroze světa (hrubá mapa + koryta). null = vypnuto (výchozí); uplatní se jen v povrchu s detaily, tvar (VyskaTvar) nemění.</summary>
     public Willage.Gen.Eroze.IErozeSveta? Eroze { get; set; }
-    /// <summary>Krok 6b: moře a sklon kontinentu (p.More), jinak null.</summary>
+    /// <summary>Krok 6b/6c: moře a sklon kontinentu (p.More nebo p.VseKrok06 – od 6d výchozí), jinak null.</summary>
     public MoreSklon? More { get; }
     /// <summary>Krok 6b: velké pánve (p.Panve), jinak null.</summary>
     public Panve? Panve { get; }

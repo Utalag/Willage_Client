@@ -74,19 +74,25 @@ public sealed class ParametrySveta
     public double SklonKontinentu = 0.002, SklonOdPobreziM = 1400.0;
     // krok 6c (Jan 10:25): maska pevniny z periodického šumu – kontinenty, členitost, šev, start
     public int KontinentuMin = 2, KontinentuMax = 4;
-    public double KontinentVelikost = 1.0, Clenitost = 1.0, ClenitostSila = 0.35;
+    public double KontinentVelikost = 1.0, Clenitost = 1.0, ClenitostSila = 0.12;
     public int SumVln = 48, WarpVln = 24;
-    public double SumLambdaMinM = 600.0, SumLambdaMaxM = 8000.0, WarpLambdaMinM = 2000.0, WarpM = 1200.0;
-    public double MorePrechod = 0.04, RezervaSevuM = 512.0, SevPrechodM = 400.0, SevMekkySpad = 0.4, SevMekkyPasM = 3000.0;
+    public double SumLambdaMinM = 600.0, SumLambdaMaxM = 4000.0, WarpLambdaMinM = 4000.0, WarpM = 700.0;
+    public double MorePrechod = 0.04, RezervaSevuM = 512.0, SevPrechodM = 400.0, SevMekkySpad = 0.0, SevMekkyPasM = 1500.0;
+    // krok 6d (Jan 10:51): ostrovy v průlivech, zvlněný okraj pásu švu, (kalibrace prahu vynechána, Jan 10:54)
+    public int OstrovuPocet = 5;
+    public double OstrovPolomerM = 700.0, OstrovVyska = 0.3, SevZvlneniM = 900.0, SevZvlneniLambdaMinM = 600.0, SevZvlneniLambdaMaxM = 3000.0;
     public double StartPolomerM = 400.0, StartPrechodM = 1200.0, StartRezerva = 0.05;
     public double MrizkaPrahuM = 128.0, MrizkaVzdalenostiM = 64.0;
     // Jan 10:03 (b): velké pánve pro velká jezera – přepínač, výchozí vypnuto
     public bool Panve = false;
-    // krok 6c: „vše zapnuto“ (moře, sklon, pánve; eroze a vodníci přes KonfiguraceSveta) – výchozí vypnuto do Janova ano
-    public bool VseKrok06 = false;
+    // krok 6c: „vše zapnuto“ (moře, sklon, pánve; eroze a vodníci přes KonfiguraceSveta); krok 6d (Jan 10:51): výchozí zapnuto
+    public bool VseKrok06 = true;
     public int PanviPocet = 4;
     public double PanevPolomerM = 1500.0, PanevHloubkaM = 15.0;
 
+    /// <summary>Parametry přesně jako GDScript krok 3b (opravy vypnuté, bez moře a pánví kroku 6) – pro ekvivalenci.</summary>
+    public static ParametrySveta Krok5(long seed = 49) => new() { Seed = seed, VseKrok06 = false };
+
     /// <summary>Parametry přesně jako GDScript krok 3b (opravy vypnuté) – pro ekvivalenci.</summary>
-    public static ParametrySveta Puvodni(long seed = 49) => new() { Seed = seed, P82PrechodM = 0.0, UtvaryKlicGd = true };
+    public static ParametrySveta Puvodni(long seed = 49) => new() { Seed = seed, P82PrechodM = 0.0, UtvaryKlicGd = true, VseKrok06 = false };
 }
