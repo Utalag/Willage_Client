@@ -1,8 +1,17 @@
 # 05 – Implementační plán: generátor světa po modulech, editor materiálů a vizuální generátor
 
-Stav: **revize 2 po odpovědi Jana**, 2026-11-26 16:10 SEČ (revize 1 ze 14:30). Jde pořád jen o plán: nic se tu neimplementuje a nic dalšího se nerozhoduje. Zadání Jana z 13:47 („než se pustíš do implementace, chci vědět, jak to chceš postavit“), obrázky podle doplnění z 13:50, revize podle odpovědi z 15:58 ([pt981u]).
+Stav: **revize 3**, 2026-11-26 17:20 SEČ: editor materiálů staví na Willage_Dev (Jan 17:12), G-1 hotové (revize 2 z 16:10 schválená i s N1–N6 v 16:50, revize 1 ze 14:30). Jde pořád jen o plán: nic se tu neimplementuje a nic dalšího se nerozhoduje. Zadání Jana z 13:47 („než se pustíš do implementace, chci vědět, jak to chceš postavit“), obrázky podle doplnění z 13:50, revize podle odpovědi z 15:58 ([pt981u]).
 
 Navazuje na `04-implementace-generatoru.md` (kroky 1–14), kapitoly `01`–`03` a reporty v `reporty/`. Výchozí bod je `main` `e2d55d2` (tag `gen-v1-prusak`: klima 7 + 7b a průsak sloučené, testy 228/228). Krok 7c (hladina podle klimatu) běží na větvi `gen-v1-krok07c-hladina-klima` a tento plán do něj nezasahuje.
+
+### Revize 3: rozhodnutí Jana 17:12 a stav G-1
+- **Editor materiálů (fáze 2, E-2 až E-4) staví na sdíleném katalogu a VPMG z Willage_Dev `main`** (commit `3476488`, „Materials + VPMG v0“), **ne na vlastním `vzhled_materialu_v1.json`**:
+  - `src/Modules/World/Willage.World.Materials`: `Data/materials-catalog-v1.json` (schemaVersion 1, sekce `geology` = fyzika, `visualProfiles` = vzhled: `style`, `baseColor`, `grainScalePermille`, `layerDensityPermille`, `irregularityPermille`), loader, odvozené hodnoty;
+  - `src/Modules/World/Willage.World.Vpmg` (VPMG v0): receptura JSON (schemaVersion 1: `materialId`, `visualProfile`, `resolution`, kroky `id/type/enabled/params`), registr operací (v0: `base_fill`, `hash_grain` nad GeologyHash), deterministický runner, RGBA8 vrstvy, `tools/VpmgPreview` (materialId + seed + receptura → PNG). Ověřeno na boxu: golden `vpmg-golden-v1.json` (materiál 52, seed 0xC0FFEE00, 64 px) dává checksum 1756279408.
+  - **Willage_Dev je pro nás jen ke čtení.** Nové operace VPMG (šum, vrstvy, kořeny, praskliny, vlhkost …) se navrhují Willage-backendu, sami je do Dev nepíšeme.
+- Na později (sladění fasády G-3): větev Dev `cursor/geology-g0-g1-1ce6` (`29bffc0`) – `Willage.World.Geology.Core` G0: fixed-point 2⁻¹⁶ m (`FxQ16`), torus planety (`PlanetTorus`, `TorusWrap`), celočíselný hash, bez `float`/`double`. Náš `Jadro/Q16.cs` a `GeologyHash` mají stejný účel.
+- Inspirace (ne směr): `reference/material-generator-inspirace-2026-11-26.png` – skupiny parametrů (základní vzhled, struktura, vrstvení, organika, praskliny, vlhkost), přednastavení (šablony), náhled řezu vrstvami a ukázky variací se stejným profilem a jiným seedem.
+- **G-1 hotové** na větvi `gen-v1-g1-moduly` (PROP a výsledky `reporty/g1-moduly-prop.md`): moduly M0–M7, pipeline, manifest katalogů (15 souborů, SHA), klíče modulů; testy 307/0, otisky `9d4f2b8` beze změny. Graf v kódu: M3 geologie a M4 eroze jsou souběžné větve za M2 (ne řetěz M2 → M3 → M4); M6 obaluje i dobití hladiny 7c.
 
 ### Rozhodnutí Jana k revizi 1 (2026-11-26 15:58, [pt981u])
 „Hele asi souhlasím, nejdřív bych ten generátor postavil na tom co máme a až pak přidával vylepšení. Generátor světa a generátor textur/editor materiálu chci odděleně, klidně jako samostatná okna. U grafického editoru bude několik variant modelu na kterých se to bude reprezentovat. Generátor světa bych asi postavil po modulech. To znamená tak jak máme teď rozvržené kroky tak bych pro ně vytvořil konfigurátory. Jako to dělalo Lovable tam byli ale zvlášť jednotlivé funkční vrstvy.“
@@ -49,7 +58,7 @@ Obrázky (zdroj `obrazky/plan05/kresli_plan05.py`, jen ilustrace):
 ## 2. Jak rozumím zadání (po revizi 2)
 
 - **A – generátor světa po modulech (okno 1).** Celý řetězec geologie → eroze → klima a biomy → voda → hotová planeta → blueprinty (bloky 128 m) → výřezy → ostrov. **Každý stávající krok je modul s vlastním konfigurátorem**: parametry, náhled, izolace vrstvy, přepočet sebe a závislých. Je to obdoba funkčních vrstev v GeoLabu, ale nad naší funkcí světa. Předherní úpravy s regiony (7b) a nové kroky přijdou až ve fázi 3.
-- **B – editor materiálů a generátor textur (okno 2, samostatné).** Vzhled materiálu (A9: barva, textura, zaoblení, lámavost, vrstvení, převis) se ukazuje na **několika variantách modelů** (plochý blok, okraj ostrova, svah, vykopaná jáma, přechod, pod vodou). Fyzika materiálů je zrcadlo z Willage_Dev a jen se čte. Původní „konfigurátor katalogu terénu“ se tím rozdělil: generátorová data (pásma klimatu, pořadí hornin, šum hornin, moře, eroze, voda, průsak) edituje konfigurátor příslušného modulu v okně 1, vzhled edituje okno 2.
+- **B – editor materiálů a generátor textur (okno 2, samostatné).** Vzhled materiálu = **`visualProfiles` sdíleného katalogu Willage_Dev + receptura VPMG** (revize 3, Jan 17:12) a ukazuje se na **několika variantách modelů** (plochý blok, okraj ostrova, svah, vykopaná jáma, přechod, pod vodou). Fyzika i vzhled v katalogu jsou zrcadlo z Willage_Dev a jen se čtou; vlastní tabulka vzhledu se nezakládá. Původní „konfigurátor katalogu terénu“ se tím rozdělil: generátorová data (pásma klimatu, pořadí hornin, šum hornin, moře, eroze, voda, průsak) edituje konfigurátor příslušného modulu v okně 1, vzhled edituje okno 2.
 - **C – vizuální generátor.** Převod dat na obraz. Data 0,25 m, grafický blok 0,5 m, uvnitř je vidět 0,25 m (Jan 2026-11-22), pevný zoom 64 dlaždic, bez LOD (7.2), kawaii toon 3D s ručně malovanými texturami ve stylu Wakfu, převis trávy, vrstvená skalní hrana, visící kameny, vodopády do oblak, průhlednost a řez (7.3, výchozí vypnuto). Jeho jádro (popis grafických bloků a základní vykreslovač) vznikne jako první pro okno 2, protože varianty modelů vykresluje stejný kód jako hra.
 
 ---
@@ -145,13 +154,13 @@ flowchart LR
 
 ![propojení](obrazky/plan05/03-propojeni-abc.png)
 
-- **Společný datový model:** jedno `MaterialId` (u8) všude (1.6). Fyzika (K, pórovitost) je zrcadlo z Willage_Dev a jen se čte. Generátorová data jsou dnešní JSON a CSV v `data/v1` a mění je **jen konfigurátory modulů v okně 1**. Vzhled má vlastní tabulku `vzhled_materialu_v1.json` se stejným id (A9) a mění ji **jen okno 2**.
-- **Manifest katalogů** `manifest_katalogu_v1.json`: všechny soubory, které generátor čte (dnes 13), jejich SHA-256, verze schématu a role (fyzika / generátor / vzhled). Z manifestu se skládají klíče modulů a ověřuje se, že potvrzená planeta má stejná data. Opraví to dnešní neúplný klíč (`DataSveta.SouborySveta` zahrnuje jen 3 soubory).
+- **Společný datový model:** jedno `MaterialId` (u8) všude (1.6). Fyzika (K, pórovitost) je zrcadlo z Willage_Dev a jen se čte. Generátorová data jsou dnešní JSON a CSV v `data/v1` a mění je **jen konfigurátory modulů v okně 1**. Vzhled = `visualProfiles` v katalogu Willage_Dev (zrcadlo, jen čtení) + receptury VPMG; okno 2 receptury upravuje a ukládá **jen u nás** (`data/vpmg/receptury/*.json`, návrh), změny katalogu nebo nové operace jde jen navrhnout Willage-backendu (revize 3).
+- **Manifest katalogů** `manifest_katalogu_v1.json`: SHA-256 všech souborů v `godot-prototyp/data` (hotové v G-1: 15 souborů, z nich 12 čtou moduly; textová data CRLF → LF). Role (fyzika / generátor / vzhled) a verze schématu přibudou v G-2. Z manifestu se skládají klíče modulů a ověřuje se, že potvrzená planeta má stejná data. Opraví to dnešní neúplný klíč (`DataSveta.SouborySveta` zahrnuje jen 3 soubory).
 - **Klíče keše:** svět podle 3.3. Vizuální keš (sítě segmentu 8 m, náhledy variant) má klíč H(obsah vzorku, verze vzhledu, verze vykreslovače) a do světa nepatří, takže změna vzhledu nikdy nepřepočítá svět.
 - **Uložení:**
   - *planeta* `WPLN` v1 (Deflate jako WGER): magie, verze, `gen_ver`, seed, SHA manifestu (volitelně přibalené kopie generátorových souborů), kanonické parametry všech modulů, klíče modulů, příznak potvrzení. Ve fázi 3 přibude seznam úprav s regiony. Odvozené mapy (WGER, klima) se ukládají vedle jako keš.
   - *ostrov*: WTI1 (E88) s vloženími a překryvem E78, s odkazem na klíč M7 planety.
-  - *katalog vzhledu*: verze `vN` + diff. Potvrzená planeta si drží svou verzi manifestu (O4).
+  - *vzhled*: commit katalogu Dev (zrcadlo) + naše receptury VPMG v manifestu, diff receptur. Potvrzená planeta si drží svou verzi manifestu (O4).
 
 ---
 
@@ -182,11 +191,15 @@ Ve fázi 3 přibudou nové moduly (M8 povrchové jevy, M9 vegetace), každý s v
 
 ```
 EditorMaterialu (Control, jen propojuje)
-├─ HorniLista            verze katalogu vzhledu, Validovat, Diff, Uložit
-├─ SeznamMaterialu       78 id, barva, filtr podle skupiny (soil / rock / ore / …)
-├─ ParametryVzhledu      barva, textura, zaoblení, lámavost, vrstvení na boku, převis trávy, styl přechodu
-├─ FyzikaJenCteni        K, pórovitost, skupina (zrcadlo Willage_Dev)
-└─ MrizkaVariant         VariantaModelu × N (SubViewport + ortografická izometrická kamera)
+├─ HorniLista            commit katalogu Dev + SHA zrcadla, Validovat, Diff, Uložit recepturu (u nás), Export návrhu
+├─ SeznamMaterialu       materiály katalogu Dev (id, key, název, baseColor), filtr podle skupiny
+├─ ProfilVzhledu         visualProfiles (style, baseColor, grain / layerDensity / irregularity ‰) – jen čtení, změna = návrh
+├─ RecepturaVpmg         kroky receptury (typ z registru operací Dev, enabled, params), seed, rozlišení
+├─ Prednastaveni         šablony receptur (inspirace: „lesní / suchá / jílovitá hlína“)
+├─ FyzikaJenCteni        sekce geology katalogu (K, pórovitost, …)
+├─ NahledVrstev          RGBA8 vrstvy runneru (albedo, …) a řez vrstvami
+├─ VariaceSeedu          stejný profil, 4 seedy
+└─ MrizkaVariant         VariantaModelu × N (SubViewport + ortografická izometrická kamera, textura z VPMG)
 ```
 
 - **Varianty modelů** jsou malé **syntetické deterministické vzorky buněk 0,25 m** v knihovně (`Vizual/VzorkyVariant`). Vykreslí je **stejný vizuální generátor jako hru** (popis grafických bloků → síť), takže editor je zároveň zkušebna vykreslovače. Výchozí sada (O-N4):
@@ -197,8 +210,9 @@ EditorMaterialu (Control, jen propojuje)
   5. přechod s jiným materiálem (např. písek, duální mřížka povrchu),
   6. pod vodou / mokrý (dno průhledné vody).
   Později přibude osamocený kámen a shluk 2–6 buněk (skála, studie D). Nová varianta = nový vzorek, editor se nemění.
-- **Validace:** všech 78 id má profil, platné odkazy na textury, rozsahy parametrů. Diff ukáže změněné materiály. Klíče světa se tím nemění, zneplatní se jen vizuální keš.
-- Výchozí hodnoty vzhledu se převezmou z toho, co už máme (barvy `materialy.csv`, `mat.gd`, `poradi_hornin.json`, textury Gemini a toon shader prototypu). Nic se nevymýšlí znovu.
+- **Validace:** receptura projde parserem a registrem operací Dev (neznámý typ = chyba), rozsahy parametrů; zrcadlo katalogu má stejný obsah jako Dev v daném commitu (dnes se liší jen koncovým `\n`). Diff ukáže změněné receptury. Klíče světa se tím nemění, zneplatní se jen vizuální keš.
+- **VPMG v0 umí jen `base_fill` a `hash_grain`.** Skupiny z inspirace (vrstvení, organika, praskliny, vlhkost, akvarelové vykreslení) jsou zatím jen návrhy operací pro Willage-backend; editor je ukáže, až je backend přidá do registru. Barvy, které máme navíc (`materialy.csv`, `mat.gd`, textury Gemini, toon shader), se použijí jako podklad návrhu, ne jako vlastní katalog.
+- **Jak se kód Dev dostane k nám (N7):** Dev je net10.0 (Vogen, SharedKernel, analyzátory), klient net9.0. Doporučení: nejdřív VPMG mimo proces – nástroj z připnutého commitu Dev (`VpmgPreview` nebo malý CLI nad runnerem) vrací PNG / RGBA a checksum, okno 2 je jen zobrazuje; test golden 1756279408. Přímý odkaz na projekty Dev až po dohodě s backendem (balíček nebo net10 v klientu).
 
 ---
 
@@ -231,7 +245,7 @@ flowchart LR
     S0["S-0 spike: C# na Androidu"]
   end
   subgraph F2["Fáze 2 · editor materiálů (okno 2)"]
-    E1[E-1 popis grafických bloků] --> E2[E-2 tabulka vzhledu A9 z dnešních barev a textur] --> E3[E-3 vzorky variant modelů] --> E4[E-4 okno Editor materiálů + základní vykreslovač]
+    E1[E-1 popis grafických bloků] --> E2[E-2 zrcadlo katalogu Dev + VPMG v0 mimo proces] --> E3[E-3 vzorky variant modelů] --> E4[E-4 okno Editor materiálů + základní vykreslovač]
   end
   subgraph F3["Fáze 3 · vylepšení (každé s Janovým ano)"]
     D7["7d zvodnělá zóna + strop hladiny u pobřeží 60 m"] --> P7e[7e M8 povrchové jevy] --> P7f[7f M9 vegetace] --> U1[U-1 úpravy s regiony 7b] --> U2[U-2 částečný přepočet]
@@ -248,18 +262,18 @@ flowchart LR
 | Krok | Cíl | Vstupy → výstupy | Testy a měření | Odhad |
 |---|---|---|---|---|
 | **7c** *(běží)* | hladina podle klimatu a šrafa zvodnělé zóny podle svého PROP | PROP `krok07c-prop.md` | dle PROP | – |
-| **G-1** | moduly M0–M7 jako obal stávajících tříd, pipeline, `manifest_katalogu_v1.json`; `KonfiguraceSveta.Sestav` zůstane tenkým obalem | dnešní třídy → `Pipeline/`, `Katalogy/` | **otisky beze změny**, 228/228; klíč modulu se mění jen při změně jeho vstupu (test na každý soubor manifestu); 1 a 8 vláken shodně | 4–6 h |
+| **G-1** ✔ *(hotovo, `gen-v1-g1-moduly`, 307/0)* | moduly M0–M7 jako obal stávajících tříd, pipeline, `manifest_katalogu_v1.json`; `KonfiguraceSveta.Sestav` zůstane tenkým obalem | dnešní třídy → `Pipeline/`, `Katalogy/` | **otisky beze změny**, 228/228; klíč modulu se mění jen při změně jeho vstupu (test na každý soubor manifestu); 1 a 8 vláken shodně | 4–6 h |
 | **G-2** | schéma parametrů: atributy rozsah, jednotka, popis, skupina a prázdné pole `napoveda` (nápovědy až později, Jan 16:50) na stávajících recordech; JSON tam a zpět | `ParametrySveta`, `ParametryMore`, `ParametryEroze`, `ParametryKlimatu`, `ParametryVody`, průsak → schéma | načtení → uložení dá bajtově stejná data (nebo kanonicky shodná); každý parametr má rozsah a jednotku | 2–3 h |
-| **G-3** | fasáda `Willage.Gen.Api` (`IModuly`, `ISluzbaSveta`, `IDotazySveta`, `IKatalogy`) + soubor planety WPLN | moduly → DTO, soubor | CLI přes fasádu dá stejné otisky; uložit → načíst = bitově stejné; změněný manifest se pozná | 3–4 h |
+| **G-3** | fasáda `Willage.Gen.Api` (`IModuly`, `ISluzbaSveta`, `IDotazySveta`, `IKatalogy`) + soubor planety WPLN; typy souřadnic a hashe sladit s Dev Geology.Core G0 (fixed-point 2⁻¹⁶ m, torus, hash; větev `cursor/geology-g0-g1-1ce6`) | moduly → DTO, soubor | CLI přes fasádu dá stejné otisky; uložit → načíst = bitově stejné; změněný manifest se pozná | 3–4 h |
 | **G-4** | Godot jádro `WillageJadro`: fronta na pozadí, signály, převod map na textury | fasáda → autoload | headless: generace bez blokování hlavního vlákna (< 1 ms), zrušení, otisk shodný s CLI | 3–4 h |
 | **G-5** | okno 1: kostra (`SeznamModulu`, `KonfiguratorModulu` generovaný ze schématu, `RetezPrepoctu`, potvrzení, uložení) | G-2, G-4 → `nastroje/GeneratorSveta.tscn` | snímky; změna parametru → přepočet jen dotčených modulů; čas celé planety (~5–6 s) | 4–6 h |
 | **G-6** | náhledy a izolace M1 funkce světa, M2 moře, M3 geologie (řez) | G-5 | snímky náhledů, shoda náhledu s nástroji `Willage.Gen.Nastroje` | 4–5 h |
 | **G-7** | náhledy M4 eroze, M5 klima (tabulka pásem), M6 voda a průsak (řez s hladinou) | G-6 + nástroj řezu (z 7c) | snímky, shoda s reporty kroků 6–7 | 4–5 h |
 | **S-0** | spike: běží Godot .NET s `Willage.Gen` na Androidu (APK z E93) | – | sestavení, spuštění, čas vzorku segmentu na telefonu (Jan spustí) | 2–3 h |
 | **E-1** | popis grafických bloků 0,5 m z buněk 0,25 m | `VzorekOkna` → popisy | jednotkové testy masek, hran, převisu a okraje; determinismus; čas na okno 16 m | 3–4 h |
-| **E-2** | `vzhled_materialu_v1.json` (A9) předvyplněný z dnešních barev a textur, validace | 78 id → profil | všechna id mají profil; změna vzhledu nemění žádný klíč světa (test) | 2–3 h |
-| **E-3** | syntetické vzorky šesti variant modelů | – → `Vizual/VzorkyVariant` | deterministické, popis bloků každé varianty má očekávané hrany (okraj, převis, jáma) | 2–3 h |
-| **E-4** | okno 2 + základní vykreslovač (toon, triplanární textura, obrysy) | E-1 až E-3, G-4 → `nastroje/EditorMaterialu.tscn` | snímky všech variant pro 5 materiálů; trojúhelníky a čas sítě; uložení vzhledu → signál v okně 1 | 6–8 h |
+| **E-2** | zrcadlo katalogu Dev (`visualProfiles`) + napojení VPMG v0 mimo proces z připnutého commitu Dev; žádný vlastní `vzhled_materialu_v1.json` | katalog Dev, `tools/VpmgPreview` → `Vizual/ZdrojVpmg` | SHA zrcadla = Dev; golden 1756279408; každý materiál má profil `default`; změna receptury nemění žádný klíč světa (test) | 2–3 h |
+| **E-3** | syntetické vzorky šesti variant modelů s texturou z VPMG | – → `Vizual/VzorkyVariant` | deterministické, popis bloků každé varianty má očekávané hrany (okraj, převis, jáma); stejná receptura + seed = stejný checksum | 2–3 h |
+| **E-4** | okno 2: receptura VPMG (jen operace z registru Dev), přednastavení, náhled vrstev a řezu, variace seedu, mřížka variant + základní vykreslovač (toon, obrysy) | E-1 až E-3, G-4 → `nastroje/EditorMaterialu.tscn` | snímky všech variant pro 5 materiálů; trojúhelníky a čas sítě; uložení receptury jen u nás; export návrhu pro backend | 6–8 h |
 | **7d** | zvodnělá zóna šířením průsaku od zdrojů (moře, řeky, prameny, oázy, vodníci); **oprava hladiny u pobřeží: u břehu jen strop na hladině moře 60 m** (Jan [pt981u]); hladina ze spádu jen pro umístění pramenů (t977u) | `PrusakDosah`, `PobrezniPas`, 7c → výstup M6 | řezy poušť a mírné pobřeží; „díra se zaplní jen v zóně“; pevninská hladina u břehu nikde pod 60 m kvůli mořskému dnu; vypnuto = beze změny | 3–5 h |
 | **7e** | M8 povrchové jevy jako funkce (písek, duny, sníh, led, zamrzání; jen světová část) s vlastním konfigurátorem | M5, M6 | nezávislost reliéfu, determinismus | 4–6 h |
 | **7f** | M9 vegetace jako funkce s vlastním konfigurátorem | M1–M8 | hustota na m², žádný holý biom, nic v tůních | 3–5 h |
@@ -282,7 +296,9 @@ Po U-2 pokračuje plán 04 krokem 8 (výřezy) a dál; krok 14 (prezentace) se r
 | R5 | determinismus napříč vlákny a platformami | rozdílné planety na telefonu a serveru | testy 1 / 8 vláken, golden vectors |
 | R6 | 2D / 3D (7.1) | přepracování vykreslovače | popis bloků nezávislý na rendereru |
 | R7 | trojúhelníky při 0,25 m na telefonu (E93: 269 tis. ještě s 0,5 m) | fps | síť po grafických blocích 0,5 m, slučování ploch, V-4 |
-| R8 | rozjetí katalogu s Willage_Dev | jiná fyzika na serveru | fyziku jen číst, změny jako návrh backendu |
+| R8 | rozjetí katalogu s Willage_Dev | jiná fyzika i vzhled na serveru | katalog jen číst; zrcadlo s commitem Dev a testem SHA; změny jako návrh backendu |
+| R12 | VPMG v0 má jen 2 operace, nové přidává jen backend | editor ukáže málo, čeká se na backend | návrhy operací posílat brzy (podle skupin z inspirace), editor bere registr dynamicky |
+| R13 | Dev net10.0 + Vogen, klient net9.0 (Godot) | nejde přímo odkazovat projekty | VPMG mimo proces z připnutého commitu; sjednocení verze s backendem (N7) |
 | R9 | souběžné větve konfliktují v `DENIK.md`, `TODO.md` a seznamu testů | zdržení merge | zápis do vlastních oddílů, seznam testů po souborech |
 | R10 | generovaný konfigurátor je pro složité parametry nepohodlný | UX | vlastní prvky jen pro tabulky (pásma, pořadí hornin) |
 | R11 | dvě okna nad stejnými soubory (souběžný zápis) | rozbitý katalog | každé okno píše jen své soubory; zápis atomicky (dočasný soubor + přejmenování), SHA v manifestu |
@@ -324,13 +340,15 @@ Po U-2 pokračuje plán 04 krokem 8 (výřezy) a dál; krok 14 (prezentace) se r
 | O11 | návrh fasády poslat Willage-backendu jen k připomínkám | souhlas |
 | O12 | pořadí | **změněno:** nejdřív fáze 1 (obal stávajícího), pak fáze 2, vylepšení až ve fázi 3 |
 
-### 11.2 Nové otázky (revize 2), u každé moje doporučení
+### 11.2 Otázky revize 2 (N1–N6 schválené 16:50) a nové otázky revize 3 (N7, N8), u každé moje doporučení
 1. **N1 – Jeden Godot projekt, nebo samostatné projekty?** *Doporučení:* jeden projekt `godot-prototyp` se dvěma samostatnými hlavními scénami v `nastroje/` (vlastní procesy a okna) a hrou jako třetí scénou. Sdílí C# jádro a data a nic se neduplikuje.
 2. **N2 – Rozdělení modulů M0–M7** podle tabulky 3.3 (funkce světa, moře a kontinenty, geologie, eroze, klima, voda a průsak, výstup)? *Doporučení:* ano. Pořadí odpovídá výpočtu v kódu (moře je součást povrchu před geologií).
 3. **N3 – Konfigurátor generovaný ze schématu parametrů** a vlastní prvky jen pro tabulky? *Doporučení:* ano. Nový parametr se pak v panelu objeví sám.
 4. **N4 – Sada variant modelů** (plochý blok, okraj ostrova, svah a schody, vykopaná jáma, přechod materiálů, pod vodou; později kámen a shluk)? *Doporučení:* ano, šest variant pro začátek.
 5. **N5 – Edituje okno 2 jen vzhled, nebo i herní sloupce tabulky materiálů** (název, rarita, nástroj)? *Doporučení:* zatím jen vzhled a ostatní jen ukazovat. Herní sloupce až s jednou tabulkou materiálů (1.6).
 6. **N6 – Pořadí ve fázi 3:** 7d → 7e → 7f → úpravy s regiony → částečný přepočet, a souběžně vykreslovač ostrova V-1 až V-4? *Doporučení:* ano.
+7. **N7 – Jak používat kód Willage_Dev (net10.0) v klientu (net9.0)?** *Doporučení:* VPMG nejdřív mimo proces z připnutého commitu Dev (PNG / RGBA + checksum), přímý odkaz až po dohodě s backendem (balíček nebo net10 v klientu).
+8. **N8 – Kam ukládat naše receptury VPMG?** *Doporučení:* `godot-prototyp/data/vpmg/receptury/<materialId>.json` (schéma Dev, v manifestu), do Dev jen jako návrh přes Willage-backend.
 
 ---
 
@@ -339,6 +357,8 @@ Po U-2 pokračuje plán 04 krokem 8 (výřezy) a dál; krok 14 (prezentace) se r
 - Reporty `reporty/krok04.md`, `krok05-prop.md`, `krok06-prop.md` (čas eroze 5,1 s), `krok07b-prop.md`, `prusak-*-prop.md`; PROP 7c na větvi `gen-v1-krok07c-hladina-klima`.
 - `TODO.md` (otázky E83–E96, povrchové jevy), `DENIK.md`.
 - Kód `cs/Willage.Gen` (`Eroze/KonfiguraceSveta.cs`, `Eroze/SouborMapy.cs`, `Data/DataSveta.cs`, `Svet/SvetFn.cs`), `godot-prototyp/scripts/cs/most/VodaV1.cs`, `godot-prototyp/README.md` (uzly scény).
-- Odpověď Jana k revizi 1 (2026-11-26 15:58, [pt981u]).
+- Odpověď Jana k revizi 1 (2026-11-26 15:58, [pt981u]); schválení revize 2 a nápovědy parametrů (16:50, [pt982u]); rozhodnutí o editoru materiálů (17:12).
+- Willage_Dev `main` `3476488` (`Willage.World.Materials`, `Willage.World.Vpmg`, `tools/VpmgPreview`, `tests/Willage.World.Vpmg.Tests/Fixtures/vpmg-golden-v1.json`), větev `cursor/geology-g0-g1-1ce6` `29bffc0` (Geology.Core G0) – jen čtení.
+- Inspirace `reference/material-generator-inspirace-2026-11-26.png`; výsledky G-1 `reporty/g1-moduly-prop.md` (větev `gen-v1-g1-moduly`).
 - GeoLab `External data/V1` (`AGENTS.md`, `src/geology/events/types.ts`, `timeline.ts`).
 - Studie `skala-studie`, `trava-studie`, `napojeni-studie`, `tileset2d-studie`, `reference/okraj-ostrova-2026-11-22.jpg`.

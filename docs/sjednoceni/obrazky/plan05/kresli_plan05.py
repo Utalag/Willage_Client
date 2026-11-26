@@ -134,7 +134,7 @@ def obr3():
     # okno B
     box(ax, 0.53, 0.50, 0.45, 0.41, "", fc="#f5e1ff", ec="#7a3ea0", r=0.01, lw=1.8)
     ax.text(0.545, 0.89, "Okno 2 · Editor materiálů a textur (EditorMaterialu.tscn)", fontsize=10, weight="bold", va="top")
-    box(ax, 0.545, 0.56, 0.15, 0.29, "Materiály (id u8)\n\nfyzika: jen čtení\n(zrcadlo Willage_Dev)\n\nvzhled: barva,\ntextura, zaoblení,\nlámavost, převis", fc="#ffffff", fs=7.6)
+    box(ax, 0.545, 0.56, 0.15, 0.29, "Materiály (id u8)\n\nkatalog Willage_Dev\n(jen čtení):\ngeology + visualProfiles\n\nreceptura VPMG v0:\nbase_fill, hash_grain", fc="#ffffff", fs=7.6)
     vars_ = ["plochý blok", "okraj ostrova", "svah / schody", "vykopaná jáma", "přechod", "pod vodou"]
     for i, v in enumerate(vars_):
         x = 0.71 + (i % 3) * 0.088; y = 0.70 - (i // 3) * 0.14
@@ -147,8 +147,8 @@ def obr3():
         fc="#fff6e0", fs=8.6)
     arrow(ax, 0.25, 0.50, 0.25, 0.41, c="#2b5d9b"); arrow(ax, 0.75, 0.50, 0.75, 0.41, c="#7a3ea0")
     box(ax, 0.02, 0.03, 0.30, 0.16, "Data generátoru (data/v1): parametry modulů\nmění jen okno 1; klíč modulu =\nH(gen_ver, verze, parametry, SHA vstupů)", fc="#f2f2f2", fs=7.8)
-    box(ax, 0.35, 0.03, 0.30, 0.16, "vzhled_materialu_v1.json (A9) píše jen okno 2;\nklíče světa se tím NEmění, jen keš sítí", fc="#f2f2f2", fs=7.8)
-    box(ax, 0.68, 0.03, 0.30, 0.16, "Uložení: planeta WPLN (seed, gen_ver, manifest,\nparametry modulů) · ostrov WTI1 + překryv E78\n· katalog vzhledu verze vN + diff", fc="#f2f2f2", fs=7.8)
+    box(ax, 0.35, 0.03, 0.30, 0.16, "Vzhled: visualProfiles katalogu Willage_Dev (jen čtení)\n+ receptury VPMG (okno 2 ukládá jen u nás);\nklíče světa se tím NEmění, jen keš sítí", fc="#f2f2f2", fs=7.8)
+    box(ax, 0.68, 0.03, 0.30, 0.16, "Uložení: planeta WPLN (seed, gen_ver, manifest,\nparametry modulů) · ostrov WTI1 + překryv E78\n· commit katalogu Dev + receptury VPMG", fc="#f2f2f2", fs=7.8)
     for x in (0.17, 0.50, 0.83): arrow(ax, x, 0.24, x, 0.19, c="#777")
     fig.savefig(os.path.join(OUT, "03-propojeni-abc.png"), bbox_inches="tight"); plt.close(fig)
 
@@ -197,7 +197,7 @@ def obr4():
     # --- okno 2
     ax = axs[1]
     ax.add_patch(Rectangle((0, 0), 1, 0.95, fc="#fafafa", ec="#7a3ea0", lw=2))
-    box(ax, 0, 0.89, 1, 0.06, "  Editor materiálů a textur · katalog vzhledu v3 (návrh v4*) | [Validovat] [Diff] [Uložit]", fc="#e9ddf3", fs=8.3, ha="left", r=0)
+    box(ax, 0, 0.89, 1, 0.06, "  Editor materiálů · katalog Dev 3476488 + VPMG v0 | [Validovat] [Diff] [Uložit recepturu] [Návrh pro backend]", fc="#e9ddf3", fs=8.3, ha="left", r=0)
     box(ax, 0.01, 0.17, 0.25, 0.70, "", fc="#ffffff", r=0)
     ax.text(0.02, 0.85, "Materiály", fontsize=9, weight="bold")
     mats = [("1 ornice", "#7aa64a"), ("3 písek", "#e8d39a"), ("5 vápenec", "#d9d2c0"), ("6 žula", "#b59a9a"), ("7 čedič", "#5c6470"), ("57 jíl", "#c07a50")]
@@ -205,10 +205,10 @@ def obr4():
         y = 0.80 - i * 0.055
         if i == 2: ax.add_patch(Rectangle((0.015, y - 0.02), 0.24, 0.045, fc="#ffe3c2", ec="none"))
         ax.add_patch(Rectangle((0.02, y - 0.012), 0.03, 0.028, fc=c, ec="#555")); ax.text(0.06, y, n, fontsize=7.8, va="center")
-    ax.text(0.02, 0.44, "Vzhled: 5 vápenec", fontsize=8.3, weight="bold")
-    for i, p in enumerate(["barva #d9d2c0", "textura vapenec_vrst ▾", "zaoblení 0,2", "lámavost 0,7", "vrstvení na boku ☑"]):
+    ax.text(0.02, 0.44, "Receptura VPMG: 5", fontsize=8.3, weight="bold")
+    for i, p in enumerate(["profil default (Dev, čtení)", "s1 base_fill ☑ albedo", "s2 hash_grain ☑", "seed 49 · 64 px", "+ operace = návrh backendu"]):
         ax.text(0.02, 0.40 - i * 0.035, p, fontsize=7.4)
-    ax.text(0.02, 0.185, "fyzika: jen čtení (Willage_Dev)", fontsize=6.8, color="#a00")
+    ax.text(0.02, 0.185, "katalog i fyzika: jen čtení (Dev)", fontsize=6.8, color="#a00")
     ax.text(0.28, 0.855, "Varianty modelů (čtou stejný popis bloků jako hra)", fontsize=8.6, weight="bold")
     col = "#d9d2c0"; grass = "#8cbc5a"
     titles = ["plochý blok", "okraj ostrova", "svah / schody", "vykopaná jáma", "přechod s pískem", "pod vodou / mokrý"]
@@ -292,7 +292,7 @@ def obr5():
     ax.set_xlim(0, 1); ax.set_ylim(0, 1)
     ax.set_title("c) popis bloku (C#, bez Godotu)", fontsize=9.5)
     txt = ("PopisBloku 0,5 m:\n• hlavní materiál (id u8) + podíl\n• maska 8 podbuněk (bitová)\n• horní plocha: tráva / písek / voda\n"
-           "• hrany: převis trávy, útes,\n  okraj ostrova, šev bloku\n• profil vzhledu z katalogu (A9):\n  zaoblení, lámavost, textura\n• voda: hladina, vodopád\n\n→ stejné pro 3D sítě i 2D dlaždice")
+           "• hrany: převis trávy, útes,\n  okraj ostrova, šev bloku\n• profil vzhledu: visualProfiles\n  katalogu Dev + textura VPMG\n• voda: hladina, vodopád\n\n→ stejné pro 3D sítě i 2D dlaždice")
     ax.text(0.02, 0.95, txt, fontsize=8.6, va="top", bbox=dict(fc="#fff6e0", ec="#999"))
     # panel d: ostrov
     ax = fig.add_axes([0.02, 0.0, 0.96, 0.52]); ax.axis("off"); ax.set_aspect("equal")
