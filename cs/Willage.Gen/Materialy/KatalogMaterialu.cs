@@ -24,7 +24,7 @@ public sealed class KatalogMaterialu
             int id = m.GetProperty("id").GetInt32();
             string key = m.GetProperty("key").GetString() ?? "";
             var g = m.GetProperty("geology");
-            double? k = g.TryGetProperty("permeabilityMs", out var kp) && kp.ValueKind == JsonValueKind.Number ? kp.GetDouble() : null;
+            double? k = g.TryGetProperty("permeabilityMs", out var kp) ? CisloK(kp) : null;
             double por = g.TryGetProperty("porosityPermille", out var pp) && pp.ValueKind == JsonValueKind.Number ? pp.GetInt32() / 1000.0 : 0.0;
             string sk = g.TryGetProperty("skupina", out var s) ? s.GetString() ?? "" : "";
             if (id is >= 0 and < 256)
@@ -32,6 +32,15 @@ public sealed class KatalogMaterialu
             Pocet++;
         }
     }
+
+    /// <summary>K je v katalogu řetězec v desítkovém zápisu („1e-5“), připouští se i číslo.</summary>
+    private static double? CisloK(JsonElement e) => e.ValueKind switch
+    {
+        JsonValueKind.Number => e.GetDouble(),
+        JsonValueKind.String when double.TryParse(e.GetString(), System.Globalization.NumberStyles.Float,
+            System.Globalization.CultureInfo.InvariantCulture, out var v) => v,
+        _ => null,
+    };
 
     public static KatalogMaterialu ZeSouboru(string cesta) => new(File.ReadAllText(cesta));
 

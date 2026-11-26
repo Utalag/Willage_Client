@@ -1,0 +1,14 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <!-- Jednotkové testy jádra bez Godotu a bez NuGet balíčků (konzolový běžec). dotnet run -c Release -->
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net9.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+  </PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Willage.Gen\Willage.Gen.csproj" />
+    <None Include="Data\**" CopyToOutputDirectory="PreserveNewest" />
+    <None Include="..\..\godot-prototyp\data\v1\materials-catalog-v1.json" Link="Data\materials-catalog-v1.json" CopyToOutputDirectory="PreserveNewest" />
+  </ItemGroup>
+</Project>
