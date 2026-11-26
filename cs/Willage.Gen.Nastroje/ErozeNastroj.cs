@@ -79,7 +79,7 @@ public static class ErozeNastroj
         var vod = Vodnici.Najdi(m, svet, pe);
         long tSit = sw.ElapsedMilliseconds;
         var proc = Process.GetCurrentProcess(); proc.Refresh();
-        if (svet.More is { } ms) Console.WriteLine(FormattableString.Invariant($"  moře: seed {svet.Sd}, cílový podíl {100 * ms.Podil:F1} %, pás P {ms.Pas:F0} m, střed {ms.Stred:F0} m, start na pevnině {ms.StartNaPevnine}, start bez posunu {ms.StartBezPosunu}; pánví {svet.Panve?.Stredy.Count ?? 0}"));
+        if (svet.More is { } ms) Console.WriteLine(FormattableString.Invariant($"  moře: seed {svet.Sd}, cílový podíl {100 * ms.Podil:F1} %, kontinentů {ms.Maska.Kontinentu}, práh {ms.Maska.Prah:F3}, zvednutí startu {ms.Maska.Zvednuti:F3}, D0 {ms.D0:F0} m, start na pevnině {ms.StartNaPevnine}, start bez posunu {ms.StartBezPosunu}; pánví {svet.Panve?.Stredy.Count ?? 0}"));
         Console.WriteLine($"mapa {krok} m {m.T.Nx}×{m.T.Ny} ({m.T.N} uzlů), vláken {vl}");
         Console.WriteLine($"  čas: svět {tSvet} ms, podklad {casy.PodkladMs} ms, eroze {casy.ErozeMs} ms, síť {casy.SitMs + tSit} ms, celkem {tSvet + casy.PodkladMs + casy.ErozeMs + casy.SitMs + tSit} ms");
         Console.WriteLine($"  paměť: špička pracovní sady {proc.PeakWorkingSet64 / 1048576} MB, mapa {m.PametBajtu / 1048576.0:F1} MB");
@@ -111,6 +111,9 @@ public static class ErozeNastroj
         int more = 0; for (int k = 0; k < m.T.N; k++) if ((m.Priznaky[k] & MapaEroze.Odtok) != 0) more++;
         Console.WriteLine($"  řeky (ústí → nejdelší pramen): {r.Count}, max {(l.Length > 0 ? l[^1] / 1000 : 0):F1} km, medián {(l.Length > 0 ? l[l.Length / 2] : 0):F0} m, > 5 km: {l.Count(x => x > 5000)}, > 10 km: {l.Count(x => x > 10000)}; odtok/moře {100.0 * more / m.T.N:F1} %");
         Console.WriteLine($"  největší povodí řek (km²): {string.Join(", ", p)}");
+        var pev = Oblasti.Pevniny(m);
+        var kont = pev.Where(o => o.PlochaM2 >= 50e6).ToList(); var ostr = pev.Where(o => o.PlochaM2 < 50e6).ToList();
+        Console.WriteLine($"  pevniny: kontinentů (≥ 50 km²) {kont.Count}: {string.Join(", ", kont.Select(o => (o.PlochaM2 / 1e6).ToString("F0", C)))} km²; ostrovů {ostr.Count} (≥ 1 km²: {ostr.Count(o => o.PlochaM2 >= 1e6)}, největší {(ostr.Count > 0 ? ostr[0].PlochaM2 / 1e6 : 0):F1} km², celkem {ostr.Sum(o => o.PlochaM2) / 1e6:F1} km²)");
         var j = Jezera.Najdi(m);
         double plocha = j.Sum(x => x.PlochaM2);
         Console.WriteLine($"  jezera: {j.Count}, plocha celkem {plocha / 1e6:F1} km² ({100 * plocha / (m.T.N * m.T.Krok * m.T.Krok):F1} %), > 0,1 km²: {j.Count(x => x.PlochaM2 > 1e5)}, > 1 km²: {j.Count(x => x.PlochaM2 > 1e6)}; největší (km²/hloubka m): {string.Join(", ", j.Take(5).Select(x => FormattableString.Invariant($"{x.PlochaM2 / 1e6:F2}/{x.MaxHloubkaM:F1}")))}");
@@ -193,7 +196,7 @@ public static class ErozeNastroj
         for (double x = 1792; x < 2176; x += 4) for (double y = 1792; y < 2176; y += 4)
         {
             n++; double h = sv.Vyska(x, y); minH = Math.Min(minH, h);
-            if (sv.More is { } ms) { minPev = Math.Min(minPev, ms.Pevnina(x, y)); if (ms.JeMore(x, y, h)) more++; double o = ms.Posun(x, y); maxPos = Math.Max(maxPos, o); minPos = Math.Min(minPos, o); }
+            if (sv.More is { } ms) { minPev = Math.Min(minPev, ms.Pevnina(x, y)); if (ms.JeMore(x, y, h)) more++; double o = ms.Aplikuj(x, y, h, sv.NeutralM) - h; maxPos = Math.Max(maxPos, o); minPos = Math.Min(minPos, o); }
         }
         Console.WriteLine($"start 3×3: moře {more}/{n} bodů, min podíl pevniny {minPev:F3}, min povrch {minH:F2} m, posun moře/sklonu {minPos:F2}…{maxPos:F2} m");
         int vStart = vod.Count(v => v.X >= 1792 && v.X < 2176 && v.Y >= 1792 && v.Y < 2176);
@@ -225,6 +228,22 @@ public static class ErozeNastroj
             for (int i = 0; i < 1_000_000; i++) sum += ef.ErozeE(1000 + i * 0.013, 2000 + i * 0.007);
             Console.WriteLine($"{mode,-11} odchylka v uzlech průměr {odch / n:F4} max {odchMax:F3} m; skok gradientu na hraně průměr {skok / n:F4} max {skokMax:F3}; max E {maxE:F2} m; {sw.Elapsed.TotalMilliseconds:F0} ns/dotaz");
         }
+        return 0;
+    }
+
+    /// <summary>Krok 6c: otisky start světa s přepínačem VseKrok06 (mapa planety z keše dir).</summary>
+    public static int Vse(string[] a, DataSveta d)
+    {
+        string? kes = a.Length > 2 ? a[2] : null;
+        var p = KonfiguraceSveta.VseZapnuto(d, Seed ?? 49);
+        var sw = Stopwatch.StartNew();
+        var sv = KonfiguraceSveta.Sestav(p, d, kes, 8);
+        Console.WriteLine($"vše zapnuto: sestavení {sw.ElapsedMilliseconds} ms, mapa {SouborMapy.Otisk(sv.Mapa!)}, vodníků {sv.Vodnici.Count}");
+        var (o, _, _) = OtiskKrok3.Spocti(KonfiguraceSveta.VseZapnuto(d, Seed ?? 49), d, uprav: g => g.Svet.Eroze = sv.Eroze);
+        int p33 = 0;
+        var v = VodaBlok.Spust(true, d, svet: KonfiguraceSveta.VseZapnuto(d, Seed ?? 49), geo: g => g.Svet.Eroze = sv.Eroze,
+            uprav: fn => { fn.Prameny.Vodnici = new VodniciVeSvete(sv.Vodnici, fn.Geologie).VOblasti; p33 = fn.Prameny.VOblasti(1792, 1792, 2176, 2176).Count; });
+        Console.WriteLine($"vše zapnuto: krok 3 {o}   voda 14,14 {v.otisk} ({v.pramenu} pramenů; 3×3: {p33})");
         return 0;
     }
 
