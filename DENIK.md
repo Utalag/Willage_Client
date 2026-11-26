@@ -612,6 +612,12 @@ Skupiny: 1 Prototyp a buildy · 2 Terén a tvar · 3 Rozlišení bloku · 4 Ská
 - **Komplikace:** mřížka vzdálenosti 64 m (sklon) nestačí na pás 5 m → u pobřeží se vzdálenost pro hladinu počítá z masky po 1 m.
 - **Další krok:** schválení; merge do main dělá Willage-backend.
 
+### 🧪 Generátor V1 krok 6g: oprava hladiny u břehu (2026-11-26 12:14 · větev `gen-v1-krok06g-oprava-hladiny`, `cs/Willage.Gen/{Svet,Geologie,Voda}/`, PROP `docs/sjednoceni/reporty/krok06g-prop.md`, shots `godot-prototyp/shots/krok06g/`)
+- **Směr:** Jan 11:55 / 11:57 a upřesnění: hladina moře jen v pásu 5 m od břehu, pak se napojí terénní voda; kde terénní voda není, čáru 60 m dál nekreslit (žádný fallback).
+- **Zlepšení:** vzdálenost k moři pro hladinu podle `JeMore`, ne podle k = 0,5. Řez `shots/krok06g/rez_pobrezi_100m.png`: na strmém pobřeží hladina stoupá se spádem (~78 m), ne vodorovných 60 m. Otisky startu beze změny (krok 3 c8eeb7964d1ddd85 / 9f32311e046f8b6a, voda 7714d1a1d34e00ad / 8e239a68c6d01be0, prameny 18 / 20); golden mapy 800d420bb00047de; testy main 104/104, větev 110/110.
+- **Komplikace:** mezi skutečným břehem a vrstevnicí k = 0,5 je 38–74 m pevniny (strmé: v úseku 100 m k nedosáhne 0,5). Dva ještě mírnější řezy jsem do shots nedával (jeden skoro vodorovný, druhý s prohlubní h0).
+- **Další krok:** schválení; merge do main dělá Willage-backend.
+
 ### 💡 TODO: náplavy a delty jako samostatný krok po kroku 6b (2026-11-26 9:59, Jan, bod 7)
 - **Doplněno 2026-11-26 11:15 (Jan, 6e):** součástí stejného kroku i **mořské usazeniny na dně moře** (sedimenty pod mořem, dnes dno = stejné vrstvy jako pevnina).
 - Eroze kroku 6 jen odebírá. Náplavy (ukládání v jezerech a nivách) a delty u ústí do moře jako samostatný krok: stream power s depozicí (FastScape / Yuan et al.), ukládání do mapy WGER a do geologie jako nová vrstva.
