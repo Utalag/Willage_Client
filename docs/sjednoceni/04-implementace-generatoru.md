@@ -28,7 +28,7 @@ Stav: **návrh k odsouhlasení**, 2026-11-20 23:50 SEČ; pořadí kroků změně
 | 3 | Funkce světa II: geologie a útvary (vč. 3b) | schváleno 2026-11-26 8:16 | 2 | Jan po kroku |
 | 4 | Funkce světa III: podzemní voda a prameny jako funkce (C#) | schváleno 2026-11-26 8:48 | 3 | Jan po kroku |
 | 5 | **Port geologie do C#** s opravami z kroku 4 (nitro sopky, mince E82 bez skoku, hustota pramenů) | nové | 4 | Jan po kroku |
-| 6 | **Eroze světa jako funkce**: koryta, údolí, náplavy, delty – součást funkce světa, ze které se vyřezává | nové | 5 | Jan po kroku |
+| 6 | **Eroze světa**: hrubá mapa toků a eroze celé planety (~16–32 m, ze seedu, uložená s planetou) + jemný detail jako funkce; vodníci u zdrojů toků | nové (způsob 9:11) | 5 | Jan po kroku |
 | 7 | **Dokončení světa**: klima a povrchové jevy jako funkce, vegetace ze seedu jako funkce, další části funkce | nové (z dřívějších 8 a 9) | 6 | Jan po kroku |
 | 8 | Výřezy: vložení blueprintu a ostrov (dříve 5) | částečně | 7 | Jan po kroku |
 | 9 | Buňky: slupka, kopání, rozdíl a ukládání (dříve 6) | částečně | 8 | Jan po kroku |
@@ -202,9 +202,15 @@ Podrobné oddíly níže mají původní čísla; v nadpisu je uvedeno nové č�
 - Navazuje na prameny a hladinu kroku 4 (zdroje vody) a na geologii kroku 5 (odolnost hornin).
 - Eroze během hry na ostrově (vrstva posunu výšky, 4.1) sem nepatří, zůstává v kroku 10.
 
+**Způsob (rozhodnutí Jana 2026-11-26 9:08–9:11):**
+- Pro **celou planetu** (konečný torus) se **jednou předpočítá hrubá mapa** (~16–32 m): voda puštěná z kopců a hor najde toky a hydraulická eroze je vyhloubí. Mapa je **deterministická ze seedu** a ukládá se **jako součást planety** (výjimka z „nic se neukládá“: je to vstup funkce světa, ne stav hry).
+- **Jemný detail** (koryto, břehy, náplavy po 0,25 m) se dopočítá **jako funkce nad mapou**.
+- **Vodníci:** na místech zdrojů vodních toků v kopcích se umístí „vodníci“ jako **trvalý zdroj vody** (herní prvek). Pozice z mapy toků, deterministicky.
+- Zdroj: Jan v chatu 2026-11-26 9:08–9:11 (schváleno; přesné znění v přepisu konverzace).
+
 **Proč tady:** výřezy mají vznikat z hotového světa (rozhodnutí 2026-11-26 9:06).
 
-**Stav:** jen rozhodnuto, způsob výpočtu otevřený.
+**Stav:** rozhodnuto (2026-11-26 9:11), kód není.
 
 ---
 
