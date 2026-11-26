@@ -61,6 +61,6 @@ public sealed class SluzbaSvetaApi : ISluzbaSveta
     {
         var kl = _s.Klice();
         var neplatne = p.Klice.Where(k => StavGeneratoru.Klic(kl, k.Key) != k.Value).Select(k => k.Key).ToList();
-        return new PlanetaInfoDto(p.GenVer, p.Seed, p.Potvrzena, p.ManifestSouhrn, SouborPlanety.RozdilyDat(p, _s.Manifest()), neplatne, p.Upravy.Count);
+        return new PlanetaInfoDto(p.GenVer, p.Seed, p.Potvrzena, p.ManifestSouhrn, SouborPlanety.RozdilyDat(p, _s.Manifest()), neplatne, p.Upravy.Count, SouborPlanety.Otisk(p));
     }
 }

@@ -63,8 +63,15 @@ public static class SouborPlanety
     public static IReadOnlyList<string> RozdilyDat(PlanetaV1 p, ManifestKatalogu aktualni) =>
         new ManifestKatalogu(p.Manifest).Rozdily(aktualni);
 
-    /// <summary>Kanonický text obsahu (pro porovnání nezávisle na kompresi).</summary>
+    /// <summary>
+    /// G-3 review (Willage-backend): kanonický text obsahu planety. Totožnost planety se hashuje z tohoto textu, ne z bajtů Deflate
+    /// (komprese se mezi verzemi .NET může lišit). WPLN je jen autorský formát klienta, ne výměnný formát s Dev.
+    /// </summary>
     public static string Kanonicky(PlanetaV1 p) =>
-        $"{p.GenVer}|{p.Seed}|{p.ManifestSouhrn}|{string.Join(";", p.Manifest.Select(m => $"{m.Cesta},{m.Velikost},{m.Sha256}"))}|{p.SadaJson}|" +
-        $"{string.Join(";", p.Klice.Select(k => k.Key + "=" + k.Value))}|{p.Potvrzena}|{p.Upravy.Count}";
+        $"{Magie}|{Verze}|{p.GenVer}|{p.Seed}|{p.ManifestSouhrn}|{string.Join(";", p.Manifest.Select(m => $"{m.Cesta},{m.Velikost},{m.Sha256}"))}|{p.SadaJson}|" +
+        $"{string.Join(";", p.Klice.Select(k => k.Key + "=" + k.Value))}|{p.Potvrzena}|" +
+        string.Join(";", p.Upravy.Select(u => $"{u.Druh},{u.Modul},{u.X0},{u.Y0},{u.X1},{u.Y1},{u.ParametryJson}"));
+
+    /// <summary>Otisk planety = SHA-256 kanonického textu (hex). Nezávisí na kompresi WPLN.</summary>
+    public static string Otisk(PlanetaV1 p) => ManifestKatalogu.Sha(Encoding.UTF8.GetBytes(Kanonicky(p)));
 }

@@ -10,8 +10,9 @@ public sealed record VysledekGeneraceDto(IReadOnlyList<ModulDto> Moduly, SouhrnP
 public sealed record OtiskyPlanetyDto(string? Mapa, string? Klima, int Vodniku, string VodaBlok, int BlokX, int BlokY, int Pramenu);
 
 /// <summary>Informace o uložené / načtené planetě WPLN.</summary>
+/// <remarks>OtiskPlanety = SHA-256 kanonického obsahu (SouborPlanety.Otisk), ne bajtů WPLN (G-3 review).</remarks>
 public sealed record PlanetaInfoDto(string GenVer, long Seed, bool Potvrzena, string ManifestSouhrn, IReadOnlyList<string> RozdilyDat,
-    IReadOnlyList<string> NeplatneModuly, int Uprav);
+    IReadOnlyList<string> NeplatneModuly, int Uprav, string OtiskPlanety);
 
 /// <summary>U-1 (zástupné): úprava s regionem.</summary>
 public sealed record UpravaRegionuDto(string Druh, string Modul, OblastQ16 Oblast, string ParametryJson);
