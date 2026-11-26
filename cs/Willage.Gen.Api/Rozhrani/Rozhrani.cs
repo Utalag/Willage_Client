@@ -25,6 +25,8 @@ public interface IModuly
 public interface ISluzbaSveta
 {
     VysledekGeneraceDto Generuj();
+    /// <summary>G-4: generace s průběhem po modulech a zrušením (kontrola mezi moduly; OperationCanceledException).</summary>
+    VysledekGeneraceDto Generuj(IProgress<ModulDto>? prubeh, CancellationToken zruseni);
     OtiskyPlanetyDto Otisky(int blokX = 14, int blokY = 14);
     PlanetaInfoDto Uloz(string cesta);
     /// <summary>Načte WPLN: sadu parametrů a potvrzení; vrátí rozdíly dat proti aktuálnímu manifestu a moduly s jiným klíčem.</summary>

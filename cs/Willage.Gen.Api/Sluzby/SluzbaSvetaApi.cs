@@ -13,6 +13,7 @@ public sealed class SluzbaSvetaApi : ISluzbaSveta
     public SluzbaSvetaApi(StavGeneratoru s) => _s = s;
 
     public VysledekGeneraceDto Generuj() => _s.Generuj();
+    public VysledekGeneraceDto Generuj(IProgress<ModulDto>? prubeh, CancellationToken zruseni) => _s.Generuj(prubeh, zruseni);
 
     public OtiskyPlanetyDto Otisky(int bx = 14, int by = 14)
     {

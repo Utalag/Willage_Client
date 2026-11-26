@@ -41,11 +41,18 @@ public sealed class StavGeneratoru
         return Pipeline.Klice(p);
     }
 
-    public VysledekBehu Spust()
+    public VysledekBehu Spust(IProgress<ModulDto>? prubeh = null, CancellationToken zruseni = default)
     {
         var (p, n) = Sada.Sestav(); Pipeline.Nastaveni = n;
         var sw = System.Diagnostics.Stopwatch.StartNew();
-        Posledni = Pipeline.Spust(p, Kes, Vlaken);
+        var zast = Pipeline.Graf.Poradi.OfType<ZastupnyModul>().ToDictionary(m => m.Id);
+        Action<StavModulu>? po = prubeh is null ? null : st =>
+        {
+            var m = Pipeline.Graf.Poradi.First(x => x.Id == st.Id); zast.TryGetValue(st.Id, out var z);
+            prubeh.Report(new ModulDto(m.Id, m.Nazev, m.VerzeAlgoritmu, m.Zavislosti, m.Soubory, z is not null, z?.Popis, st.Klic,
+                z is not null ? StavModuluDto.Zastupny : st.ZPameti ? StavModuluDto.ZPameti : StavModuluDto.Spocitano, st.Ms));
+        };
+        Posledni = Pipeline.Spust(p, Kes, Vlaken, po, zruseni);
         PosledniMs = sw.Elapsed.TotalMilliseconds;
         return Posledni;
     }
@@ -71,9 +78,9 @@ public sealed class StavGeneratoru
         }).ToList();
     }
 
-    public VysledekGeneraceDto Generuj()
+    public VysledekGeneraceDto Generuj(IProgress<ModulDto>? prubeh = null, CancellationToken zruseni = default)
     {
-        var r = Spust();
+        var r = Spust(prubeh, zruseni);
         var s = r.Vystup<VystupPlanety>(M7VystupPlanety.Id_).Souhrn;
         return new VysledekGeneraceDto(Moduly(), new SouhrnPlanetyDto(s.OtiskMapy, s.OtiskKlimatu, s.Vodniku, s.Oaz, s.ManifestSouhrn), PosledniMs);
     }

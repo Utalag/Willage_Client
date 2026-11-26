@@ -52,7 +52,11 @@ public sealed class PipelineSveta
         return kl;
     }
 
-    public VysledekBehu Spust(ParametrySveta p, string? kes = null, int vlaken = 8)
+    /// <summary>
+    /// Spustí pipeline. G-4: <paramref name="poModulu"/> se zavolá po každém modulu (z vlákna, které Spust volá),
+    /// <paramref name="zruseni"/> se kontroluje před každým modulem (OperationCanceledException; hotové moduly zůstanou v paměti).
+    /// </summary>
+    public VysledekBehu Spust(ParametrySveta p, string? kes = null, int vlaken = 8, Action<StavModulu>? poModulu = null, CancellationToken zruseni = default)
     {
         var vys = new Dictionary<string, object>(StringComparer.Ordinal);
         var k = Kontext(p, kes, vlaken, id => vys[id]);
@@ -60,13 +64,15 @@ public sealed class PipelineSveta
         var stavy = new List<StavModulu>();
         foreach (var m in Graf.Poradi)
         {
+            zruseni.ThrowIfCancellationRequested();
             string klic = kl[m.Id];
-            if (_pamet.TryGetValue(m.Id, out var c) && c.klic == klic) { vys[m.Id] = c.vystup; stavy.Add(new(m.Id, m.Nazev, klic, true, 0)); continue; }
+            if (_pamet.TryGetValue(m.Id, out var c) && c.klic == klic) { vys[m.Id] = c.vystup; stavy.Add(new(m.Id, m.Nazev, klic, true, 0)); poModulu?.Invoke(stavy[^1]); continue; }
             var sw = Stopwatch.StartNew();
             var o = m.Spust(k);
             sw.Stop();
             vys[m.Id] = o; _pamet[m.Id] = (klic, o);
             stavy.Add(new(m.Id, m.Nazev, klic, false, sw.Elapsed.TotalMilliseconds));
+            poModulu?.Invoke(stavy[^1]);
         }
         return new VysledekBehu(stavy, vys, k.Manifest);
     }
