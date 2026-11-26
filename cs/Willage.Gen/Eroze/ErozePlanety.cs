@@ -22,7 +22,7 @@ public static class ErozePlanety
     public static PeriodickyPodklad Podklad(SvetFn s, ParametryEroze pe) => new(s, pe.PlanetaXM, pe.PlanetaYM, pe.PasProlnutiM);
 
     /// <summary>Klíč keše mapy pro daný svět (moře je součástí klíče, bez moře beze změny proti kroku 6).</summary>
-    public static string Klic(SvetFn s, DataSveta d, ParametryEroze pe) => SouborMapy.KlicKese(s.Sd, pe, d.SouborySveta, (s.More?.Kanonicky() ?? "") + (s.Panve?.Kanonicky() ?? ""));
+    public static string Klic(SvetFn s, DataSveta d, ParametryEroze pe) => SouborMapy.KlicKese(s.Sd, pe, s.More is null ? d.SouborySveta.Where(f => f != d.MoreV1) : d.SouborySveta, (s.More?.Kanonicky() ?? "") + (s.Panve?.Kanonicky() ?? ""));
 
     /// <summary>Načte mapu ze složky keše podle klíče, jinak spočte a uloží. kes = null → bez ukládání.</summary>
     public static MapaEroze Mapa(SvetFn s, DataSveta d, ParametryEroze pe, string? kes, int vlaken)
