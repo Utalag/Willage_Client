@@ -47,8 +47,8 @@ public sealed class PobrezniPas
     {
         var m = _kat.Najdi(k.id);
         if (m is null) { _kat.NeznamaId.Remove(k.id); return 0; }
-        double n = m.Porovitost > 0 ? m.Porovitost : _p.PobrezPorovitost;
-        long tau0 = m.KMs is double kk ? PrusakDosah.CasCistehoBlokuMs(kk, n, k.spadPm / 1000.0) : -1;
+        double n = _koef.Porovitost(k.id) is double pn && pn > 0 ? pn : (m.Porovitost > 0 ? m.Porovitost : _p.PobrezPorovitost);
+        long tau0 = _koef.KMs(k.id) is double kk ? PrusakDosah.CasCistehoBlokuMs(kk, n, k.spadPm / 1000.0) : -1;
         return PrusakDosah.DosahMm(_koef.Koef(k.id), tau0, _horizontMs, _maxMm);
     });
 

@@ -49,7 +49,7 @@ public sealed class PrusakDutina
         {
             if (s.Cesta.Length == 1 && s.Cesta[0] == Propustnost.Vzduch) return (long)Math.Round(OtevrenaLs * PlPerUl);
             double x = double.PositiveInfinity;
-            foreach (int m in s.Cesta) x = Propustnost.Rozhrani(x, pr.X(m));
+            foreach (int m in s.Cesta) x = Propustnost.Rozhrani(x, koef is not null ? koef.X(m) : pr.X(m));
             return (long)Math.Round(x * PlPerUl);   // l/s → µl/s
         }
         long Teta(StenaDutiny s) => koef is null ? PrusakUtlum.Jedna : PrusakUtlum.Cesta(s.Cesta, koef);
