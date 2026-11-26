@@ -1,0 +1,154 @@
+{
+ "bloky": [
+  [
+   14,
+   15
+  ],
+  [
+   15,
+   15
+  ],
+  [
+   16,
+   15
+  ]
+ ],
+ "kousa": true,
+ "ms": 130280,
+ "ok": true,
+ "po": {
+  "bunek_tel": {
+   "dome": 16349,
+   "kras": 1152,
+   "pipe": 3441,
+   "skarn": 9525,
+   "zila": 4228
+  },
+  "podle_hostitele": {
+   "dome@49": 4078,
+   "dome@5": 4394,
+   "dome@51": 6198,
+   "dome@52": 1679,
+   "kras@49": 409,
+   "kras@5": 743,
+   "pipe@20": 649,
+   "pipe@26": 219,
+   "pipe@28": 247,
+   "pipe@30": 53,
+   "pipe@33": 392,
+   "pipe@36": 537,
+   "pipe@51": 4,
+   "pipe@52": 4,
+   "pipe@6": 1046,
+   "pipe@7": 290,
+   "skarn@30": 3886,
+   "skarn@49": 2265,
+   "skarn@5": 3374,
+   "zila@30": 6,
+   "zila@33": 1517,
+   "zila@36": 1027,
+   "zila@6": 1678
+  },
+  "porus_hloubka": 0,
+  "porus_host": 0,
+  "porus_mineral": 0,
+  "porus_nikdy": 0,
+  "pripady": [],
+  "sloupcu": 12288,
+  "v_pude": {}
+ },
+ "pred": {
+  "bunek_tel": {
+   "dome": 36546,
+   "kras": 1152,
+   "pipe": 3226,
+   "skarn": 94489,
+   "zila": 3882
+  },
+  "podle_hostitele": {
+   "dome@33": 13270,
+   "dome@36": 4319,
+   "dome@49": 4078,
+   "dome@5": 4394,
+   "dome@51": 6071,
+   "dome@52": 1637,
+   "dome@53": 84,
+   "dome@6": 2693,
+   "kras@49": 409,
+   "kras@5": 743,
+   "pipe@20": 605,
+   "pipe@26": 203,
+   "pipe@28": 235,
+   "pipe@30": 53,
+   "pipe@33": 292,
+   "pipe@36": 537,
+   "pipe@51": 4,
+   "pipe@52": 1,
+   "pipe@6": 1043,
+   "pipe@7": 253,
+   "skarn@20": 17696,
+   "skarn@26": 8049,
+   "skarn@28": 2549,
+   "skarn@30": 3886,
+   "skarn@33": 46809,
+   "skarn@49": 2265,
+   "skarn@5": 3374,
+   "skarn@51": 3911,
+   "skarn@52": 1874,
+   "skarn@7": 4076,
+   "zila@20": 41,
+   "zila@26": 18,
+   "zila@30": 6,
+   "zila@33": 1123,
+   "zila@36": 1009,
+   "zila@49": 1,
+   "zila@5": 1,
+   "zila@51": 4,
+   "zila@6": 1673,
+   "zila@7": 6
+  },
+  "porus_hloubka": 0,
+  "porus_host": 105401,
+  "porus_mineral": 213,
+  "porus_nikdy": 0,
+  "pripady": [
+   {
+    "typ": "skarn",
+    "vm": 20,
+    "x": 1793.0,
+    "y": 1921.0,
+    "z": 21.25
+   },
+   {
+    "typ": "skarn",
+    "vm": 20,
+    "x": 1793.0,
+    "y": 1921.0,
+    "z": 21.75
+   },
+   {
+    "typ": "skarn",
+    "vm": 20,
+    "x": 1793.0,
+    "y": 1921.0,
+    "z": 22.25
+   },
+   {
+    "typ": "skarn",
+    "vm": 33,
+    "x": 1793.0,
+    "y": 1921.0,
+    "z": 36.75
+   },
+   {
+    "typ": "skarn",
+    "vm": 33,
+    "x": 1793.0,
+    "y": 1921.0,
+    "z": 37.25
+   }
+  ],
+  "sloupcu": 12288,
+  "v_pude": {}
+ }
+}

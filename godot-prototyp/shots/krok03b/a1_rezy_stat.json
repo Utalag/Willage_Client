@@ -1,0 +1,22 @@
+{
+ "a1": {
+  "pred": {
+   "telo": 2833,
+   "v_nehostiteli": 1756
+  },
+  "po": {
+   "telo": 1261,
+   "v_nehostiteli": 0
+  }
+ },
+ "a1b": {
+  "pred": {
+   "telo": 2086,
+   "v_nehostiteli": 1745
+  },
+  "po": {
+   "telo": 394,
+   "v_nehostiteli": 0
+  }
+ }
+}

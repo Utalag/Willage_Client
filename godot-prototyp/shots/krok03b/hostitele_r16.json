@@ -1,0 +1,159 @@
+{
+ "bloky": [
+  [
+   14,
+   16
+  ],
+  [
+   15,
+   16
+  ],
+  [
+   16,
+   16
+  ]
+ ],
+ "kousa": true,
+ "ms": 129173,
+ "ok": true,
+ "po": {
+  "bunek_tel": {
+   "dome": 10227,
+   "kras": 1791,
+   "pipe": 3185,
+   "skarn": 26669,
+   "zila": 3992
+  },
+  "podle_hostitele": {
+   "dome@44": 3605,
+   "dome@49": 1002,
+   "dome@5": 904,
+   "dome@51": 3341,
+   "dome@52": 1375,
+   "kras@44": 1181,
+   "kras@49": 419,
+   "kras@5": 191,
+   "pipe@20": 556,
+   "pipe@26": 9,
+   "pipe@28": 219,
+   "pipe@30": 230,
+   "pipe@33": 531,
+   "pipe@36": 56,
+   "pipe@40": 74,
+   "pipe@52": 2,
+   "pipe@6": 1172,
+   "pipe@7": 336,
+   "skarn@30": 4932,
+   "skarn@40": 16033,
+   "skarn@44": 5360,
+   "skarn@5": 344,
+   "zila@33": 1361,
+   "zila@36": 301,
+   "zila@40": 430,
+   "zila@6": 1900
+  },
+  "porus_hloubka": 0,
+  "porus_host": 0,
+  "porus_mineral": 0,
+  "porus_nikdy": 0,
+  "pripady": [],
+  "sloupcu": 12288,
+  "v_pude": {}
+ },
+ "pred": {
+  "bunek_tel": {
+   "dome": 27242,
+   "kras": 1791,
+   "pipe": 3026,
+   "skarn": 94080,
+   "zila": 3767
+  },
+  "podle_hostitele": {
+   "dome@33": 7680,
+   "dome@36": 3932,
+   "dome@40": 3689,
+   "dome@44": 3605,
+   "dome@49": 1002,
+   "dome@5": 904,
+   "dome@51": 3285,
+   "dome@52": 1323,
+   "dome@6": 1822,
+   "kras@44": 1181,
+   "kras@49": 419,
+   "kras@5": 191,
+   "pipe@20": 531,
+   "pipe@26": 6,
+   "pipe@28": 196,
+   "pipe@30": 230,
+   "pipe@33": 446,
+   "pipe@36": 56,
+   "pipe@40": 74,
+   "pipe@6": 1172,
+   "pipe@7": 315,
+   "skarn@20": 8545,
+   "skarn@26": 601,
+   "skarn@28": 7911,
+   "skarn@30": 4932,
+   "skarn@33": 36218,
+   "skarn@40": 15563,
+   "skarn@44": 5360,
+   "skarn@5": 344,
+   "skarn@51": 3380,
+   "skarn@52": 1699,
+   "skarn@7": 9527,
+   "zila@20": 10,
+   "zila@26": 3,
+   "zila@28": 17,
+   "zila@33": 1122,
+   "zila@36": 291,
+   "zila@40": 413,
+   "zila@44": 5,
+   "zila@51": 2,
+   "zila@6": 1886,
+   "zila@7": 18
+  },
+  "porus_hloubka": 0,
+  "porus_host": 85059,
+  "porus_mineral": 237,
+  "porus_nikdy": 0,
+  "pripady": [
+   {
+    "typ": "skarn",
+    "vm": 33,
+    "x": 1793.0,
+    "y": 2049.0,
+    "z": 37.75
+   },
+   {
+    "typ": "skarn",
+    "vm": 33,
+    "x": 1793.0,
+    "y": 2049.0,
+    "z": 38.25
+   },
+   {
+    "typ": "skarn",
+    "vm": 33,
+    "x": 1793.0,
+    "y": 2049.0,
+    "z": 38.75
+   },
+   {
+    "typ": "skarn",
+    "vm": 7,
+    "x": 1793.0,
+    "y": 2051.0,
+    "z": 22.75
+   },
+   {
+    "typ": "skarn",
+    "vm": 7,
+    "x": 1793.0,
+    "y": 2051.0,
+    "z": 23.25
+   }
+  ],
+  "sloupcu": 12288,
+  "v_pude": {}
+ }
+}
