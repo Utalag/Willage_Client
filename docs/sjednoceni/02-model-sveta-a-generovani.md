@@ -18,7 +18,7 @@ Značení: K1–K12 = konflikty z `00-mapa-vetvi.md`. [n] = zdroj ze seznamu na 
   2. dorovnání okrajů na sousedy; chybí-li soused, regionální základ (`surf_ref`), nebo `base_hm` z hrubého světa (E49) [1][2],
   3. vrstvy: vlastní tvar + regionální základ, mocnosti se napojují klíny na sousedy,
   4. hranice = součet mocností, kontext `geo_fn.world_fn` + `block_info`,
-  5. **celý sloupec** se vzorkuje do buněk 0,5 m (`geo_fn.sample`),
+  5. **celý sloupec** se vzorkuje do buněk 0,5 m (`geo_fn.sample`) — dnešní kód, před sjednocením buňky na 0,25 m,
   6. minerály, pak dutiny (`cavity_one`, dnes nejvýš jedna na segment — to 1.7 ruší),
   7. voda: vsakování gen-v3 (`G.infiltrate`),
   8. validátor gen-v3.
@@ -72,14 +72,14 @@ Minerály, žíly, kras i dutiny jsou útvary funkce světa (1.7), ne krok „po
 **Téma.** Jak se funkce světa ptáme (bod, sloupec) a jak se do dotazu promítne vložení blueprintu (zrcadlení, otočení, posun výšky, prolnutí švů). Navazuje na návrh TerrainSource (E88).
 
 **Současný stav**
-- `geo_fn` umí dotaz v metrech: `surface_m`, `boundary_m`, `column` (povrch + hranice vrstev), `material` v bodě (X, Y, Z), `sample` do buněk. Kontext `world_fn` ale potřebuje **řídicí mřížku sousedních segmentů** (`hm_f`, `bs`). Chybí-li soused, okraj se zrcadlí. Rozteč řídicí mřížky je U = 0,5 m, šířka segmentu 8 m, výška sloupce 32 m jsou v kódu konstanty [6]. Proto E90 `geo_fn` na mapě 3 km nepoužilo [4].
+- `geo_fn` umí dotaz v metrech: `surface_m`, `boundary_m`, `column` (povrch + hranice vrstev), `material` v bodě (X, Y, Z), `sample` do buněk. Kontext `world_fn` ale potřebuje **řídicí mřížku sousedních segmentů** (`hm_f`, `bs`). Chybí-li soused, okraj se zrcadlí. Rozteč řídicí mřížky je U = 0,5 m (vnitřní mřížka funkce, ne datová buňka, viz 1.1), šířka segmentu 8 m, výška sloupce 32 m jsou v kódu konstanty [6]. Proto E90 `geo_fn` na mapě 3 km nepoužilo [4].
 - Výška světa je zvlášť v `lod90.h_m(x, y)`: vzorec E49 v metrech, nezávislý na rozlišení. Geologii, vodu ani sopku (v testu vypnutou) nezná [4].
 - E88 (jen dokument, s Willage-backend neprojednáno) navrhuje čtyři objekty [7]:
   - **TerrainSource** — neměnná definice: seed světa, slot původu, recept, `block_seed`, `gen_ver`, zásobník, u výřezu hashe sousedů původu a prameny,
-  - **TerrainTransform** — `rot` 0–3, `dz` v buňkách 0,5 m, `mirror` rezervované (vždy 0; zrcadlení se v E86 nezkoušelo),
+  - **TerrainTransform** — `rot` 0–3, `dz` v buňkách 0,5 m (tehdejší datová buňka; po 2026-11-21 je buňka 0,25 m, viz 1.1), `mirror` rezervované (vždy 0; zrcadlení se v E86 nezkoušelo),
   - **TerrainPlacement** — ostrov, slot, pořadí `seq`, `neighbours_before` na 4 hranách,
   - **TerrainInstance** — výsledek po napojení: hashe definice, prameny, obsazení výtoků, překryv.
-- E88 měření (jeden segment 8 m bez sousedů): řídicí mřížka po deflate 8,7–35 kB, buňky 0,5 m 1,4–2,2 kB (mřížka 5–25× větší) → mřížku neukládat. Segment bez změn hráče v návrhu WTI1 ≈ 400–450 B [7].
+- E88 měření (jeden segment 8 m bez sousedů, měřeno při buňce 0,5 m): řídicí mřížka po deflate 8,7–35 kB, buňky 0,5 m 1,4–2,2 kB (mřížka 5–25× větší) → mřížku neukládat. Segment bez změn hráče v návrhu WTI1 ≈ 400–450 B [7].
 - E86: otočení **hotových dat** je přesné (0 neshod, ~5 ms). Vygenerovat výřez znovu v otočené poloze nejde (vrstvy o 2,1–3,4 m, 18,9–24,8 % buněk jinak). Co se z funkcí počítá znovu, musí jít **inverzní transformací do souřadnic původu**. Švy vrstev přeneseného výřezu skáčou o 1,8–2,7 m (už u rot 0, klíny ze sousedů původu) [8].
 - E87: masiv jako funkce přes švy, pořadí vložení 0 neshod uvnitř masivu; vedle nížiny stěna 5–6 m a pořadí změní 2 000–2 700 buněk [9].
 - Kapitola 1 už rozhodla tvar vložení (1.4): seznam v pořadí nese souřadnice, zrcadlení, otočení, výškový posun, režim napojení (Auto / Blend / Keep) a **seed i verzi zdrojového světa**. Sousedé se nemění. Ukládá se jen rozdíl proti funkci (1.10). Souřadnice 16 × 16 × 64 v E88 po 1.1 a 1.3 neplatí (K1, K3).
@@ -118,7 +118,7 @@ Minerály, žíly, kras i dutiny jsou útvary funkce světa (1.7), ne krok „po
 - Rozhodnuto v 1.2: izometrický omezený výhled; generuje a vykresluje se jen **zorné pole plus okraj**; jen to, co je **obnažené vzduchem** (u průhledné vody i dno); slupka **2–3 buněk** (parametr) s mřížkou **0,25 m z funkce**; hlubší buňky až při odkrytí; podzemní voda zůstává funkcí.
 - Hra to tak dnes nedělá. Segment 8 m se vyplní **celý sloupec** najednou (`FN.sample`, výška 64 buněk = 32 m) [1][6]. E96 proto generuje všech 256 segmentů při načtení (58–61 s) [2].
 - E90 (prezentace, ale slupku změřilo): „povrchová slupka = vrchní buňka + 2 pod ní“ (3 × u8 na sloupec). Mapa 3 072 m, 832 512 sloupců, výšky a slupka ≈ 5,8 MB, stavba 4,9 s. Krok hráče o 16 m: 15 kousků + 35 sousedů, 296 ms. Odhad 1 m všude: ≈ 57 s, ≈ 2,6 GB sítě (síť je prezentace) [4]. TODO to formulovalo stejně: „vzorkuje se jen povrchová slupka (viditelné buňky + 1–2 vrstvy pod nimi), zbytek až při interakci“ [10].
-- E85: vzorek 0,25 m z funkcí na **celý** segment 8 m je 442–784 ms (65–108× proti zjemnění 6,0–8,1 ms) a liší se v 7,8 % buněk [11]. V 1.2 se proto varianta „0,25 m všude“ zrušila ve prospěch slupky.
+- E85: vzorek 0,25 m z funkcí na **celý** segment 8 m je 442–784 ms (65–108× proti zjemnění 6,0–8,1 ms) a liší se v 7,8 % buněk [11]. V 1.2 se proto varianta „0,25 m všude“ (myšleno vzorek celého sloupce) zrušila ve prospěch slupky. Sjednocení datové buňky na 0,25 m (2026-11-21 00:19, 1.1) tohle nemění: pořád se vzorkuje jen slupka, ne celý sloupec.
 - E96 návrh optimalizace načtení: nejdřív 3 × 3 segmenty u startu (~2 s), zbytek ve vlákně [2]. To je líné načítání segmentů, ne slupka uvnitř sloupce.
 - Jak přesně určit „obnažené vzduchem“ a šířku okraje zorného pole v datech dnes není. E90 úroveň volilo podle **hráče**, ne podle kamery [4].
 
@@ -141,7 +141,7 @@ Minerály, žíly, kras i dutiny jsou útvary funkce světa (1.7), ne krok „po
 - **Viditelnou oblast určuje prezentace** podle zoomu a velikosti dlaždice (tilesetu). Datový model pevnou šířku zobrazení nezná, dostane jen obdélník světa, který je vidět.
 - Generátor k oblasti přidá **okraj** (parametr v metrech nebo buňkách, ne v dlaždicích) a vzorkuje **slupku 2–3 buněk** (1.2).
 - Při kopání nebo poklesu vody se nově obnažené buňky **donačtou z funkce**. Jednou uložený rozdíl se znovu nepočítá.
-- **Rozlišení 0,5 m je pro data a výpočty** (poměry, objemy, voda), ne pro zobrazení. Prezentace může kreslit jinak (2D dlaždice i 3D).
+- ~~**Rozlišení 0,5 m je pro data a výpočty** (poměry, objemy, voda), ne pro zobrazení.~~ ⚠ překonáno rozhodnutím 2026-11-21 00:19 (1.1): **datová buňka i viditelný voxel jsou 0,25 m**. Data, výpočty (poměry, objemy, voda, kopání, překryv) i dlaždice používají tutéž buňku 0,25 m. Prezentace může kreslit 2D dlaždice i 3D, ale rozlišení dat je stejné.
 - Šířku okraje a počty buněk slupky změřit v 2.7, nehádat.
 - **Poznámka pro kapitolu 7 (Jan t820u–t822u, 21:03–21:08):** viditelný voxel je **0,25 m** (postava 1,75 m = 7 voxelů). **128 / 256 / 512 px** je rozlišení textury dlaždice podle kvality a monitoru (Full HD, 2K, 27"), ne velikost dlaždice na obrazovce. Kolik terénu je vidět, určuje zoom. Datový model to neomezuje. Obrázek: `obrazky/voxel-meritko.png`.
 - **Výchozí zoom (Jan t823u, t824u, 21:08–21:35):** v axonometrii kolem **64 dlaždic (voxelů 0,25 m) vodorovně**, tedy asi 16 m na šířku obrazovky (~30 px na voxel u Full HD, ~40 px u 2K).
@@ -155,10 +155,10 @@ Minerály, žíly, kras i dutiny jsou útvary funkce světa (1.7), ne krok „po
 **Téma.** Segment je jednotka výpočtu a ukládání rozdílu proti funkci (1.1, 1.4). Jaký má být formát rozdílu a jestli nechat 8 m, nebo zkusit 16 / 32 m.
 
 **Současný stav**
-- Segment je podle 1.1 parametr, výchozí **8 m** (16 × 16 buněk 0,5 m). Kandidáti 16 a 32 m se měli doladit v 1.11, ten je přeskočený.
+- Segment je podle 1.1 parametr, výchozí **8 m** (32 × 32 buněk 0,25 m; dříve 16 × 16 buněk 0,5 m). Kandidáti 16 a 32 m se měli doladit v 1.11, ten je přeskočený.
 - Dnes je segment i jednotka vložení, receptu, seedu, rotace a formátu WVB1 (K1, v kódu „blok“) [1][12]. E96 složilo blok 128 m z 256 takových segmentů [2].
 - **Překryv E78** je kanonický rozdíl proti definici: buňka 0,25 m → materiál, položka rovná definici se maže. Uložení „seřazené klíče + deflate“. Čísla: 1 buňka 8 B (deflate 40 B → nekomprimovat), 1 000 náhodných 1 792 B, chodba 15 m + šachta 124 B, chodba 70 m přes 4 segmenty 244 B, nepravidelná jeskyně 663 B. Celé pole 0,25 m je 13,4–17,4 kB deflate na 4 segmenty [7][13].
-- E88 / WTI1: segment 8 m bez změn hráče ≈ 400–450 B (hlavička, hashe, prameny). WVB1 pole 0,5 m je 1,4–2,2 kB deflate [7].
+- E88 / WTI1: segment 8 m bez změn hráče ≈ 400–450 B (hlavička, hashe, prameny). WVB1 pole 0,5 m je 1,4–2,2 kB deflate, měřeno při buňce 0,5 m [7].
 - E96 k velikosti 16 / 32 m nic neměřilo pro data. Navrhlo slučovat **sítě** vegetace a terénu po 32 m — to je prezentace (kapitola 7) [2]. E90 kousky okolí hráče měly 16 m [4].
 - Po 1.4 a 1.10 se neukládají vygenerované, ale nezměněné buňky. Prázdný segment je tedy jen odkaz na funkci (Source + Transform + Placement), ne pole buněk.
 

@@ -22,6 +22,7 @@ Značení: [n] = zdroj na konci. K1–K12 = konflikty z `00-mapa-vetvi.md`. Čas
 8. **7.1** Pohled 2D (dlaždice), nebo 3D (modely)?
 9. **7.2** LOD prezentační vrstvy.
 10. **7.3** Průhlednost a řez v izometrii (E91).
+11. **Klima** Konkrétní hodnoty klimatických presetů (násobitele, posuny, podíly reliéfních biomů, voda) mimo výchozí identitu mírného klimatu.
 
 ---
 
@@ -96,11 +97,13 @@ Hra dnes pořád kope po 0,5 m a vyplňuje celý sloupec — to je úkol impleme
 | opakovatelnost ostrova | ne, funkce už nesedí | ano, rozdíl proti funkci |
 | shoda s 1.4 / 2.4 | rozbíjí to | sedí |
 
-**Doporučení.** Varianta B. Eroze E51 (a rozpouštění krasu E75, které bere horninu) se zapisuje do stejného překryvu jako kopání, se zdrojem „eroze“. Kanonizace E78 platí (položka rovná funkci se maže). Voda v tom samém kroku terén nemění.
+**Doporučení.** ~~Varianta B. Eroze E51 (a rozpouštění krasu E75, které bere horninu) se zapisuje do stejného překryvu jako kopání, se zdrojem „eroze“.~~ ⚠ překonáno: eroze i kras během hry jdou vrstvou offsetu, ne překryvem buněk (viz Platí).
 
-**Otázka pro Jana.** Má se eroze E51 (a úbytek horniny krasem) zapisovat do překryvu jako změna proti funkci, se zdrojem „eroze“, a ne do definice terénu?
+**Otázka pro Jana.** ~~Má se eroze E51 (a úbytek horniny krasem) zapisovat do překryvu jako změna proti funkci, se zdrojem „eroze“, a ne do definice terénu?~~ ⚠ překonáno, viz Platí.
 
-**Platí:** (Jan, hovor 20. 11. 2026) Eroze se **neukládá** jako změněné buňky. Původní generátor terénu zůstává nedotčený a eroze je samostatná vrstva offsetu (posunu výšky), která se přičítá k výšce z původní funkce. Vzniká tak v podstatě druhá funkce s upraveným vstupem: eroze terén prohlubuje a čím je větší, tím víc původní funkci mění. Výpočet vody běží na výsledném terénu s offsetem. Výhody: minimální objem dat, erozi lze kdykoli vypnout nebo předělat bez zásahu do generátoru a voda se v prohlubních chová správně.
+**Platí:** (Jan, hovor 20. 11. 2026) Eroze se **neukládá** jako změněné buňky. Původní generátor terénu zůstává nedotčený a eroze je samostatná vrstva offsetu (posunu výšky), která se přičítá k výšce z původní funkce. Vzniká tak v podstatě druhá funkce s upraveným vstupem. Výpočet vody běží na výsledném terénu s offsetem. Výhody: minimální objem dat, erozi lze kdykoli vypnout nebo předělat bez zásahu do generátoru a voda se v prohlubních chová správně.
+- **Doplněno (Jan 2026-11-21 00:24):** posun eroze **smí být kladný**. Terén může i růst (usazování, náplavy, delty), nejen ubývat.
+- **Doplněno (Jan 2026-11-21 00:24):** kras během hry se ukládá **stejnou cestou offsetu**, ne jako změna materiálu na vzduch v překryvu buněk. Jan: „Zkusíme jít cestou offsetu.“ V kroku 7 se ověří, jestli offset stačí i pro podzemní dutiny.
 
 ---
 
@@ -156,11 +159,12 @@ Otočení hotových dat je změřené (0 neshod, ~5 ms). Skok vrstev 1,8–2,7 m
 |---|---|---|---|
 | šev výřezu 1,8–2,7 m [10] | ostane skok | zaklíní se na 8 m | podle pravidla (návrh: Blend, když by skok přesáhl 1 buňku, jinak Keep) |
 
-**Doporučení.** Výchozí **Blend**: klín nebo napojení na 1/16 bloku podle 1.7.1. Keep jen když ho hráč u daného vložení výslovně zvolí. Auto zatím nezavádět, dokud ho nebude potřeba jako zkratku.
+**Doporučení.** ~~Výchozí **Blend**: klín nebo napojení na 1/16 bloku podle 1.7.1. Keep jen když ho hráč u daného vložení výslovně zvolí. Auto zatím nezavádět, dokud ho nebude potřeba jako zkratku.~~ ⚠ překonáno: výchozí je Auto; Blend má dvě nezávislá nastavení (povrch 1–4 buňky, vrstvy klín 1/16 bloku), viz Platí (2026-11-21 00:24).
 
 **Otázka pro Jana.** Má být výchozí napojení švu při vložení blueprintu Blend (klín na 1/16 bloku podle 1.7.1) a Keep jen na výslovnou volbu?
 
-**Platí:** (Jan, hovor 20. 11. 2026) Výchozí režim je **Auto**. Auto se rozhoduje podle rozdílu výšek v každém sloupci zvlášť: rozdíl do 6 buněk vyhladí rampou na 3 buňkách, větší rozdíl nechá jako útes. Blend (dorovnat na 1–4 buňkách) a Keep (ponechat, schod) zůstávají jako volitelné alternativy.
+**Platí:** (Jan, hovor 20. 11. 2026) Výchozí režim je **Auto**. Auto se rozhoduje podle rozdílu výšek v každém sloupci zvlášť: rozdíl do 6 buněk vyhladí rampou na 3 buňkách, větší rozdíl nechá jako útes. Blend a Keep zůstávají jako volitelné alternativy. Počty 6 a 3 buněk pocházejí z prototypu s buňkou 0,5 m (3 m a 1,5 m). Po sjednocení buňky na 0,25 m se zachovávají vzdálenosti v metrech (Jan 2026-11-21 00:35): rozdíl do 3 m (12 buněk) vyhladí rampou na 1,5 m (6 buněk), větší rozdíl zůstane útesem.
+- **Doplněno (Jan 2026-11-21 00:24):** Blend má **dvě nezávislá nastavení**. Napojení povrchu je rampa na 1–4 buňkách. Napojení podzemních vrstev je klín, výchozí 1/16 bloku (1.7.1).
 
 ---
 
@@ -171,8 +175,8 @@ Původní plán: kontrakt WTI1, společně s Willage-backend.
 **Už vyřešeno v kap. 1–2**
 
 - Klient generuje a simuluje, server ukládá, načítá a validuje → 1.10.
-- Server ukládá a posílá seed, parametry, verzi generátoru, seznam vložení a rozdíl proti funkci (ne hotová pole segmentů). WVB1 je balík změn segmentu. Namátková kontrola generátorem jde vypnout → 1.10 (t801u–t803u).
-- Voda v buňce: celé litry, 1 B (záloha 2 B). Determinismus povinný, změny i vložení nesou verzi → 1.5, 1.10.
+- Server ukládá a posílá seed, parametry, verzi generátoru, seznam vložení a rozdíl proti funkci (ne hotová pole segmentů). WVB1 je balík změn segmentu. Kontrola generátorem jde vypnout → 1.10 (t801u–t803u); kdy kontrola běží (zásobník, ne namátkově) → 6.3.
+- Voda v buňce: krok 1/16 l, hodnota 0–250 = 0–15,625 l, 1 B, 251–255 rezerva (Jan 2026-11-21 00:39; záloha 2 B). Determinismus povinný, změny i vložení nesou verzi → 1.5, 1.10 (sjednoceno s buňkou 0,25 m, Jan 2026-11-21 00:19).
 - Objekty Source / Transform / Placement, bez řídicí mřížky, zrcadlení platí → 2.2.
 - Výška sloupce a velikost segmentu jsou parametry (32/64/128 m a 8/16/32 m), ne natvrdo 16 × 16 × 64 → 1.1, 1.3, 1.10.
 
@@ -180,25 +184,25 @@ Návrh E88 s Willage-backend **ještě nebyl projednán** [2]. Body 6.1 a 6.2 js
 
 ### 6.1 Co server ověřuje a snímek buněk
 
-**Téma.** Má klient posílat serveru snímek buněk 0,5 m a v položce překryvu i původní materiál definice, aby server spočítal souhrn přesně? (E88 otázka 4) [2].
+**Téma.** Má klient posílat serveru snímek buněk 0,5 m (tehdejší datová buňka; po 2026-11-21 00:19 je buňka 0,25 m, viz 1.1) a v položce překryvu i původní materiál definice, aby server spočítal souhrn přesně? (E88 otázka 4) [2].
 
 **Současný stav**
 - 1.10: při zapnuté kontrole server občas znovu vygeneruje segment ze seedu + změn a porovná hash. Při vypnuté kontrole jen ukládá a kontroluje **bilanci materiálu**.
-- E88: bez portu generátoru server nevidí geometrii, jen souhrn a hashe. Návrh volitelné sekce `cells_snapshot` (buňky 0,5 m po deflate, 1,4–2,2 kB na segment 8 m) a +1 B původního materiálu v položce překryvu [2].
+- E88: bez portu generátoru server nevidí geometrii, jen souhrn a hashe. Návrh volitelné sekce `cells_snapshot` (buňky 0,5 m po deflate, 1,4–2,2 kB na segment 8 m, měřeno při buňce 0,5 m) a +1 B původního materiálu v položce překryvu [2].
 - Překryv E78 jinak nese jen nový materiál. Souhrn „co ubylo / přibylo“ server z rozdílu bez původního materiálu nebo bez generátoru přesně nesloží [2][9].
 
 **Varianty**
 
-| | A: jen hash a bilance; snímek ne (generátor jen při zapnuté kontrole) | B: A + původní materiál v položce překryvu (+1 B) | C: B + povinný snímek buněk 0,5 m (1,4–2,2 kB) |
+| | A: jen hash a bilance; snímek ne (generátor jen při zapnuté kontrole) | B: A + původní materiál v položce překryvu (+1 B) | C: B + povinný snímek buněk 0,5 m (1,4–2,2 kB, měřeno při buňce 0,5 m) |
 |---|---|---|---|
 | server bez generátoru | hrubá bilance | přesný souhrn změn | přesný souhrn i náhled buněk |
 | velikost | jako E78 [9] | +1 B na položku | +1,4–2,2 kB vždy [2] |
 
-**Doporučení.** Varianta B jako základ pro jednání s Willage-backend: položka překryvu nese i původní materiál definice, aby šla bilance spočítat bez generátoru. Snímek buněk 0,5 m nechat **volitelný** (ladění a servery bez portu generátoru), ne povinný na každém uložení. Namátková kontrola z 1.10 se nemění.
+**Doporučení.** Varianta B jako základ pro jednání s Willage-backend: položka překryvu nese i původní materiál definice, aby šla bilance spočítat bez generátoru. Snímek buněk 0,5 m nechat **volitelný** (ladění a servery bez portu generátoru), ne povinný na každém uložení. Namátková kontrola z 1.10 se nemění. Po 2026-11-21 00:19 by volitelný snímek nesl buňky 0,25 m; číslo 1,4–2,2 kB je měření při 0,5 m.
 
-**Otázka pro Jana.** Má položka překryvu nést i původní materiál definice (kvůli bilanci na serveru) a snímek buněk 0,5 m zůstat jen volitelný? Tento bod se má projednat s Willage-backend.
+**Otázka pro Jana.** Má položka překryvu nést i původní materiál definice (kvůli bilanci na serveru) a snímek buněk zůstat jen volitelný? (V otázce stálo „snímek buněk 0,5 m“; po 2026-11-21 00:19 je datová buňka 0,25 m.) Tento bod se má projednat s Willage-backend.
 
-**Platí:**
+**Platí:** (Jan 2026-11-21 00:10, po vyjádření Willage-backend) Ostrov = seed + parametry + verze generátoru (`Vmajor.minor`) + seznam vložení + rozdíl proti funkci. Položka překryvu nese i původní materiál buňky (+1 B) a umí i odchylku vody. Snímek buněk je jen volitelný (ladění) a nikdy není zdroj pravdy. Formát balíku změn je verzovaný a nesmí se plést se starým WVB1 jako celým polem buněk (WVB1 v2 nebo WTI1, hlavička podle 1.1 a 1.3). Kontrola generátorem jde vypnout. Kontrola se provádí vždy proti pinované verzi ostrova, nikdy proti novějšímu generátoru.
 
 ---
 
@@ -241,7 +245,7 @@ Návrh E88 s Willage-backend **ještě nebyl projednán** [2]. Body 6.1 a 6.2 js
 
 **Otázka pro Jana.** Platí tento postup jako pravidlo kontraktu? Projedná se spolu s 6.1 s Willage-backend.
 
-**Platí:**
+**Platí:** (Jan 2026-11-21 00:10, po vyjádření Willage-backend; doplněno 2026-11-21 00:24) Kontrola není namátková. Změny se sbírají do **zásobníku**; kontrola doběhne, když je zásobník plný, nebo po uplynutí časového intervalu, podle toho, co nastane dřív. Obě meze jsou parametry. Zvláštní kontrola rud při každém zápisu není. (Nahrazuje dřívější formulaci „interval nebo počet změn“.) Po úspěšné kontrole se smaže **jen pole původního materiálu**; položka změny (nová hodnota a voda) zůstává, jinak by se vracel výkop. Pole se po ověření vynechá, nenuluje (0 = vzduch). Při přijetí změny se pohyb materiálu zapíše do účetní knihy hráče a ostrova, protože po smazání původních hodnot zůstane jen čistý rozdíl vůči funkci. Záznamy s rozporem se nemažou a zůstávají jako reference pro spor. K úspěšné kontrole se uloží krátký otisk (čas, gen_ver, segment, hash, počet buněk). Kontrola nepřegenerovává celý segment při kopání. Kontrola je ve výchozím stavu zapnutá (Jan 2026-11-21 00:18). Když se vypne, server věří inventáři od klienta.
 
 ---
 
@@ -251,9 +255,9 @@ Původní plán: co čte z dat, LOD, průhlednost, řez, 2D/3D.
 
 **Už vyřešeno v kap. 1–2**
 
-- Datový model je v metrech a na 2D/3D nezávisí; buňka 0,5 m = 1 dlaždice jako jediný most k zobrazení → 1.1 (t710u, t715u).
+- Datový model je v metrech a na 2D/3D nezávisí; ~~buňka 0,5 m = 1 dlaždice~~ **buňka 0,25 m = 1 dlaždice** jako jediný most k zobrazení → 1.1 (t710u, t715u; sjednoceno Jan 2026-11-21 00:19).
 - Viditelnou oblast dává prezentace podle zoomu; generátor dostane obdélník + okraj a vzorkuje slupku → 2.3.
-- Viditelný voxel je 0,25 m (postava 1,75 m = 7 voxelů). 128 / 256 / 512 px je rozlišení textury dlaždice, ne velikost na obrazovce → 2.3 (t820u–t822u).
+- Viditelný voxel je 0,25 m (postava 1,75 m = 7 voxelů), stejně jako datová buňka. 128 / 256 / 512 px je rozlišení textury dlaždice, ne velikost na obrazovce → 2.3 (t820u–t822u).
 - Výchozí zoom v axonometrii kolem 64 dlaždic (voxelů 0,25 m) vodorovně, asi 16 m na šířku obrazovky → 2.3, 2.4 (t823u, t824u).
 - Bok ostrova: bloky s vlastní texturou 5 m pod nejnižší okrajovou buňkou, v té výšce oblaka → 1.13.1.
 - Měřítko vegetace 0,5; slučování sítí po 32 m patří sem, ne do dat → 1.12, 2.4.
@@ -267,7 +271,7 @@ Cílový telefon a fps Jan v 1.11 přeskočil; znovu se neptám. Bench APK z E93
 **Téma.** Jestli bude pohled 2D (dlaždice), nebo 3D (modely), Jan v t710u nechal otevřené. Datový model na tom nesmí záviset, ale prezentace to rozhodnout musí.
 
 **Současný stav**
-- Prototyp i rozhodnutí o zoomu a voxels počítají s **izometrií / axonometrií** a dlaždicemi (1.2, 2.3). Pravidlo „buňka 0,5 m = 1 dlaždice“ je most k 2D tilesetu 16/32/64 px [17].
+- Prototyp i rozhodnutí o zoomu a voxels počítají s **izometrií / axonometrií** a dlaždicemi (1.2, 2.3). Pravidlo „buňka 0,25 m = 1 dlaždice“ (do 2026-11-21 00:19 znělo 0,5 m) je most k 2D tilesetu 16/32/64 px [17].
 - E90/E91/E96 kreslí 3D sítě (krychle, slupka, LOD) v téže axonometrii — to je nástrojová prezentace, ne rozhodnutí o hře [6][18][19].
 - Materiály se zatím rozliší barvou (t710u).
 
@@ -291,22 +295,22 @@ Cílový telefon a fps Jan v 1.11 přeskočil; znovu se neptám. Bench APK z E93
 **Téma.** Jak se z dat staví hrubší zobrazení v dálce (E90). Není to datový model: slupka a obdélník pohledu už jsou v 2.3.
 
 **Současný stav**
-- E90: úroveň podle **hráče**, ne kamery. Kousky 16 m: ≤ 1 kousek 0,25 m, ≤ 3 kousky 0,5 m, jinak 1 m; daleko sloupce 8 m. Mapa 3 072 m, 2,27 M trojúhelníků, stavba 4,9 s, síť ≈ 260 MB. Bez sešití 6 982 děr (1 388 m², max 5 m), se sešitím stěn dolů **0 děr**. Krok hráče 16 m: 296 ms [18].
-- 2.3 už říká, že viditelnou oblast bere prezentace z **zoomu a kamery**, datový model pevnou šířku nezná. Viditelný voxel je 0,25 m, data 0,5 m, výchozí záběr ~16 m.
+- E90: úroveň podle **hráče**, ne kamery. Kousky 16 m: ≤ 1 kousek 0,25 m, ≤ 3 kousky 0,5 m, jinak 1 m; daleko sloupce 8 m. Mapa 3 072 m, 2,27 M trojúhelníků, stavba 4,9 s, síť ≈ 260 MB. Bez sešití 6 982 děr (1 388 m², max 5 m), se sešitím stěn dolů **0 děr**. Krok hráče 16 m: 296 ms [18]. Čísla E90 jsou měření prezentačního LOD, ne datový model.
+- 2.3 už říká, že viditelnou oblast bere prezentace z **zoomu a kamery**, datový model pevnou šířku nezná. ~~Viditelný voxel je 0,25 m, data 0,5 m~~ ⚠ překonáno rozhodnutím 2026-11-21 00:19: datová buňka i viditelný voxel jsou 0,25 m, výchozí záběr ~16 m (pevný zoom 64 dlaždic).
 - Měřítko reliéfu × 8 / × 3 z testu E90 není otázka prezentace; členitost zadávají parametry světa (1.13).
 
 **Varianty (jen to, co zbývá)**
 
-| | A: LOD podle hráče, pásma E90 (16 / 48 m, daleko 8 m) | B: LOD podle kamery / zoomu, blízko 0,25 m, dál 0,5 m, zdálky hrubší; sešití stěn ponechat |
+| | A: LOD podle hráče, pásma E90 (16 / 48 m, daleko 8 m) | B: LOD podle kamery / zoomu, blízko 0,25 m, dál 0,5 m, zdálky hrubší; sešití stěn ponechat (historie, před rozhodnutím bez LOD) |
 |---|---|---|
 | soulad s 2.3 | slabší (2.3 už bere kameru) | sedí |
 | sešití | v E90 nutné, jinak díry [18] | stejné, 0 děr |
 
-**Doporučení.** Varianta B. Úroveň se volí podle kamery a zoomu, ne podle postavy. Zblízka 0,25 m (viditelný voxel), dál 0,5 m (data), zdálky hrubší síť. Sešití stěn dolů k sousedovi nechat (v E90 zrušilo díry). Přesné poloměry a daleké rozlišení se doladí měřením, až bude 7.1. Slučování stěn nebo výšková síť je optimalizace, ne pravidlo dat.
+**Doporučení.** ~~Varianta B. Úroveň se volí podle kamery a zoomu, ne podle postavy. Zblízka 0,25 m (viditelný voxel), dál 0,5 m (data), zdálky hrubší síť.~~ ⚠ překonáno rozhodnutím o 7.2 (bez LOD) a sjednocením buňky 2026-11-21 00:19 (data i pohled 0,25 m). Sešití stěn dolů k sousedovi nechat (v E90 zrušilo díry). Slučování stěn nebo výšková síť je optimalizace, ne pravidlo dat.
 
-**Otázka pro Jana.** Má se LOD řídit kamerou a zoomem (zblízka voxel 0,25 m, dál 0,5 m, zdálky hrubší) a sešití stěn z E90 zůstat?
+**Otázka pro Jana.** ~~Má se LOD řídit kamerou a zoomem (zblízka voxel 0,25 m, dál 0,5 m, zdálky hrubší) a sešití stěn z E90 zůstat?~~ ⚠ překonáno: jediné rozlišení 0,25 m, bez LOD (viz Platí).
 
-**Platí:** (Jan, hovor 20. 11. 2026) Zatím se nechává jediné rozlišení 0,25 m na buňku, bez úrovní LOD a bez zoomu: celý pohled je v jednom rozlišení.
+**Platí:** (Jan, hovor 20. 11. 2026) Zatím se nechává jediné rozlišení 0,25 m na buňku, bez úrovní LOD a bez zoomu: celý pohled je v jednom rozlišení. Datová buňka je stejná 0,25 m (1.1, Jan 2026-11-21 00:19).
 
 ---
 
@@ -342,14 +346,29 @@ Původní plán: pořadí slučování větví a zapnutí přepínačů.
 Z rozhodnutí vyplývá výchozí chování; při stavbě modelu se přepínače nahradí pravidlem, ne novým ptaním:
 
 - `p67_rezim = pretok` (E67) → 1.8; K9 se tím zavírá.
-- `p85_okraj` zap → 1.13.1; `p85_jemne` všude ne (jen slupka) → 1.2; zákaz vrstev < 25 cm se ruší (minimum 1 buňka 0,5 m) → 1.7.1.
+- `p85_okraj` zap → 1.13.1; `p85_jemne` všude ne (jen slupka) → 1.2; zákaz vrstev < 25 cm se ruší (minimum 1 buňka = 0,25 m, Jan 2026-11-21) → 1.7.1.
 - `p79_chodby` + `p85_voda` jsou nutné k tomu, aby lokální přepočet viděl dutiny a výtoky (1.9, K5) [3][12].
 - Otočení a zrcadlení přes inverzní transformaci (`p86`) → 2.2; jádro hory ve funkci světa (`p87`) → 1.4, 1.7; blok 128 m z funkce (`p96`) → 1.1, 1.4.
 - Jedna funkce světa, bez `p94_hora_k` a omezovače E92 → 1.4 (K6, K7).
-- Kras E75 během hry patří k 1.8 (`p75_kras` je dnes vypnutý — zapne se při implementaci).
+- Kras E75 během hry patří k 1.8 (`p75_kras` je dnes vypnutý — zapne se při implementaci) a ukládá se cestou offsetu (4.1, ověřit v kroku 7).
 - Do main jen s Janovým ano; každé sloučení má PROP a kontrolu výchozí hry, nebo novou referenci, když se výchozí hra mění záměrně.
 
 E95 (vlákno vody) a E96 (blok 128 m) spolu nikdy neběžely [14]. Zkušební větev `zkusebni-vse` nemá E95 ani E96 a její „E95“ je jiný pokus než `e95-async-voda` (při sloučení přečíslovat na Z1) [14].
+
+## Rozhodnuto při kroku 2 (funkce světa, Jan 2026-11-21)
+
+Tyto body vznikly až z testů kroku 2 (otázky v reportu `krok02.md`) a z pozdější poznámky k rozdrobeným biomům; v původní kostře 03 nebyly. Jsou uzavřené. Pravidla jsou v 1.13, 1.14 a 2.1.
+
+1. **Hory pod stropem sklonu** — *rozhodnuto (Jan 2026-11-21).* Roztáhnout do šířky (prodloužit vlnovou délku), ať mají plnou výšku (hornatina ~24 m, masiv ~12 m). Nezplošťovat. → 1.13.
+2. **Strop v přechodu biomů** — *rozhodnuto (Jan 2026-11-21).* Platí vážený průměr stropů podle vah mísení, ne strop strmějšího biomu. → 1.13.
+3. **Drobný detail masivu (skály)** — *rozhodnuto (Jan 2026-11-21).* Tvarům do výšky parametru (výchozí ~2 m) povolit strmější sklon. Strop platí pro celkový tvar hory. → 1.13.
+4. **Poloha výchozího světa 3 × 3** — *rozhodnuto (Jan 2026-11-21).* Nechat ho uprostřed maxima, sopku přiblížit těsně vně výřezu. → 1.14.
+Větší oblasti biomů (hrubší měřítko a slučování drobných ostrovů) byly jen **srovnány** za přepínačem `biom_velke_oblasti` (výchozí vyp). Jan 2026-11-21 21:21: současné biomy jsou asi v pořádku; **není to rozhodnutí**.
+
+Pravidla klimatu (samostatná osa, preset, základní klima, pomalá mapa, uplatnění před reliéfem, povrchové jevy až po vodě) jsou rozhodnutá → 1.15. **Otevřené zůstávají konkrétní hodnoty presetů** (násobitele, posuny, podíly reliéfních biomů, množství vody) mimo výchozí identitu mírného klimatu (`mirne`). Příkladové presety poušť / step / tundra / ledovec v kódu jsou jen náčrt, nehodnocené hodnoty.
+
+
+---
 
 ## Úkoly implementace (ne rozhodnutí)
 
