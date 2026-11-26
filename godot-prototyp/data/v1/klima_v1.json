@@ -1,0 +1,263 @@
+{
+  "_popis": "Krok 7 / 7b (Jan 2026-11-26 11:06/11:15, 12:26, 12:46–12:49): klima a biomy nad mapou planety, zapnuto výchozí (ParametrySveta.KlimaKrok07). Mění dnešní vodu (prameny, vodníci, oázy, aktivní koryta), mapu eroze ne (eroze = pozůstatek minulosti, klíč keše eroze beze změny). Pásma planety: předdefinované tropy, subtropy, mirne, chladne, polarni od rovníku k pólu (druhá polovina zrcadlí); každé jde vypnout (Zapnuto), Podil = váha šířky (zbylá se vyplní poměrně), TOdC/TDoC teploty na rovníkové/polární hraně, SrazkyK násobek srážek planety, Vitr +1 od západu / -1 od východu. Teploty °C, srážky mm/rok, délky m.",
+  "StartYM": 1984.0,
+  "VyskovyGradientCNaM": 0.05,
+  "HladinaMoreM": 60.0,
+  "DoplneniNadMoremM": 2000.0,
+  "KontinentalitaM": 20000.0,
+  "OrografieZesileni": 60.0,
+  "VlhkostMin": 0.1,
+  "VyhlazeniTerenuM": 256.0,
+  "VyhlazeniSrazekM": 128.0,
+  "OdtokReferenceMm": 315.36,
+  "PramenWMax": 2.0,
+  "PramenPravdepodobnostMax": 0.95,
+  "TLedC": -8.0,
+  "TTundraC": 0.0,
+  "TTajgaC": 5.0,
+  "TTropyC": 20.0,
+  "KoppenA": 20.0,
+  "KoppenB": 140.0,
+  "PoustPodilMeze": 0.5,
+  "PMirnyDestnyMm": 2000.0,
+  "PTropickyLesMm": 1800.0,
+  "Planety": {
+    "mirne": {
+      "SrazkyMmRok": 800.0,
+      "StartPasmo": "mirne",
+      "Pasma": {
+        "tropy": {
+          "Zapnuto": false,
+          "Podil": 0.15,
+          "TOdC": 26,
+          "TDoC": 21,
+          "SrazkyK": 1.3,
+          "Vitr": -1
+        },
+        "subtropy": {
+          "Zapnuto": true,
+          "Podil": 0.15,
+          "TOdC": 18,
+          "TDoC": 15,
+          "SrazkyK": 0.8,
+          "Vitr": -1
+        },
+        "mirne": {
+          "Zapnuto": true,
+          "Podil": 0.6,
+          "TOdC": 15,
+          "TDoC": 8,
+          "SrazkyK": 1.1,
+          "Vitr": 1
+        },
+        "chladne": {
+          "Zapnuto": true,
+          "Podil": 0.25,
+          "TOdC": 8,
+          "TDoC": 5,
+          "SrazkyK": 1.0,
+          "Vitr": 1
+        },
+        "polarni": {
+          "Zapnuto": false,
+          "Podil": 0.15,
+          "TOdC": 5,
+          "TDoC": -4,
+          "SrazkyK": 0.5,
+          "Vitr": -1
+        }
+      }
+    },
+    "poust": {
+      "SrazkyMmRok": 300.0,
+      "StartPasmo": "mirne",
+      "Pasma": {
+        "tropy": {
+          "Zapnuto": true,
+          "Podil": 0.2,
+          "TOdC": 34,
+          "TDoC": 32,
+          "SrazkyK": 0.5,
+          "Vitr": -1
+        },
+        "subtropy": {
+          "Zapnuto": true,
+          "Podil": 0.6,
+          "TOdC": 32,
+          "TDoC": 28,
+          "SrazkyK": 0.6,
+          "Vitr": -1
+        },
+        "mirne": {
+          "Zapnuto": true,
+          "Podil": 0.2,
+          "TOdC": 28,
+          "TDoC": 22,
+          "SrazkyK": 1.0,
+          "Vitr": 1
+        },
+        "chladne": {
+          "Zapnuto": false,
+          "Podil": 0.2,
+          "TOdC": 22,
+          "TDoC": 16,
+          "SrazkyK": 1.0,
+          "Vitr": 1
+        },
+        "polarni": {
+          "Zapnuto": false,
+          "Podil": 0.2,
+          "TOdC": 16,
+          "TDoC": 8,
+          "SrazkyK": 0.5,
+          "Vitr": -1
+        }
+      }
+    },
+    "step": {
+      "SrazkyMmRok": 450.0,
+      "StartPasmo": "mirne",
+      "Pasma": {
+        "tropy": {
+          "Zapnuto": false,
+          "Podil": 0.15,
+          "TOdC": 28,
+          "TDoC": 24,
+          "SrazkyK": 1.2,
+          "Vitr": -1
+        },
+        "subtropy": {
+          "Zapnuto": true,
+          "Podil": 0.25,
+          "TOdC": 24,
+          "TDoC": 20,
+          "SrazkyK": 0.8,
+          "Vitr": -1
+        },
+        "mirne": {
+          "Zapnuto": true,
+          "Podil": 0.5,
+          "TOdC": 20,
+          "TDoC": 14,
+          "SrazkyK": 1.0,
+          "Vitr": 1
+        },
+        "chladne": {
+          "Zapnuto": true,
+          "Podil": 0.25,
+          "TOdC": 14,
+          "TDoC": 10,
+          "SrazkyK": 1.0,
+          "Vitr": 1
+        },
+        "polarni": {
+          "Zapnuto": false,
+          "Podil": 0.15,
+          "TOdC": 10,
+          "TDoC": 2,
+          "SrazkyK": 0.5,
+          "Vitr": -1
+        }
+      }
+    },
+    "tundra": {
+      "SrazkyMmRok": 500.0,
+      "StartPasmo": "mirne",
+      "Pasma": {
+        "tropy": {
+          "Zapnuto": false,
+          "Podil": 0.1,
+          "TOdC": 12,
+          "TDoC": 10,
+          "SrazkyK": 1.2,
+          "Vitr": -1
+        },
+        "subtropy": {
+          "Zapnuto": false,
+          "Podil": 0.1,
+          "TOdC": 10,
+          "TDoC": 8,
+          "SrazkyK": 0.8,
+          "Vitr": -1
+        },
+        "mirne": {
+          "Zapnuto": true,
+          "Podil": 0.2,
+          "TOdC": 8,
+          "TDoC": 4,
+          "SrazkyK": 1.0,
+          "Vitr": 1
+        },
+        "chladne": {
+          "Zapnuto": true,
+          "Podil": 0.4,
+          "TOdC": 4,
+          "TDoC": -4,
+          "SrazkyK": 1.0,
+          "Vitr": 1
+        },
+        "polarni": {
+          "Zapnuto": true,
+          "Podil": 0.4,
+          "TOdC": -4,
+          "TDoC": -14,
+          "SrazkyK": 0.6,
+          "Vitr": -1
+        }
+      }
+    },
+    "ledovec": {
+      "SrazkyMmRok": 400.0,
+      "StartPasmo": "mirne",
+      "Pasma": {
+        "tropy": {
+          "Zapnuto": false,
+          "Podil": 0.1,
+          "TOdC": 0,
+          "TDoC": -2,
+          "SrazkyK": 1.2,
+          "Vitr": -1
+        },
+        "subtropy": {
+          "Zapnuto": false,
+          "Podil": 0.1,
+          "TOdC": -2,
+          "TDoC": -4,
+          "SrazkyK": 0.8,
+          "Vitr": -1
+        },
+        "mirne": {
+          "Zapnuto": true,
+          "Podil": 0.1,
+          "TOdC": -2,
+          "TDoC": -8,
+          "SrazkyK": 1.0,
+          "Vitr": 1
+        },
+        "chladne": {
+          "Zapnuto": true,
+          "Podil": 0.3,
+          "TOdC": -8,
+          "TDoC": -15,
+          "SrazkyK": 1.0,
+          "Vitr": 1
+        },
+        "polarni": {
+          "Zapnuto": true,
+          "Podil": 0.6,
+          "TOdC": -15,
+          "TDoC": -30,
+          "SrazkyK": 0.6,
+          "Vitr": -1
+        }
+      }
+    }
+  },
+  "PrechodPasmaM": 400.0,
+  "OazaZapnuta": true,
+  "OazaBunkaM": 1000.0,
+  "OazaPravdepodobnost": 0.3,
+  "OazaQLs": 3.0,
+  "OazaPolomerM": 96.0,
+  "OazaVeStepi": false
+}

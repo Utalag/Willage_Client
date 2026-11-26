@@ -89,9 +89,15 @@ public sealed class ParametrySveta
     public bool VseKrok06 = true;
     public int PanviPocet = 4;
     public double PanevPolomerM = 1500.0, PanevHloubkaM = 15.0;
+    // krok 7: klima a biomy nad mapou planety (klima_v1.json). Od 7b (Jan 12:47) výchozí zapnuto (jen s VseKrok06).
+    // Mění jen dnešní vodu (prameny, vodníci, oázy, aktivní koryta), mapu eroze ne (Jan 12:26: eroze je pozůstatek minulosti).
+    public bool KlimaKrok07 = true;
 
     /// <summary>Parametry přesně jako GDScript krok 3b (opravy vypnuté, bez moře a pánví kroku 6) – pro ekvivalenci.</summary>
     public static ParametrySveta Krok5(long seed = 49) => new() { Seed = seed, VseKrok06 = false };
+
+    /// <summary>Stav po kroku 6: moře, eroze a vodníci zapnuto, klima kroku 7 vypnuto (staré otisky: voda 8e239a68c6d01be0, 92 vodníků).</summary>
+    public static ParametrySveta Krok06(long seed = 49) => new() { Seed = seed, VseKrok06 = true, KlimaKrok07 = false };
 
     /// <summary>Parametry přesně jako GDScript krok 3b (opravy vypnuté) – pro ekvivalenci.</summary>
     public static ParametrySveta Puvodni(long seed = 49) => new() { Seed = seed, P82PrechodM = 0.0, UtvaryKlicGd = true, VseKrok06 = false };
