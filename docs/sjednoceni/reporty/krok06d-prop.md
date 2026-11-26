@@ -23,7 +23,7 @@ Zadání: Jan 10:51 (t934u), předběžné schválení 6 doporučení z 6c.
 ## Změna zadání během kroku
 Jan 10:54: **bod 3 (kompenzace prahu moře) vynechán** – odchylka ~0,8 p. b. se vejde do tolerance ±5 %. Kalibrace prahu (bisekce na mřížce 64 m s výškou světa) byla rozpracovaná a byla odstraněna, práh zůstává kvantil histogramu masky. Navíc: svislý řez přechodem moře–pevnina 100 m.
 
-## Výsledky (2026-11-26 11:20 SEČ)
+## Výsledky (2026-11-26 11:08 SEČ)
 
 ### Ostrovy v průlivech
 Kandidát ze seedu musí ležet v moři prvního prahu celý **i s pásem 250 m** (16 směrů), dál od švu než R + zvlnění + přechod + 300 m, od startu > R + 2 km a od sebe. Kupka na nezkřivených souřadnicích: `max(m, práh0 + 0,3·(1 − (d/R)²) + C·F)`, R = 700 m × (0,6–1,4).
