@@ -126,6 +126,7 @@ flowchart TB
 | **M7 Výstup planety** | 7b (část) | nový obal: otisky, potvrzení, WPLN | manifest | diagnostika, otisk, velikost | – |
 
 - **Konfigurátor modulu** se staví **generovaně ze schématu parametrů**: atributy rozsah, jednotka, popis a skupina na stávajících recordech parametrů. Vlastní prvek dostane jen to, co se do formuláře nevejde (tabulka pásem klimatu, pořadí hornin). Nebude se ručně psát sedm různých panelů.
+- **Nápovědy k parametrům** (Jan 16:50, [pt982u]): co daná veličina dělá a k čemu slouží, jako vyskakovací okno nebo jednotný návod. V první verzi se nedělají, ale schéma parametrů (G-2) má od začátku pole `napoveda` (krátký popis + volitelný odkaz do návodu), aby se nápovědy daly doplnit bez změny formátu.
 - **Klíč modulu** = H(`gen_ver`, verze algoritmu, kanonické parametry modulu, SHA jeho souborů z manifestu, klíče vstupních modulů). Změna v M5 tedy přepočítá M5–M7, ale ne M1–M4 (eroze zůstává pozůstatkem minulosti, Jan 12:26). Dnešní klíče (`SouborMapy.KlicKese`, `MapaKlimatu.KlicKlimatu`) se zapojí beze změny hodnot, aby staré soubory WGER zůstaly platné.
 - Eroze je globální (priority-flood na torusu, mapa 32 m: 5,1 s na 8 vláknech, krok 6). Přepočet je proto zatím po modulech pro celou planetu. Částečný přepočet podle regionu je až ve fázi 3.
 
@@ -248,7 +249,7 @@ flowchart LR
 |---|---|---|---|---|
 | **7c** *(běží)* | hladina podle klimatu a šrafa zvodnělé zóny podle svého PROP | PROP `krok07c-prop.md` | dle PROP | – |
 | **G-1** | moduly M0–M7 jako obal stávajících tříd, pipeline, `manifest_katalogu_v1.json`; `KonfiguraceSveta.Sestav` zůstane tenkým obalem | dnešní třídy → `Pipeline/`, `Katalogy/` | **otisky beze změny**, 228/228; klíč modulu se mění jen při změně jeho vstupu (test na každý soubor manifestu); 1 a 8 vláken shodně | 4–6 h |
-| **G-2** | schéma parametrů: atributy rozsah, jednotka, popis a skupina na stávajících recordech; JSON tam a zpět | `ParametrySveta`, `ParametryMore`, `ParametryEroze`, `ParametryKlimatu`, `ParametryVody`, průsak → schéma | načtení → uložení dá bajtově stejná data (nebo kanonicky shodná); každý parametr má rozsah a jednotku | 2–3 h |
+| **G-2** | schéma parametrů: atributy rozsah, jednotka, popis, skupina a prázdné pole `napoveda` (nápovědy až později, Jan 16:50) na stávajících recordech; JSON tam a zpět | `ParametrySveta`, `ParametryMore`, `ParametryEroze`, `ParametryKlimatu`, `ParametryVody`, průsak → schéma | načtení → uložení dá bajtově stejná data (nebo kanonicky shodná); každý parametr má rozsah a jednotku | 2–3 h |
 | **G-3** | fasáda `Willage.Gen.Api` (`IModuly`, `ISluzbaSveta`, `IDotazySveta`, `IKatalogy`) + soubor planety WPLN | moduly → DTO, soubor | CLI přes fasádu dá stejné otisky; uložit → načíst = bitově stejné; změněný manifest se pozná | 3–4 h |
 | **G-4** | Godot jádro `WillageJadro`: fronta na pozadí, signály, převod map na textury | fasáda → autoload | headless: generace bez blokování hlavního vlákna (< 1 ms), zrušení, otisk shodný s CLI | 3–4 h |
 | **G-5** | okno 1: kostra (`SeznamModulu`, `KonfiguratorModulu` generovaný ze schématu, `RetezPrepoctu`, potvrzení, uložení) | G-2, G-4 → `nastroje/GeneratorSveta.tscn` | snímky; změna parametru → přepočet jen dotčených modulů; čas celé planety (~5–6 s) | 4–6 h |
