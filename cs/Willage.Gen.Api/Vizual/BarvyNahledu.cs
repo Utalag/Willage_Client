@@ -11,6 +11,12 @@ namespace Willage.Gen.Api.Vizual;
 public static class BarvyNahledu
 {
     /// <summary>Barvy pěti typů reliéfu funkce světa (MapaBiomu: 0, 1, 2 pahorkatina, 3 hornatina, 4 sopečná) – index SvetFn.Sloupec.Biom.</summary>
+    /// <summary>G-7: barvy biomů klimatu (BiomKlimatu 0–10: moře, led, tundra, tajga, mírný les, step, poušť, savana, mírný deštný, tropický deštný, oáza).</summary>
+    public static readonly (byte r, byte g, byte b)[] PaletaBiomuKlimatu =
+    {
+        (20, 40, 90), (235, 245, 255), (170, 180, 150), (60, 110, 90), (70, 140, 70), (190, 190, 100), (230, 200, 130), (200, 170, 60), (40, 120, 110), (20, 100, 40), (40, 220, 120),
+    };
+
     public static readonly (byte r, byte g, byte b)[] PaletaBiomuSveta = { (190, 200, 110), (70, 140, 70), (150, 130, 80), (120, 110, 110), (150, 60, 50) };
 
     public static (byte r, byte g, byte b, byte a) Barva(string hex)
@@ -35,7 +41,7 @@ public static class BarvyNahledu
         var o = new byte[m.Hodnoty.Length * 4];
         var pm = PaletaMaterialu(materialy);
         float amp = 1f;
-        if (m.Vrstva is VrstvaNahleduDto.RozdilM2M1 or VrstvaNahleduDto.Panve)
+        if (m.Vrstva is VrstvaNahleduDto.RozdilM2M1 or VrstvaNahleduDto.Panve or VrstvaNahleduDto.PosunEroze)
             amp = Math.Max(1e-3f, m.Hodnoty.Where(float.IsFinite).Select(Math.Abs).DefaultIfEmpty(1f).Max());
         float sevMax = m.Vrstva == VrstvaNahleduDto.Sev ? Math.Max(1f, m.Hodnoty.Where(float.IsFinite).DefaultIfEmpty(1f).Max()) : 1f;
         for (int i = 0; i < m.Hodnoty.Length; i++)
@@ -43,6 +49,24 @@ public static class BarvyNahledu
             float v = m.Hodnoty[i];
             (byte r, byte g, byte b, byte a) c = m.Vrstva switch
             {
+                // G-7 M4–M6
+                VrstvaNahleduDto.VyskaPlanety => A(v < 60f ? Mix((10, 20, 70), (20, 50, 120), (50, 90, 160), Math.Clamp(v / 60f, 0, 1)) : Mix((30, 70, 30), (170, 150, 100), (250, 250, 250), Math.Clamp((v - 60f) / 68f, 0, 1))),
+                VrstvaNahleduDto.Toky => A(Mix((25, 25, 30), (40, 110, 200), (200, 240, 255), Math.Clamp((v - 3f) / 6f, 0, 1))),
+                VrstvaNahleduDto.Jezera => v > 0 ? A(Mix((120, 180, 240), (40, 90, 200), (10, 30, 120), Math.Clamp(v / 10f, 0, 1))) : A((70, 70, 70)),
+                VrstvaNahleduDto.Koryta => v < 0 ? A((20, 40, 90)) : v > 0.5f ? A((60, 150, 255)) : A((90, 85, 70)),
+                VrstvaNahleduDto.Teplota => A(Mix((40, 60, 200), (235, 235, 200), (200, 40, 30), Math.Clamp((v + 30f) / 65f, 0, 1))),
+                VrstvaNahleduDto.Srazky => A(Mix((190, 150, 80), (80, 170, 80), (40, 70, 200), Math.Clamp(v / 2000f, 0, 1))),
+                VrstvaNahleduDto.OdtokW => A(Mix((170, 120, 60), (220, 220, 200), (30, 90, 220), Math.Clamp(v / 2f, 0, 1))),
+                VrstvaNahleduDto.BiomKlimatu or VrstvaNahleduDto.BiomBezOaz => A(PaletaBiomuKlimatu[Math.Clamp((int)v, 0, 10)]),
+                VrstvaNahleduDto.KorytaKlimatu => v switch { < 0 => A((20, 40, 90)), < 0.5f => A((90, 85, 70)), < 1.5f => A((60, 150, 255)), < 2.5f => A((220, 170, 70)), _ => A((80, 230, 230)) },
+                VrstvaNahleduDto.Hladina or VrstvaNahleduDto.JenHladina => float.IsNaN(v) ? A((110, 110, 110)) : v <= 0 ? A((60, 240, 240)) : A(Mix((40, 140, 255), (30, 60, 160), (40, 20, 40), Math.Clamp(v / 40f, 0, 1))),
+                VrstvaNahleduDto.HladinaAbs => float.IsNaN(v) ? A((110, 110, 110)) : A(Mix((10, 20, 90), (40, 120, 220), (210, 240, 255), Math.Clamp(v / 128f, 0, 1))),
+                VrstvaNahleduDto.Dobiti => A(Mix((150, 60, 40), (220, 200, 120), (40, 110, 230), Math.Clamp(v, 0, 1))),
+                VrstvaNahleduDto.Vyver => v > 0.5f ? A((60, 240, 240)) : A((50, 50, 55)),
+                VrstvaNahleduDto.PobrezniPas => v > 1.5f ? A((20, 40, 90)) : v > 0.5f ? A((60, 200, 230)) : A((150, 140, 110)),
+                VrstvaNahleduDto.JenPrameny => A(Mix((40, 40, 40), (120, 120, 120), (220, 220, 220), Math.Clamp(v / 128f, 0, 1))),
+                // zástupná vrstva 7d: šrafa (šedá / fialová), ať je vidět, že tu není výsledek
+                VrstvaNahleduDto.ZvodnelaZona7d => ((i % m.Nx + i / m.Nx) / 6) % 2 == 0 ? A((90, 90, 90)) : A((150, 60, 150)),
                 VrstvaNahleduDto.Vyska or VrstvaNahleduDto.Relief => A(Mix((30, 70, 30), (170, 150, 100), (250, 250, 250), Math.Clamp(v / 128f, 0, 1))),
                 VrstvaNahleduDto.Biom => A(PaletaBiomuSveta[Math.Clamp((int)v, 0, 4)]),
                 VrstvaNahleduDto.Horniny or VrstvaNahleduDto.MaterialPovrchu => v < 0 ? ((byte)0, (byte)0, (byte)0, (byte)255) : pm[Math.Clamp((int)v, 0, 255)],

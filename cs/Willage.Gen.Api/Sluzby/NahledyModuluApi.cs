@@ -17,18 +17,44 @@ public sealed class NahledyModuluApi : INahledyModulu
 {
     readonly StavGeneratoru _s;
     IReadOnlyList<MaterialDto>? _mat;
-    public NahledyModuluApi(StavGeneratoru s) => _s = s;
+    readonly NahledyPlanetyApi _planeta;
+    readonly NahledyVodyApi _voda;
+    public NahledyModuluApi(StavGeneratoru s) { _s = s; _planeta = new NahledyPlanetyApi(s); _voda = new NahledyVodyApi(s); }
 
     static readonly Dictionary<string, VrstvaNahleduDto[]> _vrstvy = new()
     {
         ["M1"] = new[] { VrstvaNahleduDto.Vyska, VrstvaNahleduDto.Biom, VrstvaNahleduDto.Horniny, VrstvaNahleduDto.Sopky, VrstvaNahleduDto.Masiv, VrstvaNahleduDto.Relief },
         ["M2"] = new[] { VrstvaNahleduDto.Pevnina, VrstvaNahleduDto.More, VrstvaNahleduDto.Vyska, VrstvaNahleduDto.Panve, VrstvaNahleduDto.Sev, VrstvaNahleduDto.RozdilM2M1 },
         ["M3"] = new[] { VrstvaNahleduDto.MaterialPovrchu, VrstvaNahleduDto.Mince, VrstvaNahleduDto.Vyska },
+        ["M4"] = NahledyPlanetyApi.VrstvyM4,
+        ["M5"] = NahledyPlanetyApi.VrstvyM5,
+        ["M6"] = NahledyVodyApi.VrstvyM6,
+    };
+    static readonly Dictionary<string, VrstvaNahleduDto[]> _izolace = new()
+    {
+        ["M1"] = new[] { VrstvaNahleduDto.Relief }, ["M2"] = new[] { VrstvaNahleduDto.RozdilM2M1 },
+        ["M4"] = new[] { VrstvaNahleduDto.PosunEroze }, ["M5"] = new[] { VrstvaNahleduDto.BiomBezOaz },
+        ["M6"] = new[] { VrstvaNahleduDto.JenHladina, VrstvaNahleduDto.JenPrameny },
     };
 
     public static IReadOnlyList<string> ModulySNahledem => _vrstvy.Keys.ToList();
     public static IReadOnlyList<VrstvaNahleduDto> VrstvyModulu(string modul) => _vrstvy.TryGetValue(modul, out var v) ? v : Array.Empty<VrstvaNahleduDto>();
-    public static VrstvaNahleduDto? IzolaceModulu(string modul) => modul switch { "M1" => VrstvaNahleduDto.Relief, "M2" => VrstvaNahleduDto.RozdilM2M1, _ => null };
+    public static VrstvaNahleduDto? IzolaceModulu(string modul) => _izolace.TryGetValue(modul, out var v) ? v[0] : null;
+    /// <summary>G-7: všechny izolační vrstvy modulu (M3 izoluje řezem → prázdné).</summary>
+    public static IReadOnlyList<VrstvaNahleduDto> IzolacniVrstvy(string modul) => _izolace.TryGetValue(modul, out var v) ? v : Array.Empty<VrstvaNahleduDto>();
+    public IReadOnlyList<VrstvaNahleduDto> IzolaceVrstvy(string modul) => IzolacniVrstvy(modul);
+    public IReadOnlyList<PasmoNahleduDto> TabulkaPasem() => _planeta.TabulkaPasem();
+
+    /// <summary>Vzorky úsečky: nx = ⌊délka / krok⌋ (≥ 1, ≤ 8192), středy (i + 0,5)·krok od Od.</summary>
+    public static (int nx, Func<int, double> X, Func<int, double> Y) Vzorky(SouradniceQ16 od, SouradniceQ16 @do, double krokM)
+    {
+        if (krokM <= 0) throw new ArgumentOutOfRangeException(nameof(krokM));
+        double dx = @do.XM - od.XM, dy = @do.YM - od.YM, d = Math.Sqrt(dx * dx + dy * dy);
+        int nx = Math.Max(1, (int)Math.Floor(d / krokM));
+        if (nx > 8192) throw new ArgumentOutOfRangeException(nameof(krokM), "řez má víc než 8192 vzorků");
+        double ux = d == 0 ? 0 : dx / d, uy = d == 0 ? 0 : dy / d, x0 = od.XM, y0 = od.YM;
+        return (nx, i => x0 + (i + 0.5) * krokM * ux, i => y0 + (i + 0.5) * krokM * uy);
+    }
 
     public IReadOnlyList<string> Moduly() => ModulySNahledem;
     public IReadOnlyList<VrstvaNahleduDto> Vrstvy(string modul) => VrstvyModulu(modul);
@@ -107,6 +133,9 @@ public sealed class NahledyModuluApi : INahledyModulu
     public NahledMapyDto Mapa(string modul, VrstvaNahleduDto vrstva, int rozliseni = 256, OblastQ16? oblast = null)
     {
         if (rozliseni < 1 || rozliseni > 2048) throw new ArgumentOutOfRangeException(nameof(rozliseni));
+        if (!VrstvyModulu(modul).Contains(vrstva)) throw new ArgumentException($"modul {modul} nemá vrstvu {vrstva}");
+        if (modul is "M4" or "M5") return _planeta.Mapa(modul, vrstva, rozliseni, oblast, IzolacniVrstvy(modul).Contains(vrstva));
+        if (modul == "M6") return _voda.Mapa(vrstva, rozliseni, oblast);
         var sw = Stopwatch.StartNew();
         var f = Vzorek(modul, vrstva);
         double svet = M2.SvetM;
@@ -156,14 +185,11 @@ public sealed class NahledyModuluApi : INahledyModulu
     public RezModuluDto Rez(string modul, SouradniceQ16 od, SouradniceQ16 @do, double krokM, RezimRezuDto rezim = RezimRezuDto.Vse)
     {
         if (krokM <= 0) throw new ArgumentOutOfRangeException(nameof(krokM));
-        if (!_vrstvy.ContainsKey(modul)) throw new ArgumentException($"modul {modul} nemá řez v G-6 (M4–M6 v G-7)");
+        if (!_vrstvy.ContainsKey(modul)) throw new ArgumentException($"modul {modul} nemá řez (M0, M7–M9)");
+        if (modul is "M4" or "M5") return _planeta.Rez(modul, od, @do, krokM);
+        if (modul == "M6") return _voda.Rez(od, @do, krokM);
         var sw = Stopwatch.StartNew();
-        double dx = @do.XM - od.XM, dy = @do.YM - od.YM, d = Math.Sqrt(dx * dx + dy * dy);
-        int nx = Math.Max(1, (int)Math.Floor(d / krokM));
-        if (nx > 8192) throw new ArgumentOutOfRangeException(nameof(krokM), "řez má víc než 8192 vzorků");
-        double ux = d == 0 ? 0 : dx / d, uy = d == 0 ? 0 : dy / d;
-        double X(int i) => od.XM + (i + 0.5) * krokM * ux;
-        double Y(int i) => od.YM + (i + 0.5) * krokM * uy;
+        var (nx, X, Y) = Vzorky(od, @do, krokM);
         var pov = new double[nx]; double[]? pov1 = null; byte[] mat = Array.Empty<byte>(); int nz = 0;
         double hladina = double.NaN;
         switch (modul)

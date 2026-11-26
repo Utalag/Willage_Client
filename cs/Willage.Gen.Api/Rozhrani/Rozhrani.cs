@@ -72,11 +72,12 @@ public interface IUpravyRegionu
 }
 
 /// <summary>
-/// G-6: náhledy a izolace modulů M1–M3 nad výstupy posledního běhu (po Generuj). M4–M6 přijdou v G-7 (dnes IDotazySveta.Mapa).
+/// G-6 / G-7: náhledy a izolace modulů M1–M6 nad výstupy posledního běhu (po Generuj). M1–M3 na oblasti funkce světa (0…SvetMaxM),
+/// M4/M5 na mapě planety (uzly 32 m), M6 výchozí start 3 × 3 bloky. 7d (zvodnělá zóna) je zástupná.
 /// </summary>
 public interface INahledyModulu
 {
-    /// <summary>Moduly s vlastním náhledem (dnes M1, M2, M3).</summary>
+    /// <summary>Moduly s vlastním náhledem (M1–M6).</summary>
     IReadOnlyList<string> Moduly();
     IReadOnlyList<VrstvaNahleduDto> Vrstvy(string modul);
     /// <summary>Izolační vrstva modulu (M1 Relief, M2 RozdilM2M1), M3 izoluje řezem (RezimRezuDto); null = bez izolace mapy.</summary>
@@ -86,4 +87,8 @@ public interface INahledyModulu
     /// <summary>Řez úsečkou (Q16): M1/M2 profil povrchu, M3 svislý řez materiálů 0,25 m v režimu izolace.</summary>
     RezModuluDto Rez(string modul, SouradniceQ16 od, SouradniceQ16 @do, double krokM, RezimRezuDto rezim = RezimRezuDto.Vse);
     IReadOnlyList<MaterialDto> Materialy();
+    /// <summary>G-7: všechny izolační vrstvy modulu (M6 dvě: jen hladina, jen prameny; M3 izoluje řezem → prázdné).</summary>
+    IReadOnlyList<VrstvaNahleduDto> IzolaceVrstvy(string modul);
+    /// <summary>G-7: tabulka pásem klimatu M5 (prázdná bez klimatu).</summary>
+    IReadOnlyList<PasmoNahleduDto> TabulkaPasem();
 }
