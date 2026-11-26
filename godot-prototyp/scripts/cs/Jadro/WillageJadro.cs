@@ -29,10 +29,12 @@ public partial class WillageJadro : Node
     [Signal] public delegate void PlanetaInfoEventHandler(Godot.Collections.Dictionary info);
     [Signal] public delegate void PraceSelhalaEventHandler(long uloha, string nazev, string chyba);
     [Signal] public delegate void PraceZrusenaEventHandler(long uloha, string nazev);
-    /// <summary>G-6: náhled vrstvy modulu M1–M3 hotový (DTO v PosledniNahled).</summary>
+    /// <summary>G-6 / G-7: náhled vrstvy modulu M1–M6 hotový (DTO v PosledniNahled, body v PosledniNahled.Body).</summary>
     [Signal] public delegate void NahledModuluHotovEventHandler(long uloha, string modul, int vrstva, ImageTexture textura);
     /// <summary>G-6: řez modulu hotový (DTO v PosledniRez, obraz řezu M3 v PosledniRezTextura, jinak null).</summary>
     [Signal] public delegate void RezModuluHotovEventHandler(long uloha, string modul, int rezim);
+    /// <summary>G-7: tabulka pásem klimatu M5 hotová (DTO v PosledniTabulkaPasem).</summary>
+    [Signal] public delegate void TabulkaPasemHotovaEventHandler(long uloha, int pasem);
     /// <summary>Zástupné: hlídání změn katalogů (okno 2 uloží vzhled → okno 1 se dozví) přijde s oknem 2; dnes se nevysílá.</summary>
     [Signal] public delegate void KatalogZmenenEventHandler(string cesta);
 
@@ -156,7 +158,7 @@ public partial class WillageJadro : Node
 
     void Info(PlanetaInfoDto i) { PosledniInfo = i; EmitSignal(SignalName.PlanetaInfo, DtoNaVariant.Slovnik(i)); }
 
-    // ---- G-6: náhledy M1–M3 ----
+    // ---- G-6 / G-7: náhledy M1–M6 ----
     public NahledMapyDto? PosledniNahled { get; private set; }
     public RezModuluDto? PosledniRez { get; private set; }
     public ImageTexture? PosledniRezTextura { get; private set; }
@@ -164,12 +166,16 @@ public partial class WillageJadro : Node
     public System.Collections.Generic.IReadOnlyList<MaterialDto> MaterialyDto { get; private set; } = Array.Empty<MaterialDto>();
 
     /// <summary>Mapa vrstvy modulu (VrstvaNahleduDto jako int); barvy se spočtou na vlákně fronty, textura na hlavním.</summary>
-    public long NahledModulu(string modul, int vrstva, int rozliseni = 256)
+    public long NahledModulu(string modul, int vrstva, int rozliseni = 256) => NahledModulu(modul, vrstva, rozliseni, null);
+
+    /// <summary>G-7: náhled na oblasti v metrech (null = výchozí oblast modulu); převod do Q16 na hranici fasády.</summary>
+    public long NahledModulu(string modul, int vrstva, int rozliseni, Rect2? oblastM)
     {
         long id = 0;
+        OblastQ16? o = oblastM is Rect2 r ? new OblastQ16(SouradniceQ16.ZMetru(r.Position.X, r.Position.Y), SouradniceQ16.ZMetru(r.End.X, r.End.Y)) : null;
         id = Zarad("Nahled", _ =>
         {
-            var n = Gen().Nahledy.Mapa(modul, (VrstvaNahleduDto)vrstva, rozliseni); var mat = Gen().Nahledy.Materialy();
+            var n = Gen().Nahledy.Mapa(modul, (VrstvaNahleduDto)vrstva, rozliseni, o); var mat = Gen().Nahledy.Materialy();
             return (n, mat, Willage.Gen.Api.Vizual.BarvyNahledu.Rgba(n, mat));
         }, r =>
         {
@@ -194,6 +200,16 @@ public partial class WillageJadro : Node
             PosledniRezTextura = r.r.Nz > 0 ? TexturaMapy.ZRgba(r.r.Nx, r.r.Nz, r.Item3) : null;
             EmitSignal(SignalName.RezModuluHotov, id, modul, rezim);
         });
+        return id;
+    }
+
+    // ---- G-7: tabulka pásem M5 ----
+    public System.Collections.Generic.IReadOnlyList<PasmoNahleduDto> PosledniTabulkaPasem { get; private set; } = Array.Empty<PasmoNahleduDto>();
+
+    public long TabulkaPasem()
+    {
+        long id = 0;
+        id = Zarad("TabulkaPasem", _ => Gen().Nahledy.TabulkaPasem(), t => { PosledniTabulkaPasem = t; EmitSignal(SignalName.TabulkaPasemHotova, id, t.Count); });
         return id;
     }
 
