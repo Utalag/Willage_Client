@@ -235,7 +235,7 @@ Podrobné oddíly níže mají původní čísla; v nadpisu je uvedeno nové č�
 
 **Proč tady:** svět, ze kterého se vyřezává, má být úplný. Změny na ostrově (vrstva změn) zůstávají v kroku 11.
 
-**Stav:** jen rozhodnuto (pořadí uvnitř kroku doplněno 2026-11-26 11:15: nejdřív klima a biomy, pak 7b).
+**Stav:** jen rozhodnuto (pořadí uvnitř kroku doplněno 2026-11-26 11:15: nejdřív klima a biomy, pak 7b). Klima a biomy (část 1) na větvi `gen-v1-krok07-klima-biomy` za přepínačem `KlimaKrok07` (výchozí vyp), PROP `reporty/krok07-prop.md`; eroze se s klimatem nepřepočítává (Jan 12:26: pozůstatek minulosti, suchá koryta v pouštích), mění se jen dnešní voda.
 
 ---
 

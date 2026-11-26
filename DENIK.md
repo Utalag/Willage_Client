@@ -618,6 +618,12 @@ Skupiny: 1 Prototyp a buildy · 2 Terén a tvar · 3 Rozlišení bloku · 4 Ská
 - **Komplikace:** mezi skutečným břehem a vrstevnicí k = 0,5 je 38–74 m pevniny (strmé: v úseku 100 m k nedosáhne 0,5). Dva ještě mírnější řezy jsem do shots nedával (jeden skoro vodorovný, druhý s prohlubní h0).
 - **Další krok:** schválení; merge do main dělá Willage-backend.
 
+### 🧪 Generátor V1 krok 7: klima a biomy (2026-11-26 12:45 · větev `gen-v1-krok07-klima-biomy`, `cs/Willage.Gen/Klima/`, PROP `docs/sjednoceni/reporty/krok07-prop.md`, shots `godot-prototyp/shots/krok07/`)
+- **Směr:** plán 04 krok 7 (Jan 11:06 / 11:15): teplotní pásma, srážky se stínem, pouště, klima planety; Jan 12:26: klima mění jen dnešní vodu, eroze zůstává jako pozůstatek.
+- **Zlepšení:** šířka a teplota na torusu, vlhkost nesená větrnými pásy (srážkový stín návětří 1,3× / závětří 0,66× základu), odtok podle Turca, 10 klimatických biomů (Whittaker + Köppenova mez), aktivní a suchá koryta, vodníci a prameny podle odtoku. Za přepínačem `KlimaKrok07` (vyp); vyp = otisky beze změny, zap = stejná mapa eroze i geologie, jiná voda (904afe6c9e9c03d6, vodníků 92 → 84). Testy main 110/110, větev 141/141.
+- **Komplikace:** hladká šířka (1 − cos)/2 dala 29 % tundry → lineární šířka; skok srážek na hranicích pásů → přechod 4°; dva průchody nestačily na periodické řešení → do ustálení. Na ledové planetě teče víc než ve stepi (chybí zamrzání).
+- **Další krok:** schválení; merge do main dělá Willage-backend.
+
 ### 💡 TODO: náplavy a delty jako samostatný krok po kroku 6b (2026-11-26 9:59, Jan, bod 7)
 - **Doplněno 2026-11-26 11:15 (Jan, 6e):** součástí stejného kroku i **mořské usazeniny na dně moře** (sedimenty pod mořem, dnes dno = stejné vrstvy jako pevnina).
 - Eroze kroku 6 jen odebírá. Náplavy (ukládání v jezerech a nivách) a delty u ústí do moře jako samostatný krok: stream power s depozicí (FastScape / Yuan et al.), ukládání do mapy WGER a do geologie jako nová vrstva.
