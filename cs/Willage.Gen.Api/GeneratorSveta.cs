@@ -15,11 +15,14 @@ public sealed class GeneratorSveta
     public IKatalogy Katalogy { get; }
     public IVizualniData Vizual { get; }
     public IUpravyRegionu Upravy { get; }
+    /// <summary>G-6: náhledy a izolace M1–M3.</summary>
+    public INahledyModulu Nahledy { get; }
 
     public GeneratorSveta(DataSveta d, string? kes = null, int vlaken = 8)
     {
         Stav = new StavGeneratoru(d, kes, vlaken);
         Moduly = new ModulyApi(Stav); Sluzba = new SluzbaSvetaApi(Stav); Dotazy = new DotazySvetaApi(Stav); Katalogy = new KatalogyApi(Stav);
+        Nahledy = new NahledyModuluApi(Stav);
         Vizual = new ZastupnaVizualniData(); Upravy = new ZastupneUpravyRegionu();
     }
 

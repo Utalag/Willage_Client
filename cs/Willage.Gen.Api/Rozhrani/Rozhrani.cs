@@ -70,3 +70,20 @@ public interface IUpravyRegionu
     IReadOnlyList<UpravaRegionuDto> Seznam();
     ZastupnyVysledekDto Pridej(UpravaRegionuDto u);
 }
+
+/// <summary>
+/// G-6: náhledy a izolace modulů M1–M3 nad výstupy posledního běhu (po Generuj). M4–M6 přijdou v G-7 (dnes IDotazySveta.Mapa).
+/// </summary>
+public interface INahledyModulu
+{
+    /// <summary>Moduly s vlastním náhledem (dnes M1, M2, M3).</summary>
+    IReadOnlyList<string> Moduly();
+    IReadOnlyList<VrstvaNahleduDto> Vrstvy(string modul);
+    /// <summary>Izolační vrstva modulu (M1 Relief, M2 RozdilM2M1), M3 izoluje řezem (RezimRezuDto); null = bez izolace mapy.</summary>
+    VrstvaNahleduDto? Izolace(string modul);
+    /// <summary>Mapa vrstvy na oblasti funkce světa (výchozí 0…SvetMaxM), rozliseni × rozliseni vzorků.</summary>
+    NahledMapyDto Mapa(string modul, VrstvaNahleduDto vrstva, int rozliseni = 256, OblastQ16? oblast = null);
+    /// <summary>Řez úsečkou (Q16): M1/M2 profil povrchu, M3 svislý řez materiálů 0,25 m v režimu izolace.</summary>
+    RezModuluDto Rez(string modul, SouradniceQ16 od, SouradniceQ16 @do, double krokM, RezimRezuDto rezim = RezimRezuDto.Vse);
+    IReadOnlyList<MaterialDto> Materialy();
+}
