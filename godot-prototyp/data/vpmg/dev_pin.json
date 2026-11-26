@@ -2,11 +2,11 @@
   "format": "willage-dev-pin-v1",
   "repo": "Utalag/Willage_Dev",
   "vetev": "main",
-  "commit": "12c3e6b05305c9ec6d0c9ed170791643f477871f",
-  "popis": "feat(vpmg): deterministic ops v1 and Willage material profiles (#16) – předtím 3476488 (#15, VPMG v0)",
+  "commit": "42e7475332b0bda06fa7b5097b4aac92ab4a95fe",
+  "popis": "fix(vpmg): correct smoothstep noise, strata bias, and v1 goldens (#17) – předtím 12c3e6b (#16, ops v1 s chybou SmoothStep), 3476488 (#15, v0)",
   "katalog": {
     "cesta": "src/Modules/World/Willage.World.Materials/Data/materials-catalog-v1.json",
-    "sha256": "1fb24319edbf0186537d4c1c624485fdf7339c7e89d1b20e9253cecc626a6736",
+    "sha256": "5893da04f418a85abc2c829ce1ade23d496915f4e026c5cf127de03781669a9b",
     "zrcadlo": "v1/materials-catalog-v1.json",
     "rozdil": "zrcadlo = Dev bez koncového \\n"
   },

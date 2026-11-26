@@ -176,10 +176,10 @@
         "default": {
           "style": "willage_v1",
           "baseColor": "#E5E0D4",
-          "palette": ["#F2EFE8", "#E5E0D4", "#C9C4B8", "#B0AAA0"],
-          "grainScalePermille": 260,
+          "palette": ["#EEEBE5", "#E3DFD8", "#D4D0CA", "#C6C2BC"],
+          "grainScalePermille": 200,
           "layerDensityPermille": 680,
-          "irregularityPermille": 220
+          "irregularityPermille": 180
         }
       },
       "subMaterials": null,
@@ -204,10 +204,10 @@
         "default": {
           "style": "willage_v1",
           "baseColor": "#A89888",
-          "palette": ["#C4B4A4", "#A89888", "#8A7A6C", "#6E6058", "#554A44"],
+          "palette": ["#BAB0A6", "#A89E94", "#968C84", "#847A74", "#746C66"],
           "grainScalePermille": 380,
           "layerDensityPermille": 560,
-          "irregularityPermille": 520
+          "irregularityPermille": 400
         }
       },
       "subMaterials": null,

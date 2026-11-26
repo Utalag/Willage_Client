@@ -1,42 +1,46 @@
 {
-  "format": "willage-vpmg-operace-dev-v1",
-  "poznamka": "GENEROVÁNO nástrojem Willage.Vpmg.Nastroj (příkaz parametry) z připnutého Willage_Dev – needitovat ručně. Typy = registr Dev, parametry = rozbor zdrojů operací (VpmgStepParams.Get*, Params.TryGetValue, VisualProfile.*). vychozi \"\" = výchozí hodnotu bere Dev z profilu (vychoziDev).",
-  "devCommit": "12c3e6b05305c9ec6d0c9ed170791643f477871f",
+  "format": "willage-vpmg-operace-dev-v2",
+  "poznamka": "GENEROVÁNO nástrojem Willage.Vpmg.Nastroj (příkaz parametry) z deskriptorů Dev VpmgOperationCatalog (= tools/VpmgPreview --describe-ops) – needitovat ručně. ctiProfil = jen pole profilu z deskriptorů (ProfileField); ostatní čtená pole doplňuje klientský překryv. vychozi \"\" = výchozí hodnotu bere Dev z profilu / rozměru (vychoziDev).",
+  "devCommit": "42e7475332b0bda06fa7b5097b4aac92ab4a95fe",
   "operace": [
     {
       "type": "base_fill",
       "trida": "BaseFillOperation",
-      "ctiProfil": [
-        "baseColor"
-      ],
+      "popisDev": "Vyplní vrstvu barvou z visualProfile.baseColor.",
+      "ctiProfil": [],
       "params": [
         {
           "nazev": "layer",
           "druh": "text",
           "vychozi": "albedo",
-          "vychoziDev": "\"albedo\""
+          "vychoziDev": "albedo",
+          "popisDev": "Id vrstvy textury (typicky albedo)."
         }
       ]
     },
     {
       "type": "color_variation",
       "trida": "ColorVariationOperation",
-      "ctiProfil": [
-        "baseColor",
-        "palette"
-      ],
+      "popisDev": "Alias pro palette_map.",
+      "ctiProfil": [],
       "params": [
         {
           "nazev": "scalePermille",
           "druh": "cele",
           "vychozi": "280",
-          "vychoziDev": "280"
+          "vychoziDev": "280",
+          "popisDev": "Velikost buňky šumu v ‰ šířky.",
+          "min": 1,
+          "max": 2000
         },
         {
           "nazev": "jitterPermille",
           "druh": "cele",
           "vychozi": "90",
-          "vychoziDev": "90"
+          "vychoziDev": "90",
+          "popisDev": "Jemná variace kolem palety v ‰.",
+          "min": 0,
+          "max": 500
         }
       ],
       "aliasOf": "palette_map"
@@ -44,39 +48,49 @@
     {
       "type": "grass_tufts",
       "trida": "GrassTuftsOperation",
+      "popisDev": "Vzor běitků na svrchní zelené textuře.",
       "ctiProfil": [],
       "params": [
         {
           "nazev": "densityPermille",
           "druh": "cele",
           "vychozi": "550",
-          "vychoziDev": "550"
+          "vychoziDev": "550",
+          "popisDev": "Pravděpodobnost sloupce s běitkem v ‰.",
+          "min": 0,
+          "max": 1000
         },
         {
           "nazev": "bladeLengthPermille",
           "druh": "cele",
           "vychozi": "180",
-          "vychoziDev": "180"
+          "vychoziDev": "180",
+          "popisDev": "Délka světlejšího pruhu od horní hrany v ‰ výšky.",
+          "min": 0,
+          "max": 500
         },
         {
           "nazev": "hueJitterPermille",
           "druh": "cele",
           "vychozi": "120",
-          "vychoziDev": "120"
+          "vychoziDev": "120",
+          "popisDev": "Odchylka odstínu zeleně v ‰.",
+          "min": 0,
+          "max": 500
         }
       ]
     },
     {
       "type": "hash_grain",
       "trida": "HashGrainOperation",
-      "ctiProfil": [
-        "grainScalePermille"
-      ],
+      "popisDev": "Deterministické zrno z GeologyHash; amplituda z visualProfile.grainScalePermille.",
+      "ctiProfil": [],
       "params": []
     },
     {
       "type": "irregularity",
       "trida": "IrregularityWarpOperation",
+      "popisDev": "Alias pro warp.",
       "ctiProfil": [
         "irregularityPermille"
       ],
@@ -85,7 +99,10 @@
           "nazev": "strengthPermille",
           "druh": "cele",
           "vychozi": "",
-          "vychoziDev": "context.VisualProfile.IrregularityPermille",
+          "vychoziDev": "profil irregularityPermille",
+          "popisDev": "Síla posunu vzorkování v ‰.",
+          "min": 0,
+          "max": 1000,
           "zProfilu": [
             "irregularityPermille"
           ]
@@ -94,7 +111,10 @@
           "nazev": "cellPx",
           "druh": "cele",
           "vychozi": "",
-          "vychoziDev": "Math.Max(4, w / 12)"
+          "vychoziDev": "výchozí Dev (z rozměru textury)",
+          "popisDev": "Velikost buňky offsetu v px (výchozí ~šířka/12).",
+          "min": 2,
+          "max": 32
         }
       ],
       "aliasOf": "warp"
@@ -102,28 +122,33 @@
     {
       "type": "palette_map",
       "trida": "PaletteMapOperation",
-      "ctiProfil": [
-        "baseColor",
-        "palette"
-      ],
+      "popisDev": "Mapuje šum na paletu profilu a přidá jemný jitter.",
+      "ctiProfil": [],
       "params": [
         {
           "nazev": "scalePermille",
           "druh": "cele",
           "vychozi": "280",
-          "vychoziDev": "280"
+          "vychoziDev": "280",
+          "popisDev": "Velikost buňky šumu v ‰ šířky.",
+          "min": 1,
+          "max": 2000
         },
         {
           "nazev": "jitterPermille",
           "druh": "cele",
           "vychozi": "90",
-          "vychoziDev": "90"
+          "vychoziDev": "90",
+          "popisDev": "Jemná variace kolem palety v ‰.",
+          "min": 0,
+          "max": 500
         }
       ]
     },
     {
       "type": "smooth_noise",
       "trida": "SmoothNoiseOperation",
+      "popisDev": "Víceoktávový value noise s jemnou změnou jasu.",
       "ctiProfil": [
         "grainScalePermille"
       ],
@@ -132,7 +157,10 @@
           "nazev": "scalePermille",
           "druh": "cele",
           "vychozi": "",
-          "vychoziDev": "context.VisualProfile.GrainScalePermille",
+          "vychoziDev": "profil grainScalePermille",
+          "popisDev": "Velikost buňky šumu v ‰ šířky textury.",
+          "min": 1,
+          "max": 2000,
           "zProfilu": [
             "grainScalePermille"
           ]
@@ -141,31 +169,39 @@
           "nazev": "octaves",
           "druh": "cele",
           "vychozi": "3",
-          "vychoziDev": "3"
+          "vychoziDev": "3",
+          "popisDev": "Počet oktáv FBM.",
+          "min": 1,
+          "max": 6
         },
         {
           "nazev": "amplitudePermille",
           "druh": "cele",
           "vychozi": "120",
-          "vychoziDev": "120"
+          "vychoziDev": "120",
+          "popisDev": "Síla odchylky RGB v ‰.",
+          "min": 0,
+          "max": 1000
         }
       ]
     },
     {
       "type": "strata",
       "trida": "StrataOperation",
+      "popisDev": "Horizontální pásma; výchozí tloušťka z visualProfile.layerDensityPermille.",
       "ctiProfil": [
-        "baseColor",
-        "irregularityPermille",
         "layerDensityPermille",
-        "palette"
+        "irregularityPermille"
       ],
       "params": [
         {
           "nazev": "bandMinPx",
           "druh": "cele",
           "vychozi": "",
-          "vychoziDev": "Math.Max(2, h * 80 / Math.Max(100, density + 50))",
+          "vychoziDev": "profil layerDensityPermille",
+          "popisDev": "Minimální výška pásma v px (výchozí z hustoty vrstev profilu).",
+          "min": 2,
+          "max": 64,
           "zProfilu": [
             "layerDensityPermille"
           ]
@@ -174,7 +210,10 @@
           "nazev": "bandJitterPermille",
           "druh": "cele",
           "vychozi": "",
-          "vychoziDev": "irregularity",
+          "vychoziDev": "profil irregularityPermille",
+          "popisDev": "Náhodná odchylka tloušťky pásma v ‰.",
+          "min": 0,
+          "max": 1000,
           "zProfilu": [
             "irregularityPermille"
           ]
@@ -184,6 +223,7 @@
     {
       "type": "value_noise",
       "trida": "ValueNoiseOperation",
+      "popisDev": "Alias pro smooth_noise.",
       "ctiProfil": [
         "grainScalePermille"
       ],
@@ -192,7 +232,10 @@
           "nazev": "scalePermille",
           "druh": "cele",
           "vychozi": "",
-          "vychoziDev": "context.VisualProfile.GrainScalePermille",
+          "vychoziDev": "profil grainScalePermille",
+          "popisDev": "Velikost buňky šumu v ‰ šířky textury.",
+          "min": 1,
+          "max": 2000,
           "zProfilu": [
             "grainScalePermille"
           ]
@@ -201,13 +244,19 @@
           "nazev": "octaves",
           "druh": "cele",
           "vychozi": "3",
-          "vychoziDev": "3"
+          "vychoziDev": "3",
+          "popisDev": "Počet oktáv FBM.",
+          "min": 1,
+          "max": 6
         },
         {
           "nazev": "amplitudePermille",
           "druh": "cele",
           "vychozi": "120",
-          "vychoziDev": "120"
+          "vychoziDev": "120",
+          "popisDev": "Síla odchylky RGB v ‰.",
+          "min": 0,
+          "max": 1000
         }
       ],
       "aliasOf": "smooth_noise"
@@ -215,6 +264,7 @@
     {
       "type": "warp",
       "trida": "WarpOperation",
+      "popisDev": "Domain warp poslední vrstvy.",
       "ctiProfil": [
         "irregularityPermille"
       ],
@@ -223,7 +273,10 @@
           "nazev": "strengthPermille",
           "druh": "cele",
           "vychozi": "",
-          "vychoziDev": "context.VisualProfile.IrregularityPermille",
+          "vychoziDev": "profil irregularityPermille",
+          "popisDev": "Síla posunu vzorkování v ‰.",
+          "min": 0,
+          "max": 1000,
           "zProfilu": [
             "irregularityPermille"
           ]
@@ -232,7 +285,10 @@
           "nazev": "cellPx",
           "druh": "cele",
           "vychozi": "",
-          "vychoziDev": "Math.Max(4, w / 12)"
+          "vychoziDev": "výchozí Dev (z rozměru textury)",
+          "popisDev": "Velikost buňky offsetu v px (výchozí ~šířka/12).",
+          "min": 2,
+          "max": 32
         }
       ]
     }

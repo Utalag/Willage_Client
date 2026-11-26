@@ -25,7 +25,7 @@ public static class TestyT1
         var man = ManifestKatalogu.Spocti(data);
 
         // pin a zrcadlo
-        T.Je(pin.Commit == "12c3e6b05305c9ec6d0c9ed170791643f477871f" && api.Schema.DevCommit == pin.Commit && api.Schema.PrekryvCommit == pin.Commit, $"pin Dev {pin.Commit[..7]} = schéma operací ({api.Schema.DevCommit[..7]})");
+        T.Je(pin.Commit == "42e7475332b0bda06fa7b5097b4aac92ab4a95fe" && api.Schema.DevCommit == pin.Commit && api.Schema.PrekryvCommit == pin.Commit, $"pin Dev {pin.Commit[..7]} = schéma operací ({api.Schema.DevCommit[..7]})");
         T.Je(man.ShaSouboru(pin.ZrcadloCesta) == pin.ZrcadloSha, "SHA zrcadla = manifest");
         T.Je(pin.GoldenChecksum == 1756279408u && pin.GoldenMaterial == 52 && pin.GoldenSeed == 0xC0FFEE00u && pin.GoldenRozliseni == 64, "golden v pinu = Dev (52, 0xC0FFEE00, 64 → 1756279408)");
 

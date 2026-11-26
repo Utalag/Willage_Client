@@ -4,9 +4,9 @@ using Willage.Materialy.Api.Dto;
 namespace Willage.Materialy.Api.Sluzby;
 
 /// <summary>
-/// T-2b: schéma operací VPMG pro konfigurátor = <b>generovaný</b> popis z Dev (data/vpmg/operace_dev_v1.json, nástroj „parametry“:
-/// registr Dev + rozbor zdrojů operací) + klientský překryv (data/vpmg/operace_vpmg_v1.json: české názvy, rozsahy, jednotky,
-/// zástupné návrhy pro backend). Typy, parametry, výchozí hodnoty a čtené pole profilu jsou vždy z Dev.
+/// T-2c: schéma operací VPMG pro konfigurátor = <b>generovaný</b> popis z Dev (data/vpmg/operace_dev_v1.json, nástroj „parametry“
+/// = deskriptory Dev VpmgOperationCatalog / --describe-ops) + klientský překryv (data/vpmg/operace_vpmg_v1.json: české názvy, jednotky,
+/// pole profilu čtená mimo výchozí hodnoty, zástupné návrhy pro backend). Typy, parametry, rozsahy a výchozí hodnoty jsou vždy z Dev.
 /// </summary>
 public sealed class SchemaOperaciVpmg
 {
@@ -48,18 +48,28 @@ public sealed class SchemaOperaciVpmg
                 string n = dp.GetProperty("nazev").GetString()!;
                 JsonElement? po = prp is { } q && q.TryGetProperty(n, out var qq) ? qq : null;
                 string vd = Str(dp, "vychoziDev");
-                string popis = po is { } a ? Str(a, "popis") : "";
+                string popis = po is { } a && Str(a, "popis") != "" ? Str(a, "popis") : Str(dp, "popisDev");
                 if (Str(dp, "vychozi") == "") popis = (popis == "" ? "" : popis + "; ") + $"prázdné = výchozí Dev: {vd}";
                 return new ParametrVpmgDto(n, Enum.Parse<DruhParametruVpmg>(dp.GetProperty("druh").GetString()!, true), Str(dp, "vychozi"), popis,
-                    new List<string>(), po is { } b ? Int(b, "min") : null, po is { } c ? Int(c, "max") : null, po is { } e ? Str(e, "jednotka") : "", vd, po is null);
+                    new List<string>(), Int(dp, "min") ?? (po is { } b ? Int(b, "min") : null), Int(dp, "max") ?? (po is { } c ? Int(c, "max") : null), po is { } e ? Str(e, "jednotka") : "", vd, po is null);
             }).ToList();
+            if (prp is { } pm)
+                foreach (var q2 in pm.EnumerateObject())
+                    foreach (var mm in new[] { "min", "max" })
+                        if (q2.Value.TryGetProperty(mm, out var mv) && o.GetProperty("params").EnumerateArray().FirstOrDefault(x => x.GetProperty("nazev").GetString() == q2.Name) is { ValueKind: JsonValueKind.Object } dx
+                            && Int(dx, mm) is { } dvm && dvm != mv.GetInt32())
+                            nes.Add($"překryv: '{type}.{q2.Name}' {mm} {mv.GetInt32()} ≠ Dev {dvm}");
+            var ctiP = o.GetProperty("ctiProfil").EnumerateArray().Select(c => c.GetString()!)
+                .Concat(pr is { } cp0 && cp0.TryGetProperty("ctiProfil", out var cpp) ? cpp.EnumerateArray().Select(c => c.GetString()!) : Array.Empty<string>())
+                .Distinct().OrderBy(c => c, StringComparer.Ordinal).ToList();
+            foreach (var c in ctiP.Where(c => Profil.All(p2 => p2.Nazev != c))) nes.Add($"'{type}': ctiProfil '{c}' není pole profilu");
             if (prp is { } pq)
                 foreach (var n in pq.EnumerateObject().Select(p => p.Name).Where(n => par.All(p => p.Nazev != n)))
                     nes.Add($"překryv: operace '{type}' parametr '{n}' Dev nečte");
             if (pr is { } z && z.TryGetProperty("zastupna", out var zz) && zz.GetBoolean()) nes.Add($"překryv: '{type}' je označená zástupná, ale Dev ji má v registru");
             ops.Add(new OperaceVpmgDto(type, pr is { } n1 ? Str(n1, "nazev") : type, pr is { } s1 ? Str(s1, "skupina") : "Dev (bez popisu klienta)",
-                pr is { } d1 ? Str(d1, "popis") : "operace z registru Dev bez popisu v překryvu", false, par,
-                o.GetProperty("ctiProfil").EnumerateArray().Select(c => c.GetString()!).ToList(), o.TryGetProperty("aliasOf", out var al) ? al.GetString() : null, Str(o, "trida")));
+                pr is { } d1 ? Str(d1, "popis") : Str(o, "popisDev") is var pd0 && pd0 != "" ? pd0 : "operace z registru Dev bez popisu v překryvu", false, par,
+                ctiP, o.TryGetProperty("aliasOf", out var al) ? al.GetString() : null, Str(o, "trida")));
         }
         foreach (var (type, p) in prekryv)
         {

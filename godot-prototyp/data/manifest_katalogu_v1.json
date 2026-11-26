@@ -1,6 +1,6 @@
 {
   "format": "willage-manifest-katalogu-v1",
-  "souhrn": "9f500a87108b0e61bd1406882cf4856598faae005d43a23fc0184945af4986bd",
+  "souhrn": "cf3441ac42e8a59243f8cd795d7af7edcc79c8da3bf850195008e2b21ce8f8aa",
   "soubory": [
     {
       "cesta": "klima_presety.csv",
@@ -50,7 +50,7 @@
     {
       "cesta": "v1/materials-catalog-v1.json",
       "velikost": 56818,
-      "sha256": "664f6f311b2f9f1b6be83ab1c706d4086c475d13f8d4e6c297281a4eb350ef2d"
+      "sha256": "59eed962a98e052bb4adf6cbf4ec8a5b59a4798a33d836aea1694f2116da3dc1"
     },
     {
       "cesta": "v1/more_v1.json",
@@ -79,18 +79,18 @@
     },
     {
       "cesta": "vpmg/dev_pin.json",
-      "velikost": 1199,
-      "sha256": "b242db09a92e26ccf574197e54ec89ef1728a8c296bde2969a16ba047a279303"
+      "velikost": 1239,
+      "sha256": "a4904defa82f8c6b3e3688844698159582fa844c275126daeb3afef63e4ee1b6"
     },
     {
       "cesta": "vpmg/operace_dev_v1.json",
-      "velikost": 5661,
-      "sha256": "d946ff5ad0e9e45e24f33cb08ec5eb29de864e006df2b618206f055a54817991"
+      "velikost": 8240,
+      "sha256": "4d69d2f561b14690a0101474ad9b70ad249580592fb7c559d991c442c68af604"
     },
     {
       "cesta": "vpmg/operace_vpmg_v1.json",
-      "velikost": 6074,
-      "sha256": "a08ec56dce7362c16b4a5af8a8ba36388084ee41dc322dc5284524b5dcd08d94"
+      "velikost": 7318,
+      "sha256": "a27f866b8e71f1d009a6f22579a14873313e19e0b5b20019d6785a1091d3c7b2"
     },
     {
       "cesta": "vpmg/receptury/1.json",
@@ -99,23 +99,23 @@
     },
     {
       "cesta": "vpmg/receptury/2.json",
-      "velikost": 622,
-      "sha256": "2e0a428bf7c334c7f80bd9351645b8e46640d90b791b88dd70d0b489b4a655fc"
+      "velikost": 603,
+      "sha256": "ffd8b2bc4cdfbadc569bff95825f1916ab55ba5ad4d11077ea534d52e4efd832"
     },
     {
       "cesta": "vpmg/receptury/3.json",
-      "velikost": 648,
-      "sha256": "4b3c38d13eb593a7594cab17c53873e5c950f77dc349a49a73defde65aa7ad52"
+      "velikost": 647,
+      "sha256": "ce350f86cbf1e2963526b42a964be687d1d5e614bb88b4918f127aab453f6260"
     },
     {
       "cesta": "vpmg/receptury/5.json",
-      "velikost": 654,
-      "sha256": "d65b256030a2770213964ce25655805acea41b086af852c32cdeafcf374d6d3b"
+      "velikost": 636,
+      "sha256": "3414899aeaf439ab37f52d5a02abca9a2010522b8a290f0f7f0af2e5e097b2f5"
     },
     {
       "cesta": "vpmg/receptury/6.json",
-      "velikost": 763,
-      "sha256": "a6970d397dae511e80b77e98a9ccf4b43fc499cdf75df7ebbe56883da78aec28"
+      "velikost": 703,
+      "sha256": "b16dbe944ae29e5ccda2e27a0ec4518192a269f9b8838e513fb644ca6843a92e"
     },
     {
       "cesta": "vpmg/receptury/README.md",
@@ -124,8 +124,8 @@
     },
     {
       "cesta": "vpmg/receptury/zdroj_receptur.json",
-      "velikost": 2201,
-      "sha256": "11c178d9f1c0d9d4819725464c69a28177281cfc18f983683dc6aa75890a3521"
+      "velikost": 2225,
+      "sha256": "4e56785fbffb154e50db577da5b815a2ba2e766d6cf7cb727f3db5a36f17293d"
     },
     {
       "cesta": "vpmg/vzorek_materialu_v0.json",
