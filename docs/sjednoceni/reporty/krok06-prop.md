@@ -81,3 +81,12 @@ Negativní / omezení:
 Volba mřížky: **32 m** (návrh) – 4× rychlejší (5 s), 4× menší soubor, determinismus i periodicita stejné, síť toků hustší; jemný tvar koryta dává funkce. 16 m nechat jako parametr (`KrokM`). Rozhodne Jan.
 
 Obrázky: `godot-prototyp/shots/krok06/vyska_pred_po.png`, `toky_vodnici.png`, `vyrez_start.png`, `sev_torusu.png`, `detail_bloku.png`.
+
+## Otázky pro Jana
+1. **Moře / odtok:** nechat odtok jako nejnižší 2 % buněk, nebo zavést hladinu moře / velkorozměrový sklon kontinentu, aby vznikly delší řeky? (Dnes max tok 3 km, povodí 4 km².)
+2. **Mřížka:** 32 m (návrh: 5 s, 3,5 MB) nebo 16 m (21 s, 14 MB, 527 MB paměti)?
+3. **Přepínač eroze:** zůstává vypnutý. Zapnout až po rozhodnutí, jak se mají přizpůsobit prameny kroku 4 (v 14,14 se se zapnutou erozí ztratí oba)?
+4. **Vodníci:** filtr „kopce ≥ 0,5“ a Q = plocha × 10 l/s/km² vyhovuje? Zapnout vodníky ve výchozím nastavení spolu s erozí?
+5. **Periodicita:** stačí prolnutí u švu (pás 512 m), nebo udělat funkci světa nativně periodickou (zásah do kroku 2, mění svět)?
+6. **Interpolace E:** přejít z bilineární na hladší (bikubickou / smoothstep), aby v detailu nebyly „hvězdy“? Mění jen zapnutý režim.
+7. **Náplavy a delty:** nechat mimo (jen eroze bez ukládání), nebo je navrhnout jako další krok?
