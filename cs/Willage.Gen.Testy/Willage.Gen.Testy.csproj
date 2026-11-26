@@ -9,6 +9,7 @@
   <ItemGroup>
     <ProjectReference Include="..\Willage.Gen\Willage.Gen.csproj" />
     <ProjectReference Include="../Willage.Gen.Api/Willage.Gen.Api.csproj" />
+    <ProjectReference Include="../Willage.Materialy.Api/Willage.Materialy.Api.csproj" />
     <None Include="Data\**" CopyToOutputDirectory="PreserveNewest" />
     <None Include="..\..\godot-prototyp\data\v1\materials-catalog-v1.json" Link="Data\materials-catalog-v1.json" CopyToOutputDirectory="PreserveNewest" />
   </ItemGroup>
