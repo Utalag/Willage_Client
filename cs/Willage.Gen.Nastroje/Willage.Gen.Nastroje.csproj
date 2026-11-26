@@ -1,0 +1,14 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <!-- Nástroje kroku 5: porovnání s GDScriptem (výpisy z tools/*.gd), časy, otisky, obrázky řezu. -->
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net9.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <RootNamespace>Willage.Gen.Nastroje</RootNamespace>
+    <Deterministic>true</Deterministic>
+  </PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="../Willage.Gen/Willage.Gen.csproj" />
+  </ItemGroup>
+</Project>
