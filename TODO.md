@@ -12,6 +12,10 @@ Nejdřív se dořeší všechno s vodou, pak další bloky. V rámci bloku se ne
 4. **Měřítko a zobrazení:** ~~oddělené typy jednotek v kódu (E89)~~ → ~~plán vzorkování a LOD (E90)~~ → ~~průhlednost překážek v izometrii (E91)~~ → ~~test měřítka v izometrii a blok 128 m (E92)~~ → ~~výkon na telefonu (E93)~~. **Blok 4 hotový** (2026-11-20 08:33), nic není sloučené do main; otázky jsou v „Rozhodnutí Jana“.
 5. **Janovo rozhodnutí:** charakter krajiny.
 
+## Generátor V1: povrchové jevy klimatu (Jan 2026-11-26 12:47, krok 7b, bod 7)
+
+- [ ] **Zamrzání a led jako povrchové jevy** (jen TODO, neimplementováno): zamrzlé toky a jezera, sníh a led podle teploty pásma, tání. Dnes Turcův odtok na ledové planetě téměř nezohledňuje zamrzání (teče víc než ve stepi). Navazuje na krok 8 plánu 04 (světová část v kroku 7).
+
 ## Voda
 
 - [x] **E68 – sjednocení výpočtu povrchu a podzemí (hydrologický orchestrátor).** Podnět: konverzace s ChatGPT 2026-11-19 ([sdílený chat](https://chatgpt.com/share/6aff2aa3-865c-83ed-a19c-63720302f8cf)). Hotovo (tag `e68-orchestrator`, větev `e68-orchestrator`): modul `hydro68.gd`, `p68_hydro` zapnuto, kola do ustálení (max 64), bilance a otisk; smyčka tůň→průsak→pramen chyba 61 % → 0; ostrov bitově stejný.

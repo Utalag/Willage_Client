@@ -26,5 +26,57 @@ Rozhodnutí Jana 12:47 / 12:49 k otázkám z kroku 7:
 ## Měření
 Testy C# (main i větev), otisky vyp/zap, podíly biomů pro 4 seedy a 5 planet, počty oáz, obrázky `godot-prototyp/shots/krok07b/` (pásma a teplota, biomy 4 seedy, pouštní planeta s oázami), `git merge-tree` proti main. Negativní výsledky zapsat.
 
-## Výsledky
-(doplní se)
+## Výsledky (2026-11-26 13:20 SEČ)
+
+### Implementace a výchozí hodnoty pásem (`klima_v1.json`)
+Pásma od rovníku k pólu, `Podil` = váha půlperiody (po vypnutí se zbylá normalizují), teploty `TOd → TDo` (°C, rovníková → polární hrana), `K` = násobek srážek planety, vítr `+` od západu / `−` od východu. Přechod mezi pásmy `PrechodPasmaM` = 400 m. `—` = vypnuto.
+
+| planeta (srážky mm) | tropy | subtropy | mírné | chladné | polární |
+|---|---|---|---|---|---|
+| **mírné** (800) | — | 15 %: 18→15, K 0,8, − | **60 %**: 15→8, K 1,1, + | 25 %: 8→5, K 1,0, + | — |
+| poušť (300) | 20 %: 34→32, K 0,5, − | 60 %: 32→28, K 0,6, − | 20 %: 28→22, K 1,0, + | — | — |
+| step (450) | — | 25 %: 24→20, K 0,8, − | 50 %: 20→14, K 1,0, + | 25 %: 14→10, K 1,0, + | — |
+| tundra (500) | — | — | 20 %: 8→4, K 1,0, + | 40 %: 4→−4, K 1,0, + | 40 %: −4→−14, K 0,6, − |
+| ledovec (400) | — | — | 10 %: −2→−8 | 30 %: −8→−15 | 60 %: −15→−30, K 0,6, − |
+
+Vypnuté pásmo má v JSON dál své hodnoty (stačí přepnout `Zapnuto`). Další výchozí: `OazaPravdepodobnost` 0,3, `OazaBunkaM` 1000 m, `OazaQLs` 3 l/s, `OazaPolomerM` 96 m, `OazaVeStepi` false, `StartPasmo` mirne.
+
+### Negativní / mezivýsledky
+- První mírná planeta (srážky 1000 mm): w průměr **1,27** (příliš vlhká), mírný les 93 %. 650 mm: w 0,54, step 11 %, vodníků jen 42. Zvoleno **800 mm** (w ≈ 0,7–0,84, vodníků 78–97). Odtok podle Turca je ve studených pásmech velmi nelineární.
+- Oázy nejdřív s pravděpodobností buňky nezávislou na ploše pouště: na stepi 0,77 oáz/km² pouště (poušť tvoří jen skvrny). Opraveno: pravděpodobnost × podíl pouštních uzlů v buňce. Pak na pouštní planetě 44 oáz (0,15 /km²) při 0,2, proto výchozí **0,3** (71 oáz, 0,24 /km²).
+- Porovnání otisku klimatu při 1 a 8 vláknech nejdřív „nesedělo“ jen v nástroji (1 vlákno bez překrytí oáz); ne chyba v knihovně.
+
+### Podíly biomů mírné planety (% pevniny)
+| seed | mírný les | tajga | step | mírný deštný les | poušť | w průměr | T °C |
+|---|---|---|---|---|---|---|---|
+| 49 | 91,0 | 5,4 | 3,6 | 0,1 | 0 | 0,83 | 2,9…18,0 |
+| 2 | 86,7 | 6,4 | 6,7 | 0,2 | 0 | 0,73 | 2,5…18,0 |
+| 4 | 87,9 | 4,9 | 7,0 | 0,3 | 0 | 0,71 | 2,8…18,0 |
+| 8 | 91,9 | 5,9 | 2,1 | 0,2 | 0 | 0,84 | 2,5…18,0 |
+
+Mírný les + tajga 91–98 % (H2 ano, poušť 0 %), srážkový stín: návětří 1,22–1,31×, závětří za hřbetem 0,57–0,64×. Koryta z eroze: aktivní 73–79 %, suchá 20–26 %. Vodníci před → po (bez klimatu → s klimatem): 49: 92 → 86, 2: 94 → 78, 4: 114 → 86, 8: 103 → 97.
+
+### Ostatní planety (seed 49, stejná eroze)
+| planeta | poušť | step | led | tundra | tajga | mírný les | oázy | aktivní koryta | vodníci |
+|---|---|---|---|---|---|---|---|---|---|
+| poušť | 93,4 | 5,9 | 0 | 0 | 0 | 0 | **71** (0,24 / km² pouště; biom oáza 0,57 % pevniny, Q 203 l/s) | 0 | 71 (jen oázy) |
+| step | 15,7 | 59,8 | 0 | 0 | 0 | 23,4 | 11 (0,22 / km²) | 17 % | 15 |
+| tundra | 0 | 0 | 32,4 | 43,3 | 19,3 | 5,0 | 0 | 72 % | 54 |
+| ledovec | 0 | 0 | 94,3 | 5,7 | 0 | 0 | 0 | 72 % | 49 |
+
+Všechna koryta pouštní planety jsou suchá (pozůstatek eroze), vodu tam dávají jen oázy. Poznámka: ledová planeta má pořád hodně vody (chybí zamrzání, TODO bod 7).
+
+### Otisky seedu 49
+| konfigurace | mapa eroze | krok 3 | voda 14,14 | prameny 3×3 | vodníci |
+|---|---|---|---|---|---|
+| `Krok5()` | – | c8eeb7964d1ddd85 | 7714d1a1d34e00ad | 18 | – |
+| `Krok06()` / `--bez-klimatu` (klima vyp) | 800d420bb00047de | 9f32311e046f8b6a | 8e239a68c6d01be0 | 20 | 92 |
+| **nový výchozí** (klima zap, pásma, oázy) | 800d420bb00047de | 9f32311e046f8b6a | **377a8210f82c856a** | **21** | **86** |
+
+Klíč keše eroze d61ed38d70cfced9 beze změny, otisk klimatu cb11da8d141a2a5e, start: mírný les, T 10,1 °C, P 943 mm, w 1,35 (prameny ve 3×3: 20 → 21, výkon 52 → 83 l/s). Na mírné planetě žádné oázy (poušť 0 %).
+
+### Testy
+Větev c733dba (krok 7): 141. Nová větev: **OK 156, chyb 0** (+15 testů 7b: pásma, vypínání, normalizace, přechod, symetrie, oázy, výchozí zapnuto). `main` 5e4f1f0: 110.
+
+### Obrázky (`godot-prototyp/shots/krok07b/`)
+`pasma_teplota_seed49.png` (mapa teploty s hranicemi pásem a profil po ose y), `biomy_4_seedy.png` (49, 2, 4, 8), `poust_oazy_seed49.png` (biomy pouštní planety, suchá koryta a oázy), `pasma_teplota_poust_seed49.png`.

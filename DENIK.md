@@ -624,6 +624,12 @@ Skupiny: 1 Prototyp a buildy · 2 Terén a tvar · 3 Rozlišení bloku · 4 Ská
 - **Komplikace:** hladká šířka (1 − cos)/2 dala 29 % tundry → lineární šířka; skok srážek na hranicích pásů → přechod 4°; dva průchody nestačily na periodické řešení → do ustálení. Na ledové planetě teče víc než ve stepi (chybí zamrzání).
 - **Další krok:** schválení; merge do main dělá Willage-backend.
 
+### 🧪 Generátor V1 krok 7b: klimatická pásma, oázy, klima výchozí zapnuto (2026-11-26 13:20 · větev `gen-v1-krok07b-pasma`, `cs/Willage.Gen/Klima/`, PROP `docs/sjednoceni/reporty/krok07b-prop.md`, shots `godot-prototyp/shots/krok07b/`)
+- **Směr:** Jan 12:47 / 12:49: klima výchozí zapnuto, mírná planeta většinou mírná přes předdefinovaná konfigurovatelná pásma (tropy, subtropy, mírné, chladné, polární; šířka a teploty laditelné, každé jde vypnout, zbylá vyplní planetu poměrně), gradient 0,05 °C/m zůstává, vítr jen po pásech, oázy v pouštích, reliéf eroze se klimatem nemění, zamrzání později.
+- **Zlepšení:** pásma v `klima_v1.json` s plynulým přechodem 400 m, mírná planeta: mírný les 87–92 %, tajga 5–6 %, poušť 0 %. Oázy (pravděpodobnost úměrná podílu pouště v buňce): na pouštní planetě 71. Otisky: `Krok5()` a `Krok06()` staré, nový výchozí voda 14,14 377a8210f82c856a (21 pramenů, 86 vodníků). Testy main 110, větev 156.
+- **Komplikace:** první kalibrace srážek moc vlhká (w 1,27) nebo moc suchá (0,54), zvoleno 800 mm; oázy nejdřív nezávislé na ploše pouště (0,77/km² na stepi) → úměrně podílu pouště.
+- **Další krok:** schválení; merge do main dělá Willage-backend.
+
 ### 💡 TODO: náplavy a delty jako samostatný krok po kroku 6b (2026-11-26 9:59, Jan, bod 7)
 - **Doplněno 2026-11-26 11:15 (Jan, 6e):** součástí stejného kroku i **mořské usazeniny na dně moře** (sedimenty pod mořem, dnes dno = stejné vrstvy jako pevnina).
 - Eroze kroku 6 jen odebírá. Náplavy (ukládání v jezerech a nivách) a delty u ústí do moře jako samostatný krok: stream power s depozicí (FastScape / Yuan et al.), ukládání do mapy WGER a do geologie jako nová vrstva.
