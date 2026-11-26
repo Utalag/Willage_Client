@@ -104,3 +104,8 @@
 | 70 | — | Přesunuto do tezba-studie/ZDROJE.md jako [26] (T01, dříve E65). |
 | 71 | — | Přesunuto do tezba-studie/ZDROJE.md jako [27] (T01, dříve E65). |
 | 72 | — | Přesunuto do tezba-studie/ZDROJE.md jako [28] (T01, dříve E65). |
+| 84 | https://doi.org/10.1002/esp.1952 (Tucker & Hancock 2010, *Modelling landscape evolution*, ESPL 35:28–50) | přehled modelů vývoje krajiny: detachment-limited stream power jako nejjednodušší rozumný model říční eroze → volba pro krok 6 (krok06, 2026-11-26) |
+| 85 | https://doi.org/10.1016/j.geomorph.2012.10.008 (Braun & Willett 2013, Geomorphology 180–181:170–179) | implicitní O(N) řešení stream power v pořadí od odtoku (stack), stabilní pro libovolné dt → `cs/Willage.Gen/Eroze/StreamPower.cs` (krok06) |
+| 86 | https://doi.org/10.1016/S0734-189X(84)80011-0 (O'Callaghan & Mark 1984, CVGIP 28(3):323–344) | D8: odtok do nejstrmějšího z 8 sousedů, akumulace plochy → `Eroze/Smerovani.cs` (krok06) |
+| 87 | https://doi.org/10.1029/1999JB900120 (Whipple & Tucker 1999, JGR 104(B8):17661–17674) | stream power E = K A^m S^n, m/n ≈ 0,5 → parametry `eroze_v1.json` (krok06) |
+| 88 | https://doi.org/10.3133/pp252 (Leopold & Maddock 1953, USGS PP 252) | hydraulická geometrie koryta w ∝ Q^0,5, d ∝ Q^0,4 → šířka a hloubka koryta v `Eroze/ErozeSvetaFn.cs` (krok06) |
