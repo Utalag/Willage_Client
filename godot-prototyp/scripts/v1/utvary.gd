@@ -118,7 +118,21 @@ func _make(kd: String, hsh: int, cx: float, cy: float) -> Dictionary:
 			for q in [cx, cy, cz] + u + v + n + [ra, rb, rc]: P.append(q)
 			box = [cx - ra, cy - ra, cz - ra, cx + ra, cy + ra, cz + ra]
 		"dome":
-			var cz := clampf(zs * (0.55 + 0.20 * _rr(hsh, 3)), 6.0, maxf(zs - 3.0, 6.0))
+			# Jan 2026-11-26: střed Z v pásmu sedimentů (sůl má hostitele jen tam).
+			# Podíly pásem stejné jako geo_vrstvy.PASMA / parametry pasmo_*.
+			var cz: float
+			if bool(svet.p.get("dom_pasmo_sedimenty", true)):
+				var p0 := float(svet.p.get("pasmo_spodek", 0.32))
+				var p1 := float(svet.p.get("pasmo_krystalinikum", 0.35))
+				var p2 := float(svet.p.get("pasmo_sedimenty", 0.25))
+				var p3 := float(svet.p.get("pasmo_svrchni", 0.08))
+				var ps := p0 + p1 + p2 + p3
+				if ps <= 0.0: ps = 1.0
+				var z0 := zs * (p0 + p1) / ps
+				var z1 := zs * (p0 + p1 + p2) / ps
+				cz = lerpf(z0, z1, 0.15 + 0.70 * _rr(hsh, 3))
+			else:
+				cz = clampf(zs * (0.55 + 0.20 * _rr(hsh, 3)), 6.0, maxf(zs - 3.0, 6.0))
 			var ra := 3.0 + 4.0 * _rr(hsh, 7); var rb := 3.0 + 4.0 * _rr(hsh, 8); var rc := 6.0 + 8.0 * _rr(hsh, 9)
 			for q in [cx, cy, cz, 1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, ra, rb, rc]: P.append(q)
 			var e := maxf(ra, maxf(rb, rc))

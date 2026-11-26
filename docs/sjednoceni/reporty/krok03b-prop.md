@@ -1,6 +1,6 @@
 # PROP – Krok 3b, hostitelské horniny útvarů (A1) a šum mocnosti podle horniny (A10)
 
-**PŘERUŠENO 26. 11., přechod na C#** (viz Výsledky). Větev `gen-v1-krok03b-hostitele-sum` z `gen-v1-krok03-geologie` (d571153). Napsáno 2026-11-26 ráno SEČ, před změnou kódu. Do `main` ani do větve kroku 3 se nemerguje. Sopku (naklopení vrstev, A11) neřeším – patří Willage-backendu.
+**PŘERUŠENO 26. 11. 07:59, přechod na C#**; v 8:04 Jan schválil doporučení a ukotvení středu dómu se dokončilo v GDScriptu (viz Rozhodnutí). Větev `gen-v1-krok03b-hostitele-sum` z `gen-v1-krok03-geologie` (d571153). Napsáno 2026-11-26 ráno SEČ, před změnou kódu. Do `main` ani do větve kroku 3 se nemerguje. Sopku (naklopení vrstev, A11) neřeším – patří Willage-backendu.
 
 ## Proč
 Jan 2026-11-26 schválil ([pt897u], [pt898u]) dvě úpravy generování vrstev jako doplněk kroku 3: **A1** útvary jen ve vhodné hornině (dnes `host_ok` vrací `true`, takže žíla nebo čočka může vzniknout i v písku či ornici) a **A10** vlastní nepravidelnost mocnosti pro každou horninu (dnes mají všechny jednu oktávu na měřítku 180 m). Vápenec u hladiny (A12) zůstává u odhadu `vyska_tvar − 2 m`. GDScript je teď ověřovací prototyp; ověřené věci se později přepíšou do C#, proto kód krátký, členěný a přenositelný (data v tabulkách, čisté funkce, žádné konstanty podle případu).
@@ -53,8 +53,16 @@ Naklopení vrstev sopkou (A11), skutečná hladina podzemní vody u mince (zůst
 Tabulky `utvary_hostitele.json` a `sum_hornin_v1.csv` jako data beze změny; logika `je_hostitel` / `mineral_ok` (nikdy vyhrává, min. hloubka, hosts `*`); fBm z hash-hodnotového šumu (oktava 0 shodná s původním polem, lakunarita 2, váhy persistence^o, normalizace Σw, `0,5 + (n − 0,5)·amplituda`); testy z `tools/geo_v1b/` jako referenční vektory (otisky výše, `sum.json`, počty buněk útvarů).
 
 ### Otevřené otázky pro Jana
-1. Je zvětralý jíl (4) a spraš (54) „půda“ v seznamu `nikdy` (teď ano)?
-2. Skarn jen v karbonátech a vápnitých metamorfitech (3 karbonáty + amfibolit, svor, fylit, přechodová zóna) – souhlas, nebo chce víc hostitelů? Objem skarnu klesl ~4×.
-3. Dóm: ukotvit střed do pásma sedimentů (jinak ztrácí ~60 % objemu)?
-4. Hodnoty tabulky šumu (návrh podle geologického charakteru, ne měření) – schválit/upravit po horninách.
-5. Šum přítomnosti (`V1_PRES`) také po horninách? Teď beze změny.
+Zodpovězeno 2026-11-26 8:04 SEČ ([pt907u] souhlas s doporučeními). Viz následující oddíl.
+
+## Rozhodnutí Jana 2026-11-26 8:04 SEČ
+Jan souhlasil s doporučeními ([pt907u]). Přepis do C# jen tam, kde bude potřeba, postupně nebo při finalizaci ([pt906u]).
+
+1. **Zvětralý jíl (4) a spraš (54) zůstanou v seznamu `nikdy`.** Tabulka `utvary_hostitele.json` beze změny.
+2. **Skarn zůstane jen v karbonátech a vápnitých metamorfitech** (hlubinný a jeskynní vápenec, dolomit, amfibolit, svor, fylit, přechodová zóna). Menší objem je v pořádku. Tabulka beze změny.
+3. **Střed dómu (sůl 47) se ukotví do pásma sedimentů.** Implementováno v GDScriptu (`utvary.gd`, parametr `dom_pasmo_sedimenty`, výchozí zapnuto): střed Z = 15–85 % výšky pásma sedimentů, podíly pásem stejné jako `geo_vrstvy.PASMA` / `pasmo_*`. Vypnutý parametr = původní vzorec 0,55–0,75 výšky (pro srovnání). Výsledky níže.
+4. **Tabulka `sum_hornin_v1.csv` je schválená jako výchozí hodnoty**, doladí se podle vzhledu.
+5. **Šum přítomnosti `V1_PRES` se zatím nemění.**
+
+### Dóm v sedimentech – výsledky
+(doplním po testech)

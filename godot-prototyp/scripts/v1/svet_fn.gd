@@ -75,6 +75,7 @@ static func vychozi() -> Dictionary:
 		"p82_vapenec": true, "p82_podil": 0.5, "p82_pod_m": 2.0,
 		# krok 3b: útvary jen v hostitelské hornině (A1) a šum mocnosti podle horniny (A10); false = původní krok 3
 		"a1_hostitele": true, "a10_sum_hornin": true,
+		"dom_pasmo_sedimenty": true,   # Jan 2026-11-26: střed dómu (sůl) v pásmu sedimentů
 		"sopka_pruduch_r_m": 2.0, "sopka_lava_id": 7, "sopka_popel_id": 57, "sopka_slupka_m": 5.0,
 	}
 
