@@ -79,7 +79,9 @@ public static class TestyG5
         T.Je(st.StartsWith("M0:ZPameti,M1:ZPameti,M2:ZPameti,M3:ZPameti,M4:ZPameti,M5:Spocitano,M6:Spocitano"), "přepočet: M0–M4 z paměti, M5+ spočteno: " + st);
         Console.WriteLine($"  přepočet M5 a závislých {sw.ElapsedMilliseconds} ms (celá planeta viz G-4)");
         T.Je(r.Souhrn.OtiskKlimatu != "cb11da8d141a2a5e" && r.Souhrn.OtiskMapy == "800d420bb00047de", "jiný gradient → jiné klima, mapa stejná");
-        foreach (var p in g.Moduly.Parametry("M5").Where(p => p.Hodnota != p.Vychozi && !p.JenCteni)) g.Moduly.Nastav(p.Id, p.Vychozi);
+        var zv = g.Moduly.VychoziModulu("M5");
+        T.Je(zv.Prijato && S(zv.Neplatne) == "M5,M6,M6d,M7,M8,M9", "VychoziModulu(M5) → neplatné M5 a závislé: " + S(zv.Neplatne));
+        T.Je(g.Moduly.VychoziModulu("M4").Neplatne.Count == 0, "VychoziModulu(M4) bez změny → nic neplatné");
         r = g.Moduly.Prepocitej();
         T.Je(r.Souhrn.OtiskKlimatu == "cb11da8d141a2a5e" && r.Souhrn.Vodniku == 86, $"výchozí hodnoty modulu M5 → otisky zpět ({r.Souhrn.OtiskKlimatu}, {r.Souhrn.Vodniku})");
     }

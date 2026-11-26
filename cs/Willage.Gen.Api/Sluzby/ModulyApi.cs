@@ -36,6 +36,18 @@ public sealed class ModulyApi : IModuly
         return new(true, null, Zmenene(pred, _s.Klice()));
     }
 
+    public ZmenaParametruDto VychoziModulu(string modul)
+    {
+        if (_s.Potvrzena) return new(false, "planeta je potvrzená – parametry jsou zamčené", Array.Empty<string>());
+        var pred = _s.Klice();
+        foreach (var p in _s.Schema.Modulu(modul).Where(p => !p.JenCteni))
+        {
+            var v = p.Vychozi?.ToJsonString() ?? "null";
+            if ((_s.Sada.Hodnota(p.Id)?.ToJsonString() ?? "null") != v) _s.Sada.Nastav(p.Id, JsonNode.Parse(v));
+        }
+        return new(true, null, Zmenene(pred, _s.Klice()));
+    }
+
     static IReadOnlyList<string> Zmenene(IReadOnlyDictionary<string, string> a, IReadOnlyDictionary<string, string> b) =>
         a.Keys.Where(k => a[k] != StavGeneratoru.Klic(b, k)).ToList();
 

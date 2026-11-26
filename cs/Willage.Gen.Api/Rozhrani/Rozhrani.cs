@@ -13,6 +13,8 @@ public interface IModuly
     ZmenaParametruDto Nastav(string idParametru, string hodnotaJson);
     /// <summary>Vrátí všechny parametry na dnešní výchozí hodnoty (data/v1).</summary>
     ZmenaParametruDto Vychozi();
+    /// <summary>G-5: parametry jednoho modulu na výchozí hodnoty (ostatní moduly beze změny). Vrátí zneplatněné moduly.</summary>
+    ZmenaParametruDto VychoziModulu(string modul);
     /// <summary>Přepočítá neplatné moduly (s keší); stejné jako ISluzbaSveta.Generuj.</summary>
     VysledekGeneraceDto Prepocitej();
     /// <summary>U-2 (zástupné): přepočet jen oblasti; dnes přepočte celý modul a vrátí Zastupny = true.</summary>
