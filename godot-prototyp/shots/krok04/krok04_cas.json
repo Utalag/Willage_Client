@@ -1,21 +1,21 @@
 {
   "seed": 49,
   "rezim": "cas",
-  "init_ms": 280.1763,
+  "init_ms": 255.2977,
   "cas": {
     "hladina_1m": {
-      "ms": 420.2586,
-      "ms_gdscript": 246.1056,
-      "ms_csharp": 174.153,
+      "ms": 351.9872,
+      "ms_gdscript": 204.497,
+      "ms_csharp": 147.49019999999996,
       "volani_povrch": 18637,
       "volani_sloupec": 0,
       "volani_bod": 0,
       "prameny": 0
     },
     "profily_2m": {
-      "ms": 29770.7276,
-      "ms_gdscript": 29671.7496,
-      "ms_csharp": 98.97799999999916,
+      "ms": 29906.1337,
+      "ms_gdscript": 29796.2897,
+      "ms_csharp": 109.84399999999732,
       "volani_povrch": 4805,
       "volani_sloupec": 4096,
       "volani_bod": 0,

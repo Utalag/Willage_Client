@@ -36,3 +36,42 @@ Krok 4 v `04-implementace-generatoru.md`: hladina podzemí a propustnost jako **
 
 ## Mimo rozsah
 Řešič E67 v C#, povrchová voda a jezera (krok 7), okraj ostrova a vložení (krok 5), ukládání pramenů (krok 6), port geologie do C#.
+
+## Změna po prvním běhu (zapsáno 8:31 SEČ)
+První běh na skutečném světě (β = 0, čistě tlumená kopie reliéfu): **0 % zóny vývěru, 0 pramenů na 3 × 3** (startovní svět je mírný, povrch 67–94 m; G − povrch nepřekročí d₀ = 1,5 m). Záporný výsledek uložen v `shots/krok04/beh1_beta0.json`. Doplněno zesílení údolí β: L = min(G − d₀ + β·(G − povrch), povrch), výchozí β = 1 (`voda_v1.json`). Spojitost se nemění (povrch i G jsou spojité).
+
+## Výsledky (2026-11-26 8:36 SEČ)
+Všechny testy: **jednotkové C# 29/29, běh na funkci světa 0 chyb** (`tools/voda_v1.gd --rezim=vse`, 67 s). Svět seed 49, bloky 14–16 × 14–16.
+
+### 1. Hladina jako funkce
+- Mapa 3 × 3 bloky po 2 m (192 × 192): **L nad povrchem 0×**, zóna vývěru 3,3 % plochy, hloubka hladiny průměr 1,53 m, max 10,5 m (u sopky).
+- Švy: bloky počítané v oddělených instancích (jiné pořadí plnění paměti), šev x i y po 1 m: **0 neshod**. Skok přes šev na 2 m 0,192 / 0,236 m, uvnitř bloku max 0,192 / 0,246 m (šev není vidět).
+- Profil sloupců bloku 14,14 (4 096 sloupců): hladina v těsnění 381 sloupců (9,3 %, bez volné vody), zavěšená voda 271 sloupců (6,6 %).
+- Obrázky: `shots/krok04/mapa_hladiny_3x3.png`, `rez_y1856.png`, `rez_y1960.png`.
+
+### 2. Prameny
+- 3 × 3: **8 pramenů** (6 vývěr, 2 kras; kontakt 0, sníh 0). Výkon > jmenovitý nebo > kapacita: 0. Blíž než 8 m: 0. V 2 m od okraje oblasti 3 × 3: 0 (filtr pro vložení `Prameny.MimoOkraj`). Prameny celé oblasti jsou shodné ze dvou instancí.
+- Ve výchozím světě jsou všechny otevřené (vzduch nad buňkou) → výkon = jmenovitý 0,79–4,33 l/s.
+- Zasypání okolní horninou (5 pramenů): jednoduchý model písek 6 × 0,00625 = 0,0375 l/s, ornice 0,0014 l/s; tlakový model vydá plný jmenovitý výkon s Ht 5–17 m, u ornice narazí na strop 20 m a vydá 0,112 l/s.
+- Příklady z 1.8 v jednotkových testech: žula + jedna buňka 1 l/s → 1 l/s; odkopáno → 10 l/s; ucpáno → ~0; tlakový strop 0,5 m → 3 l/s.
+- Záporné: kontaktní pramen nevznikl ani jeden (sklon ≥ 0,5 v zóně vývěru na mírném startu chybí); sníh ve startovním světě není.
+
+### 3. Artéská voda – model ji zvládne
+- Blok 14,14: 4 705 sevřených vrstev, **618 artéských** (tlaková výška > strop vrstvy), všech 618 by po prokopání tryskalo (výška > povrch). 12/12 vzorků nezávisle ověřeno (výchoz ve zvláštní instanci geologie: stejná hornina, stejná výška).
+- Ale: 420 z 618 jsou slupky popela (57) mezi lávou ve vnitřku sopky. Mimo sopku 198: ornice 46, písek 56, jeskynní vápenec 53, spraš 43. Pískovec 52: 1 557 sevřených, 0 artéských (nevychází do 192 m). 4 087 sevřených vrstev nemá v dosahu výchoz.
+
+### 4. Determinismus
+Otisk bloku 14,14 (hladina + profily + prameny, Q16): **`f19006126c4b12a7`** ve třech procesech (det ×2, vse). S β = 0 byl `b017a12c4686fd61`.
+
+### Kontrola E82 (A12)
+551 sloupců s mincí (mřížka 12 m): L − (vyska_tvar − 2 m) medián +0,75 m, p10 −0,73, p90 +1,58; v 83 % je skutečná L nad odhadem, tj. strop vápence leží ≥ 2 m pod hladinou. Odhad mince tedy sedí; geologie na hladině dál nezávisí.
+
+### Čas (blok 128 m, samostatný proces)
+| úloha | celkem | GDScript (most) | C# |
+|---|---|---|---|
+| hladina 1 m (16 384 bodů) | 352 ms | 204 ms (povrch 11 µs) | 147 ms |
+| profily 2 m (4 096 sloupců) | 29,9 s | 29,8 s (`vypln_sloupec` 7,3 ms) | 110 ms |
+GDScriptový protějšek kroku 4 neexistuje; dřívější voda na bloku 128 m (E96, plná simulace) 49–53 s. **Hypotéza H2 potvrzena:** 99,6 % času je čtení geologie z GDScriptu, C# část je ~0,1 s.
+
+### Omezení
+Hladina není řešič E67 (pasti, výtok z okrajů vrstev, bilance); je to funkce reliéfu. Torus se zatím nebalí (světové metry bez periody). Totožnost vrstvy pro doplňování = ID horniny.

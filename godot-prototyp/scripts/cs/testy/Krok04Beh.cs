@@ -94,8 +94,9 @@ public partial class Krok04Beh : RefCounted
                 maxSkok = Math.Max(maxSkok, Math.Abs(fa.Hladina.Hladina(x - ex, y - ey) - fb.Hladina.Hladina(x + ex, y + ey)));
                 maxVnitrni = Math.Max(maxVnitrni, Math.Abs(fa.Hladina.Hladina(x - 3 * ex, y - 3 * ey) - fa.Hladina.Hladina(x - ex, y - ey)));
             }
-            var pa = fa.Prameny.VOblasti((bx0 + dx) * 128.0, (by0 + dy) * 128.0, (bx0 + dx + 1) * 128.0, (by0 + dy + 1) * 128.0);
-            var pb = fb.Prameny.VOblasti((bx0 + dx) * 128.0, (by0 + dy) * 128.0, (bx0 + dx + 1) * 128.0, (by0 + dy + 1) * 128.0);
+            // prameny celé oblasti 3 × 3 z obou instancí (každá měla jinak naplněnou paměť)
+            var pa = fa.Prameny.VOblasti(bx0 * 128.0, by0 * 128.0, bx0 * 128.0 + 384, by0 * 128.0 + 384);
+            var pb = fb.Prameny.VOblasti(bx0 * 128.0, by0 * 128.0, bx0 * 128.0 + 384, by0 * 128.0 + 384);
             bool pramShoda = pa.SequenceEqual(pb);
             res.Add(new Dictionary<string, object> { ["sev"] = dx == 1 ? "x" : "y", ["neshod"] = neshod, ["skok_pres_sev_2m"] = maxSkok,
                 ["skok_uvnitr_2m_max"] = maxVnitrni, ["prameny_shoda"] = pramShoda, ["prameny"] = pa.Count });
@@ -169,7 +170,7 @@ public partial class Krok04Beh : RefCounted
     {
         var sw = Stopwatch.StartNew();
         var bl = fn.Blok(bx0, by0, 2.0, true);
-        int sev = 0, art = 0, tekouci = 0, bezDopl = 0; var pripady = new List<object>(); int overeno = 0, neover = 0;
+        int sev = 0, art = 0, tekouci = 0, bezDopl = 0; var podleMat = new SortedDictionary<int, int[]>(); var pripady = new List<object>(); int overeno = 0, neover = 0;
         var nezavisla = new GeologieGd(seed);
         for (int k = 0; k < bl.Profily.Length; k++)
         {
@@ -177,10 +178,13 @@ public partial class Krok04Beh : RefCounted
             foreach (var v in p.Sevrene)
             {
                 sev++;
+                if (!podleMat.TryGetValue(v.Material, out var pm)) podleMat[v.Material] = pm = new int[3];
+                pm[0]++;
                 double x = bx0 * 128.0 + (k % bl.N + 0.5) * 2, y = by0 * 128.0 + (k / bl.N + 0.5) * 2;
                 var d = fn.Doplnovani.Vyska(x, y, v.Material);
                 if (d is null) { bezDopl++; continue; }
-                if (d.Value.vyska > v.Hi) art++;
+                if (d.Value.vyska > v.Hi) { art++; pm[1]++; }
+                if (d.Value.vyska > v.Hi && fn.Geologie.MaterialPovrchu(x, y) != 75 && !VSopce(fn, x, y)) pm[2]++;
                 if (d.Value.vyska > p.Povrch) tekouci++;
                 if (pripady.Count < 12 && d.Value.vyska > v.Hi)
                 {
@@ -194,12 +198,20 @@ public partial class Krok04Beh : RefCounted
             }
         }
         int vTes = bl.Profily.Count(p => p!.HladinaVTesneni), zav = bl.Profily.Count(p => p!.Zavesena.Count > 0);
-        _out["arteska"] = new Dictionary<string, object> { ["sloupcu"] = bl.Profily.Length, ["sevrenych_vrstev"] = sev, ["artesky"] = art,
+        _out["arteska"] = new Dictionary<string, object> { ["sloupcu"] = bl.Profily.Length, ["sevrenych_vrstev"] = sev, ["podle_materialu_sevrene_artesky_mimo_sopku"] = podleMat.ToDictionary(e => e.Key.ToString(), e => e.Value), ["artesky"] = art,
             ["samovolne_tekouci"] = tekouci, ["bez_doplnovani"] = bezDopl, ["overeno"] = overeno, ["neovereno"] = neover,
             ["hladina_v_tesneni_sloupcu"] = vTes, ["zavesena_sloupcu"] = zav, ["pripady"] = pripady, ["ms"] = sw.Elapsed.TotalMilliseconds,
             ["otisk_bloku"] = OtiskVody.Blok(bl) };
         if (neover > 0) Chyba($"tlaková výška ≠ výška doplňování v {neover} případech");
         GD.Print($"artéská: sevřených {sev}, artéských {art}, tekoucích {tekouci}");
+    }
+
+    // sloupec v sopce: v hloubce 2 m pod povrchem láva (7), popel (57) nebo průduch (75) ve slupkách
+    private static bool VSopce(PodzemniVodaFn fn, double x, double y)
+    {
+        var s = fn.Geologie.Sloupec(x, y); int n = 0;
+        for (int k = 0; k < 512; k += 4) if (s[k] == 7 || s[k] == 75) n++;
+        return n >= 4;
     }
 
     // Kontrola E82 (A12): odhad vyska_tvar − 2 m proti skutečné L na sloupcích s mincí

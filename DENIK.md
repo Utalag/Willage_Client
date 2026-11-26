@@ -562,6 +562,12 @@ Skupiny: 1 Prototyp a buildy · 2 Terén a tvar · 3 Rozlišení bloku · 4 Ská
 - Jan 8:04 souhlasil: zvětralý jíl a spraš zůstanou v `nikdy`; skarn jen v karbonátech a vápnitých metamorfitech (menší objem OK); střed dómu (sůl) do sedimentů; tabulka šumu je výchozí (doladí se podle vzhledu); `V1_PRES` zatím beze změny.
 - Dóm po ukotvení: 89 125 buněk v 9 blocích (90 % objemu před A1, 2,2× proti starému středu s A1 40 230), 0 v nehostiteli. Původní testy kroku 3: 0 chyb. Determinismus dvou procesů: `bbdc0afa877d6c2e` (4 718 592 buněk).
 
+### 🧪 Generátor V1 krok 4: podzemní voda a prameny jako funkce světa, první kód v C# (2026-11-26 8:40 · větev `gen-v1-krok04-podzemni-voda`, `cs/Willage.Gen/`, `godot-prototyp/scripts/cs/`, shots `shots/krok04/`)
+- **Směr:** čistá C# knihovna (bez Godotu) + Godot .NET fasáda; geologie kroků 1–3 zůstává v GDScriptu a čte se mostem `GeologieGd`. Hladina = tlumená kopie reliéfu (vážený průměr povrchu na světové mřížce 8 m, R 48 m, d₀ 1,5 m, zesílení údolí β 1), profil sloupce (volná, zavěšená, sevřená voda), prameny ze seedu po buňkách 32 m, výkon pramene podle 1.8 (jednoduchý / tlakový), artéská voda z výchozu stejné horniny do 192 m. Kontrakty Willage_Dev zrcadlené jen pro čtení.
+- **Zlepšení:** 29/29 jednotkových testů, 0 chyb na funkci světa, švy 0 neshod, hladina nikde nad povrchem, 8 pramenů na 3 × 3, artéská voda ano, otisk `f19006126c4b12a7` ve 3 procesech. C# část bloku ~0,1 s.
+- **Komplikace:** 99,6 % času je most do GDScriptu (7,3 ms na sloupec, blok s profily 30 s). Bez β 0 pramenů; 420 z 618 artéských případů je ve slupkách sopky. Není to řešič E67.
+- **Další krok:** otázky pro Jana v `docs/sjednoceni/reporty/krok04.md`; schválení kroku.
+
 ## 3 Rozlišení bloku
 
 ### 🧪 Nastavitelné rozlišení, test 32 × 32 × 64 s buňkou 0,5³ (2026-11-17 11:50 · `--res-test`)
@@ -742,6 +748,9 @@ Godot .NET (nebo GDExtension) a stavba chunků ve vlákně, napojení bloků na 
 - **gen-v3: kámen odspodu přes BFS hromady (19:30):** pořadí kamenů odspodu s BFS vrstvami dalo čistotu 0,778 proti 0,814 výchozího pořadí a 75–104 ms; nahrazeno tvarem stratum (0,946, 22 ms).
 - **Pěna z hloubkového bufferu (rešerše):** u izometrické kamery a malých vod dává nerovnoměrný pás [14][15]. Nahrazeno vzdálenostním polem.
 
+### ❌ Hladina jako čistě tlumená kopie reliéfu (β = 0) (2026-11-26 8:31 · krok 4, `shots/krok04/beh1_beta0.json`)
+- Na mírném startovním světě (povrch 67–94 m) hladina nikde nedosáhla povrchu: 0 % vývěru, 0 pramenů. Nahrazeno zesílením údolí β = 1.
+
 ## 3 Rozlišení bloku
 - **16 × 16 × 64 s buňkou 1 × 1 × 0,5 jako cílový vzhled:** Jan: „moc hrubé“. Zatím zůstává ve hře, jemnější rozlišení je ve zkoušce.
 
@@ -815,6 +824,9 @@ Nevyzkoušené nápady na zrychlení. Stav: 💡 návrh · 🔬 ověřuje se · 
 - 💡 **Blueprint: tělesa jako implicitní primitiva / SDF (17:06):** sopouch, kimberlit, solný dóm a žíla jako 3D primitiva s relací *erode* (Paris 2019, *Arches*) [34][44]; stejný tvar v jemnějším rozlišení, na každou vrstvu plné 3D pole netřeba.
 - 💡 **Blueprint: rezervoár a jeskyně jako vložený materiál + místní hladina (17:06):** vzduch/voda v zásobníku sloupce pod nepropustným stropem (*Arches*) a lokální hladina se bariérou jako Minecraft aquifer 1.18 [34][36]. Přesné objemy z receptu zůstanou.
 - 💡 **Blueprint: stream-power eroze a kompetence až se povolí fyzika (17:06):** Cordonnier 2016/2018 — \(\partial h/\partial t = u - k A^m S^n\), \(k\) podle pevnosti vrstvy [31][32]. Teď nepočítat (Jan 16:5x); vzorec je připravený. Plné Badlands/Landlab/GOLEM při uložení bloku přeskočit.
+
+### 💡 Port geologie kroků 1–3 do C# kvůli mostu (2026-11-26 · krok 4)
+- Krok 4 tráví 99,6 % času čtením sloupců z GDScriptu (`vypln_sloupec` 7,3 ms na sloupec); C# část je ~0,1 s na blok. Port `svet_fn` + `geo_vrstvy` (rozhraní `IGeologie` už existuje) by blok s profily zrychlil z ~30 s řádově na desetiny sekundy. Podle Jana [pt906u] až když bude potřeba.
 
 ## 3 Rozlišení bloku
 - 💡 **Jemnější rozlišení jen u povrchu:** 32 × 32 stojí asi 4× generování a 3× síť. Hloubku nechat hrubou a jemné buňky držet jen v horních vrstvách.

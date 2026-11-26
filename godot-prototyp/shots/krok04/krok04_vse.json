@@ -1,0 +1,475 @@
+{
+ "seed": 49,
+ "rezim": "vse",
+ "init_ms": 254.3826,
+ "mapa": {
+  "n": 192,
+  "krok_m": 2,
+  "L_nad_povrchem": 0,
+  "vyver_podil": 0.033447265625,
+  "hloubka_prumer_m": 1.52931304814087,
+  "hloubka_max_m": 10.503136,
+  "ms": 4337.1843,
+  "ms_gdscript": 3872.8933
+ },
+ "sev": [
+  {
+   "sev": "x",
+   "neshod": 0,
+   "skok_pres_sev_2m": 0.19184255825913965,
+   "skok_uvnitr_2m_max": 0.1924633284212831,
+   "prameny_shoda": true,
+   "prameny": 8
+  },
+  {
+   "sev": "y",
+   "neshod": 0,
+   "skok_pres_sev_2m": 0.23632848033768994,
+   "skok_uvnitr_2m_max": 0.24588546606587158,
+   "prameny_shoda": true,
+   "prameny": 8
+  }
+ ],
+ "rezy": [
+  {
+   "y": 1856.25,
+   "x0": 1792,
+   "krok_m": 0.5,
+   "mat": "rez_y1856.25.u8",
+   "sloupce": "768 sloupců (vynecháno)"
+  },
+  {
+   "y": 1960.25,
+   "x0": 1792,
+   "krok_m": 0.5,
+   "mat": "rez_y1960.25.u8",
+   "sloupce": "768 sloupců (vynecháno)"
+  }
+ ],
+ "prameny": {
+  "pocet": 8,
+  "druhy": {
+   "Vyver": 6,
+   "Kras": 2
+  },
+  "porus_vykonu": 0,
+  "na_okraji_2m": 0,
+  "po_filtru_na_okraji": 0,
+  "blize_8m": 0,
+  "seznam": [
+   {
+    "x": 1887,
+    "y": 2143,
+    "z": 76.375,
+    "druh": "Vyver",
+    "jmenovity": 1.3520050048828125,
+    "vykon": 1.3520050048828125,
+    "kapacita": -1,
+    "otevreny": true,
+    "akvifer": 3,
+    "mimo_okraj_2m": true
+   },
+   {
+    "x": 1931,
+    "y": 2107,
+    "z": 73.375,
+    "druh": "Kras",
+    "jmenovity": 2.588043212890625,
+    "vykon": 2.588043212890625,
+    "kapacita": -1,
+    "otevreny": true,
+    "akvifer": 3,
+    "mimo_okraj_2m": true
+   },
+   {
+    "x": 1933,
+    "y": 1935,
+    "z": 78.125,
+    "druh": "Vyver",
+    "jmenovity": 0.7870635986328125,
+    "vykon": 0.7870635986328125,
+    "kapacita": -1,
+    "otevreny": true,
+    "akvifer": 3,
+    "mimo_okraj_2m": true
+   },
+   {
+    "x": 1935,
+    "y": 2051,
+    "z": 75.375,
+    "druh": "Vyver",
+    "jmenovity": 1.06207275390625,
+    "vykon": 1.06207275390625,
+    "kapacita": -1,
+    "otevreny": true,
+    "akvifer": 3,
+    "mimo_okraj_2m": true
+   },
+   {
+    "x": 1953,
+    "y": 2115,
+    "z": 74.125,
+    "druh": "Kras",
+    "jmenovity": 4.3310546875,
+    "vykon": 4.3310546875,
+    "kapacita": -1,
+    "otevreny": true,
+    "akvifer": 2,
+    "mimo_okraj_2m": true
+   },
+   {
+    "x": 2043,
+    "y": 1925,
+    "z": 78.875,
+    "druh": "Vyver",
+    "jmenovity": 1.3260498046875,
+    "vykon": 1.3260498046875,
+    "kapacita": -1,
+    "otevreny": true,
+    "akvifer": 3,
+    "mimo_okraj_2m": true
+   },
+   {
+    "x": 2055,
+    "y": 1929,
+    "z": 78.375,
+    "druh": "Vyver",
+    "jmenovity": 1.3860931396484375,
+    "vykon": 1.3860931396484375,
+    "kapacita": -1,
+    "otevreny": true,
+    "akvifer": 3,
+    "mimo_okraj_2m": true
+   },
+   {
+    "x": 2093,
+    "y": 1939,
+    "z": 77.375,
+    "druh": "Vyver",
+    "jmenovity": 0.8383026123046875,
+    "vykon": 0.8383026123046875,
+    "kapacita": -1,
+    "otevreny": true,
+    "akvifer": 3,
+    "mimo_okraj_2m": true
+   }
+  ],
+  "ucpani": [
+   [
+    "Vyver",
+    3,
+    1.3520050048828125,
+    0.0375,
+    1.3520050048828125,
+    8.76336669921875
+   ],
+   [
+    "Kras",
+    3,
+    2.588043212890625,
+    0.0375,
+    2.588043212890625,
+    17.003621419270836
+   ],
+   [
+    "Vyver",
+    3,
+    0.7870635986328125,
+    0.0375,
+    0.7870635986328125,
+    4.997090657552084
+   ],
+   [
+    "Vyver",
+    3,
+    1.06207275390625,
+    0.0375,
+    1.06207275390625,
+    6.830485026041667
+   ],
+   [
+    "Kras",
+    2,
+    4.3310546875,
+    0.0013875000000000003,
+    0.11238750000000003,
+    20
+   ]
+  ],
+  "ms": 4099.8333
+ },
+ "arteska": {
+  "sloupcu": 4096,
+  "sevrenych_vrstev": 4705,
+  "podle_materialu_sevrene_artesky_mimo_sopku": {
+   "2": [
+    46,
+    46,
+    46
+   ],
+   "3": [
+    56,
+    56,
+    56
+   ],
+   "5": [
+    2053,
+    53,
+    53
+   ],
+   "47": [
+    172,
+    0,
+    0
+   ],
+   "49": [
+    31,
+    0,
+    0
+   ],
+   "50": [
+    327,
+    0,
+    0
+   ],
+   "52": [
+    1557,
+    0,
+    0
+   ],
+   "54": [
+    43,
+    43,
+    43
+   ],
+   "57": [
+    420,
+    420,
+    0
+   ]
+  },
+  "artesky": 618,
+  "samovolne_tekouci": 618,
+  "bez_doplnovani": 4087,
+  "overeno": 12,
+  "neovereno": 0,
+  "hladina_v_tesneni_sloupcu": 381,
+  "zavesena_sloupcu": 271,
+  "pripady": [
+   {
+    "x": 1793,
+    "y": 1793,
+    "vrstva": [
+     0,
+     2.5
+    ],
+    "material": 57,
+    "povrch": 68.40603942029574,
+    "hladina": 68.40603942029574,
+    "tlakova_vyska": 96.90396756376394,
+    "vychoz": [
+     1688,
+     1760
+    ],
+    "overeno": true
+   },
+   {
+    "x": 1793,
+    "y": 1793,
+    "vrstva": [
+     7.5,
+     12.5
+    ],
+    "material": 57,
+    "povrch": 68.40603942029574,
+    "hladina": 68.40603942029574,
+    "tlakova_vyska": 96.90396756376394,
+    "vychoz": [
+     1688,
+     1760
+    ],
+    "overeno": true
+   },
+   {
+    "x": 1793,
+    "y": 1793,
+    "vrstva": [
+     17.5,
+     22.5
+    ],
+    "material": 57,
+    "povrch": 68.40603942029574,
+    "hladina": 68.40603942029574,
+    "tlakova_vyska": 96.90396756376394,
+    "vychoz": [
+     1688,
+     1760
+    ],
+    "overeno": true
+   },
+   {
+    "x": 1793,
+    "y": 1793,
+    "vrstva": [
+     27.5,
+     32.5
+    ],
+    "material": 57,
+    "povrch": 68.40603942029574,
+    "hladina": 68.40603942029574,
+    "tlakova_vyska": 96.90396756376394,
+    "vychoz": [
+     1688,
+     1760
+    ],
+    "overeno": true
+   },
+   {
+    "x": 1793,
+    "y": 1793,
+    "vrstva": [
+     37.5,
+     42.5
+    ],
+    "material": 57,
+    "povrch": 68.40603942029574,
+    "hladina": 68.40603942029574,
+    "tlakova_vyska": 96.90396756376394,
+    "vychoz": [
+     1688,
+     1760
+    ],
+    "overeno": true
+   },
+   {
+    "x": 1793,
+    "y": 1793,
+    "vrstva": [
+     47.5,
+     52.5
+    ],
+    "material": 57,
+    "povrch": 68.40603942029574,
+    "hladina": 68.40603942029574,
+    "tlakova_vyska": 96.90396756376394,
+    "vychoz": [
+     1688,
+     1760
+    ],
+    "overeno": true
+   },
+   {
+    "x": 1793,
+    "y": 1793,
+    "vrstva": [
+     57.5,
+     62.5
+    ],
+    "material": 57,
+    "povrch": 68.40603942029574,
+    "hladina": 68.40603942029574,
+    "tlakova_vyska": 96.90396756376394,
+    "vychoz": [
+     1688,
+     1760
+    ],
+    "overeno": true
+   },
+   {
+    "x": 1795,
+    "y": 1793,
+    "vrstva": [
+     0,
+     2.25
+    ],
+    "material": 57,
+    "povrch": 68.16278615478068,
+    "hladina": 68.16278615478068,
+    "tlakova_vyska": 96.90396756376394,
+    "vychoz": [
+     1688,
+     1760
+    ],
+    "overeno": true
+   },
+   {
+    "x": 1795,
+    "y": 1793,
+    "vrstva": [
+     7.25,
+     12.25
+    ],
+    "material": 57,
+    "povrch": 68.16278615478068,
+    "hladina": 68.16278615478068,
+    "tlakova_vyska": 96.90396756376394,
+    "vychoz": [
+     1688,
+     1760
+    ],
+    "overeno": true
+   },
+   {
+    "x": 1795,
+    "y": 1793,
+    "vrstva": [
+     17.25,
+     22.25
+    ],
+    "material": 57,
+    "povrch": 68.16278615478068,
+    "hladina": 68.16278615478068,
+    "tlakova_vyska": 96.90396756376394,
+    "vychoz": [
+     1688,
+     1760
+    ],
+    "overeno": true
+   },
+   {
+    "x": 1795,
+    "y": 1793,
+    "vrstva": [
+     27.25,
+     32.25
+    ],
+    "material": 57,
+    "povrch": 68.16278615478068,
+    "hladina": 68.16278615478068,
+    "tlakova_vyska": 96.90396756376394,
+    "vychoz": [
+     1688,
+     1760
+    ],
+    "overeno": true
+   },
+   {
+    "x": 1795,
+    "y": 1793,
+    "vrstva": [
+     37.25,
+     42.25
+    ],
+    "material": 57,
+    "povrch": 68.16278615478068,
+    "hladina": 68.16278615478068,
+    "tlakova_vyska": 96.90396756376394,
+    "vychoz": [
+     1688,
+     1760
+    ],
+    "overeno": true
+   }
+  ],
+  "ms": 30170.9404,
+  "otisk_bloku": "f19006126c4b12a7"
+ },
+ "mince82": {
+  "sloupcu_s_minci": 551,
+  "L_minus_odhad_median": 0.7518832813477445,
+  "p10": -0.7288783486041268,
+  "p90": 1.5791213590446063,
+  "podil_L_nad_odhadem": 0.8275862068965517
+ },
+ "chyb": 0
+}
