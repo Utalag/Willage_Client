@@ -575,6 +575,12 @@ Skupiny: 1 Prototyp a buildy · 2 Terén a tvar · 3 Rozlišení bloku · 4 Ská
 - **Rozhodnutí Jana 9:32 (zapracováno 9:36):** prameny 24 m / 0,6 → 18 na 3 × 3; mince 32 m beze změny; keš středu útvaru s přesným klíčem (otisky beze změny, 0 kolizí); paralelní 0,25 m: blok 18,9 s (1 vlákno) → 2,6 s (8 vláken), otisk `ce6d906313af513f` stejný při 1/2/4/8 vláknech. Voda 14,14 nově `7714d1a1d34e00ad`. Testy 49/49.
 - **Další krok:** merge do main převezme Willage-backend; pak krok 6 (eroze světa).
 
+### 🧪 Generátor V1 krok 6 (nové pořadí): eroze světa v C# – hrubá mapa planety, toky, vodníci (2026-11-26 9:50 · větev `gen-v1-krok06-eroze-sveta`, `cs/Willage.Gen/Eroze/`, PROP `docs/sjednoceni/reporty/krok06-prop.md`, shots `godot-prototyp/shots/krok06/`)
+- **Směr:** Jan 9:08–9:11 (plán 04, krok 6) a 9:35. Planeta = torus 31 360 × 15 616 m (parametr); periodický podklad = povrch světa s prolnutím u švu (pás 512 m). Odtok = nejnižší 2 % buněk, priority-flood [20], D8 [86], akumulace × srážky, stream power implicitně (Braun & Willett [85], m 0,5, n 1, 20 × 1000 let, max 20 m). Jemný detail = funkce (E bilineárně + koryto w ∝ Q^0,5, d ∝ Q^0,4 [88]). Uložení WGER v1 + klíč keše SHA-256. Vodníci = prameny toků v kopcích, druh pramene `Vodnik`. Eroze i vodníci za přepínačem, výchozí vypnuto.
+- **Zlepšení:** 32 m: 5,1 s (8 vl.) / 5,8 s (1 vl.), ~200 MB, soubor 3,5 MB; 16 m: 21 s / 23,5 s, 527 MB. Otisk mapy stejný na 1/8 vláknech, ve 2 procesech i po načtení (`779c6542f74b8fd8` / `bb14220287472c9a`). Periodicita přesná (10⁻¹² m), skok přes šev menší než běžný krok. 555 toků (medián 245 m, max 3,1 km), 189 vodníků (Q medián 2,8 l/s). Vypnuto → otisky krok 3 `c8eeb7964d1ddd85` a voda 14,14 `7714d1a1d34e00ad` beze změny. Testy 61/61.
+- **Komplikace:** toky krátké – svět nemá velkorozměrový sklon, odtoky rozeseté → mnoho malých povodí (max 4 km²). Zapnutá eroze mění otisky a v bloku 14,14 zmizí oba prameny. Bilineární E dělá v detailu „hvězdy“; koryta při ≤ 41 l/s mělká. 16 m nad cílem paměti 500 MB. Planeta má jen 2 sopky. Godot adaptér zatím ne.
+- **Další krok:** otázky pro Jana v PROP (moře/odtok, 32 vs 16 m, přepínač, vodníci, interpolace); schválení kroku.
+
 ## 3 Rozlišení bloku
 
 ### 🧪 Nastavitelné rozlišení, test 32 × 32 × 64 s buňkou 0,5³ (2026-11-17 11:50 · `--res-test`)
