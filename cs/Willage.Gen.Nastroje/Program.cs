@@ -25,6 +25,7 @@ return cmd switch
         "prameny" => ErozeNastroj.PramenyDiag(args, data),
         "interp" => ErozeNastroj.InterpMer(args, data),
         "vse" => ErozeNastroj.Vse(args, data),
+        "rez" => ErozeNastroj.Rez(args, data),
         _ => Napoveda(),
     },
     _ => Napoveda(),
