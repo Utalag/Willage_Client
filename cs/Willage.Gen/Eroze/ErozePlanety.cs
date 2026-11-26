@@ -1,0 +1,29 @@
+using Willage.Gen.Data;
+using Willage.Gen.Svet;
+
+namespace Willage.Gen.Eroze;
+
+/// <summary>Sestavení eroze planety: funkce světa přes celý torus, výpočet nebo načtení z keše, napojení do světa (přepínač).</summary>
+public static class ErozePlanety
+{
+    /// <summary>Parametry světa pro planetu: svět musí pokrýt Px, Py i pás prolnutí (jinak stejné jako p).</summary>
+    public static SvetFn SvetPlanety(ParametrySveta p, DataSveta d, ParametryEroze pe)
+    {
+        p.SvetMaxM = Math.Max(p.SvetMaxM, Math.Max(pe.PlanetaXM, pe.PlanetaYM) + pe.PasProlnutiM);
+        return new SvetFn(p, d);
+    }
+
+    public static PeriodickyPodklad Podklad(SvetFn s, ParametryEroze pe) => new(s, pe.PlanetaXM, pe.PlanetaYM, pe.PasProlnutiM);
+
+    /// <summary>Načte mapu ze složky keše podle klíče, jinak spočte a uloží. kes = null → bez ukládání.</summary>
+    public static MapaEroze Mapa(SvetFn s, DataSveta d, ParametryEroze pe, string? kes, int vlaken)
+    {
+        string klic = SouborMapy.KlicKese(s.Sd, pe, d.SouborySveta);
+        string? cesta = kes is null ? null : Path.Combine(kes, $"eroze_{klic[..16]}.wger");
+        if (cesta is not null && SouborMapy.Nacti(cesta, klic) is { } m) return m;
+        m = VypocetEroze.Spocti(Podklad(s, pe), pe, vlaken, out _);
+        m.KlicKese = klic;
+        if (cesta is not null) { Directory.CreateDirectory(kes!); SouborMapy.Uloz(cesta, m, s.Sd); }
+        return m;
+    }
+}
