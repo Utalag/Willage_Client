@@ -34,7 +34,7 @@ public sealed class M7VystupPlanety : ModulZaklad
         else s = new SvetKrok06
         {
             Geologie = g, Mapa = e.Mapa, Eroze = e.Eroze, Vodnici = c.Vodnici, VodniciBezKlimatu = e.Vodnici, Oazy = c.Oazy,
-            Klima = new Klima.KlimaSvetaFn(c.Mapa!), Hydrologie = c.Hydrologie, ParametryKlimatu = c.Parametry, Napajeni = v.Napajeni,
+            Klima = new Klima.KlimaSvetaFn(c.Mapa!), Hydrologie = c.Hydrologie, ParametryKlimatu = k.Nastaveni.Klima, Napajeni = v.Napajeni,   // aktuální parametry (Hladina* patří M6)
         };
         var sh = new SouhrnPlanety(e.Mapa is null ? null : SouborMapy.Otisk(e.Mapa), e.Mapa?.KlicKese, c.Mapa?.Otisk(), c.Mapa?.Klic, s.Vodnici.Count, s.Oazy.Count, k.Manifest.Souhrn);
         return new VystupPlanety(s, sh);

@@ -22,6 +22,27 @@ public static class KanonickeParametry
     }
 
     public static string Json<T>(T o) => JsonSerializer.Serialize(o, O);
+
+    /// <summary>Kanonický JSON vybraných vlastností objektu (řazeno ordinálně).</summary>
+    public static string Vlastnosti(object o, IEnumerable<string> nazvy)
+    {
+        var t = o.GetType(); var sb = new StringBuilder();
+        foreach (var n in nazvy.OrderBy(x => x, StringComparer.Ordinal))
+        {
+            var pr = t.GetProperty(n) ?? throw new ArgumentException($"{t.Name} nemá vlastnost {n}");
+            sb.Append(n).Append('=').Append(JsonSerializer.Serialize(pr.GetValue(o), pr.PropertyType, O)).Append(';');
+        }
+        return sb.ToString();
+    }
+
+    /// <summary>Kopie recordu (přes JSON) s vybranými vlastnostmi vrácenými na výchozí hodnotu.</summary>
+    public static T BezVlastnosti<T>(T o, IEnumerable<string> nazvy) where T : class, new()
+    {
+        var n = System.Text.Json.Nodes.JsonNode.Parse(JsonSerializer.Serialize(o, O))!.AsObject();
+        var v = System.Text.Json.Nodes.JsonNode.Parse(JsonSerializer.Serialize(new T(), O))!.AsObject();
+        foreach (var x in nazvy) n[x] = v[x]?.DeepClone();
+        return n.Deserialize<T>(O)!;
+    }
 }
 
 /// <summary>
@@ -54,6 +75,16 @@ public static class RozdeleniParametru
     {
         "P82Vapenec", "P82Podil", "P82PodM", "A1Hostitele", "A10SumHornin", "DomPasmoSedimenty", "SopkaPruduchRM", "SopkaSlupkaM", "SopkaLavaId", "SopkaPopelId",
         "PasmoSpodek", "PasmoKrystalinikum", "PasmoSedimenty", "PasmoSvrchni", "P82PrechodM", "UtvaryKlicGd",
+    };
+
+    /// <summary>
+    /// G-2: parametry dobití hladiny 7c v ParametryKlimatu (soubor klima_v1.json) patří modulu M6 – klíč M6, ne M5.
+    /// (HladinaMoreM v ParametryKlimatu je hladina moře pro klima a zůstává v M5.)
+    /// </summary>
+    public static readonly string[] KlimaProM6 =
+    {
+        "HladinaKlimaZapnuta", "HladinaWPrah", "HladinaWPlna", "HladinaSuchoM", "HladinaBrehPlneM", "HladinaBrehDoM",
+        "HladinaKorytoPlneM", "HladinaKorytoDoM", "HladinaZdrojPlneM", "HladinaZdrojDoM",
     };
 
     public static IReadOnlyDictionary<string, string[]> Vse => new Dictionary<string, string[]> { ["M0"] = M0, ["M1"] = M1, ["M2"] = M2, ["M3"] = M3 };
