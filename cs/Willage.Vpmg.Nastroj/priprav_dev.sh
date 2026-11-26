@@ -17,7 +17,7 @@ if [ -f "$CIL/.pin-ok" ] && [ "$(git -C "$CIL" rev-parse HEAD 2>/dev/null)" = "$
 fi
 rm -rf "$CIL"; mkdir -p "$CIL"; git -C "$CIL" init -q
 if [ "${1:-}" = "--zdroj" ]; then
-  git -C "$CIL" fetch -q "$2" "$COMMIT" 2>&1 | maska
+  git -C "$CIL" fetch -q --depth 1 "file://$(cd "$2" && pwd)" "$COMMIT" 2>&1 | maska
 else
   TOKEN="${WILLAGE_DEV_GH_TOKEN:-${WILLAGE_CLIENT_GH_TOKEN:-}}"
   if [ -n "$TOKEN" ]; then URL="https://x-access-token:${TOKEN}@github.com/${REPO}.git"; else URL="https://github.com/${REPO}.git"; fi
