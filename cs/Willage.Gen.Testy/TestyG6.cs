@@ -23,8 +23,8 @@ public static class TestyG6
         var g = new GeneratorSveta(data, kes);
         g.Sluzba.Generuj();
         var n = g.Nahledy;
-        T.Je(string.Join(",", n.Moduly()) == "M1,M2,M3", "moduly s náhledem M1, M2, M3");
-        T.Je(n.Vrstvy("M1").Count == 6 && n.Vrstvy("M2").Count == 6 && n.Vrstvy("M3").Count == 3 && n.Vrstvy("M4").Count == 0, "vrstvy M1 6, M2 6, M3 3, M4 žádné (G-7)");
+        T.Je(n.Moduly().Take(3).SequenceEqual(new[] { "M1", "M2", "M3" }), "moduly s náhledem M1, M2, M3 (G-7 přidává M4–M6)");
+        T.Je(n.Vrstvy("M1").Count == 6 && n.Vrstvy("M2").Count == 6 && n.Vrstvy("M3").Count == 3, "vrstvy M1 6, M2 6, M3 3");
         T.Je(n.Izolace("M1") == VrstvaNahleduDto.Relief && n.Izolace("M2") == VrstvaNahleduDto.RozdilM2M1 && n.Izolace("M3") is null, "izolace: M1 reliéf, M2 rozdíl M2−M1, M3 řezem");
 
         // nezávislé instance jádra jako v nástrojích (PorovnejVysku: new SvetFn(new ParametrySveta()); rez: new GeologieCs(new ParametrySveta()))
@@ -35,7 +35,7 @@ public static class TestyG6
 
         int R = 64;
         var casy = new List<string>();
-        foreach (var modul in n.Moduly())
+        foreach (var modul in new[] { "M1", "M2", "M3" })
             foreach (var v in n.Vrstvy(modul))
             {
                 var m = n.Mapa(modul, v, R);
@@ -114,8 +114,8 @@ public static class TestyG6
         var pr = n.Rez("M2", SouradniceQ16.ZMetru(0, 1984), SouradniceQ16.ZMetru(4096, 1984), 8);
         T.Je(pr.Nx == 512 && pr.PovrchM1 is not null && Bit(pr.PovrchM[100], s2.Vyska(4.0 + 100 * 8, 1984)) && Bit(pr.PovrchM1[100], s1.Vyska(804, 1984)) && pr.HladinaMoreM == s2.P.HladinaMoreM,
             $"profil M2 512 vzorků: povrch M2, M1 a hladina {pr.HladinaMoreM} m");
-        bool chybaM4 = false; try { n.Rez("M4", default, SouradniceQ16.ZMetru(10, 0), 1); } catch (ArgumentException) { chybaM4 = true; }
-        T.Je(chybaM4, "řez M4 v G-6 není (G-7) → ArgumentException");
+        bool chybaM7 = false; try { n.Rez("M7", default, SouradniceQ16.ZMetru(10, 0), 1); } catch (ArgumentException) { chybaM7 = true; }
+        T.Je(chybaM7, "řez M7 není → ArgumentException (M4–M6 mají řez od G-7)");
 
         // barvy a materiály
         var mat = n.Materialy();
