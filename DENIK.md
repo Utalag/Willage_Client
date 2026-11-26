@@ -618,6 +618,12 @@ Skupiny: 1 Prototyp a buildy · 2 Terén a tvar · 3 Rozlišení bloku · 4 Ská
 - **Komplikace:** mezi skutečným břehem a vrstevnicí k = 0,5 je 38–74 m pevniny (strmé: v úseku 100 m k nedosáhne 0,5). Dva ještě mírnější řezy jsem do shots nedával (jeden skoro vodorovný, druhý s prohlubní h0).
 - **Další krok:** schválení; merge do main dělá Willage-backend.
 
+### 🧪 Generátor V1: koeficient průsaku (těsnost), zapínatelný (2026-11-26 12:36 · větev `gen-v1-prusak-koeficient`, `cs/Willage.Gen/{Materialy,Voda/Prusak}/`, PROP `docs/sjednoceni/reporty/prusak-koef-prop.md`, shots `godot-prototyp/shots/prusak/`)
+- **Směr:** Jan 12:19 / 12:21: koeficient 0–255 jako bajt (255 propustné, 0 těsné), voda po bloku se násobí koeficientem, výchozí vypnuto; pro podvodní stavby a průsak do vykopaných prostor.
+- **Zlepšení:** tabulka bajtů z prusak_v1.json (písek 178, jíl 13, žula 0, štěrk 255), útlum celočíselně v Q24 (bitově shodný), plnění dutiny 2 × 2 m pod hladinou 60 m: 10 bloků písku 198 l/h místo 7200 l/h (1,9 dne místo 1,3 h do 50 %). Otisky seed 49 stejné vypnuto i zapnuto; testy main 110/110, větev 135/135.
+- **Komplikace:** zaokrouhlení na nejbližší nechalo koeficienty ≥ 128 uvíznout na 1 LSB, proto zaokrouhlení dolů. Násobení po blocích je přísnější než sériový Darcy u tlustých vrstev. Žula a jíl jsou těsné už přes K z katalogu.
+- **Další krok:** schválení; napojit na vykopané prostory; merge do main dělá Willage-backend.
+
 ### 💡 TODO: náplavy a delty jako samostatný krok po kroku 6b (2026-11-26 9:59, Jan, bod 7)
 - **Doplněno 2026-11-26 11:15 (Jan, 6e):** součástí stejného kroku i **mořské usazeniny na dně moře** (sedimenty pod mořem, dnes dno = stejné vrstvy jako pevnina).
 - Eroze kroku 6 jen odebírá. Náplavy (ukládání v jezerech a nivách) a delty u ústí do moře jako samostatný krok: stream power s depozicí (FastScape / Yuan et al.), ukládání do mapy WGER a do geologie jako nová vrstva.
