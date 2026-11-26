@@ -69,6 +69,7 @@ var sA = fA.Prameny.VOblasti(128, 0, 256, 128); var sB = fB.Prameny.VOblasti(128
 T.Je(sA.SequenceEqual(sB), $"prameny bloku nezávislé na pořadí výpočtu ({sA.Count} vs {sB.Count})");
 
 TestyKrok05.Spust(kat, pr);
+TestyKrok06.Spust();
 
 Console.WriteLine($"OK {T.Ok}, chyb {T.Chyb}");
 return T.Chyb == 0 ? 0 : 1;
