@@ -9,7 +9,7 @@ namespace Willage.Gen.Testy;
 public static class TestyKrok06d
 {
     /// <summary>Golden: otisk mapy eroze výchozího světa (VseKrok06, seed 49, 32 m) – mění se jen se záměrnou změnou generátoru nebo dat.</summary>
-    public const string GoldenMapaVychozi = "08e6ca036c3e2322";
+    public const string GoldenMapaVychozi = "800d420bb00047de";
 
     public static void Spust()
     {

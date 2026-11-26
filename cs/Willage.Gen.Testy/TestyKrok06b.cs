@@ -19,7 +19,7 @@ public static class TestyKrok06b
             var p = json.Uplatni(new ParametrySveta { Seed = seed, More = true, VseKrok06 = false });
             var ms = new MoreSklon(p, seed, new HashSveta(seed));
             podily.Add(ms.Podil);
-            bool ok = ms.StartNaPevnine && ms.StartBezPosunu && Math.Abs(ms.Podil - 0.30) <= 0.05 + 1e-12;
+            bool ok = ms.StartNaPevnine && ms.StartBezPosunu && Math.Abs(ms.Podil - json.PodilMore) <= 0.05 + 1e-12;
             for (double x = 1792; x < 2176 && ok; x += 16) for (double y = 1792; y < 2176 && ok; y += 16)
                 if (ms.Pevnina(x, y) != 1.0 || ms.Aplikuj(x, y, 50.0, 60.0) != 50.0) ok = false;
             for (double x = 0; x < 512 && ok; x += 16) for (double y = 0; y < 15616 && ok; y += 97)
