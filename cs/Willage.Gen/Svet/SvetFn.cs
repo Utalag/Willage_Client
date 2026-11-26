@@ -24,6 +24,8 @@ public sealed class SvetFn
     public Sopky Sopky { get; }
     public MapaHornin Horniny { get; }
     public string KlimaId { get; } = "mirne";
+    /// <summary>Krok 6: eroze světa (hrubá mapa + koryta). null = vypnuto (výchozí); uplatní se jen v povrchu s detaily, tvar (VyskaTvar) nemění.</summary>
+    public Willage.Gen.Eroze.IErozeSveta? Eroze { get; set; }
 
     public SvetFn(ParametrySveta p, DataSveta data)
     {
@@ -75,7 +77,9 @@ public sealed class SvetFn
             double dx = x - s[i].X, dy = y - s[i].Y, r2 = dx * dx + dy * dy;
             if (r2 < s[i].R * s[i].R) h += Sopky.Kuzel(i, Math.Sqrt(r2));
         }
-        return Smin(h);
+        h = Smin(h);
+        if (detaily && Eroze != null) h -= Eroze.Hloubka(x, y);
+        return h;
     }
 
     /// <summary>Index sopky, v jejímž úpatí bod leží (poslední vyhrává), jinak −1.</summary>
