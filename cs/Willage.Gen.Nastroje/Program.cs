@@ -16,6 +16,13 @@ return cmd switch
     "prameny" => Prameny(data),
     "cas" => Cas(args, data),
     "par" => Paralelne.Spust(data, args.Contains("--puvodni"), args.Skip(1).Where(s => int.TryParse(s, out _)).Select(int.Parse).DefaultIfEmpty(1).ToArray()) == 0 ? 0 : 1,
+    "klima" => args[1] switch
+    {
+        "mapa" => KlimaNastroj.Mapa(args, data),
+        "otisky" => KlimaNastroj.Otisky(args, data),
+        "prameny" => KlimaNastroj.Prameny(args, data),
+        _ => Napoveda(),
+    },
     "eroze" => args[1] switch
     {
         "svetmax" => ErozeNastroj.SvetMax(data),

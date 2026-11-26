@@ -27,6 +27,7 @@ public static class ErozeNastroj
             else if (a[i] == "--panve") Panve = true;
             else if (a[i] == "--vypnuto") Vypnuto = true;   // 6d: VseKrok06 je výchozí zapnuto; --vypnuto = jen --more / --panve
             else if (a[i] == "--seed") Seed = long.Parse(a[++i]);
+            else if (a[i] == "--planeta") KlimaNastroj.Planeta = a[++i];
             else r.Add(a[i]);
         }
         return r.ToArray();
