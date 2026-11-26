@@ -23,6 +23,11 @@ public sealed class Prameny
     /// <summary>Krok 6: vodníci z eroze světa (obdélník → prameny). null = vypnuto (výchozí); přidají se za prameny ze seedu.</summary>
     public Func<double, double, double, double, IEnumerable<Pramen>>? Vodnici { get; set; }
 
+    /// <summary>Krok 7: váha odtoku klimatu w(x, y) ve středu buňky (1 = beze změny). null = vypnuto (výchozí).
+    /// Pravděpodobnost buňky × w (strop KlimaPMax), výkon × w.</summary>
+    public Func<double, double, double>? KlimaW { get; set; }
+    public double KlimaPMax { get; set; } = 0.95;
+
     /// <summary>Prameny světových buněk, jejichž pramen leží v obdélníku [x0, x1) × [y0, y1).</summary>
     public List<Pramen> VOblasti(double x0, double y0, double x1, double y1)
     {
@@ -70,8 +75,10 @@ public sealed class Prameny
     private Pramen? Spocti(int cx, int cy)
     {
         uint seed = _p.Seed;
-        if (GeologyHash.Unit(GeologyHash.HashInt3(cx, cy, SaltExist, seed)) >= _p.PravdepodobnostBunky) return null;
         double b = _p.BunkaPramenuM, st = _p.KrokKandidatuM;
+        double w = KlimaW is null ? 1.0 : KlimaW((cx + 0.5) * b, (cy + 0.5) * b);
+        double pBunky = KlimaW is null ? _p.PravdepodobnostBunky : Math.Min(KlimaPMax, _p.PravdepodobnostBunky * w);
+        if (GeologyHash.Unit(GeologyHash.HashInt3(cx, cy, SaltExist, seed)) >= pBunky) return null;
         int n = (int)Math.Round(b / st);
         (int druh, double prevys, uint tie, double x, double y, int kz, int akv)? best = null;
         for (int i = 0; i < n; i++)
@@ -96,6 +103,7 @@ public sealed class Prameny
         var d = (DruhPramene)v.druh;
         double zaklad = d switch { DruhPramene.Snih => _p.QSnih, DruhPramene.Kontakt => _p.QKontakt, DruhPramene.Kras => _p.QKras, _ => _p.QVyver };
         double q = zaklad * (0.5 + GeologyHash.Unit(GeologyHash.HashInt3(cx, cy, SaltQ, seed)));
+        if (KlimaW is not null) q *= w;
         uint prio = GeologyHash.HashInt3(cx, cy, SaltPrio, seed);
         return new Pramen(v.x, v.y, v.kz, d, q, cx, cy, prio, v.akv);
     }

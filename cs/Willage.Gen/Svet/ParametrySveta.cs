@@ -89,6 +89,9 @@ public sealed class ParametrySveta
     public bool VseKrok06 = true;
     public int PanviPocet = 4;
     public double PanevPolomerM = 1500.0, PanevHloubkaM = 15.0;
+    // krok 7: klima a biomy nad mapou planety (klima_v1.json). Výchozí vypnuto do Janova ano. Mění jen dnešní vodu
+    // (prameny, vodníci, aktivní koryta), mapu eroze ne (Jan 12:26: eroze je pozůstatek minulosti).
+    public bool KlimaKrok07 = false;
 
     /// <summary>Parametry přesně jako GDScript krok 3b (opravy vypnuté, bez moře a pánví kroku 6) – pro ekvivalenci.</summary>
     public static ParametrySveta Krok5(long seed = 49) => new() { Seed = seed, VseKrok06 = false };
