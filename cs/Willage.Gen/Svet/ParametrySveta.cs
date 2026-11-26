@@ -80,8 +80,6 @@ public sealed class ParametrySveta
     public double MorePrechod = 0.04, RezervaSevuM = 512.0, SevPrechodM = 400.0, SevMekkySpad = 0.0, SevMekkyPasM = 1500.0;
     // krok 6d (Jan 10:51): ostrovy v průlivech, zvlněný okraj pásu švu, (kalibrace prahu vynechána, Jan 10:54)
     public int OstrovuPocet = 5;
-    // krok 6e: hladina podzemní vody se u moře svazuje s mořem, ale ne ve startu (plná ochrana do StartVodaOchranaM od středu startu, plný účinek od +StartVodaPrechodM)
-    public double StartVodaOchranaM = 600.0, StartVodaPrechodM = 800.0;
     public double OstrovPolomerM = 700.0, OstrovVyska = 0.3, SevZvlneniM = 400.0, SevZvlneniLambdaMinM = 600.0, SevZvlneniLambdaMaxM = 3000.0;
     public double StartPolomerM = 400.0, StartPrechodM = 1200.0, StartRezerva = 0.05;
     public double MrizkaPrahuM = 128.0, MrizkaVzdalenostiM = 64.0;

@@ -36,7 +36,7 @@ public interface IGeologie
     /// <summary>Krok 6b: hrubá hloubka eroze světa v bodě (bez koryta), bez eroze 0.</summary>
     double ErozeHruba(double x, double y) => 0.0;
 
-    /// <summary>Krok 6e: vzdálenost k moři pro hladinu podzemní vody (m; v moři 0, ve startu chráněno = velká), bez moře nekonečno.</summary>
+    /// <summary>Krok 6e/6f: vzdálenost k moři pro hladinu podzemní vody (m; v moři 0; u pobřeží z masky po 1 m), bez moře nekonečno.</summary>
     double VzdalenostOdMore(double x, double y) => double.PositiveInfinity;
 
     /// <summary>Krok 6e: hladina moře (m), bez moře NaN.</summary>
