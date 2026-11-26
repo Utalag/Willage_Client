@@ -9,5 +9,6 @@
   <ItemGroup>
     <ProjectReference Include="..\cs\Willage.Gen\Willage.Gen.csproj" />
     <ProjectReference Include="..\cs\Willage.Gen.Api\Willage.Gen.Api.csproj" />
+    <ProjectReference Include="..\cs\Willage.Materialy.Api\Willage.Materialy.Api.csproj" />
   </ItemGroup>
 </Project>

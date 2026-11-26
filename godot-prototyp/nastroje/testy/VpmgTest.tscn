@@ -1,0 +1,40 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/cs/testy/VpmgTest.cs" id="1"]
+
+[node name="VpmgTest" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+script = ExtResource("1")
+
+[node name="Pozadi" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+color = Color(0.13, 0.13, 0.15, 1)
+
+[node name="Okraj" type="MarginContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+theme_override_constants/margin_left = 16
+theme_override_constants/margin_top = 12
+theme_override_constants/margin_right = 16
+theme_override_constants/margin_bottom = 12
+
+[node name="Svisle" type="VBoxContainer" parent="Okraj"]
+layout_mode = 2
+
+[node name="Titulek" type="Label" parent="Okraj/Svisle"]
+layout_mode = 2
+text = "T-1 VPMG"
+
+[node name="Mrizka" type="GridContainer" parent="Okraj/Svisle"]
+layout_mode = 2
+theme_override_constants/h_separation = 24
+theme_override_constants/v_separation = 12
+columns = 6
