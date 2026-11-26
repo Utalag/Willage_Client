@@ -126,13 +126,59 @@ static int Api(string[] a, Willage.Gen.Data.DataSveta d)
 }
 
 /// G-6: náhledy M1–M3 přes fasádu – „nahled porovnej-rez rez_opravy.bin [kes]“ porovná řez M3 s výstupem nástroje „rez“ bajt po bajtu,
-/// „nahled otisky [kes]“ vypíše SHA (16 hex) všech vrstev náhledu 256×256 (pro porovnání mezi větvemi / s Godot náhledem).
+/// „nahled otisky [kes]“ vypíše SHA (16 hex) všech vrstev náhledu 256×256 (M6 128×128) (pro porovnání mezi větvemi / s Godot náhledem).
+/// G-7: „nahled porovnej-rez-vody bin x0 y0 ux uy [kes]“ – řez M6 proti „eroze rez“; „nahled planeta [kes]“ – čísla M4–M6 a tabulka pásem.
 static int Nahled(string[] a, Willage.Gen.Data.DataSveta d)
 {
     string sub = a.Length > 1 ? a[1] : "otisky";
-    string? kes = sub == "porovnej-rez" ? (a.Length > 3 ? a[3] : null) : (a.Length > 2 ? a[2] : null);
+    string? kes = sub == "porovnej-rez" ? (a.Length > 3 ? a[3] : null) : sub == "porovnej-rez-vody" ? (a.Length > 7 ? a[7] : null) : (a.Length > 2 ? a[2] : null);
     var g = new Willage.Gen.Api.GeneratorSveta(d, kes);
     g.Sluzba.Generuj();
+    var C = System.Globalization.CultureInfo.InvariantCulture;
+    if (sub == "porovnej-rez-vody")
+    {
+        // G-7: nahled porovnej-rez-vody <eroze_rez.bin> <x0> <y0> <ux> <uy> [kes] – řez M6 proti nástroji „eroze rez“ (materiály, povrch, surová hladina)
+        double x0 = double.Parse(a[3], C), y0 = double.Parse(a[4], C), ux = double.Parse(a[5], C), uy = double.Parse(a[6], C);
+        double nrm = Math.Sqrt(ux * ux + uy * uy); ux /= nrm; uy /= nrm;
+        using var r = new BinaryReader(File.OpenRead(a[2]));
+        int nx = r.ReadInt32(), nz = r.ReadInt32(); double krok = r.ReadDouble();
+        var rez = g.Nahledy.Rez("M6", Willage.Gen.Api.Dto.SouradniceQ16.ZMetru(x0, y0), Willage.Gen.Api.Dto.SouradniceQ16.ZMetru(x0 + nx * krok * ux, y0 + nx * krok * uy), krok);
+        int bunek = 0, povrch = 0, hladina = 0; double maxPov = 0, maxHl = 0;
+        if (rez.Nx != nx) Console.WriteLine($"počet vzorků se liší: nástroj {nx}, náhled {rez.Nx}");
+        for (int i = 0; i < Math.Min(nx, rez.Nx); i++)
+        {
+            double pv = r.ReadDouble(), hl = r.ReadDouble(); r.ReadDouble();
+            var sl = r.ReadBytes(nz);
+            if (BitConverter.DoubleToInt64Bits(pv) != BitConverter.DoubleToInt64Bits(rez.PovrchM[i])) { povrch++; maxPov = Math.Max(maxPov, Math.Abs(pv - rez.PovrchM[i])); }
+            double h2 = rez.HladinaPodzemniM![i];
+            if (BitConverter.DoubleToInt64Bits(hl) != BitConverter.DoubleToInt64Bits(h2)) { hladina++; if (!double.IsNaN(hl) && !double.IsNaN(h2)) maxHl = Math.Max(maxHl, Math.Abs(hl - h2)); }
+            for (int k = 0; k < nz; k++) if (sl[k] != rez.Material(i, k)) bunek++;
+        }
+        Console.WriteLine(FormattableString.Invariant($"řez M6 od ({x0}, {y0}) směr ({ux:F3}, {uy:F3}): {nx}×{nz} buněk, rozdílných buněk {bunek}, povrchů {povrch} (max {maxPov:G3} m), hladin {hladina} (max {maxHl:G3} m); pramenů u řezu {rez.Body!.Count}; náhled {rez.Ms:F0} ms"));
+        // řady M5 (teplota, srážky, w, biom) a M4 (eroze) proti CSV nástroje (přesnost výpisu: F3, F2, F4, F3)
+        int rad = 0; var csv = File.ReadAllLines(Path.ChangeExtension(a[2], ".csv")).Skip(1).Select(l => l.Split(',')).ToArray();
+        var r5 = g.Nahledy.Rez("M5", rez.Od, rez.Do, krok); var r4 = g.Nahledy.Rez("M4", rez.Od, rez.Do, krok);
+        for (int i = 0; i < Math.Min(csv.Length, r5.Nx); i++)
+        {
+            double P(int c) => double.Parse(csv[i][c], C);
+            if (Math.Abs(P(7) - r5.Rady!["teplota_c"][i]) > 6e-4 || Math.Abs(P(8) - r5.Rady["srazky_mm"][i]) > 6e-3 || Math.Abs(P(9) - r5.Rady["w"][i]) > 6e-5
+                || (int)P(10) != (int)r5.Rady["biom"][i] || Math.Abs(P(12) - r4.Rady!["eroze_m"][i]) > 6e-4) rad++;
+        }
+        Console.WriteLine($"řady M5 / M4 proti CSV nástroje: rozdílných vzorků {rad} z {csv.Length} (M5 {r5.Ms:F0} ms, M4 {r4.Ms:F0} ms)");
+        return bunek + povrch + hladina + rad == 0 ? 0 : 1;
+    }
+    if (sub == "planeta")
+    {
+        // G-7: souhrnná čísla M4–M6 (porovnat s „klima mapa“) a tabulka pásem
+        foreach (var (m, v) in new[] { ("M4", Willage.Gen.Api.Dto.VrstvaNahleduDto.PosunEroze), ("M5", Willage.Gen.Api.Dto.VrstvaNahleduDto.BiomKlimatu), ("M6", Willage.Gen.Api.Dto.VrstvaNahleduDto.Hladina) })
+        {
+            var n = g.Nahledy.Mapa(m, v, m == "M6" ? 128 : 256);
+            Console.WriteLine($"{m} {n.Popis}\n   " + string.Join(", ", n.Cisla.Select(c => FormattableString.Invariant($"{c.Key} {c.Value:0.###}"))) + $" · bodů {n.Body?.Count ?? 0} · {n.Ms:F0} ms");
+        }
+        foreach (var p in g.Nahledy.TabulkaPasem())
+            Console.WriteLine(FormattableString.Invariant($"pásmo {p.Nazev,-9} podíl {p.Podil:0.##} T {p.TOdC}→{p.TDoC} K {p.SrazkyK} vítr {p.Vitr:+0;-0} u {p.UOd:0.###}…{p.UDo:0.###} pevnina {100 * p.PodilPevniny:F1} % T {p.TPrumerC:F1} P {p.PPrumerMm:F0} w {p.WPrumer:F2} hlavní {p.HlavniBiom} {100 * p.PodilHlavnihoBiomu:F1} %"));
+        return 0;
+    }
     if (sub == "porovnej-rez")
     {
         using var r = new BinaryReader(File.OpenRead(a[2]));
@@ -152,7 +198,7 @@ static int Nahled(string[] a, Willage.Gen.Data.DataSveta d)
     foreach (var m in g.Nahledy.Moduly())
         foreach (var v in g.Nahledy.Vrstvy(m))
         {
-            var n = g.Nahledy.Mapa(m, v, 256);
+            var n = g.Nahledy.Mapa(m, v, m == "M6" ? 128 : 256);
             var b = new byte[n.Hodnoty.Length * 4]; Buffer.BlockCopy(n.Hodnoty, 0, b, 0, b.Length);
             Console.WriteLine($"{m}.{v,-16} {Willage.Gen.Katalogy.ManifestKatalogu.Sha(b)[..16]}  min {n.Cisla["min"]:F2} max {n.Cisla["max"]:F2}  {n.Ms:F0} ms");
         }
