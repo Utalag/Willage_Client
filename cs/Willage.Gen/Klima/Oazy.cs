@@ -16,7 +16,7 @@ public static class Oazy
     {
         var v = new List<Vodnik>();
         if (!p.OazaZapnuta || p.OazaPravdepodobnost <= 0) return v;
-        var t = m.T; uint sd = unchecked((uint)seed); double b = p.OazaBunkaM;
+        var t = m.T; uint sd = SeedSveta.Hash32(seed); double b = p.OazaBunkaM;
         int cx0 = (int)Math.Ceiling(t.Nx * t.Krok / b), cy0 = (int)Math.Ceiling(t.Ny * t.Krok / b);
         bool Pousten(int k) => mk.Biom[k] == BiomKlimatu.Poust || (p.OazaVeStepi && mk.Biom[k] == BiomKlimatu.Step);
         for (int cy = 0; cy < cy0; cy++)
