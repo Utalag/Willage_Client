@@ -624,6 +624,12 @@ Skupiny: 1 Prototyp a buildy · 2 Terén a tvar · 3 Rozlišení bloku · 4 Ská
 - **Komplikace:** zaokrouhlení na nejbližší nechalo koeficienty ≥ 128 uvíznout na 1 LSB, proto zaokrouhlení dolů. Násobení po blocích je přísnější než sériový Darcy u tlustých vrstev. Žula a jíl jsou těsné už přes K z katalogu.
 - **Další krok:** schválení; napojit na vykopané prostory; merge do main dělá Willage-backend.
 
+### 🧪 Generátor V1: pobřežní pás z koeficientu průsaku, horizont 30 dnů, tlak (2026-11-26 13:08 · větev `gen-v1-prusak-pobrezi`, `cs/Willage.Gen/Voda/Prusak/{PrusakDosah,PobrezniPas}.cs`, PROP `docs/sjednoceni/reporty/prusak-pobrezi-prop.md`, shots `godot-prototyp/shots/prusak-pobrezi/`)
+- **Směr:** Jan 12:35–12:39: šířka pásu mořské hladiny místo konstanty 5 m z materiálů u břehu; šířka = dosah průsaku za 30 dnů (ladící horizont); průsak roste s tlakem (rozdíl hladin); vše za přepínačem, výchozí vypnuto.
+- **Zlepšení:** `PrusakPobrezi` (výchozí false). Štěrk strop 16 m, písek 1,6–3,6 m podle spádu (2,65 m při 50 ‰), spraš a zvětralé horniny desetiny metru, jíl a žula 0; bez koeficientu by písek dosáhl stropu. Tlak i v modelu dutiny (spád = Δh / tloušťka). Vypnuto: otisky bloků u pobřeží (seedy 49, 1, 2, 3) shodné s main, start 3 × 3 beze změny i zapnuto; testy main 110/110, větev 165/165.
+- **Komplikace:** pás je na většině břehů užší než 5 m (62 % břehů < 0,01 m); vápence vycházejí těsně (K matrice), ač jsou krasové; štěrkový břeh v seedech 49, 1, 2, 3 není.
+- **Další krok:** schválení; rozhodnout kras a výchozí hodnoty; merge do main dělá Willage-backend.
+
 ### 💡 TODO: náplavy a delty jako samostatný krok po kroku 6b (2026-11-26 9:59, Jan, bod 7)
 - **Doplněno 2026-11-26 11:15 (Jan, 6e):** součástí stejného kroku i **mořské usazeniny na dně moře** (sedimenty pod mořem, dnes dno = stejné vrstvy jako pevnina).
 - Eroze kroku 6 jen odebírá. Náplavy (ukládání v jezerech a nivách) a delty u ústí do moře jako samostatný krok: stream power s depozicí (FastScape / Yuan et al.), ukládání do mapy WGER a do geologie jako nová vrstva.
