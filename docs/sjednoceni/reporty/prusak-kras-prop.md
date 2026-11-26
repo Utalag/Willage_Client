@@ -25,4 +25,37 @@ Zadání: Jan 13:05 (t968u) – doporučení z kroku pobřeží: vápence a dolo
 Šířky pásu krasových břehů před/po; podíl pobřeží se změněnou šířkou (seed 49 a další); řezy vápencovými břehy (`shots/prusak-kras/`, česky, před/po); otisky s klimatem zapnutým a předvolbami Krok5/Krok06, příznaky vypnuto; testy na main dfcb9ff a na větvi; `git merge-tree`.
 
 ## Výsledky
-(doplní se po experimentu)
+(2026-11-26 13:25 SEČ)
+
+### Sloučení do main dfcb9ff
+Merge `gen-v1-prusak-pobrezi` (obsahuje i koeficient) do větve z main. Konflikty jen v `DENIK.md` a `cs/Willage.Gen.Testy/Program.cs`: ponechány obě strany (deník v časovém pořadí: koeficient 12:36, krok 7 12:45, pobřeží 13:08, krok 7b 13:20; testy `TestyKrok07` i `TestyPrusak` / `TestyPrusakPobrezi`). Ostatní soubory (DataSveta, KonfiguraceSveta, ErozeNastroj, nástroje) se sloučily samy: zůstalo klima i průsak. Přepínače výchozí vypnuto.
+
+### Šířky pásu krasu (30 dnů; `shots/prusak-kras/sirky_pasu.md`)
+S puklinami jsou cave_limestone, deep_limestone, dolomite a limestone_outcrop stejné jako písek: **1,59 / 2,65 / 3,60 m** při spádu 10 / 50 / 200 ‰ (7 d 1,69 m, 90 d 3,40 m). Bez puklin zůstávají 0,00 / 0,01 / 0,02 m. Sádrovec a sůl 0 (bez puklin, H4 potvrzena). H1 potvrzena. H5: porozita 350 ‰ je záměr, aby pás seděl na 1,5–3,5 m (puklinová 1–5 % by při stejném K dojela na strop 16 m).
+
+### Podíl pobřeží (sken 64 m po ose x, spád 50 ‰)
+| seed | břehů | před, pás 1–3 m | po, pás 1–3 m | před, &lt; 0,01 m | po, &lt; 0,01 m | kras dominantní po (šířka 2,65 m) |
+|---|---|---|---|---|---|---|
+| 49 | 2316 | 297 (13 %) | 1463 (63 %) | 1441 (62 %) | 419 (18 %) | 1241 (54 %): jeskyň. 568, hlub. 428, dolomit 245 |
+| 1 | 2508 | 286 (11 %) | 1568 (63 %) | 1535 (61 %) | 423 (17 %) | 1362 (54 %) |
+| 2 | 1736 | 211 (12 %) | 1072 (62 %) | 1064 (61 %) | 307 (18 %) | 927 (53 %) |
+| 3 | 1902 | 256 (13 %) | 1212 (64 %) | 1153 (61 %) | 327 (17 %) | 1016 (53 %) |
+
+H2 potvrzena: **asi polovina břehů změnila šířku** (seed 49: 1166 z 2316, 50 %; z pásu &lt; 0,01 m nebo 0,01–1 m do 1–3 m). limestone_outcrop se na břehu skoro nevyskytuje (není v první osmičce). Část ornice (topsoil) přestala být dominantní, protože v okně 2 m je pod ní vápenec s větším dosahem (seed 49: ornice 512 → 370).
+
+### Řezy
+`godot-prototyp/shots/prusak-kras/rezy_kras_pobrezi.png` – tři řezy 100 m, seed 49, celek a detail 20 m u břehu: dolomit (od x 8244 y 992), jeskynní vápenec (od x 20050 y 1760), vápenec + ornice (od x 30500,5 y 4704, směr −x). Oranžová = konstanta 5 m, fialová = pás z koeficientu bez puklin (~0,01 m, čára hned klesá na spád terénu), modrá = s puklinami (~2,65 m). `podil_pobrezi.png` – sloupcový graf podílu břehů.
+
+### Otisky (klima výchozí zapnuto, přepínače průsaku vypnuto) = main dfcb9ff
+`klima otisky` keš k49:
+| konfigurace | mapa | krok 3 | voda 14,14 | prameny 3×3 | vodníci |
+|---|---|---|---|---|---|
+| klima vyp (`Krok06()`) | 800d420bb00047de | 9f32311e046f8b6a | 8e239a68c6d01be0 | 20 | 92 |
+| **klima zap (výchozí)** | 800d420bb00047de | 9f32311e046f8b6a | **377a8210f82c856a** | **21** | **86** |
+H3 potvrzena. Stejné i s `--pobrezi` (start 3×3 je daleko od moře). `Krok5()` / `Krok06()` hlídají testy kroku 7 (beze změny). Otisk klimatu cb11da8d141a2a5e, start: mírný les, T 10,1 °C, P 943 mm, w 1,35.
+
+### Testy
+`main` dfcb9ff: **OK 156, chyb 0**. Větev: **OK 228, chyb 0**. Negativní při psaní testů (opraveno, ne v kódu knihovny): (1) monotónnost koeficientu proti K matrice padala, protože kras má nízké K matrice a koeficient 178 – porovnává se efektivní K. (2) dutina v dolomitu bez puklin není bitově 0 (matrice dá jednotky µl za hodinu), jen ~10⁹× menší tok než s puklinami.
+
+### Merge
+`git merge-tree` proti `main` dfcb9ff: bez konfliktů, main je předek. Bez merge do main.

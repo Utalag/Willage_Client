@@ -643,6 +643,12 @@ Skupiny: 1 Prototyp a buildy · 2 Terén a tvar · 3 Rozlišení bloku · 4 Ská
 - **Další krok:** schválení; merge do main dělá Willage-backend.
 
 
+### 🧪 Generátor V1: puklinová propustnost krasu a sloučení průsaku do main s klimatem 7/7b (2026-11-26 13:28 · větev `gen-v1-prusak-merge`, `prusak_v1.json` pole `pukliny`, PROP `docs/sjednoceni/reporty/prusak-kras-prop.md`, shots `godot-prototyp/shots/prusak-kras/`)
+- **Směr:** Jan 13:05: vápence a dolomit dostanou puklinovou propustnost (pás jako písek, 1,5–3,5 m), data v JSON, za stávajícími přepínači; sloučit průsak do aktuálního mainu (klima 7/7b).
+- **Zlepšení:** efektivní K = matrice + 1e-4 m/s, koeficient 178, porozita 350 ‰ pro cave_limestone, deep_limestone, dolomite, limestone_outcrop. Na seedu 49 se šířka 1–3 m zvedla z 13 % na 63 % břehů (polovina pobřeží se změnila). Vypnuto: otisky = main (voda 377a8210f82c856a, 21 pramenů, 86 vodníků). Testy main 156/156, větev 228/228.
+- **Komplikace:** sádrovec a sůl zůstávají těsné (nejsou uhličitany). Porozita 350 ‰ je „písková“, ne puklinová – jinak by pás dojel na strop 16 m. limestone_outcrop se na břehu skoro nevyskytuje.
+- **Další krok:** schválení; merge do main dělá Willage-backend.
+
 ### 💡 TODO: náplavy a delty jako samostatný krok po kroku 6b (2026-11-26 9:59, Jan, bod 7)
 - **Doplněno 2026-11-26 11:15 (Jan, 6e):** součástí stejného kroku i **mořské usazeniny na dně moře** (sedimenty pod mořem, dnes dno = stejné vrstvy jako pevnina).
 - Eroze kroku 6 jen odebírá. Náplavy (ukládání v jezerech a nivách) a delty u ústí do moře jako samostatný krok: stream power s depozicí (FastScape / Yuan et al.), ukládání do mapy WGER a do geologie jako nová vrstva.
