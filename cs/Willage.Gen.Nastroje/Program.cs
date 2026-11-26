@@ -2,6 +2,7 @@ using Willage.Gen.Data;
 using Willage.Gen.Nastroje;
 
 var data = DataSveta.Najdi(AppContext.BaseDirectory);
+args = ErozeNastroj.Volby(args);
 string cmd = args.Length > 0 ? args[0] : "";
 return cmd switch
 {

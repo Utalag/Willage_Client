@@ -11,16 +11,41 @@ namespace Willage.Gen.Nastroje;
 public static class ErozeNastroj
 {
     static readonly CultureInfo C = CultureInfo.InvariantCulture;
+    /// <summary>Volby: --more (krok 6b moře + sklon), --sklon S, --interp bilinearni|catmullrom|bspline.</summary>
+    public static bool More; public static double? Sklon; public static string? Interp;
 
-    public static ParametryEroze Parametry(DataSveta d, double krok) =>
-        ParametryEroze.ZJson(File.ReadAllText(d.ErozeV1)) with { KrokM = krok };
+    public static string[] Volby(string[] a)
+    {
+        var r = new List<string>();
+        for (int i = 0; i < a.Length; i++)
+        {
+            if (a[i] == "--more") More = true;
+            else if (a[i] == "--sklon") Sklon = double.Parse(a[++i], C);
+            else if (a[i] == "--interp") Interp = a[++i];
+            else r.Add(a[i]);
+        }
+        return r.ToArray();
+    }
+
+    public static ParametrySveta Ps()
+    {
+        var p = new ParametrySveta { More = More };
+        if (Sklon is double s) p.SklonKontinentu = s;
+        return p;
+    }
+
+    public static ParametryEroze Parametry(DataSveta d, double krok)
+    {
+        var p = ParametryEroze.ZJson(File.ReadAllText(d.ErozeV1)) with { KrokM = krok };
+        return Interp is null ? p : p with { InterpolaceE = Interp };
+    }
 
     /// <summary>Start svět s planetárním svet_max_m: povrch na mřížce 1 m a otisk kroku 3 musí zůstat stejné.</summary>
     public static int SvetMax(DataSveta d)
     {
         var pe = Parametry(d, 32);
         var a = new SvetFn(new ParametrySveta(), d);
-        var b = ErozePlanety.SvetPlanety(new ParametrySveta(), d, pe);
+        var b = ErozePlanety.SvetPlanety(Ps(), d, pe);
         double max = 0; var p = new ParametrySveta();
         double ox = p.StartBlok[0] * p.BlokM - p.BlokM, oy = p.StartBlok[1] * p.BlokM - p.BlokM;
         for (int i = 0; i < 384; i++) for (int j = 0; j < 384; j++)
@@ -38,10 +63,10 @@ public static class ErozeNastroj
         double krok = double.Parse(a[2], C); int vl = int.Parse(a[3]); string? outDir = a.Length > 4 ? a[4] : null;
         var pe = Parametry(d, krok);
         var sw = Stopwatch.StartNew();
-        var svet = ErozePlanety.SvetPlanety(new ParametrySveta(), d, pe);
+        var svet = ErozePlanety.SvetPlanety(Ps(), d, pe);
         long tSvet = sw.ElapsedMilliseconds;
         var m = VypocetEroze.Spocti(ErozePlanety.Podklad(svet, pe), pe, vl, out var casy);
-        m.KlicKese = SouborMapy.KlicKese(svet.Sd, pe, d.SouborySveta);
+        m.KlicKese = ErozePlanety.Klic(svet, d, pe);
         sw.Restart();
         var toky = SitToku.Toky(m);
         var vod = Vodnici.Najdi(m, svet, pe);
@@ -52,6 +77,7 @@ public static class ErozeNastroj
         Console.WriteLine($"  paměť: špička pracovní sady {proc.PeakWorkingSet64 / 1048576} MB, mapa {m.PametBajtu / 1048576.0:F1} MB");
         Console.WriteLine($"  otisk {SouborMapy.Otisk(m)}  klíč keše {m.KlicKese[..16]}");
         Statistiky(m, toky, vod, pe);
+        RekyStat(m);
         Sev(m, svet, pe);
         if (outDir is not null)
         {
@@ -67,6 +93,16 @@ public static class ErozeNastroj
                 toky.Select(t => FormattableString.Invariant($"{t.Pramen},{t.Konec},{t.DelkaM:F1},{t.Uzlu}")).Prepend("pramen,konec,delka_m,uzlu"));
         }
         return 0;
+    }
+
+    static void RekyStat(MapaEroze m)
+    {
+        var r = Reky.Najdi(m);
+        var l = r.Select(x => x.DelkaM).OrderBy(x => x).ToArray();
+        var p = r.Select(x => x.PovodiM2 / 1e6).OrderByDescending(x => x).Take(5).Select(x => x.ToString("F1", C));
+        int more = 0; for (int k = 0; k < m.T.N; k++) if ((m.Priznaky[k] & MapaEroze.Odtok) != 0) more++;
+        Console.WriteLine($"  řeky (ústí → nejdelší pramen): {r.Count}, max {(l.Length > 0 ? l[^1] / 1000 : 0):F1} km, medián {(l.Length > 0 ? l[l.Length / 2] : 0):F0} m, > 5 km: {l.Count(x => x > 5000)}, > 10 km: {l.Count(x => x > 10000)}; odtok/moře {100.0 * more / m.T.N:F1} %");
+        Console.WriteLine($"  největší povodí řek (km²): {string.Join(", ", p)}");
     }
 
     static void Statistiky(MapaEroze m, List<Tok> toky, List<Vodnik> vod, ParametryEroze pe)
@@ -120,8 +156,8 @@ public static class ErozeNastroj
     {
         string f = a[2]; double krok = double.Parse(a[3], C);
         var pe = Parametry(d, krok);
-        var svet = ErozePlanety.SvetPlanety(new ParametrySveta(), d, pe);
-        var m = SouborMapy.Nacti(f, SouborMapy.KlicKese(svet.Sd, pe, d.SouborySveta)) ?? throw new Exception("mapa nesedí s klíčem");
+        var svet = ErozePlanety.SvetPlanety(Ps(), d, pe);
+        var m = SouborMapy.Nacti(f, ErozePlanety.Klic(svet, d, pe)) ?? throw new Exception("mapa nesedí s klíčem");
         var ef = new ErozeSvetaFn(m, pe); var vod = Vodnici.Najdi(m, svet, pe);
         var (o0, _, _) = OtiskKrok3.Spocti(new ParametrySveta(), d);
         var (o1, _, _) = OtiskKrok3.Spocti(new ParametrySveta(), d, uprav: g => g.Svet.Eroze = ef);
@@ -148,8 +184,8 @@ public static class ErozeNastroj
         // eroze detail <mapa.wger> <krok> <x0> <y0> <strana> <vystup.bin>
         string f = a[2]; double krok = double.Parse(a[3], C), x0 = double.Parse(a[4], C), y0 = double.Parse(a[5], C), s = double.Parse(a[6], C);
         var pe = Parametry(d, krok);
-        var svet = ErozePlanety.SvetPlanety(new ParametrySveta(), d, pe);
-        var m = SouborMapy.Nacti(f, SouborMapy.KlicKese(svet.Sd, pe, d.SouborySveta))!;
+        var svet = ErozePlanety.SvetPlanety(Ps(), d, pe);
+        var m = SouborMapy.Nacti(f, ErozePlanety.Klic(svet, d, pe))!;
         var pod = ErozePlanety.Podklad(svet, pe); var ef = new ErozeSvetaFn(m, pe);
         int n = (int)(s / 0.25);
         using var w = new BinaryWriter(File.Create(a[7]));
