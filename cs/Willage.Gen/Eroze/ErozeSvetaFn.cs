@@ -4,7 +4,7 @@ namespace Willage.Gen.Eroze;
 public interface IErozeSveta { double Hloubka(double x, double y); }
 
 /// <summary>
-/// Jemný detail jako funkce nad hrubou mapou (žádné dlaždice → žádné švy): bilineárně E z periodických uzlů
+/// Jemný detail jako funkce nad hrubou mapou (žádné dlaždice → žádné švy): E z uzlů (bilineárně / Catmull-Rom / B-spline, krok 6b) z periodických uzlů
 /// ukotvených ve světě (i·krok) + zahloubení koryta podle vzdálenosti k úsekům uzel→příjemce. Šířka w = a·Q^0,5,
 /// hloubka d = c·Q^0,4 (Leopold & Maddock 1953 [88]), profil d·(1 − t²)², t = vzdálenost/(w/2), přes úseky maximum.
 /// </summary>
@@ -16,7 +16,7 @@ public sealed class ErozeSvetaFn : IErozeSveta
 
     public ErozeSvetaFn(MapaEroze m, ParametryEroze p)
     {
-        _m = m; _p = p; var t = m.T;
+        _m = m; _p = p; var t = m.T; _interp = Rozpoznej(p.InterpolaceE);
         _px = t.Nx * t.Krok; _py = t.Ny * t.Krok;
         _w = new float[t.N]; _d = new float[t.N];
         for (int k = 0; k < t.N; k++)
@@ -36,8 +36,51 @@ public sealed class ErozeSvetaFn : IErozeSveta
         var t = _m.T;
         double fx = PeriodickyPodklad.Zabal(x, _px) / t.Krok, fy = PeriodickyPodklad.Zabal(y, _py) / t.Krok;
         int i = (int)Math.Floor(fx), j = (int)Math.Floor(fy); double u = fx - i, v = fy - j;
-        double e00 = _m.E(t.K(i, j)), e10 = _m.E(t.K(i + 1, j)), e01 = _m.E(t.K(i, j + 1)), e11 = _m.E(t.K(i + 1, j + 1));
-        return (e00 * (1 - u) + e10 * u) * (1 - v) + (e01 * (1 - u) + e11 * u) * v;
+        switch (_interp)
+        {
+            case Interpolace.Bilinearni:
+            {
+                double e00 = _m.E(t.K(i, j)), e10 = _m.E(t.K(i + 1, j)), e01 = _m.E(t.K(i, j + 1)), e11 = _m.E(t.K(i + 1, j + 1));
+                return (e00 * (1 - u) + e10 * u) * (1 - v) + (e01 * (1 - u) + e11 * u) * v;
+            }
+            default:
+            {
+                Span<double> wu = stackalloc double[4], wv = stackalloc double[4];
+                Vahy(_interp, u, wu); Vahy(_interp, v, wv);
+                double e = 0;
+                for (int b = 0; b < 4; b++)
+                {
+                    double r = 0;
+                    for (int a = 0; a < 4; a++) r += wu[a] * _m.E(t.K(i - 1 + a, j - 1 + b));
+                    e += wv[b] * r;
+                }
+                return e < 0 ? 0 : e;   // Catmull-Rom může překmitnout pod 0
+            }
+        }
+    }
+
+    public enum Interpolace { Bilinearni, CatmullRom, BSpline }
+    private readonly Interpolace _interp;
+
+    public static Interpolace Rozpoznej(string s) => s.ToLowerInvariant() switch
+    {
+        "catmullrom" => Interpolace.CatmullRom, "bspline" => Interpolace.BSpline, _ => Interpolace.Bilinearni,
+    };
+
+    /// <summary>Kubické váhy 4 uzlů (i − 1 … i + 2) pro t ∈ [0, 1).</summary>
+    public static void Vahy(Interpolace m, double t, Span<double> w)
+    {
+        double t2 = t * t, t3 = t2 * t;
+        if (m == Interpolace.CatmullRom)
+        {
+            w[0] = 0.5 * (-t3 + 2 * t2 - t); w[1] = 0.5 * (3 * t3 - 5 * t2 + 2);
+            w[2] = 0.5 * (-3 * t3 + 4 * t2 + t); w[3] = 0.5 * (t3 - t2);
+        }
+        else
+        {
+            double s = 1 - t;
+            w[0] = s * s * s / 6; w[1] = (3 * t3 - 6 * t2 + 4) / 6; w[2] = (-3 * t3 + 3 * t2 + 3 * t + 1) / 6; w[3] = t3 / 6;
+        }
     }
 
     public double Koryto(double x, double y)

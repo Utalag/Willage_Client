@@ -32,6 +32,8 @@ public sealed record ParametryEroze
     public double KorytoC { get; init; } = 0.6;
     public double KorytoMinSirkaM { get; init; } = 1.0;
     public double KorytoMaxHloubkaM { get; init; } = 3.0;
+    /// <summary>Krok 6b: interpolace E mezi uzly: "bilinearni" (krok 6), "catmullrom", "bspline".</summary>
+    public string InterpolaceE { get; init; } = "bilinearni";
 
     public int Nx => (int)Math.Round(PlanetaXM / KrokM);
     public int Ny => (int)Math.Round(PlanetaYM / KrokM);
