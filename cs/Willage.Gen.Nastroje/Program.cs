@@ -24,6 +24,7 @@ return cmd switch
     "prameny" => Prameny(data),
     "manifest" => Manifest(args, data),
     "moduly" => Moduly(data),
+    "schema" => Schema(args, data),
     "cas" => Cas(args, data),
     "par" => Paralelne.Spust(data, args.Contains("--puvodni"), args.Skip(1).Where(s => int.TryParse(s, out _)).Select(int.Parse).DefaultIfEmpty(1).ToArray()) == 0 ? 0 : 1,
     "klima" => args[1] switch
@@ -73,6 +74,23 @@ static int Moduly(Willage.Gen.Data.DataSveta d)
     var k = pl.Klice(new Willage.Gen.Svet.ParametrySveta());
     foreach (var m in pl.Graf.Poradi)
         Console.WriteLine($"{m.Id} {m.Nazev,-18} v{m.VerzeAlgoritmu} ← [{string.Join(",", m.Zavislosti)}] soubory [{string.Join(", ", m.Soubory)}] klíč {k[m.Id][..16]}");
+    return 0;
+}
+
+/// G-2: schéma parametrů – „schema [soubor.json]“ zapíše JSON (bez souboru jen souhrn); „schema --kontrola soubor.json“ porovná.
+static int Schema(string[] a, Willage.Gen.Data.DataSveta d)
+{
+    var s = Willage.Gen.Schema.SchemaParametru.Sestav(d);
+    string json = s.ToJson();
+    foreach (var g in s.Parametry.GroupBy(p => p.Modul).OrderBy(g => g.Key))
+        Console.WriteLine($"{g.Key}: {g.Count()} parametrů, skupiny {string.Join(", ", g.Select(p => p.Skupina).Distinct())}");
+    Console.WriteLine($"celkem {s.Parametry.Count}, jen čtení {s.Parametry.Count(p => p.JenCteni)}, SHA256 {Willage.Gen.Katalogy.ManifestKatalogu.Sha(System.Text.Encoding.UTF8.GetBytes(json))[..16]}");
+    var f = a.Skip(1).FirstOrDefault(x => !x.StartsWith("--"));
+    if (f is null) return 0;
+    if (a.Contains("--kontrola")) { bool ok = File.Exists(f) && File.ReadAllText(f).Replace("\r\n", "\n") == json; Console.WriteLine(ok ? "schéma aktuální" : "schéma se liší: " + f); return ok ? 0 : 1; }
+    Directory.CreateDirectory(Path.GetDirectoryName(Path.GetFullPath(f))!);
+    File.WriteAllText(f, json);
+    Console.WriteLine("zapsáno " + f);
     return 0;
 }
 
