@@ -1,0 +1,211 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/cs/GeneratorSveta/GeneratorSvetaOkno.cs" id="1"]
+[ext_resource type="Script" path="res://scripts/cs/GeneratorSveta/HorniLista.cs" id="2"]
+[ext_resource type="Script" path="res://scripts/cs/GeneratorSveta/SeznamModulu.cs" id="3"]
+[ext_resource type="Script" path="res://scripts/cs/GeneratorSveta/KonfiguratorModulu.cs" id="4"]
+[ext_resource type="Script" path="res://scripts/cs/GeneratorSveta/NahledModulu.cs" id="5"]
+[ext_resource type="Script" path="res://scripts/cs/GeneratorSveta/Diagnostika.cs" id="6"]
+[ext_resource type="Script" path="res://scripts/cs/GeneratorSveta/RetezPrepoctu.cs" id="7"]
+[ext_resource type="Script" path="res://scripts/cs/Jadro/Uzly/NahledVrstvy.cs" id="8"]
+[ext_resource type="Script" path="res://scripts/cs/Jadro/Uzly/ZastupnyPanel.cs" id="9"]
+[ext_resource type="Script" path="res://scripts/cs/Jadro/Uzly/StavJadra.cs" id="10"]
+
+[node name="GeneratorSveta" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1")
+
+[node name="Pozadi" type="Panel" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Svislo" type="VBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 8.0
+offset_top = 6.0
+offset_right = -8.0
+offset_bottom = -6.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="HorniLista" type="HBoxContainer" parent="Svislo"]
+unique_name_in_owner = true
+layout_mode = 2
+script = ExtResource("2")
+
+[node name="Titulek" type="Label" parent="Svislo/HorniLista"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 20
+text = "Generátor světa"
+
+[node name="Info" type="Label" parent="Svislo/HorniLista"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "planeta: …"
+clip_text = true
+
+[node name="PrepocitatVse" type="Button" parent="Svislo/HorniLista"]
+layout_mode = 2
+text = "Přepočítat vše"
+
+[node name="Zrusit" type="Button" parent="Svislo/HorniLista"]
+layout_mode = 2
+text = "Zrušit"
+
+[node name="VychoziVse" type="Button" parent="Svislo/HorniLista"]
+layout_mode = 2
+text = "Výchozí vše"
+
+[node name="Potvrdit" type="Button" parent="Svislo/HorniLista"]
+layout_mode = 2
+tooltip_text = "Zamkne parametry a uloží WPLN (dál jen herní změny)."
+text = "Potvrdit planetu"
+
+[node name="Ulozit" type="Button" parent="Svislo/HorniLista"]
+layout_mode = 2
+text = "Uložit WPLN"
+
+[node name="Nacti" type="Button" parent="Svislo/HorniLista"]
+layout_mode = 2
+text = "Načíst WPLN"
+
+[node name="Cesta" type="LineEdit" parent="Svislo/HorniLista"]
+custom_minimum_size = Vector2(220, 0)
+layout_mode = 2
+text = "user://planeta.wpln"
+
+[node name="Hlavni" type="HSplitContainer" parent="Svislo"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="SeznamModulu" type="ItemList" parent="Svislo/Hlavni"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(330, 0)
+layout_mode = 2
+script = ExtResource("3")
+
+[node name="Stred" type="HSplitContainer" parent="Svislo/Hlavni"]
+layout_mode = 2
+
+[node name="KonfiguratorModulu" type="VBoxContainer" parent="Svislo/Hlavni/Stred"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+script = ExtResource("4")
+
+[node name="Nadpis" type="Label" parent="Svislo/Hlavni/Stred/KonfiguratorModulu"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 18
+text = "modul"
+
+[node name="Akce" type="HBoxContainer" parent="Svislo/Hlavni/Stred/KonfiguratorModulu"]
+layout_mode = 2
+
+[node name="Prepocitat" type="Button" parent="Svislo/Hlavni/Stred/KonfiguratorModulu/Akce"]
+layout_mode = 2
+text = "Přepočítat modul + závislé"
+
+[node name="Vychozi" type="Button" parent="Svislo/Hlavni/Stred/KonfiguratorModulu/Akce"]
+layout_mode = 2
+text = "Výchozí hodnoty"
+
+[node name="Izolovat" type="Button" parent="Svislo/Hlavni/Stred/KonfiguratorModulu/Akce"]
+layout_mode = 2
+text = "Izolovat vrstvu (zástupné)"
+
+[node name="UlozitSadu" type="Button" parent="Svislo/Hlavni/Stred/KonfiguratorModulu/Akce"]
+layout_mode = 2
+text = "Uložit sadu (zástupné)"
+
+[node name="Stav" type="Label" parent="Svislo/Hlavni/Stred/KonfiguratorModulu"]
+layout_mode = 2
+text = "vyber modul"
+autowrap_mode = 3
+
+[node name="Svitek" type="ScrollContainer" parent="Svislo/Hlavni/Stred/KonfiguratorModulu"]
+layout_mode = 2
+size_flags_vertical = 3
+horizontal_scroll_mode = 0
+
+[node name="Parametry" type="VBoxContainer" parent="Svislo/Hlavni/Stred/KonfiguratorModulu/Svitek"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Zastupny" type="Label" parent="Svislo/Hlavni/Stred/KonfiguratorModulu"]
+layout_mode = 2
+autowrap_mode = 3
+script = ExtResource("9")
+
+[node name="Prave" type="VBoxContainer" parent="Svislo/Hlavni/Stred"]
+custom_minimum_size = Vector2(500, 0)
+layout_mode = 2
+
+[node name="NahledModulu" type="VBoxContainer" parent="Svislo/Hlavni/Stred/Prave"]
+unique_name_in_owner = true
+layout_mode = 2
+script = ExtResource("5")
+
+[node name="Titulek" type="Label" parent="Svislo/Hlavni/Stred/Prave/NahledModulu"]
+layout_mode = 2
+text = "Náhled modulu"
+
+[node name="Volba" type="OptionButton" parent="Svislo/Hlavni/Stred/Prave/NahledModulu"]
+layout_mode = 2
+
+[node name="Nahled" type="TextureRect" parent="Svislo/Hlavni/Stred/Prave/NahledModulu"]
+custom_minimum_size = Vector2(490, 245)
+layout_mode = 2
+script = ExtResource("8")
+Zmenseni = 2
+
+[node name="Poznamka" type="Label" parent="Svislo/Hlavni/Stred/Prave/NahledModulu" groups=["zastupne"]]
+layout_mode = 2
+autowrap_mode = 3
+script = ExtResource("9")
+Funkce = "vlastní náhled a izolace modulu (G-6 M1–M3, G-7 M4–M6); dnes vrstvy hotové planety"
+
+[node name="PohledRezu" type="Label" parent="Svislo/Hlavni/Stred/Prave" groups=["zastupne"]]
+layout_mode = 2
+autowrap_mode = 3
+script = ExtResource("9")
+Funkce = "PohledRezu – řez úsečkou, hladina, zvodnělá zóna 7c/7d (G-6)"
+
+[node name="Diagnostika" type="Label" parent="Svislo/Hlavni/Stred/Prave"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 3
+autowrap_mode = 3
+script = ExtResource("6")
+
+[node name="ZU1" type="Label" parent="Svislo/Hlavni/Stred/Prave" groups=["zastupne"]]
+layout_mode = 2
+autowrap_mode = 3
+script = ExtResource("9")
+Funkce = "U-1 regionální úpravy"
+
+[node name="ZU2" type="Label" parent="Svislo/Hlavni/Stred/Prave" groups=["zastupne"]]
+layout_mode = 2
+autowrap_mode = 3
+script = ExtResource("9")
+Funkce = "U-2 částečný přepočet"
+
+[node name="RetezPrepoctu" type="HFlowContainer" parent="Svislo"]
+unique_name_in_owner = true
+layout_mode = 2
+script = ExtResource("7")
+
+[node name="StavJadra" type="Label" parent="Svislo"]
+layout_mode = 2
+script = ExtResource("10")
