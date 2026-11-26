@@ -13,13 +13,13 @@ public static class MultiMeshSloupce
 
     public static MultiMesh Sloupec(SloupecDto s)
     {
-        int n = 0; foreach (var b in s.Materialy) if (b != 0) n++;
+        int n = 0; for (int z = 0; z < s.Pocet; z++) if (s.Material(z) != 0) n++;
         var mm = new MultiMesh { TransformFormat = MultiMesh.TransformFormatEnum.Transform3D, UseColors = true, Mesh = new BoxMesh { Size = Vector3.One * BunkaM } };
         mm.InstanceCount = n;
         int k = 0;
-        for (int z = 0; z < s.Materialy.Length; z++)
+        for (int z = 0; z < s.Pocet; z++)
         {
-            byte mat = s.Materialy[z]; if (mat == 0) continue;
+            byte mat = s.Material(z); if (mat == 0) continue;
             mm.SetInstanceTransform(k, new Transform3D(Basis.Identity, new Vector3(0, (z + 0.5f) * BunkaM, 0)));
             mm.SetInstanceColor(k, Barva(mat));
             k++;

@@ -13,7 +13,7 @@ public sealed class DotazySvetaApi : IDotazySveta
     public SloupecDto Sloupec(SouradniceQ16 p)
     {
         var g = Svet.Geologie;
-        return new SloupecDto(p, g.Povrch(p.XM, p.YM), g.Sloupec(p.XM, p.YM));
+        return new SloupecDto(p, g.Povrch(p.XM, p.YM), SloupecDto.Zabal(g.Sloupec(p.XM, p.YM)));
     }
 
     public BodDto Bod(SouradniceQ16 p)

@@ -1,7 +1,25 @@
 namespace Willage.Gen.Api.Dto;
 
-/// <summary>Sloupec geologie 0,25 m (MaterialId u8 odspodu) a povrch.</summary>
-public sealed record SloupecDto(SouradniceQ16 Poloha, double PovrchM, byte[] Materialy);
+/// <summary>
+/// Sloupec geologie po buňkách 0,25 m odspodu. G-3 review (bod 4): <c>Bunky</c> = 2 B na buňku jako Dev <c>ShellCellPayload</c>
+/// (bajt 0 = MaterialId u8, bajt 1 = varianta; varianta je zatím vždy 0, význam řeší jiná vrstva). Vzduch = materiál 0.
+/// Vzorkování: vodorovně přesně v bodě <c>Poloha</c> (pro sloupec buňky předej střed buňky, SouradniceQ16.StredBunky = min. roh + 0,125 m);
+/// svisle ve středu buňky, z = (i + 0,5) · 0,25 m. PovrchM = double metry nad dnem sloupce.
+/// </summary>
+public sealed record SloupecDto(SouradniceQ16 Poloha, double PovrchM, byte[] Bunky)
+{
+    public const int BajtuNaBunku = 2;
+    public int Pocet => Bunky.Length / BajtuNaBunku;
+    public byte Material(int i) => Bunky[BajtuNaBunku * i];
+    public byte Varianta(int i) => Bunky[BajtuNaBunku * i + 1];
+
+    public static byte[] Zabal(ReadOnlySpan<byte> materialy)
+    {
+        var b = new byte[materialy.Length * BajtuNaBunku];
+        for (int i = 0; i < materialy.Length; i++) b[BajtuNaBunku * i] = materialy[i];
+        return b;
+    }
+}
 
 /// <summary>Bod povrchu: výška, materiál povrchu, moře, klima (null bez klimatu).</summary>
 public sealed record BodDto(SouradniceQ16 Poloha, double PovrchM, int MaterialPovrchu, bool More, double? TeplotaC, double? SrazkyMm, string? Biom);

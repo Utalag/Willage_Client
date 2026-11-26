@@ -110,11 +110,15 @@ public static class TestyG3
         T.Je(S(g.Katalogy.DotceneModuly("v1/eroze_v1.json")) == "M4,M5,M6,M6d,M7,M8,M9" && S(g.Katalogy.DotceneModuly("v1/voda_v1.json")) == "M6,M6d,M7,M8,M9", "dotčené moduly souboru (+ závislé)");
         T.Je(g.Katalogy.NavrhVerze().Zastupny, "návrh verze katalogu: zástupné");
         var svet = g.Stav.Hotovo().Svet;
-        var bod = SouradniceQ16.ZMetru(1984.25, 1990.5);
+        var bod = SouradniceQ16.ZMetru(1984.375, 1990.625);   // střed buňky (7937, 7962)
         var sl = g.Dotazy.Sloupec(bod);
-        T.Je(sl.Materialy.AsSpan().SequenceEqual(svet.Geologie.Sloupec(1984.25, 1990.5)) && sl.PovrchM == svet.Geologie.Povrch(1984.25, 1990.5), $"Sloupec = GeologieCs ({sl.Materialy.Length} buněk, povrch {sl.PovrchM:F2} m)");
+        var geoSl = svet.Geologie.Sloupec(1984.375, 1990.625);
+        T.Je(sl.Pocet == geoSl.Length && Enumerable.Range(0, sl.Pocet).All(i => sl.Material(i) == geoSl[i] && sl.Varianta(i) == 0) && sl.PovrchM == svet.Geologie.Povrch(1984.375, 1990.625),
+            $"Sloupec = GeologieCs, 2 B na buňku (materiál, varianta 0) ({sl.Pocet} buněk, povrch {sl.PovrchM:F2} m)");
+        T.Je(SouradniceQ16.StredBunky(7937, 7962) == bod && SouradniceQ16.MinRohBunky(7937, 7962) == SouradniceQ16.ZMetru(1984.25, 1990.5) && SouradniceQ16.MinRohBunky(1, 2) == new SouradniceQ16(16384, 32768),
+            "buňka: min. roh (index jako Dev) a střed = roh + 0,125 m");
         var bd = g.Dotazy.Bod(bod);
-        T.Je(bd.Biom is not null && bd.TeplotaC == svet.Klima!.Teplota(1984.25, 1990.5) && bd.PovrchM == sl.PovrchM, $"Bod: {bd.PovrchM:F1} m, {bd.TeplotaC:F1} °C, {bd.Biom}");
+        T.Je(bd.Biom is not null && bd.TeplotaC == svet.Klima!.Teplota(1984.375, 1990.625) && bd.PovrchM == sl.PovrchM, $"Bod: {bd.PovrchM:F1} m, {bd.TeplotaC:F1} °C, {bd.Biom}");
         var rz = g.Dotazy.Rez(SouradniceQ16.ZMetru(1792, 1984), SouradniceQ16.ZMetru(2176, 1984), 2.0);
         T.Je(rz.PovrchM.Length == 193 && rz.PovrchM[0] == svet.Geologie.Povrch(1792, 1984) && rz.PovrchM[^1] == svet.Geologie.Povrch(2176, 1984), "Rez 384 m po 2 m: 193 vzorků, konce = povrch");
         var mv = g.Dotazy.Mapa(VrstvaMapyDto.Vyska); var mt = g.Dotazy.Mapa(VrstvaMapyDto.Teplota); var mb = g.Dotazy.Mapa(VrstvaMapyDto.Biom);
