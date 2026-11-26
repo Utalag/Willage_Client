@@ -13,7 +13,7 @@ public static class ErozeNastroj
 {
     static readonly CultureInfo C = CultureInfo.InvariantCulture;
     /// <summary>Volby: --more (krok 6b moře + sklon), --sklon S, --interp bilinearni|catmullrom|bspline.</summary>
-    public static bool More, Panve, Vypnuto; public static long? Seed; public static double? Sklon; public static string? Interp;
+    public static bool More, Panve, Vypnuto, BezKlimatu; public static long? Seed; public static double? Sklon; public static string? Interp;
 
     public static string[] Volby(string[] a)
     {
@@ -25,6 +25,7 @@ public static class ErozeNastroj
             else if (a[i] == "--interp") Interp = a[++i];
             else if (a[i] == "--hladina-krok4") { PrizpusobPrameny = true; UpravaPramenu = pv => pv with { HladinaSledujeErozi = false }; }
             else if (a[i] == "--panve") Panve = true;
+            else if (a[i] == "--bez-klimatu") BezKlimatu = true;   // 7b: klima výchozí zapnuto; --bez-klimatu = stav po kroku 6
             else if (a[i] == "--vypnuto") Vypnuto = true;   // 6d: VseKrok06 je výchozí zapnuto; --vypnuto = jen --more / --panve
             else if (a[i] == "--seed") Seed = long.Parse(a[++i]);
             else if (a[i] == "--planeta") KlimaNastroj.Planeta = a[++i];
@@ -237,14 +238,15 @@ public static class ErozeNastroj
     public static int Vse(string[] a, DataSveta d)
     {
         string? kes = a.Length > 2 ? a[2] : null;
-        var p = KonfiguraceSveta.VseZapnuto(d, Seed ?? 49);
+        ParametrySveta Vz() { var q = KonfiguraceSveta.VseZapnuto(d, Seed ?? 49); q.KlimaKrok07 = !BezKlimatu; return q; }
+        var p = Vz();
         var sw = Stopwatch.StartNew();
         var sv = KonfiguraceSveta.Sestav(p, d, kes, 8);
         Console.WriteLine($"vše zapnuto: sestavení {sw.ElapsedMilliseconds} ms, mapa {SouborMapy.Otisk(sv.Mapa!)}, vodníků {sv.Vodnici.Count}");
-        var (o, _, _) = OtiskKrok3.Spocti(KonfiguraceSveta.VseZapnuto(d, Seed ?? 49), d, uprav: g => g.Svet.Eroze = sv.Eroze);
+        var (o, _, _) = OtiskKrok3.Spocti(Vz(), d, uprav: g => g.Svet.Eroze = sv.Eroze);
         int p33 = 0;
-        var v = VodaBlok.Spust(true, d, svet: KonfiguraceSveta.VseZapnuto(d, Seed ?? 49), geo: g => g.Svet.Eroze = sv.Eroze,
-            uprav: fn => { fn.Prameny.Vodnici = new VodniciVeSvete(sv.Vodnici, fn.Geologie).VOblasti; p33 = fn.Prameny.VOblasti(1792, 1792, 2176, 2176).Count; });
+        var v = VodaBlok.Spust(true, d, svet: Vz(), geo: g => g.Svet.Eroze = sv.Eroze,
+            uprav: fn => { fn.Prameny.Vodnici = new VodniciVeSvete(sv.Vodnici, fn.Geologie).VOblasti; sv.NapojKlima(fn.Prameny); p33 = fn.Prameny.VOblasti(1792, 1792, 2176, 2176).Count; });
         Console.WriteLine($"vše zapnuto: krok 3 {o}   voda 14,14 {v.otisk} ({v.pramenu} pramenů; 3×3: {p33})");
         return 0;
     }
