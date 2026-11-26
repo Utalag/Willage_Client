@@ -8,6 +8,11 @@ return cmd switch
     "vyska" => PorovnejVysku.Spust(args[1], data) == 0 ? 0 : 1,
     "det3" => Det3(args, data),
     "voda" => Voda(args, data),
+    "sevy" => Sevy(args, data),
+    "rez" => Rez(args, data),
+    "sopka" => Sopka(data),
+    "prameny" => Prameny(data),
+    "cas" => Cas(args, data),
     _ => Napoveda(),
 };
 
@@ -29,3 +34,28 @@ static int Voda(string[] a, Willage.Gen.Data.DataSveta d)
     Console.WriteLine($"voda {(opravy ? "opravy" : "puvodni")} blok 14,14: {o}, pramenů {n}, init {init:F0} ms, blok {ms:F0} ms");
     return 0;
 }
+
+static int Sevy(string[] a, Willage.Gen.Data.DataSveta d)
+{
+    string o = a.Length > 1 ? a[1] : "vystup";
+    SevyMince.Spust(d, o);
+    return 0;
+}
+
+static int Rez(string[] a, Willage.Gen.Data.DataSveta d)
+{
+    // rez <výstupní složka> [xs] [y] [pul]
+    string o = a[1];
+    double xs = a.Length > 2 ? double.Parse(a[2], System.Globalization.CultureInfo.InvariantCulture) : 2048.0;
+    double y = a.Length > 3 ? double.Parse(a[3], System.Globalization.CultureInfo.InvariantCulture) : 1984.0;
+    double pul = a.Length > 4 ? double.Parse(a[4], System.Globalization.CultureInfo.InvariantCulture) : 48.0;
+    SevyMince.Rez(d, Path.Combine(o, "rez_puvodni.bin"), false, xs, y, pul);
+    SevyMince.Rez(d, Path.Combine(o, "rez_opravy.bin"), true, xs, y, pul);
+    return 0;
+}
+
+static int Sopka(Willage.Gen.Data.DataSveta d) { SopkaVoda.Spust(d); return 0; }
+
+static int Prameny(Willage.Gen.Data.DataSveta d) { HustotaPramenu.Spust(d); return 0; }
+
+static int Cas(string[] a, Willage.Gen.Data.DataSveta d) { Casy.Spust(d, a.Contains("--opravy"), a.Contains("--blok")); return 0; }

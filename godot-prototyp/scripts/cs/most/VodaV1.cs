@@ -1,22 +1,26 @@
 using System;
 using System.Collections.Generic;
 using Godot;
+using Willage.Gen.Data;
+using Willage.Gen.Geologie;
 using Willage.Gen.Materialy;
+using Willage.Gen.Svet;
 using Willage.Gen.Voda;
 
 namespace WillagePrototyp.Most;
 
 /// <summary>
 /// Fasáda kroku 4 pro GDScript hru a nástroje: load("res://scripts/cs/most/VodaV1.cs").new() → nastav(seed) → hladina(x, y), prameny_bloku(bx, by).
-/// Drží jen PodzemniVodaFn; žádná logika vody tady není.
+/// Drží jen PodzemniVodaFn; žádná logika vody tady není. Geologie je od kroku 5 nativní C# (GeologieCs);
+/// nastav_gd(seed) použije starý most do GDScriptu (jen reference pro porovnání).
 /// </summary>
 [GlobalClass]
 public partial class VodaV1 : RefCounted
 {
     public PodzemniVodaFn? Fn { get; private set; }
-    public GeologieGd? Geo { get; private set; }
+    public IGeologie? Geo { get; private set; }
 
-    public static PodzemniVodaFn Vytvor(GeologieGd geo, ParametryVody? p = null)
+    public static PodzemniVodaFn Vytvor(IGeologie geo, ParametryVody? p = null)
     {
         var kat = KatalogMaterialu.ZeSouboru(ProjectSettings.GlobalizePath("res://data/v1/materials-catalog-v1.json"));
         p ??= ParametryVody.ZJson(Godot.FileAccess.GetFileAsString("res://data/v1/voda_v1.json"));
@@ -24,6 +28,15 @@ public partial class VodaV1 : RefCounted
     }
 
     public void Nastav(int seed)
+    {
+        var data = new DataSveta(ProjectSettings.GlobalizePath("res://data"));
+        Geo = new GeologieCs(new ParametrySveta { Seed = seed }, data);
+        var p = ParametryVody.ZJson(Godot.FileAccess.GetFileAsString("res://data/v1/voda_v1.json")) with { Seed = (uint)seed };
+        Fn = Vytvor(Geo, p);
+    }
+
+    /// <summary>Reference: geologie přes most do GDScriptu (krok 4).</summary>
+    public void NastavGd(int seed)
     {
         Geo = new GeologieGd(seed);
         var p = ParametryVody.ZJson(Godot.FileAccess.GetFileAsString("res://data/v1/voda_v1.json")) with { Seed = (uint)seed };
