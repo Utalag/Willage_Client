@@ -43,7 +43,7 @@ public static class SouborPlanety
         var mag = Encoding.ASCII.GetString(r.ReadBytes(4));
         if (mag != Magie) throw new InvalidDataException("není soubor planety WPLN");
         int v = r.ReadInt32();
-        if (v != Verze) throw new InvalidDataException($"nepodporovaná verze WPLN {v} (umím {Verze})");
+        if (v < 1 || v > Verze) throw new InvalidDataException($"nepodporovaná verze formátu WPLN {v} (umím 1–{Verze}; viz KompatibilitaPlanety)");
         string gen = r.ReadString(); long seed = r.ReadInt64(); string souhrn = r.ReadString();
         var man = new List<PolozkaManifestu>(); int n = r.ReadInt32();
         for (int i = 0; i < n; i++) man.Add(new PolozkaManifestu(r.ReadString(), r.ReadInt64(), r.ReadString()));

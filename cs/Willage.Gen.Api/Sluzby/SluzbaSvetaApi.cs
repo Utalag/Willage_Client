@@ -46,7 +46,8 @@ public sealed class SluzbaSvetaApi : ISluzbaSveta
     public PlanetaInfoDto Nacti(string cesta)
     {
         var p = SouborPlanety.Nacti(cesta);
-        if (p.GenVer != Pipeline.KlicModulu.GenVer) throw new InvalidDataException($"planeta je z generátoru {p.GenVer}, tento je {Pipeline.KlicModulu.GenVer}");
+        if (KompatibilitaPlanety.Urci(p) == UrovenKompatibility.Nepodporovana)
+            throw new InvalidDataException($"planeta je z neznámého generátoru {p.GenVer} (známé: {string.Join(", ", KompatibilitaPlanety.ZnameGenVer)})");
         _s.Sada = SadaParametru.ZJson(p.SadaJson, _s.Schema, SadaParametru.ZDat(_s.Data));
         _s.Potvrzena = p.Potvrzena;
         return Info(p);
@@ -61,6 +62,6 @@ public sealed class SluzbaSvetaApi : ISluzbaSveta
     {
         var kl = _s.Klice();
         var neplatne = p.Klice.Where(k => StavGeneratoru.Klic(kl, k.Key) != k.Value).Select(k => k.Key).ToList();
-        return new PlanetaInfoDto(p.GenVer, p.Seed, p.Potvrzena, p.ManifestSouhrn, SouborPlanety.RozdilyDat(p, _s.Manifest()), neplatne, p.Upravy.Count, SouborPlanety.Otisk(p));
+        return new PlanetaInfoDto(p.GenVer, p.Seed, p.Potvrzena, p.ManifestSouhrn, SouborPlanety.RozdilyDat(p, _s.Manifest()), neplatne, p.Upravy.Count, SouborPlanety.Otisk(p), KompatibilitaPlanety.Urci(p).ToString());
     }
 }

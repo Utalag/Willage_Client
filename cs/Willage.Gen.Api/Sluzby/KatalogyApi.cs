@@ -13,7 +13,16 @@ public sealed class KatalogyApi : IKatalogy
     {
         var m = _s.Manifest();
         return new ManifestDto(m.Souhrn, m.Polozky.Select(x => new PolozkaKataloguDto(x.Cesta, x.Velikost, x.Sha256,
-            _s.Pipeline.Graf.Poradi.Where(mo => mo.Soubory.Contains(x.Cesta)).Select(mo => mo.Id).ToList())).ToList());
+            _s.Pipeline.Graf.Poradi.Where(mo => mo.Soubory.Contains(x.Cesta)).Select(mo => mo.Id).ToList())).ToList(), PinKatalogu(m));
+    }
+
+    /// <summary>Katalog materiálů: schemaVersion z JSON a SHA z manifestu.</summary>
+    PinKataloguDto PinKatalogu(ManifestKatalogu m)
+    {
+        string rel = ManifestKatalogu.Relativni(_s.Data.Koren, _s.Data.KatalogMaterialu);
+        using var doc = System.Text.Json.JsonDocument.Parse(File.ReadAllText(_s.Data.KatalogMaterialu));
+        int sv = doc.RootElement.TryGetProperty("schemaVersion", out var v) ? v.GetInt32() : 0;
+        return new PinKataloguDto(rel, sv, m.ShaSouboru(rel));
     }
 
     /// <summary>Moduly, které soubor čtou, a všechny závislé (soubor, který nečte nikdo, mění jen klíč M7 a dál).</summary>
