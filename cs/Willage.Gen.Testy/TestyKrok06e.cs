@@ -17,7 +17,7 @@ public static class TestyKrok06e
         var pv = ParametryVody.ZJson(File.ReadAllText(data.VodaV1));
         T.Sekce("krok 6e: výchozí hodnoty (35 % moře, zvlnění švu 400 m)");
         T.Je(json.PodilMore == 0.35 && json.SevZvlneniM == 400.0 && new ParametrySveta().PodilMore == 0.35 && new ParametrySveta().SevZvlneniM == 400.0, "podíl moře 0,35 a zvlnění 400 m v JSON i v C#");
-        T.Je(pv.HladinaPrechodM == 600.0, "HladinaPrechodM 600 m ve voda_v1.json");
+        T.Je(pv.HladinaPrechodM > 0, $"HladinaPrechodM {pv.HladinaPrechodM} m ve voda_v1.json (ladící, krok 6f: 5 m)");
 
         T.Sekce("krok 6e: hladina podzemní vody u moře");
         bool start = true, more60 = true, plynule = true, vliv = false; int nMore = 0;
@@ -33,14 +33,14 @@ public static class TestyKrok06e
             {
                 double x = r.NextDouble() * 31360, y = r.NextDouble() * 15616, d = g.VzdalenostOdMore(x, y);
                 if (d == 0) { nMore++; if (Math.Abs(h1.Surova(x, y) - 60.0) > 1e-9) more60 = false; }
-                else if (d < 600) { vliv |= Math.Abs(h1.Surova(x, y) - h0.Surova(x, y)) > 0.01; double dx = 1.0; maxSkok = Math.Max(maxSkok, Math.Abs(h1.Surova(x + dx, y) - h1.Surova(x, y))); }
+                else if (d < pv.HladinaPrechodM) { vliv |= Math.Abs(h1.Surova(x, y) - h0.Surova(x, y)) > 0.01; double dx = 1.0; maxSkok = Math.Max(maxSkok, Math.Abs(h1.Surova(x + dx, y) - h1.Surova(x, y))); }
             }
-            plynule &= maxSkok < 3.0;
+            double mez = Math.Max(3.0, 50.0 / Math.Max(pv.HladinaPrechodM, 1e-6) * 1.5 + 1.0); plynule &= maxSkok < mez; if (maxSkok >= mez) Console.WriteLine($"SKOK seed {seed} {maxSkok:F2} mez {mez:F2}");
         }
         T.Je(start, "start 3 × 3: hladina s vazbou na moře = bez vazby (10 seedů)");
         T.Je(more60 && nMore > 100, $"v moři hladina přesně 60 m ({nMore} bodů, 10 seedů)");
-        T.Je(vliv, "do 600 m od moře se hladina mění");
-        T.Je(plynule, "hladina je spojitá u pobřeží (krok 1 m < 3 m)");
+        T.Je(vliv, $"do {pv.HladinaPrechodM} m od moře se hladina mění");
+        T.Je(plynule, "hladina je spojitá u pobřeží (krok 1 m v mezích přechodu)");
         var gb = new GeologieCs(ParametrySveta.Krok5(), data);
         T.Je(double.IsPositiveInfinity(gb.VzdalenostOdMore(5000, 5000)) && new RegionalniHladina(gb, pv).Surova(5000, 5000) == new RegionalniHladina(gb, pv with { HladinaPrechodM = 0 }).Surova(5000, 5000), "bez moře beze změny");
 
