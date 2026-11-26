@@ -32,8 +32,8 @@ public sealed record ParametryVody
     // krok 6b: hladina se počítá z povrchu před erozí a sníží se o hrubou erozi (koryto pak hladinu odkryje); bez eroze beze změny
     public bool HladinaSledujeErozi { get; init; } = true;
 
-    // krok 6e (Jan 11:15): hladina podzemní vody u moře = hladina moře; plynulý přechod do vnitrozemí na této vzdálenosti od moře (m); 0 = vypnuto
-    public double HladinaPrechodM { get; init; } = 600.0;
+    // krok 6e/6f (Jan 11:15, 11:33–11:34): u moře = hladina moře; plynulý přechod do vnitrozemí na této vzdálenosti od břehu (m, výchozí 5); 0 = vypnuto
+    public double HladinaPrechodM { get; init; } = 5.0;
 
     public static ParametryVody ZJson(string json) =>
         JsonSerializer.Deserialize<ParametryVody>(json, new JsonSerializerOptions { PropertyNameCaseInsensitive = true }) ?? new();

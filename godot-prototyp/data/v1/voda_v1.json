@@ -7,5 +7,5 @@
   "bunkaPramenuM": 24.0, "krokKandidatuM": 2.0, "pravdepodobnostBunky": 0.6, "rozestupM": 8.0, "sklonKontakt": 0.5,
   "qSnih": 4.0, "qKontakt": 1.5, "qKras": 5.0, "qVyver": 1.0,
   "tlakovy": false,
-  "hladinaPrechodM": 600.0
+  "hladinaPrechodM": 5.0
 }

@@ -61,20 +61,30 @@ public sealed class MoreSklon
         return d;
     }
 
-    /// <summary>Vzdálenost k moři (m), bilineárně z hrubé mřížky, periodicky.</summary>
+    /// <summary>Krok 6f: vzdálenost k moři pro hladinu podzemní vody. U pobřeží (hrubá D ≤ 32 m) z masky po 1 m, jinak hrubá mřížka 64 m (ta nestačí na pás 5 m).</summary>
+    public double VzdalenostOdMoreJemna(double x, double y)
+    {
+        if (Pevnina(x, y) < 0.5) return 0.0;
+        double d = VzdalenostOdMore(x, y);
+        if (d > 32.0) return d;
+        double best = d;
+        const int R = 16;
+        for (int j = -R; j <= R; j++)
+        for (int i = -R; i <= R; i++)
+        {
+            if (i == 0 && j == 0) continue;
+            double q = i * i + j * j; if (q >= best * best) continue;
+            if (Pevnina(x + i, y + j) < 0.5) best = Math.Sqrt(q);
+        }
+        return best;
+    }
+
+    /// <summary>Vzdálenost k moři (m), bilineárně z hrubé mřížky, periodicky (sklon kontinentu, pánve).</summary>
     public double VzdalenostOdMore(double x, double y)
     {
         double fx = x / _s, fy = y / _s; int i = (int)Math.Floor(fx), j = (int)Math.Floor(fy); double u = fx - i, v = fy - j;
         double D(int a, int b) => _d[Mod(b, _ny) * _nx + Mod(a, _nx)];
         return (D(i, j) * (1 - u) + D(i + 1, j) * u) * (1 - v) + (D(i, j + 1) * (1 - u) + D(i + 1, j + 1) * u) * v;
-    }
-
-    /// <summary>Krok 6e: vzdálenost k moři pro hladinu podzemní vody; start 3 × 3 je chráněn (vzdálenost se tam zvětší, takže se hladina k moři neváže – otisky startu beze změny).</summary>
-    public double VzdalenostProVodu(double x, double y)
-    {
-        double d = VzdalenostOdMore(x, y);
-        double dst = Maska.VzdalenostOdStartu(x, y);
-        return d + 1.0e5 * (1.0 - Gd.Smoothstep(_p.StartVodaOchranaM, _p.StartVodaOchranaM + _p.StartVodaPrechodM, dst));
     }
 
     public string Kanonicky() => FormattableString.Invariant(
