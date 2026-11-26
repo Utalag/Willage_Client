@@ -599,7 +599,15 @@ Skupiny: 1 Prototyp a buildy · 2 Terén a tvar · 3 Rozlišení bloku · 4 Ská
 - **Komplikace:** ostrovy v průlivech jen 0–2 na seed a malé (průlivy ~1 km); zvlnění 900 m bere moře průlivům → víc šíjí (samostatné pevniny 1–2). Řez ukázal, že podzemní voda o moři neví a mořské dno nemá sedimenty.
 - **Další krok:** otázky v PROP (zvlnění 400/900 m, ostrovy, hladina podzemní vody u moře, mořské dno); merge 06 → 06d do main.
 
+### 🧪 Generátor V1 krok 6e: moře 35 %, hladina podzemní vody u moře, zvlnění švu jako ladící parametr (2026-11-26 11:45 · větev `gen-v1-krok06e-doladeni`, `cs/Willage.Gen/{Svet,Voda,Geologie}/`, `data/v1/{more,voda}_v1.json`, PROP `docs/sjednoceni/reporty/krok06e-prop.md`, shots `godot-prototyp/shots/krok06e/`)
+- **Směr:** Jan 11:15 + 11:22. Zvlnění švu 400 m (parametry `SevZvlneniM`, `SevZvlneniLambdaMinM/MaxM` v `more_v1.json`, v klíči); výchozí podíl moře 35 %; hladina podzemní vody = 60 m u moře a v moři, přechod 600 m (`HladinaPrechodM`); rozhodnutí 6–6e a nové pořadí (klima a biomy, předherní editor světa) do plánu 04 na větvi `docs-plan04-krok06e`.
+- **Zlepšení:** samostatné pevniny ≥ 2 v 9 z 10 seedů (dříve 3 z 10), ostrovy v průlivech 22 na 10 seedů (dříve 5); moře skutečné o 0,6–0,9 p. b. pod cílem; start beze změny bez eroze (krok 3 c8eeb7964d1ddd85, voda 7714d1a1d34e00ad), s erozí krok 3 9f32311e046f8b6a, voda 8e239a68c6d01be0, mapa 800d420bb00047de; 5–6 s, ≤ 221 MB, deterministické; testy 100/100.
+- **Komplikace:** moře je 155–680 m od startu → vazba hladiny na moře měnila start (18 → 2 prameny), proto ochrana startu pro vodu. Hladina 60 m vodorovně u pobřeží: u strmých břehů hluboko pod povrchem, u pozvolných vývěry.
+- **TODO:** mořské usazeniny na dně spolu s náplavy a deltami (samostatný krok).
+- **Další krok:** schválení; merge 06e (a docs větve) do main dělá Willage-backend.
+
 ### 💡 TODO: náplavy a delty jako samostatný krok po kroku 6b (2026-11-26 9:59, Jan, bod 7)
+- **Doplněno 2026-11-26 11:15 (Jan, 6e):** součástí stejného kroku i **mořské usazeniny na dně moře** (sedimenty pod mořem, dnes dno = stejné vrstvy jako pevnina).
 - Eroze kroku 6 jen odebírá. Náplavy (ukládání v jezerech a nivách) a delty u ústí do moře jako samostatný krok: stream power s depozicí (FastScape / Yuan et al.), ukládání do mapy WGER a do geologie jako nová vrstva.
 
 ## 3 Rozlišení bloku
