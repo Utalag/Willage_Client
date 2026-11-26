@@ -2,7 +2,7 @@ namespace Willage.Gen.Geologie;
 
 /// <summary>
 /// Co krok 4 potřebuje z funkce světa kroků 1–3 (souřadnice světa v m, z nahoru, 0 = dno sloupce 128 m).
-/// Dnes ji dává GDScript (svet_fn.gd / geo_vrstvy.gd) přes adaptér GeologieGd; po portu ji dá C# beze změny volajících.
+/// Nativně ji dává GeologieCs (krok 5); GDScript přes most GeologieGd zůstává jako reference pro porovnání.
 /// </summary>
 public interface IGeologie
 {
@@ -20,4 +20,10 @@ public interface IGeologie
 
     /// <summary>Mince E82 sloupce (vápenec zvednut k odhadu hladiny − 2 m).</summary>
     bool Mince82(double x, double y);
+
+    /// <summary>Síla mince E82 0–1 (krok 5: spojitý přechod přes šev bloků); výchozí = mince jako 0/1.</summary>
+    double Mince82Sila(double x, double y) => Mince82(x, y) ? 1.0 : 0.0;
+
+    /// <summary>Maska buněk sloupce v nitru sopky (průduch, láva, popel), nebo null mimo sopku. Krok 5: voda je bere jako těsnění.</summary>
+    bool[]? NitroSopky(double x, double y) => null;
 }
