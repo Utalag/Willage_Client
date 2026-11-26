@@ -26,6 +26,7 @@ return cmd switch
     "moduly" => Moduly(data),
     "schema" => Schema(args, data),
     "api" => Api(args, data),
+    "nahled" => Nahled(args, data),
     "cas" => Cas(args, data),
     "par" => Paralelne.Spust(data, args.Contains("--puvodni"), args.Skip(1).Where(s => int.TryParse(s, out _)).Select(int.Parse).DefaultIfEmpty(1).ToArray()) == 0 ? 0 : 1,
     "klima" => args[1] switch
@@ -122,6 +123,40 @@ static int Api(string[] a, Willage.Gen.Data.DataSveta d)
             return 0;
         default: return Napoveda();
     }
+}
+
+/// G-6: náhledy M1–M3 přes fasádu – „nahled porovnej-rez rez_opravy.bin [kes]“ porovná řez M3 s výstupem nástroje „rez“ bajt po bajtu,
+/// „nahled otisky [kes]“ vypíše SHA (16 hex) všech vrstev náhledu 256×256 (pro porovnání mezi větvemi / s Godot náhledem).
+static int Nahled(string[] a, Willage.Gen.Data.DataSveta d)
+{
+    string sub = a.Length > 1 ? a[1] : "otisky";
+    string? kes = sub == "porovnej-rez" ? (a.Length > 3 ? a[3] : null) : (a.Length > 2 ? a[2] : null);
+    var g = new Willage.Gen.Api.GeneratorSveta(d, kes);
+    g.Sluzba.Generuj();
+    if (sub == "porovnej-rez")
+    {
+        using var r = new BinaryReader(File.OpenRead(a[2]));
+        int nx = r.ReadInt32(), nz = r.ReadInt32(); double x0 = r.ReadDouble(), y = r.ReadDouble();
+        var rez = g.Nahledy.Rez("M3", Willage.Gen.Api.Dto.SouradniceQ16.ZMetru(x0, y), Willage.Gen.Api.Dto.SouradniceQ16.ZMetru(x0 + nx * 0.25, y), 0.25);
+        int bunek = 0, povrch = 0;
+        for (int i = 0; i < nx; i++)
+        {
+            double pv = r.ReadDouble(); r.ReadDouble();
+            var sl = r.ReadBytes(nz);
+            if (BitConverter.DoubleToInt64Bits(pv) != BitConverter.DoubleToInt64Bits(rez.PovrchM[i])) povrch++;
+            for (int k = 0; k < nz; k++) if (sl[k] != rez.Material(i, k)) bunek++;
+        }
+        Console.WriteLine($"řez M3 x {x0}…{x0 + nx * 0.25}, y {y}: {nx}×{nz} buněk, rozdílných buněk {bunek}, rozdílných povrchů {povrch} (náhled {rez.Ms:F0} ms)");
+        return bunek + povrch == 0 ? 0 : 1;
+    }
+    foreach (var m in g.Nahledy.Moduly())
+        foreach (var v in g.Nahledy.Vrstvy(m))
+        {
+            var n = g.Nahledy.Mapa(m, v, 256);
+            var b = new byte[n.Hodnoty.Length * 4]; Buffer.BlockCopy(n.Hodnoty, 0, b, 0, b.Length);
+            Console.WriteLine($"{m}.{v,-16} {Willage.Gen.Katalogy.ManifestKatalogu.Sha(b)[..16]}  min {n.Cisla["min"]:F2} max {n.Cisla["max"]:F2}  {n.Ms:F0} ms");
+        }
+    return 0;
 }
 
 static int Det3(string[] a, Willage.Gen.Data.DataSveta d)
