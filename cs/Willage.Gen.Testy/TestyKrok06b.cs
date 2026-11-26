@@ -16,7 +16,7 @@ public static class TestyKrok06b
         bool vse = true; var podily = new HashSet<double>();
         foreach (long seed in new long[] { 49, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11 })
         {
-            var p = json.Uplatni(new ParametrySveta { Seed = seed, More = true });
+            var p = json.Uplatni(new ParametrySveta { Seed = seed, More = true, VseKrok06 = false });
             var ms = new MoreSklon(p, seed, new HashSveta(seed));
             podily.Add(ms.Podil);
             bool ok = ms.StartNaPevnine && ms.StartBezPosunu && Math.Abs(ms.Podil - 0.30) <= 0.05 + 1e-12;
@@ -30,8 +30,8 @@ public static class TestyKrok06b
         T.Je(podily.Count == 12, "odchylka podílu moře se mění se seedem");
 
         T.Sekce("krok 6b: moře vypnuté / zapnuté ve start světě");
-        var s0 = new SvetFn(new ParametrySveta(), data);
-        var s1 = new SvetFn(json.Uplatni(new ParametrySveta { More = true }), data);
+        var s0 = new SvetFn(ParametrySveta.Krok5(), data);
+        var s1 = new SvetFn(json.Uplatni(new ParametrySveta { More = true, VseKrok06 = false }), data);
         double md = 0; for (double x = 1792; x < 2176; x += 3.7) for (double y = 1792; y < 2176; y += 5.3) md = Math.Max(md, Math.Abs(s0.Vyska(x, y) - s1.Vyska(x, y)));
         T.Je(md == 0, "start svět s mořem a sklonem beze změny (pobřežní rovina)");
 
@@ -39,7 +39,7 @@ public static class TestyKrok06b
         var pe = ParametryEroze.ZJson(File.ReadAllText(data.ErozeV1)) with { PlanetaXM = 8192, PlanetaYM = 4096, KrokuCasu = 3 };
         (string otisk, string klic, double more, int panvi) Beh(ParametryMore pm)
         {
-            var ps = new ParametrySveta { More = true, Panve = true, StartBlok = new[] { 20, 12 } };
+            var ps = new ParametrySveta { More = true, Panve = true, VseKrok06 = false, StartBlok = new[] { 20, 12 } };
             var sv = ErozePlanety.SvetPlanety(ps, data, pe);
             pm.Uplatni(sv.P);                       // přepsat hodnoty ze souboru testovanými
             sv = new SvetFn(sv.P, data);
@@ -58,7 +58,7 @@ public static class TestyKrok06b
 
         T.Sekce("krok 6b: jezera a interpolace");
         var pe2 = pe with { PlanetaXM = 2048, PlanetaYM = 1024, KrokuCasu = 3 };
-        var sv2 = ErozePlanety.SvetPlanety(new ParametrySveta(), data, pe2);
+        var sv2 = ErozePlanety.SvetPlanety(ParametrySveta.Krok5(), data, pe2);
         var m2 = VypocetEroze.Spocti(ErozePlanety.Podklad(sv2, pe2), pe2, 2, out _);
         var jez = Jezera.Najdi(m2);
         bool hl = jez.Count > 0;

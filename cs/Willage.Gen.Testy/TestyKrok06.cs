@@ -11,7 +11,7 @@ public static class TestyKrok06
     {
         var data = DataSveta.Najdi(AppContext.BaseDirectory);
         var pe = ParametryEroze.ZJson(File.ReadAllText(data.ErozeV1)) with { PlanetaXM = 2048, PlanetaYM = 1024, KrokuCasu = 5, AKritM2 = 50_000 };
-        var svet = ErozePlanety.SvetPlanety(new ParametrySveta(), data, pe);
+        var svet = ErozePlanety.SvetPlanety(ParametrySveta.Krok5(), data, pe);
         var pod = ErozePlanety.Podklad(svet, pe);
 
         T.Sekce("krok 6: periodický podklad");
@@ -59,7 +59,7 @@ public static class TestyKrok06
         }
         T.Je(maxSev < 0.05, $"hloubka eroze spojitá přes šev torusu (max skok 2 cm: {maxSev:F4} m)");
         T.Je(maxKrok < 0.05, $"hloubka eroze spojitá uvnitř (max skok 2 cm: {maxKrok:F4} m)");
-        var s0 = new SvetFn(new ParametrySveta(), data);
+        var s0 = new SvetFn(ParametrySveta.Krok5(), data);
         double h0 = s0.Vyska(2000.3, 1900.7); s0.Eroze = ef; double h1 = s0.Vyska(2000.3, 1900.7), t1 = s0.VyskaTvar(2000.3, 1900.7);
         s0.Eroze = null;
         T.Blizko(h0 - h1, ef.Hloubka(2000.3, 1900.7), 1e-12, "přepínač: povrch − hloubka eroze");

@@ -30,7 +30,7 @@ public static class TestyKrok06c
         bool okPocet = true, okPodil = true; var kont = new HashSet<int>();
         foreach (long seed in new long[] { 49, 1, 2, 3, 4, 5, 6, 7 })
         {
-            var p = json.Uplatni(new ParametrySveta { Seed = seed, More = true });
+            var p = json.Uplatni(new ParametrySveta { Seed = seed, More = true, VseKrok06 = false });
             var m = new MaskaPevniny(p, new HashSveta(seed));
             kont.Add(m.Kontinentu);
             okPocet &= m.Kontinentu >= p.KontinentuMin && m.Kontinentu <= p.KontinentuMax;
@@ -47,7 +47,7 @@ public static class TestyKrok06c
         var pe = ParametryEroze.ZJson(File.ReadAllText(data.ErozeV1)) with { PlanetaXM = 8192, PlanetaYM = 4096, KrokuCasu = 3 };
         (string otisk, string klic) Beh(ParametryMore pm)
         {
-            var ps = new ParametrySveta { More = true, StartBlok = new[] { 20, 12 } };
+            var ps = new ParametrySveta { More = true, VseKrok06 = false, StartBlok = new[] { 20, 12 } };
             var sv = ErozePlanety.SvetPlanety(ps, data, pe);
             pm.Uplatni(sv.P);
             sv = new SvetFn(sv.P, data);
@@ -62,8 +62,8 @@ public static class TestyKrok06c
         T.Je(c.otisk != a.otisk && c.klic != a.klic, "členitost: jiný otisk i klíč");
 
         T.Sekce("krok 6c: přepínač vše zapnuto");
-        T.Je(!new ParametrySveta().VseKrok06 && !new ParametrySveta().More && !new ParametrySveta().Panve, "výchozí: vše vypnuto");
-        var p0 = new ParametrySveta(); var pv = KonfiguraceSveta.VseZapnuto(data);
+        T.Je(new ParametrySveta().VseKrok06 && !ParametrySveta.Krok5().VseKrok06, "výchozí od 6d: vše zapnuto (Krok5() = vypnuto)");
+        var p0 = ParametrySveta.Krok5(); var pv = KonfiguraceSveta.VseZapnuto(data);
         var s0 = new SvetFn(p0, data); var sv1 = new SvetFn(pv, data);
         T.Je(sv1.More is not null && sv1.Panve is not null, "VseKrok06 zapne moře i pánve");
         double md = 0; for (double x = 1792; x < 2176; x += 3.7) for (double y = 1792; y < 2176; y += 5.3) md = Math.Max(md, Math.Abs(s0.Vyska(x, y) - sv1.Vyska(x, y)));
