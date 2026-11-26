@@ -4,6 +4,7 @@ using Willage.Gen.Data;
 using Willage.Gen.Eroze;
 using Willage.Gen.Geologie;
 using Willage.Gen.Svet;
+using Willage.Gen.Voda;
 
 namespace Willage.Gen.Nastroje;
 
@@ -12,7 +13,7 @@ public static class ErozeNastroj
 {
     static readonly CultureInfo C = CultureInfo.InvariantCulture;
     /// <summary>Volby: --more (krok 6b moře + sklon), --sklon S, --interp bilinearni|catmullrom|bspline.</summary>
-    public static bool More; public static double? Sklon; public static string? Interp;
+    public static bool More, Panve; public static double? Sklon; public static string? Interp;
 
     public static string[] Volby(string[] a)
     {
@@ -22,6 +23,8 @@ public static class ErozeNastroj
             if (a[i] == "--more") More = true;
             else if (a[i] == "--sklon") Sklon = double.Parse(a[++i], C);
             else if (a[i] == "--interp") Interp = a[++i];
+            else if (a[i] == "--prameny") PrizpusobPrameny = true;
+            else if (a[i] == "--panve") Panve = true;
             else r.Add(a[i]);
         }
         return r.ToArray();
@@ -29,7 +32,7 @@ public static class ErozeNastroj
 
     public static ParametrySveta Ps()
     {
-        var p = new ParametrySveta { More = More };
+        var p = new ParametrySveta { More = More, Panve = Panve };
         if (Sklon is double s) p.SklonKontinentu = s;
         return p;
     }
@@ -103,6 +106,9 @@ public static class ErozeNastroj
         int more = 0; for (int k = 0; k < m.T.N; k++) if ((m.Priznaky[k] & MapaEroze.Odtok) != 0) more++;
         Console.WriteLine($"  řeky (ústí → nejdelší pramen): {r.Count}, max {(l.Length > 0 ? l[^1] / 1000 : 0):F1} km, medián {(l.Length > 0 ? l[l.Length / 2] : 0):F0} m, > 5 km: {l.Count(x => x > 5000)}, > 10 km: {l.Count(x => x > 10000)}; odtok/moře {100.0 * more / m.T.N:F1} %");
         Console.WriteLine($"  největší povodí řek (km²): {string.Join(", ", p)}");
+        var j = Jezera.Najdi(m);
+        double plocha = j.Sum(x => x.PlochaM2);
+        Console.WriteLine($"  jezera: {j.Count}, plocha celkem {plocha / 1e6:F1} km² ({100 * plocha / (m.T.N * m.T.Krok * m.T.Krok):F1} %), > 0,1 km²: {j.Count(x => x.PlochaM2 > 1e5)}, > 1 km²: {j.Count(x => x.PlochaM2 > 1e6)}; největší (km²/hloubka m): {string.Join(", ", j.Take(5).Select(x => FormattableString.Invariant($"{x.PlochaM2 / 1e6:F2}/{x.MaxHloubkaM:F1}")))}");
     }
 
     static void Statistiky(MapaEroze m, List<Tok> toky, List<Vodnik> vod, ParametryEroze pe)
@@ -148,10 +154,11 @@ public static class ErozeNastroj
         foreach (var x in m.H0) w.Write(x);
         foreach (var x in m.H) w.Write(x);
         foreach (var x in m.A) w.Write(x);
+        foreach (var x in m.Vypln) w.Write(x);
         w.Write(m.Priznaky);
     }
 
-    /// <summary>Otisky kroku 3 a vody 14,14 s erozí zapnutou (mapa ze souboru) a vypnutou.</summary>
+    /// <summary>Otisky kroku 3 a vody 14,14: výchozí, moře, moře + eroze, moře + eroze + vodníci (mapa ze souboru s --more).</summary>
     public static int Otisky(string[] a, DataSveta d)
     {
         string f = a[2]; double krok = double.Parse(a[3], C);
@@ -159,22 +166,62 @@ public static class ErozeNastroj
         var svet = ErozePlanety.SvetPlanety(Ps(), d, pe);
         var m = SouborMapy.Nacti(f, ErozePlanety.Klic(svet, d, pe)) ?? throw new Exception("mapa nesedí s klíčem");
         var ef = new ErozeSvetaFn(m, pe); var vod = Vodnici.Najdi(m, svet, pe);
-        var (o0, _, _) = OtiskKrok3.Spocti(new ParametrySveta(), d);
-        var (o1, _, _) = OtiskKrok3.Spocti(new ParametrySveta(), d, uprav: g => g.Svet.Eroze = ef);
-        Console.WriteLine($"det3: vypnuto {o0}, eroze {o1}");
-        var v0 = VodaBlok.Spust(true, d);
-        var v1 = VodaBlok.Spust(true, d, geo: g => g.Svet.Eroze = ef);
-        var v2 = VodaBlok.Spust(true, d, geo: g => g.Svet.Eroze = ef,
-            uprav: fn => fn.Prameny.Vodnici = new VodniciVeSvete(vod, fn.Geologie).VOblasti);
-        Console.WriteLine($"voda 14,14: vypnuto {v0.otisk} ({v0.pramenu} pramenů), eroze {v1.otisk} ({v1.pramenu}), eroze+vodníci {v2.otisk} ({v2.pramenu})");
+        Func<ParametryVody, ParametryVody>? voda = PrizpusobPrameny ? UpravaPramenu : null;
+        void Radek(string jmeno, ParametrySveta ps, bool eroze, bool vodnici)
+        {
+            var (o, _, _) = OtiskKrok3.Spocti(ps, d, uprav: eroze ? g => g.Svet.Eroze = ef : null);
+            var v = VodaBlok.Spust(true, d, svet: ps, voda: eroze ? voda : null, geo: eroze ? g => g.Svet.Eroze = ef : null,
+                uprav: vodnici ? fn => fn.Prameny.Vodnici = new VodniciVeSvete(vod, fn.Geologie).VOblasti : null);
+            Console.WriteLine($"{jmeno,-28} krok 3 {o}   voda 14,14 {v.otisk} ({v.pramenu} pramenů)");
+        }
+        Radek("výchozí (vše vypnuto)", new ParametrySveta(), false, false);
+        if (More) Radek("moře + sklon", Ps(), false, false);
+        Radek("eroze", Ps(), true, false);
+        Radek("eroze + vodníci", Ps(), true, true);
+        // start svět 3 × 3 na pevnině?
+        var sv = new SvetFn(Ps(), d); int more = 0, n = 0; double minPev = 1, minH = 1e9, maxPos = -1e9, minPos = 1e9;
+        for (double x = 1792; x < 2176; x += 4) for (double y = 1792; y < 2176; y += 4)
+        {
+            n++; double h = sv.Vyska(x, y); minH = Math.Min(minH, h);
+            if (sv.More is { } ms) { minPev = Math.Min(minPev, ms.Pevnina(x, y)); if (ms.JeMore(x, y, h)) more++; double o = ms.Posun(x, y); maxPos = Math.Max(maxPos, o); minPos = Math.Min(minPos, o); }
+        }
+        Console.WriteLine($"start 3×3: moře {more}/{n} bodů, min podíl pevniny {minPev:F3}, min povrch {minH:F2} m, posun moře/sklonu {minPos:F2}…{maxPos:F2} m");
         int vStart = vod.Count(v => v.X >= 1792 && v.X < 2176 && v.Y >= 1792 && v.Y < 2176);
         Console.WriteLine($"vodníků ve start světě 3×3: {vStart}");
-        var bl = vod.OrderBy(v => (v.X - 2048) * (v.X - 2048) + (v.Y - 2048) * (v.Y - 2048)).First();
-        int bx = (int)Math.Floor(bl.X / 128), by = (int)Math.Floor(bl.Y / 128);
-        var b0 = VodaBlok.Spust(true, d, bx, by, geo: g => g.Svet.Eroze = ef);
-        var b1 = VodaBlok.Spust(true, d, bx, by, geo: g => g.Svet.Eroze = ef,
-            uprav: fn => fn.Prameny.Vodnici = new VodniciVeSvete(vod, fn.Geologie).VOblasti);
-        Console.WriteLine(FormattableString.Invariant($"nejbližší vodník ke startu ({bl.X},{bl.Y}) Q {bl.QLs:F2} l/s, blok {bx},{by}: bez vodníků {b0.otisk} ({b0.pramenu}), s vodníky {b1.otisk} ({b1.pramenu})"));
+        return 0;
+    }
+
+    public static bool PrizpusobPrameny;
+    public static Func<ParametryVody, ParametryVody> UpravaPramenu = pv => pv;
+
+    /// <summary>Diagnostika pramenů bloku: vývěr, materiál povrchu v zóně vývěru, kandidáti buněk (vypnuto vs. eroze).</summary>
+    public static int PramenyDiag(string[] a, DataSveta d)
+    {
+        string f = a[2]; double krok = double.Parse(a[3], C); int bx = a.Length > 4 ? int.Parse(a[4]) : 14, by = a.Length > 5 ? int.Parse(a[5]) : 14;
+        var pe = Parametry(d, krok);
+        var svet = ErozePlanety.SvetPlanety(Ps(), d, pe);
+        var m = SouborMapy.Nacti(f, ErozePlanety.Klic(svet, d, pe)) ?? throw new Exception("mapa nesedí s klíčem");
+        var ef = new ErozeSvetaFn(m, pe);
+        foreach (bool er in new[] { false, true })
+        {
+            var fn = VodaBlok.Fn(true, d, PrizpusobPrameny && er ? UpravaPramenu : null, er ? g => g.Svet.Eroze = ef : null, Ps());
+            int vyv = 0, n = 0; var mat = new SortedDictionary<int, int>(); double sE = 0;
+            for (double x = bx * 128 + 1; x < bx * 128 + 128; x += 2)
+            for (double y = by * 128 + 1; y < by * 128 + 128; y += 2)
+            {
+                n++; sE += ef.Hloubka(x, y);
+                if (!fn.Hladina.Vyver(x, y)) continue;
+                vyv++;
+                var col = fn.Geologie.Sloupec(x, y); double pov = fn.Geologie.Povrch(x, y);
+                int kt = Math.Clamp((int)Math.Floor((pov - 1e-9) / 0.25), 0, col.Length - 1);
+                mat[col[kt]] = mat.GetValueOrDefault(col[kt]) + 1;
+            }
+            int kand = 0, b24 = 0;
+            for (int cx = (int)Math.Floor(bx * 128 / 24.0); cx <= (int)Math.Floor((bx * 128 + 127.9) / 24.0); cx++)
+            for (int cy = (int)Math.Floor(by * 128 / 24.0); cy <= (int)Math.Floor((by * 128 + 127.9) / 24.0); cy++)
+            { b24++; if (fn.Prameny.Kandidat(cx, cy) is not null) kand++; }
+            Console.WriteLine($"{(er ? "eroze" : "vypnuto"),-8} vývěr {vyv}/{n} bodů 2 m; materiál povrchu ve vývěru: {string.Join(" ", mat.Select(k => $"{k.Key}:{k.Value}"))}; kandidátů {kand}/{b24} buněk; průměrná hloubka eroze {(er ? sE / n : 0):F2} m");
+        }
         return 0;
     }
 

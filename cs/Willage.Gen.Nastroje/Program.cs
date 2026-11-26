@@ -21,6 +21,7 @@ return cmd switch
         "mapa" => ErozeNastroj.Mapa(args, data),
         "otisky" => ErozeNastroj.Otisky(args, data),
         "detail" => ErozeNastroj.Detail(args, data),
+        "prameny" => ErozeNastroj.PramenyDiag(args, data),
         _ => Napoveda(),
     },
     _ => Napoveda(),
