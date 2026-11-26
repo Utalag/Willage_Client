@@ -47,13 +47,27 @@ public sealed class NahledyVodyApi
         return k.Voda(Willage.Gen.Materialy.KatalogMaterialu.ZeSouboru(_s.Data.KatalogMaterialu), v.Parametry, v.PrusakJson);
     }
 
-    PodzemniVodaFn? _fnPram; string? _fnPramKlic;
-    /// <summary>Prameny z jedné trvalé vody (keš kandidátů buněk v Prameny se mezi náhledy a řezy zachová); jen z vlákna volajícího (fronta).</summary>
+    /// <summary>
+    /// Prameny v obdélníku – stejný výsledek jako Prameny.VOblasti (buňky po BunkaPramenuM, Vysledny, pak vodníci a stejné řazení), jen buňky
+    /// se počítají paralelně (každé vlákno vlastní voda; Vysledny buňky nezávisí na pořadí). Sekvenčně trval start 3 × 3 ~1,4 s (nález G-7).
+    /// </summary>
     List<Pramen> Prameny(double x0, double y0, double x1, double y1)
     {
-        string klic = _s.Hotovo().Klice[M7VystupPlanety.Id_];
-        if (_fnPram is null || _fnPramKlic != klic) { _fnPram = VodaKlon(); _fnPramKlic = klic; }
-        return _fnPram.Prameny.VOblasti(x0, y0, x1, y1);
+        double b = V.Parametry.BunkaPramenuM;
+        int cx0 = (int)Math.Floor(x0 / b), cx1 = (int)Math.Floor((x1 - 1e-9) / b), cy0 = (int)Math.Floor(y0 / b), cy1 = (int)Math.Floor((y1 - 1e-9) / b);
+        int ny = cy1 - cy0 + 1, nb = (cx1 - cx0 + 1) * ny;
+        var bunky = new Pramen?[nb];
+        Parallel.For(0, nb, new ParallelOptions { MaxDegreeOfParallelism = Math.Max(1, _s.Vlaken) }, VodaKlon, (q, _, fn) =>
+        {
+            bunky[q] = fn.Prameny.Vysledny(cx0 + q / ny, cy0 + q % ny);
+            return fn;
+        }, _ => { });
+        var o = new List<Pramen>();
+        foreach (var s in bunky) if (s is not null && s.X >= x0 && s.X < x1 && s.Y >= y0 && s.Y < y1) o.Add(s);
+        var vod = VodaKlon().Prameny.Vodnici;
+        if (vod is not null) o.AddRange(vod(x0, y0, x1, y1));
+        o.Sort((a, c) => a.X != c.X ? a.X.CompareTo(c.X) : a.Y.CompareTo(c.Y));
+        return o;
     }
 
     public NahledMapyDto Mapa(VrstvaNahleduDto v, int rozliseni, OblastQ16? oblast)
@@ -134,7 +148,7 @@ public sealed class NahledyVodyApi
 
     static string Popis(VrstvaNahleduDto v) => v switch
     {
-        VrstvaNahleduDto.Hladina => "M6: hloubka hladiny pod povrchem (7c, m; záporná = vývěr, šedá = bez hladiny) + prameny",
+        VrstvaNahleduDto.Hladina => "M6: hloubka hladiny pod povrchem (7c, m; tyrkys = vývěr, tmavě modrá = hladina nad povrchem / moře, šedá = bez hladiny) + prameny",
         VrstvaNahleduDto.HladinaAbs => "M6: surová hladina podzemní vody (m n. m.)",
         VrstvaNahleduDto.Dobiti => "M6: dobití hladiny klimatem 7c (0 bez hladiny … 1 plně)",
         VrstvaNahleduDto.Vyver => "M6: zóna vývěru (hladina ≥ povrch)",
@@ -162,7 +176,7 @@ public sealed class NahledyVodyApi
         }, _ => { });
         // prameny do 150 m od úsečky (jako nástroj „eroze rez“)
         double x0 = od.XM, y0 = od.YM, x1 = @do.XM, y1 = @do.YM;
-        var pr = Prameny(Math.Min(x0, x1) - 200, Math.Min(y0, y1) - 200, Math.Max(x0, x1) + 200, Math.Max(y0, y1) + 200);
+        var pr = Prameny(Math.Min(x0, x1) - 150, Math.Min(y0, y1) - 150, Math.Max(x0, x1) + 150, Math.Max(y0, y1) + 150);   // nástroj bere ±200 m a filtruje 150 m – stejná množina
         double vx = x1 - x0, vy = y1 - y0, L2 = vx * vx + vy * vy;
         var body = new List<BodNahleduDto>();
         foreach (var p in pr)

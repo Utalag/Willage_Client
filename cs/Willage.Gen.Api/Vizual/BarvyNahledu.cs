@@ -51,6 +51,8 @@ public static class BarvyNahledu
             {
                 // G-7 M4–M6
                 VrstvaNahleduDto.VyskaPlanety => A(v < 60f ? Mix((10, 20, 70), (20, 50, 120), (50, 90, 160), Math.Clamp(v / 60f, 0, 1)) : Mix((30, 70, 30), (170, 150, 100), (250, 250, 250), Math.Clamp((v - 60f) / 68f, 0, 1))),
+                // posun eroze: většina pod 1 m, max 20 m → odmocninová škála (tmavá 0 → oranžová → světlá max)
+                VrstvaNahleduDto.PosunEroze => v < 0 ? A((40, 90, 200)) : A(Mix((25, 25, 35), (200, 90, 40), (255, 240, 200), MathF.Sqrt(Math.Clamp(v / amp, 0, 1)))),
                 VrstvaNahleduDto.Toky => A(Mix((25, 25, 30), (40, 110, 200), (200, 240, 255), Math.Clamp((v - 3f) / 6f, 0, 1))),
                 VrstvaNahleduDto.Jezera => v > 0 ? A(Mix((120, 180, 240), (40, 90, 200), (10, 30, 120), Math.Clamp(v / 10f, 0, 1))) : A((70, 70, 70)),
                 VrstvaNahleduDto.Koryta => v < 0 ? A((20, 40, 90)) : v > 0.5f ? A((60, 150, 255)) : A((90, 85, 70)),
@@ -59,7 +61,8 @@ public static class BarvyNahledu
                 VrstvaNahleduDto.OdtokW => A(Mix((170, 120, 60), (220, 220, 200), (30, 90, 220), Math.Clamp(v / 2f, 0, 1))),
                 VrstvaNahleduDto.BiomKlimatu or VrstvaNahleduDto.BiomBezOaz => A(PaletaBiomuKlimatu[Math.Clamp((int)v, 0, 10)]),
                 VrstvaNahleduDto.KorytaKlimatu => v switch { < 0 => A((20, 40, 90)), < 0.5f => A((90, 85, 70)), < 1.5f => A((60, 150, 255)), < 2.5f => A((220, 170, 70)), _ => A((80, 230, 230)) },
-                VrstvaNahleduDto.Hladina or VrstvaNahleduDto.JenHladina => float.IsNaN(v) ? A((110, 110, 110)) : v <= 0 ? A((60, 240, 240)) : A(Mix((40, 140, 255), (30, 60, 160), (40, 20, 40), Math.Clamp(v / 40f, 0, 1))),
+                // hloubka hladiny: NaN šedá (bez hladiny), < −0,25 m hladina nad povrchem (moře, zaplavené) tmavě modrá, −0,25…0 vývěr tyrkysová
+                VrstvaNahleduDto.Hladina or VrstvaNahleduDto.JenHladina => float.IsNaN(v) ? A((110, 110, 110)) : v < -0.25f ? A((15, 25, 75)) : v <= 0 ? A((60, 240, 240)) : A(Mix((40, 140, 255), (30, 60, 160), (40, 20, 40), Math.Clamp(v / 40f, 0, 1))),
                 VrstvaNahleduDto.HladinaAbs => float.IsNaN(v) ? A((110, 110, 110)) : A(Mix((10, 20, 90), (40, 120, 220), (210, 240, 255), Math.Clamp(v / 128f, 0, 1))),
                 VrstvaNahleduDto.Dobiti => A(Mix((150, 60, 40), (220, 200, 120), (40, 110, 230), Math.Clamp(v, 0, 1))),
                 VrstvaNahleduDto.Vyver => v > 0.5f ? A((60, 240, 240)) : A((50, 50, 55)),
