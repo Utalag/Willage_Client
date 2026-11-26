@@ -31,8 +31,11 @@ public static class TestyPrusak
         T.Je(k.Koef(10) == 0 && k.Koef(100) == 0, "materiál bez K (sníh, diamant) = 0 (těsnění)");
         bool mon = true; var pr = new Propustnost(kat);
         for (int a = 1; a < 256; a++) for (int b = 1; b < 256; b++)
-            if (kat.Najdi(a) is { KMs: double ka } && kat.Najdi(b) is { KMs: double kb } && ka > kb && k.Koef(a) < k.Koef(b)) mon = false;
-        T.Je(mon, "vyšší K nikdy nemá menší koeficient (monotónnost tříd)");
+        {
+            double? ka = k.KMs(a) ?? kat.Najdi(a)?.KMs, kb = k.KMs(b) ?? kat.Najdi(b)?.KMs;
+            if (ka is double xa && kb is double xb && xa > xb && k.Koef(a) < k.Koef(b)) mon = false;
+        }
+        T.Je(mon, "vyšší efektivní K (vč. puklin) nikdy nemá menší koeficient");
         bool vyhodi = false;
         try { _ = new PrusakKoeficient(kat, pj.Replace("\"vzduch\": 255", "\"vzduch\": 256")); } catch (ArgumentOutOfRangeException) { vyhodi = true; }
         T.Je(vyhodi, "hodnota mimo 0–255 se odmítne");

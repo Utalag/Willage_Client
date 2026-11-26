@@ -21,7 +21,7 @@ public static class PobrezniNastroj
         var kat = KatalogMaterialu.ZeSouboru(d.KatalogMaterialu);
         var pv0 = ParametryVody.ZJson(File.ReadAllText(d.VodaV1)) with { PrusakPobrezi = true };
         var koef = new PrusakKoeficient(kat, File.ReadAllText(d.PrusakV1));
-        var ids = new[] { 66, 3, 55, 46, 57, 60, 54, 2, 1, 12, 4, 6, 33 };
+        var ids = new[] { 66, 3, 55, 5, 44, 49, 56, 46, 57, 60, 54, 2, 1, 12, 4, 6, 33, 47, 48 };
         int[] dny = { 7, 30, 90 }; int[] spady = { 10, 50, 200 };
         var sb = new StringBuilder();
         sb.AppendLine("| materiál | koef. | K (m/s) | 30 d, spád 10 ‰ | 30 d, 50 ‰ | 30 d, 200 ‰ | 7 d, 50 ‰ | 90 d, 50 ‰ | 30 d, 50 ‰ bez koef. |");
@@ -79,7 +79,7 @@ public static class PobrezniNastroj
         var bl = body.Select(b => ((int)Math.Floor(b.x / 128.0), (int)Math.Floor(b.y / 128.0))).Distinct().ToList();
         Console.WriteLine("bloky u břehu (bx,by): " + string.Join(" ", bl.Where((_, i) => i % Math.Max(1, bl.Count / 5) == 0).Take(5).Select(t => $"{t.Item1},{t.Item2}")) + $"  (celkem {bl.Count})");
         // kandidáti řezů: pro mat 66, 3/55, ostatní: pevnina stoupá (povrch +10 m do 60 m od břehu), blízko startu mimo
-        foreach (var (jm, ids) in new[] { ("štěrk", new[] { 66 }), ("písek", new[] { 3, 55 }), ("zvětralé", new[] { 57, 60, 46 }) })
+        foreach (var (jm, ids) in new[] { ("štěrk", new[] { 66 }), ("písek", new[] { 3, 55 }), ("kras", new[] { 5, 44, 49, 56 }), ("zvětralé", new[] { 57, 60, 46 }) })
         {
             var kand = body.Where(b => ids.Contains(b.mat)).Take(400).ToList();
             Console.WriteLine($"kandidáti {jm}: {kand.Count}");

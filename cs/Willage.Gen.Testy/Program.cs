@@ -79,6 +79,7 @@ TestyKrok06g.Spust();
 TestyKrok07.Spust(kat);
 TestyPrusak.Spust();
 TestyPrusakPobrezi.Spust();
+TestyPrusakKras.Spust();
 
 Console.WriteLine($"OK {T.Ok}, chyb {T.Chyb}");
 return T.Chyb == 0 ? 0 : 1;
