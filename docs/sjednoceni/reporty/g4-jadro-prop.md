@@ -31,4 +31,34 @@ Větev `gen-v1-g4-jadro` (z `gen-v1-g3-api`), plán 05 krok G-4, Jan 17:39 (post
 - Autoload v project.godot se načte i ve hře – proto líná inicializace (nic se nepočítá, dokud o to někdo nepožádá).
 
 ## Výsledky
-*(doplní se po implementaci)*
+**Postaveno:** viz Cíl 1–5 (vše hotovo). Zástupné uzly `ZastupnyPanel` pro 7d, M8, M9, U-1, U-2, nápovědu; signál `KatalogZmenen` zástupný.
+
+| Měření | Výsledek |
+|---|---|
+| `dotnet run Willage.Gen.Testy` | **OK 397, chyb 0** (4 min 8 s) |
+| Godot 4.7.2 mono headless `--editor --build-solutions` | build .NET projektu OK |
+| `dotnet build WillagePrototyp.csproj` | OK, 0 chyb |
+| headless `JadroTest.tscn` | **OK 12, chyb 0**; `Generuj` na hl. vlákně zahřáté 0,014 ms, studené 3,4 ms (JIT + start vlákna); během generace 2,0 s proběhlo 291 snímků, nejdelší 24,3 ms; otisky = CLI; mapa 980×488 /4 → 245×122; zrušení po M5 → `PraceZrusena`; chyba → `PraceSelhala` |
+| hlavní scéna hry s autoloadem (`--quit-after 120`) | OK, líná inicializace nic nepočítá |
+| `klima otisky` | mapa 800d420bb00047de; zap: 86 vodníků, krok 3 9f32311e046f8b6a, voda 377a8210f82c856a, klima cb11da8d141a2a5e; vyp: 92, 8e239a68c6d01be0; segment 059d807ab04b7f00 (test) – **beze změny vůči 9d4f2b8** |
+
+**Negativní / nečekané:**
+- První běh testů 386/3: headless import Godotu vytvořil `*.csv.import`/`*.translation` v `data/` a změnil manifest → manifest je ignoruje, `.gitignore` (c0ac920).
+- První `Generuj` 3,2–3,4 ms (JIT) – limit < 1 ms platí jen pro zahřáté volání, studené se hlásí.
+- G-3 větev byla napoprvé pushnuta bez změny seed → long v `PlanetaV1`/`SouborPlanety` (nekompilovala) – opraveno commitem 1389f1c na gen-v1-g3-api.
+- Fasáda není vláknově bezpečná – řešeno jedinou frontou; CTS se záměrně nedisposuje (souběh se zrušením).
+
+## G-3 review (Willage-backend) – zapracováno
+| Bod | Commit | Co |
+|---|---|---|
+| 1 WPLN jen autorský formát, hash kanonického obsahu | 40e1ed7 | `SouborPlanety.Otisk` = SHA-256 kanonického textu; `PlanetaInfoDto.OtiskPlanety`; zástupný `PlanetaJson.Export` (`willage-planeta-export-v1`) |
+| 2 bez reference na Geology.Core, Q16 = 2D bod | 774726e | README + doc `SouradniceQ16`; MapaDto = hrubá mřížka 32 m, ne buňky |
+| 3 seed long, 32bit na jednom místě | 1369bb5 | `SeedSveta.Hash32` (dolních 32 bitů = dosavadní chování oáz) |
+| 4 SloupecDto 2 B/buňku | d273e41 | materiál + varianta jako Dev ShellCellPayload; `StredBunky`/`MinRohBunky` |
+| 5 MaterialId byte, kolize 57 | cd92826 | `byte`, kolize SopkaPopelId 57 s Dev 57–74 zdokumentována, nepřečíslováno |
+| 6 Q16 na hranici | 836623f | `UpravaRegionu` v Q16 (long); PovrchM/KrokM zdokumentovány v metrech |
+| 7 verzování | 2fc28a3 | `KompatibilitaPlanety` (Plna/Prepocet/Nepodporovana), formát 1..Verze; pin `materials-catalog-v1.json` (schemaVersion + SHA) v manifestu |
+| 8 zrcadla jen pro čtení + golden vektory | 774726e | README |
+| testy | 0ff686e | otisk stabilní/se mění, export, seed 2⁴⁰+5, V0.9 a formát 2 odmítnuty, pin katalogu |
+
+Otisky se žádným bodem nezměnily.
