@@ -2,6 +2,8 @@ using Willage.Gen.Data;
 using Willage.Gen.Nastroje;
 
 var data = DataSveta.Najdi(AppContext.BaseDirectory);
+args = ErozeNastroj.Volby(args);
+ErozeNastroj.D = data;
 string cmd = args.Length > 0 ? args[0] : "";
 return cmd switch
 {
@@ -14,6 +16,18 @@ return cmd switch
     "prameny" => Prameny(data),
     "cas" => Cas(args, data),
     "par" => Paralelne.Spust(data, args.Contains("--puvodni"), args.Skip(1).Where(s => int.TryParse(s, out _)).Select(int.Parse).DefaultIfEmpty(1).ToArray()) == 0 ? 0 : 1,
+    "eroze" => args[1] switch
+    {
+        "svetmax" => ErozeNastroj.SvetMax(data),
+        "mapa" => ErozeNastroj.Mapa(args, data),
+        "otisky" => ErozeNastroj.Otisky(args, data),
+        "detail" => ErozeNastroj.Detail(args, data),
+        "prameny" => ErozeNastroj.PramenyDiag(args, data),
+        "interp" => ErozeNastroj.InterpMer(args, data),
+        "vse" => ErozeNastroj.Vse(args, data),
+        "rez" => ErozeNastroj.Rez(args, data),
+        _ => Napoveda(),
+    },
     _ => Napoveda(),
 };
 

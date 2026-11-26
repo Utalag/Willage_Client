@@ -41,6 +41,11 @@ public sealed class GeologieCs : IGeologie
     public bool Mince82(double x, double y) => Geo.Mince.Sila(x, y) >= 0.5;
     public double Mince82Sila(double x, double y) => Geo.Mince.Sila(x, y);
 
+    public double PovrchBezEroze(double x, double y) => Svet.VyskaBezEroze(x, y);
+    public double ErozeHruba(double x, double y) => Svet.Eroze?.Hruba(x, y) ?? 0.0;
+    public double VzdalenostOdMore(double x, double y) => Svet.More?.VzdalenostProVodu(x, y) ?? double.PositiveInfinity;
+    public double HladinaMore => Svet.More is null ? double.NaN : Svet.P.HladinaMoreM;
+
     public bool VNitruSopky(double x, double y, double z) => Geo.Sopky.Mat(x, y, z) >= 0;
 
     public bool[]? NitroSopky(double x, double y)

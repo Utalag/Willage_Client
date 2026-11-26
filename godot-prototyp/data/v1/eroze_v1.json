@@ -1,0 +1,22 @@
+{
+  "PlanetaXM": 31360.0,
+  "PlanetaYM": 15616.0,
+  "KrokM": 32.0,
+  "PasProlnutiM": 512.0,
+  "OdtokPodil": 0.02,
+  "Srazky": 1.0,
+  "EpsilonVyplneM": 0.001,
+  "K": 1e-5,
+  "M": 0.5,
+  "KrokuCasu": 20,
+  "DtRoku": 1000.0,
+  "MaxEroseM": 20.0,
+  "AKritM2": 250000.0,
+  "SpecifickyOdtokLsKm2": 10.0,
+  "VodnikVahaKopcu": 0.5,
+  "KorytoA": 3.0,
+  "KorytoC": 0.6,
+  "KorytoMinSirkaM": 1.0,
+  "KorytoMaxHloubkaM": 3.0,
+  "InterpolaceE": "catmullrom"
+}
