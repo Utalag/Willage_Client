@@ -70,7 +70,7 @@ public sealed class MoreSklon
     }
 
     public string Kanonicky() => FormattableString.Invariant(
-        $"more6c|{_p.PlanetaXM}|{_p.PlanetaYM}|{_p.HladinaMoreM}|{_p.HloubkaMoreM}|{_p.MorePrechod}|{_p.SklonKontinentu}|{_p.SklonOdPobreziM}|{_p.MrizkaVzdalenostiM}|{D0:R}|{_p.PodilMore}|{_p.OdchylkaMoreProcBodu}|{_p.KontinentuMin}|{_p.KontinentuMax}|{_p.KontinentVelikost}|{_p.Clenitost}|{_p.ClenitostSila}|{_p.SumVln}|{_p.WarpVln}|{_p.SumLambdaMinM}|{_p.SumLambdaMaxM}|{_p.WarpLambdaMinM}|{_p.WarpM}|{_p.RezervaSevuM}|{_p.SevPrechodM}|{_p.SevMekkySpad}|{_p.SevMekkyPasM}|{_p.StartPolomerM}|{_p.StartPrechodM}|{_p.StartRezerva}|{_p.MrizkaPrahuM}|") + Maska.Kanonicky();
+        $"more6d|{_p.PlanetaXM}|{_p.PlanetaYM}|{_p.HladinaMoreM}|{_p.HloubkaMoreM}|{_p.MorePrechod}|{_p.SklonKontinentu}|{_p.SklonOdPobreziM}|{_p.MrizkaVzdalenostiM}|{D0:R}|{_p.PodilMore}|{_p.OdchylkaMoreProcBodu}|{_p.KontinentuMin}|{_p.KontinentuMax}|{_p.KontinentVelikost}|{_p.Clenitost}|{_p.ClenitostSila}|{_p.SumVln}|{_p.WarpVln}|{_p.SumLambdaMinM}|{_p.SumLambdaMaxM}|{_p.WarpLambdaMinM}|{_p.WarpM}|{_p.RezervaSevuM}|{_p.SevPrechodM}|{_p.SevMekkySpad}|{_p.SevMekkyPasM}|{_p.StartPolomerM}|{_p.StartPrechodM}|{_p.StartRezerva}|{_p.MrizkaPrahuM}|{_p.OstrovuPocet}|{_p.OstrovPolomerM}|{_p.OstrovVyska}|{_p.SevZvlneniM}|{_p.SevZvlneniLambdaMinM}|{_p.SevZvlneniLambdaMaxM}|") + Maska.Kanonicky();
 
     public double Pevnina(double x, double y) => Maska.K(x, y);
 
