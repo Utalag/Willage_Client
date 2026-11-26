@@ -53,6 +53,7 @@ public sealed class KesGeologie : IGeologie
     public double ErozeHruba(double x, double y) => _g.ErozeHruba(x, y);
     public double VzdalenostOdMore(double x, double y) => _g.VzdalenostOdMore(x, y);
     public (double d, double sx, double sy) BrehOdMore(double x, double y, double dosah) => _g.BrehOdMore(x, y, dosah);
+    public bool JeMoreVyska(double x, double y, double vyska) => _g.JeMoreVyska(x, y, vyska);
     public double HladinaMore => _g.HladinaMore;
 
     private readonly Dictionary<(long, long), bool[]?> _ns = new();

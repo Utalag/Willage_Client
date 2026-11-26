@@ -50,6 +50,7 @@ public sealed class GeologieCs : IGeologie
         double d = Svet.More.BrehJemny(x, y, Povrch, dosah, out double sx, out double sy);
         return (d, sx, sy);
     }
+    public bool JeMoreVyska(double x, double y, double vyska) => Svet.More?.JeMore(x, y, vyska) ?? false;
     public double HladinaMore => Svet.More is null ? double.NaN : Svet.P.HladinaMoreM;
 
     public bool VNitruSopky(double x, double y, double z) => Geo.Sopky.Mat(x, y, z) >= 0;
