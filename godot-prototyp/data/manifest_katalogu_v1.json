@@ -1,6 +1,6 @@
 {
   "format": "willage-manifest-katalogu-v1",
-  "souhrn": "cf3441ac42e8a59243f8cd795d7af7edcc79c8da3bf850195008e2b21ce8f8aa",
+  "souhrn": "ad961209ecf099e4fa7f3f208b60916002780d7df966c8f559433947710c6f36",
   "soubory": [
     {
       "cesta": "klima_presety.csv",
@@ -131,6 +131,36 @@
       "cesta": "vpmg/vzorek_materialu_v0.json",
       "velikost": 921,
       "sha256": "ba65cba619a70ff50d623ccf1b26db00811ab92d800f21325076538299c0120f"
+    },
+    {
+      "cesta": "vpmg/zaklady/1-grass-v1.png",
+      "velikost": 18418,
+      "sha256": "f8fc4085e004fbf57243b66c7a1af9089c930e688a5edb4b7709c895aea1f32d"
+    },
+    {
+      "cesta": "vpmg/zaklady/2-topsoil-v1.png",
+      "velikost": 16165,
+      "sha256": "bafa3d6e98a5d6f682cfc7758d5450951714c6eb8d0bdf4958aaade860eb8531"
+    },
+    {
+      "cesta": "vpmg/zaklady/3-gravel_sand-v1.png",
+      "velikost": 18800,
+      "sha256": "c06995651ccaad3f101b2b8834ef7199d22fd920596a67e5e111d22ec871729a"
+    },
+    {
+      "cesta": "vpmg/zaklady/5-cave_limestone-v1.png",
+      "velikost": 13430,
+      "sha256": "922156d5da9968847b4bc256dc7782d6ed89acf0177b9d1702c64a59a00659c2"
+    },
+    {
+      "cesta": "vpmg/zaklady/6-granite-v1.png",
+      "velikost": 18839,
+      "sha256": "8ea9c353a27e2cc4d248e49441cd1980c6f83322d84d5cbd99f9d774593bbc93"
+    },
+    {
+      "cesta": "vpmg/zaklady/zaklady_v1.json",
+      "velikost": 5148,
+      "sha256": "8183d245d82062b83003cd2b2fb6ecd26bed1b1f9f971793ebd5e373406cd1bb"
     }
   ]
 }

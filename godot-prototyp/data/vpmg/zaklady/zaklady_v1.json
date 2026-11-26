@@ -1,0 +1,131 @@
+{
+  "popis": "Ruční podkladové dlaždice (Gemini, Jan) pro budoucí base_texture Dev – jen vzhled, neměni ID ani fyziku materiálů. Klient je zatím připnutý na Dev 42e7475 (bez base_texture); import ověřen nástrojem Dev 04ed4d9.",
+  "nastroj": "tools/priprava_dlazdic.py",
+  "postup": "střed čtverce, box filtr na 128, prolnutí posunem o půl (X pak Y), alfa 255",
+  "kontrolaDev": {
+    "commit": "04ed4d98bb033cb3334bb60c9f1d26a030ff2e5d",
+    "prikaz": "dotnet run --project tools/VpmgPreview -- --import-tile <png> <out.rgba8>"
+  },
+  "dlazdice": [
+    {
+      "materialId": 1,
+      "key": "grass",
+      "soubor": "1-grass-v1.png",
+      "format": "rgba8",
+      "widthPx": 128,
+      "heightPx": 128,
+      "sha256": "ec468bfc4886dee4dcca923fc139f1fde783e901349b9ff2ab350f1a1c7aea6a",
+      "pngSha256": "f8fc4085e004fbf57243b66c7a1af9089c930e688a5edb4b7709c895aea1f32d",
+      "zdroj": {
+        "soubor": "zaklad-1-grass.jpg",
+        "sha256": "4c8cb705045b3e51b84beb93014a9147e50654f472335b29da7835678c680c72",
+        "cesta": "willage-ideas/gemini/zaklad-1-grass.jpg"
+      },
+      "importDev": "shoda sha256 + pngSha256",
+      "baseTile": {
+        "asset": "tiles/1-grass-v1.rgba8",
+        "format": "rgba8",
+        "widthPx": 128,
+        "heightPx": 128,
+        "sha256": "ec468bfc4886dee4dcca923fc139f1fde783e901349b9ff2ab350f1a1c7aea6a",
+        "source": "godot-prototyp/data/vpmg/zaklady/1-grass-v1.png"
+      }
+    },
+    {
+      "materialId": 2,
+      "key": "topsoil",
+      "soubor": "2-topsoil-v1.png",
+      "format": "rgba8",
+      "widthPx": 128,
+      "heightPx": 128,
+      "sha256": "16a7f13cc8f865b88c62763514873ab02b6683667a17d2ac68007e1e59292f6d",
+      "pngSha256": "bafa3d6e98a5d6f682cfc7758d5450951714c6eb8d0bdf4958aaade860eb8531",
+      "zdroj": {
+        "soubor": "zaklad-2-topsoil.jpg",
+        "sha256": "86aa7b894116a47749c61b5798e1b1c077775eed36d59b01434b3cdecfe6c4d2",
+        "cesta": "willage-ideas/gemini/zaklad-2-topsoil.jpg"
+      },
+      "importDev": "shoda sha256 + pngSha256",
+      "baseTile": {
+        "asset": "tiles/2-topsoil-v1.rgba8",
+        "format": "rgba8",
+        "widthPx": 128,
+        "heightPx": 128,
+        "sha256": "16a7f13cc8f865b88c62763514873ab02b6683667a17d2ac68007e1e59292f6d",
+        "source": "godot-prototyp/data/vpmg/zaklady/2-topsoil-v1.png"
+      }
+    },
+    {
+      "materialId": 3,
+      "key": "gravel_sand",
+      "soubor": "3-gravel_sand-v1.png",
+      "format": "rgba8",
+      "widthPx": 128,
+      "heightPx": 128,
+      "sha256": "552743b862c1ba9f49f8f114651c5ef44bb9bb1c2629ded48aca36a362f69083",
+      "pngSha256": "c06995651ccaad3f101b2b8834ef7199d22fd920596a67e5e111d22ec871729a",
+      "zdroj": {
+        "soubor": "zaklad-3-gravel_sand.jpg",
+        "sha256": "0301f197a03852d9fc9d4f0d0d0e64cdefe07fab9e1ad684053dc650393b8c22",
+        "cesta": "willage-ideas/gemini/zaklad-3-gravel_sand.jpg"
+      },
+      "importDev": "shoda sha256 + pngSha256",
+      "baseTile": {
+        "asset": "tiles/3-gravel_sand-v1.rgba8",
+        "format": "rgba8",
+        "widthPx": 128,
+        "heightPx": 128,
+        "sha256": "552743b862c1ba9f49f8f114651c5ef44bb9bb1c2629ded48aca36a362f69083",
+        "source": "godot-prototyp/data/vpmg/zaklady/3-gravel_sand-v1.png"
+      }
+    },
+    {
+      "materialId": 5,
+      "key": "cave_limestone",
+      "soubor": "5-cave_limestone-v1.png",
+      "format": "rgba8",
+      "widthPx": 128,
+      "heightPx": 128,
+      "sha256": "f8f7dbfff2d678f7b45c75a1a3848eb3486092ca0f0111a1ea6f130d584f2d40",
+      "pngSha256": "922156d5da9968847b4bc256dc7782d6ed89acf0177b9d1702c64a59a00659c2",
+      "zdroj": {
+        "soubor": "zaklad-5-cave_limestone.jpg",
+        "sha256": "791bcc5ad6cbc7bdf3826f3715c85a5d7db87cd6b0bd4e3183771ba5c20fdffb",
+        "cesta": "willage-ideas/gemini/zaklad-5-cave_limestone.jpg"
+      },
+      "importDev": "shoda sha256 + pngSha256",
+      "baseTile": {
+        "asset": "tiles/5-cave_limestone-v1.rgba8",
+        "format": "rgba8",
+        "widthPx": 128,
+        "heightPx": 128,
+        "sha256": "f8f7dbfff2d678f7b45c75a1a3848eb3486092ca0f0111a1ea6f130d584f2d40",
+        "source": "godot-prototyp/data/vpmg/zaklady/5-cave_limestone-v1.png"
+      }
+    },
+    {
+      "materialId": 6,
+      "key": "granite",
+      "soubor": "6-granite-v1.png",
+      "format": "rgba8",
+      "widthPx": 128,
+      "heightPx": 128,
+      "sha256": "743b27dd70bff346a6c10d59a696172d576500b8d14df23cc0137a1f42aac28c",
+      "pngSha256": "8ea9c353a27e2cc4d248e49441cd1980c6f83322d84d5cbd99f9d774593bbc93",
+      "zdroj": {
+        "soubor": "zaklad-6-granite.jpg",
+        "sha256": "3437c056f2075028311df30c856794e6098f4e164caee304ccbe7341af269b77",
+        "cesta": "willage-ideas/gemini/zaklad-6-granite.jpg"
+      },
+      "importDev": "shoda sha256 + pngSha256",
+      "baseTile": {
+        "asset": "tiles/6-granite-v1.rgba8",
+        "format": "rgba8",
+        "widthPx": 128,
+        "heightPx": 128,
+        "sha256": "743b27dd70bff346a6c10d59a696172d576500b8d14df23cc0137a1f42aac28c",
+        "source": "godot-prototyp/data/vpmg/zaklady/6-granite-v1.png"
+      }
+    }
+  ]
+}

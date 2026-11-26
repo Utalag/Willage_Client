@@ -44,3 +44,11 @@ v editoru zástupné (vidět, nejde je vybrat). Rozšíření = přidat ID do so
 | **T-2b** | `mat-v1-t2b-vpmg-v1` (z `mat-v1-t2-okno`) | pin Dev `12c3e6b` (PR #16: ops v1 + visualProfiles s `palette`), zrcadlo katalogu; schéma operací **generované z Dev** (`operace_dev_v1.json`, nástroj `parametry`) + klientský překryv `operace_vpmg_v1.json`; výchozí receptury vzorku = receptury v1 z Dev v `data/vpmg/receptury/<id>.json` (N8); paleta v profilu | goldeny 11/11 (52 + 5 materiálů + 5 operací) přes nástroj i fasádu; generovaný soubor = živý rozbor; otisky beze změny |
 
 Výsledky a nálezy: `reporty/t2b-vpmg-v1-prop.md`. Klíč M6 se mění (deklaruje celý katalog) – návrh pro G-řadu tamtéž.
+
+## T-2c – oprava VPMG v1 (Dev 42e7475) + podkladové dlaždice
+| Krok | Větev | Obsah | Ověření |
+|---|---|---|---|
+| **T-2c** | `mat-v1-t2c-vpmg-fix` (z `mat-v1-t2b-vpmg-v1`) | pin Dev `42e7475`; schéma operací z deskriptorů Dev (`VpmgOperationCatalog.DescribeAll`, = `--describe-ops`) + český překryv; dlaždice Gemini `data/vpmg/zaklady/` (Python výjimka, offline) | goldeny 11/11; srovnání v0 / v1 rozbitá / v1 opravená; dlaždice = `--import-tile` Dev 04ed4d9 |
+| T-2d *(navrženo)* | – | pin Dev ≥ 04ed4d9: `base_texture`, `baseTile` v katalogu, receptury v2, zdroj dlaždic v nástroji | čeká na `baseTile` v katalogu Dev a řešení palette_map (viz `t2c-zaklady-prop.md`) |
+
+Výsledky: `reporty/t2c-vpmg-fix-prop.md`, `reporty/t2c-zaklady-prop.md`.
