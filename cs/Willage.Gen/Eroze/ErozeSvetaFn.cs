@@ -1,7 +1,12 @@
 namespace Willage.Gen.Eroze;
 
 /// <summary>Zdroj eroze pro funkci světa: kolik metrů odebrat v bodě (≥ 0).</summary>
-public interface IErozeSveta { double Hloubka(double x, double y); }
+public interface IErozeSveta
+{
+    double Hloubka(double x, double y);
+    /// <summary>Hrubá složka (E z mapy bez koryta) – podle ní klesá i hladina podzemní vody (krok 6b).</summary>
+    double Hruba(double x, double y);
+}
 
 /// <summary>
 /// Jemný detail jako funkce nad hrubou mapou (žádné dlaždice → žádné švy): E z uzlů (bilineárně / Catmull-Rom / B-spline, krok 6b) z periodických uzlů
@@ -113,4 +118,5 @@ public sealed class ErozeSvetaFn : IErozeSveta
     }
 
     public double Hloubka(double x, double y) => ErozeE(x, y) + Koryto(x, y);
+    public double Hruba(double x, double y) => ErozeE(x, y);
 }

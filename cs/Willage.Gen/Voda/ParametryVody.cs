@@ -29,6 +29,8 @@ public sealed record ParametryVody
     public bool Tlakovy { get; init; } = false;
     // krok 5 (Jan 2026-11-26, rozhodnutí 3): nitro sopky (průduch, láva, popel) je pro vodu těsnění; false = krok 4
     public bool SopkaNepropustna { get; init; } = true;
+    // krok 6b: hladina se počítá z povrchu před erozí a sníží se o hrubou erozi (koryto pak hladinu odkryje); bez eroze beze změny
+    public bool HladinaSledujeErozi { get; init; } = true;
 
     public static ParametryVody ZJson(string json) =>
         JsonSerializer.Deserialize<ParametryVody>(json, new JsonSerializerOptions { PropertyNameCaseInsensitive = true }) ?? new();

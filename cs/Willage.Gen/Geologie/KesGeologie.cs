@@ -43,6 +43,15 @@ public sealed class KesGeologie : IGeologie
     public double Mince82Sila(double x, double y) => _g.Mince82Sila(x, y);
     public bool VNitruSopky(double x, double y, double z) => _g.VNitruSopky(x, y, z);
 
+    private readonly Dictionary<(long, long), double> _pov0 = new();
+    public double PovrchBezEroze(double x, double y)
+    {
+        var k = K(x, y);
+        if (!_pov0.TryGetValue(k, out var v)) { v = _g.PovrchBezEroze(x, y); _pov0[k] = v; }
+        return v;
+    }
+    public double ErozeHruba(double x, double y) => _g.ErozeHruba(x, y);
+
     private readonly Dictionary<(long, long), bool[]?> _ns = new();
     public bool[]? NitroSopky(double x, double y)
     {

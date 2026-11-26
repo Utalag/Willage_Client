@@ -15,6 +15,9 @@ public sealed class RegionalniHladina
 
     public RegionalniHladina(IGeologie g, ParametryVody p) { _g = g; _p = p; }
 
+    /// <summary>Povrch pro tvar hladiny: krok 6b s erozí = povrch před erozí (hladina pak klesne o hrubou erozi).</summary>
+    private double PovrchH(double x, double y) => _p.HladinaSledujeErozi ? _g.PovrchBezEroze(x, y) : _g.Povrch(x, y);
+
     /// <summary>Hladina bez ořezu povrchem.</summary>
     public double Surova(double x, double y)
     {
@@ -28,10 +31,11 @@ public sealed class RegionalniHladina
             double dx = i * s - x, dy = j * s - y, d2 = dx * dx + dy * dy;
             if (d2 >= R2) continue;
             double w = 1.0 - d2 / R2; w *= w;
-            sw += w; sh += w * _g.Povrch(i * s, j * s);
+            sw += w; sh += w * PovrchH(i * s, j * s);
         }
         double g = sh / sw;
-        return g - _p.HloubkaD0M + _p.ZesileniUdoliBeta * (g - _g.Povrch(x, y));
+        double l = g - _p.HloubkaD0M + _p.ZesileniUdoliBeta * (g - PovrchH(x, y));
+        return _p.HladinaSledujeErozi ? l - _g.ErozeHruba(x, y) : l;
     }
 
     /// <summary>Hladina L (m), nikdy nad povrchem.</summary>

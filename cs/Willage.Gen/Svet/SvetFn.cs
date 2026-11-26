@@ -28,6 +28,8 @@ public sealed class SvetFn
     public Willage.Gen.Eroze.IErozeSveta? Eroze { get; set; }
     /// <summary>Krok 6b: moře a sklon kontinentu (p.More), jinak null.</summary>
     public MoreSklon? More { get; }
+    /// <summary>Krok 6b: velké pánve (p.Panve), jinak null.</summary>
+    public Panve? Panve { get; }
 
     public SvetFn(ParametrySveta p, DataSveta data)
     {
@@ -44,6 +46,7 @@ public sealed class SvetFn
         Sopky = new Sopky(p, H, Biomy, (x, y, w) => VyskaBezSopek(x, y, w, true), Relief, SvetM, StropPovrchuM);
         Horniny = new MapaHornin(p, H, SvetM);
         if (p.More) More = new MoreSklon(p, Sd);
+        if (p.Panve) Panve = new Panve(p, H, More);
     }
 
     public double[] Vahy(double x, double y) => Biomy.Vahy(x, y);
@@ -70,8 +73,10 @@ public sealed class SvetFn
 
     public double Vyska(double x, double y) => VyskaW(x, y, Vahy(x, y), true);
     public double VyskaTvar(double x, double y) => VyskaW(x, y, Vahy(x, y), false);
+    /// <summary>Krok 6b: povrch s detaily bez eroze světa (stejné jako Vyska, když je eroze vypnutá).</summary>
+    public double VyskaBezEroze(double x, double y) => VyskaW(x, y, Vahy(x, y), true, false);
 
-    public double VyskaW(double x, double y, double[] w, bool detaily = true)
+    public double VyskaW(double x, double y, double[] w, bool detaily = true, bool eroze = true)
     {
         double h = VyskaBezSopek(x, y, w, detaily);
         var s = Sopky.Seznam;
@@ -81,8 +86,9 @@ public sealed class SvetFn
             if (r2 < s[i].R * s[i].R) h += Sopky.Kuzel(i, Math.Sqrt(r2));
         }
         if (More != null) h += More.Posun(x, y);
+        if (Panve != null) h += Panve.Posun(x, y);
         h = Smin(h);
-        if (detaily && Eroze != null) h -= Eroze.Hloubka(x, y);
+        if (detaily && eroze && Eroze != null) h -= Eroze.Hloubka(x, y);
         return h;
     }
 
