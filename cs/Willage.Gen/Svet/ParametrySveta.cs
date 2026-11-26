@@ -93,6 +93,17 @@ public sealed class ParametrySveta
     // Mění jen dnešní vodu (prameny, vodníci, oázy, aktivní koryta), mapu eroze ne (Jan 12:26: eroze je pozůstatek minulosti).
     public bool KlimaKrok07 = true;
 
+    /// <summary>G-1: hluboká kopie (pole i biomy). SvetFn mění parametry na místě (klimatický preset), pipeline proto staví každý svět z vlastní kopie.</summary>
+    public ParametrySveta Kopie()
+    {
+        var k = (ParametrySveta)MemberwiseClone();
+        k.StartBlok = (int[])StartBlok.Clone();
+        k.Podil = (double[])Podil.Clone();
+        k.Biomy = Biomy.Select(b => new Biom(b.PosunM, b.PrevyseniM, b.VlnaM, b.Drsnost, b.StropDeg, b.Hreben)).ToArray();
+        k.HorninyBiomu = HorninyBiomu.Select(r => (int[])r.Clone()).ToArray();
+        return k;
+    }
+
     /// <summary>Parametry přesně jako GDScript krok 3b (opravy vypnuté, bez moře a pánví kroku 6) – pro ekvivalenci.</summary>
     public static ParametrySveta Krok5(long seed = 49) => new() { Seed = seed, VseKrok06 = false };
 

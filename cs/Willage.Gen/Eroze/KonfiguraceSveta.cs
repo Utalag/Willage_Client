@@ -64,29 +64,13 @@ public static class KonfiguraceSveta
     public static ParametrySveta VseZapnuto(DataSveta d, long seed = 49) =>
         ErozePlanety.NactiMore(new ParametrySveta { Seed = seed, VseKrok06 = true }, d);
 
+    /// <summary>
+    /// G-1: tenký obal nad pipeline modulů M0–M7 (Pipeline/PipelineSveta). Výsledek je stejný jako dřív (test proti zmrazené kopii);
+    /// na vstupu zůstává vedlejší účinek NactiMore(p) jako dřív, klimatický preset se už do p nezapisuje (pipeline staví z kopií).
+    /// </summary>
     public static SvetKrok06 Sestav(ParametrySveta p, DataSveta d, string? kes = null, int vlaken = 8)
     {
         ErozePlanety.NactiMore(p, d);
-        var g = new GeologieCs(p, d);
-        if (!p.VseKrok06) return new SvetKrok06 { Geologie = g };
-        var pe = ParametryEroze.ZJson(File.ReadAllText(d.ErozeV1));
-        // svět planety: stejné přepínače a seed, větší svet_max_m (start svět se tím nemění – ověřeno v kroku 6)
-        var pp = ErozePlanety.NactiMore(new ParametrySveta { Seed = p.Seed, VseKrok06 = true, StartBlok = p.StartBlok }, d);
-        var sp = ErozePlanety.SvetPlanety(pp, d, pe);
-        var m = ErozePlanety.Mapa(sp, d, pe, kes, vlaken);
-        var ef = new ErozeSvetaFn(m, pe);
-        g.Svet.Eroze = ef;
-        var v6 = Vodnici.Najdi(m, sp, pe);
-        if (!p.KlimaKrok07) return new SvetKrok06 { Geologie = g, Mapa = m, Eroze = ef, Vodnici = v6 };
-        // krok 7: klima nad hotovou mapou; mapa eroze a její klíč se nemění (Jan 12:26)
-        var pk = ParametryKlimatu.ZJson(File.ReadAllText(d.KlimaV1));
-        var mk = MapaKlimatu.Spocti(m, pk, pk.Planeta(p.Klima), vlaken);
-        mk.Klic = MapaKlimatu.KlicKlimatu(m.KlicKese, pk, p.Klima);
-        var hk = HydrologieKlimatu.Spocti(m, mk, pe);
-        var oazy = Oazy.Najdi(m, mk, pk, p.Seed); Oazy.Prekryj(mk, oazy, pk);
-        var vod = hk.Vodnici(m, sp, pe); vod.AddRange(oazy);
-        var nap = pk.HladinaKlimaZapnuta ? NapajeniVody.Spocti(m, mk, hk, vod, pk) : null;
-        return new SvetKrok06 { Geologie = g, Mapa = m, Eroze = ef, Vodnici = vod, VodniciBezKlimatu = v6, Oazy = oazy,
-            Klima = new KlimaSvetaFn(mk), Hydrologie = hk, ParametryKlimatu = pk, Napajeni = nap };
+        return new Pipeline.PipelineSveta(d).Spust(p, kes, vlaken).Svet;
     }
 }

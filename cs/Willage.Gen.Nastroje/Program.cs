@@ -22,6 +22,8 @@ return cmd switch
     },
     "prusak" => PrusakSimulace.Spust(data, args.Length > 1 ? args[1] : "vystup-prusak"),
     "prameny" => Prameny(data),
+    "manifest" => Manifest(args, data),
+    "moduly" => Moduly(data),
     "cas" => Cas(args, data),
     "par" => Paralelne.Spust(data, args.Contains("--puvodni"), args.Skip(1).Where(s => int.TryParse(s, out _)).Select(int.Parse).DefaultIfEmpty(1).ToArray()) == 0 ? 0 : 1,
     "klima" => args[1] switch
@@ -47,6 +49,32 @@ return cmd switch
 };
 
 static int Napoveda() { Console.WriteLine("použití: vyska <bin>"); return 2; }
+
+/// G-1: manifest katalogů – „manifest“ zapíše data/manifest_katalogu_v1.json, „manifest --kontrola“ jen porovná.
+static int Manifest(string[] a, Willage.Gen.Data.DataSveta d)
+{
+    var m = Willage.Gen.Katalogy.ManifestKatalogu.Spocti(d);
+    string f = Path.Combine(d.Koren, Willage.Gen.Katalogy.ManifestKatalogu.NazevSouboru);
+    if (a.Contains("--kontrola"))
+    {
+        var r = File.Exists(f) ? Willage.Gen.Katalogy.ManifestKatalogu.ZJson(File.ReadAllText(f)).Rozdily(m) : new[] { "(chybí " + f + ")" };
+        Console.WriteLine(r.Count == 0 ? $"manifest aktuální: {m.Polozky.Count} souborů, souhrn {m.Souhrn}" : "rozdíly: " + string.Join(", ", r));
+        return r.Count == 0 ? 0 : 1;
+    }
+    m.Uloz(d.Koren);
+    Console.WriteLine($"manifest {f}: {m.Polozky.Count} souborů, souhrn {m.Souhrn}");
+    return 0;
+}
+
+/// G-1: graf modulů a klíče výchozího světa (bez výpočtu).
+static int Moduly(Willage.Gen.Data.DataSveta d)
+{
+    var pl = new Willage.Gen.Pipeline.PipelineSveta(d);
+    var k = pl.Klice(new Willage.Gen.Svet.ParametrySveta());
+    foreach (var m in pl.Graf.Poradi)
+        Console.WriteLine($"{m.Id} {m.Nazev,-18} v{m.VerzeAlgoritmu} ← [{string.Join(",", m.Zavislosti)}] soubory [{string.Join(", ", m.Soubory)}] klíč {k[m.Id][..16]}");
+    return 0;
+}
 
 static int Det3(string[] a, Willage.Gen.Data.DataSveta d)
 {
