@@ -8,4 +8,4 @@ public sealed record ManifestDto(string Souhrn, IReadOnlyList<PolozkaKataloguDto
 public sealed record KontrolaKataloguDto(bool Aktualni, IReadOnlyList<string> Rozdily, IReadOnlyList<string> DotceneModuly);
 
 /// <summary>Zástupné (C, okno 2): popis grafického bloku 0,5 m.</summary>
-public sealed record GrafickyBlokDto(SouradniceQ16 Poloha, int Material, string Varianta);
+public sealed record GrafickyBlokDto(SouradniceQ16 Poloha, byte Material, string Varianta);

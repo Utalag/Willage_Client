@@ -21,8 +21,12 @@ public sealed record SloupecDto(SouradniceQ16 Poloha, double PovrchM, byte[] Bun
     }
 }
 
-/// <summary>Bod povrchu: výška, materiál povrchu, moře, klima (null bez klimatu).</summary>
-public sealed record BodDto(SouradniceQ16 Poloha, double PovrchM, int MaterialPovrchu, bool More, double? TeplotaC, double? SrazkyMm, string? Biom);
+/// <summary>
+/// Bod povrchu: výška, materiál povrchu (MaterialId u8, G-3 review bod 5), moře, klima (null bez klimatu).
+/// Pozor: klient používá id 57 pro sopečný popel (ParametrySveta.SopkaPopelId) – koliduje s rozsahem id 57–74 v katalogu Dev;
+/// zdokumentováno, nepřečíslováno (rozhodne se při sjednocení katalogu).
+/// </summary>
+public sealed record BodDto(SouradniceQ16 Poloha, double PovrchM, byte MaterialPovrchu, bool More, double? TeplotaC, double? SrazkyMm, string? Biom);
 
 /// <summary>
 /// Řez povrchem mezi dvěma body (vzorky po krokM). Jednotky (G-3 review): vodorovné polohy jsou Q16, PovrchM a KrokM jsou

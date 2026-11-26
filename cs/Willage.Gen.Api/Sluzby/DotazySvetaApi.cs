@@ -20,7 +20,7 @@ public sealed class DotazySvetaApi : IDotazySveta
     {
         var s = Svet; var g = s.Geologie; double h = g.Povrch(p.XM, p.YM);
         var k = s.Klima;
-        return new BodDto(p, h, g.MaterialPovrchu(p.XM, p.YM), g.JeMoreVyska(p.XM, p.YM, h),
+        return new BodDto(p, h, checked((byte)g.MaterialPovrchu(p.XM, p.YM)), g.JeMoreVyska(p.XM, p.YM, h),
             k?.Teplota(p.XM, p.YM), k?.Srazky(p.XM, p.YM), k is null ? null : KlasifikaceBiomu.NazevCs[(int)k.Biom(p.XM, p.YM)]);
     }
 
