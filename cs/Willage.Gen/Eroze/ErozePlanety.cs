@@ -9,16 +9,20 @@ public static class ErozePlanety
     /// <summary>Parametry světa pro planetu: svět musí pokrýt Px, Py i pás prolnutí (jinak stejné jako p).</summary>
     public static SvetFn SvetPlanety(ParametrySveta p, DataSveta d, ParametryEroze pe)
     {
+        p.PlanetaXM = pe.PlanetaXM; p.PlanetaYM = pe.PlanetaYM;
         p.SvetMaxM = Math.Max(p.SvetMaxM, Math.Max(pe.PlanetaXM, pe.PlanetaYM) + pe.PasProlnutiM);
         return new SvetFn(p, d);
     }
 
     public static PeriodickyPodklad Podklad(SvetFn s, ParametryEroze pe) => new(s, pe.PlanetaXM, pe.PlanetaYM, pe.PasProlnutiM);
 
+    /// <summary>Klíč keše mapy pro daný svět (moře je součástí klíče, bez moře beze změny proti kroku 6).</summary>
+    public static string Klic(SvetFn s, DataSveta d, ParametryEroze pe) => SouborMapy.KlicKese(s.Sd, pe, d.SouborySveta, s.More?.Kanonicky() ?? "");
+
     /// <summary>Načte mapu ze složky keše podle klíče, jinak spočte a uloží. kes = null → bez ukládání.</summary>
     public static MapaEroze Mapa(SvetFn s, DataSveta d, ParametryEroze pe, string? kes, int vlaken)
     {
-        string klic = SouborMapy.KlicKese(s.Sd, pe, d.SouborySveta);
+        string klic = Klic(s, d, pe);
         string? cesta = kes is null ? null : Path.Combine(kes, $"eroze_{klic[..16]}.wger");
         if (cesta is not null && SouborMapy.Nacti(cesta, klic) is { } m) return m;
         m = VypocetEroze.Spocti(Podklad(s, pe), pe, vlaken, out _);

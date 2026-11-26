@@ -23,7 +23,7 @@ public static class VypocetEroze
         });
         long tPodklad = sw.ElapsedMilliseconds;
 
-        var odtok = Odtoky(m.H0, p.OdtokPodil);
+        var odtok = podklad.Svet.More is { } more ? OdtokMore(t, m.H0, more) : Odtoky(m.H0, p.OdtokPodil);
         var h = new double[t.N]; for (int k = 0; k < t.N; k++) h[k] = m.H0[k];
         double[] fill = h; int[] poradi = Array.Empty<int>(); sbyte[] prij = m.Prijemce;
         for (int s = 0; s <= p.KrokuCasu; s++)
@@ -46,6 +46,14 @@ public static class VypocetEroze
         SitToku.Oznac(m, p.AKritM2);
         casy = new CasyEroze(tPodklad, tEroze - tPodklad, sw.ElapsedMilliseconds - tEroze);
         return m;
+    }
+
+    /// <summary>Krok 6b: odtok = moře (uzly v mořském pásu pod hladinou moře).</summary>
+    public static bool[] OdtokMore(Torus t, float[] h0, Willage.Gen.Svet.MoreSklon more)
+    {
+        var o = new bool[t.N];
+        for (int k = 0; k < t.N; k++) { var (x, y) = t.Poloha(k); o[k] = more.JeMore(x, y, h0[k]); }
+        return o;
     }
 
     /// <summary>Odtoky = nejnižší podíl buněk podkladu (shoda → nižší index).</summary>

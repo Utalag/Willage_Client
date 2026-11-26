@@ -14,10 +14,11 @@ public static class SouborMapy
     public const string Magie = "WGER"; public const int Verze = 1;
     public const string VerzeGeneratoru = "krok06-eroze-v1";
 
-    public static string KlicKese(long seed, ParametryEroze p, IEnumerable<string> datoveSoubory)
+    public static string KlicKese(long seed, ParametryEroze p, IEnumerable<string> datoveSoubory, string svet = "")
     {
         var sb = new StringBuilder();
         sb.Append(VerzeGeneratoru).Append('|').Append(seed).Append('|').Append(p.Kanonicky());
+        if (svet.Length > 0) sb.Append('|').Append(svet);   // krok 6b: parametry světa, které mapu mění (moře)
         foreach (var f in datoveSoubory.OrderBy(f => Path.GetFileName(f), StringComparer.Ordinal))
             sb.Append('|').Append(Path.GetFileName(f)).Append('=').Append(Convert.ToHexString(SHA256.HashData(File.ReadAllBytes(f))));
         return Convert.ToHexString(SHA256.HashData(Encoding.UTF8.GetBytes(sb.ToString()))).ToLowerInvariant();
