@@ -13,7 +13,7 @@ public static class ErozeNastroj
 {
     static readonly CultureInfo C = CultureInfo.InvariantCulture;
     /// <summary>Volby: --more (krok 6b moře + sklon), --sklon S, --interp bilinearni|catmullrom|bspline.</summary>
-    public static bool More, Panve, Vypnuto, BezKlimatu; public static long? Seed; public static double? Sklon; public static string? Interp;
+    public static bool More, Panve, Vypnuto, BezKlimatu, StareDno, BezDobiti; public static long? Seed; public static double? Sklon; public static string? Interp;
 
     public static string[] Volby(string[] a)
     {
@@ -28,6 +28,8 @@ public static class ErozeNastroj
             else if (a[i] == "--pobrezi") VodaBlok.Pobrezi = true;
             else if (a[i] == "--bez-tlaku") VodaBlok.BezTlaku = true;   // koeficient průsaku zapnut
             else if (a[i] == "--panve") Panve = true;
+            else if (a[i] == "--stare-dno") StareDno = true;   // 7c: HladinaBezMorskychUzlu = false (starý propad hladiny za břehem)
+            else if (a[i] == "--bez-dobiti") BezDobiti = true;   // 7c: hladina bez dobití klimatem (jako 7b)
             else if (a[i] == "--bez-klimatu") BezKlimatu = true;   // 7b: klima výchozí zapnuto; --bez-klimatu = stav po kroku 6
             else if (a[i] == "--vypnuto") Vypnuto = true;   // 6d: VseKrok06 je výchozí zapnuto; --vypnuto = jen --more / --panve
             else if (a[i] == "--seed") Seed = long.Parse(a[++i]);
@@ -249,7 +251,7 @@ public static class ErozeNastroj
         var (o, _, _) = OtiskKrok3.Spocti(Vz(), d, uprav: g => g.Svet.Eroze = sv.Eroze);
         int p33 = 0;
         var v = VodaBlok.Spust(true, d, svet: Vz(), geo: g => g.Svet.Eroze = sv.Eroze,
-            uprav: fn => { fn.Prameny.Vodnici = new VodniciVeSvete(sv.Vodnici, fn.Geologie).VOblasti; sv.NapojKlima(fn.Prameny); p33 = fn.Prameny.VOblasti(1792, 1792, 2176, 2176).Count; });
+            uprav: fn => { fn.Prameny.Vodnici = new VodniciVeSvete(sv.Vodnici, fn.Geologie).VOblasti; sv.NapojKlima(fn); p33 = fn.Prameny.VOblasti(1792, 1792, 2176, 2176).Count; });
         Console.WriteLine($"vše zapnuto: krok 3 {o}   voda 14,14 {v.otisk} ({v.pramenu} pramenů; 3×3: {p33})");
         return 0;
     }
@@ -325,8 +327,15 @@ public static class ErozeNastroj
         var pe0 = ParametryEroze.ZJson(File.ReadAllText(d.ErozeV1)); p.SvetMaxM = Math.Max(p.SvetMaxM, Math.Max(pe0.PlanetaXM, pe0.PlanetaYM) + pe0.PasProlnutiM);
         var sv = KonfiguraceSveta.Sestav(p, d, kes, 8);
         var pv = Willage.Gen.Voda.ParametryVody.ZJson(File.ReadAllText(d.VodaV1));
-        pv = VodaBlok.Priznaky(pv);
-        var fn = sv.Voda(Willage.Gen.Materialy.KatalogMaterialu.ZeSouboru(d.KatalogMaterialu), pv, VodaBlok.PrusakJson(pv, d));
+        pv = VodaBlok.Priznaky(pv) with { HladinaBezMorskychUzlu = !StareDno };
+        var kat = Willage.Gen.Materialy.KatalogMaterialu.ZeSouboru(d.KatalogMaterialu);
+        var fn = sv.Voda(kat, pv, VodaBlok.PrusakJson(pv, d));
+        if (BezDobiti) fn.Hladina.Napajeni = null;
+        // propustnost materiálů (zvodnělé buňky v obrázku): id, těleso (propustné), K m/s, název
+        var prop = new Willage.Gen.Materialy.Propustnost(kat);
+        var mat = new List<string> { "id,teleso,k_ms,klic" };
+        for (int id = 1; id < 256; id++) { var mm = kat.Najdi(id); if (mm is null) continue; mat.Add(FormattableString.Invariant($"{id},{(prop.Teleso(id) ? 1 : 0)},{mm.KMs ?? 0.0:E3},{mm.Key}")); }
+        File.WriteAllLines(Path.ChangeExtension(a[8], ".mat.csv"), mat);
         double krok = Willage.Gen.Jadro.GeologyGridConstants.CellM; int n = (int)Math.Round(L / krok);
         string bin = a[8], csv = Path.ChangeExtension(bin, ".csv");
         var s0 = sv.Geologie.Sloupec(x0, y0);

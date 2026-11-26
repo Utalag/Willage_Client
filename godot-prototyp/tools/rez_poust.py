@@ -1,4 +1,5 @@
-"""Svislý řez pouštním pobřežím (krok 7 / 7b). Vstup: bin+csv z `eroze rez --planeta poust`."""
+"""Svislý řez (krok 7 / 7b / 7c). Vstup: bin + csv + mat.csv z `eroze rez` (volitelně --planeta poust).
+Šrafa = zvodnělé buňky (pod hladinou podzemní vody, kde existuje, a propustný materiál); těsnění bez šrafy; chybí-li hladina, čára se nekreslí."""
 import struct, json, sys
 from pathlib import Path
 import numpy as np, matplotlib
@@ -39,9 +40,16 @@ def nacti_csv(f):
     rows = list(csv.DictReader(open(f)))
     return {k: np.array([float(r[k]) for r in rows]) for k in rows[0]}
 
-def kresli(bin_cesta, csv_cesta, vystup, titulek, dpi=90):
+def nacti_teleso(f):
+    t = {}
+    for r in csv.DictReader(open(f)):
+        t[int(r['id'])] = int(r['teleso'])
+    return t
+
+def kresli(bin_cesta, csv_cesta, vystup, titulek, dpi=90, mat_cesta=None):
     n, nz, krok, P, W, K, M = nacti_bin(bin_cesta)
     c = nacti_csv(csv_cesta)
+    tel = nacti_teleso(mat_cesta or str(csv_cesta).replace('.csv', '.mat.csv'))
     s, je, hydro, er, biom = c['s'], c['jemore'], c['hydro'].astype(int), c['eroze_m'], c['biom'].astype(int)
     ids = sorted(set(np.unique(M)) - {0})
     lut = np.zeros(256, int)
@@ -52,14 +60,27 @@ def kresli(bin_cesta, csv_cesta, vystup, titulek, dpi=90):
     cm = ListedColormap(cols)
     nm = BoundaryNorm(np.arange(-0.5, len(ids) + 1.5), cm.N)
     Wk = np.where(je == 1, np.nan, W)
-    zmin = max(20, np.floor(min(P.min(), np.nanmin(W)) - 10))
+    zmin = max(20, np.floor(min(P.min(), np.nanmin(W) if np.any(~np.isnan(W)) else P.min()) - 10))
     zmax = np.ceil(max(P.max(), 62) + 6)
     fig, a = plt.subplots(figsize=(16, 7.2))
     a.imshow(Mi, origin='lower', extent=[0, n * krok, 0, nz * krok], cmap=cm, norm=nm, aspect='auto', interpolation='nearest')
+    # zvodnělá zóna: buňka pod hladinou (kde existuje) a pod povrchem, propustný materiál (těleso)
+    zc = (np.arange(nz) + 0.5) * krok
+    nas = (zc[:, None] < np.where(np.isnan(W), -1e9, W)[None, :]) & (zc[:, None] < P[None, :]) & (M > 0)
+    teleso = np.zeros(256, bool)
+    for i, v in tel.items(): teleso[i] = v == 1
+    nas &= teleso[M]
+    xs = (np.arange(n) + 0.5) * krok
+    plt.rcParams['hatch.linewidth'] = 0.6
+    plt.rcParams['hatch.color'] = '#0b3d91'
+    a.contourf(xs, zc, nas.astype(float), levels=[0.5, 1.5], colors='none', hatches=['////'])
     a.fill_between(s, np.minimum(P, 60), 60, where=je == 1, color='#3070ff', alpha=0.45, label='moře (hladina 60 m)')
     a.plot(s, P, 'k', lw=1.3, label='povrch')
     a.axhline(60, color='#0030c0', ls='--', lw=0.8, label='60 m (reference)')
     a.plot(s, Wk, color='#00b0ff', lw=1.9, label='hladina podzemní vody (na pevnině; u břehu napojení 5 m)')
+    bez = (je == 0) & np.isnan(W)
+    if np.any(bez):
+        a.fill_between(s, zmax - 1.2, zmax, where=bez, color='#c0392b', alpha=0.6, label='bez hladiny podzemní vody (není dobíjená)')
     if np.any(je == 0):
         sb = s[np.argmax(je == 0)]
         a.axvline(sb, color='#008000', lw=1.0, ls='--', label='břeh (konec moře)')
@@ -79,7 +100,10 @@ def kresli(bin_cesta, csv_cesta, vystup, titulek, dpi=90):
     a.set_xlabel('vzdálenost podél řezu (m), moře vlevo → poušť vpravo')
     a.set_ylabel('výška z (m)')
     a.set_title(titulek, fontsize=11)
-    l1 = a.legend(loc='upper left', fontsize=8, framealpha=0.92)
+    from matplotlib.patches import Patch
+    hl, ll = a.get_legend_handles_labels()
+    hl.append(Patch(facecolor='white', edgecolor='#0b3d91', hatch='////', label='zvodnělé buňky: pod hladinou a propustný materiál (K ≥ práh nebo rozpustná hornina: vápenec, dolomit, sůl); těsnění bez šrafy'))
+    l1 = a.legend(hl, ll + [hl[-1].get_label()], loc='upper left', fontsize=8, framealpha=0.92)
     a.add_artist(l1)
     h = [plt.Rectangle((0, 0), 1, 1, color=cols[t + 1]) for t in range(len(ids))]
     a.legend(h, [f'{i}  {nazev(i)}' for i in ids], loc='lower right', fontsize=7.5, ncol=2, title='materiál', framealpha=0.92)
@@ -91,11 +115,14 @@ def kresli(bin_cesta, csv_cesta, vystup, titulek, dpi=90):
     print('zapsáno', vystup)
 
 if __name__ == '__main__':
-    out = Path(sys.argv[1]) if len(sys.argv) > 1 else ROOT / 'shots/rez-poust'
-    src = Path(sys.argv[2]) if len(sys.argv) > 2 else Path('/tmp/rez-poust')
-    kresli(src / 'rez_200.bin', src / 'rez_200.csv', out / 'rez_poust_200m.png',
-           'Řez 200 m, buňka 0,25 m: pouštní planeta, seed 49, subtropické pásmo.\n'
-           'Od x 13848 y 14368 m směrem +x (1, 0). Moře vlevo, suchá poušť vpravo. Žádný pramen ani oáza na řezu.')
-    kresli(src / 'rez_1000.bin', src / 'rez_1000.csv', out / 'rez_poust_1000m.png',
-           'Řez 1000 m (přehled), buňka 0,25 m: stejná úsečka jako řez 200 m, pokračuje do vnitrozemí.\n'
-           'Oranžový pruh = suché koryto (pozůstatek eroze, bez dnešního průtoku). Oáza na řezu není (nejbližší ~475 m stranou).')
+    # použití: rez_poust.py <vystupni_slozka> <zdroj_slozka>  (zdroj: poust_200, poust_1000, mirne_100 jako .bin/.csv/.mat.csv)
+    out = Path(sys.argv[1]) if len(sys.argv) > 1 else ROOT / 'shots/krok07c'
+    src = Path(sys.argv[2]) if len(sys.argv) > 2 else Path('/workspace/k07c/r')
+    sada = [
+        ('poust_200', 'rez_poust_200m.png', 'Pouštní pobřeží, řez 200 m (planeta poušť, seed 49, subtropické pásmo): buňka 0,25 m, od x 13848 y 14368 m směrem +x. Moře vlevo.'),
+        ('poust_1000', 'rez_poust_1000m.png', 'Pouštní pobřeží, přehled 1 km (stejná úsečka): hladina podzemní vody končí tam, kde není dobíjená; suché koryto oranžově.'),
+        ('mirne_100', 'rez_mirne_strme_100m.png', 'Strmé pobřeží mírné planety (seed 49, řez kroku 6g): od x 22489,4 y 5322,3 m, směr (0,97; −0,26), buňka 0,25 m.'),
+    ]
+    for jm, png, tit in sada:
+        if (src / f'{jm}.bin').exists():
+            kresli(src / f'{jm}.bin', src / f'{jm}.csv', out / png, tit)

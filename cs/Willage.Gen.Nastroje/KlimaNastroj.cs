@@ -47,6 +47,12 @@ public static class KlimaNastroj
         int kor = 0; for (int k = 0; k < t.N; k++) if ((m.Priznaky[k] & MapaEroze.Koryto) != 0) kor++;
         int akt = hk.Pocet(HydrologieKlimatu.Aktivni), suc = hk.Pocet(HydrologieKlimatu.Suche), bez = hk.Pocet(HydrologieKlimatu.BezKoryta);
         Console.WriteLine($"  koryta z eroze {kor} uzlů: aktivní {akt} ({100.0 * akt / kor:F1} %), suchá {suc} ({100.0 * suc / kor:F1} %); dnešní tok mimo koryto {bez} uzlů");
+        if (sv.Napajeni is { } nap)
+        {
+            int nb = 0, nd = 0, np = 0;
+            for (int k = 0; k < t.N; k++) { if ((m.Priznaky[k] & MapaEroze.Odtok) != 0) continue; np++; if (nap.E[k] <= 0f) nb++; else if (nap.E[k] < 1f) nd++; }
+            Console.WriteLine(FormattableString.Invariant($"  hladina podzemní vody (7c): bez hladiny {100.0 * nb / np:F1} % pevniny, jen částečně dobitá (hlouběji) {100.0 * nd / np:F1} %, plně dobitá {100.0 * (np - nb - nd) / np:F1} %"));
+        }
         void V(string n, List<Vodnik> v)
         {
             var q = v.Select(x => x.QLs).OrderBy(x => x).ToArray();
@@ -113,7 +119,7 @@ public static class KlimaNastroj
             var (o, _, _) = OtiskKrok3.Spocti(Ps(ErozeNastroj.Seed ?? 49, kl), d, uprav: g => g.Svet.Eroze = sv.Eroze);
             int p33 = 0;
             var v = VodaBlok.Spust(true, d, svet: Ps(ErozeNastroj.Seed ?? 49, kl), geo: g => g.Svet.Eroze = sv.Eroze,
-                uprav: fn => { fn.Prameny.Vodnici = new VodniciVeSvete(sv.Vodnici, fn.Geologie).VOblasti; sv.NapojKlima(fn.Prameny); p33 = fn.Prameny.VOblasti(1792, 1792, 2176, 2176).Count; });
+                uprav: fn => { fn.Prameny.Vodnici = new VodniciVeSvete(sv.Vodnici, fn.Geologie).VOblasti; sv.NapojKlima(fn); p33 = fn.Prameny.VOblasti(1792, 1792, 2176, 2176).Count; });
             Console.WriteLine($"klima {(kl ? "zap" : "vyp")}: oáz {sv.Oazy.Count}, mapa {SouborMapy.Otisk(sv.Mapa!)}, vodníků {sv.Vodnici.Count}, krok 3 {o}, voda 14,14 {v.otisk} ({v.pramenu} pramenů; 3×3: {p33}){(kl ? $", klima {sv.Klima!.Mapa.Otisk()}, w start {sv.Klima.W(1984, 1984):F2}, biom start {KlasifikaceBiomu.NazevCs[(int)sv.Klima.Biom(1984, 1984)]}, T {sv.Klima.Teplota(1984, 1984):F1} °C, P {sv.Klima.Srazky(1984, 1984):F0} mm" : "")}");
         }
         return 0;
@@ -128,10 +134,22 @@ public static class KlimaNastroj
         var sv = KonfiguraceSveta.Sestav(p, d, kes, 8);
         var pv = ParametryVody.ZJson(File.ReadAllText(d.VodaV1));
         var kat = Willage.Gen.Materialy.KatalogMaterialu.ZeSouboru(d.KatalogMaterialu);
-        var f0 = new PodzemniVodaFn(sv.Geologie, kat, pv); var f1 = new PodzemniVodaFn(sv.Geologie, kat, pv); sv.NapojKlima(f1.Prameny);
-        var l0 = f0.Prameny.VOblasti(x0, y0, x0 + s, y0 + s); var l1 = f1.Prameny.VOblasti(x0, y0, x0 + s, y0 + s);
+        var f0 = new PodzemniVodaFn(sv.Geologie, kat, pv); var f1 = new PodzemniVodaFn(sv.Geologie, kat, pv); sv.NapojKlima(f1);
+        var f2 = new PodzemniVodaFn(sv.Geologie, kat, pv); sv.NapojKlima(f2.Prameny);   // 7b: jen prameny podle w, hladina všude
+        var l0 = f0.Prameny.VOblasti(x0, y0, x0 + s, y0 + s); var l1 = f1.Prameny.VOblasti(x0, y0, x0 + s, y0 + s); var l2 = f2.Prameny.VOblasti(x0, y0, x0 + s, y0 + s);
         var k = sv.Klima!;
-        Console.WriteLine(FormattableString.Invariant($"prameny ({x0:F0}, {y0:F0}) {s:F0} m, biom {KlasifikaceBiomu.NazevCs[(int)k.Biom(x0 + s / 2, y0 + s / 2)]}, w {k.W(x0 + s / 2, y0 + s / 2):F2}: bez klimatu {l0.Count} ({l0.Sum(x => x.Jmenovity):F1} l/s), s klimatem {l1.Count} ({l1.Sum(x => x.Jmenovity):F1} l/s)"));
+        Console.WriteLine(FormattableString.Invariant($"prameny ({x0:F0}, {y0:F0}) {s:F0} m, planeta {p.Klima}, biom {KlasifikaceBiomu.NazevCs[(int)k.Biom(x0 + s / 2, y0 + s / 2)]}, w {k.W(x0 + s / 2, y0 + s / 2):F2}: bez klimatu {l0.Count} ({l0.Sum(x => x.Jmenovity):F1} l/s), klima 7b {l2.Count} ({l2.Sum(x => x.Jmenovity):F1} l/s), klima + dobití hladiny 7c {l1.Count} ({l1.Sum(x => x.Jmenovity):F1} l/s)"));
+        // podíl pevniny s hladinou (vzorky po 64 m v oblasti), hloubka hladiny
+        int n = 0, bez = 0, pev = 0; var hl = new List<double>();
+        for (double y = y0 + 32; y < y0 + s; y += 64) for (double x = x0 + 32; x < x0 + s; x += 64)
+        {
+            n++; double pov = f1.Geologie.Povrch(x, y);
+            if (pov < 60.0) continue; pev++;
+            double h = f1.Hladina.Surova(x, y);
+            if (double.IsNaN(h)) bez++; else hl.Add(Math.Max(0, pov - h));
+        }
+        hl.Sort();
+        Console.WriteLine(FormattableString.Invariant($"  pevnina {pev} vzorků po 64 m: bez hladiny {bez} ({100.0 * bez / Math.Max(1, pev):F0} %), hloubka hladiny medián {(hl.Count > 0 ? hl[hl.Count / 2] : double.NaN):F1} m, 90 % {(hl.Count > 0 ? hl[(int)(hl.Count * 0.9)] : double.NaN):F1} m"));
         return 0;
     }
 }
