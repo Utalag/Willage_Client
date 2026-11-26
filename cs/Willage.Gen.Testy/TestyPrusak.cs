@@ -21,9 +21,10 @@ public static class TestyPrusak
         var data = DataSveta.Najdi(AppContext.BaseDirectory);
         var kat = KatalogMaterialu.ZeSouboru(data.KatalogMaterialu);
         var pj = File.ReadAllText(data.PrusakV1);
-        var pv = ParametryVody.ZJson(File.ReadAllText(data.VodaV1));
+        var pvJson = ParametryVody.ZJson(File.ReadAllText(data.VodaV1));
+        var pv = pvJson with { PrusakTlak = false };   // původní model (poměr výšek); tlak má vlastní testy dole
         T.Sekce("koeficient průsaku: tabulka 0–255");
-        T.Je(!new ParametryVody().PrusakKoeficient && !pv.PrusakKoeficient, "výchozí příznak vypnuto (kód i voda_v1.json)");
+        T.Je(!new ParametryVody().PrusakKoeficient && !pvJson.PrusakKoeficient, "výchozí příznak vypnuto (kód i voda_v1.json)");
         var k = new PrusakKoeficient(kat, pj);
         T.Je(k.Koef(Sterk) == 255 && k.Koef(Pisek) == 178 && k.Koef(Jil) == 13 && k.Koef(Zula) == 0 && k.Koef(0) == 255, "štěrk 255, písek 178, jíl 13, žula 0, vzduch 255");
         T.Je(k.Koef(33) == 0 && k.Koef(4) == 13 && k.Koef(Spras) == 38 && k.Koef(60) == 77, "ortorula 0, zvětralý jíl 13, spraš 38 (třída K), zvětralá žula 77");
@@ -77,5 +78,24 @@ public static class TestyPrusak
         T.Blizko(dl.HladinaM, 60.0, 1e-3, "konečná hladina = venkovní 60 m (strop 62 m)");
         var dz = zap.Dutina(Z(Zula, 1)); dz.Beh(30 * 86400);
         T.Je(dz.HladinaM == 56.0, "žula za 30 dnů: hladina beze změny (56 m)");
+
+        T.Sekce("koeficient průsaku: tlak (rozdíl hladin) v dutině");
+        var pvT = pvJson with { PrusakTlak = true, PrusakKoeficient = true };
+        var zapT = new PodzemniVodaFn(new SyntetickaGeologie(), kat, pvT, pj);
+        long VolT(int m, int n, long s) { var d = zapT.Dutina(Z(m, n)); d.Beh(s); return d.ObjemUl; }
+        T.Je(pvJson.PrusakTlak && pvJson.PrusakSpadMax == 10.0, "PrusakTlak výchozí zapnuto (působí jen s PrusakKoeficient / dutinou), strop spádu 10");
+        T.Je(zapT.Dutina(Z(Pisek, 1)).Tlak && !zap.Dutina(Z(Pisek, 1)).Tlak, "příznak se předává do dutiny");
+        long a1 = VolT(Pisek, 1, 10), a5 = VolT(Pisek, 5, 10);
+        T.Je(a1 > 0 && a1 > a5, $"s tlakem tenčí stěna pustí víc (spád = Δh / tloušťka): {a1} > {a5} µl za 10 s");
+        T.Je(VolT(Sterk, 1, 10) > Vol(zap, Sterk, 1, 10), "s tlakem je spád u tenké stěny > 1, tok vyšší než při poměru výšek");
+        var dh = zapT.Dutina(Z(Pisek, 4)); dh.Krok(); long prvni = dh.ObjemUl;
+        var dn = new PodzemniVodaFn(new SyntetickaGeologie(), kat, pvT with { PrusakSpadMax = 0.5 }, pj).Dutina(Z(Pisek, 4)); dn.Krok();
+        T.Je(prvni > dn.ObjemUl, "strop spádu je ladící (PrusakSpadMax 10 vs 0,5)");
+        var dp = zapT.Dutina(Z(Pisek, 5)); double predch2 = dp.HladinaM; bool rost = true;
+        while (dp.Cas < 3 * 86400) { dp.Krok(); if (dp.HladinaM < predch2) rost = false; predch2 = dp.HladinaM; }
+        T.Je(rost && dp.HladinaM <= 60.0 + 1e-9 && Math.Abs(dp.HladinaM - 60.0) < 0.01, "s tlakem: hladina roste, nepřekročí 60 m, dosáhne 60 m");
+        long hole = Vol(zapT, Zula, 1, 3600, 1);
+        T.Je(hole == Vol(zap, Zula, 1, 3600, 1), "díra: poměr výšek jako dřív (tlak ji nemění)");
+        T.Je(Vol(zap, Pisek, 5, 3600) == 1182988524L, "bez tlaku: zlaté číslo 1182988524 µl beze změny");
     }
 }

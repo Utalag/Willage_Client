@@ -6,7 +6,9 @@ namespace Willage.Gen.Voda.Prusak;
 /// <summary>
 /// Plnění uzavřené dutiny pod hladinou podzemní vody průsakem stěnami. Celočíselně (Int128, objem v pikolitrech), krok 10 s.
 /// Tok jedné stěnové buňky = X_min(cesta) [l/s při spádu 1, stávající pravidlo minima] × T(cesta) [jen při zapnutém koeficientu]
-/// × spád, kde spád = (H − max(h, z buňky)) / (H − dno). Stěna do vzduchu (díra) = otevřená buňka, jmenovitě 1 l/s.
+/// × spád. Bez tlaku spád = (H − max(h, z buňky)) / (H − dno) (poměr výšek). S tlakem je spád skutečný hydraulický:
+/// i = (H − max(h, z buňky)) / tloušťka stěny, nejvýš <c>spadMax</c> (celočíselně v promile); tok roste s rozdílem hladin
+/// a klesá s tloušťkou. Stěna do vzduchu (díra) = otevřená buňka, jmenovitě 1 l/s, vždy s poměrem výšek.
 /// Dutina je odvzdušněná: voda stoupá nejvýš na min(H, strop).
 /// </summary>
 public sealed class PrusakDutina
@@ -18,13 +20,15 @@ public sealed class PrusakDutina
     /// <summary>Jmenovitý tok otevřené stěnové buňky (l/s) – příklad „buňka 1 l/s“ z 1.8.</summary>
     public const double OtevrenaLs = 1.0;
 
-    private readonly record struct Skupina(long Pocet, long ZMm, long RateUlS, long T);
+    private readonly record struct Skupina(long Pocet, long ZMm, long RateUlS, long T, long LMm);
 
     private readonly Skupina[] _sk;
     private readonly long _dnoMm, _hMm, _stropMm, _plochaMm2, _rovnovahaMm;
     private Int128 _objemPl;   // pikolitry (1 µl = 10⁶ pl; 1 mm³ = 1 µl)
 
     public bool Koeficient { get; }
+    public bool Tlak { get; }
+    private readonly long _spadMaxPm;
     public long Cas { get; private set; }
     public double HladinaM => (_dnoMm + (double)(_objemPl / PlPerUl) / _plochaMm2) / 1000.0;
     public double RovnovahaM => _rovnovahaMm / 1000.0;
@@ -32,9 +36,10 @@ public sealed class PrusakDutina
     public double Plneni => _rovnovahaMm == _dnoMm ? 1.0 : Math.Min(1.0, ((double)(_objemPl / PlPerUl) / _plochaMm2) / (_rovnovahaMm - _dnoMm));
     public long ObjemUl => (long)(_objemPl / PlPerUl);
 
-    public PrusakDutina(ZadaniDutiny z, Propustnost pr, PrusakKoeficient? koef)
+    public PrusakDutina(ZadaniDutiny z, Propustnost pr, PrusakKoeficient? koef, bool tlak = false, double spadMax = 10.0)
     {
-        Koeficient = koef is not null;
+        Koeficient = koef is not null; Tlak = tlak;
+        _spadMaxPm = Math.Max(1, (long)Math.Round(spadMax * 1000.0));
         _dnoMm = (long)Math.Round(z.DnoM * 1000); _hMm = (long)Math.Round(z.HladinaVenkuM * 1000);
         _stropMm = _dnoMm + z.VyskaBunek * MmCell;
         _plochaMm2 = (long)z.SirkaBunek * MmCell * z.HloubkaBunek * MmCell;
@@ -50,7 +55,7 @@ public sealed class PrusakDutina
         long Teta(StenaDutiny s) => koef is null ? PrusakUtlum.Jedna : PrusakUtlum.Cesta(s.Cesta, koef);
         void Pridej(long pocet, long zMm, StenaDutiny s)
         {
-            if (pocet > 0 && zMm < _hMm) sk.Add(new Skupina(pocet, zMm, Ul(s), Teta(s)));
+            if (pocet > 0 && zMm < _hMm) sk.Add(new Skupina(pocet, zMm, Ul(s), Teta(s), s.Cesta.Length == 1 && s.Cesta[0] == Propustnost.Vzduch ? 0 : s.Cesta.Length * MmCell));
         }
         int dir = Math.Min(z.DirBocnich, 4 * z.VyskaBunek * Math.Max(z.SirkaBunek, z.HloubkaBunek));
         long boku = 2L * (z.SirkaBunek + z.HloubkaBunek);   // buněk na jedné vrstvě obvodu
@@ -82,10 +87,11 @@ public sealed class PrusakDutina
         {
             long hl = Math.Max(hMm, s.ZMm);
             long spad = Math.Max(0, _hMm - hl);
+            if (Tlak && s.LMm > 0) spad = Math.Min(spad, _spadMaxPm * s.LMm / 1000);
             // µl/s × pocet × s × T / 2^24 × spad/norm → v pl
             Int128 q = (Int128)s.RateUlS * s.Pocet * KrokS * PlPerUl;
             q = q * s.T >> PrusakUtlum.Q;
-            prirustek += q * spad / norm;
+            prirustek += Tlak && s.LMm > 0 ? q * spad / s.LMm : q * spad / norm;
         }
         _objemPl += prirustek;
         Int128 maxPl = (Int128)(rovnovahaMm - _dnoMm) * _plochaMm2 * PlPerUl;

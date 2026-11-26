@@ -8,5 +8,7 @@
   "qSnih": 4.0, "qKontakt": 1.5, "qKras": 5.0, "qVyver": 1.0,
   "tlakovy": false,
   "hladinaPrechodM": 5.0,
-  "prusakKoeficient": false
+  "prusakKoeficient": false,
+  "prusakPobrezi": false,
+  "pobrezHorizontDni": 30.0, "pobrezSpad": 0.05, "pobrezPorovitost": 0.3, "pobrezMaxM": 16.0, "pobrezOknoM": 2.0
 }

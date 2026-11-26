@@ -12,15 +12,29 @@ public static class VodaBlok
 {
     /// <summary>Volba --prusak: zapne ParametryVody.PrusakKoeficient (otisky musí zůstat stejné).</summary>
     public static bool Prusak;
+    /// <summary>Volba --pobrezi: zapne ParametryVody.PrusakPobrezi (šířka pobřežního pásu z koeficientu průsaku).</summary>
+    public static bool Pobrezi;
+    /// <summary>Volba --bez-tlaku: PrusakTlak = false.</summary>
+    public static bool BezTlaku;
+
+    public static ParametryVody Priznaky(ParametryVody pv)
+    {
+        if (Prusak) pv = pv with { PrusakKoeficient = true };
+        if (Pobrezi) pv = pv with { PrusakPobrezi = true };
+        if (BezTlaku) pv = pv with { PrusakTlak = false };
+        return pv;
+    }
+
+    public static string? PrusakJson(ParametryVody pv, DataSveta d) => pv.PrusakKoeficient || pv.PrusakPobrezi ? File.ReadAllText(d.PrusakV1) : null;
 
     public static PodzemniVodaFn Fn(bool opravy, DataSveta d, Func<ParametryVody, ParametryVody>? uprav = null, Action<GeologieCs>? geo = null, ParametrySveta? svet = null)
     {
         var ps = svet ?? (opravy ? new ParametrySveta() : ParametrySveta.Puvodni());
         var pv = ParametryVody.ZJson(File.ReadAllText(d.VodaV1)) with { SopkaNepropustna = opravy };
-        if (Prusak) pv = pv with { PrusakKoeficient = true };
+        pv = Priznaky(pv);
         if (uprav is not null) pv = uprav(pv);
         var g = new GeologieCs(ps, d); geo?.Invoke(g);
-        return new PodzemniVodaFn(g, KatalogMaterialu.ZeSouboru(d.KatalogMaterialu), pv, pv.PrusakKoeficient ? File.ReadAllText(d.PrusakV1) : null);
+        return new PodzemniVodaFn(g, KatalogMaterialu.ZeSouboru(d.KatalogMaterialu), pv, PrusakJson(pv, d));
     }
 
     public static (string otisk, int pramenu, double msInit, double msBlok) Spust(bool opravy, DataSveta d, int bx = 14, int by = 14, Action<PodzemniVodaFn>? uprav = null, Action<GeologieCs>? geo = null, ParametrySveta? svet = null, Func<ParametryVody, ParametryVody>? voda = null)

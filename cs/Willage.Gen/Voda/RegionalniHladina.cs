@@ -1,4 +1,5 @@
 using Willage.Gen.Geologie;
+using Willage.Gen.Voda.Prusak;
 
 namespace Willage.Gen.Voda;
 
@@ -13,7 +14,19 @@ public sealed class RegionalniHladina
     private readonly IGeologie _g;
     private readonly ParametryVody _p;
 
-    public RegionalniHladina(IGeologie g, ParametryVody p) { _g = g; _p = p; }
+    private readonly PobrezniPas? _pas;
+    private readonly System.Collections.Concurrent.ConcurrentDictionary<(long, long, int), double> _sirky = new();
+
+    /// <param name="pas">šířka pobřežního pásu z koeficientu průsaku; null = konstanta <see cref="ParametryVody.HladinaPrechodM"/></param>
+    public RegionalniHladina(IGeologie g, ParametryVody p, PobrezniPas? pas = null) { _g = g; _p = p; _pas = pas; }
+
+    /// <summary>Šířka pásu u břehu v (sx, sy) při rozdílu hladin dhMm; cache po 1 m a spádu.</summary>
+    private double SirkaPasu(double sx, double sy, long dhMm)
+    {
+        int spad = _pas!.SpadPm(dhMm);
+        return _sirky.GetOrAdd(((long)Math.Round(sx), (long)Math.Round(sy), spad),
+            k => _pas.Sirka(_g.Sloupec(k.Item1, k.Item2), _g.Povrch(k.Item1, k.Item2), dhMm));
+    }
 
     /// <summary>Povrch pro tvar hladiny: krok 6b s erozí = povrch před erozí (hladina pak klesne o hrubou erozi).</summary>
     private double PovrchH(double x, double y) => _p.HladinaSledujeErozi ? _g.PovrchBezEroze(x, y) : _g.Povrch(x, y);
@@ -37,7 +50,22 @@ public sealed class RegionalniHladina
         double l = g - _p.HloubkaD0M + _p.ZesileniUdoliBeta * (g - PovrchH(x, y));
         l = _p.HladinaSledujeErozi ? l - _g.ErozeHruba(x, y) : l;
         // krok 6e/6g: v moři (JeMore) a v pásu HladinaPrechodM od skutečného břehu hladina = hladina moře, dál původní spád (smoothstep); žádný fallback 60 m
-        if (_p.HladinaPrechodM > 0)
+        if (_pas is not null)
+        {
+            // koeficient průsaku: šířka pásu = dosah mořské vody za horizont podle materiálů u nejbližšího břehu
+            double hm = _g.HladinaMore;
+            if (!double.IsNaN(hm))
+            {
+                var (d, sx, sy) = _g.BrehOdMore(x, y, _pas.MaxM);
+                if (d <= 0) l = hm;
+                else if (d < _pas.MaxM && !double.IsNaN(sx))
+                {
+                    double w = SirkaPasu(sx, sy, (long)Math.Round((l - hm) * 1000.0));
+                    if (d < w) { double t = d / w; t = t * t * (3.0 - 2.0 * t); l = hm + (l - hm) * t; }
+                }
+            }
+        }
+        else if (_p.HladinaPrechodM > 0)
         {
             double hm = _g.HladinaMore;
             if (!double.IsNaN(hm))

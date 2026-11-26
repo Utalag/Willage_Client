@@ -44,6 +44,12 @@ public sealed class GeologieCs : IGeologie
     public double PovrchBezEroze(double x, double y) => Svet.VyskaBezEroze(x, y);
     public double ErozeHruba(double x, double y) => Svet.Eroze?.Hruba(x, y) ?? 0.0;
     public double VzdalenostOdMore(double x, double y) => Svet.More?.VzdalenostOdMoreJemna(x, y, Povrch) ?? double.PositiveInfinity;
+    public (double d, double sx, double sy) BrehOdMore(double x, double y, double dosah)
+    {
+        if (Svet.More is null) return (double.PositiveInfinity, double.NaN, double.NaN);
+        double d = Svet.More.BrehJemny(x, y, Povrch, dosah, out double sx, out double sy);
+        return (d, sx, sy);
+    }
     public double HladinaMore => Svet.More is null ? double.NaN : Svet.P.HladinaMoreM;
 
     public bool VNitruSopky(double x, double y, double z) => Geo.Sopky.Mat(x, y, z) >= 0;
