@@ -1,0 +1,12 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <!-- T-1: fasáda editoru materiálů / generátoru textur (net9, bez Godotu, bez kódu Dev).
+       Katalog vzhledu čte zrcadlo katalogu Dev (jen čtení), receptury drží ve schématu Dev (VpmgRecipeJson),
+       textury počítá VPMG Dev mimo proces (Willage.Vpmg.Nastroj, rozhodnutí N7). Okno 2 (T-2) a testy ji používají. -->
+  <PropertyGroup>
+    <TargetFramework>net9.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <RootNamespace>Willage.Materialy.Api</RootNamespace>
+    <Deterministic>true</Deterministic>
+  </PropertyGroup>
+</Project>

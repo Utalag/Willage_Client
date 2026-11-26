@@ -1,0 +1,34 @@
+{
+  "format": "willage-vpmg-operace-v0",
+  "devCommit": "34764880fa2b0f1c580558403f9ea40a29f6a1c8",
+  "poznamka": "Popis operací VPMG pro konfigurátor editoru materiálů (T-1/T-2). Dev schéma parametrů nemá – operace čtou params ad hoc; nezástupné operace musí odpovídat registru Dev (test T-1). Zástupné operace jsou návrhy pro Willage-backend (inspirace 2026-11-26), v registru Dev nejsou a nejdou spustit.",
+  "rozliseni": { "min": 8, "max": 512, "vychozi": 64 },
+  "profil": [
+    { "nazev": "style", "druh": "text", "popis": "styl vykreslení profilu (v0 ho žádná operace nečte)" },
+    { "nazev": "baseColor", "druh": "barva", "popis": "základní barva #RRGGBB (čte base_fill)" },
+    { "nazev": "grainScalePermille", "druh": "cele", "min": 0, "max": 1000, "jednotka": "‰", "popis": "amplituda zrna (čte hash_grain: delta = (hash − 128) × ‰ / 1000)" },
+    { "nazev": "layerDensityPermille", "druh": "cele", "min": 0, "max": 1000, "jednotka": "‰", "popis": "hustota vrstev (v0 ji žádná operace nečte – čeká na vrstvení)" },
+    { "nazev": "irregularityPermille", "druh": "cele", "min": 0, "max": 1000, "jednotka": "‰", "popis": "nepravidelnost (v0 ji žádná operace nečte)" }
+  ],
+  "operace": [
+    {
+      "type": "base_fill", "nazev": "Základní barva", "skupina": "základní vzhled",
+      "popis": "Vyplní vrstvu barvou visualProfile.baseColor (geologii nečte).",
+      "ctiProfil": ["baseColor"],
+      "params": [ { "nazev": "layer", "druh": "text", "vychozi": "albedo", "popis": "cílová vrstva RGBA8 (výstup runneru = poslední vytvořená vrstva)" } ]
+    },
+    {
+      "type": "hash_grain", "nazev": "Zrno (hash)", "skupina": "struktura",
+      "popis": "Deterministické zrno z GeologyHash nad poslední vrstvou; amplituda visualProfile.grainScalePermille, sůl z ID materiálu a seedu.",
+      "ctiProfil": ["grainScalePermille"],
+      "params": []
+    },
+    { "type": "noise_field", "nazev": "Šumové pole", "skupina": "struktura", "zastupna": true, "popis": "zástupné: Perlin / Simplex / Worley (Dev má jen rozhraní IVpmgNoiseSource bez implementace) – návrh pro backend", "params": [] },
+    { "type": "layering", "nazev": "Vrstvení a tvar", "skupina": "vrstvení", "zastupna": true, "popis": "zástupné: vrstvy, zvlnění, orientace, nepravidelnost hran (layerDensity / irregularity) – návrh pro backend", "params": [] },
+    { "type": "inclusions", "nazev": "Inkluze (kamínky)", "skupina": "struktura", "zastupna": true, "popis": "zástupné: hustota a velikost inkluzí – návrh pro backend", "params": [] },
+    { "type": "roots", "nazev": "Kořeny a organika", "skupina": "organika", "zastupna": true, "popis": "zástupné: hustota, tloušťka, větvení, hloubka kořenů – návrh pro backend", "params": [] },
+    { "type": "cracks", "nazev": "Praskliny a dutiny", "skupina": "praskliny", "zastupna": true, "popis": "zástupné: praskliny, dutiny (kras, nory) – návrh pro backend", "params": [] },
+    { "type": "moisture", "nazev": "Vlhkost a přechody", "skupina": "vlhkost", "zastupna": true, "popis": "zástupné: vlhkost, plynulý přechod k jinému materiálu – návrh pro backend", "params": [] },
+    { "type": "watercolor", "nazev": "Akvarelové vykreslení", "skupina": "vykreslení", "zastupna": true, "popis": "zástupné: akvarelový styl (barva, rozmytí, textura papíru) – návrh pro backend", "params": [] }
+  ]
+}
