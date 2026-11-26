@@ -22,6 +22,7 @@ public partial class GeneratorSvetaOkno : Control
     public RetezPrepoctu Retez { get; private set; } = null!;
     public HorniLista Lista { get; private set; } = null!;
     public Diagnostika Diagnostika { get; private set; } = null!;
+    public PohledRezu Rez { get; private set; } = null!;
 
     public override void _Ready()
     {
@@ -30,7 +31,11 @@ public partial class GeneratorSvetaOkno : Control
         Lista = GetNode<HorniLista>("%HorniLista"); Diagnostika = GetNode<Diagnostika>("%Diagnostika");
         var j = WillageJadro.Instance; if (j is null) { GD.PushError("GeneratorSveta: chybí autoload WillageJadro"); return; }
 
-        Seznam.ModulVybran += id => { Konfigurator.Zobraz(id); Nahled.NastavModul(id); };
+        Rez = GetNode<PohledRezu>("%PohledRezu");
+        Seznam.ModulVybran += id => { Konfigurator.Zobraz(id); Rez.NastavModul(id); Nahled.NastavModul(id); };
+        // G-6: úsečka z náhledu → řez; izolace z konfigurátoru → náhled (M1, M2) nebo režim řezu (M3)
+        Nahled.UseckaVybrana += (od, @do) => Rez.NastavUsecku(od, @do);
+        Konfigurator.IzolaceZmenena += (m, st) => { if (m == "M3") Rez.NastavRezim(st); else Nahled.NastavIzolaci(st > 0); };
         j.ParametrZmenen += (_, prijato, _, _) => { if (prijato) { j.Moduly(); j.InfoPlanety(); } };
         j.PlanetaHotova += _ => { j.Moduly(); j.InfoPlanety(); };
         // načtení WPLN mění sadu parametrů: úlohy jdou do fronty za Nacti, takže přijdou už nové hodnoty

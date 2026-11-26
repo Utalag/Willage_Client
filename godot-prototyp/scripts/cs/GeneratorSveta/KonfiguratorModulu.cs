@@ -18,6 +18,10 @@ namespace WillagePrototyp.OknoGeneratoru;
 public partial class KonfiguratorModulu : VBoxContainer
 {
     [Signal] public delegate void PostavenEventHandler(string modul, int editoru);
+    /// <summary>G-6: izolace vrstvy modulu – M1/M2 0 vyp / 1 zap (izolační vrstva náhledu), M3 režim řezu 0 vše / 1 jen vrstvy / 2 jen útvary.</summary>
+    [Signal] public delegate void IzolaceZmenenaEventHandler(string modul, int stav);
+
+    public int StavIzolace { get; private set; }
 
     public string Modul { get; private set; } = "";
     public PopisKonfiguratoru? Popis { get; private set; }
@@ -40,7 +44,7 @@ public partial class KonfiguratorModulu : VBoxContainer
         _parametry = GetNode<VBoxContainer>("Svitek/Parametry"); _zastupny = GetNode<ZastupnyPanel>("Zastupny");
         _prepocitat = GetNode<Button>("Akce/Prepocitat"); _vychozi = GetNode<Button>("Akce/Vychozi");
         _izolovat = GetNode<Button>("Akce/Izolovat"); _sada = GetNode<Button>("Akce/UlozitSadu");
-        _izolovat.Disabled = true; _izolovat.TooltipText = "zástupný: izolace vrstvy modulu přijde s náhledy G-6 (M1–M3) a G-7 (M4–M6)";
+        _izolovat.Pressed += PrepniIzolaci;
         _sada.Disabled = true; _sada.TooltipText = "zástupný: pojmenované sady parametrů – zatím se ukládá celá planeta (WPLN)";
         _zastupny.Visible = false;
         var j = WillageJadro.Instance; if (j is null) { _stav.Text = "jádro chybí (autoload WillageJadro)"; return; }
@@ -66,10 +70,35 @@ public partial class KonfiguratorModulu : VBoxContainer
         var m = j.PosledniModuly.FirstOrDefault(x => x.Id == modul);
         _nadpis.Text = m is null ? modul : $"{m.Id} · {m.Nazev}  (verze {m.Verze}, závisí na {(m.Zavislosti.Count == 0 ? "–" : string.Join(", ", m.Zavislosti))})";
         bool zast = m?.Zastupny ?? false;
+        NastavTlacitkoIzolace(modul, 0);
         _zastupny.Visible = zast; GetNode<Control>("Svitek").Visible = !zast;
         _prepocitat.Disabled = zast; _vychozi.Disabled = zast;
         if (zast) { Vycisti(); _zastupny.Funkce = $"{m!.Id} {m.Nazev}"; _stav.Text = $"modul je zástupný – průchozí, bez parametrů ({m.Popis})"; Postaveni++; EmitSignal(SignalName.Postaven, modul, 0); return; }
         j.Parametry(modul);
+    }
+
+    /// <summary>G-6: izolace pro M1–M3 (jako GeoLab); M4–M6 zástupné (G-7).</summary>
+    void NastavTlacitkoIzolace(string modul, int stav)
+    {
+        StavIzolace = stav;
+        (string text, string tip) = modul switch
+        {
+            "M1" => (stav == 0 ? "Izolovat: jen reliéf" : "Izolace: jen reliéf ✓", "náhled jen reliéfu bez moře, masivu a sopek"),
+            "M2" => (stav == 0 ? "Izolovat: rozdíl M2 − M1" : "Izolace: rozdíl M2 − M1 ✓", "náhled rozdílu výšky proti M1 (moře, sklon kontinentu, pánve)"),
+            "M3" => (stav switch { 0 => "Izolovat řez: jen vrstvy", 1 => "Izolovat řez: jen útvary", _ => "Řez: vše" }, "řez M3: vše → jen vrstvy → jen útvary + nitro sopek"),
+            _ => ("Izolovat vrstvu (zástupné)", "zástupný: izolace M4–M6 přijde s náhledy G-7"),
+        };
+        _izolovat.Text = text; _izolovat.TooltipText = tip;
+        _izolovat.Disabled = modul is not ("M1" or "M2" or "M3");
+    }
+
+    /// <summary>Přepne izolaci (M1/M2 zap/vyp, M3 cyklus režimů řezu) a vyšle IzolaceZmenena.</summary>
+    public void PrepniIzolaci()
+    {
+        if (_izolovat.Disabled) return;
+        int dalsi = Modul == "M3" ? (StavIzolace + 1) % 3 : 1 - StavIzolace;
+        NastavTlacitkoIzolace(Modul, dalsi);
+        EmitSignal(SignalName.IzolaceZmenena, Modul, dalsi);
     }
 
     void Vycisti()

@@ -10,6 +10,9 @@
 [ext_resource type="Script" path="res://scripts/cs/Jadro/Uzly/NahledVrstvy.cs" id="8"]
 [ext_resource type="Script" path="res://scripts/cs/Jadro/Uzly/ZastupnyPanel.cs" id="9"]
 [ext_resource type="Script" path="res://scripts/cs/Jadro/Uzly/StavJadra.cs" id="10"]
+[ext_resource type="Script" path="res://scripts/cs/GeneratorSveta/UseckaRezu.cs" id="11"]
+[ext_resource type="Script" path="res://scripts/cs/GeneratorSveta/PohledRezu.cs" id="12"]
+[ext_resource type="Script" path="res://scripts/cs/GeneratorSveta/ProfilRezu.cs" id="13"]
 
 [node name="GeneratorSveta" type="Control"]
 layout_mode = 3
@@ -170,17 +173,63 @@ layout_mode = 2
 script = ExtResource("8")
 Zmenseni = 2
 
+[node name="Mapa" type="TextureRect" parent="Svislo/Hlavni/Stred/Prave/NahledModulu"]
+custom_minimum_size = Vector2(490, 270)
+layout_mode = 2
+tooltip_text = "Dva kliky = úsečka řezu"
+
+[node name="Usecka" type="Control" parent="Svislo/Hlavni/Stred/Prave/NahledModulu/Mapa"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("11")
+
+[node name="Info" type="Label" parent="Svislo/Hlavni/Stred/Prave/NahledModulu"]
+custom_minimum_size = Vector2(490, 0)
+layout_mode = 2
+theme_override_font_sizes/font_size = 12
+autowrap_mode = 3
+
 [node name="Poznamka" type="Label" parent="Svislo/Hlavni/Stred/Prave/NahledModulu" groups=["zastupne"]]
 layout_mode = 2
 autowrap_mode = 3
 script = ExtResource("9")
-Funkce = "vlastní náhled a izolace modulu (G-6 M1–M3, G-7 M4–M6); dnes vrstvy hotové planety"
+Funkce = "vlastní náhled a izolace M4–M6 (G-7); dnes vrstvy hotové planety"
 
-[node name="PohledRezu" type="Label" parent="Svislo/Hlavni/Stred/Prave" groups=["zastupne"]]
+[node name="PohledRezu" type="VBoxContainer" parent="Svislo/Hlavni/Stred/Prave"]
+unique_name_in_owner = true
+layout_mode = 2
+script = ExtResource("12")
+
+[node name="Titulek" type="Label" parent="Svislo/Hlavni/Stred/Prave/PohledRezu"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 12
+text = "Řez"
+clip_text = true
+
+[node name="Rezim" type="OptionButton" parent="Svislo/Hlavni/Stred/Prave/PohledRezu"]
+layout_mode = 2
+
+[node name="Plocha" type="Control" parent="Svislo/Hlavni/Stred/Prave/PohledRezu"]
+custom_minimum_size = Vector2(490, 190)
+layout_mode = 2
+script = ExtResource("13")
+
+[node name="Kurzor" type="Label" parent="Svislo/Hlavni/Stred/Prave/PohledRezu"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 12
+text = "najeď myší na řez"
+clip_text = true
+
+[node name="Zastupny" type="Label" parent="Svislo/Hlavni/Stred/Prave/PohledRezu" groups=["zastupne"]]
 layout_mode = 2
 autowrap_mode = 3
 script = ExtResource("9")
-Funkce = "PohledRezu – řez úsečkou, hladina, zvodnělá zóna 7c/7d (G-6)"
+Funkce = "řez s hladinou a zvodnělou zónou M4–M6 (G-7, 7d)"
 
 [node name="Diagnostika" type="Label" parent="Svislo/Hlavni/Stred/Prave"]
 unique_name_in_owner = true
