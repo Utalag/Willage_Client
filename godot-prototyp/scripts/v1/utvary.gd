@@ -3,6 +3,7 @@ extends RefCounted
 ## Žíla, čočka/peň, dóm, komín, kras/dutina, skarn na kontaktu granitoidu.
 ## cavity_one se nepoužívá. Jádro převzaté z tools/implicit_e84.gd (zkusebni-vse).
 const H = preload("res://scripts/stable_hash.gd")
+const HU = preload("res://scripts/v1/hostitele_utvaru.gd")
 
 const PEG := 38
 const SKARN := 42
@@ -23,6 +24,7 @@ const GRID := {
 
 var svet
 var geo
+var host                      # hostitelské horniny útvarů (A1), data/v1/utvary_hostitele.json
 var fast := true
 var _cx := 1e300
 var _cy := 1e300
@@ -32,6 +34,7 @@ var _zs := {}
 func _init(s, g) -> void:
 	svet = s
 	geo = g
+	host = HU.new(bool(svet.p.get("a1_hostitele", true)))
 
 static func _u(h: int) -> float:
 	return float(H.shr(h, 40)) / 16777216.0
@@ -209,23 +212,28 @@ func _skarn_d(x: float, y: float, z: float, hr: Array) -> float:
 	var nd := d - W * (1.0 + 0.5 * vnoise(svet.sd ^ 84, x * 0.5, y * 0.5, z * 0.5))
 	return nd
 
-func feat_mat(f: Dictionary, z: float) -> int:
+func feat_mat(f: Dictionary, z: float, vrstva_id := -1) -> int:
 	match String(f.k):
 		"kras": return VZDUCH
 		"dome": return SUL
 		"pipe": return KIMB
 		"zila", "cocka":
-			# občas minerál v žíle (hostitel), jinak pegmatit
+			# občas minerál v žíle, jen když je hornina jeho hostitel (katalog minerálů); jinak pegmatit
 			if _u(H.mix(int(f.seed), "MIN", int(floor(z * 4.0)))) < 0.08:
-				return 8 if _u(H.mix(int(f.seed), "MIN2", 0)) < 0.5 else 9
+				var m := 8 if _u(H.mix(int(f.seed), "MIN2", 0)) < 0.5 else 9
+				if vrstva_id < 0 or host.mineral_ok(m, vrstva_id): return m
 			return PEG
 	return PEG
 
+## smí útvar typu `kd` vzniknout v hornině `vrstva_id` (A1)? Vypnuto (a1_hostitele = false) = původní chování kroku 3.
 func host_ok(kd: String, vrstva_id: int, povrch_m: float, z: float) -> bool:
+	if not host.povoleno: return _host_ok_puvodni(kd, vrstva_id, povrch_m, z)
+	return host.je_hostitel(kd, vrstva_id, povrch_m - z)
+
+## původní krok 3 (`a1_hostitele` = false): jen kras měl hostitele, ostatní vždy ano. Slouží k porovnání „před“.
+func _host_ok_puvodni(kd: String, vrstva_id: int, povrch_m: float, z: float) -> bool:
 	match kd:
-		"skarn": return true
-		"cocka", "zila": return true
-		"dome", "pipe": return true
+		"skarn", "cocka", "zila", "dome", "pipe": return true
 		"kras": return vrstva_id in KARST and povrch_m - z >= 2.0
 	return false
 
@@ -239,7 +247,7 @@ func mat_feats(feats: Array, x: float, y: float, z: float, vrstva_id: int, povrc
 	var bm := -1
 	# pořadí E84: skarn → čočka → žíla → kras (mladší přepisuje); dóm/komín s čočkou
 	var sd0 := _skarn_d(x, y, z, hr)
-	if sd0 < 0.0 and GRANITOID.has(vrstva_id) == false:
+	if sd0 < 0.0 and GRANITOID.has(vrstva_id) == false and host_ok("skarn", vrstva_id, povrch_m, z):
 		# skarn jen při kontaktu, ne uvnitř masivu granitoidu daleko od hranice
 		best = sd0
 		bm = SKARN
@@ -250,5 +258,5 @@ func mat_feats(feats: Array, x: float, y: float, z: float, vrstva_id: int, povrc
 		var d := sdf(f, x, y, z)
 		if d < 0.0 and d <= best:
 			best = d
-			bm = feat_mat(f, z)
+			bm = feat_mat(f, z, vrstva_id)
 	return bm

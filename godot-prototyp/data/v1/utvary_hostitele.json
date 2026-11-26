@@ -1,0 +1,87 @@
+{
+ "_popis": "Hostitelské horniny útvarů V1 (A1, krok 3b). Klíče hornin = data/teren/poradi_hornin.json. `nikdy` (půda, písek, ornice, spraš, zvětralý jíl) vyhrává nad vším. `hosts: \"*\"` = všechny horniny úrovní 0–40 typu layer/seam kromě `nikdy`. min_hloubka_m = nejmenší hloubka pod povrchem. Minerály v žíle: data/teren/mineraly_hostitele.json (scripts/teren/hostitele.gd). Geologické zdůvodnění v docs/sjednoceni/reporty/krok03b.md.",
+ "nikdy": [
+  "topsoil",
+  "gravel_sand",
+  "loess",
+  "weathered_clay"
+ ],
+ "typy": {
+  "zila": {
+   "hosts": [
+    "granite",
+    "granodiorite",
+    "leucogranite",
+    "orthogneiss",
+    "biotite_gneiss",
+    "two_mica_gneiss",
+    "migmatite",
+    "mica_schist",
+    "quartzite",
+    "phyllite",
+    "amphibolite",
+    "granulite",
+    "lower_gneiss",
+    "crystalline_transition"
+   ],
+   "min_hloubka_m": 0.0
+  },
+  "cocka": {
+   "hosts": [
+    "granite",
+    "granodiorite",
+    "leucogranite",
+    "orthogneiss",
+    "biotite_gneiss",
+    "two_mica_gneiss",
+    "migmatite",
+    "mica_schist",
+    "quartzite",
+    "phyllite",
+    "amphibolite",
+    "granulite",
+    "lower_gneiss",
+    "crystalline_transition"
+   ],
+   "min_hloubka_m": 0.0
+  },
+  "dome": {
+   "hosts": [
+    "rock_salt",
+    "gypsum",
+    "dolomite",
+    "deep_limestone",
+    "cave_limestone",
+    "siltstone",
+    "shale",
+    "conglomerate",
+    "quartz_sandstone"
+   ],
+   "min_hloubka_m": 0.0
+  },
+  "pipe": {
+   "hosts": "*",
+   "min_hloubka_m": 0.0
+  },
+  "kras": {
+   "hosts": [
+    "deep_limestone",
+    "cave_limestone",
+    "dolomite"
+   ],
+   "min_hloubka_m": 2.0
+  },
+  "skarn": {
+   "hosts": [
+    "deep_limestone",
+    "cave_limestone",
+    "dolomite",
+    "amphibolite",
+    "mica_schist",
+    "phyllite",
+    "crystalline_transition"
+   ],
+   "min_hloubka_m": 0.0
+  }
+ }
+}
