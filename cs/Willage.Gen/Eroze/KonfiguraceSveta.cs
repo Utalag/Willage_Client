@@ -20,6 +20,8 @@ public sealed class SvetKrok06
     /// <summary>Krok 7: klima (ParametrySveta.KlimaKrok07), jinak null. Vodníci jsou pak z dnešní (klimatické) sítě.</summary>
     public KlimaSvetaFn? Klima { get; init; }
     public HydrologieKlimatu? Hydrologie { get; init; }
+    /// <summary>Oázy / artéské prameny v pouštích (jsou i v seznamu Vodnici).</summary>
+    public List<Vodnik> Oazy { get; init; } = new();
     public ParametryKlimatu? ParametryKlimatu { get; init; }
     /// <summary>Vodníci kroku 6 (bez klimatu) – pro srovnání před/po.</summary>
     public List<Vodnik> VodniciBezKlimatu { get; init; } = new();
@@ -68,7 +70,9 @@ public static class KonfiguraceSveta
         var mk = MapaKlimatu.Spocti(m, pk, pk.Planeta(p.Klima), vlaken);
         mk.Klic = MapaKlimatu.KlicKlimatu(m.KlicKese, pk, p.Klima);
         var hk = HydrologieKlimatu.Spocti(m, mk, pe);
-        return new SvetKrok06 { Geologie = g, Mapa = m, Eroze = ef, Vodnici = hk.Vodnici(m, sp, pe), VodniciBezKlimatu = v6,
+        var oazy = Oazy.Najdi(m, mk, pk, p.Seed); Oazy.Prekryj(mk, oazy, pk);
+        var vod = hk.Vodnici(m, sp, pe); vod.AddRange(oazy);
+        return new SvetKrok06 { Geologie = g, Mapa = m, Eroze = ef, Vodnici = vod, VodniciBezKlimatu = v6, Oazy = oazy,
             Klima = new KlimaSvetaFn(mk), Hydrologie = hk, ParametryKlimatu = pk };
     }
 }

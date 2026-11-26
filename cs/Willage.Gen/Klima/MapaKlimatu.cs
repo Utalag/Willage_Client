@@ -12,13 +12,13 @@ public sealed class MapaKlimatu
     public Torus T { get; }
     public float[] Teplota, Srazky, W;
     public BiomKlimatu[] Biom;
-    public double[] SirkaRadku;
+    public KlimaRadku[] Radky;
     public Zemepis Zemepis { get; }
     public string Klic { get; set; } = "";
 
     MapaKlimatu(Torus t, Zemepis z)
     {
-        T = t; Zemepis = z; Teplota = new float[t.N]; Srazky = new float[t.N]; W = new float[t.N]; Biom = new BiomKlimatu[t.N]; SirkaRadku = new double[t.Ny];
+        T = t; Zemepis = z; Teplota = new float[t.N]; Srazky = new float[t.N]; W = new float[t.N]; Biom = new BiomKlimatu[t.N]; Radky = new KlimaRadku[t.Ny];
     }
 
     public static MapaKlimatu Spocti(MapaEroze m, ParametryKlimatu p, KlimaPlanety k, int vlaken = 8)
@@ -33,22 +33,22 @@ public sealed class MapaKlimatu
         var po = new ParallelOptions { MaxDegreeOfParallelism = vlaken };
         Parallel.For(0, t.Ny, po, j =>
         {
-            double s = z.SirkaDeg(j * t.Krok); mk.SirkaRadku[j] = s;
+            var kr = z.Radek(j * t.Krok); mk.Radky[j] = kr;
             int o = j * t.Nx; var rz = new double[t.Nx]; var rv = new double[t.Nx];
-            double wz = z.PodilZapadu(s);
+            double wz = kr.PodilZapadu;
             if (wz > 0) Klima.Srazky.Radek(hs.AsSpan(o, t.Nx), more.AsSpan(o, t.Nx), 1, t.Krok, p, rz);
             if (wz < 1) Klima.Srazky.Radek(hs.AsSpan(o, t.Nx), more.AsSpan(o, t.Nx), -1, t.Krok, p, rv);
-            double pb = z.SrazkyPasmo(s);
+            double pb = kr.SrazkyMm;
             for (int i = 0; i < t.Nx; i++) praw[o + i] = pb * (wz * rz[i] + (1 - wz) * rv[i]);
         });
         var ps = Vyhlazeni.Box(praw, t.Nx, t.Ny, rP, rP);
         Parallel.For(0, t.Ny, po, j =>
         {
-            double s = mk.SirkaRadku[j];
+            var kr = mk.Radky[j];
             for (int i = 0; i < t.Nx; i++)
             {
                 int q = j * t.Nx + i;
-                double te = z.Teplota(s, m.H[q]), pr = ps[q];
+                double te = z.Teplota(kr.TC, m.H[q]), pr = ps[q];
                 mk.Teplota[q] = (float)te; mk.Srazky[q] = (float)pr;
                 mk.W[q] = more[q] ? 0f : (float)(Odtok.OdtokMm(pr, te) / p.OdtokReferenceMm);
                 mk.Biom[q] = KlasifikaceBiomu.Urci(te, pr, more[q], p);
