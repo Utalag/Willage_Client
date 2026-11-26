@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using System.Threading;
 using Godot;
 using Willage.Gen.Api;
@@ -40,6 +41,7 @@ public partial class WillageJadro : Node
     FrontaPrace? _fronta;
     GeneratorSveta? _gen;   // jen na vlákně fronty
     string _data = "", _kes = "";
+    volatile bool _ukonceno;
 
     public static WillageJadro? Instance { get; private set; }
     public int Cekajicich => _fronta?.Cekajicich ?? 0;
@@ -52,6 +54,7 @@ public partial class WillageJadro : Node
 
     public override void _ExitTree()
     {
+        _ukonceno = true;   // G-5: doručení po ukončení (zrušené úlohy při zavření okna) se zahodí – uzel už je uvolněný
         _fronta?.Dispose(); _fronta = null;
         if (Instance == this) Instance = null;
     }
@@ -60,7 +63,7 @@ public partial class WillageJadro : Node
     {
         if (_fronta is not null) return _fronta;
         _data = ProjectSettings.GlobalizePath(DataCesta); _kes = ProjectSettings.GlobalizePath(KesCesta);
-        _fronta = new FrontaPrace(a => Callable.From(a).CallDeferred());
+        _fronta = new FrontaPrace(a => Callable.From(() => { if (!_ukonceno && IsInstanceValid(this)) a(); }).CallDeferred());
         return _fronta;
     }
 
@@ -88,7 +91,7 @@ public partial class WillageJadro : Node
     public long Generuj()
     {
         var f = Fronta(); var pr = new PrubehModulu(this, f);
-        return Zarad("Generuj", ct => Gen().Sluzba.Generuj(pr, ct), r => { PosledniVysledek = r; EmitSignal(SignalName.PlanetaHotova, DtoNaVariant.Slovnik(r.Souhrn)); });
+        return Zarad("Generuj", ct => Gen().Sluzba.Generuj(pr, ct), r => { PosledniVysledek = r; PosledniModuly = r.Moduly; EmitSignal(SignalName.PlanetaHotova, DtoNaVariant.Slovnik(r.Souhrn)); });
     }
 
     public long Otisky(int bx = 14, int by = 14) =>
@@ -103,19 +106,51 @@ public partial class WillageJadro : Node
         return id;
     }
 
-    public long Moduly() => Zarad("Moduly", _ => Gen().Moduly.Seznam(), m => EmitSignal(SignalName.ModulySeznam, DtoNaVariant.Pole(m)));
+    /// <summary>G-5: poslední seznam modulů a parametry modulů jako DTO (pro C# uzly okna; signály nesou totéž jako Variant).</summary>
+    public System.Collections.Generic.IReadOnlyList<ModulDto> PosledniModuly { get; private set; } = Array.Empty<ModulDto>();
+    readonly System.Collections.Generic.Dictionary<string, System.Collections.Generic.IReadOnlyList<ParametrDto>> _parametry = new();
+    public System.Collections.Generic.IReadOnlyList<ParametrDto> ParametryDto(string modul) => _parametry.TryGetValue(modul, out var p) ? p : Array.Empty<ParametrDto>();
+    /// <summary>G-5: poslední info o planetě (seed, gen_ver, potvrzení, otisk).</summary>
+    public PlanetaInfoDto? PosledniInfo { get; private set; }
 
-    public long Parametry(string modul) => Zarad("Parametry", _ => Gen().Moduly.Parametry(modul), p => EmitSignal(SignalName.ParametryModulu, modul, DtoNaVariant.Pole(p)));
+    public long Moduly() => Zarad("Moduly", _ => Gen().Moduly.Seznam(), m => { PosledniModuly = m; EmitSignal(SignalName.ModulySeznam, DtoNaVariant.Pole(m)); });
 
+    public long Parametry(string modul) => Zarad("Parametry", _ => Gen().Moduly.Parametry(modul), p => { _parametry[modul] = p; EmitSignal(SignalName.ParametryModulu, modul, DtoNaVariant.Pole(p)); });
+
+    /// <summary>G-5: všechny parametry na výchozí hodnoty (data/v1). Signál ParametrZmenen s id „*“.</summary>
+    public long Vychozi() => Zarad("Vychozi", _ => Gen().Moduly.Vychozi(),
+        z => EmitSignal(SignalName.ParametrZmenen, "*", z.Prijato, z.Duvod ?? "", System.Linq.Enumerable.ToArray(z.Neplatne)));
+
+    /// <summary>G-5: info o planetě bez změny (signál PlanetaInfo).</summary>
+    public long InfoPlanety() => Zarad("Info", _ => Gen().Sluzba.Info(), Info);
+
+    /// <summary>Nastaví parametr; po přijetí obnoví v keši parametry jeho modulu (ParametryDto), pak vyšle ParametrZmenen.</summary>
     public long Nastav(string idParametru, string hodnotaJson) =>
-        Zarad("Nastav", _ => Gen().Moduly.Nastav(idParametru, hodnotaJson),
-            z => EmitSignal(SignalName.ParametrZmenen, idParametru, z.Prijato, z.Duvod ?? "", System.Linq.Enumerable.ToArray(z.Neplatne)));
+        Zarad("Nastav", _ =>
+        {
+            var z = Gen().Moduly.Nastav(idParametru, hodnotaJson);
+            string modul = Gen().Moduly.Seznam().Select(m => m.Id).FirstOrDefault(m => Gen().Moduly.Parametry(m).Any(p => p.Id == idParametru)) ?? "";
+            return (z, modul, modul == "" ? null : Gen().Moduly.Parametry(modul));
+        }, r =>
+        {
+            if (r.Item3 is not null) _parametry[r.modul] = r.Item3;
+            EmitSignal(SignalName.ParametrZmenen, idParametru, r.z.Prijato, r.z.Duvod ?? "", r.z.Neplatne.ToArray());
+        });
+
+    /// <summary>G-5: parametry modulu na výchozí hodnoty (na vlákně fronty z aktuální sady). Signál ParametrZmenen s id „modul:*“, pak ParametryModulu.</summary>
+    public long VychoziModulu(string modul) =>
+        Zarad("VychoziModulu", _ => (Gen().Moduly.VychoziModulu(modul), Gen().Moduly.Parametry(modul)), r =>
+        {
+            _parametry[modul] = r.Item2;
+            EmitSignal(SignalName.ParametrZmenen, modul + ":*", r.Item1.Prijato, r.Item1.Duvod ?? "", r.Item1.Neplatne.ToArray());
+            EmitSignal(SignalName.ParametryModulu, modul, DtoNaVariant.Pole(r.Item2));
+        });
 
     public long Uloz(string cesta) { string c = ProjectSettings.GlobalizePath(cesta); return Zarad("Uloz", _ => Gen().Sluzba.Uloz(c), Info); }
     public long Nacti(string cesta) { string c = ProjectSettings.GlobalizePath(cesta); return Zarad("Nacti", _ => Gen().Sluzba.Nacti(c), Info); }
     public long Potvrd() => Zarad("Potvrd", _ => Gen().Sluzba.PotvrdPlanetu(), Info);
 
-    void Info(PlanetaInfoDto i) => EmitSignal(SignalName.PlanetaInfo, DtoNaVariant.Slovnik(i));
+    void Info(PlanetaInfoDto i) { PosledniInfo = i; EmitSignal(SignalName.PlanetaInfo, DtoNaVariant.Slovnik(i)); }
 
     /// <summary>Zruší běžící i čekající úlohy (běžící generace skončí před dalším modulem).</summary>
     public void Zrus() => _fronta?.ZrusVse();
