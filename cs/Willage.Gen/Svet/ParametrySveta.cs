@@ -69,7 +69,13 @@ public sealed class ParametrySveta
     // krok 6b (Jan 2026-11-26 9:59): moře kolem švu torusu a mírný sklon kontinentu – mění svět, výchozí vypnuto
     public bool More = false;
     public double PlanetaXM = 31360.0, PlanetaYM = 15616.0;
-    public double HladinaMoreM = 60.0, MorePasM = 1100.0, MorePrechodM = 300.0, HloubkaMoreM = 12.0;
+    // Jan 10:03: moře ≈ 30 % planety (PodilMore určí šířku pásu), střed pásu posunutý o StredMoreM od švu (šev i pás prolnutí v moři, start na pevnině)
+    public double PodilMore = 0.30, StredMoreM = 530.0;
+    public double HladinaMoreM = 60.0, MorePrechodM = 300.0, HloubkaMoreM = 25.0;
+    // Jan 10:03 (b): velké pánve pro velká jezera – přepínač, výchozí vypnuto
+    public bool Panve = false;
+    public int PanviPocet = 4;
+    public double PanevPolomerM = 1500.0, PanevHloubkaM = 15.0;
     public double PobreziSumM = 300.0, PobreziVlnaM = 1500.0, SklonKontinentu = 0.002;
 
     /// <summary>Parametry přesně jako GDScript krok 3b (opravy vypnuté) – pro ekvivalenci.</summary>
