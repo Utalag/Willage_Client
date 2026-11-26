@@ -70,6 +70,7 @@ T.Je(sA.SequenceEqual(sB), $"prameny bloku nezávislé na pořadí výpočtu ({s
 
 TestyKrok05.Spust(kat, pr);
 TestyKrok06.Spust();
+TestyKrok06b.Spust();
 
 Console.WriteLine($"OK {T.Ok}, chyb {T.Chyb}");
 return T.Chyb == 0 ? 0 : 1;
