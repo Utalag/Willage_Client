@@ -42,12 +42,18 @@ public sealed class ManifestKatalogu
         foreach (var f in Directory.EnumerateFiles(full, "*", SearchOption.AllDirectories))
         {
             string rel = Relativni(full, f);
-            if (rel == NazevSouboru) continue;
+            if (rel == NazevSouboru || ArtefaktGodotu(rel)) continue;
             var b = Obsah(f);
             pol.Add(new PolozkaManifestu(rel, b.LongLength, Sha(b)));
         }
         return new ManifestKatalogu(pol);
     }
+
+    /// <summary>
+    /// G-4: soubory, které vyrobí import Godotu při otevření projektu (CSV se importuje jako překlad: *.csv.import, *.translation;
+    /// *.uid). Nejsou to data generátoru, do manifestu nepatří (jinak by headless spuštění Godotu změnilo klíče).
+    /// </summary>
+    public static bool ArtefaktGodotu(string rel) => rel.EndsWith(".import", StringComparison.Ordinal) || rel.EndsWith(".translation", StringComparison.Ordinal) || rel.EndsWith(".uid", StringComparison.Ordinal);
 
     /// <summary>Bajty souboru pro SHA: textová data (.json, .csv, .txt, .md) s CRLF → LF, aby SHA nezávisela na git autocrlf (Windows).</summary>
     public static byte[] Obsah(string cesta)

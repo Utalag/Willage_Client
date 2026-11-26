@@ -6,3 +6,7 @@ _zaloha/
 mono_crash.*
 bin/
 obj/
+
+# G-4: artefakty importu Godotu (CSV se importuje jako překlad); manifest dat je ignoruje
+godot-prototyp/**/*.translation
+godot-prototyp/**/*.csv.import
