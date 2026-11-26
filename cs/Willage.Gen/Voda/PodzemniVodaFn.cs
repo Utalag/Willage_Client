@@ -1,6 +1,7 @@
 using Willage.Gen.Geologie;
 using Willage.Gen.Jadro;
 using Willage.Gen.Materialy;
+using Willage.Gen.Voda.Prusak;
 
 namespace Willage.Gen.Voda;
 
@@ -16,16 +17,27 @@ public sealed class PodzemniVodaFn
     public RegionalniHladina Hladina { get; }
     public Doplnovani Doplnovani { get; }
     public Prameny Prameny { get; }
+    /// <summary>Koeficienty průsaku 0–255; null, když jsou vypnuté <see cref="ParametryVody.PrusakKoeficient"/> i <see cref="ParametryVody.PrusakPobrezi"/>.</summary>
+    public PrusakKoeficient? Prusak { get; }
+    /// <summary>Šířka pobřežního pásu z koeficientu; null, když je <see cref="ParametryVody.PrusakPobrezi"/> vypnuto.</summary>
+    public PobrezniPas? Pas { get; }
 
-    public PodzemniVodaFn(IGeologie geologie, KatalogMaterialu katalog, ParametryVody p)
+    /// <param name="prusakJson">obsah prusak_v1.json; povinný jen při zapnutém PrusakKoeficient</param>
+    public PodzemniVodaFn(IGeologie geologie, KatalogMaterialu katalog, ParametryVody p, string? prusakJson = null)
     {
         Geologie = geologie as KesGeologie ?? new KesGeologie(geologie);
         Propustnost = new Propustnost(katalog);
         P = p;
-        Hladina = new RegionalniHladina(Geologie, p);
+        if (p.PrusakKoeficient || p.PrusakPobrezi)
+            Prusak = new PrusakKoeficient(katalog, prusakJson ?? throw new InvalidOperationException("PrusakKoeficient / PrusakPobrezi zapnut, chybí prusak_v1.json"));
+        Pas = p.PrusakPobrezi ? new PobrezniPas(katalog, Prusak!, p) : null;
+        Hladina = new RegionalniHladina(Geologie, p, Pas);
         Doplnovani = new Doplnovani(Geologie, p);   // výchoz v nitru sopky se při SopkaNepropustna nepočítá (viz Doplnovani)
         Prameny = new Prameny(Geologie, Hladina, Propustnost, p);
     }
+
+    /// <summary>Plnění uzavřené dutiny průsakem stěn; koeficient se uplatní jen při zapnutém příznaku.</summary>
+    public PrusakDutina Dutina(ZadaniDutiny z) => new(z, Propustnost, P.PrusakKoeficient ? Prusak : null, P.PrusakTlak, P.PrusakSpadMax);
 
     public ProfilSloupce Profil(double x, double y) =>
         ProfilSloupce.Spocti(Geologie.Sloupec(x, y), Geologie.Povrch(x, y), Hladina.Hladina(x, y), Propustnost, P.FilmM, Nitro(x, y));

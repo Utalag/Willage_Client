@@ -39,6 +39,9 @@ public interface IGeologie
     /// <summary>Krok 6e/6g: vzdálenost k skutečnému moři pro hladinu podzemní vody (m; v moři 0; u břehu po 1 m k bodu JeMore), bez moře nekonečno.</summary>
     double VzdalenostOdMore(double x, double y) => double.PositiveInfinity;
 
+    /// <summary>Jako <see cref="VzdalenostOdMore"/> s dosahem hledání a polohou nejbližšího bodu moře (NaN, když je dál než dosah).</summary>
+    (double d, double sx, double sy) BrehOdMore(double x, double y, double dosah) => (VzdalenostOdMore(x, y), double.NaN, double.NaN);
+
     /// <summary>Krok 6e: hladina moře (m), bez moře NaN.</summary>
     double HladinaMore => double.NaN;
 }

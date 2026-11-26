@@ -13,6 +13,14 @@ return cmd switch
     "sevy" => Sevy(args, data),
     "rez" => Rez(args, data),
     "sopka" => Sopka(data),
+    "pobrezi" => args[1] switch
+    {
+        "tabulka" => PobrezniNastroj.Tabulka(data),
+        "brehy" => PobrezniNastroj.Brehy(args, data),
+        "vliv" => PobrezniNastroj.Vliv(args, data),
+        _ => Napoveda(),
+    },
+    "prusak" => PrusakSimulace.Spust(data, args.Length > 1 ? args[1] : "vystup-prusak"),
     "prameny" => Prameny(data),
     "cas" => Cas(args, data),
     "par" => Paralelne.Spust(data, args.Contains("--puvodni"), args.Skip(1).Where(s => int.TryParse(s, out _)).Select(int.Parse).DefaultIfEmpty(1).ToArray()) == 0 ? 0 : 1,

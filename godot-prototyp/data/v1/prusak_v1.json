@@ -1,0 +1,25 @@
+{
+  "_pozn": "Koeficient průsaku (těsnost) materiálu jako celé číslo 0–255: 255 = plně propustné, 0 = těsné. Viz docs/sjednoceni/reporty/prusak-koef-prop.md. Používá se jen při ParametryVody.PrusakKoeficient = true.",
+  "vzduch": 255,
+  "bezK": 0,
+  "tridyPodleK": [
+    { "kOd": 1e-3, "koef": 255 },
+    { "kOd": 1e-4, "koef": 178 },
+    { "kOd": 1e-5, "koef": 128 },
+    { "kOd": 1e-6, "koef": 77 },
+    { "kOd": 1e-7, "koef": 38 },
+    { "kOd": 1e-8, "koef": 20 },
+    { "kOd": 1e-9, "koef": 15 },
+    { "kOd": 1e-10, "koef": 13 },
+    { "kOd": 1e-11, "koef": 3 }
+  ],
+  "podleKlice": {
+    "subalpine_scree": 255,
+    "gravel_sand": 178,
+    "hill_sand": 178,
+    "clay_deposit": 13,
+    "weathered_clay": 13,
+    "granite": 0,
+    "orthogneiss": 0
+  }
+}

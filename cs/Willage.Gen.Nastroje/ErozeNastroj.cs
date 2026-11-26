@@ -24,6 +24,9 @@ public static class ErozeNastroj
             else if (a[i] == "--sklon") Sklon = double.Parse(a[++i], C);
             else if (a[i] == "--interp") Interp = a[++i];
             else if (a[i] == "--hladina-krok4") { PrizpusobPrameny = true; UpravaPramenu = pv => pv with { HladinaSledujeErozi = false }; }
+            else if (a[i] == "--prusak") VodaBlok.Prusak = true;
+            else if (a[i] == "--pobrezi") VodaBlok.Pobrezi = true;
+            else if (a[i] == "--bez-tlaku") VodaBlok.BezTlaku = true;   // koeficient průsaku zapnut
             else if (a[i] == "--panve") Panve = true;
             else if (a[i] == "--bez-klimatu") BezKlimatu = true;   // 7b: klima výchozí zapnuto; --bez-klimatu = stav po kroku 6
             else if (a[i] == "--vypnuto") Vypnuto = true;   // 6d: VseKrok06 je výchozí zapnuto; --vypnuto = jen --more / --panve
@@ -320,7 +323,8 @@ public static class ErozeNastroj
         var pe0 = ParametryEroze.ZJson(File.ReadAllText(d.ErozeV1)); p.SvetMaxM = Math.Max(p.SvetMaxM, Math.Max(pe0.PlanetaXM, pe0.PlanetaYM) + pe0.PasProlnutiM);
         var sv = KonfiguraceSveta.Sestav(p, d, kes, 8);
         var pv = Willage.Gen.Voda.ParametryVody.ZJson(File.ReadAllText(d.VodaV1));
-        var fn = sv.Voda(Willage.Gen.Materialy.KatalogMaterialu.ZeSouboru(d.KatalogMaterialu), pv);
+        pv = VodaBlok.Priznaky(pv);
+        var fn = sv.Voda(Willage.Gen.Materialy.KatalogMaterialu.ZeSouboru(d.KatalogMaterialu), pv, VodaBlok.PrusakJson(pv, d));
         double krok = Willage.Gen.Jadro.GeologyGridConstants.CellM; int n = (int)Math.Round(L / krok);
         using var w = new BinaryWriter(File.Create(a[8]));
         var s0 = sv.Geologie.Sloupec(x0, y0);
