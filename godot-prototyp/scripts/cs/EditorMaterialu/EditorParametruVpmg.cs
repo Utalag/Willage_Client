@@ -65,6 +65,14 @@ public partial class EditorParametruVpmg : HBoxContainer
                 sb.ValueChanged += v => { if (!_tichy) { _tichy = true; sl.Value = v; _tichy = false; Hlas(((int)v).ToString(CultureInfo.InvariantCulture)); } };
                 Ovladac = sl; AddChild(sl); AddChild(sb);
                 break;
+            case DruhParametruVpmg.Prepinac:
+            {
+                // T-2d: bool parametr Dev (base_texture offsetEnabled / rotate90) – hodnota "true" / "false"
+                var cb = new CheckBox { ButtonPressed = p.Hodnota == "true", Text = p.Hodnota, TooltipText = p.Popis };
+                cb.Toggled += on => { cb.Text = on ? "true" : "false"; Hlas(on ? "true" : "false"); };
+                Ovladac = cb; AddChild(cb);
+                break;
+            }
             case DruhParametruVpmg.Volba:
                 var ob = new OptionButton { TooltipText = p.Popis };
                 foreach (var m in p.Moznosti) ob.AddItem(m);
@@ -105,6 +113,7 @@ public partial class EditorParametruVpmg : HBoxContainer
             case ColorPickerButton cp: cp.Color = Color.FromHtml(h); break;
             case HSlider sl: sl.Value = Cislo(h); if (GetChildCount() > 2 && GetChild(2) is SpinBox sb) sb.Value = Cislo(h); break;
             case OptionButton ob: ob.Select(Math.Max(0, IndexOf(Popis, h))); break;
+            case CheckBox cb: cb.ButtonPressed = h == "true"; cb.Text = h; break;
             case LineEdit le: le.Text = h; if (le.GetParent()?.GetNodeOrNull<HBoxContainer>("Vzornik") is { } vz) Vzornik(vz, h); break;
         }
         _tichy = false;
@@ -118,6 +127,7 @@ public partial class EditorParametruVpmg : HBoxContainer
             case ColorPickerButton cp: cp.Color = Color.FromHtml(h); Hlas("#" + cp.Color.ToHtml(false).ToLowerInvariant()); break;
             case HSlider sl: sl.Value = Cislo(h); break;
             case OptionButton ob: ob.Select(IndexOf(Popis!, h)); Hlas(h); break;
+            case CheckBox cb: cb.ButtonPressed = h == "true"; break; // Toggled → Hlas
             case LineEdit le: le.Text = h; Hlas(h); break;
         }
     }

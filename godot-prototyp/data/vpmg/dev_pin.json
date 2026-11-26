@@ -2,11 +2,11 @@
   "format": "willage-dev-pin-v1",
   "repo": "Utalag/Willage_Dev",
   "vetev": "main",
-  "commit": "42e7475332b0bda06fa7b5097b4aac92ab4a95fe",
-  "popis": "fix(vpmg): correct smoothstep noise, strata bias, and v1 goldens (#17) – předtím 12c3e6b (#16, ops v1 s chybou SmoothStep), 3476488 (#15, v0)",
+  "commit": "36ac11f1a057c08b587eab0a4a88c976e6edc3c5",
+  "popis": "VPMG v2: tune recipes (lower noise, tint 85-115) (#20) + #19 (5 dlaždic baseTile, palette_map mixPermille, goldeny v2) – předtím 42e7475 (#17), 12c3e6b (#16), 3476488 (#15)",
   "katalog": {
     "cesta": "src/Modules/World/Willage.World.Materials/Data/materials-catalog-v1.json",
-    "sha256": "5893da04f418a85abc2c829ce1ade23d496915f4e026c5cf127de03781669a9b",
+    "sha256": "1c482e83084437479d262dfb8f7ac083caf264bd92a7d8901a68537e37f486cf",
     "zrcadlo": "v1/materials-catalog-v1.json",
     "rozdil": "zrcadlo = Dev bez koncového \\n"
   },
@@ -19,7 +19,13 @@
   },
   "goldenReceptur": {
     "fixture": "tests/Willage.World.Vpmg.Tests/Fixtures/vpmg-recipe-goldens-v1.json",
-    "slozka": "tests/Willage.World.Vpmg.Tests/Fixtures/recipes"
+    "slozka": "tests/Willage.World.Vpmg.Tests/Fixtures/recipes",
+    "fixtureV2": "tests/Willage.World.Vpmg.Tests/Fixtures/vpmg-recipe-goldens-v2.json"
   },
-  "pouziti": "Willage_Dev je jen ke čtení. Nástroj cs/Willage.Vpmg.Nastroj (net10) odkazuje projekty Dev v .willage-dev/<commit>/ (cs/Willage.Vpmg.Nastroj/priprav_dev.sh). Změna pinu = změna tohoto souboru + WillageDevCommit v csproj nástroje (test T-1 hlídá shodu)."
+  "pouziti": "Willage_Dev je jen ke čtení. Nástroj cs/Willage.Vpmg.Nastroj (net10) odkazuje projekty Dev v .willage-dev/<commit>/ (cs/Willage.Vpmg.Nastroj/priprav_dev.sh). Změna pinu = změna tohoto souboru + WillageDevCommit v csproj nástroje (test T-1 hlídá shodu).",
+  "dlazdice": {
+    "slozka": "src/Modules/World/Willage.World.Materials/Data/tiles",
+    "pouziti": "nástroj je bere z Data/ vedle své sestavy (kopie z projektu Materials); zrcadlo katalogu se ověřuje proti nim (SHA baseTile)",
+    "klient": "data/vpmg/zaklady/zaklady_v1.json (stejné SHA)"
+  }
 }

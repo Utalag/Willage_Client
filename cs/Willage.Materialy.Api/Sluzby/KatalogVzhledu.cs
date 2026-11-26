@@ -28,7 +28,10 @@ public sealed class KatalogVzhledu : IKatalogVzhledu
                 var v = p.Value;
                 prof[p.Name] = new ProfilVzhleduDto(v.GetProperty("style").GetString() ?? "", v.GetProperty("baseColor").GetString() ?? "",
                     v.GetProperty("grainScalePermille").GetInt32(), v.GetProperty("layerDensityPermille").GetInt32(), v.GetProperty("irregularityPermille").GetInt32(),
-                    v.TryGetProperty("palette", out var pal) ? pal.EnumerateArray().Select(x => x.GetString()!).ToList() : null);
+                    v.TryGetProperty("palette", out var pal) ? pal.EnumerateArray().Select(x => x.GetString()!).ToList() : null,
+                    v.TryGetProperty("baseTile", out var bt) ? new DlazdiceProfiluDto(bt.GetProperty("asset").GetString()!, bt.GetProperty("format").GetString()!,
+                        bt.GetProperty("widthPx").GetInt32(), bt.GetProperty("heightPx").GetInt32(), bt.GetProperty("sha256").GetString()!,
+                        bt.TryGetProperty("source", out var src) ? src.GetString() ?? "" : "") : null);
             }
             l.Add(new MaterialVzhleduDto((byte)m.GetProperty("id").GetInt32(), m.GetProperty("key").GetString() ?? "", m.GetProperty("name").GetString() ?? "",
                 m.GetProperty("idStatus").GetString() ?? "", g.TryGetProperty("skupina", out var s) ? s.GetString() ?? "" : "", prof, fyz));

@@ -1,7 +1,11 @@
 namespace Willage.Materialy.Api.Dto;
 
 /// <summary>Vizuální profil materiálu z katalogu Dev (visualProfiles) – vzhled, nikdy fyzika.</summary>
-public sealed record ProfilVzhleduDto(string Style, string BaseColor, int GrainScalePermille, int LayerDensityPermille, int IrregularityPermille, IReadOnlyList<string>? Palette = null)
+/// <summary>T-2d: ruční dlaždice profilu (baseTile katalogu Dev) – jen ke čtení.</summary>
+public sealed record DlazdiceProfiluDto(string Asset, string Format, int WidthPx, int HeightPx, string Sha256, string Source);
+
+public sealed record ProfilVzhleduDto(string Style, string BaseColor, int GrainScalePermille, int LayerDensityPermille, int IrregularityPermille, IReadOnlyList<string>? Palette = null,
+    DlazdiceProfiluDto? BaseTile = null)
 {
     /// <summary>Paleta jako text „#a, #b“ (prázdná = žádná).</summary>
     public string PaletaText => Palette is { Count: > 0 } p ? string.Join(", ", p) : "";

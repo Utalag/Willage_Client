@@ -1,61 +1,61 @@
 {
   "format": "willage-vpmg-receptury-zdroj-v1",
-  "devCommit": "42e7475332b0bda06fa7b5097b4aac92ab4a95fe",
-  "poznamka": "T-2b: výchozí receptury vzorku 5 materiálů = bajtové kopie receptur v1 z Willage_Dev (fixture testů VPMG, PR #16, oprava PR #17 / 42e7475). Soubor <materialId>.json (N8). Kopie hlídá test (SHA = Dev v pinu, golden přes nástroj i fasádu). Změny receptur jdou do Dev jen jako návrh přes Willage-backend.",
+  "devCommit": "36ac11f1a057c08b587eab0a4a88c976e6edc3c5",
+  "poznamka": "T-2d: výchozí receptury vzorku 5 materiálů = bajtové kopie receptur v2 z Willage_Dev (base_texture nad dlaždicí baseTile → palette_map mix → smooth_noise [→ grass_tufts]; PR #19/#20, 36ac11f). Soubor <materialId>.json (N8). Kopie hlídá test (SHA = Dev v pinu, golden přes nástroj i fasádu). Receptury v1 (procedurální, T-2b/T-2c) zůstávají v Dev a jejich goldeny se dál ověřují. Změny receptur jdou do Dev jen jako návrh přes Willage-backend.",
   "receptury": [
     {
       "materialId": 1,
       "soubor": "1.json",
-      "zdrojDev": "tests/Willage.World.Vpmg.Tests/Fixtures/recipes/recipe-grass-v1.json",
-      "sha256": "4570a161451c982b6cf2329e86fc1e9e3204548e277833216505ac8626d5084a",
+      "zdrojDev": "tests/Willage.World.Vpmg.Tests/Fixtures/recipes/recipe-grass-v2.json",
+      "sha256": "96fea1cdaec98773af75a0044e34ccd17282a2c4b20a2b7091126b05f95ee5eb",
       "golden": {
         "seed": "0xC0FFEE00",
         "resolution": 64,
-        "checksum": 756991887
+        "checksum": 3708330389
       }
     },
     {
       "materialId": 2,
       "soubor": "2.json",
-      "zdrojDev": "tests/Willage.World.Vpmg.Tests/Fixtures/recipes/recipe-topsoil-v1.json",
-      "sha256": "ffd8b2bc4cdfbadc569bff95825f1916ab55ba5ad4d11077ea534d52e4efd832",
+      "zdrojDev": "tests/Willage.World.Vpmg.Tests/Fixtures/recipes/recipe-topsoil-v2.json",
+      "sha256": "c5cad51f406c9e7622941ce78bb177b0c54659c7c49c6bb6c5cc3ac13cf3c49e",
       "golden": {
         "seed": "0xC0FFEE00",
         "resolution": 64,
-        "checksum": 2725408357
+        "checksum": 4232278201
       }
     },
     {
       "materialId": 3,
       "soubor": "3.json",
-      "zdrojDev": "tests/Willage.World.Vpmg.Tests/Fixtures/recipes/recipe-gravel-sand-v1.json",
-      "sha256": "ce350f86cbf1e2963526b42a964be687d1d5e614bb88b4918f127aab453f6260",
+      "zdrojDev": "tests/Willage.World.Vpmg.Tests/Fixtures/recipes/recipe-gravel-sand-v2.json",
+      "sha256": "4b4dfedbd364d0ae1a57130b2ad0e478f8ae26775964bbf684d6555283f3cd40",
       "golden": {
         "seed": "0xC0FFEE00",
         "resolution": 64,
-        "checksum": 3628591702
+        "checksum": 589438081
       }
     },
     {
       "materialId": 5,
       "soubor": "5.json",
-      "zdrojDev": "tests/Willage.World.Vpmg.Tests/Fixtures/recipes/recipe-cave-limestone-v1.json",
-      "sha256": "3414899aeaf439ab37f52d5a02abca9a2010522b8a290f0f7f0af2e5e097b2f5",
+      "zdrojDev": "tests/Willage.World.Vpmg.Tests/Fixtures/recipes/recipe-cave-limestone-v2.json",
+      "sha256": "4af57bf18926277064a7a0cd1fc5a45f546bc8c8bc1ed0015462bc164f989552",
       "golden": {
         "seed": "0xC0FFEE00",
         "resolution": 64,
-        "checksum": 2752359023
+        "checksum": 1867729526
       }
     },
     {
       "materialId": 6,
       "soubor": "6.json",
-      "zdrojDev": "tests/Willage.World.Vpmg.Tests/Fixtures/recipes/recipe-granite-v1.json",
-      "sha256": "b16dbe944ae29e5ccda2e27a0ec4518192a269f9b8838e513fb644ca6843a92e",
+      "zdrojDev": "tests/Willage.World.Vpmg.Tests/Fixtures/recipes/recipe-granite-v2.json",
+      "sha256": "244a26bc5bca6ad71f90166214be3369bd0f2cfd459e0fb72ed957161bee6e8e",
       "golden": {
         "seed": "0xC0FFEE00",
         "resolution": 64,
-        "checksum": 917430836
+        "checksum": 453757041
       }
     }
   ]

@@ -12,7 +12,7 @@ var pr = new Propustnost(kat);
 var jen = args.FirstOrDefault(a => a.StartsWith("--jen="))?[6..];
 if (jen is "G5" or "G6" or "G7" or "T1" or "T2" or "T2b")
 {
-    if (jen == "G5") TestyG5.Spust(); else if (jen == "G6") TestyG6.Spust(); else if (jen == "T1") TestyT1.Spust(); else if (jen == "T2") TestyT2.Spust(); else if (jen == "T2b") TestyT2b.Spust(); else TestyG7.Spust();
+    if (jen == "G5") TestyG5.Spust(); else if (jen == "G6") TestyG6.Spust(); else if (jen == "T1") TestyT1.Spust(); else if (jen == "T2") TestyT2.Spust(); else if (jen == "T2b") TestyT2b.Spust(); else if (jen == "T2d") TestyT2d.Spust(); else TestyG7.Spust();
     Console.WriteLine($"OK {T.Ok}, chyb {T.Chyb}");
     return T.Chyb == 0 ? 0 : 1;
 }
@@ -100,6 +100,7 @@ TestyG7.Spust();
 TestyT1.Spust();
 TestyT2.Spust();
 TestyT2b.Spust();
+TestyT2d.Spust();
 
 Console.WriteLine($"OK {T.Ok}, chyb {T.Chyb}");
 return T.Chyb == 0 ? 0 : 1;

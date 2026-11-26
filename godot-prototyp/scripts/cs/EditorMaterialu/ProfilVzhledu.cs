@@ -18,8 +18,12 @@ public partial class ProfilVzhledu : VBoxContainer
     public Label StavNavrhu { get; private set; } = null!;
     public Button ZrusitNavrh { get; private set; } = null!;
     public readonly Dictionary<string, EditorParametruVpmg> PodleNazvu = new();
+    /// <summary>T-2d: řádek „podkladová dlaždice“ (baseTile profilu, jen ke čtení) – náhled PNG z data/vpmg/zaklady.</summary>
+    public HBoxContainer Dlazdice { get; private set; } = null!;
+    public Label PopisDlazdice { get; private set; } = null!;
     StavEditoru _st = null!;
     SchemaOperaciVpmg _s = null!;
+    ZakladyVpmg? _z;
     List<string> _profily = new();
 
     public override void _Ready()
@@ -30,7 +34,7 @@ public partial class ProfilVzhledu : VBoxContainer
         ZrusitNavrh.Pressed += () => _st.ZrusNavrh();
     }
 
-    public void Pripoj(StavEditoru st, SchemaOperaciVpmg s) { _st = st; _s = s; }
+    public void Pripoj(StavEditoru st, SchemaOperaciVpmg s, ZakladyVpmg? zaklady = null) { _st = st; _s = s; _z = zaklady; }
 
     /// <summary>Postaví editory znovu (jiný materiál / profil / zrušený návrh).</summary>
     public void Postav()
@@ -48,7 +52,27 @@ public partial class ProfilVzhledu : VBoxContainer
             Editory.AddChild(e);
             PodleNazvu[p.Nazev] = e;
         }
+        PostavDlazdici();
         Obnov();
+    }
+
+    void PostavDlazdici()
+    {
+        var bt = _st.ProfilKatalogu.BaseTile;
+        Dlazdice = new HBoxContainer { Name = "Dlazdice" };
+        Dlazdice.AddChild(new Label { Text = "baseTile", CustomMinimumSize = new Vector2(170, 0), TooltipText = "ruční dlaždice profilu (katalog Dev) – čte ji krok base_texture; jen ke čtení" });
+        var z = _z?.PodleSha(bt?.Sha256);
+        if (z != null && Image.LoadFromFile(z.Cesta) is { } img && !img.IsEmpty())
+            Dlazdice.AddChild(new TextureRect { Texture = ImageTexture.CreateFromImage(img), CustomMinimumSize = new Vector2(48, 48), ExpandMode = TextureRect.ExpandModeEnum.IgnoreSize,
+                StretchMode = TextureRect.StretchModeEnum.Scale, TextureFilter = TextureFilterEnum.Nearest, TooltipText = z.Cesta });
+        PopisDlazdice = new Label
+        {
+            Text = bt is null ? "žádná (profil bez dlaždice)" : $"{bt.Asset}  {bt.WidthPx}×{bt.HeightPx}\nsha {bt.Sha256[..12]}… {(z != null ? "= data/vpmg/zaklady/" + z.Soubor : "klient nemá")}",
+            Modulate = bt is null ? new Color(0.55f, 0.55f, 0.6f) : Colors.White, TooltipText = bt?.Source ?? "",
+        };
+        PopisDlazdice.AddThemeFontSizeOverride("font_size", 11);
+        Dlazdice.AddChild(PopisDlazdice);
+        Editory.AddChild(Dlazdice);
     }
 
     /// <summary>Obnoví zvýraznění a stav návrhu bez přestavby editorů.</summary>

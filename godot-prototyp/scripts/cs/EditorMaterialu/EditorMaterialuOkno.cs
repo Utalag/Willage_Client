@@ -48,7 +48,7 @@ public partial class EditorMaterialuOkno : Control
         Lista.NastavPin(Jadro.Api.Pin);
         Lista.NastavKontrolu(null, null, null);
         Seznam.Napln(Jadro.Api.Katalog, Jadro.Api.Vzorek);
-        Profil.Pripoj(st, Jadro.Api.Schema);
+        Profil.Pripoj(st, Jadro.Api.Schema, Jadro.Api.Zaklady);
         Konfigurator.Pripoj(st, Jadro.Api.Schema);
         for (int i = 1; i <= 3; i++) Dlazdice.AddItem($"dlaždice {i}×{i}");
         Dlazdice.Select(1); Nahled.Dlazdice = 2;
@@ -93,7 +93,7 @@ public partial class EditorMaterialuOkno : Control
         var st = Jadro.Stav;
         if (st.ZdrojReceptury is not { } z || !st.Navrh.Prazdny || st.Seed != z.GoldenSeed || st.Receptura.Resolution != z.GoldenRozliseni
             || Willage.Materialy.Api.Sluzby.RecepturyVpmg.DoJson(st.Receptura) != Willage.Materialy.Api.Sluzby.RecepturyVpmg.DoJson(z.Receptura)) return "";
-        return t.Checksum == z.GoldenChecksum ? $"\ngolden v1 Dev {z.GoldenChecksum} ✓" : $"\nROZDÍL od goldenu v1 Dev {z.GoldenChecksum}";
+        return t.Checksum == z.GoldenChecksum ? $"\ngolden {Verze(z)} Dev {z.GoldenChecksum} ✓" : $"\nROZDÍL od goldenu {Verze(z)} Dev {z.GoldenChecksum}";
     }
 
     void PrijmiTexturu(string cil)
@@ -110,4 +110,7 @@ public partial class EditorMaterialuOkno : Control
         else if (cil.StartsWith("var") && int.TryParse(cil[3..], out int i) && i < _seedyVariaci.Count)
             Variace.Zobraz(i, _seedyVariaci[i], t);
     }
+
+    /// <summary>T-2d: verze receptury Dev podle zdroje (recipe-*-v2.json → v2).</summary>
+    static string Verze(Willage.Materialy.Api.Sluzby.ZaznamReceptury z) => z.ZdrojDev.EndsWith("-v2.json") ? "v2" : z.ZdrojDev.EndsWith("-v1.json") ? "v1" : "";
 }

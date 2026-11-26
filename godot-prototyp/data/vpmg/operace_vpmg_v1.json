@@ -1,7 +1,7 @@
 {
   "format": "willage-vpmg-operace-prekryv-v2",
-  "devCommit": "42e7475332b0bda06fa7b5097b4aac92ab4a95fe",
-  "poznamka": "T-2c: KLIENTSKÝ PŘEKRYV nad generovaným operace_dev_v1.json (deskriptory Dev VpmgOperationCatalog = --describe-ops: typy, parametry, rozsahy, výchozí hodnoty). Tady jen české názvy, skupiny, popisy, jednotky, ctiProfil (pole profilu, která operace čte mimo výchozí hodnoty parametrů – deskriptory Dev to neříkají) a zástupné návrhy pro Willage-backend. Parametr / operace, kterou Dev nezná, je chyba testu.",
+  "devCommit": "36ac11f1a057c08b587eab0a4a88c976e6edc3c5",
+  "poznamka": "T-2c/T-2d: KLIENTSKÝ PŘEKRYV nad generovaným operace_dev_v1.json (deskriptory Dev VpmgOperationCatalog = --describe-ops: typy, parametry, rozsahy, výchozí hodnoty). Tady jen české názvy, skupiny, popisy, jednotky, ctiProfil (pole profilu, která operace čte mimo výchozí hodnoty parametrů – deskriptory Dev to neříkají) a zástupné návrhy pro Willage-backend. Parametr / operace, kterou Dev nezná, je chyba testu.",
   "rozliseni": {
     "min": 8,
     "max": 512,
@@ -64,6 +64,56 @@
       ]
     },
     {
+      "type": "base_texture",
+      "nazev": "Podkladová dlaždice",
+      "skupina": "základní vzhled",
+      "popis": "Vyplní vrstvu ruční dlaždicí z profilu (baseTile, toroidálně); seed mění jen posun / otočení, tint je pevný v receptuře.",
+      "params": {
+        "layer": {
+          "popis": "cílová vrstva RGBA8"
+        },
+        "scalePermille": {
+          "jednotka": "‰",
+          "popis": "měřítko dlaždice (1000 = 1:1)"
+        },
+        "offsetEnabled": {
+          "popis": "posun dlaždice podle seedu kroku"
+        },
+        "tintPermille": {
+          "jednotka": "‰",
+          "popis": "přimíchání průměru palety profilu"
+        },
+        "rotate90": {
+          "popis": "otočení o k×90° podle seedu (vypnuto kvůli světlu dlaždic)"
+        }
+      },
+      "ctiProfil": [
+        "palette",
+        "baseColor"
+      ]
+    },
+    {
+      "type": "tile_sample",
+      "nazev": "Vzorek dlaždice (alias base_texture)",
+      "skupina": "základní vzhled",
+      "popis": "Alias base_texture (stejná implementace v Dev).",
+      "params": {
+        "layer": {},
+        "scalePermille": {
+          "jednotka": "‰"
+        },
+        "offsetEnabled": {},
+        "tintPermille": {
+          "jednotka": "‰"
+        },
+        "rotate90": {}
+      },
+      "ctiProfil": [
+        "palette",
+        "baseColor"
+      ]
+    },
+    {
       "type": "hash_grain",
       "nazev": "Zrno (hash)",
       "skupina": "struktura",
@@ -76,7 +126,7 @@
       "type": "palette_map",
       "nazev": "Paleta (mapování)",
       "skupina": "barva",
-      "popis": "Mapuje šum na paletu profilu (palette, jinak baseColor).",
+      "popis": "Mapuje šum na paletu profilu (palette, jinak baseColor); mixPermille = síla palety nad vstupem (v2: 200 ‰ nad dlaždicí).",
       "params": {
         "scalePermille": {
           "jednotka": "‰",
@@ -85,6 +135,10 @@
         "jitterPermille": {
           "jednotka": "‰",
           "popis": "rozptyl barvy"
+        },
+        "mixPermille": {
+          "jednotka": "‰",
+          "popis": "síla palety nad vstupem (1000 = jen paleta, v1)"
         }
       },
       "ctiProfil": [
@@ -103,6 +157,10 @@
         },
         "jitterPermille": {
           "jednotka": "‰"
+        },
+        "mixPermille": {
+          "jednotka": "‰",
+          "popis": "síla palety nad vstupem (1000 = jen paleta, v1)"
         }
       },
       "ctiProfil": [
@@ -148,7 +206,7 @@
       "type": "strata",
       "nazev": "Vrstvy (strata)",
       "skupina": "vrstvení",
-      "popis": "Vodorovná pásma z palety; tloušťka z layerDensityPermille, rozcuch z irregularityPermille.",
+      "popis": "Vodorovná pásma z palety; tloušťka z layerDensityPermille, rozcuch z irregularityPermille. Pozor: přepíše celý vstup (i dlaždici base_texture).",
       "params": {
         "bandMinPx": {
           "jednotka": "px",

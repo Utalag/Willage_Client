@@ -68,7 +68,15 @@
           "palette": ["#98F58A", "#7EE06A", "#5BC94E", "#3FAF3C"],
           "grainScalePermille": 180,
           "layerDensityPermille": 120,
-          "irregularityPermille": 280
+          "irregularityPermille": 280,
+          "baseTile": {
+            "asset": "tiles/001-grass-v1.rgba8",
+            "format": "rgba8",
+            "widthPx": 128,
+            "heightPx": 128,
+            "sha256": "ec468bfc4886dee4dcca923fc139f1fde783e901349b9ff2ab350f1a1c7aea6a",
+            "source": "Utalag/Willage_Client@7332992 godot-prototyp/data/vpmg/zaklady/1-grass-v1.png"
+          }
         }
       },
       "subMaterials": null,
@@ -96,7 +104,15 @@
           "palette": ["#D4A574", "#B8845A", "#9A6B42", "#7A5230"],
           "grainScalePermille": 320,
           "layerDensityPermille": 420,
-          "irregularityPermille": 360
+          "irregularityPermille": 360,
+          "baseTile": {
+            "asset": "tiles/002-topsoil-v1.rgba8",
+            "format": "rgba8",
+            "widthPx": 128,
+            "heightPx": 128,
+            "sha256": "16a7f13cc8f865b88c62763514873ab02b6683667a17d2ac68007e1e59292f6d",
+            "source": "Utalag/Willage_Client@7332992 godot-prototyp/data/vpmg/zaklady/2-topsoil-v1.png"
+          }
         }
       },
       "subMaterials": null,
@@ -124,7 +140,15 @@
           "palette": ["#F4EDE0", "#E8D9C3", "#C9B89A", "#A89880"],
           "grainScalePermille": 420,
           "layerDensityPermille": 200,
-          "irregularityPermille": 480
+          "irregularityPermille": 480,
+          "baseTile": {
+            "asset": "tiles/003-gravel_sand-v1.rgba8",
+            "format": "rgba8",
+            "widthPx": 128,
+            "heightPx": 128,
+            "sha256": "552743b862c1ba9f49f8f114651c5ef44bb9bb1c2629ded48aca36a362f69083",
+            "source": "Utalag/Willage_Client@7332992 godot-prototyp/data/vpmg/zaklady/3-gravel_sand-v1.png"
+          }
         }
       },
       "subMaterials": null,
@@ -179,7 +203,15 @@
           "palette": ["#EEEBE5", "#E3DFD8", "#D4D0CA", "#C6C2BC"],
           "grainScalePermille": 200,
           "layerDensityPermille": 680,
-          "irregularityPermille": 180
+          "irregularityPermille": 180,
+          "baseTile": {
+            "asset": "tiles/005-cave_limestone-v1.rgba8",
+            "format": "rgba8",
+            "widthPx": 128,
+            "heightPx": 128,
+            "sha256": "f8f7dbfff2d678f7b45c75a1a3848eb3486092ca0f0111a1ea6f130d584f2d40",
+            "source": "Utalag/Willage_Client@7332992 godot-prototyp/data/vpmg/zaklady/5-cave_limestone-v1.png"
+          }
         }
       },
       "subMaterials": null,
@@ -207,7 +239,15 @@
           "palette": ["#BAB0A6", "#A89E94", "#968C84", "#847A74", "#746C66"],
           "grainScalePermille": 380,
           "layerDensityPermille": 560,
-          "irregularityPermille": 400
+          "irregularityPermille": 400,
+          "baseTile": {
+            "asset": "tiles/006-granite-v1.rgba8",
+            "format": "rgba8",
+            "widthPx": 128,
+            "heightPx": 128,
+            "sha256": "743b27dd70bff346a6c10d59a696172d576500b8d14df23cc0137a1f42aac28c",
+            "source": "Utalag/Willage_Client@7332992 godot-prototyp/data/vpmg/zaklady/6-granite-v1.png"
+          }
         }
       },
       "subMaterials": null,

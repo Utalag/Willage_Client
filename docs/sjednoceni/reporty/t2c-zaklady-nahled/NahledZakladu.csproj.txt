@@ -1,8 +1,0 @@
-<Project Sdk="Microsoft.NET.Sdk">
-  <!-- DOČASNÝ NÁHLED (mimo klienta i Dev main): Dev 04ed4d9 base_texture + receptury v2 s dlaždicemi Gemini v dočasné kopii katalogu. -->
-  <PropertyGroup><OutputType>Exe</OutputType><TargetFramework>net10.0</TargetFramework><Nullable>enable</Nullable><ImplicitUsings>enable</ImplicitUsings></PropertyGroup>
-  <ItemGroup>
-    <ProjectReference Include="/workspace/willage-ideas/mat-t2/.willage-dev/import-04ed4d9/src/Modules/World/Willage.World.Vpmg/Willage.World.Vpmg.csproj" />
-    <ProjectReference Include="/workspace/willage-ideas/mat-t2/.willage-dev/import-04ed4d9/src/Modules/World/Willage.World.Materials/Willage.World.Materials.csproj" />
-  </ItemGroup>
-</Project>

@@ -25,7 +25,7 @@ public static class TestyT1
         var man = ManifestKatalogu.Spocti(data);
 
         // pin a zrcadlo
-        T.Je(pin.Commit == "42e7475332b0bda06fa7b5097b4aac92ab4a95fe" && api.Schema.DevCommit == pin.Commit && api.Schema.PrekryvCommit == pin.Commit, $"pin Dev {pin.Commit[..7]} = schéma operací ({api.Schema.DevCommit[..7]})");
+        T.Je(pin.Commit == "36ac11f1a057c08b587eab0a4a88c976e6edc3c5" && api.Schema.DevCommit == pin.Commit && api.Schema.PrekryvCommit == pin.Commit, $"pin Dev {pin.Commit[..7]} = schéma operací ({api.Schema.DevCommit[..7]})");
         T.Je(man.ShaSouboru(pin.ZrcadloCesta) == pin.ZrcadloSha, "SHA zrcadla = manifest");
         T.Je(pin.GoldenChecksum == 1756279408u && pin.GoldenMaterial == 52 && pin.GoldenSeed == 0xC0FFEE00u && pin.GoldenRozliseni == 64, "golden v pinu = Dev (52, 0xC0FFEE00, 64 → 1756279408)");
 
@@ -39,7 +39,7 @@ public static class TestyT1
 
         // schéma operací
         var sch = api.Schema;
-        T.Je(sch.Spustitelne.Count == 10 && sch.Zastupne.Count == 6, $"schéma: 10 spustitelných + 6 zástupných ({sch.Spustitelne.Count} + {sch.Zastupne.Count})");
+        T.Je(sch.Spustitelne.Count == 12 && sch.Zastupne.Count == 6, $"schéma: 12 spustitelných + 6 zástupných ({sch.Spustitelne.Count} + {sch.Zastupne.Count})");
         T.Je(sch.Profil.Select(p => p.Nazev).SequenceEqual(new[] { "style", "baseColor", "palette", "grainScalePermille", "layerDensityPermille", "irregularityPermille" }), "parametry profilu = MaterialVisualProfile Dev (v1 + palette)");
 
         // receptury – formát a validace (bez nástroje)

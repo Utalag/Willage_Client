@@ -8,9 +8,13 @@ namespace Willage.Vpmg.Nastroj;
 public sealed record NavrhProfilu(string? Style = null, string? BaseColor = null, int? GrainScalePermille = null, int? LayerDensityPermille = null, int? IrregularityPermille = null,
     IReadOnlyList<string>? Palette = null)
 {
-    public MaterialVisualProfile Na(MaterialVisualProfile p) => new(
-        Style ?? p.Style, BaseColor ?? p.BaseColor, GrainScalePermille ?? p.GrainScalePermille,
-        LayerDensityPermille ?? p.LayerDensityPermille, IrregularityPermille ?? p.IrregularityPermille, Palette ?? p.Palette);
+    /// <summary>T-2d: `with` – pole, která návrh nezná (baseTile), zůstanou z katalogu.</summary>
+    public MaterialVisualProfile Na(MaterialVisualProfile p) => p with
+    {
+        Style = Style ?? p.Style, BaseColor = BaseColor ?? p.BaseColor, GrainScalePermille = GrainScalePermille ?? p.GrainScalePermille,
+        LayerDensityPermille = LayerDensityPermille ?? p.LayerDensityPermille, IrregularityPermille = IrregularityPermille ?? p.IrregularityPermille,
+        Palette = Palette ?? p.Palette,
+    };
 }
 
 /// <summary>IMaterialCatalog Dev s jedním přepsaným profilem jednoho materiálu (adaptér, ne kopie logiky).</summary>

@@ -46,7 +46,7 @@ public sealed class StavEditoru
     /// <summary>Profil, jak ho vidí náhled: katalog + návrh.</summary>
     public ProfilVzhleduDto ProfilNahledu => new(Navrh.Style ?? ProfilKatalogu.Style, Navrh.BaseColor ?? ProfilKatalogu.BaseColor,
         Navrh.GrainScalePermille ?? ProfilKatalogu.GrainScalePermille, Navrh.LayerDensityPermille ?? ProfilKatalogu.LayerDensityPermille,
-        Navrh.IrregularityPermille ?? ProfilKatalogu.IrregularityPermille, Navrh.Palette ?? ProfilKatalogu.Palette);
+        Navrh.IrregularityPermille ?? ProfilKatalogu.IrregularityPermille, Navrh.Palette ?? ProfilKatalogu.Palette, ProfilKatalogu.BaseTile);
 
     void Zmena(string co) { Verze++; Zmeneno?.Invoke(co); }
 
@@ -155,6 +155,7 @@ public sealed class StavEditoru
         DruhParametruVpmg.Barva when !BarvaRe.IsMatch(h) => $"{p.Nazev}: '{h}' není barva #RRGGBB",
         DruhParametruVpmg.Cele when !int.TryParse(h, NumberStyles.Integer, CultureInfo.InvariantCulture, out _) => $"{p.Nazev}: '{h}' není celé číslo",
         DruhParametruVpmg.Cele when int.Parse(h, CultureInfo.InvariantCulture) is var v && ((p.Min is { } mi && v < mi) || (p.Max is { } ma && v > ma)) => $"{p.Nazev}: {h} mimo {p.Min}–{p.Max}",
+        DruhParametruVpmg.Prepinac when h is not ("true" or "false") => $"{p.Nazev}: '{h}' není true / false",
         DruhParametruVpmg.Volba when p.Moznosti.Count > 0 && !p.Moznosti.Contains(h) => $"{p.Nazev}: '{h}' není z voleb",
         _ => null,
     };

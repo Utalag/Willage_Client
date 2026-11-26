@@ -49,6 +49,6 @@ Výsledky a nálezy: `reporty/t2b-vpmg-v1-prop.md`. Klíč M6 se mění (deklaru
 | Krok | Větev | Obsah | Ověření |
 |---|---|---|---|
 | **T-2c** | `mat-v1-t2c-vpmg-fix` (z `mat-v1-t2b-vpmg-v1`) | pin Dev `42e7475`; schéma operací z deskriptorů Dev (`VpmgOperationCatalog.DescribeAll`, = `--describe-ops`) + český překryv; dlaždice Gemini `data/vpmg/zaklady/` (Python výjimka, offline) | goldeny 11/11; srovnání v0 / v1 rozbitá / v1 opravená; dlaždice = `--import-tile` Dev 04ed4d9 |
-| T-2d *(navrženo)* | – | pin Dev ≥ 04ed4d9: `base_texture`, `baseTile` v katalogu, receptury v2, zdroj dlaždic v nástroji | čeká na `baseTile` v katalogu Dev a řešení palette_map (viz `t2c-zaklady-prop.md`) |
+| **T-2d** | `mat-v1-t2d-zaklady` (z `mat-v1-t2c-vpmg-fix` `7332992`) | pin Dev `36ac11f` (PR #19/#20): `base_texture` nad `baseTile` (dlaždice Dev `Data/tiles` = `data/vpmg/zaklady`), receptury v2 vzorku, `palette_map.mixPermille`, přepínače bool parametrů, baseTile v profilu | goldeny v2 5/5 + v1 10/10 + legacy, nástroj i fasáda; arch variací a srovnání v1 / v2 |
 
-Výsledky: `reporty/t2c-vpmg-fix-prop.md`, `reporty/t2c-zaklady-prop.md`.
+Výsledky: `reporty/t2c-vpmg-fix-prop.md`, `reporty/t2c-zaklady-prop.md`, `reporty/t2d-zaklady-prop.md`.

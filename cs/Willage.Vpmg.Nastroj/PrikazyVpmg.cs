@@ -5,6 +5,7 @@ using Willage.World.Materials.Domain;
 using Willage.World.Materials.Ports;
 using Willage.World.Vpmg;
 using Willage.World.Vpmg.Pipeline;
+using Willage.World.Vpmg.Ports;
 using Willage.World.Vpmg.Recipe;
 
 namespace Willage.Vpmg.Nastroj;
@@ -19,10 +20,21 @@ public sealed class PrikazyVpmg
     public string ZdrojKatalogu { get; }
     public VpmgOperationRegistry Registr { get; } = VpmgDefaults.CreateDefaultRegistry();
 
+    /// <summary>T-2d: kořen Data Dev (kopie z projektu Willage.World.Materials při buildu) – dlaždice baseTile (tiles/*.rgba8).</summary>
+    public static string DataDev => Path.Combine(AppContext.BaseDirectory, "Data");
+    public IVpmgTileSource Dlazdice { get; } = new FileVpmgTileSource(DataDev);
+
     public PrikazyVpmg(string? katalog)
     {
         ZdrojKatalogu = katalog ?? "Dev (embedded Data/materials-catalog-v1.json)";
-        Katalog = katalog is null ? MaterialCatalogLoader.LoadFromEmbeddedOrDefault() : MaterialCatalogLoader.LoadFromFile(katalog);
+        Katalog = katalog is null ? MaterialCatalogLoader.LoadFromEmbeddedOrDefault() : Nacti(katalog);
+    }
+
+    /// <summary>Zrcadlo klienta se načte loaderem Dev, ale baseTile se ověřují (SHA) proti dlaždicím Dev v Data/tiles – klient je nekopíruje.</summary>
+    public static IMaterialCatalog Nacti(string katalog)
+    {
+        using var s = File.OpenRead(katalog);
+        return MaterialCatalogLoader.LoadFromStream(s, DataDev);
     }
 
     /// <summary>Operace registru Dev: všechny implementace IVpmgStepOperation v sestavě Dev, které výchozí registr umí.</summary>
@@ -42,7 +54,7 @@ public sealed class PrikazyVpmg
     {
         var sw = Stopwatch.StartNew();
         var kat = KatalogSNavrhem.S(Katalog, r.MaterialId, r.VisualProfileName, navrh);
-        var v = new VpmgPipelineRunner(kat, Registr).Run(r, seed);
+        var v = new VpmgPipelineRunner(kat, Registr, Dlazdice).Run(r, seed);
         return new BehVpmg(v, v.ComputeFnvChecksum(), sw.Elapsed.TotalMilliseconds);
     }
 
@@ -57,10 +69,14 @@ public sealed class PrikazyVpmg
     }
 
     /// <summary>T-2b: goldeny receptur v1 z fixture Dev v pinu (receptura i checksum z Dev, katalog = zrcadlo / embedded).</summary>
-    public IReadOnlyList<(string Soubor, uint Ocekavany, uint Spocteny)> GoldenyReceptur()
+    public IReadOnlyList<(string Soubor, uint Ocekavany, uint Spocteny)> GoldenyReceptur() =>
+        [.. GoldenyFixture("vpmg-recipe-goldens-v1.json"), .. GoldenyFixture("vpmg-recipe-goldens-v2.json")];
+
+    /// <summary>T-2d: jedna fixture goldenů Dev (v1 = procedurální, v2 = base_texture nad dlaždicí).</summary>
+    public IReadOnlyList<(string Soubor, uint Ocekavany, uint Spocteny)> GoldenyFixture(string fixture)
     {
         const string F = "tests/Willage.World.Vpmg.Tests/Fixtures/";
-        using var d = JsonDocument.Parse(File.ReadAllText(PinDev.Cesta(F + "vpmg-recipe-goldens-v1.json")));
+        using var d = JsonDocument.Parse(File.ReadAllText(PinDev.Cesta(F + fixture)));
         uint seed = Convert.ToUInt32(d.RootElement.GetProperty("seed").GetString(), 16);
         return d.RootElement.GetProperty("cases").EnumerateArray().Select(c =>
         {
@@ -75,7 +91,7 @@ public sealed class PrikazyVpmg
     {
         string dev = PinDev.Cesta("src/Modules/World/Willage.World.Materials/Data/materials-catalog-v1.json");
         string a = File.ReadAllText(zrcadlo).TrimEnd(), b = File.ReadAllText(dev).TrimEnd();
-        var ka = MaterialCatalogLoader.LoadFromFile(zrcadlo); var kb = MaterialCatalogLoader.LoadFromFile(dev);
+        var ka = Nacti(zrcadlo); var kb = MaterialCatalogLoader.LoadFromFile(dev);
         string ja = JsonSerializer.Serialize(ka.All), jb = JsonSerializer.Serialize(kb.All);
         string rozdil = File.ReadAllBytes(dev).Length - File.ReadAllBytes(zrcadlo).Length is var d && d != 0 ? $"Dev má o {d} B víc (koncové bílé znaky)" : "žádný";
         return (a == b, ja == jb, ka.All.Count, kb.All.Count, rozdil);

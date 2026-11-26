@@ -4,10 +4,32 @@
   "visualProfile": "default",
   "resolution": 64,
   "steps": [
-    { "id": "s1", "type": "base_fill", "enabled": true, "params": { "layer": "albedo" } },
-    { "id": "s2", "type": "palette_map", "enabled": true, "params": { "scalePermille": "240", "jitterPermille": "85" } },
-    { "id": "s3", "type": "smooth_noise", "enabled": true, "params": { "scalePermille": "380", "octaves": "2", "amplitudePermille": "55" } },
-    { "id": "s4", "type": "warp", "enabled": true, "params": { "strengthPermille": "280", "cellPx": "5" } },
-    { "id": "s5", "type": "hash_grain", "enabled": true, "params": {} }
+    {
+      "id": "s0",
+      "type": "base_texture",
+      "enabled": true,
+      "params": {
+        "layer": "albedo",
+        "scalePermille": "1000",
+        "offsetEnabled": "true",
+        "tintPermille": "105"
+      }
+    },
+    {
+      "id": "s1",
+      "type": "palette_map",
+      "enabled": true,
+      "params": {
+        "scalePermille": "260",
+        "jitterPermille": "32",
+        "mixPermille": "200"
+      }
+    },
+    {
+      "id": "s2",
+      "type": "smooth_noise",
+      "enabled": true,
+      "params": { "scalePermille": "220", "octaves": "2", "amplitudePermille": "18" }
+    }
   ]
 }

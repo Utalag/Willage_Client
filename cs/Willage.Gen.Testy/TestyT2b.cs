@@ -8,7 +8,8 @@ using Willage.Materialy.Api.Sluzby;
 
 namespace Willage.Gen.Testy;
 
-/// <summary>T-2b / T-2c: Dev VPMG ops v1 s opravou (42e7475): schéma z deskriptorů Dev, receptury v1 vzorku, goldeny přes nástroj i fasádu, paleta, barvy.</summary>
+/// <summary>T-2b / T-2c: Dev VPMG ops v1 s opravou (42e7475): schéma z deskriptorů Dev, receptury v1 vzorku, goldeny přes nástroj i fasádu, paleta, barvy.
+/// T-2d: výchozí receptury klienta jsou v2 → receptury v1 se tu berou přímo z fixture Dev v pinu (procedurální v1 zůstává ověřená).</summary>
 public static class TestyT2b
 {
     static string S<X>(IEnumerable<X> x) => string.Join(",", x);
@@ -62,9 +63,15 @@ public static class TestyT2b
             $"operace_dev_v1.json = VpmgPreview --describe-ops ({desk.Count} operací, {shod}/{celkem} parametrů){(roz.Count > 0 ? ": " + S(roz) : "")}");
     }
 
+    static readonly (byte Id, string Soubor)[] V1Vzorek = [(1, "recipe-grass-v1.json"), (2, "recipe-topsoil-v1.json"), (3, "recipe-gravel-sand-v1.json"), (5, "recipe-cave-limestone-v1.json"), (6, "recipe-granite-v1.json")];
+
+    /// <summary>T-2d: receptury v1 vzorku z fixture Dev v pinu (klientská knihovna má od T-2d v2).</summary>
+    static List<(byte MaterialId, RecepturaVpmgDto Receptura, uint Golden)> V1(string devKoren) => V1Vzorek.Select(x => (x.Id,
+        RecepturyVpmg.ZJson(File.ReadAllText(Path.Combine(devKoren, "tests/Willage.World.Vpmg.Tests/Fixtures/recipes", x.Soubor))), Ocekavane[x.Soubor])).ToList();
+
     public static void Spust()
     {
-        T.Sekce("T-2b/T-2c: Dev VPMG ops v1 (oprava 42e7475) – schéma z deskriptorů Dev, receptury v1 vzorku, goldeny, paleta, barvy");
+        T.Sekce("T-2b/T-2c: Dev VPMG ops v1 (oprava 42e7475, pin T-2d) – schéma z deskriptorů Dev, receptury v1 vzorku, goldeny, paleta, barvy");
         var data = DataSveta.Najdi(AppContext.BaseDirectory);
         using var api = new MaterialyApi(data.Koren);
         var sch = api.Schema; var kn = api.Receptury; var k = api.Katalog;
@@ -78,22 +85,17 @@ public static class TestyT2b
         var sn = sch.Operace("smooth_noise")!;
         T.Je(S(sn.Params.Select(p => p.Nazev + "=" + p.Vychozi)) == "scalePermille=,octaves=3,amplitudePermille=120" && sn.Params[0].VychoziDev.Contains("grainScalePermille") && sn.Params[1].Min == 1 && sn.Params[1].Max == 6 && sn.Params[0].Max == 2000,
             "smooth_noise: scalePermille (výchozí = profil grain, 1..2000), octaves 3 (1..6), amplitude 120 – z deskriptorů Dev");
-        T.Je(S(sch.Operace("palette_map")!.Params.Select(p => p.Nazev + "=" + p.Vychozi)) == "scalePermille=280,jitterPermille=90", "palette_map: scale 280, jitter 90");
+        T.Je(S(sch.Operace("palette_map")!.Params.Select(p => p.Nazev + "=" + p.Vychozi)) == "scalePermille=280,jitterPermille=90,mixPermille=1000", "palette_map: scale 280, jitter 90, mix 1000 (T-2d; 1000 = chování v1)");
         T.Je(S(sch.Operace("strata")!.Params.Select(p => p.Nazev)) == "bandMinPx,bandJitterPermille" && S(sch.Operace("strata")!.CtiProfil) == "baseColor,irregularityPermille,layerDensityPermille,palette", "strata: bandMinPx, bandJitterPermille; čte paletu, layerDensity, irregularity");
         T.Je(S(sch.Operace("warp")!.Params.Select(p => p.Nazev)) == "strengthPermille,cellPx" && S(sch.Operace("grass_tufts")!.Params.Select(p => p.Nazev + "=" + p.Vychozi)) == "densityPermille=550,bladeLengthPermille=180,hueJitterPermille=120",
             "warp: strength, cellPx; grass_tufts: 550 / 180 / 120");
         T.Je(sch.Spustitelne.SelectMany(o => o.Params).All(p => !p.BezPrekryvu), "každý parametr Dev má klientský popis (žádný obecný editor)");
 
-        // receptury v1 vzorku (N8)
-        T.Je(S(kn.Zaznamy.Select(z => z.MaterialId)) == S(api.Vzorek.Materialy.Select(m => m.Id)) && kn.DevCommit == api.Pin.Commit, "receptury v1 = vzorek 1,2,3,5,6; index z pinu Dev");
-        T.Je(kn.Zaznamy.All(z => z.Soubor == $"{z.MaterialId}.json" && kn.ShaSouboru(z) == z.Sha256), "receptury/<materialId>.json, SHA = index");
-        if (Directory.Exists(devKoren))
-            T.Je(kn.Zaznamy.All(z => Convert.ToHexString(SHA256.HashData(File.ReadAllBytes(Path.Combine(devKoren, z.ZdrojDev)))).ToLowerInvariant() == z.Sha256),
-                "kopie receptur = fixture Dev v pinu bajt po bajtu");
-        else T.Je(false, "připnutý Dev chybí: " + devKoren);
-        T.Je(kn.Zaznamy.All(z => RecepturyVpmg.Validuj(z.Receptura, sch, k).Count == 0), "receptury v1 platné proti schématu z Dev: " + S(kn.Zaznamy.SelectMany(z => RecepturyVpmg.Validuj(z.Receptura, sch, k))));
-        T.Je(kn.Zaznamy.All(z => Ocekavane[Path.GetFileName(z.ZdrojDev)] == z.GoldenChecksum), "golden v indexu = goldeny backendu");
-        T.Je(RecepturyVpmg.DoJson(kn.Vychozi(52)) == RecepturyVpmg.DoJson(RecepturyVpmg.Vychozi(52)), "materiál bez receptury v1 → výchozí v0");
+        // receptury v1 vzorku: od T-2d jen ve fixture Dev (knihovna klienta = v2, viz TestyT2d)
+        if (!Directory.Exists(devKoren)) { T.Je(false, "připnutý Dev chybí: " + devKoren); return; }
+        var v1r = V1(devKoren);
+        T.Je(v1r.All(z => RecepturyVpmg.Validuj(z.Receptura, sch, k).Count == 0), "receptury v1 (Dev) platné proti schématu z Dev: " + S(v1r.SelectMany(z => RecepturyVpmg.Validuj(z.Receptura, sch, k))));
+        T.Je(RecepturyVpmg.DoJson(kn.Vychozi(52)) == RecepturyVpmg.DoJson(RecepturyVpmg.Vychozi(52)), "materiál bez receptury vzorku → výchozí v0");
 
         // paleta
         T.Je(api.Vzorek.Materialy.All(m => k.Material(m.Id)!.Profily["default"].Palette is { Count: >= 4 }) && k.Material(52)!.Profily["default"].Palette is null,
@@ -101,16 +103,16 @@ public static class TestyT2b
 
         // stav editoru s knihovnou
         var st = new StavEditoru(k, sch, api.Vzorek, receptury: kn);
-        T.Je(RecepturyVpmg.DoJson(st.Receptura) == RecepturyVpmg.DoJson(kn.Zaznam(1)!.Receptura) && st.ZdrojReceptury!.Soubor == "1.json", "stav: tráva → receptura v1 z receptury/1.json");
+        T.Je(RecepturyVpmg.DoJson(st.Receptura) == RecepturyVpmg.DoJson(kn.Zaznam(1)!.Receptura) && st.ZdrojReceptury!.Soubor == "1.json", "stav: tráva → receptura z receptury/1.json");
         st.VyberMaterial(6);
-        T.Je(RecepturyVpmg.DoJson(st.Receptura) == RecepturyVpmg.DoJson(kn.Zaznam(6)!.Receptura) && st.Receptura.Kroky.Count == 6, "výběr 6 žula → její receptura v1 (6 kroků)");
+        T.Je(RecepturyVpmg.DoJson(st.Receptura) == RecepturyVpmg.DoJson(kn.Zaznam(6)!.Receptura), "výběr 6 žula → její receptura z knihovny");
         T.Je(st.PridejKrok("smooth_noise") == null && st.Receptura.Kroky[^1].Params is var pn && !pn.ContainsKey("scalePermille") && pn["octaves"] == "3" && pn["amplitudePermille"] == "120",
             "přidaný smooth_noise: octaves 3, amplitude 120, scalePermille nevyplněno (= profil, jako Dev)");
         int ix = st.Receptura.Kroky.Count - 1;
         T.Je(st.NastavParametrKroku(ix, "octaves", "9") != null && st.NastavParametrKroku(ix, "scalePermille", "300") == null && st.Receptura.Kroky[ix].Params["scalePermille"] == "300"
              && st.NastavParametrKroku(ix, "scalePermille", "") == null && !st.Receptura.Kroky[ix].Params.ContainsKey("scalePermille"), "octaves 9 mimo 1..8 odmítnuto; prázdná hodnota = výchozí Dev (klíč odebrán)");
         st.VychoziReceptura();
-        T.Je(RecepturyVpmg.DoJson(st.Receptura) == RecepturyVpmg.DoJson(kn.Zaznam(6)!.Receptura), "„Výchozí receptura“ = v1 materiálu");
+        T.Je(RecepturyVpmg.DoJson(st.Receptura) == RecepturyVpmg.DoJson(kn.Zaznam(6)!.Receptura), "„Výchozí receptura“ = receptura materiálu z knihovny");
         T.Je(st.NastavNavrh("palette", "#112233, #zz0000") != null && st.NastavNavrh("palette", "#112233, #445566") == null && S(st.Navrh.Palette!) == "#112233,#445566"
              && st.NastavNavrh("palette", st.ProfilKatalogu.PaletaText) == null && st.Navrh.Palette is null, "návrh palety: špatná barva odmítnuta, platná projde, = katalog → zrušen");
 
@@ -122,17 +124,18 @@ public static class TestyT2b
         var ziva = JsonNode.Parse(z.ParametryDevJson())!; var soubor = JsonNode.Parse(File.ReadAllText(Path.Combine(api.KorenDat, "vpmg", "operace_dev_v1.json")))!;
         T.Je(JsonNode.DeepEquals(ziva, soubor), "operace_dev_v1.json = živý rozbor Dev nástrojem (generovaný soubor aktuální)");
         var g = z.Goldeny();
-        T.Je(g.Count == 10 && g.All(x => x.Ocekavany == x.Spocteny && Ocekavane[x.Soubor] == x.Ocekavany), "goldeny v1 přes nástroj 10/10: " + S(g.Select(x => $"{x.Soubor.Replace("recipe-", "").Replace("-v1.json", "")}={x.Spocteny}")));
+        var g1 = g.Where(x => x.Soubor.EndsWith("-v1.json")).ToList();
+        T.Je(g1.Count == 10 && g1.All(x => x.Ocekavany == x.Spocteny && Ocekavane[x.Soubor] == x.Ocekavany), "goldeny v1 přes nástroj 10/10: " + S(g1.Select(x => $"{x.Soubor.Replace("recipe-", "").Replace("-v1.json", "")}={x.Spocteny}")));
         var (oc, sp) = z.Golden();
         T.Je(oc == 1756279408u && sp == oc && z.Spust(RecepturyVpmg.Vychozi(52), 0xC0FFEE00u).Checksum == 1756279408u, "legacy golden 52 = 1756279408 (nástroj i fasáda)");
-        var fas = kn.Zaznamy.Select(r => (r.MaterialId, Ch: z.Spust(r.Receptura, r.GoldenSeed).Checksum, r.GoldenChecksum)).ToList();
-        T.Je(fas.All(x => x.Ch == x.GoldenChecksum), "goldeny 5 materiálů přes fasádu (receptury/ + zrcadlo): " + S(fas.Select(x => $"{x.MaterialId}={x.Ch}")));
+        var fas = v1r.Select(r => (r.MaterialId, Ch: z.Spust(r.Receptura, 0xC0FFEE00u).Checksum, r.Golden)).ToList();
+        T.Je(fas.All(x => x.Ch == x.Golden), "goldeny v1 5 materiálů přes fasádu (receptura Dev v1 + zrcadlo): " + S(fas.Select(x => $"{x.MaterialId}={x.Ch}")));
         if (Directory.Exists(devKoren))
         {
             var opy = Ocekavane.Keys.Where(f => f.StartsWith("recipe-op-")).Select(f => (f, Ch: z.Spust(RecepturyVpmg.ZJson(File.ReadAllText(Path.Combine(devKoren, "tests/Willage.World.Vpmg.Tests/Fixtures/recipes", f))), 0xC0FFEE00u).Checksum)).ToList();
             T.Je(opy.All(x => x.Ch == Ocekavane[x.f]), "goldeny 5 operací přes fasádu (receptura Dev → DTO → JSON fasády → nástroj): " + S(opy.Select(x => x.Ch)));
         }
-        var r6 = kn.Zaznam(6)!.Receptura;
+        var r6 = v1r.Single(x => x.MaterialId == 6).Receptura;
         uint c0 = z.Spust(r6, 0xC0FFEE00u).Checksum;
         T.Je(z.Spust(r6, 0xC0FFEE00u, new NavrhProfiluDto(Palette: new[] { "#112233", "#445566" })).Checksum != c0 && z.Spust(r6, 0xC0FFEE00u).Checksum == c0, "návrh palety změní žulu, bez návrhu zase golden");
         bool ld = z.Spust(r6, 0xC0FFEE00u, new NavrhProfiluDto(LayerDensityPermille: 900)).Checksum != c0, ir = z.Spust(r6, 0xC0FFEE00u, new NavrhProfiluDto(IrregularityPermille: 900)).Checksum != c0;
@@ -146,9 +149,9 @@ public static class TestyT2b
         var r6b = r6 with { Kroky = r6.Kroky.Select(x => x.Id == "s4" ? x with { Id = "s4b" } : x).ToList() };
         T.Je(z.Spust(r6b, 1).Checksum != sA, "seed kroku = DeriveSeed(seed, HashString(step.Id)): přejmenování kroku změní výstup");
         // T-2c: barvy v paletě (oprava SmoothStep / strata) – podíl pixelů dál než 48 od nejbližší barvy palety
-        foreach (var r in kn.Zaznamy)
+        foreach (var r in v1r)
         {
-            var t = z.Spust(r.Receptura, r.GoldenSeed); var pal = k.Material(r.MaterialId)!.Profily["default"].Palette!;
+            var t = z.Spust(r.Receptura, 0xC0FFEE00u); var pal = k.Material(r.MaterialId)!.Profily["default"].Palette!;
             double mimo = MimoPaletu(t.Rgba, pal, 48);
             int cist = 0; for (int i = 0; i < t.Rgba.Length; i += 4) if ((t.Rgba[i] == 255 && t.Rgba[i + 1] == 255 && t.Rgba[i + 2] == 0) || (t.Rgba[i] == 0 && t.Rgba[i + 1] == 0 && t.Rgba[i + 2] == 255)) cist++;
             Console.WriteLine($"  barvy {r.MaterialId}: mimo paletu (>48) {mimo:P1}, čistě žlutých / modrých {cist}");
@@ -157,6 +160,6 @@ public static class TestyT2b
 
         // T-2c: generovaný soubor = výstup VpmgPreview --describe-ops z pinu Dev (stejné parametry, rozsahy, výchozí hodnoty)
         if (Directory.Exists(devKoren)) DescribeOps(devKoren, soubor);
-        foreach (var r in kn.Zaznamy) { var t = z.Spust(r.Receptura, r.GoldenSeed); Console.WriteLine($"  {r.MaterialId} {k.Material(r.MaterialId)!.Key}: {t.Checksum} ({t.MsNastroj:F2} ms nástroj, {t.MsCelkem:F2} ms celkem)"); }
+        foreach (var r in v1r) { var t = z.Spust(r.Receptura, 0xC0FFEE00u); Console.WriteLine($"  {r.MaterialId} {k.Material(r.MaterialId)!.Key}: {t.Checksum} ({t.MsNastroj:F2} ms nástroj, {t.MsCelkem:F2} ms celkem)"); }
     }
 }

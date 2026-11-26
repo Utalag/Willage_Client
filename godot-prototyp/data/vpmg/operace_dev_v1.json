@@ -1,7 +1,7 @@
 {
   "format": "willage-vpmg-operace-dev-v2",
   "poznamka": "GENEROVÁNO nástrojem Willage.Vpmg.Nastroj (příkaz parametry) z deskriptorů Dev VpmgOperationCatalog (= tools/VpmgPreview --describe-ops) – needitovat ručně. ctiProfil = jen pole profilu z deskriptorů (ProfileField); ostatní čtená pole doplňuje klientský překryv. vychozi \"\" = výchozí hodnotu bere Dev z profilu / rozměru (vychoziDev).",
-  "devCommit": "42e7475332b0bda06fa7b5097b4aac92ab4a95fe",
+  "devCommit": "36ac11f1a057c08b587eab0a4a88c976e6edc3c5",
   "operace": [
     {
       "type": "base_fill",
@@ -15,6 +15,53 @@
           "vychozi": "albedo",
           "vychoziDev": "albedo",
           "popisDev": "Id vrstvy textury (typicky albedo)."
+        }
+      ]
+    },
+    {
+      "type": "base_texture",
+      "trida": "BaseTextureOperation",
+      "popisDev": "Vyplní vrstvu ruční dlaždicí z visualProfile.baseTile (toroidální vzorek).",
+      "ctiProfil": [],
+      "params": [
+        {
+          "nazev": "layer",
+          "druh": "text",
+          "vychozi": "albedo",
+          "vychoziDev": "albedo",
+          "popisDev": "Id vrstvy textury."
+        },
+        {
+          "nazev": "scalePermille",
+          "druh": "cele",
+          "vychozi": "1000",
+          "vychoziDev": "1000",
+          "popisDev": "1000 = 1:1; nearest při ≥1000, box průměr při &lt;1000.",
+          "min": 250,
+          "max": 4000
+        },
+        {
+          "nazev": "offsetEnabled",
+          "druh": "prepinac",
+          "vychozi": "true",
+          "vychoziDev": "true",
+          "popisDev": "Toroidální posuv ze StepSeed (seamless)."
+        },
+        {
+          "nazev": "tintPermille",
+          "druh": "cele",
+          "vychozi": "0",
+          "vychoziDev": "0",
+          "popisDev": "Směs k průměru palety profilu v ‰.",
+          "min": 0,
+          "max": 1000
+        },
+        {
+          "nazev": "rotate90",
+          "druh": "prepinac",
+          "vychozi": "false",
+          "vychoziDev": "false",
+          "popisDev": "Rotace k×90° ze StepSeed; výchozí false (isometrické světlo dlaždic)."
         }
       ]
     },
@@ -41,6 +88,15 @@
           "popisDev": "Jemná variace kolem palety v ‰.",
           "min": 0,
           "max": 500
+        },
+        {
+          "nazev": "mixPermille",
+          "druh": "cele",
+          "vychozi": "1000",
+          "vychoziDev": "1000",
+          "popisDev": "Směs s vstupní vrstvou v ‰; 1000 = plná paleta (v1 chování).",
+          "min": 0,
+          "max": 1000
         }
       ],
       "aliasOf": "palette_map"
@@ -142,6 +198,15 @@
           "popisDev": "Jemná variace kolem palety v ‰.",
           "min": 0,
           "max": 500
+        },
+        {
+          "nazev": "mixPermille",
+          "druh": "cele",
+          "vychozi": "1000",
+          "vychoziDev": "1000",
+          "popisDev": "Směs s vstupní vrstvou v ‰; 1000 = plná paleta (v1 chování).",
+          "min": 0,
+          "max": 1000
         }
       ]
     },
@@ -219,6 +284,54 @@
           ]
         }
       ]
+    },
+    {
+      "type": "tile_sample",
+      "trida": "TileSampleOperation",
+      "popisDev": "Alias pro base_texture.",
+      "ctiProfil": [],
+      "params": [
+        {
+          "nazev": "layer",
+          "druh": "text",
+          "vychozi": "albedo",
+          "vychoziDev": "albedo",
+          "popisDev": "Id vrstvy textury."
+        },
+        {
+          "nazev": "scalePermille",
+          "druh": "cele",
+          "vychozi": "1000",
+          "vychoziDev": "1000",
+          "popisDev": "1000 = 1:1; nearest při ≥1000, box průměr při &lt;1000.",
+          "min": 250,
+          "max": 4000
+        },
+        {
+          "nazev": "offsetEnabled",
+          "druh": "prepinac",
+          "vychozi": "true",
+          "vychoziDev": "true",
+          "popisDev": "Toroidální posuv ze StepSeed (seamless)."
+        },
+        {
+          "nazev": "tintPermille",
+          "druh": "cele",
+          "vychozi": "0",
+          "vychoziDev": "0",
+          "popisDev": "Směs k průměru palety profilu v ‰.",
+          "min": 0,
+          "max": 1000
+        },
+        {
+          "nazev": "rotate90",
+          "druh": "prepinac",
+          "vychozi": "false",
+          "vychoziDev": "false",
+          "popisDev": "Rotace k×90° ze StepSeed; výchozí false (isometrické světlo dlaždic)."
+        }
+      ],
+      "aliasOf": "base_texture"
     },
     {
       "type": "value_noise",

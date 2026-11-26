@@ -17,8 +17,10 @@ public sealed class MaterialyApi : IDisposable
     public IZdrojVpmg Zdroj { get; }
     /// <summary>Vzorek materiálů, se kterými editor pracuje (ostatní zástupné).</summary>
     public VzorekMaterialu Vzorek { get; }
-    /// <summary>T-2b: výchozí receptury (data/vpmg/receptury, kopie receptur v1 z Dev).</summary>
+    /// <summary>T-2b: výchozí receptury (data/vpmg/receptury, kopie receptur z Dev – od T-2d v2).</summary>
     public KnihovnaReceptur Receptury { get; }
+    /// <summary>T-2d: podkladové dlaždice klienta (data/vpmg/zaklady) = baseTile katalogu Dev.</summary>
+    public ZakladyVpmg Zaklady { get; }
 
     public MaterialyApi(string korenDat, IZdrojVpmg? zdroj = null)
     {
@@ -28,6 +30,7 @@ public sealed class MaterialyApi : IDisposable
         Vzorek = new VzorekMaterialu(Path.Combine(KorenDat, "vpmg", "vzorek_materialu_v0.json"), Katalog);
         Schema = new SchemaOperaciVpmg(Path.Combine(KorenDat, "vpmg", "operace_vpmg_v1.json"), Path.Combine(KorenDat, "vpmg", "operace_dev_v1.json"));
         Receptury = new KnihovnaReceptur(Path.Combine(KorenDat, "vpmg", "receptury"));
+        Zaklady = new ZakladyVpmg(Path.Combine(KorenDat, "vpmg", "zaklady"));
         Zdroj = zdroj ?? new ZdrojVpmgProces(Katalog.Cesta);
     }
 

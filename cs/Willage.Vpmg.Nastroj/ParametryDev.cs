@@ -36,7 +36,7 @@ public static class ParametryDev
             {
                 var o = new JsonObject
                 {
-                    ["nazev"] = x.Name, ["druh"] = x.Type == "int" ? "cele" : "text", ["vychozi"] = x.DefaultLiteral ?? "",
+                    ["nazev"] = x.Name, ["druh"] = x.Type switch { "int" => "cele", "bool" => "prepinac", _ => "text" }, ["vychozi"] = x.DefaultLiteral ?? "",
                     ["vychoziDev"] = x.DefaultLiteral ?? (x.ProfileField != null ? "profil " + x.ProfileField : "výchozí Dev (z rozměru textury)"),
                     ["popisDev"] = x.Description,
                 };

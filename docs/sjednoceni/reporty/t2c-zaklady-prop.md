@@ -29,7 +29,9 @@ Soubory v Client `godot-prototyp/data/vpmg/zaklady/`, manifest `zaklady_v1.json`
 - `data/vpmg/*` je v manifestu katalogů (32 souborů, souhrn `ad961209…`) → mění se jen souhrn manifestu a klíč M7; otisky světa beze změny (mapa `800d420bb00047de`, voda `377a8210f82c856a` / `8e239a68c6d01be0`, klima `cb11da8d141a2a5e`); testy dotnet 623/0, Godot EditorMaterialuTest 27/0.
 - pin klienta zůstává **42e7475** (přepnutí na 04ed4d9 není triviální: nový katalog s `baseTile`, zdroj dlaždic, receptury v2 → samostatný krok T-2d).
 
-## Dočasný náhled (není operace klienta ani Dev)
+## Dočasný náhled (není operace klienta ani Dev) – ODSTRANĚN v T-2d
+T-2d (Dev 36ac11f) má `base_texture` v nástroji i editoru, program byl smazán (zůstává v historii commitu `51f2252`).
+
 `docs/sjednoceni/reporty/t2c-zaklady-nahled/` – malý C# program nad Dev 04ed4d9 (jen čtení): dočasná kopie katalogu Dev, do které se vloží
 `baseTile` těchto 5 dlaždic, a běh receptur `recipe-*-v2.json`. Arch `obrazky/t2c/20-zaklady-variace.png`: originál | dlaždice 2×2 | 4 variace
 (seedy editoru = seed + i·7919) receptur v2 **bez kroku palette_map** | v2 Dev beze změny | procedurální v1.
