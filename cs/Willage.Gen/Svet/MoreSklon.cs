@@ -61,22 +61,43 @@ public sealed class MoreSklon
         return d;
     }
 
-    /// <summary>Krok 6f: vzdálenost k moři pro hladinu podzemní vody. U pobřeží (hrubá D ≤ 32 m) z masky po 1 m, jinak hrubá mřížka 64 m (ta nestačí na pás 5 m).</summary>
-    public double VzdalenostOdMoreJemna(double x, double y)
+    /// <summary>
+    /// Krok 6g: vzdálenost k skutečnému moři (JeMore: k &lt; 0,5 a povrch pod hladinou moře) pro hladinu podzemní vody.
+    /// Ne k vrstevnici masky k = 0,5 – mezi břehem a k = 0,5 je desítky metrů pevniny.
+    /// Ve vnitrozemí (hrubá vzdálenost k masce &gt; 32 m) stačí mřížka 64 m (už je ≫ pás 5 m).
+    /// U pobřeží a v pásu k &lt; 0,5 nad hladinou se hledá JeMore po 1 m do 16 m; nenajde-li se, vrací 16 m (mimo pás přechodu).
+    /// </summary>
+    public double VzdalenostOdMoreJemna(double x, double y, Func<double, double, double> vyska)
     {
-        if (Pevnina(x, y) < 0.5) return 0.0;
-        double d = VzdalenostOdMore(x, y);
-        if (d > 32.0) return d;
-        double best = d;
+        if (JeMore(x, y, vyska(x, y))) return 0.0;
+        // daleko od vrstevnice k = 0,5 ⇒ ještě dál od skutečného moře
+        if (Pevnina(x, y) >= 0.5)
+        {
+            double d = VzdalenostOdMore(x, y);
+            if (d > 32.0) return d;
+            double bestK = d;
+            const int Rk = 16;
+            for (int j = -Rk; j <= Rk; j++)
+            for (int i = -Rk; i <= Rk; i++)
+            {
+                if (i == 0 && j == 0) continue;
+                double q = i * i + j * j; if (q >= bestK * bestK) continue;
+                if (Pevnina(x + i, y + j) < 0.5) bestK = Math.Sqrt(q);
+            }
+            if (bestK >= Rk) return bestK;
+        }
         const int R = 16;
+        double best = R;
+        bool nasel = false;
         for (int j = -R; j <= R; j++)
         for (int i = -R; i <= R; i++)
         {
             if (i == 0 && j == 0) continue;
-            double q = i * i + j * j; if (q >= best * best) continue;
-            if (Pevnina(x + i, y + j) < 0.5) best = Math.Sqrt(q);
+            double q = i * i + j * j; if (nasel && q >= best * best) continue;
+            if (q > R * R) continue;
+            if (JeMore(x + i, y + j, vyska(x + i, y + j))) { best = Math.Sqrt(q); nasel = true; }
         }
-        return best;
+        return nasel ? best : R;
     }
 
     /// <summary>Vzdálenost k moři (m), bilineárně z hrubé mřížky, periodicky (sklon kontinentu, pánve).</summary>

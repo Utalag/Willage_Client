@@ -36,7 +36,7 @@ public sealed class RegionalniHladina
         double g = sh / sw;
         double l = g - _p.HloubkaD0M + _p.ZesileniUdoliBeta * (g - PovrchH(x, y));
         l = _p.HladinaSledujeErozi ? l - _g.ErozeHruba(x, y) : l;
-        // krok 6e/6f: v moři a v pásu HladinaPrechodM od břehu hladina = hladina moře, dál původní spád (smoothstep)
+        // krok 6e/6g: v moři (JeMore) a v pásu HladinaPrechodM od skutečného břehu hladina = hladina moře, dál původní spád (smoothstep); žádný fallback 60 m
         if (_p.HladinaPrechodM > 0)
         {
             double hm = _g.HladinaMore;
