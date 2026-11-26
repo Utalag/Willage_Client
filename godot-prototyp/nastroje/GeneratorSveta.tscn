@@ -13,6 +13,8 @@
 [ext_resource type="Script" path="res://scripts/cs/GeneratorSveta/UseckaRezu.cs" id="11"]
 [ext_resource type="Script" path="res://scripts/cs/GeneratorSveta/PohledRezu.cs" id="12"]
 [ext_resource type="Script" path="res://scripts/cs/GeneratorSveta/ProfilRezu.cs" id="13"]
+[ext_resource type="Script" path="res://scripts/cs/GeneratorSveta/BodyNahledu.cs" id="14"]
+[ext_resource type="Script" path="res://scripts/cs/GeneratorSveta/TabulkaPasem.cs" id="15"]
 
 [node name="GeneratorSveta" type="Control"]
 layout_mode = 3
@@ -174,6 +176,7 @@ script = ExtResource("8")
 Zmenseni = 2
 
 [node name="Mapa" type="TextureRect" parent="Svislo/Hlavni/Stred/Prave/NahledModulu"]
+clip_contents = true
 custom_minimum_size = Vector2(490, 270)
 layout_mode = 2
 tooltip_text = "Dva kliky = úsečka řezu"
@@ -188,17 +191,35 @@ grow_vertical = 2
 mouse_filter = 2
 script = ExtResource("11")
 
+[node name="Body" type="Control" parent="Svislo/Hlavni/Stred/Prave/NahledModulu/Mapa"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("14")
+
 [node name="Info" type="Label" parent="Svislo/Hlavni/Stred/Prave/NahledModulu"]
 custom_minimum_size = Vector2(490, 0)
 layout_mode = 2
 theme_override_font_sizes/font_size = 12
 autowrap_mode = 3
 
+[node name="Pasma" type="Tree" parent="Svislo/Hlavni/Stred/Prave/NahledModulu"]
+visible = false
+custom_minimum_size = Vector2(490, 92)
+layout_mode = 2
+theme_override_font_sizes/font_size = 11
+theme_override_font_sizes/title_button_font_size = 11
+script = ExtResource("15")
+
 [node name="Poznamka" type="Label" parent="Svislo/Hlavni/Stred/Prave/NahledModulu" groups=["zastupne"]]
 layout_mode = 2
 autowrap_mode = 3
 script = ExtResource("9")
-Funkce = "vlastní náhled a izolace M4–M6 (G-7); dnes vrstvy hotové planety"
+Funkce = "vlastní náhled M7–M9 (M7 ukazuje vrstvy hotové planety; M8, M9 fáze 3)"
 
 [node name="PohledRezu" type="VBoxContainer" parent="Svislo/Hlavni/Stred/Prave"]
 unique_name_in_owner = true
@@ -229,7 +250,7 @@ clip_text = true
 layout_mode = 2
 autowrap_mode = 3
 script = ExtResource("9")
-Funkce = "řez s hladinou a zvodnělou zónou M4–M6 (G-7, 7d)"
+Funkce = "zvodnělá zóna 7d v řezu (Jan: odloženo)"
 
 [node name="Diagnostika" type="Label" parent="Svislo/Hlavni/Stred/Prave"]
 unique_name_in_owner = true

@@ -33,9 +33,9 @@ public partial class GeneratorSvetaOkno : Control
 
         Rez = GetNode<PohledRezu>("%PohledRezu");
         Seznam.ModulVybran += id => { Konfigurator.Zobraz(id); Rez.NastavModul(id); Nahled.NastavModul(id); };
-        // G-6: úsečka z náhledu → řez; izolace z konfigurátoru → náhled (M1, M2) nebo režim řezu (M3)
+        // G-6 / G-7: úsečka z náhledu → řez; izolace z konfigurátoru → náhled (M1, M2, M4, M5, M6) nebo režim řezu (M3)
         Nahled.UseckaVybrana += (od, @do) => Rez.NastavUsecku(od, @do);
-        Konfigurator.IzolaceZmenena += (m, st) => { if (m == "M3") Rez.NastavRezim(st); else Nahled.NastavIzolaci(st > 0); };
+        Konfigurator.IzolaceZmenena += (m, st) => { if (m == "M3") Rez.NastavRezim(st); else Nahled.NastavIzolaci(st); };
         j.ParametrZmenen += (_, prijato, _, _) => { if (prijato) { j.Moduly(); j.InfoPlanety(); } };
         j.PlanetaHotova += _ => { j.Moduly(); j.InfoPlanety(); };
         // načtení WPLN mění sadu parametrů: úlohy jdou do fronty za Nacti, takže přijdou už nové hodnoty

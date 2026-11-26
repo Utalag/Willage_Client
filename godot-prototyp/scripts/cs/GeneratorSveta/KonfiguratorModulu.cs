@@ -77,7 +77,7 @@ public partial class KonfiguratorModulu : VBoxContainer
         j.Parametry(modul);
     }
 
-    /// <summary>G-6: izolace pro M1–M3 (jako GeoLab); M4–M6 zástupné (G-7).</summary>
+    /// <summary>G-6 / G-7: izolace pro M1–M6 (jako GeoLab): M1/M2/M4/M5 zap/vyp, M3 cyklus režimů řezu, M6 cyklus jen hladina / jen prameny.</summary>
     void NastavTlacitkoIzolace(string modul, int stav)
     {
         StavIzolace = stav;
@@ -86,17 +86,20 @@ public partial class KonfiguratorModulu : VBoxContainer
             "M1" => (stav == 0 ? "Izolovat: jen reliéf" : "Izolace: jen reliéf ✓", "náhled jen reliéfu bez moře, masivu a sopek"),
             "M2" => (stav == 0 ? "Izolovat: rozdíl M2 − M1" : "Izolace: rozdíl M2 − M1 ✓", "náhled rozdílu výšky proti M1 (moře, sklon kontinentu, pánve)"),
             "M3" => (stav switch { 0 => "Izolovat řez: jen vrstvy", 1 => "Izolovat řez: jen útvary", _ => "Řez: vše" }, "řez M3: vše → jen vrstvy → jen útvary + nitro sopek"),
-            _ => ("Izolovat vrstvu (zástupné)", "zástupný: izolace M4–M6 přijde s náhledy G-7"),
+            "M4" => (stav == 0 ? "Izolovat: posun eroze" : "Izolace: posun eroze ✓", "mapa posunu eroze H0 − H (bez vodníků)"),
+            "M5" => (stav == 0 ? "Izolovat: jen klima" : "Izolace: jen klima ✓", "biom z teploty a srážek bez oáz – bez vlivu na vodu"),
+            "M6" => (stav switch { 0 => "Izolovat: jen hladina", 1 => "Izolovat: jen prameny", _ => "Izolace: vypnout" }, "M6: vše → jen hladina (bez pramenů) → jen prameny"),
+            _ => ("Izolovat vrstvu", "modul nemá izolaci"),
         };
         _izolovat.Text = text; _izolovat.TooltipText = tip;
-        _izolovat.Disabled = modul is not ("M1" or "M2" or "M3");
+        _izolovat.Disabled = modul is not ("M1" or "M2" or "M3" or "M4" or "M5" or "M6");
     }
 
-    /// <summary>Přepne izolaci (M1/M2 zap/vyp, M3 cyklus režimů řezu) a vyšle IzolaceZmenena.</summary>
+    /// <summary>Přepne izolaci (M1/M2/M4/M5 zap/vyp, M3 a M6 cyklus 0 → 1 → 2) a vyšle IzolaceZmenena.</summary>
     public void PrepniIzolaci()
     {
         if (_izolovat.Disabled) return;
-        int dalsi = Modul == "M3" ? (StavIzolace + 1) % 3 : 1 - StavIzolace;
+        int dalsi = Modul is "M3" or "M6" ? (StavIzolace + 1) % 3 : 1 - StavIzolace;
         NastavTlacitkoIzolace(Modul, dalsi);
         EmitSignal(SignalName.IzolaceZmenena, Modul, dalsi);
     }
