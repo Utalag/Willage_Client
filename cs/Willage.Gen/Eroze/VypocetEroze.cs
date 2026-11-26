@@ -40,6 +40,7 @@ public static class VypocetEroze
         for (int k = 0; k < t.N; k++)
         {
             m.H[k] = (float)Math.Min(h[k], m.H0[k]);
+            m.Vypln[k] = (float)Math.Max(fill[k], m.H[k]);
             if (odtok[k]) m.Priznaky[k] |= MapaEroze.Odtok;
             else if (fill[k] > h[k] + 0.05) m.Priznaky[k] |= MapaEroze.Jezero;
         }
