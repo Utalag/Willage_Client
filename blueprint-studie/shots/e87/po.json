@@ -1,0 +1,760 @@
+{
+ "p87_1": {
+  "hreben": {
+   "poradi_0": {
+    "bloky": {
+     "(-1, 0)": {
+      "gen_ms": 251.818,
+      "jadro_na_povrchu": 254,
+      "krok_uvnitr_max_u": 1.19326570630074,
+      "krok_uvnitr_prumer_u": 0.289996060740668,
+      "max_u": 54.553853392601,
+      "mineraly": "56/64",
+      "prumer_u": 51.8510625190283,
+      "schodek": 8,
+      "typ": "hora_vyzdvizena"
+     },
+     "(0, 0)": {
+      "gen_ms": 512.71,
+      "jadro_na_povrchu": 242,
+      "krok_uvnitr_max_u": 1.45935201644897,
+      "krok_uvnitr_prumer_u": 0.35980369435274,
+      "max_u": 53.9295546486974,
+      "mineraly": "56/64",
+      "prumer_u": 50.9377235941947,
+      "schodek": 8,
+      "typ": "hora_vyzdvizena"
+     },
+     "(1, 0)": {
+      "gen_ms": 296.952,
+      "jadro_na_povrchu": 114,
+      "krok_uvnitr_max_u": 1.35264837741852,
+      "krok_uvnitr_prumer_u": 0.354241844668286,
+      "max_u": 50.9926894903183,
+      "mineraly": "56/64",
+      "prumer_u": 48.109631481444,
+      "schodek": 8,
+      "typ": "hora_vyzdvizena"
+     }
+    },
+    "jemne": {
+     "hrube_jemne_max_m": 0.5,
+     "ms_vzorek_32": 713.724833333333,
+     "sev_krok_max_m": 0.25,
+     "uvnitr_krok_max_m": 0.5,
+     "zmena_po_sousedech": {
+      "(-1, 0)": 0,
+      "(0, 0)": 0,
+      "(1, 0)": 0
+     }
+    },
+    "otisk_bunek": "6378881a100416d5",
+    "poradi": "-1,0:hora_vyzdvizena:821;0,0:hora_vyzdvizena:822;1,0:hora_vyzdvizena:823",
+    "svy": {
+     "(-1, 0)|(0, 0)": {
+      "bunky_dovnitr_jinak": 0.129607609988109,
+      "bunky_jinak": 0.135714285714286,
+      "jadro_dovnitr_max_u": 0.546295556674409,
+      "jadro_max_u": 0.457752075791355,
+      "jadro_na_povrchu_sev": 32,
+      "krok_dovnitr_prumer_u": 0.337187266966794,
+      "povrch_max_u": 0.487048164010048,
+      "povrch_prumer_u": 0.226114034419879,
+      "sev_vyska_prumer_u": 52.6068095165538,
+      "vrstvy_dovnitr_max_u": 6.44222731277585,
+      "vrstvy_max_u": 5.69279921052543,
+      "vytlacene_sev": 16,
+      "vytlacene_vnitrek": 25
+     },
+     "(0, 0)|(1, 0)": {
+      "bunky_dovnitr_jinak": 0.0571791613722999,
+      "bunky_jinak": 0.0742637644046095,
+      "jadro_dovnitr_max_u": 0.720218452266195,
+      "jadro_max_u": 0.809975685296592,
+      "jadro_na_povrchu_sev": 22,
+      "krok_dovnitr_prumer_u": 0.29088776189019,
+      "povrch_max_u": 0.695042503997684,
+      "povrch_prumer_u": 0.302145269641187,
+      "sev_vyska_prumer_u": 49.1097038002335,
+      "vrstvy_dovnitr_max_u": 2.55562129326928,
+      "vrstvy_max_u": 2.24005308479218,
+      "vytlacene_sev": 21,
+      "vytlacene_vnitrek": 29
+     }
+    },
+    "voda": {
+     "chyba_svet": 0.0,
+     "ms": 412.36,
+     "okraj": 19.5,
+     "otisk": "1620c0d1cb1bb6b2",
+     "souhrn": {
+      "koryto_sloupcu": 35,
+      "okraj_lps": 19.5,
+      "podzemni_telesa": 0,
+      "prameny": 5,
+      "tun_sloupcu": 4,
+      "vodopady": 0,
+      "vodopady_okraj": 5,
+      "volani_podzemi": 0,
+      "vyvery": 0
+     },
+     "zdroje": 19.5
+    },
+    "voda67": {
+     "chyba_svet": 0.0,
+     "ms": 396.596,
+     "okraj": 19.5,
+     "otisk": "1620c0d1cb1bb6b2",
+     "souhrn": {
+      "koryto_sloupcu": 35,
+      "okraj_lps": 19.5,
+      "podzemni_telesa": 0,
+      "prameny": 5,
+      "tun_sloupcu": 4,
+      "vodopady": 0,
+      "vodopady_okraj": 5,
+      "volani_podzemi": 0,
+      "vyvery": 0
+     },
+     "zdroje": 19.5
+    }
+   },
+   "poradi_1": {
+    "bloky": {
+     "(-1, 0)": {
+      "gen_ms": 273.861,
+      "jadro_na_povrchu": 254,
+      "krok_uvnitr_max_u": 1.19326570630074,
+      "krok_uvnitr_prumer_u": 0.289996060740668,
+      "max_u": 54.553853392601,
+      "mineraly": "56/64",
+      "prumer_u": 51.8510625190283,
+      "schodek": 8,
+      "typ": "hora_vyzdvizena"
+     },
+     "(0, 0)": {
+      "gen_ms": 528.813,
+      "jadro_na_povrchu": 242,
+      "krok_uvnitr_max_u": 1.45935201644897,
+      "krok_uvnitr_prumer_u": 0.35980369435274,
+      "max_u": 53.9295546486974,
+      "mineraly": "56/64",
+      "prumer_u": 50.9377235941947,
+      "schodek": 8,
+      "typ": "hora_vyzdvizena"
+     },
+     "(1, 0)": {
+      "gen_ms": 298.546,
+      "jadro_na_povrchu": 114,
+      "krok_uvnitr_max_u": 1.35264837741852,
+      "krok_uvnitr_prumer_u": 0.354241844668286,
+      "max_u": 50.9926894903183,
+      "mineraly": "56/64",
+      "prumer_u": 48.109631481444,
+      "schodek": 8,
+      "typ": "hora_vyzdvizena"
+     }
+    },
+    "otisk_bunek": "6378881a100416d5",
+    "poradi": "1,0:hora_vyzdvizena:823;-1,0:hora_vyzdvizena:821;0,0:hora_vyzdvizena:822",
+    "svy": {
+     "(-1, 0)|(0, 0)": {
+      "bunky_dovnitr_jinak": 0.129607609988109,
+      "bunky_jinak": 0.135714285714286,
+      "jadro_dovnitr_max_u": 0.546295556674409,
+      "jadro_max_u": 0.457752075791355,
+      "jadro_na_povrchu_sev": 32,
+      "krok_dovnitr_prumer_u": 0.337187266966794,
+      "povrch_max_u": 0.487048164010048,
+      "povrch_prumer_u": 0.226114034419879,
+      "sev_vyska_prumer_u": 52.6068095165538,
+      "vrstvy_dovnitr_max_u": 6.44222731277585,
+      "vrstvy_max_u": 5.69279921052543,
+      "vytlacene_sev": 16,
+      "vytlacene_vnitrek": 25
+     },
+     "(0, 0)|(1, 0)": {
+      "bunky_dovnitr_jinak": 0.0571791613722999,
+      "bunky_jinak": 0.0742637644046095,
+      "jadro_dovnitr_max_u": 0.720218452266195,
+      "jadro_max_u": 0.809975685296592,
+      "jadro_na_povrchu_sev": 22,
+      "krok_dovnitr_prumer_u": 0.29088776189019,
+      "povrch_max_u": 0.695042503997684,
+      "povrch_prumer_u": 0.302145269641187,
+      "sev_vyska_prumer_u": 49.1097038002335,
+      "vrstvy_dovnitr_max_u": 2.55562129326928,
+      "vrstvy_max_u": 2.24005308479218,
+      "vytlacene_sev": 21,
+      "vytlacene_vnitrek": 29
+     }
+    }
+   },
+   "poradi_neshod_bunek": {
+    "(-1, 0)": 0,
+    "(0, 0)": 0,
+    "(1, 0)": 0
+   }
+  },
+  "masiv2x2": {
+   "poradi_0": {
+    "bloky": {
+     "(0, 0)": {
+      "gen_ms": 262.201,
+      "jadro_na_povrchu": 242,
+      "krok_uvnitr_max_u": 1.45935201644897,
+      "krok_uvnitr_prumer_u": 0.35980369435274,
+      "max_u": 53.9295546486974,
+      "mineraly": "56/64",
+      "prumer_u": 50.9377235941947,
+      "schodek": 8,
+      "typ": "hora_vyzdvizena"
+     },
+     "(0, 1)": {
+      "gen_ms": 511.79,
+      "jadro_na_povrchu": 53,
+      "krok_uvnitr_max_u": 1.10909485816956,
+      "krok_uvnitr_prumer_u": 0.30351213037502,
+      "max_u": 51.3310810029507,
+      "mineraly": "56/64",
+      "prumer_u": 47.9100344478156,
+      "schodek": 8,
+      "typ": "hora_vyzdvizena"
+     },
+     "(1, 0)": {
+      "gen_ms": 293.91,
+      "jadro_na_povrchu": 114,
+      "krok_uvnitr_max_u": 1.35264837741852,
+      "krok_uvnitr_prumer_u": 0.354241844668286,
+      "max_u": 50.9926894903183,
+      "mineraly": "56/64",
+      "prumer_u": 48.109631481444,
+      "schodek": 8,
+      "typ": "hora_vyzdvizena"
+     },
+     "(1, 1)": {
+      "gen_ms": 250.824,
+      "jadro_na_povrchu": 177,
+      "krok_uvnitr_max_u": 1.37893012538552,
+      "krok_uvnitr_prumer_u": 0.306219911691733,
+      "max_u": 51.4433620274067,
+      "mineraly": "56/64",
+      "prumer_u": 48.6713686470557,
+      "schodek": 8,
+      "typ": "hora_vyzdvizena"
+     }
+    },
+    "jemne": {
+     "hrube_jemne_max_m": 0.5,
+     "ms_vzorek_32": 642.012,
+     "sev_krok_max_m": 0.25,
+     "uvnitr_krok_max_m": 0.5,
+     "zmena_po_sousedech": {
+      "(0, 0)": 0,
+      "(0, 1)": 0,
+      "(1, 0)": 0,
+      "(1, 1)": 0
+     }
+    },
+    "otisk_bunek": "a52daab1768ec4df",
+    "poradi": "0,0:hora_vyzdvizena:811;1,0:hora_vyzdvizena:812;0,1:hora_vyzdvizena:813;1,1:hora_vyzdvizena:814",
+    "svy": {
+     "(0, 0)|(0, 1)": {
+      "bunky_dovnitr_jinak": 0.133587786259542,
+      "bunky_jinak": 0.127713920817369,
+      "jadro_dovnitr_max_u": 1.32425642302467,
+      "jadro_max_u": 1.29861852779555,
+      "jadro_na_povrchu_sev": 19,
+      "krok_dovnitr_prumer_u": 0.358975852344884,
+      "povrch_max_u": 0.874692566692829,
+      "povrch_prumer_u": 0.358540387242101,
+      "sev_vyska_prumer_u": 48.995586768433,
+      "vrstvy_dovnitr_max_u": 5.98924929775844,
+      "vrstvy_max_u": 4.25106276092412,
+      "vytlacene_sev": 26,
+      "vytlacene_vnitrek": 26
+     },
+     "(0, 0)|(1, 0)": {
+      "bunky_dovnitr_jinak": 0.0508259212198221,
+      "bunky_jinak": 0.0627400768245839,
+      "jadro_dovnitr_max_u": 0.720218452266195,
+      "jadro_max_u": 0.809975685296592,
+      "jadro_na_povrchu_sev": 22,
+      "krok_dovnitr_prumer_u": 0.29088776189019,
+      "povrch_max_u": 0.695042503997684,
+      "povrch_prumer_u": 0.302145269641187,
+      "sev_vyska_prumer_u": 49.1097038002335,
+      "vrstvy_dovnitr_max_u": 2.55562129326928,
+      "vrstvy_max_u": 2.24005308479218,
+      "vytlacene_sev": 21,
+      "vytlacene_vnitrek": 29
+     },
+     "(0, 1)|(1, 1)": {
+      "bunky_dovnitr_jinak": 0.111548556430446,
+      "bunky_jinak": 0.107470511140236,
+      "jadro_dovnitr_max_u": 0.853939799158873,
+      "jadro_max_u": 0.786832585838695,
+      "jadro_na_povrchu_sev": 3,
+      "krok_dovnitr_prumer_u": 0.248152510961518,
+      "povrch_max_u": 0.695037446916103,
+      "povrch_prumer_u": 0.263371553330217,
+      "sev_vyska_prumer_u": 47.8812671650376,
+      "vrstvy_dovnitr_max_u": 6.04823350110938,
+      "vrstvy_max_u": 3.34798595328888,
+      "vytlacene_sev": 33,
+      "vytlacene_vnitrek": 36
+     },
+     "(1, 0)|(1, 1)": {
+      "bunky_dovnitr_jinak": 0.0871862615587847,
+      "bunky_jinak": 0.069828722002635,
+      "jadro_dovnitr_max_u": 1.35903422983984,
+      "jadro_max_u": 0.842052534262642,
+      "jadro_na_povrchu_sev": 8,
+      "krok_dovnitr_prumer_u": 0.235169606821728,
+      "povrch_max_u": 0.533528152853251,
+      "povrch_prumer_u": 0.209827924525598,
+      "sev_vyska_prumer_u": 47.5373874803336,
+      "vrstvy_dovnitr_max_u": 3.42538104211535,
+      "vrstvy_max_u": 3.56926810909064,
+      "vytlacene_sev": 35,
+      "vytlacene_vnitrek": 40
+     }
+    },
+    "voda": {
+     "chyba_svet": 0.0,
+     "ms": 1046.277,
+     "okraj": 9.5,
+     "otisk": "8f3abf374c170f79",
+     "souhrn": {
+      "koryto_sloupcu": 28,
+      "okraj_lps": 9.5,
+      "podzemni_telesa": 1,
+      "prameny": 3,
+      "tun_sloupcu": 167,
+      "vodopady": 0,
+      "vodopady_okraj": 2,
+      "volani_podzemi": 3,
+      "vyvery": 1
+     },
+     "zdroje": 9.5
+    },
+    "voda67": {
+     "chyba_svet": 0.0,
+     "ms": 6608.112,
+     "okraj": 9.5,
+     "otisk": "449bb242baa4690d",
+     "souhrn": {
+      "koryto_sloupcu": 28,
+      "okraj_lps": 9.5,
+      "podzemni_telesa": 1,
+      "prameny": 3,
+      "tun_sloupcu": 167,
+      "vodopady": 0,
+      "vodopady_okraj": 2,
+      "volani_podzemi": 2,
+      "vyvery": 0
+     },
+     "zdroje": 9.5
+    }
+   },
+   "poradi_1": {
+    "bloky": {
+     "(0, 0)": {
+      "gen_ms": 261.283,
+      "jadro_na_povrchu": 242,
+      "krok_uvnitr_max_u": 1.45935201644897,
+      "krok_uvnitr_prumer_u": 0.35980369435274,
+      "max_u": 53.9295546486974,
+      "mineraly": "56/64",
+      "prumer_u": 50.9377235941947,
+      "schodek": 8,
+      "typ": "hora_vyzdvizena"
+     },
+     "(0, 1)": {
+      "gen_ms": 491.87,
+      "jadro_na_povrchu": 53,
+      "krok_uvnitr_max_u": 1.10909485816956,
+      "krok_uvnitr_prumer_u": 0.30351213037502,
+      "max_u": 51.3310810029507,
+      "mineraly": "56/64",
+      "prumer_u": 47.9100344478156,
+      "schodek": 8,
+      "typ": "hora_vyzdvizena"
+     },
+     "(1, 0)": {
+      "gen_ms": 281.884,
+      "jadro_na_povrchu": 114,
+      "krok_uvnitr_max_u": 1.35264837741852,
+      "krok_uvnitr_prumer_u": 0.354241844668286,
+      "max_u": 50.9926894903183,
+      "mineraly": "56/64",
+      "prumer_u": 48.109631481444,
+      "schodek": 8,
+      "typ": "hora_vyzdvizena"
+     },
+     "(1, 1)": {
+      "gen_ms": 258.757,
+      "jadro_na_povrchu": 177,
+      "krok_uvnitr_max_u": 1.37893012538552,
+      "krok_uvnitr_prumer_u": 0.306219911691733,
+      "max_u": 51.4433620274067,
+      "mineraly": "56/64",
+      "prumer_u": 48.6713686470557,
+      "schodek": 8,
+      "typ": "hora_vyzdvizena"
+     }
+    },
+    "otisk_bunek": "a52daab1768ec4df",
+    "poradi": "1,1:hora_vyzdvizena:814;0,1:hora_vyzdvizena:813;1,0:hora_vyzdvizena:812;0,0:hora_vyzdvizena:811",
+    "svy": {
+     "(0, 0)|(0, 1)": {
+      "bunky_dovnitr_jinak": 0.133587786259542,
+      "bunky_jinak": 0.127713920817369,
+      "jadro_dovnitr_max_u": 1.32425642302467,
+      "jadro_max_u": 1.29861852779555,
+      "jadro_na_povrchu_sev": 19,
+      "krok_dovnitr_prumer_u": 0.358975852344884,
+      "povrch_max_u": 0.874692566692829,
+      "povrch_prumer_u": 0.358540387242101,
+      "sev_vyska_prumer_u": 48.995586768433,
+      "vrstvy_dovnitr_max_u": 5.98924929775844,
+      "vrstvy_max_u": 4.25106276092412,
+      "vytlacene_sev": 26,
+      "vytlacene_vnitrek": 26
+     },
+     "(0, 0)|(1, 0)": {
+      "bunky_dovnitr_jinak": 0.0508259212198221,
+      "bunky_jinak": 0.0627400768245839,
+      "jadro_dovnitr_max_u": 0.720218452266195,
+      "jadro_max_u": 0.809975685296592,
+      "jadro_na_povrchu_sev": 22,
+      "krok_dovnitr_prumer_u": 0.29088776189019,
+      "povrch_max_u": 0.695042503997684,
+      "povrch_prumer_u": 0.302145269641187,
+      "sev_vyska_prumer_u": 49.1097038002335,
+      "vrstvy_dovnitr_max_u": 2.55562129326928,
+      "vrstvy_max_u": 2.24005308479218,
+      "vytlacene_sev": 21,
+      "vytlacene_vnitrek": 29
+     },
+     "(0, 1)|(1, 1)": {
+      "bunky_dovnitr_jinak": 0.111548556430446,
+      "bunky_jinak": 0.107470511140236,
+      "jadro_dovnitr_max_u": 0.853939799158873,
+      "jadro_max_u": 0.786832585838695,
+      "jadro_na_povrchu_sev": 3,
+      "krok_dovnitr_prumer_u": 0.248152510961518,
+      "povrch_max_u": 0.695037446916103,
+      "povrch_prumer_u": 0.263371553330217,
+      "sev_vyska_prumer_u": 47.8812671650376,
+      "vrstvy_dovnitr_max_u": 6.04823350110938,
+      "vrstvy_max_u": 3.34798595328888,
+      "vytlacene_sev": 33,
+      "vytlacene_vnitrek": 36
+     },
+     "(1, 0)|(1, 1)": {
+      "bunky_dovnitr_jinak": 0.0871862615587847,
+      "bunky_jinak": 0.069828722002635,
+      "jadro_dovnitr_max_u": 1.35903422983984,
+      "jadro_max_u": 0.842052534262642,
+      "jadro_na_povrchu_sev": 8,
+      "krok_dovnitr_prumer_u": 0.235169606821728,
+      "povrch_max_u": 0.533528152853251,
+      "povrch_prumer_u": 0.209827924525598,
+      "sev_vyska_prumer_u": 47.5373874803336,
+      "vrstvy_dovnitr_max_u": 3.42538104211535,
+      "vrstvy_max_u": 3.56926810909064,
+      "vytlacene_sev": 35,
+      "vytlacene_vnitrek": 40
+     }
+    }
+   },
+   "poradi_neshod_bunek": {
+    "(0, 0)": 0,
+    "(0, 1)": 0,
+    "(1, 0)": 0,
+    "(1, 1)": 0
+   }
+  },
+  "vedle": {
+   "poradi_0": {
+    "bloky": {
+     "(0, 0)": {
+      "gen_ms": 268.019,
+      "jadro_na_povrchu": 242,
+      "krok_uvnitr_max_u": 1.45935201644897,
+      "krok_uvnitr_prumer_u": 0.35980369435274,
+      "max_u": 53.9295546486974,
+      "mineraly": "56/64",
+      "prumer_u": 50.9377235941947,
+      "schodek": 8,
+      "typ": "hora_vyzdvizena"
+     },
+     "(0, 1)": {
+      "gen_ms": 245.808,
+      "jadro_na_povrchu": 10,
+      "krok_uvnitr_max_u": 11.4719146117568,
+      "krok_uvnitr_prumer_u": 0.796942905940012,
+      "max_u": 51.4719146117568,
+      "mineraly": "80/80",
+      "prumer_u": 42.4057114334551,
+      "schodek": 0,
+      "typ": "kopec"
+     },
+     "(1, 0)": {
+      "gen_ms": 289.407,
+      "jadro_na_povrchu": 114,
+      "krok_uvnitr_max_u": 1.35264837741852,
+      "krok_uvnitr_prumer_u": 0.354241844668286,
+      "max_u": 50.9926894903183,
+      "mineraly": "56/64",
+      "prumer_u": 48.109631481444,
+      "schodek": 8,
+      "typ": "hora_vyzdvizena"
+     },
+     "(1, 1)": {
+      "gen_ms": 207.67,
+      "jadro_na_povrchu": 4,
+      "krok_uvnitr_max_u": 10.1743903849274,
+      "krok_uvnitr_prumer_u": 0.472614990876502,
+      "max_u": 50.1743903849274,
+      "mineraly": "44/44",
+      "prumer_u": 41.0690180049965,
+      "schodek": 0,
+      "typ": "louka"
+     }
+    },
+    "jemne": {
+     "hrube_jemne_max_m": 1.75,
+     "ms_vzorek_32": 520.91,
+     "sev_krok_max_m": 0.25,
+     "uvnitr_krok_max_m": 2.75,
+     "zmena_po_sousedech": {
+      "(0, 0)": 84,
+      "(0, 1)": 4,
+      "(1, 0)": 78,
+      "(1, 1)": 0
+     }
+    },
+    "otisk_bunek": "2194fa3d04d7ea76",
+    "poradi": "0,0:hora_vyzdvizena:811;1,0:hora_vyzdvizena:812;0,1:kopec:303;1,1:louka:404",
+    "svy": {
+     "(0, 0)|(0, 1)": {
+      "bunky_dovnitr_jinak": 0.133587786259542,
+      "bunky_jinak": 0.0393401015228426,
+      "jadro_dovnitr_max_u": 1.32425642302467,
+      "jadro_max_u": 0.0,
+      "jadro_na_povrchu_sev": 20,
+      "krok_dovnitr_prumer_u": 2.2098961489368,
+      "povrch_max_u": 0.0,
+      "povrch_prumer_u": 0.0,
+      "sev_vyska_prumer_u": 49.1723623567959,
+      "vrstvy_dovnitr_max_u": 5.98924929775844,
+      "vrstvy_max_u": 0.0,
+      "vytlacene_sev": 0,
+      "vytlacene_vnitrek": 26
+     },
+     "(0, 0)|(1, 0)": {
+      "bunky_dovnitr_jinak": 0.0508259212198221,
+      "bunky_jinak": 0.0627400768245839,
+      "jadro_dovnitr_max_u": 0.720218452266195,
+      "jadro_max_u": 0.809975685296592,
+      "jadro_na_povrchu_sev": 22,
+      "krok_dovnitr_prumer_u": 0.29088776189019,
+      "povrch_max_u": 0.695042503997684,
+      "povrch_prumer_u": 0.302145269641187,
+      "sev_vyska_prumer_u": 49.1097038002335,
+      "vrstvy_dovnitr_max_u": 2.55562129326928,
+      "vrstvy_max_u": 2.24005308479218,
+      "vytlacene_sev": 21,
+      "vytlacene_vnitrek": 29
+     },
+     "(0, 1)|(1, 1)": {
+      "bunky_dovnitr_jinak": 0.231481481481481,
+      "bunky_jinak": 0.0308641975308642,
+      "jadro_dovnitr_max_u": 10.2859749776759,
+      "jadro_max_u": 0.314253819206066,
+      "jadro_na_povrchu_sev": 0,
+      "krok_dovnitr_prumer_u": 0.630761908552974,
+      "povrch_max_u": 0.187819840153679,
+      "povrch_prumer_u": 0.011738740009605,
+      "sev_vyska_prumer_u": 40.4822910734874,
+      "vrstvy_dovnitr_max_u": 10.2859749776759,
+      "vrstvy_max_u": 0.382624728674948,
+      "vytlacene_sev": 3,
+      "vytlacene_vnitrek": 36
+     },
+     "(1, 0)|(1, 1)": {
+      "bunky_dovnitr_jinak": 0.0871862615587847,
+      "bunky_jinak": 0.0421607378129117,
+      "jadro_dovnitr_max_u": 1.35903422983984,
+      "jadro_max_u": 0.314253819206066,
+      "jadro_na_povrchu_sev": 8,
+      "krok_dovnitr_prumer_u": 1.69835127164293,
+      "povrch_max_u": 0.187819840153679,
+      "povrch_prumer_u": 0.011738740009605,
+      "sev_vyska_prumer_u": 47.525407384579,
+      "vrstvy_dovnitr_max_u": 3.42538104211535,
+      "vrstvy_max_u": 0.382624728674948,
+      "vytlacene_sev": 1,
+      "vytlacene_vnitrek": 40
+     }
+    },
+    "voda": {
+     "chyba_svet": 0.0,
+     "ms": 1739.952,
+     "okraj": 16.46668,
+     "otisk": "00e3822f57c23c3f",
+     "souhrn": {
+      "koryto_sloupcu": 12,
+      "okraj_lps": 16.44669,
+      "podzemni_telesa": 1,
+      "prameny": 7,
+      "tun_sloupcu": 47,
+      "vodopady": 3,
+      "vodopady_okraj": 6,
+      "volani_podzemi": 4,
+      "vyvery": 1
+     },
+     "zdroje": 18.0
+    },
+    "voda67": {
+     "chyba_svet": -0.0000000000000000520417042793042,
+     "ms": 820.751,
+     "okraj": 16.44669,
+     "otisk": "ba0ed633bd469fe4",
+     "souhrn": {
+      "koryto_sloupcu": 12,
+      "okraj_lps": 16.44669,
+      "podzemni_telesa": 1,
+      "prameny": 7,
+      "tun_sloupcu": 47,
+      "vodopady": 3,
+      "vodopady_okraj": 6,
+      "volani_podzemi": 2,
+      "vyvery": 0
+     },
+     "zdroje": 18.0
+    }
+   },
+   "poradi_1": {
+    "bloky": {
+     "(0, 0)": {
+      "gen_ms": 336.08,
+      "jadro_na_povrchu": 139,
+      "krok_uvnitr_max_u": 11.7536432743073,
+      "krok_uvnitr_prumer_u": 0.680147128259963,
+      "max_u": 53.9295546486974,
+      "mineraly": "56/64",
+      "prumer_u": 49.6503987850165,
+      "schodek": 8,
+      "typ": "hora_vyzdvizena"
+     },
+     "(0, 1)": {
+      "gen_ms": 234.9,
+      "jadro_na_povrchu": 0,
+      "krok_uvnitr_max_u": 5.0,
+      "krok_uvnitr_prumer_u": 0.533704933853233,
+      "max_u": 48.0,
+      "mineraly": "80/80",
+      "prumer_u": 41.1183870800369,
+      "schodek": 0,
+      "typ": "kopec"
+     },
+     "(1, 0)": {
+      "gen_ms": 344.004,
+      "jadro_na_povrchu": 94,
+      "krok_uvnitr_max_u": 9.72314560413361,
+      "krok_uvnitr_prumer_u": 0.576689909583382,
+      "max_u": 50.9926894903183,
+      "mineraly": "56/64",
+      "prumer_u": 47.0657815890995,
+      "schodek": 8,
+      "typ": "hora_vyzdvizena"
+     },
+     "(1, 1)": {
+      "gen_ms": 201.344,
+      "jadro_na_povrchu": 0,
+      "krok_uvnitr_max_u": 1.22588918594221,
+      "krok_uvnitr_prumer_u": 0.187053488960237,
+      "max_u": 41.0,
+      "mineraly": "44/44",
+      "prumer_u": 40.0251677921232,
+      "schodek": 0,
+      "typ": "louka"
+     }
+    },
+    "otisk_bunek": "d6132492d579489c",
+    "poradi": "0,1:kopec:303;1,1:louka:404;0,0:hora_vyzdvizena:811;1,0:hora_vyzdvizena:812",
+    "svy": {
+     "(0, 0)|(0, 1)": {
+      "bunky_dovnitr_jinak": 0.621875,
+      "bunky_jinak": 0.0,
+      "jadro_dovnitr_max_u": 25.3601458890984,
+      "jadro_max_u": 0.0,
+      "jadro_na_povrchu_sev": 0,
+      "krok_dovnitr_prumer_u": 2.13613498108086,
+      "povrch_max_u": 0.0,
+      "povrch_prumer_u": 0.0,
+      "sev_vyska_prumer_u": 40.0,
+      "vrstvy_dovnitr_max_u": 25.3601458890984,
+      "vrstvy_max_u": 0.0,
+      "vytlacene_sev": 0,
+      "vytlacene_vnitrek": 30
+     },
+     "(0, 0)|(1, 0)": {
+      "bunky_dovnitr_jinak": 0.094559585492228,
+      "bunky_jinak": 0.0658914728682171,
+      "jadro_dovnitr_max_u": 9.47349923236885,
+      "jadro_max_u": 0.809975685296592,
+      "jadro_na_povrchu_sev": 22,
+      "krok_dovnitr_prumer_u": 0.636308321430035,
+      "povrch_max_u": 0.695042503997684,
+      "povrch_prumer_u": 0.290406529631582,
+      "sev_vyska_prumer_u": 48.6274127267461,
+      "vrstvy_dovnitr_max_u": 9.47349923236885,
+      "vrstvy_max_u": 2.24005308479218,
+      "vytlacene_sev": 17,
+      "vytlacene_vnitrek": 48
+     },
+     "(0, 1)|(1, 1)": {
+      "bunky_dovnitr_jinak": 0.14375,
+      "bunky_jinak": 0.025,
+      "jadro_dovnitr_max_u": 0.162573852099644,
+      "jadro_max_u": 0.0,
+      "jadro_na_povrchu_sev": 0,
+      "krok_dovnitr_prumer_u": 0.210000367036015,
+      "povrch_max_u": 0.0,
+      "povrch_prumer_u": 0.0,
+      "sev_vyska_prumer_u": 40.0,
+      "vrstvy_dovnitr_max_u": 2.16332756210485,
+      "vrstvy_max_u": 0.0,
+      "vytlacene_sev": 0,
+      "vytlacene_vnitrek": 31
+     },
+     "(1, 0)|(1, 1)": {
+      "bunky_dovnitr_jinak": 0.5609375,
+      "bunky_jinak": 0.0328125,
+      "jadro_dovnitr_max_u": 24.7469935685396,
+      "jadro_max_u": 0.179529475780686,
+      "jadro_na_povrchu_sev": 0,
+      "krok_dovnitr_prumer_u": 1.60966615146507,
+      "povrch_max_u": 0.187819840153679,
+      "povrch_prumer_u": 0.011738740009605,
+      "sev_vyska_prumer_u": 39.9941306299952,
+      "vrstvy_dovnitr_max_u": 24.7469935685396,
+      "vrstvy_max_u": 0.318937780990108,
+      "vytlacene_sev": 0,
+      "vytlacene_vnitrek": 32
+     }
+    }
+   },
+   "poradi_neshod_bunek": {
+    "(0, 0)": 2211,
+    "(0, 1)": 2732,
+    "(1, 0)": 2021,
+    "(1, 1)": 2487
+   }
+  }
+ }
+}

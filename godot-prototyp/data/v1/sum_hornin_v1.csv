@@ -1,0 +1,38 @@
+key,id,nazev,meritko_m,amplituda,oktavy,persistence,profil,poznamka
+peridotite,20,Peridotit / dunit,300,0.5,2,0.4,vyvrelina,"hluboké vyvřeliny a bazika: velké pomalé změny, slabý detail"
+lherzolite,22,"Lherzolit, olivín",300,0.5,2,0.4,vyvrelina,"hluboké vyvřeliny a bazika: velké pomalé změny, slabý detail"
+eclogite,23,Eklogit,300,0.5,2,0.4,vyvrelina,"hluboké vyvřeliny a bazika: velké pomalé změny, slabý detail"
+pyroxenite,24,Pyroxenit,300,0.5,2,0.4,vyvrelina,"hluboké vyvřeliny a bazika: velké pomalé změny, slabý detail"
+serpentinite,25,Serpentinit (hadec),300,0.5,2,0.4,vyvrelina,"hluboké vyvřeliny a bazika: velké pomalé změny, slabý detail"
+gabbro,26,Gabro,300,0.5,2,0.4,vyvrelina,"hluboké vyvřeliny a bazika: velké pomalé změny, slabý detail"
+norite,27,Norit / anortozit,300,0.5,2,0.4,vyvrelina,"hluboké vyvřeliny a bazika: velké pomalé změny, slabý detail"
+fe_ti_zone,28,Fe-Ti rudní zóna (magnetit),300,0.5,2,0.4,vyvrelina,"hluboké vyvřeliny a bazika: velké pomalé změny, slabý detail"
+diabase,7,Diabaz (= čedič gen-v3),300,0.5,2,0.4,vyvrelina,"hluboké vyvřeliny a bazika: velké pomalé změny, slabý detail"
+granulite,29,Granulit,300,0.5,2,0.4,vyvrelina,"hluboké vyvřeliny a bazika: velké pomalé změny, slabý detail"
+amphibolite,30,Amfibolit,240,0.6,2,0.5,rula,foliované metamorfity: střední zvlnění
+lower_gneiss,31,Spodní přechodová břidlice / rula,240,0.6,2,0.5,rula,foliované metamorfity: střední zvlnění
+migmatite,32,Migmatit,240,0.6,2,0.5,rula,foliované metamorfity: střední zvlnění
+orthogneiss,33,Ortorula,240,0.6,2,0.5,rula,foliované metamorfity: střední zvlnění
+biotite_gneiss,34,Biotitická rula,240,0.6,2,0.5,rula,foliované metamorfity: střední zvlnění
+two_mica_gneiss,35,Dvojslídná rula,240,0.6,2,0.5,rula,foliované metamorfity: střední zvlnění
+granodiorite,36,Granodiorit,300,0.45,2,0.4,granitoid,masivní granitoid: velká pomalá tělesa
+granite,6,Masivní žula (= žula gen-v3),300,0.45,2,0.4,granitoid,masivní granitoid: velká pomalá tělesa
+leucogranite,37,Světlá granitoidní žula,300,0.45,2,0.4,granitoid,masivní granitoid: velká pomalá tělesa
+quartzite,39,Krystalický kvarcit,160,0.7,2,0.5,kvarcit,"křehký kvarcit: kratší vlna, víc nepravidelný"
+mica_schist,40,"Svor (granáty, slídy)",200,0.5,2,0.5,svor,"svory, fylit: jemná foliace"
+phyllite,41,Fylit,200,0.5,2,0.5,svor,"svory, fylit: jemná foliace"
+crystalline_transition,43,Přechodová zóna krystalinika,240,0.6,2,0.5,rula,foliované metamorfity: střední zvlnění
+deep_limestone,44,Hlubinný vápenec / křída,280,0.45,1,0.5,vapenec_h,hlubinný vápenec: rovnoměrný
+siltstone,45,Prachovec,360,0.35,1,0.5,jemny,"jemná vrstevnatá hornina, plynule zvlněná (jílovec, břidlice, prachovec)"
+conglomerate,46,Slepenec,80,1.0,3,0.6,hrubozrnny,"slepenec, štěrk: hrubé a nepravidelné (3 oktávy)"
+gypsum,48,"Sádrovec, anhydrit",320,0.4,1,0.5,evaporit,sádrovec: pomalé změny
+dolomite,49,Dolomit,200,0.7,2,0.5,vapenec_j,jeskynní vápenec / dolomit: nerovnoměrný
+cave_limestone,5,Masivní jeskynní vápenec (= vápenec gen-v3),200,0.7,2,0.5,vapenec_j,jeskynní vápenec / dolomit: nerovnoměrný
+black_coal,50,Černé uhlí (sloj),300,0.5,1,0.5,sloj,"sloj: souvislá, mírná změna mocnosti"
+shale,51,Jílová břidlice,360,0.35,1,0.5,jemny,"jemná vrstevnatá hornina, plynule zvlněná (jílovec, břidlice, prachovec)"
+quartz_sandstone,52,Křemenný pískovec,140,0.8,2,0.55,pisek_k,"pískovec: střední vlna, výrazná amplituda"
+lignite,53,Hnědé uhlí / lignit,300,0.5,1,0.5,sloj,"sloj: souvislá, mírná změna mocnosti"
+weathered_clay,4,Zvětralá břidlice a jíly (= jíl gen-v3),360,0.35,1,0.5,jemny,"jemná vrstevnatá hornina, plynule zvlněná (jílovec, břidlice, prachovec)"
+gravel_sand,3,"Štěrk, hlinitopísčité sedimenty (= písek gen-v3)",80,1.0,3,0.6,hrubozrnny,"slepenec, štěrk: hrubé a nepravidelné (3 oktávy)"
+loess,54,Spraš a zvětraliny,320,0.4,1,0.5,spras,"spraš: plošná, klidná"
+topsoil,2,"Ornice, humus (= hlína gen-v3, tráva navrchu)",120,0.6,2,0.5,puda,ornice: drobná proměnlivost

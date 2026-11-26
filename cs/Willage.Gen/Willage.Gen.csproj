@@ -1,0 +1,10 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <!-- Čisté jádro generátoru V1 (bez Godotu). Godot fasáda: godot-prototyp/scripts/cs. -->
+  <PropertyGroup>
+    <TargetFramework>net9.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <RootNamespace>Willage.Gen</RootNamespace>
+    <Deterministic>true</Deterministic>
+  </PropertyGroup>
+</Project>

@@ -1,0 +1,9 @@
+# Klimatické presety (docs/sjednoceni 1.15). Načítá scripts/v1/klima.gd na začátku kroku 2.
+# Řádky s # na začátku se přeskočí. priklad=1 = náčrt, nehodnocené hodnoty (03 zůstává otevřené).
+# mirne je identita: násobitele 1, posun 0, podíly reliéfních biomů jako výchozí svět.
+id,nazev_cs,priklad,k_prevyseni,d_posun_m,k_vlna,k_drsnost,podil_nizina,podil_mokrad,podil_pahorkatina,podil_hornatina,podil_sopecna,k_masiv_amp,k_masiv_zdvih,k_podhuri,k_horniny,k_voda,poznamka
+mirne,mírné,0,1,0,1,1,0.35,0.10,0.30,0.20,0.05,1,1,1,1,1,identita; výchozí svět zůstane bitově stejný
+poust,poušť,1,0.70,-0.5,1.25,0.85,0.55,0.02,0.28,0.08,0.07,0.55,0.60,0.70,1,0.25,"příklad, nehodnocené hodnoty: sušší, plošší, málo mokřadů a hor"
+step,step,1,0.85,0.0,1.10,1.00,0.40,0.04,0.40,0.12,0.04,0.75,0.80,0.85,1,0.50,"příklad, nehodnocené hodnoty: otevřená krajina, méně vody"
+tundra,tundra,1,0.90,-0.5,1.05,0.90,0.28,0.08,0.24,0.38,0.02,1.05,1.00,0.90,1,0.70,"příklad, nehodnocené hodnoty: víc hornatiny, chladnější"
+ledovec,ledovec,1,1.30,4.0,1.15,0.80,0.12,0.02,0.18,0.66,0.02,1.35,1.25,1.10,1,0.40,"příklad, nehodnocené hodnoty: vysoký reliéf, převaha hor"

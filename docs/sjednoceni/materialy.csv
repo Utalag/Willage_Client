@@ -1,0 +1,79 @@
+id,nazev_cs,skupina,propustnost_0_1,K_m_s,propustnost_l_s_herni,porovitost,odpor_povrchu_res,eroze_ero_v,hustota_kg_m3,tvrdost_kopani,vzacnost,vegetace,barva_hex,poznamka
+0,vzduch,other,1,–,–,1,0,–,~1.2,–,–,ne,(průhledná),"v poradi_hornin.json má id 0 dva klíče (cloud_line, map_ceiling)"
+1,tráva / drn,soil,0.667,1e-05,6.25e-4,0.45,0.85,1.5 m/s (střední),1700,"2.0 Mohs, sypka, nástroj ruka","běžná, skóre 1","ano (trs, květiny, keř, jehličnan, listnáč)",#8fcc78,"pravidlo: tráva hodně zpomalí (res 0,85)"
+2,"Ornice, humus",soil,0.595,3.7e-06,2.31e-4,0.43,0.4,0.4 m/s (vysoká),1700,"2.0 Mohs, sypka, nástroj ruka","běžná, skóre 1",ano (keř),#a88066,poradi_hornin.json má jinou barvu #a8805f
+3,"Štěrk, hlinitopísčité sedimenty",soil,0.833,0.0001,0.00625,0.35,0.25,0.25 m/s (vysoká),1900,"5.0 Mohs, sypka, nástroj ruka","běžná, skóre 1.5","ano (kaktus, suchá tráva)",#fae39e,"poradi_hornin.json má jinou barvu #f2ef9d; pravidlo: písek neudrží vodu, trochu zpomalí (res 0,25, ret 0,09)"
+4,Zvětralá břidlice a jíly,soil,0,1e-10,6.25e-9,0.5,0.1,1.2 m/s (střední),1800,"2.0 Mohs, sypka, nástroj ruka","běžná, skóre 2",ne,#eb9e85,poradi_hornin.json má jinou barvu #bfb762; pravidlo: jíl a pevná skála vodu drží (perm 0)
+5,Masivní jeskynní vápenec,rock,0.246,3e-08,1.87e-6,0.05,0.1,4 m/s (velmi nízká),2640,"3.2 Mohs, stredni, nástroj bronz","běžná, skóre 2",ano (mech),#e0d1ad,"perm 0,246 (skutečná hodnota, E61, Jan 2026-11-19 04:39; pravidlo „vápenec nepropustný“ z 2026-11-17 zrušeno); poradi_hornin.json má jinou barvu #bf9749; rozpustnost 0.2 kg/m³ (kras E75)"
+6,žula,rock,0,1e-12,6.25e-11,0.01,0.05,6 m/s (velmi nízká),2720,"6.5 Mohs, tvrda, nástroj zelezo","běžná, skóre 3",ano (mech),#ccadbd,poradi_hornin.json má jinou barvu #8c236e; pravidlo: jíl a pevná skála vodu drží (perm 0)
+7,Diabaz (= čedič gen-v3),rock,0,1e-09,6.25e-8,0.05,0.05,6 m/s (velmi nízká),2800,"6.5 Mohs, tvrda, nástroj zelezo","běžná, skóre 3",ano (mech),#858cad,poradi_hornin.json má jinou barvu #249248
+8,měděná ruda,ore,0,1e-12,6.25e-11,0.01,0.05,6 m/s (velmi nízká),3200,"4.0 Mohs, stredni, nástroj bronz","vzácná, skóre 40",ne,#73d9c7,
+9,železná ruda,ore,0,1e-12,6.25e-11,0.01,0.05,6 m/s (velmi nízká),4500,"6.0 Mohs, tvrda, nástroj zelezo","neobvyklá, skóre 25",ne,#e0736b,
+10,Věčný sníh a led,other,0,–,–,0,0.3,0.5 m/s (střední),850,"1.5 Mohs, sypka, nástroj ruka","běžná, skóre 8",ne,#f7faff,poradi_hornin.json má jinou barvu #f4f8ff
+11,mlha,other,0,–,–,0,–,–,–,nekopatelná,–,ne,#f2f5ff,
+12,ložiskový jíl,ore,0,1e-10,6.25e-9,0.5,0.1,1.2 m/s (střední),1800,"2.0 Mohs, sypka, nástroj ruka","neobvyklá, skóre 2",ne,#f5855c,"jen ze serveru (zásobník gen-v3), generátor ho nevytváří"
+20,Peridotit / dunit,rock,0,1e-12,6.25e-11,0.01,0.1,6 m/s (velmi nízká),3200,"6.7 Mohs, tvrda, nástroj zelezo",neobvyklá,ano (mech) – přes třídu čedič,#53593a,herní třída: čedič
+21,Kimberlit (komíny),rock,0,1e-12,6.25e-11,0.01,0.1,6 m/s (velmi nízká),2600,"4.5 Mohs, stredni, nástroj bronz",vzácná,ano (mech) – přes třídu čedič,#1f6f5c,herní třída: čedič; ⚠ herní třída čedič (tridy.gd)
+22,"Lherzolit, olivín",rock,0,1e-12,6.25e-11,0.01,0.1,6 m/s (velmi nízká),3200,"6.7 Mohs, tvrda, nástroj zelezo",neobvyklá,ano (mech) – přes třídu čedič,#55752d,herní třída: čedič
+23,Eklogit,rock,0,1e-12,6.25e-11,0.01,0.1,6 m/s (velmi nízká),3400,"7.0 Mohs, velmi_tvrda, nástroj ocel",vzácná,ano (mech) – přes třídu čedič,#93cc69,herní třída: čedič
+24,Pyroxenit,rock,0,1e-12,6.25e-11,0.01,0.1,6 m/s (velmi nízká),3200,"6.5 Mohs, velmi_tvrda, nástroj ocel",neobvyklá,ano (mech) – přes třídu čedič,#6e925f,herní třída: čedič
+25,Serpentinit (hadec),rock,0,1e-12,6.25e-11,0.01,0.1,6 m/s (velmi nízká),2600,"4.0 Mohs, stredni, nástroj bronz",neobvyklá,ano (mech) – přes třídu čedič,#225916,herní třída: čedič
+26,Gabro,rock,0,1e-12,6.25e-11,0.01,0.1,6 m/s (velmi nízká),3000,"6.5 Mohs, velmi_tvrda, nástroj ocel",neobvyklá,ano (mech) – přes třídu čedič,#48af43,herní třída: čedič
+27,Norit / anortozit,rock,0,1e-12,6.25e-11,0.01,0.1,6 m/s (velmi nízká),3000,"6.5 Mohs, velmi_tvrda, nástroj ocel",neobvyklá,ano (mech) – přes třídu čedič,#3c7541,herní třída: čedič
+28,Fe-Ti rudní zóna (magnetit),rock,0,1e-12,6.25e-11,0.01,0.1,6 m/s (velmi nízká),3000,"6.5 Mohs, velmi_tvrda, nástroj ocel",neobvyklá,ano (mech) – přes třídu čedič,#84cc92,herní třída: čedič
+29,Granulit,rock,0,1e-12,6.25e-11,0.01,0.1,6 m/s (velmi nízká),2750,"6.5 Mohs, tvrda, nástroj zelezo",běžná,ano (mech) – přes třídu čedič,#22593a,herní třída: čedič
+30,Amfibolit,rock,0,1e-12,6.25e-11,0.01,0.1,6 m/s (velmi nízká),3000,"6.0 Mohs, velmi_tvrda, nástroj ocel",neobvyklá,ano (mech) – přes třídu čedič,#5aaf8b,herní třída: čedič
+31,Spodní přechodová břidlice / rula,rock,0,1e-12,6.25e-11,0.01,0.1,6 m/s (velmi nízká),2750,"6.5 Mohs, tvrda, nástroj zelezo",běžná,ano (mech) – přes třídu čedič,#4c7569,herní třída: čedič
+32,Migmatit,rock,0,1e-12,6.25e-11,0.01,0.1,6 m/s (velmi nízká),2750,"6.5 Mohs, tvrda, nástroj zelezo",běžná,ano (mech) – přes třídu žula,#7c5b8c,herní třída: žula
+33,Ortorula,rock,0,1e-12,6.25e-11,0.01,0.1,6 m/s (velmi nízká),2750,"6.5 Mohs, tvrda, nástroj zelezo",běžná,ano (mech) – přes třídu žula,#a22fbf,herní třída: žula
+34,Biotitická rula,rock,0,1e-12,6.25e-11,0.01,0.1,6 m/s (velmi nízká),2750,"6.5 Mohs, tvrda, nástroj zelezo",běžná,ano (mech) – přes třídu žula,#e65cf2,herní třída: žula
+35,Dvojslídná rula,rock,0,1e-12,6.25e-11,0.01,0.1,6 m/s (velmi nízká),2750,"6.5 Mohs, tvrda, nástroj zelezo",běžná,ano (mech) – přes třídu žula,#a555a2,herní třída: žula
+36,Granodiorit,rock,0,1e-12,6.25e-11,0.01,0.1,6 m/s (velmi nízká),2720,"6.5 Mohs, tvrda, nástroj zelezo",běžná,ano (mech) – přes třídu žula,#d88ccc,herní třída: žula
+37,Světlá granitoidní žula,rock,0,1e-12,6.25e-11,0.01,0.1,6 m/s (velmi nízká),2720,"6.5 Mohs, tvrda, nástroj zelezo",běžná,ano (mech) – přes třídu žula,#bf4990,herní třída: žula
+38,Pegmatitové žíly,rock,0,1e-12,6.25e-11,0.01,0.1,6 m/s (velmi nízká),2720,"6.5 Mohs, tvrda, nástroj zelezo",běžná,ano (mech) – přes třídu žula,#ff8fd0,herní třída: žula
+39,Krystalický kvarcit,rock,0,1e-12,6.25e-11,0.01,0.1,6 m/s (velmi nízká),2650,"7.0 Mohs, velmi_tvrda, nástroj ocel",neobvyklá,ano (mech) – přes třídu žula,#a56b80,herní třída: žula
+40,"Svor (granáty, slídy)",rock,0,1e-11,6.25e-10,0.05,0.1,2 m/s (nízká),2700,"5.0 Mohs, tvrda, nástroj zelezo",běžná,ano (mech) – přes třídu žula,#d8365d,herní třída: žula
+41,Fylit,rock,0,1e-11,6.25e-10,0.05,0.1,2 m/s (nízká),2600,"3.5 Mohs, stredni, nástroj bronz",běžná,ano (mech) – přes třídu žula,#8c3540,herní třída: žula
+42,Skarn (kontakt),rock,0,1e-12,6.25e-11,0.01,0.1,6 m/s (velmi nízká),2640,"5.0 Mohs, tvrda, nástroj zelezo",běžná,ano (mech) – přes třídu žula,#7d3fa0,herní třída: žula
+43,Přechodová zóna krystalinika,rock,0,1e-12,6.25e-11,0.01,0.1,6 m/s (velmi nízká),2750,"6.5 Mohs, tvrda, nástroj zelezo",běžná,ano (mech) – přes třídu žula,#f2a79d,herní třída: žula
+44,Hlubinný vápenec / křída,rock,0.246,3e-08,1.87e-6,0.05,0.1,4 m/s (velmi nízká),2640,"3.2 Mohs, stredni, nástroj bronz",běžná,ano (mech) – přes třídu vápenec,#8c6c5b,"perm 0,246 (skutečná hodnota, E61, Jan 2026-11-19 04:39; pravidlo „vápenec nepropustný“ z 2026-11-17 zrušeno); rozpustnost 0.2 kg/m³ (kras E75); herní třída: vápenec"
+45,Prachovec,rock,0,1e-09,6.25e-8,0.15,0.15,1.5 m/s (střední),2400,"3.5 Mohs, stredni, nástroj bronz",běžná,ne,#bf6a2f,herní třída: jíl
+46,Slepenec,rock,0.5,1e-06,6.25e-5,0.2,0.2,2 m/s (nízká),2500,"5.0 Mohs, stredni, nástroj bronz",běžná,"ano (kaktus, suchá tráva) – přes třídu písek",#f2a15c,herní třída: písek; pravidlo: pórovitá hornina trochu prosakuje
+47,Kamenná sůl (dómy),rock,0,1e-13,6.25e-12,0.01,0.1,1 m/s (střední),2160,"2.3 Mohs, mekka, nástroj kamen",neobvyklá,ano (mech) – přes třídu vápenec,#f7f2ee,rozpustnost 360.0 kg/m³ (kras E75); herní třída: vápenec
+48,"Sádrovec, anhydrit",rock,0,1e-13,6.25e-12,0.01,0.1,1 m/s (střední),2300,"2.0 Mohs, mekka, nástroj kamen",neobvyklá,ano (mech) – přes třídu vápenec,#d8b78c,rozpustnost 2.5 kg/m³ (kras E75); herní třída: vápenec
+49,Dolomit,rock,0.246,3e-08,1.87e-6,0.05,0.1,4 m/s (velmi nízká),2850,"3.7 Mohs, stredni, nástroj bronz",neobvyklá,ano (mech) – přes třídu vápenec,#8c6323,rozpustnost 0.15 kg/m³ (kras E75); herní třída: vápenec
+50,Černé uhlí (sloj),rock,0.333,1e-07,6.25e-6,0.08,0.1,1.5 m/s (střední),1400,"2.3 Mohs, mekka, nástroj kamen",neobvyklá,ano (mech) – přes třídu čedič,#f2d07d,herní třída: čedič; ⚠ herní třída čedič (tridy.gd)
+51,Jílová břidlice,rock,0,1e-11,6.25e-10,0.05,0.1,2 m/s (nízká),2500,"3.0 Mohs, mekka, nástroj kamen",běžná,ne,#a5986b,herní třída: jíl
+52,Křemenný pískovec,rock,0.333,1e-07,6.25e-6,0.2,0.2,2 m/s (nízká),2400,"6.5 Mohs, stredni, nástroj bronz",běžná,"ano (kaktus, suchá tráva) – přes třídu písek",#d8ba36,herní třída: písek; pravidlo: pórovitá hornina trochu prosakuje
+53,Hnědé uhlí / lignit,rock,~0.333,~1e-7,~6.25e-6,~0.08,~0.1,~1.5 m/s (střední),~1200,"~2 Mohs, mekka, nástroj ~krumpáč",~běžná,ano (mech) – přes třídu čedič,#8c8035,"hnědé uhlí jako vrstva: chybí ve vodní i těžební tabulce, převzato z minerálu 105, hustota a tvrdost [25]; herní třída: čedič"
+54,Spraš a zvětraliny,soil,0.333,1e-07,6.25e-6,0.45,0.35,0.3 m/s (vysoká),1550,"2.0 Mohs, sypka, nástroj ruka",běžná,"ano (kaktus, suchá tráva) – přes třídu písek",#a3a529,herní třída: písek
+55,Písčité podloží pahorků,soil,0.833,0.0001,0.00625,0.35,0.25,0.25 m/s (vysoká),1800,"6.0 Mohs, sypka, nástroj ruka",běžná,"ano (kaktus, suchá tráva) – přes třídu písek",#6b6562,herní třída: písek
+56,Vápencové výchozy,rock,0.246,3e-08,1.87e-6,0.05,0.15,4 m/s (velmi nízká),2640,"3.2 Mohs, stredni, nástroj bronz",běžná,ano (mech) – přes třídu vápenec,#826a5b,"perm 0,246 (skutečná hodnota, E61, Jan 2026-11-19 04:39; pravidlo „vápenec nepropustný“ z 2026-11-17 zrušeno); herní třída: vápenec"
+57,Zvětralé vyvřeliny,rock,0.667,1e-05,6.25e-4,0.25,0.2,2 m/s (nízká),2300,"4.0 Mohs, mekka, nástroj kamen",běžná,ne,#5b4744,herní třída: jíl
+58,"Lesní půdy, flyš",rock,0,1e-09,6.25e-8,0.15,0.3,1.5 m/s (střední),2450,"4.0 Mohs, stredni, nástroj bronz",běžná,ne,#afa094,herní třída: jíl
+59,Pískovcové věže a stěny,rock,0.333,1e-07,6.25e-6,0.2,0.15,2 m/s (nízká),2400,"6.5 Mohs, stredni, nástroj bronz",běžná,"ano (kaktus, suchá tráva) – přes třídu písek",#c6beb6,herní třída: písek; pravidlo: pórovitá hornina trochu prosakuje
+60,Zvětralá žula vysočin,rock,0.5,1e-06,6.25e-5,0.05,0.2,3 m/s (nízká),2300,"4.0 Mohs, mekka, nástroj kamen",běžná,ano (mech) – přes třídu žula,#ddbb9b,herní třída: žula
+61,Horské hřebeny (Šumava/Krkonoše),rock,0,1e-12,6.25e-11,0.01,0.15,6 m/s (velmi nízká),2750,"6.5 Mohs, tvrda, nástroj zelezo",běžná,ano (mech) – přes třídu žula,#6b5f52,herní třída: žula
+62,Krystalické břidlice svahů,rock,0,1e-11,6.25e-10,0.05,0.15,2 m/s (nízká),2700,"5.0 Mohs, tvrda, nástroj zelezo",běžná,ano (mech) – přes třídu žula,#82786e,herní třída: žula
+63,Žulové masivy hřbetů,rock,0,1e-12,6.25e-11,0.01,0.15,6 m/s (velmi nízká),2720,"6.5 Mohs, tvrda, nástroj zelezo",běžná,ano (mech) – přes třídu žula,#99938c,herní třída: žula
+64,Strmé skalní stěny,rock,0,1e-12,6.25e-11,0.01,0.15,6 m/s (velmi nízká),2720,"6.5 Mohs, tvrda, nástroj zelezo",běžná,ano (mech) – přes třídu žula,#af997b,herní třída: žula
+65,Vysokohorské krystalinikum,rock,0,1e-12,6.25e-11,0.01,0.15,6 m/s (velmi nízká),2750,"6.5 Mohs, tvrda, nástroj zelezo",běžná,ano (mech) – přes třídu žula,#c6b499,herní třída: žula
+66,"Subalpínské pásmo (skály, sutě)",soil,1,0.01,0.625,0.3,0.2,1.2 m/s (střední),1900,"5.0 Mohs, sypka, nástroj ruka",běžná,"ano (kaktus, suchá tráva) – přes třídu písek",#ddd1bb,herní třída: písek
+67,Alpínský stupeň,rock,0,1e-12,6.25e-11,0.01,0.15,6 m/s (velmi nízká),2750,"6.5 Mohs, tvrda, nástroj zelezo",běžná,ano (mech) – přes třídu žula,#6b6862,herní třída: žula
+68,Vysokohorský granit,rock,0,1e-12,6.25e-11,0.01,0.15,6 m/s (velmi nízká),2720,"6.5 Mohs, tvrda, nástroj zelezo",běžná,ano (mech) – přes třídu žula,#82755b,herní třída: žula
+69,Vysokohorské kvarcity a břidlice,rock,0,1e-12,6.25e-11,0.01,0.15,6 m/s (velmi nízká),2650,"7.0 Mohs, velmi_tvrda, nástroj ocel",neobvyklá,ano (mech) – přes třídu žula,#998e76,herní třída: žula
+70,Extrémní hřebeny,rock,0,1e-12,6.25e-11,0.01,0.15,6 m/s (velmi nízká),2720,"6.5 Mohs, tvrda, nástroj zelezo",běžná,ano (mech) – přes třídu žula,#afa894,herní třída: žula
+71,Velehorský masiv,rock,0,1e-12,6.25e-11,0.01,0.15,6 m/s (velmi nízká),2720,"6.5 Mohs, tvrda, nástroj zelezo",běžná,ano (mech) – přes třídu žula,#ddce9b,herní třída: žula
+72,Skalní věže,rock,0,1e-12,6.25e-11,0.01,0.15,6 m/s (velmi nízká),2720,"6.5 Mohs, tvrda, nástroj zelezo",běžná,ano (mech) – přes třídu žula,#6b6652,herní třída: žula
+73,Vrcholové pyramidy,rock,0,1e-12,6.25e-11,0.01,0.15,6 m/s (velmi nízká),2720,"6.5 Mohs, tvrda, nástroj zelezo",běžná,ano (mech) – přes třídu žula,#827e6e,herní třída: žula
+74,"Nejvyšší bod (skála, led)",rock,0,1e-12,6.25e-11,0.01,0.15,6 m/s (velmi nízká),2720,"6.5 Mohs, tvrda, nástroj zelezo",běžná,ano (mech) – přes třídu žula,#99978c,herní třída: žula
+75,Sopouch (vulkanický kanál),rock,0,1e-12,6.25e-11,0.01,0.1,6 m/s (velmi nízká),3000,"6.5 Mohs, tvrda, nástroj zelezo",běžná,ano (mech) – přes třídu čedič,#d8401c,herní třída: čedič
+100,diamanty,ore,0,~1e-12,~6.25e-11,0,0.1,~6 m/s (velmi nízká),3500,"10 Mohs, velmi_tvrda, nástroj ocel","vzácná, skóre 400",ne,~#73d9c7 (barva třídy),K podle hostitelské horniny [23]; eroze odhad jako hostitelská skála [24]; herní třída: měděná ruda
+101,drahokamy,ore,0,~1e-12,~6.25e-11,0,0.1,~6 m/s (velmi nízká),3500,"7.5 Mohs, velmi_tvrda, nástroj ocel","vzácná, skóre 150",ne,~#73d9c7 (barva třídy),K podle hostitelské horniny [23]; eroze odhad jako hostitelská skála [24]; herní třída: měděná ruda
+102,"vzácné kovy (Li, Sn, Ta)",ore,0,~1e-12,~6.25e-11,0,0.1,~6 m/s (velmi nízká),3200,"4.0 Mohs, stredni, nástroj bronz","vzácná, skóre 90",ne,~#73d9c7 (barva třídy),K podle hostitelské horniny [23]; eroze odhad jako hostitelská skála [24]; herní třída: měděná ruda
+103,titanomagnetit (Fe-Ti),ore,0,~1e-12,~6.25e-11,0,0.1,~6 m/s (velmi nízká),4500,"6.0 Mohs, tvrda, nástroj zelezo","neobvyklá, skóre 30",ne,~#e0736b (barva třídy),K podle hostitelské horniny [23]; eroze odhad jako hostitelská skála [24]; herní třída: železná ruda
+104,černé uhlí (minerál),ore,0,~1e-12,~6.25e-11,0,0.1,~6 m/s (velmi nízká),1400,"2.3 Mohs, mekka, nástroj kamen","neobvyklá, skóre 12",ne,~#73d9c7 (barva třídy),K podle hostitelské horniny [23]; eroze odhad jako hostitelská skála [24]; herní třída: měděná ruda; ⚠ tridy.gd z něj dělá herní třídu „měděná ruda“
+105,hnědé uhlí (minerál),ore,0.333,1e-07,6.25e-6,0.08,0.1,1.5 m/s (střední),1200,"2.0 Mohs, mekka, nástroj kamen","běžná, skóre 6",ne,~#73d9c7 (barva třídy),klíč „lignite“ má i vrstva id 53; herní třída: měděná ruda; ⚠ tridy.gd z něj dělá herní třídu „měděná ruda“
+106,granáty,ore,0,~1e-12,~6.25e-11,0,0.1,~6 m/s (velmi nízká),3500,"7.0 Mohs, velmi_tvrda, nástroj ocel","vzácná, skóre 60",ne,~#73d9c7 (barva třídy),K podle hostitelské horniny [23]; eroze odhad jako hostitelská skála [24]; herní třída: měděná ruda
+107,zlato,ore,0,~1e-12,~6.25e-11,0,0.1,~6 m/s (velmi nízká),3200,"4.0 Mohs, stredni, nástroj bronz","vzácná, skóre 250",ne,~#73d9c7 (barva třídy),"K podle hostitelské horniny [23]; eroze odhad jako hostitelská skála [24]; hustota 3200 = rudnina, ne ryzí zlato (19 300); herní třída: měděná ruda"
+250,voda (rezervoár v dutině),water,1 [~],–,–,1,0,~6 m/s (velmi nízká),1000,–,–,ne,~#5aa0e6,"voda není materiál buňky, ale stav (WVB1 vrstva water); id 250 = dutina s vodou z tridy.gd; eroze odhad jako hostitelská skála [24]"

@@ -216,6 +216,30 @@ Skupiny: 1 Prototyp a buildy · 2 Terén a tvar · 3 Rozlišení bloku · 4 Ská
 - **Komplikace:** koryta jsou krátké úseky (malý svět, malá povodí). Krasová vyvěračka 0. Hráz na svahu tůň nevytvořila (potok ji obtekl). Podzemní tok vede zatím zjednodušeně k nejbližšímu okraji.
 - **Další krok:** Jan rozhodne, jak daleko vést podzemní tok (sledovat propustnou vrstvu?) a jestli má mít krasová vyvěračka vlastní pravidlo. Starší otevřené otázky (eroze po blocích vs hrubý svět, jádro hory přes šev, minerály z hrubého světa) zůstávají.
 
+### 📏 E96: ostrov = jeden blok 128 m z funkce světa, rozhodnutí Jana 2026-11-20 11:48 (2026-11-20 13:01 · `godot-prototyp/scripts/teren/blok96.gd`, `scripts/island.gd`, `scripts/demo/blok128_demo.gd`, `tools/blok128_e96.gd`, příznaky `p96_blok128` (vyp), `p96_lod_zaber`, větev a tag `e96-blok128`, data `blueprint-studie/shots/e96/`, snímky `willage-ideas/shots-e96/`)
+- **Směr:** 16 × 16 herních bloků po 8 m z `lod90.h_m` (E90) přes cestu `base_hm` (E49) → geologie, voda E68, kopání, vegetace a kamera beze změny modulů. LOD přehledu sloupce 1 m z E90 nad záběrem 64 m.
+- **Zlepšení:** celý blok 128 m hratelný, voda povrch + podzemí na celém bloku, start na rovném místě, rostliny ne v tůních. Přehled s LOD 139 k trojúhelníků a 35 draw calls místo 9,8 M a 7 721.
+- **Komplikace:** načtení 140 s (bloky 60 s, voda 50 s), výkop 27–41 s (podzemí 22–27 s), RSS 2,5 GB, herní kamera 5,2 M trojúhelníků a 3 556 draw calls. Tůně 22 % plochy. Výška jen 16–30 m (sloupec 32 m). Na telefonu dnes nehratelné.
+- **Další krok (Jan):** viz TODO „Rozhodnutí Jana“ E96.
+
+### 📏 Blok 4 / E94: scéna v metrech a převod na jednotky.gd, rozhodnutí Jana 2026-11-20 11:04 (2026-11-20 11:35 · `godot-prototyp/scripts/jednotky.gd`, `blueprint-studie/scripts/voda/litry.gd`, `tools/meritko_e94.gd`, `tools/litry_e94.gd`, příznaky `p89_meritko` (na větvi zap), `p94_hora_k`, větev a tag `e94-metry`, data `blueprint-studie/shots/e94/`)
+- **Směr:** E89 otázky 1–4 = ano. Ve scéně platí 1 jednotka = 1 m. Konstanty se převedly na modul soubor po souboru a l → m³ má jeden tvar. Stromy, stavby, kamera a mlha jsou v metrech a ve smyčkách jsou jen konstanty modulu.
+- **Zlepšení:** 30 vlastních skriptů bere `BS`/`BH`/`CELL_H` z `jednotky.gd`. Otisky buněk, sítí, odkrytí a vegetace jsou stejné ve všech 40 commitech, `voda_e66` d7aedf3a6d9d10e8 → 63d7b89a91385a79 s 0 neshodami a `port_studie` má 0 změn. l → m³ jde jen dělením (`voda/litry.gd`). Ve scéně v metrech už stromy a domky nejsou zúžené a kamera, zoom, mlha a body trasy počítají v metrech. Rychlost je stejná (síť 187 → 185 ms), konstanta modulu stojí ve smyčce stejně jako literál, volání funkce 4,5× víc.
+- **Komplikace:** otisky vody se sjednocením nezměnily, protože na ostrově START je 0 rozdílných bitů v 79 495 hodnotách. Stromy 3,5–4 m při hustotě po buňkách zakryjí louku. Hora se v bloku 8 m nedá zvednout nad 30,5 m (`p94_hora_k` 1,5: vrchol 10,5 m nad loukou). S vyšší horou má lokální přepočet vody 162 neshod (výkopy 4–5), stejně i na main, takže je to stará chyba vody.
+- **Rozhodnutí Jana 11:39 (E94b):** velikost vegetace 0,5 (`p94_meritko_veg`): listnáč 1,75 m, jehličnan 2 m, hustota zatím beze změny, otisky výchozí hry stejné (snímky `94_vegm05_*`).
+- **Další krok (Jan):** sloučit? hustota stromů na m² (později)? půdorysy staveb? cesty 1 m? hora `p94_hora_k` nebo E87/E92? opravit neshody lokálního přepočtu?
+
+### 📏 Blok 4 / E89: oddělené typy jednotek (2026-11-20 07:19 · `godot-prototyp/scripts/jednotky.gd`, `tools/jednotky_e89.py` + `.gd`, příznak `p89_meritko`, větev `e89-jednotky`, data `blueprint-studie/shots/e89/`)
+- **Směr:** TODO Blok 4, první bod: metry pro fyziku a vodu, herní jednotky 0,25 m, hustota vzorkování a celočíselná mřížka na jednom místě. Hydraulika zůstává v m, s, l/s.
+- **Zjištění:** konstanty bloku rozepsané (BS 33×, BH 18×, CELL_H 9×), dvě konvence os indexu (stejná čísla), l → m³ dvakrát jinak (13 % průtoků jiný poslední bit), `ug_cell_m3` s výchozí 0,125 i 1,0. Scéna kreslí buňku 1 × 1 × 0,5 → vodorovně natažená 2×.
+- **Výsledek:** modul bez chyb (tam a zpět, vnoření, index pro 16–128), volání 3–4× dražší než výraz. `p89_meritko` ukáže scénu v metrech, výchozí hra beze změny.
+- **Další krok (Jan):** scéna v metrech? postupný převod konstant? jeden tvar l → m³? vegetace a stavby v metrech?
+### 🧪 Blueprint v3 / E87: jádro vyzdvižené hory přes více bloků (2026-11-20 06:52 · `blueprint-studie/scripts/bp/geo2.gd` (`massif87`), `pipeline.gd`, `geo_fn.gd` + kopie v prototypu, příznak `p87_jadro_hory`, nástroj `tools/jadro_e87.gd`, větev `e87-jadro-hory`, data `blueprint-studie/shots/e87/`)
+- **Směr:** TODO Blok 3: masiv hory jako funkce ve světových metrech; volná strana bloku = masiv, soused masivu předá jen odchylku od funkce, při 0,25 m virtuální soused z funkce.
+- **Zlepšení:** dnes každý šev mezi horami spadne na 20 m (sedlo 1,7–4 m pod průměrem) a jádro se u okraje utne (3–3,6 m v jednom sloupci). S p87 šev leží ve výšce masivu a skoky na švu jsou stejné jako uvnitř bloku; masiv nezávisí na pořadí (0 neshod), 0,25 m se po přidání sousedů nemění, bilance vody 0, dva běhy stejné. Výchozí hra beze změny.
+- **Komplikace:** masiv vedle kopce nebo louky dá stěnu 5–6 m v pásu 2 m; virtuální soused u nížiny nesedí (78–84 buněk 0,25 m); masiv je hladší bez teras; vzorek 0,25 m ~2× pomalejší; jiná voda (2 × 2: 9 → 3 prameny).
+- **Další krok (Jan):** zapnout p87; přechod masiv → nížina (podhůří ve funkci, nebo širší pás); vrátit terasy; jak velký má masiv být.
+
 ### 🔄 Voda E74–E77 sloučena, přepínače podle Jana (2026-11-20 04:08 · větev `voda-e74-e77-slouceni`, tag `voda-e74-e77-ready`, `tok.solve74`, `ug67._merge_outs72d`, `ostrov_voda.place76`, data `blueprint-studie/shots/voda_e74_e77/`)
 - **Směr:** Jan 2026-11-20 01:49 a 03:26: sloučit E74–E77, zapnout obsazování pramenů s hladinou, uložené prameny, slučování do 8 m; E75 a těžba na `cas_hry.gd`.
 - **Zlepšení:** výchozí ostrov beze změny otisku (63d7b89a91385a79), 0 neshod, chyba 0 ve všech testech, druhý běh bitově stejný; neobsazený pramen už vodu ze světa nepouští; nové postavení a načtení ostrova = lokální stav; slučování nejdál 8 m.
@@ -529,6 +553,28 @@ Skupiny: 1 Prototyp a buildy · 2 Terén a tvar · 3 Rozlišení bloku · 4 Ská
 - Usazování (Jan 20:20): v tůních, kde voda neproudí, se materiál usazuje. Odplavení i usazení závisí na rychlosti proudění (práh rychlosti pro odplavení a pro usazení podle materiálu); časy předpočítané z průtoku jako události.
 - Rozhodnutí Jan 21:14: podzemní voda může běžet na hrubší mřížce (ve svet64 32 na blok: 23 s, špička 0,7 GB místo 4 GB); povrchová voda zůstává v plném rozlišení.
 
+
+### 🧪 Generátor V1 krok 3b: útvary jen v hostitelské hornině (A1) a šum mocnosti podle horniny (A10) (2026-11-26 · `gen-v1-krok03b-hostitele-sum`, shots `shots/krok03b/`)
+- Jan 2026-11-26 schválil A1 a A10 jako doplněk kroku 3. 07:59 přerušeno (přechod prototypů na C#); v 8:04 Jan schválil doporučení a ukotvení středu dómu se dokončilo v GDScriptu. PROP: `docs/sjednoceni/reporty/krok03b-prop.md`.
+- A1: po zapnutí 0 buněk útvarů v nehostiteli (před 85–105 tis. na řadu bloků); v ornici/písku byla před jen 1 buňka, skutečná chyba byl skarn a dóm v krystaliniku.
+
+### ✅ Generátor V1 krok 3b: rozhodnutí Jana 8:04 a ukotvení středu dómu do pásma sedimentů (2026-11-26 8:12 · `gen-v1-krok03b-hostitele-sum`, shot `shots/krok03b/a1_rez_dom_pred_po.png`)
+- Jan 8:04 souhlasil: zvětralý jíl a spraš zůstanou v `nikdy`; skarn jen v karbonátech a vápnitých metamorfitech (menší objem OK); střed dómu (sůl) do sedimentů; tabulka šumu je výchozí (doladí se podle vzhledu); `V1_PRES` zatím beze změny.
+- Dóm po ukotvení: 89 125 buněk v 9 blocích (90 % objemu před A1, 2,2× proti starému středu s A1 40 230), 0 v nehostiteli. Původní testy kroku 3: 0 chyb. Determinismus dvou procesů: `bbdc0afa877d6c2e` (4 718 592 buněk).
+
+### 🧪 Generátor V1 krok 4: podzemní voda a prameny jako funkce světa, první kód v C# (2026-11-26 8:40 · větev `gen-v1-krok04-podzemni-voda`, `cs/Willage.Gen/`, `godot-prototyp/scripts/cs/`, shots `shots/krok04/`)
+- **Směr:** čistá C# knihovna (bez Godotu) + Godot .NET fasáda; geologie kroků 1–3 zůstává v GDScriptu a čte se mostem `GeologieGd`. Hladina = tlumená kopie reliéfu (vážený průměr povrchu na světové mřížce 8 m, R 48 m, d₀ 1,5 m, zesílení údolí β 1), profil sloupce (volná, zavěšená, sevřená voda), prameny ze seedu po buňkách 32 m, výkon pramene podle 1.8 (jednoduchý / tlakový), artéská voda z výchozu stejné horniny do 192 m. Kontrakty Willage_Dev zrcadlené jen pro čtení.
+- **Zlepšení:** 29/29 jednotkových testů, 0 chyb na funkci světa, švy 0 neshod, hladina nikde nad povrchem, 8 pramenů na 3 × 3, artéská voda ano, otisk `f19006126c4b12a7` ve 3 procesech. C# část bloku ~0,1 s.
+- **Komplikace:** 99,6 % času je most do GDScriptu (7,3 ms na sloupec, blok s profily 30 s). Bez β 0 pramenů; 420 z 618 artéských případů je ve slupkách sopky. Není to řešič E67.
+- **Další krok:** otázky pro Jana v `docs/sjednoceni/reporty/krok04.md`; schválení kroku.
+
+### 🧪 Generátor V1 krok 5 (nové pořadí): port geologie kroků 1–3 do C# s opravami z kroku 4 (2026-11-26 9:27 · větev `gen-v1-krok04b-geologie-cs`, `cs/Willage.Gen/{Sum,Svet,Geologie}/`, PROP `docs/sjednoceni/reporty/krok05-prop.md`, obrázek `docs/sjednoceni/reporty/krok05/rez_sev_mince.png`)
+- **Směr:** Jan 8:48 (rozhodnutí 6 ke kroku 4) a 9:06 (nové pořadí). `svet_fn.gd`, `geo_vrstvy.gd`, `utvary.gd`, `sum_hornin.gd`, `hostitele_utvaru.gd` převedené do malých C# tříd; FastNoiseLite 1.1.0 (stejná verze jako v Godotu 4.7.2) s obalem, který napodobí Godot (float souřadnice, samostatná doménová deformace). Data beze změny. `GeologieCs : IGeologie`, most `GeologieGd` jen reference. Opravy za přepínači (výchozí zap.): nitro sopky nepropustné (`SopkaNepropustna`), spojitá mince E82 přes šev (`P82PrechodM` 32 m); hustota pramenů jen parametry (čtverec, pravděpodobnost), výchozí beze změny.
+- **Zlepšení:** bitová shoda s GDScriptem: 3 600 bodů povrchu/biomu/hornin, otisk kroku 3 `bbdc0afa877d6c2e` (4 718 592 buněk), 4 segmenty 8 m po 0,25 m, otisk vody bloku 14,14 `f19006126c4b12a7`. Čas: krok 3 (3 × 3, 2 m / 1 m) 2,6 s proti 128 s (≈ 49×), segment 8 m 0,08–0,33 s proti 3,1–8,1 s (10–100×), krok 4 blok s profily 1,0 s proti ~30 s. Šev s různou mincí: rozdílné buňky mezi sousedními sloupci 30,8 → 2,6 (uvnitř bloku 3,8), skok vápence průměr 8,2 m → 0,24 m. Sopka: sevřených vrstev v nitru 29 044 → 0 a 32 554 → 26. Determinismus 2 procesů: s opravami `c8eeb7964d1ddd85` (krok 3) a `add94931c6922f9c` (voda). Testy 44/44.
+- **Komplikace:** cache výšky středu útvaru (`_zs`, klíč 0,25 m) dělá výsledek teoreticky závislý na pořadí dotazů (ve 3 × 3 0 kolizí). Blok 128 m po 0,25 m trvá 18,5 s na jednom vlákně (krok 3 není paralelní, instance není vláknově bezpečná). Nepřenesené volby, které výchozí svět nepoužívá: `biom_velke_oblasti`, `klima=ze_seedu`.
+- **Rozhodnutí Jana 9:32 (zapracováno 9:36):** prameny 24 m / 0,6 → 18 na 3 × 3; mince 32 m beze změny; keš středu útvaru s přesným klíčem (otisky beze změny, 0 kolizí); paralelní 0,25 m: blok 18,9 s (1 vlákno) → 2,6 s (8 vláken), otisk `ce6d906313af513f` stejný při 1/2/4/8 vláknech. Voda 14,14 nově `7714d1a1d34e00ad`. Testy 49/49.
+- **Další krok:** merge do main převezme Willage-backend; pak krok 6 (eroze světa).
+
 ## 3 Rozlišení bloku
 
 ### 🧪 Nastavitelné rozlišení, test 32 × 32 × 64 s buňkou 0,5³ (2026-11-17 11:50 · `--res-test`)
@@ -709,6 +755,9 @@ Godot .NET (nebo GDExtension) a stavba chunků ve vlákně, napojení bloků na 
 - **gen-v3: kámen odspodu přes BFS hromady (19:30):** pořadí kamenů odspodu s BFS vrstvami dalo čistotu 0,778 proti 0,814 výchozího pořadí a 75–104 ms; nahrazeno tvarem stratum (0,946, 22 ms).
 - **Pěna z hloubkového bufferu (rešerše):** u izometrické kamery a malých vod dává nerovnoměrný pás [14][15]. Nahrazeno vzdálenostním polem.
 
+### ❌ Hladina jako čistě tlumená kopie reliéfu (β = 0) (2026-11-26 8:31 · krok 4, `shots/krok04/beh1_beta0.json`)
+- Na mírném startovním světě (povrch 67–94 m) hladina nikde nedosáhla povrchu: 0 % vývěru, 0 pramenů. Nahrazeno zesílením údolí β = 1.
+
 ## 3 Rozlišení bloku
 - **16 × 16 × 64 s buňkou 1 × 1 × 0,5 jako cílový vzhled:** Jan: „moc hrubé“. Zatím zůstává ve hře, jemnější rozlišení je ve zkoušce.
 
@@ -782,6 +831,9 @@ Nevyzkoušené nápady na zrychlení. Stav: 💡 návrh · 🔬 ověřuje se · 
 - 💡 **Blueprint: tělesa jako implicitní primitiva / SDF (17:06):** sopouch, kimberlit, solný dóm a žíla jako 3D primitiva s relací *erode* (Paris 2019, *Arches*) [34][44]; stejný tvar v jemnějším rozlišení, na každou vrstvu plné 3D pole netřeba.
 - 💡 **Blueprint: rezervoár a jeskyně jako vložený materiál + místní hladina (17:06):** vzduch/voda v zásobníku sloupce pod nepropustným stropem (*Arches*) a lokální hladina se bariérou jako Minecraft aquifer 1.18 [34][36]. Přesné objemy z receptu zůstanou.
 - 💡 **Blueprint: stream-power eroze a kompetence až se povolí fyzika (17:06):** Cordonnier 2016/2018 — \(\partial h/\partial t = u - k A^m S^n\), \(k\) podle pevnosti vrstvy [31][32]. Teď nepočítat (Jan 16:5x); vzorec je připravený. Plné Badlands/Landlab/GOLEM při uložení bloku přeskočit.
+
+### 💡 ~~Port geologie kroků 1–3 do C# kvůli mostu (2026-11-26 · krok 4)~~ → hotovo v kroku 5 (2026-11-26 9:27)
+- Krok 4 tráví 99,6 % času čtením sloupců z GDScriptu (`vypln_sloupec` 7,3 ms na sloupec); C# část je ~0,1 s na blok. Port `svet_fn` + `geo_vrstvy` (rozhraní `IGeologie` už existuje) by blok s profily zrychlil z ~30 s řádově na desetiny sekundy. Podle Jana [pt906u] až když bude potřeba.
 
 ## 3 Rozlišení bloku
 - 💡 **Jemnější rozlišení jen u povrchu:** 32 × 32 stojí asi 4× generování a 3× síť. Hloubku nechat hrubou a jemné buňky držet jen v horních vrstvách.

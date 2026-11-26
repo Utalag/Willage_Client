@@ -7,6 +7,7 @@ extends RefCounted
 ## vrstvy hlíny, písku a jílu u povrchu, jeskyně (chamber), kameny po sloupcích (stratum), rudy v hostiteli, voda se zadržením.
 ## Souhrn ze serveru: hlína / písek / jíl = počty STRATA prototypu bez šumových rud; rudy ore-v0.2; jeskyně cave-v0; kámen = zbytek.
 
+const J = preload("res://scripts/jednotky.gd")   # E94: mřížka a metry z jednoho místa
 const Mat = preload("res://scripts/mat.gd")
 const Ore = preload("res://scripts/gen3/ore_v0.gd")
 const Cave = preload("res://scripts/gen3/cave_v0.gd")
@@ -14,8 +15,8 @@ const G = preload("res://scripts/gen3/gen_v3.gd")
 const SRV = preload("res://scripts/gen3/gen3_server.gd")
 const S = preload("res://scripts/gen3/gen3_stack.gd")
 const H = preload("res://scripts/stable_hash.gd")
-const BS := 16
-const BH := 64
+const BS := J.BS
+const BH := J.BH
 const VERSION := "gen-v3-study-4 + prototyp (SOIL_COLS)"
 const POUR := {"louka": [60, 200], "kopec": [60, 220], "hora": [40, 160], "piscina": [80, 260]}
 const BONUS_PCT := 50          # unikátní blok (ore_bonus > 0) = bonus 50 % na rudy, jeskyně a vodu (jako „bonus 50 %“ ve studii)

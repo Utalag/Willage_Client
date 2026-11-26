@@ -3,14 +3,15 @@ extends Node
 ##   -- --genv3-shots [--gen=proto|v3] [--tag=X]   screenshoty shots/41_genv3_proto_*<_tag>.png
 ##   -- --genv3-bench [--gen=proto|v3] [--tag=X]   měření vložení a kopání + validátor a determinismus → shots/41_genv3_proto_bench<_tag>.txt
 
+const J = preload("res://scripts/jednotky.gd")   # E94: mřížka a metry z jednoho místa
 const BlockGen = preload("res://scripts/block_gen.gd")
 const Block = preload("res://scripts/block.gd")
 const Mat = preload("res://scripts/mat.gd")
 const Params = preload("res://scripts/surface/surface_params.gd")
 const Gen3 = preload("res://scripts/gen3/gen3_proto.gd")
 const Vec = preload("res://scripts/vectors.gd")
-const BS := 16
-const BH := 64
+const BS := J.BS
+const BH := J.BH
 
 var m
 var tag := ""

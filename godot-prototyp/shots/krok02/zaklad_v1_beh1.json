@@ -1,0 +1,264 @@
+{
+ "chyb_celkem": 0,
+ "index": {
+  "bity": 19,
+  "chyb": 0,
+  "ms": 127.193,
+  "n": 32,
+  "nz": 512,
+  "pocet": 524288
+ },
+ "materialy": {
+  "chyby": [],
+  "nacteni_ms": 2.375,
+  "perm_odchylky": [],
+  "pocet": 78
+ },
+ "neplatne": [
+  {
+   "duvod": [
+    "blok_m = 200 buněk, není mocnina 2",
+    "blok se nedělí na segmenty beze zbytku (mocnina 2)",
+    "maximum světa není mocnina 2 bloků"
+   ],
+   "odmitnuto": true,
+   "zmena": "blok_m=100.0"
+  },
+  {
+   "duvod": [
+    "blok_m = 192 buněk, není mocnina 2",
+    "blok se nedělí na segmenty beze zbytku (mocnina 2)",
+    "maximum světa není mocnina 2 bloků"
+   ],
+   "odmitnuto": true,
+   "zmena": "blok_m=96.0"
+  },
+  {
+   "duvod": [
+    "výška sloupce 48.0 není ve výčtu 32/64/128 m",
+    "sloupec_m = 96 buněk, není mocnina 2"
+   ],
+   "odmitnuto": true,
+   "zmena": "sloupec_m=48.0"
+  },
+  {
+   "duvod": [
+    "segment 12.0 není ve výčtu 8/16/32 m",
+    "segment_m = 24 buněk, není mocnina 2",
+    "blok se nedělí na segmenty beze zbytku (mocnina 2)"
+   ],
+   "odmitnuto": true,
+   "zmena": "segment_m=12.0"
+  },
+  {
+   "duvod": [
+    "blok_m = 128.0 se nedělí buňkou 0.3 m",
+    "segment_m = 8.0 se nedělí buňkou 0.3 m",
+    "sloupec_m = 128.0 se nedělí buňkou 0.3 m",
+    "svet_max_m = 4096.0 se nedělí buňkou 0.3 m",
+    "buňka se nedělí na jemné buňky (mocnina 2)"
+   ],
+   "odmitnuto": true,
+   "zmena": "bunka_m=0.3"
+  },
+  {
+   "duvod": [
+    "buňka se nedělí na jemné buňky (mocnina 2)"
+   ],
+   "odmitnuto": true,
+   "zmena": "jemna_m=0.2"
+  },
+  {
+   "duvod": [
+    "svet_max_m = 6000 buněk, není mocnina 2",
+    "maximum světa není mocnina 2 bloků"
+   ],
+   "odmitnuto": true,
+   "zmena": "svet_max_m=3000.0"
+  },
+  {
+   "duvod": [
+    "výchozí svět mimo maximum"
+   ],
+   "odmitnuto": true,
+   "zmena": "svet_start_bloku=64"
+  },
+  {
+   "duvod": [
+    "slupka mimo 2–3 buňky"
+   ],
+   "odmitnuto": true,
+   "zmena": "slupka_bunek=5"
+  }
+ ],
+ "otisk": "cc9e412759114af1",
+ "platne": [
+  {
+   "bity_indexu": 17,
+   "chyby": [],
+   "odvozene": {
+    "blok_bunek": 256,
+    "jemnych_na_bunku": 2,
+    "neutralni_bunka": 32,
+    "neutralni_m": 16.0,
+    "segment_bunek": 16,
+    "segment_jemnych": 32,
+    "segmentu_v_bloku": 16,
+    "sloupec_bunek": 64,
+    "sloupec_jemnych": 128,
+    "svet_max_bloku": 32
+   },
+   "segment_m": 8.0,
+   "sloupec_m": 32.0
+  },
+  {
+   "bity_indexu": 19,
+   "chyby": [],
+   "odvozene": {
+    "blok_bunek": 256,
+    "jemnych_na_bunku": 2,
+    "neutralni_bunka": 32,
+    "neutralni_m": 16.0,
+    "segment_bunek": 32,
+    "segment_jemnych": 64,
+    "segmentu_v_bloku": 8,
+    "sloupec_bunek": 64,
+    "sloupec_jemnych": 128,
+    "svet_max_bloku": 32
+   },
+   "segment_m": 16.0,
+   "sloupec_m": 32.0
+  },
+  {
+   "bity_indexu": 21,
+   "chyby": [],
+   "odvozene": {
+    "blok_bunek": 256,
+    "jemnych_na_bunku": 2,
+    "neutralni_bunka": 32,
+    "neutralni_m": 16.0,
+    "segment_bunek": 64,
+    "segment_jemnych": 128,
+    "segmentu_v_bloku": 4,
+    "sloupec_bunek": 64,
+    "sloupec_jemnych": 128,
+    "svet_max_bloku": 32
+   },
+   "segment_m": 32.0,
+   "sloupec_m": 32.0
+  },
+  {
+   "bity_indexu": 18,
+   "chyby": [],
+   "odvozene": {
+    "blok_bunek": 256,
+    "jemnych_na_bunku": 2,
+    "neutralni_bunka": 64,
+    "neutralni_m": 32.0,
+    "segment_bunek": 16,
+    "segment_jemnych": 32,
+    "segmentu_v_bloku": 16,
+    "sloupec_bunek": 128,
+    "sloupec_jemnych": 256,
+    "svet_max_bloku": 32
+   },
+   "segment_m": 8.0,
+   "sloupec_m": 64.0
+  },
+  {
+   "bity_indexu": 20,
+   "chyby": [],
+   "odvozene": {
+    "blok_bunek": 256,
+    "jemnych_na_bunku": 2,
+    "neutralni_bunka": 64,
+    "neutralni_m": 32.0,
+    "segment_bunek": 32,
+    "segment_jemnych": 64,
+    "segmentu_v_bloku": 8,
+    "sloupec_bunek": 128,
+    "sloupec_jemnych": 256,
+    "svet_max_bloku": 32
+   },
+   "segment_m": 16.0,
+   "sloupec_m": 64.0
+  },
+  {
+   "bity_indexu": 22,
+   "chyby": [],
+   "odvozene": {
+    "blok_bunek": 256,
+    "jemnych_na_bunku": 2,
+    "neutralni_bunka": 64,
+    "neutralni_m": 32.0,
+    "segment_bunek": 64,
+    "segment_jemnych": 128,
+    "segmentu_v_bloku": 4,
+    "sloupec_bunek": 128,
+    "sloupec_jemnych": 256,
+    "svet_max_bloku": 32
+   },
+   "segment_m": 32.0,
+   "sloupec_m": 64.0
+  },
+  {
+   "bity_indexu": 19,
+   "chyby": [],
+   "odvozene": {
+    "blok_bunek": 256,
+    "jemnych_na_bunku": 2,
+    "neutralni_bunka": 128,
+    "neutralni_m": 64.0,
+    "segment_bunek": 16,
+    "segment_jemnych": 32,
+    "segmentu_v_bloku": 16,
+    "sloupec_bunek": 256,
+    "sloupec_jemnych": 512,
+    "svet_max_bloku": 32
+   },
+   "segment_m": 8.0,
+   "sloupec_m": 128.0
+  },
+  {
+   "bity_indexu": 21,
+   "chyby": [],
+   "odvozene": {
+    "blok_bunek": 256,
+    "jemnych_na_bunku": 2,
+    "neutralni_bunka": 128,
+    "neutralni_m": 64.0,
+    "segment_bunek": 32,
+    "segment_jemnych": 64,
+    "segmentu_v_bloku": 8,
+    "sloupec_bunek": 256,
+    "sloupec_jemnych": 512,
+    "svet_max_bloku": 32
+   },
+   "segment_m": 16.0,
+   "sloupec_m": 128.0
+  },
+  {
+   "bity_indexu": 23,
+   "chyby": [],
+   "odvozene": {
+    "blok_bunek": 256,
+    "jemnych_na_bunku": 2,
+    "neutralni_bunka": 128,
+    "neutralni_m": 64.0,
+    "segment_bunek": 64,
+    "segment_jemnych": 128,
+    "segmentu_v_bloku": 4,
+    "sloupec_bunek": 256,
+    "sloupec_jemnych": 512,
+    "svet_max_bloku": 32
+   },
+   "segment_m": 32.0,
+   "sloupec_m": 128.0
+  }
+ ],
+ "verze": {
+  "aktualni": "V1.0",
+  "chyb": 0,
+  "u16": 256
+ }
+}

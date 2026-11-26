@@ -1,0 +1,50 @@
+{
+ "bloky": [
+  [
+   14,
+   14
+  ],
+  [
+   15,
+   15
+  ],
+  [
+   16,
+   16
+  ],
+  [
+   14,
+   16
+  ]
+ ],
+ "ms": 91376,
+ "ok": true,
+ "po": {
+  "coin_na_cili": 16384,
+  "coin_sloupcu": 16384,
+  "coin_vapenec": 16384,
+  "krizeni": 0,
+  "mezery": 0,
+  "min_def": 0.370221287135005,
+  "nad_H4": 602,
+  "pod_025": 0,
+  "pripady": [],
+  "sloupcu": 65536,
+  "souctu_zle": 0,
+  "vrstev": 718297
+ },
+ "pred": {
+  "coin_na_cili": 15584,
+  "coin_sloupcu": 16384,
+  "coin_vapenec": 16384,
+  "krizeni": 0,
+  "mezery": 0,
+  "min_def": 0.368789770960075,
+  "nad_H4": 4653,
+  "pod_025": 0,
+  "pripady": [],
+  "sloupcu": 65536,
+  "souctu_zle": 0,
+  "vrstev": 686654
+ }
+}

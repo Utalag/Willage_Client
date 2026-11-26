@@ -1,0 +1,74 @@
+{
+ "blok_ms_max": 434.478,
+ "blok_ms_p50": 223.659,
+ "bloky_ms": 58751.42,
+ "funkce_ms": 113.666,
+ "neshod_celkem": 0,
+ "pamet_godot_mb": 345.047095298767,
+ "profil_digest_ms": 0.459,
+ "rostlin": 35358,
+ "rss_konec_mb": 614.21875,
+ "rss_po_blocich_mb": 200.62890625,
+ "rss_po_vode_mb": 614.21875,
+ "rss_start_mb": 138.12109375,
+ "souhrn": {
+  "koryto_sloupcu": 360,
+  "okraj_lps": 20.194277,
+  "podzemni_telesa": 1,
+  "prameny": 10,
+  "tun_sloupcu": 14719,
+  "vodopady": 0,
+  "vodopady_okraj": 4,
+  "volani_podzemi": 6,
+  "vyvery": 1
+ },
+ "typy": {
+  "hora": 35,
+  "kopec": 34,
+  "louka": 181,
+  "piscina": 6
+ },
+ "voda_casti": {
+  "celkem": 51785.517,
+  "podzemí: pásma": 15181.314,
+  "povrch + podzemí: plný výpočet": 34706.05,
+  "prameny": 346.094
+ },
+ "voda_ms": 51785.55,
+ "vykopy": [
+  {
+   "celkem_ms": 27213.058,
+   "gi": 41331,
+   "ms": 27212.993,
+   "okno": 169,
+   "r_step_max_ms": 0.0,
+   "r_steps": 0,
+   "surf_ms": 4132.883,
+   "ug_ms": 21727.412
+  },
+  {
+   "celkem_ms": 28339.667,
+   "gi": 73386,
+   "ms": 28339.624,
+   "okno": 30597,
+   "r_step_max_ms": 0.0,
+   "r_steps": 0,
+   "surf_ms": 155.533,
+   "ug_ms": 26788.996
+  },
+  {
+   "celkem_ms": 27573.532,
+   "gi": 17540,
+   "ms": 27573.49,
+   "okno": 33066,
+   "r_step_max_ms": 0.0,
+   "r_steps": 0,
+   "surf_ms": 161.231,
+   "ug_ms": 26045.401
+  }
+ ],
+ "vyska_bunky": [
+  32,
+  60
+ ]
+}

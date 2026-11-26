@@ -2556,3 +2556,298 @@ a `surface.adapt(real)` se bez nových vstupů neprojeví.
 
 Těžba a rozklad hornin jsou samostatná studie. Návrh E65 je teď **T01 (dříve E65)** v `../tezba-studie/` (`README.md`, `PROP.md`, `DENIK.md`, `ZDROJE.md` [1]–[28], tabulka v `data/horniny_tezba_navrh.json`).
 Zdroje [45]–[72] níže v tomto souboru zůstávají jen jako zástupné číslo, aby se neposunulo číslování blueprint-studie.
+
+## E89 oddělené typy jednotek v kódu (plán, zapsáno před pokusem 2026-11-20 07:02; TODO Blok 4 „Oddělené typy jednotek v kódu: metry pro fyziku a vodu (m, s, l/s), herní jednotky po 0,25 m, hustota vzorkování a celočíselné souřadnice mřížky. Hydrauliku nepřevádět na herní jednotky.“; větev `e89-jednotky` z main 8d4d809)
+- **Co už je (průzkum kódu):**
+  - Geologie: `geo_fn.U` = 0,5 m (řídicí mřížka a délková jednotka tabulek), `BW` 8 m, `BHT` 32 m. Index `(x*16+y)*64+z`, z je výška.
+  - Hra a vykreslení: `block.gd`, `mesher.gd`, `island.gd`, `veg_render.gd`, `shore_fields.gd` mají každý svoje `BS` 16,
+    `BH` 64, `CELL_H` 0,5. Index `(x*BS+z)*BH+y`, y je výška (osa Godotu). Buňka se kreslí 1 × 1 × 0,5 jednotky scény
+    (Jan 17. 11.), takže vodorovně 1 jednotka scény = 0,5 m, svisle 1 = 1 m. Scéna je vodorovně natažená 2×.
+  - Voda: metry, sekundy, l/s (`voda_cell_m` 0,5, `cell_m2`, `u_m`, `q_to_m3` 0,001, `cm_s`, `cas_hry.gd`). Výchozí hodnoty
+    parametrů jsou rozepsané po souborech (`p.get("ug_cell_m3", 0.125)` i `p.get("ug_cell_m3", 1.0)`).
+  - Herní jednotka 0,25 m (Jan 19. 11. 20:12) v main zatím v kódu není (`prekryv78` je jen na větvích).
+- **Pokus:**
+  1. *Audit (`tools/jednotky_e89.py`):* opakované konstanty geometrie, dvě konvence indexu buňky, klíče parametrů s jednotkou
+     v názvu a bez ní, stejný klíč s různou výchozí hodnotou v různých souborech, místa převodu metrů a buněk.
+  2. *Modul `scripts/jednotky.gd`:* jedno místo pro metry, herní jednotky 0,25 m, hustotu vzorkování n (16 / 32 / 64 / 128
+     na blok), celočíselné souřadnice mřížky (blok, sloupec, buňka) a převod os geologie ↔ Godot. Hydraulika zůstává v m, s, l/s.
+     Nic z dnešního kódu ho nepoužívá. Výchozí hra se nemůže změnit.
+  3. *Test (`tools/jednotky_e89.gd`):* tam a zpět pro všechny hustoty, vnoření 0,5 ⊃ 0,25 (8 buněk), svět ↔ (slot, místní),
+     shoda s dnešními konstantami (`geo_fn.U`, `Block.CELL_H`, `voda_cell_m`, `ug` objem buňky), cena volání funkce proti
+     výrazu v kódu (ns na převod; hra na telefonu).
+  4. *Měřítko scény (příznak `p89_meritko`, výchozí vyp, `surface_params`):* ostrov se vykreslí v metrech (vodorovně ×0,5),
+     paprsky myši se převedou do místních souřadnic ostrova. Snímky vyp / zap se stejnou postavou 1,75 m a domem
+     (`shots/89_*`). Jen zobrazení, data a voda beze změny.
+  5. *Výchozí hra:* `voda_e66` (d7aedf3a6d9d10e8 → 63d7b89a91385a79) a `port_studie --check` 0 změn.
+- **Negativa předem:** GDScript nemá vlastní typy čísel (newtype), typ jednotky se tedy hlídá jen názvem a auditem, ne
+  překladačem. Volání statické funkce bude pomalejší než výraz. Měřítko scény mění vzhled svahů (2× strmější) a všechny
+  rozměry staveb a cest v buňkách. Hra ani demo ho nepoužívají, dokud Jan nerozhodne.
+
+### E89 výsledky (2026-11-20 07:19, větev `e89-jednotky`, tag `e89-jednotky`, `scripts/jednotky.gd`, `tools/jednotky_e89.py` + `.gd`, `scripts/demo/meritko_demo.gd`, shots `shots/e89/`)
+- **Audit (`audit.md`, 1 soubor = 1 místo, regexy přibližné):**
+  - konstanty geometrie rozepsané po souborech: `BS` 16 na 33 místech, `BH` 64 na 18, `CELL_H` 0,5 na 9, `U` 0,5 na 3, `CELL` na 3
+    (0,25 ve `gw74` a `kras75`, 0,5 v `eroze/hydro`); násobení `* 0.5` / `* CELL_H` 103 míst;
+  - dvě konvence indexu buňky: hra (y nahoru, Godot) 18 míst v 7 souborech, geologie a voda (z nahoru) 66 míst ve 22 souborech.
+    Číselně je index stejný (16 384 / 16 384 buněk, 0 chyb), liší se jen jména os;
+  - voda převádí l → m³ dvakrát jinak: dělení 1000 na 12 místech, násobení 0,001 (`q_to_m3`) na 20. To není bitově
+    stejné: 133 127 z 1 000 000 náhodných průtoků (13,3 %) a 4 z 319 skutečných průtoků ostrova START se liší v posledním
+    bitu (relativně 2,2·10⁻¹⁶). Port (C#, telefon) musí použít stejný tvar jako GDScript, jinak otisk vody nesedí;
+  - `p.get` se 104 klíči, 2 s různou výchozí hodnotou: `ug_cell_m3` 0,125 (`podzemi.gd`) a 1,0 (`ug_funkce.from_cells`,
+    testy s buňkou 1 m; ostrov jde přes `from_world` s `geo_fn.U`, takže dnes bez dopadu) a `podzemi_vrstva` true / false;
+  - v `params.gd` 221 klíčů, jednotku v názvu (`_m`, `_s`, `_m3`, `_q`, `_ms`…) má 22.
+- **Modul `jednotky.gd` (test `test.json`):** shoda s kódem: `U_M` = `geo_fn.U`, `BLOK_M` = `BW`, `VYSKA_M` = `BHT`,
+  buňka 16 = `voda_cell_m` = `Block.CELL_H`, `nz(16)` = `Block.BH`, objem buňky 0,125 m³ = `podzemi.gd` (≠ 1,0 v `from_cells`).
+  Tam a zpět 0 chyb pro 16 / 32 / 64 / 128 (střed i spodní hrana), vnoření 0 chyb (každá buňka 0,25 m má rodiče 0,5 m),
+  index 0 chyb (16 384, 131 072, vzorky 10 811 a 86 481), 200 000 bodů světa → slot 0 mimo blok, 0 rozdílů proti herním
+  jednotkám (hustota 32 = 0,25 m). Postava 7 hj = 1,75 m, dveře 8 hj = 2,0 m.
+- **Cena:** volání statické funkce je 3,1–4,3× dražší než výraz: m → index 36 ns výraz proti 112–116 ns funkce, index buňky
+  41 ns proti 173–177 ns (1 000 000 převodů, Linux x86_64, GDScript). Ve vnitřních smyčkách (mesher, voda) se modul nemá volat
+  po buňkách, jen jako zdroj konstant.
+- **Měřítko scény (`p89_meritko`, výchozí vyp):** dnes se buňka kreslí 1 × 1 × 0,5 jednotky → vodorovně 1 jednotka = 0,5 m,
+  svisle 1 = 1 m, terén je vodorovně natažený 2× a svahy vypadají poloviční. S příznakem je ostrov 2 × 2 bloky 16 × 16 m
+  (dnes 32 × 32 jednotek), buňka 0,5 × 0,5 × 0,5. Paprsek středem obrazovky trefí stejný sloupec (24, 24) vyp i zap.
+  Snímky `89_meritko_{vyp,zap}_{ostrov,detail,hora_bok}.png` s postavou 1,75 m a domem 4 × 4 × 3 m v metrech.
+- **Výchozí hra beze změny:** `voda_e66` otisky d7aedf3a6d9d10e8 → 63d7b89a91385a79, 0 neshod (12 výkopů),
+  `port_studie --check` 81 souborů, změněno 0 (modul a příznak jsou jen v prototypu, studie se nemění).
+- **Negativa:**
+  - GDScript typ jednotky nehlídá. Je to jen pravidlo názvů (`_m`, `_s`, `_lps`, `_hj`, `_i`, `_sc`) a audit.
+  - Modul zatím nic v kódu nepoužívá. Převod 33 + 18 + 9 konstant a 103 násobení je samostatná práce s rizikem změny otisků.
+  - `p89_meritko` zmenší i vegetaci a stavby (jsou dětmi ostrova): stromy a domek hry jsou vodorovně o polovinu užší.
+    Kamera hry, náhledy vkládání, cesty a mlha počítají se starými jednotkami. Je to jen náhled pro test měřítka (Blok 4, bod 4).
+  - Ostrov 2 × 2 bloky v metrech je 16 × 16 m a 32 m vysoký sloup. Hora START je proti postavě nízká (asi 4–5 m nad loukou).
+  - Na x86 jsem neměřil ARM ani telefon. Ceny volání jsou jen pro tento počítač.
+- **Pro Jana:** (1) má být ve scéně 1 jednotka = 1 m (`p89_meritko`), nebo zůstat u 1 × 1 × 0,5 a převádět jen v datech?
+  (2) převést konstanty `BS` / `BH` / `CELL_H` na modul postupně (soubor po souboru, kontrola otisků)? (3) sjednotit l → m³
+  na jeden tvar (`* 0.001` nebo `/ 1000`), i když se změní poslední bity vody a otisky? (4) vegetace a stavby: měřit
+  v metrech (nezávisle na buňce), nebo v herních jednotkách?
+
+## E94 metry ve scéně a převod na jednotky.gd (plán, zapsáno před pokusem 2026-11-20 11:10; Jan 2026-11-20 11:04 k E89: „Souhlasím s návrhy a sjednocením a optimalizacemi.“; větev `e94-metry` z main 0e8aa00 + sloučená `e89-jednotky`)
+- **Co se má stát (E89 otázky 1–4 = ano):**
+  1. *Scéna 1 jednotka = 1 m.* Dnes se buňka kreslí 1 × 1 × 0,5 (vodorovně natažená 2×). Ostrov dostane měřítko (0,5, 1, 0,5)
+     jako v náhledu `p89_meritko`, data a voda zůstanou v buňkách. `p89_meritko` bude na větvi výchozí zap, staré chování
+     zůstane dosažitelné přes `--surface.p89_meritko=false`.
+  2. *Převod konstant na `jednotky.gd` postupně, soubor po souboru.* Jen vlastní skripty prototypu (kopie studií mění jen
+     `port_studie.py`). Po každém kroku: `voda_e66` (d7aedf3a6d9d10e8 → 63d7b89a91385a79), `port_studie --check` 0 změn,
+     test `jednotky_e89.gd` a nový `tools/meritko_e94.gd` (otisky buněk, sítí, odkrytí a vegetace musí zůstat stejné).
+  3. *Jeden tvar l → m³.* Ve studii vznikne jedna funkce (`voda/litry.gd`), voda ji přebere přes `port_studie`. Zvolený tvar je
+     dělení `/ 1000` (IEEE dělení je správně zaokrouhlené, násobení 0,001 zaokrouhluje dvakrát). Ve vnitřních smyčkách se
+     použije stejný výraz s konstantou modulu. **Mění se poslední bity vody a otisky vody** (starý a nový otisk zapíšu).
+  4. *Stromy, stavby, kamera, cesty a mlha v metrech.* Vegetace a stavby se v ostrově s měřítkem vyrovnají (×2 vodorovně),
+     rozměry modelů se zadají v metrech, půdorysy staveb v metrech → buňky. Kamera, zoom a mlha přepočtené na metry.
+     Hora START: zkusím volitelné převýšení hory (`p94_hora_k`, výchozí 1 = beze změny), protože mění terén i vodu.
+  5. *Rychlost.* Ve vnitřních smyčkách jen konstanty modulu (žádné volání po buňkách). Měřím před a po (`meritko_e94.gd`:
+     generování, síť, odkrytí, vegetace, smyčka literál / konstanta / funkce; `voda_e66` časy).
+- **Negativa předem:** hora v bloku 8 m nemůže být vysoká bez útesu (strop 32 m výšky a 8 m šířky). Cesty zůstanou po
+  buňkách (šířka 0,5 m), jejich šířka v metrech je herní rozhodnutí. Sjednocení l → m³ změní otisky i ve studii.
+
+### E94 výsledky (2026-11-20 11:35, větev a tag `e94-metry`, nesloučeno; data `shots/e94/`, snímky `shots/e94/snimky/` a `/workspace/willage-ideas/shots-e94/`)
+- **Převod na `jednotky.gd` (40 commitů, soubor po souboru):** `jednotky.gd` má mřížku hry `BS` 16, `BH` 64, `CELL_M` 0,5.
+  Konstanty z ní bere 30 vlastních skriptů prototypu (block, mesher, island, veg_render, veg, grass, shore_fields, dual_grid_mesher,
+  ostrov_voda_render, roads, buildings, road_builder, main, digging, discovery, block_gen, ostrov_teren, ostrov_voda, prenos76,
+  gen3_proto, water_flow a 6 dem). Výšky `* 0.5` v cestách a stavbách jsou teď `* CELL_H`. Literály 16 / 64 / 0,5 zůstaly jen
+  v kopiích studií (`teren/zaklad/*`, `gen3/*` z lozika-studie), které mění jen `port_studie.py` (`audit_po.md`).
+- **Kontrola po každém commitu (`kontrola_po_commitech.txt`):** otisky buněk 631c754f4b07783b, sítí 3452e4cdb33ddb50, odkrytí
+  db706a1c2d1b9ddb a vegetace 483dc33fa9ea0a18 (`tools/meritko_e94.gd`) stejné ve všech 40 commitech, 0 chyb skriptu.
+  `port_studie --check` 0 změn (jediná výjimka je commit se změnou studie, v dalším se kopie přenesly). `voda_e66` po skupinách
+  (blok, hra, litry, konec): d7aedf3a6d9d10e8 → 63d7b89a91385a79, 0 neshod. Test E89 0 chyb (známá výjimka `from_cells` 1,0).
+- **Jeden tvar l → m³ (`voda/litry.gd` ve studii, přenesený do prototypu):** dělení `/ 1000` (`LI.L_NA_M3`). Nahrazeno 9 míst
+  s násobením 0,001 (`tok`, `tok60`, `hydro68`, `ug_funkce` ×2, `ug58`, `ug_pole`, `ug67`, `kras75`, `podzemi`). Dělení v `mech`
+  (4 místa), `ug_funkce` a `prenos76` bere konstantu modulu. Kontexty podzemí mají `l_na_m3 = 1 / ug_q_to_m3` (1000 přesně,
+  testy s jednotkou 1). **Negativum proti očekávání: otisky vody se nezměnily** (d7aedf3a6d9d10e8 → 63d7b89a91385a79 před i po).
+  Otisk hashuje hladiny, směry a průtoky. Převod l → m³ je jen v časech plnění tůní, událostech podzemí, krasu a erozi.
+  Na ostrově START je to 79 495 hodnot vody (`litry_e94.gd`), 0 rozdílných bitů. Časy E77 jsou stejné (tůň 92,81 s, eroze
+  2,31 dne) a kras E75 s `p75_kras` taky (otisk krasu 7e31419afd6c5cdc, 0 rozpustných pásem). Rozdíl se projeví až u hodnot,
+  kde násobení zaokrouhlí jinak (13 % náhodných průtoků, E89).
+- **Scéna v metrech (`p89_meritko` na větvi výchozí zap, staré `--surface.p89_meritko=false`):** ostrov 16 × 16 m, buňka 0,5³.
+  - Stromy, keře, kaktusy, tráva a popisky se v ostrově s měřítkem vyrovnají (×2 vodorovně). Modely .glb jsou už v metrech.
+    Výšky v metrech jsou listnáč 3,5 m, jehličnan 4 m, keř 1 m a kaktus 1,5 m (×0,8–1,2 z dat).
+  - Stavby mají půdorys v metrech (domek 3,5 m = 7 buněk, studna 1,5 m = 3, mlýn 3,5 m = 7, políčko 3,5 m = 7) a model
+    vyplní půdorys. Hledání místa bere ohled na velikost.
+  - Kamera má střed (8, 15, 8) a záběr 33 (dřív 16 a 66), meze zoomu ×0,5 a LOD trávy v dnešních jednotkách.
+  - Mlha má stejný vzor na buňku (`noise_k` 0,24). Body trasy cest už nejsou zúžené.
+  - Cesty jsou po buňkách. Šířka 0,5 m a schody po 0,5 m už jsou v metrech správně.
+  - Paprsek středem obrazovky trefí sloupec (24, 24) v metrech i postaru.
+- **Rychlost (nejlepší z 10, 4 bloky, x86_64):** síť 187,1 → 185,2 ms, odkrytí 2,08 → 2,05 ms, vegetace 1,57 → 1,47 ms,
+  generování 881 → 865 ms. Voda plný výpočet 2509 → 2610 ms, což je v šumu běhů (E89: 2779–3037 ms). Ve smyčce stojí převod
+  20,3 ns s literálem, 20,0 ns s lokální konstantou, 20,8 ns s konstantou `J.U_M` a 92,9 ns s voláním `J.i_m()`. Konstanta
+  modulu je zadarmo a volání je 4,5× dražší, proto se ve smyčkách nepoužívá. Po převodu: 20,0 / 19,8 / 19,9 / 84,5 ns.
+- **Hora START (`p94_hora_k`, výchozí 1 = beze změny):**
+  - Dnes je louka 20 m, hora má medián 23 m a vrchol 29 m (9 m nad loukou), blok má 8 m.
+  - S k 1,5 je medián 27,5 m a vrchol 30,5 m, což je strop sloupce (61 buněk). Na víc není ve sloupci 32 m místo.
+  - Voda s k 1,5: otisky 6976996a24e60fab → 659ffcd2d60568e9, prameny 8 (dřív 5), okraj 21,7 l/s.
+  - **Nález:** **162 neshod lokálního přepočtu s plným** (výkopy 4 a 5: fill 43, to 38; od výkopu 6 zase 0). Stejně to vychází
+    na main 0e8aa00 se stejnou horou, takže to je chyba lokálního přepočtu vody, ne E94.
+- **Negativa:**
+  - Stromy 3,5–4 m při dnešní hustotě (vegetace po buňkách 0,5 m) zakryjí louku i postavu (`94_po_zap_detail.png`). Hustota by
+    měla být na m², ne na buňku.
+  - Hora v bloku 8 m zůstane malá. Skutečnou horu dá jen E87 (jádro přes víc bloků) nebo E92 (blok 128 m).
+  - Stavby 7 × 7 buněk se na svah s rozdílem ≤ 1 buňky vejdou hůř než 3 × 3 (najde se méně míst).
+  - Cesty o šířce 1 buňky jsou v metrech jen 0,5 m.
+  - `jednotky.gd` přes `preload` v `block.gd` a `mesher.gd` se načte všude. Je to jen konstanta a čas se nezměnil.
+- **Pro Jana:** (1) sloučit E94 do main (scéna v metrech výchozí, přepínač zatím nechat)? (2) výšky stromů 3,5 / 4 m, nebo menší /
+  řidší vegetace na m²? (3) půdorysy staveb (domek 3,5 m)? (4) cesty 1 m (2 buňky)? (5) hora: `p94_hora_k` 1,5, nebo počkat na
+  E87 / E92? (6) opravit nález 162 neshod lokálního přepočtu u vyšší hory (blok vody)?
+
+### E94b měřítko rostlin (Jan 2026-11-20 11:39, „velikost vegetace 0,5“; zapsáno před úpravou 11:40, výsledky 11:45)
+- **Plán:** nový parametr `p94_meritko_veg` (surface_params, výchozí 0,5) násobí výšky rostlin ve scéně v metrech. Hustota
+  zůstává (proředění podle plochy je pozdější téma). Bez `p89_meritko` se nepoužije, takže výchozí kontrola musí zůstat stejná.
+- **Výsledek:** listnáč 3,5 → 1,75 m, jehličnan 4 → 2 m, keř 1 → 0,5 m, kaktus 1,5 → 0,75 m (×0,8–1,2 z dat). Trsy, květiny, mech
+  a suchá tráva z VegRender taky ×0,5. Trávu C (`grass.gd`) to nemění. Postava 1,75 m je na detailu vidět (`94_vegm05_zap_detail.png`),
+  stromy jsou zhruba stejně vysoké jako ona. `voda_e66` d7aedf3a6d9d10e8 → 63d7b89a91385a79, 0 neshod, `port_studie` 0 změn,
+  otisky buněk, sítí, odkrytí a vegetace stejné (631c754f…, 3452e4cd…, db706a1c…, 483dc33f…).
+- **Negativum:** stromy 1,75–2 m jsou spíš keře nebo mladé stromky. Jsou menší než domek (3 m) a skutečné stromy. Je to herní volba.
+- **Snímky:** `94_vegm05_zap_{ostrov,detail,hra_kamera}.png` (+ `_hora`, `_hora_bok`).
+## E87 jádro vyzdvižené hory přes více bloků (plán, zapsáno před pokusem 2026-11-20 06:45; TODO Blok 3 „Jádro vyzdvižené hory přes více bloků“)
+- **Co je dnes (čtení kódu):** `hora_vyzdvizena` = šablona povrchu `BG.base_heightmap("hora", seed)` v MÍSTNÍCH souřadnicích bloku
+  (jeden vlastní tvar na blok, 31–48 buněk + `surface_shift` 9). Okraje se dorovnají (`SF.adapt`, pás `band` 4): ke
+  skutečnému sousedovi na jeho výšku, na VOLNÉ straně na regionální základ `surf_ref` (40 U = 20 m). Zdvih jádra
+  u = převýšení nad `surf_ref` rozmazané krabicí (`uplift_blur` 2) jen UVNITŘ bloku (okraje se opakují), vršek krystalinika
+  se pro u od 2 do 9 U zvedne až k (vyhlazenému) povrchu. Vrstvy se pak klíny (`continue_thick`, `taper_m` 3 m) navážou na
+  souseda, na volné straně na regionální základ (rovná louka bez zdvihu). Šum vrstev `BP_STRATA2` je v místních souřadnicích
+  se seedem bloku.
+- **Hypotéza dnešního stavu (změřit):** masiv z několika bloků hory se rozpadne na samostatné vrcholy se sedlem na každém
+  švu (první blok má volné okraje stažené na 20 m, sousedé se jen napojí). Jádro se k okraji bloku utne (u → 0 na okraji
+  dorovnaném na `surf_ref` + klín na regionální vrstvy). Povrch i vrstvy přes šev bez skoku (napojení), ale masiv a jádro
+  nejsou spojité „geologicky“; pořadí vložení mění výsledek.
+- **Návrh (`p87_jadro_hory`, výchozí vyp):** masiv = funkce ve SVĚTOVÝCH metrech F(X, Y) (šum světa se `world_seed`, nízká
+  frekvence ~ několik bloků, výška v rozsahu dnešní hory). Pro blok `hora_vyzdvizena`:
+  1. šablona povrchu = F v řídicích bodech (+ posun bloku);
+  2. regionální základ na volné straně = F (ne `surf_ref`), u souseda, který je také masiv E87, se přenáší ODCHYLKA od F
+     (soused − F(sloupec souseda) + F(vlastní sloupec)), u jiného souseda výška jako dnes;
+  3. zdvih u a vyhlazený povrch z F rozmazané ve světě (bez opakování okrajů), vršek jádra omezený skutečným povrchem;
+     šum vrstev ve světových souřadnicích;
+  4. klíny vrstev: volná strana = vlastní cíl (ne regionální rovina), masiv-soused = přenos odchylky mocnosti od cíle;
+  5. jemné vzorkování (0,25 m): chybí-li soused, řídicí bod za okrajem = čistá funkce masivu (virtuální soused), aby se
+     buňky bloku nezměnily, až soused přibude.
+  Čistá funkce na obou stranách → odchylka 0 → šev bez opravy a výsledek nezávisí na pořadí (Janovo pravidlo „sousedé se
+  nemění“ zůstává: blok se nemění, jen se už nemusí měnit nic).
+- **Rizika / co může selhat:** masiv vedle louky / kopce se dorovná jen na straně nového bloku → strmý svah nebo stěna
+  na 2 m pásu; volný okraj masivu na kraji ostrova je vysoký (útes do mlhy); jiný tvar hory než dnes (plošina s vrcholy
+  podle světa místo jednoho vrcholu na blok) → jiná voda, prameny, rarita; posun výšky bloku (`shift`) mezi bloky masivu
+  vytvoří schod (záměr); virtuální soused v 0,25 m nesedí, když skutečný soused má odchylku (rohy u třetího souseda);
+  minerály a dutiny dál podle bloku (nemění se).
+- **Měření (`tools/jadro_e87.gd`, `shots/e87`):** scénáře masiv 2 × 2 (dvě pořadí vložení), masiv vedle kopce a louky,
+  dlouhý hřbet 3 × 1. Dnes a s `p87`: skok povrchu na švu (max, průměr proti kroku uvnitř), skok vršku jádra, hranic vrstev,
+  vytlačené vrstvy u švu, podíl jádra na povrchu u švu a uvnitř, neshoda buněk přes šev, minerály (počty, schodek), voda
+  (prameny, bilance, otisk), stejné buňky při jiném pořadí, 0,25 m: změna buněk bloku po přidání souseda, krok na švu;
+  čas generování bloku; dva běhy = stejné otisky. Výchozí `voda_e66` a `port_studie --check` beze změny.
+
+### E87 výsledky (2026-11-20 06:52, větev `e87-jadro-hory`, tag `e87-jadro`, `geo2.massif87`, `pipeline` / `geo_fn` (studie i kopie), `tools/jadro_e87.gd`, shots `shots/e87/`)
+- **Dnes (potvrzeno, `pred.txt`):** masiv 2 × 2, hřbet 3 × 1, masiv vedle kopce a louky. Každý šev mezi horami leží přesně
+  na 40,0 U (20 m) → sedlo 1,7–4 m pod průměrem bloku (43,5–47,9 U) a ~8,5 m pod vrcholy (57–58 U). Skok na švu 0
+  (povrch, jádro, vrstvy), ale hned vedle švu krok jádra 6,1–7,3 U (3–3,6 m) a 33–38 % buněk jinak (uvnitř bloku 1–3 U):
+  jádro se k okraji utne. Jádro na povrchu 4–28 z 256 sloupců, na švech 0/32. Pořadí vložení mění 148–324 buněk na blok.
+  0,25 m: 0 změn po přidání sousedů (všechny okraje jsou stejně na 20 m). Minerály hory 56/64 (schodek 8, i s p87).
+- **S `p87_jadro_hory` (`po.txt`):**
+  - masiv bez sedel: šev 47,5–52,6 U, průměr bloků 47,9–51,9 U, max 51,0–54,6 U;
+  - šev = vnitřek: povrch max 0,49–0,87 U (krok uvnitř u švu 0,2–0,4 průměr), jádro 0,46–1,30 U (dovnitř 0,55–1,36),
+    vrstvy 2,2–5,7 U (dovnitř 2,6–6,4), buňky jinak 6,3–13,6 % (dovnitř 5,1–13,4 %); jádro na povrchu 53–254/256;
+  - pořadí: 2 × 2 i hřbet v obou pořadích bitově stejné (0 neshod, otisk a52daab1768ec4df, 6378881a100416d5);
+  - 0,25 m: 0 změn buněk po přidání sousedů masivu, krok na švu max 0,25 m (uvnitř 0,5 m), hrubé vs jemné max 0,5 m
+    (dnes 1,5–1,75 m);
+  - voda: bilance 0 (nejvýš 4·10⁻¹⁵) v E74 i E67; jiný tvar → jiná voda: 2 × 2 prameny 9 → 3, tůně 76 → 167 sloupců;
+    hřbet prameny 7 → 5; vedle 7 → 7;
+  - dva procesy: 12/12 stejných otisků (`determinismus.txt`);
+  - čas bloku hory medián 308 → 294 ms (max 529 ms při souběhu); vzorek 0,25 m 322–353 → 521–714 ms na blok (virtuální
+    soused počítá cíle vrstev znovu, bez mezipaměti mezi kontexty).
+- **Negativy:**
+  - **Masiv vedle nížiny = stěna.** Dorovnání má jen pás 4 sloupce (2 m): kopec a louka položené po masivu mají krok uvnitř
+    až 11,5 U (5,7 m), masiv položený po nich 9,7–11,8 U; u švu krok jádra 9,5–25 U a 56–62 % buněk jinak. Pořadí tu mění
+    2 000–2 700 buněk na blok.
+  - Virtuální soused nesedí se skutečnou nížinou: po přidání kopce / louky se v 0,25 m změní 78–84 buněk bloku masivu.
+  - Tvar masivu je hladší (krok uvnitř 1,1–1,5 U místo 7,6–8,4) – zmizely terasy a útesy dnešní šablony hory.
+  - `veg.gd` nezná typ `hora_vyzdvizena` (chyba `DENSITY`, i bez p87) – blok se postaví, jen bez vegetace.
+- **Výchozí hra beze změny:** `voda_e66` stejný JSON bez časů jako main 57c7dfb (d7aedf3a6d9d10e8, 63d7b89a91385a79),
+  `port_studie --check` 0 změn (studie i kopie upravené stejně, `port_manifest.json` přepočítaný).
+- **Doporučení:** zapnout pro masiv; přechod masiv → nížina řešit podhůřím ve funkci masivu (útlum F k `surf_ref` podle
+  vzdálenosti od okraje masivu, ne pás 2 m) nebo širším pásem jen pro tento šev; terasy vrátit jako detail ve světových
+  souřadnicích; virtuálního souseda kešovat.
+
+## E96 ostrov = jeden blok 128 m z funkce světa (plán, zapsáno před pokusem 2026-11-20 11:51; Jan 2026-11-20 11:48: „Začneme generovat už celý jeden blok 128m“ = ano k E92 otázce 1; větev `e96-blok128` z `e94-metry` 96f2310)
+- **Co už je hotové (neopakuju, beru):**
+  - **E90** `scripts/teren/lod90.gd` (z větve `e90-lod` beze změny): funkce světa `h_m(x, y)` v metrech (E49 natažená vodorovně,
+    reliéf kolem 20 m), LOD a sešití švů pro dlaždice 128 m.
+  - **E92** změřil blok 128 m z této funkce (sklon p50 17,5° při natažení × 8 a reliéfu × 3), vodu na něm neměřil.
+  - **E94** scéna v metrech, buňka 0,5 m, `jednotky.gd` (BS 16, BH 64), vegetace × 0,5.
+  - **E49** cesta blueprintu `base_hm` (povrch z hrubého světa, typ bloku řídí jen geologii) – tou půjde povrch z funkce do
+    stávající pipeline (vrstvy, minerály, dutiny, navázání na sousedy), takže geologie, voda (E68 orchestrátor, povrch + podzemí),
+    kopání, vegetace a kamera zůstanou stejné moduly.
+- **Návrh:** příznak `p96_blok128` (surface_params, výchozí vyp). Se zapnutým: ostrov = 16 × 16 herních bloků po 8 m (= 128 × 128 m,
+  256 × 256 sloupců po 0,5 m), každý blok z `lod90.h_m` vzorkovaného ve středech buněk (bez šablon, `detail` 0). Svět studie
+  (`ostrov_teren`) 18 × 18 slotů s posunem (1, 1) (prstenec mlhy / příkopu). Pořadí vložení po řádcích. Typ bloku (jen geologie):
+  hora / kopec / prohlubeň / louka podle průměru a rozpětí výšky. Kamera: střed na místě startu, zoom až na celý blok.
+  Postava (v ukázce) a domek na zemi u středu.
+- **Výška se nevejde:** sloupec je 64 buněk = 32 m (strop povrchu 61 buněk = 30,5 m). Funkce E90 s reliéfem × 3 má 7–50 m.
+  Proto pro E96 `p96_relief` 1 (= rozsah E49 14–30 m) a menší natažení `p96_natazeni` 4 (aby svahy nebyly jen 1/3 E92).
+  Dlaždice `p96_dlazdice` (7, 4) z průzkumu 16 × 16 dlaždic: rozpětí 14,2 m, sklon p50 9°, p95 28,5° (vzorky 4 m, sklon přes 1 m).
+- **Měřím:** čas generování (bloky, sítě, povrch, vegetace), plnou vodu (povrch + podzemí, části), kopání + lokální přepočet vody
+  (8 výkopů), paměť (statická Godot, RSS), trojúhelníky a draw calls (xvfb, opengl3, přehled a herní kamera); srovnání
+  s ostrovem START a odhadem E93 (střední telefon 1,6–1,9× pomaleji než box); kde to neškáluje, návrh optimalizace.
+- **Snímky** do `/workspace/willage-ideas/shots-e96/`: celý blok shora / izometricky, detail s postavou 1,75 m a domem 4 × 4 × 3 m,
+  detail vody / vodopádu, herní kamera.
+- **Výchozí hra beze změny:** `voda_e66` d7aedf3a6d9d10e8 → 63d7b89a91385a79, `port_studie --check` 0 změn.
+- **Negativa předem:** 256 bloků v GDScriptu (~220 ms / blok) → generování ~1 min na boxu. Plná voda na mřížce 288 × 288
+  bude řádově delší než 2,5 s. Každý blok je vlastní síť → stovky draw calls. Hora max 16 m nad nejnižším místem (strop sloupce).
+  E90 LOD použiju jen, když bez něj nepůjde vykreslit; jinak jen změřím a navrhnu.
+- **Bublina pro zkušební panel (`p96_blok128`):** „Blok 128 m (E96): ostrov je jeden velký blok 128 × 128 m z funkce světa
+  místo čtyř šablon 8 m. Buňka 0,5 m, vrstvy, voda, kopání a vegetace jako dnes. Načítání trvá déle (desítky sekund).
+  Změna se projeví až po novém spuštění hry.“
+
+### E96 výsledky (2026-11-20 13:01)
+- **Co funguje** (`--surface.p96_blok128=true`, výchozí vyp): ostrov 16 × 16 bloků = 128 × 128 m, 256 × 256 sloupců po 0,5 m,
+  povrch z `lod90.h_m` (natažení 4, reliéf 1, dlaždice (7, 4)). Výšky 16–30 m (32–60 buněk). Typy bloků (jen geologie):
+  louka 181, kopec 34, hora 35, prohlubeň 6. Vrstvy, minerály a dutiny jdou stávající pipeline (cesta `base_hm`), voda
+  `ostrov_voda` / E68 (povrch + podzemí), kopání `Digging`, vegetace, kamera (zoom až na celý blok). Start = nejrovnější okno
+  9 × 9 do 24 m od středu: domek (144, 162), postava (značka 1,75 m, hra postavu nemá) na zemi ve výšce 23 m, kamera na ní.
+  Rostliny v tůních a korytech se nevysadí (8 640 rostlin, jen s příznakem). **LOD přehledu** (E90 `lod90`): nad záběrem
+  `p96_lod_zaber` 64 m jedna síť sloupců 1 m bez vegetace (49 860 trojúhelníků, stavba 79–88 ms).
+- **Měření** (box, binárka editoru, llvmpipe; `shots/e96/*.json`, snímky `/workspace/willage-ideas/shots-e96/`):
+
+| | ostrov START (2 × 2 bloky) | blok 128 m | poměr |
+|---|---|---|---|
+| sloupců | 1 024 | 65 536 | 64× |
+| generování bloků | 0,9 s | 58–61 s (224 ms / blok, lineární) | 67× |
+| pole povrchu / kostky / duální povrch / vegetace | – | 7,3 / 8,4 / 2,8 / 9,6 s | |
+| plná voda (prameny / podzemí: pásma / povrch + podzemí) | 2,6 s | 49–53 s (0,3 / 15 / 33 s) | ~20× |
+| načtení celkem | ~4 s | 138–142 s | ~35× |
+| výkop ve hře (Digging + voda + přestavba) | 1,6 s | 27 / 31 / 35 / 41 s (roste) | 17–25× |
+| z toho podzemí / povrch (nástroj, 3 výkopy) | | 22–27 s / 0,2–4,9 s | |
+| RSS / Godot statická / video | 675 / 83 / 65 MB | 2 510 / 1 149 / 287 MB | 3,7× / 14× / 4,4× |
+| herní kamera 33 m: trojúhelníky / draw calls / snímek | 240 k / 178 / 115 ms | 5,16 M / 3 556 / 903 ms | 21× / 20× |
+| přehled celku bez LOD | 266 k / 175 / 142 ms | 9,8 M / 7 721 / 1 596 ms | |
+| přehled celku s LOD | – | 139 k / 35 / 64 ms | |
+| přehled bez vegetace / jen terén | 87 k / 46 | 4,27 M / 1 051 · 4,24 M / 1 048 | |
+| detail 16 m | 292 k / 175 | 2,86 M / 2 053 | |
+
+- **Voda na bloku:** 10 pramenů, koryto 360 sloupců, **tůně 14 719 sloupců (22 % plochy)**, 0 vodopádů uvnitř, 4 vodopády přes
+  okraj (20,2 l/s, nejvyšší 19 m), 1 podzemní těleso, 1 vývěr, 6 volání podzemí.
+- **Podzemní voda na celém bloku (jen měřeno, neřeším; E95 hlásí 1,5–3,8 min):** pásma při plném výpočtu 15 s, plný výpočet
+  povrch + podzemí 33 s. Po výkopu přepočet podzemí 22–27 s v jednom kuse: oprava I spadne na přesný přepočet (`fallback` 10,
+  `exact` 10) celého velkého volání; kroky R 0 (rozpočet se nepoužije). Vlastní měření je jiný běh než E95 (jiná mřížka).
+- **Telefon (odhad E93, střední třída 1,6–1,9× pomaleji než box):** načtení 3,7–4,5 min, plná voda 1,3–1,7 min, výkop 43–78 s.
+  Vykreslení: herní kamera 3 556 draw calls (doporučený strop OpenGL ES < 500 [77]) a 5,2 M trojúhelníků (telefon 0,2–1 M [78][79])
+  → nehratelné. Přehled s LOD (35 draw calls, 139 k) je v rozpočtu.
+- **Úzká místa a návrhy (bez přehánění):**
+  1. **Výkop 27–41 s:** podzemí (přesný přepočet velkého volání) + povrch přes obří tůně (okno až 33 066 sloupců). → asynchronně
+     (E95), velikost těles / tůní omezit po oblastech, výkop přepočítat jen v tělese, kterého se týká.
+  2. **Tůně 22 % plochy:** ploché kvantované louky (schod 0,5 m) dělají uzavřené prohlubně. → minimální hloubka tůně, nebo tůně jen
+     v pánvích funkce (E49 jezera).
+  3. **Vykreslení:** vegetace 57 % trojúhelníků a 86 % draw calls (MultiMesh po blocích a druzích). → vegetace po kouscích 32 m
+     (4 × 4 bloky) jedním MultiMesh na druh, drobné rostliny jen zblízka. Terén 256 bloků × 4 sítě → slučovat po 32 m. I detail
+     16 m kreslí 2 053 draw calls → nejspíš stíny celého ostrova; omezit vzdálenost stínů.
+  4. **Načtení 140 s:** lineární v počtu bloků. → nejdřív 3 × 3 bloky u startu (~2 s), zbytek ve vlákně na pozadí; uložit
+     vygenerovaná data místo generování při každém startu.
+  5. **Paměť 1,15 GB statické:** hlavně scéna (pole povrchu, sítě; logika bez scény jen 345 MB). → pole povrchu a sítě jen pro
+     viditelné kousky.
+- **Výchozí hra beze změny:** `voda_e66` d7aedf3a6d9d10e8 → 63d7b89a91385a79, 0 neshod; `port_studie --check` 82 souborů, 0 změn;
+  otisky E94 (buňky 631c754f…, sítě 3452e4cd…, odkrytí db706a1c…, vegetace 483dc33f…) stejné.
+- **Negativa:**
+  - Výška se do sloupce 32 m nevejde: reliéf funkce E90 × 3 (7–50 m) jsem musel snížit na × 1 (16–30 m) a natažení na × 4. Vrchol
+    hory je plošina 30 m (ořez E49). Skutečně vysoká hora potřebuje vyšší sloupec (BH 64 → 128), to je samostatná změna.
+  - Svahy jsou mírné (p50 9°, p95 28°, vzorky 4 m), vodopády uvnitř žádné; voda teče hlavně do tůní a přes okraj.
+  - Vrcholy hor jsou bílé (třída sníh z geologie hory) a v buňkách 0,5 m schodovité.
+  - Výkop se s dalšími výkopy zpomaluje (27 → 41 s), příčinu jsem nehledal.
+  - LOD přehledu: boky sloupců jsou tmavé (orientace trojúhelníků lod90 není sjednocená, kreslí se bez odstraňování odvrácených
+    stěn); přechod při 64 m je skokový (vegetace zmizí); po výkopu se přehled staví znovu při dalším oddálení (~80 ms).
+  - Modelový dům 4 × 4 × 3 m stojí těsně u domku hry. Tráva C a vegetace se po výkopu přestavují po blocích (beze změny).
+  - Všechna čísla vykreslení jsou z llvmpipe, telefon jen odhad.

@@ -1,0 +1,22 @@
+# Přemapování pásem krajiny id 57–74 (pořadí úrovně 41–63) na vrstvy 0–40.
+# Geologie V1 tato id jako vrstvy nepřiřazuje (1.7.1). Řádky v materialy_v1.csv zůstávají.
+# Odstranit je z tabulky úplně je otevřené (Jan).
+id_krajina,nazev,id_vrstva,nazev_vrstvy
+57,Zvětralé vyvřeliny,7,Diabaz / čedič
+58,Lesní půdy / flyš,51,Jílová břidlice
+59,Pískovcové věže a stěny,52,Křemenný pískovec
+60,Zvětralá žula vysočin,6,žula
+61,Horské hřebeny,6,žula
+62,Krystalické břidlice svahů,40,Svor
+63,Žulové masivy hřbetů,6,žula
+64,Strmé skalní stěny,6,žula
+65,Vysokohorské krystalinikum,34,Biotitická rula
+66,Subalpínské pásmo,3,Štěrk
+67,Alpínský stupeň,6,žula
+68,Vysokohorský granit,6,žula
+69,Vysokohorské kvarcity a břidlice,39,Krystalický kvarcit
+70,Extrémní hřebeny,6,žula
+71,Velehorský masiv,6,žula
+72,Skalní věže,6,žula
+73,Vrcholové pyramidy,6,žula
+74,Nejvyšší bod,6,žula

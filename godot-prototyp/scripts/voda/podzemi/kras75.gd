@@ -11,6 +11,7 @@ extends RefCounted
 ## Kopání / položení: postup se dopočítá do teď, odpočet pásem prokopaného sloupce se vynuluje.
 const VP = preload("res://scripts/teren/zaklad/voda_params.gd")
 const F = preload("res://scripts/voda/podzemi/ug_funkce.gd")
+const LI = preload("res://scripts/voda/litry.gd")   # E94: jeden tvar l → m³
 const CELL := 0.25
 const E := 1e-12
 
@@ -112,7 +113,7 @@ static func rates(c: Dictionary, bodies: Array, K: Dictionary) -> void:
 			var s := float(S.get(int(c.mat[b]), 0.0))
 			if s <= 0.0 or float(sg[1]) <= 0.0: continue
 			var f := exp(-float(sg[2]) / lam) - exp(-float(sg[3]) / lam)
-			rate[b] = float(rate.get(b, 0.0)) + float(sg[1]) * 0.001 * s * f * float(K.get("zr", 1.0))   # zr: herní zrychlení (1 = reálně)
+			rate[b] = float(rate.get(b, 0.0)) + float(sg[1]) / LI.L_NA_M3 * s * f * float(K.get("zr", 1.0))   # zr: herní zrychlení (1 = reálně)
 			ztop[b] = maxf(float(ztop.get(b, -INF)), float(sg[4]))
 			K.col[b] = int(c.bcol[b]); K.mat[b] = int(c.mat[b])
 	K.rate = rate; K.ztop = ztop

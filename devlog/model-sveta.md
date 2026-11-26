@@ -70,6 +70,8 @@ U průzkumného světa to znamená generovat deterministicky ze stejných funkc�
 
 Průzkumný svět (velký, po chunkách) a osobní ostrov (začíná na 4 blocích, nejvýš asi 16) sdílí stejnou geologii a vodu. Hráč přenese výřez s celou geologickou definicí, otočí ho, posune ho do výšky a připojí ho. Existující bloky se nemění, přizpůsobí se jen nový. Voda se nepřenáší hotová, po vložení se přepočítá v novém okolí. Otevřené body jsou v [`TODO.md`](../TODO.md).
 
+Pokus E87 (2026-11-20 06:52, větev `e87-jadro-hory`): vyzdvižená hora přes víc bloků se dnes rozpadne na samostatné vrcholy. Každý šev spadne na regionální základ 20 m a jádro z hluboké horniny se u okraje utne. Masiv jako funkce ve světových metrech to řeší. Dva bloky masivu se potkají bez opravy, protože si přes šev předávají jen odchylku od funkce, takže výsledek nezávisí na pořadí ani na rozlišení. Otevřený je přechod masivu do nížiny, kde dnešní pás dorovnání 2 m vytvoří stěnu.
+
 ## Zdroje
 
 - [Svět a měřítko](svet-a-meritko.md) (E49, E50)

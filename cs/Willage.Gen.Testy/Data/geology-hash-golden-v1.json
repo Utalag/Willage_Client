@@ -1,0 +1,19 @@
+{
+  "format": "willage-geology-hash-golden-v1",
+  "algorithm": "hashInt3",
+  "note": "Referenční vektory pro port hashInt3 (prototyp Willage_Client V1); seed je uint32 hex.",
+  "vectors": [
+    { "x": 0, "y": 0, "z": 0, "seed": "00000001", "hash": "4D234C08" },
+    { "x": 1, "y": 2, "z": 3, "seed": "0000601D", "hash": "E7E0506A" },
+    { "x": -1, "y": 5, "z": 9, "seed": "0000002A", "hash": "4F2C2C38" },
+    { "x": 100, "y": -200, "z": 7, "seed": "DEADBEEF", "hash": "D3835B03" },
+    { "x": 24605, "y": 0, "z": 0, "seed": "00000000", "hash": "CBF974C2" },
+    { "x": 17, "y": 19, "z": 23, "seed": "13572468", "hash": "5E0E7806" }
+  ],
+  "deriveVectors": [
+    { "seed": 99, "salt": 7, "hash": "4C95CAD5" }
+  ],
+  "hashStringVectors": [
+    { "text": "ev_sed_0001", "hash": "3E0E4409" }
+  ]
+}

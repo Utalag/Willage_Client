@@ -1,6 +1,7 @@
 extends RefCounted
 ## E60: optimalizovaná kopie tok.update a odtoků tůní (tok.gd se nemění). Výsledek musí být bit po bitu stejný (tools/alg60_tok.gd).
 const T = preload("res://scripts/voda/tok.gd")
+const LI = preload("res://scripts/voda/litry.gd")   # E94: jeden tvar l → m³
 static var PR := {}
 static var M0 := 0   # E60: počáteční okraj okna (0 = margin jako tok.gd); okno se samo zvětší, když okraj neodvádí
 static var KOLA := 4      # E68: nejvýš kol povrch ↔ podzemí v update (4 = dosavadní)
@@ -398,7 +399,7 @@ static func _ponds_refresh(st: Dictionary, dirty: PackedInt32Array, cm2: float, 
 	for key in soft:
 		if hard.has(key) or not st._pd.has(key): continue
 		var comp: PackedInt32Array = st._pd[key].cells
-		var x := _pond_dict_soft(st, comp, st._pd[key]) if FAST_POND else T._pond_dict(st, comp, cm2, um, false, 0.001)
+		var x := _pond_dict_soft(st, comp, st._pd[key]) if FAST_POND else T._pond_dict(st, comp, cm2, um, false, LI.L_NA_M3)
 		st._pd[key] = x
 		var wp: bool = not x["suchá"]
 		for c in comp: pw[c] = 1 if wp and st.fill[c] >= st.hm[c] + 0.1 else 0
@@ -426,7 +427,7 @@ static func _ponds_refresh(st: Dictionary, dirty: PackedInt32Array, cm2: float, 
 	for mn in mins:
 		var comp := T._pond_comp(st, mn, seen)
 		marked.append_array(comp)
-		var x := T._pond_dict(st, comp, cm2, um, false, 0.001)
+		var x := T._pond_dict(st, comp, cm2, um, false, LI.L_NA_M3)
 		st._pd[mn] = x; st._kd60 = true
 		for c in comp: pk[c] = mn
 		if not x["suchá"]:
@@ -443,7 +444,7 @@ static func drain(st: Dictionary, comp: PackedInt32Array) -> float:
 	return d
 
 ## události plnění po vrstvách: čas = objem vrstvy / (přítok − odtok); odtok ≥ přítok → nenaplní se (ponor), žádné události
-static func fill_events(st: Dictionary, comp: PackedInt32Array, lo: float, hi: float, q: float, dr: float, cell_m2: float, u_m: float, q_to_m3: float) -> Array:
+static func fill_events(st: Dictionary, comp: PackedInt32Array, lo: float, hi: float, q: float, dr: float, cell_m2: float, u_m: float, l_na_m3: float) -> Array:
 	var ev := []; var vol := 0.0; var t := 0.0; var lev := lo
 	var net := q - dr
 	while lev < hi - 0.01:   # hladina přelivu je o pár EPS (priority-flood) nad okrajem → zbytky < 0,01 U se slijí do poslední vrstvy
@@ -454,7 +455,7 @@ static func fill_events(st: Dictionary, comp: PackedInt32Array, lo: float, hi: f
 			if st.hm[i] < nl: area += 1
 		var dv := area * cell_m2 * (nl - lev) * u_m
 		vol += dv
-		t = (t + dv / (net * q_to_m3)) if net > 0.0 else -1.0
+		t = (t + dv / (net / l_na_m3)) if net > 0.0 else -1.0
 		ev.append({"hladina_m": (nl - lo) * u_m, "plocha_m2": area * cell_m2, "objem_m3": vol, "cas_s": t})
 		lev = nl
 	return ev

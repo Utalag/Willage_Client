@@ -1,0 +1,2048 @@
+{
+  "schemaVersion": 1,
+  "sourceNote": "Seeded from Utalag/Willage_Client sdilene/materialy_voda.json + horniny_voda.json; names/colors from poradi_hornin.json. materialy.csv není v repu – ekvivalent sdilene JSON.",
+  "permeabilityCanonicalUnit": "m/s",
+  "permeabilityConversion": {
+    "fromMillidarcy": "K_ms ≈ k_mD × 9.869233e-16 (voda 20 °C, 1 mD ≈ 9,87×10⁻¹³ m/s dle Darcy; geologie prototypu V1 používá mD)",
+    "prototypeNote": "Lovable V1 materials.ts permeability je v mD; backend drží K [m/s]."
+  },
+  "derivedFormulasVersion": "v0",
+  "derivedFormulas": {
+    "maxWaterPerCellSixteenthsLiter": "floor(porosityPermille/1000 * 1000) / 16  (buňka 0,25 m → 15,625 l objemu)",
+    "maxFlowPermille": "permeabilityGamePermille",
+    "erosionTimeSteps": "max(1, erosionResistancePermille / max(1, permeabilityGamePermille))"
+  },
+  "openTodoIds": {
+    "lava": "TODO – finální ID není přiřazeno",
+    "ash": "TODO – finální ID není přiřazeno",
+    "breccia": "TODO – finální ID není přiřazeno",
+    "openRange57to74": "ID 57–74 v katalogu mají idStatus todo_open_range – čeká na schválení Jana"
+  },
+  "materials": [
+    {
+      "id": 0,
+      "key": "map_ceiling",
+      "name": "Strop mapy, vzduch",
+      "idStatus": "active",
+      "geology": {
+        "densityKgPerM3": 2750,
+        "hardnessMohsLike": 7,
+        "porosityPermille": 1000,
+        "permeabilityMs": null,
+        "permeabilityGamePermille": 1000,
+        "erosionResistancePermille": 1000,
+        "specificYieldPermille": null,
+        "skupina": "krystal"
+      },
+      "visualProfiles": {
+        "default": {
+          "style": "neutral",
+          "baseColor": "#2f8bbf",
+          "grainScalePermille": 500,
+          "layerDensityPermille": 300,
+          "irregularityPermille": 200
+        }
+      },
+      "subMaterials": null,
+      "source": "materialy_voda.json"
+    },
+    {
+      "id": 1,
+      "key": "grass",
+      "name": "Tráva",
+      "idStatus": "active",
+      "geology": {
+        "densityKgPerM3": 1400,
+        "hardnessMohsLike": 1,
+        "porosityPermille": 450,
+        "permeabilityMs": "1e-5",
+        "permeabilityGamePermille": 667,
+        "erosionResistancePermille": 820,
+        "specificYieldPermille": 150,
+        "skupina": "drn"
+      },
+      "visualProfiles": {
+        "default": {
+          "style": "neutral",
+          "baseColor": "#808080",
+          "grainScalePermille": 500,
+          "layerDensityPermille": 300,
+          "irregularityPermille": 200
+        }
+      },
+      "subMaterials": null,
+      "source": "materialy_voda.json"
+    },
+    {
+      "id": 2,
+      "key": "topsoil",
+      "name": "Ornice, humus (= hlína gen-v3, tráva navrchu)",
+      "idStatus": "active",
+      "geology": {
+        "densityKgPerM3": 1600,
+        "hardnessMohsLike": 2,
+        "porosityPermille": 430,
+        "permeabilityMs": "3.7e-6",
+        "permeabilityGamePermille": 595,
+        "erosionResistancePermille": 952,
+        "specificYieldPermille": 150,
+        "skupina": "hlina"
+      },
+      "visualProfiles": {
+        "default": {
+          "style": "neutral",
+          "baseColor": "#a8805f",
+          "grainScalePermille": 500,
+          "layerDensityPermille": 300,
+          "irregularityPermille": 200
+        }
+      },
+      "subMaterials": null,
+      "source": "materialy_voda.json"
+    },
+    {
+      "id": 3,
+      "key": "gravel_sand",
+      "name": "Štěrk, hlinitopísčité sedimenty (= písek gen-v3)",
+      "idStatus": "active",
+      "geology": {
+        "densityKgPerM3": 1700,
+        "hardnessMohsLike": 2,
+        "porosityPermille": 350,
+        "permeabilityMs": "1e-4",
+        "permeabilityGamePermille": 833,
+        "erosionResistancePermille": 970,
+        "specificYieldPermille": 260,
+        "skupina": "pisek"
+      },
+      "visualProfiles": {
+        "default": {
+          "style": "neutral",
+          "baseColor": "#f2ef9d",
+          "grainScalePermille": 500,
+          "layerDensityPermille": 300,
+          "irregularityPermille": 200
+        }
+      },
+      "subMaterials": null,
+      "source": "materialy_voda.json"
+    },
+    {
+      "id": 4,
+      "key": "weathered_clay",
+      "name": "Zvětralá břidlice a jíly (= jíl gen-v3)",
+      "idStatus": "active",
+      "geology": {
+        "densityKgPerM3": 2000,
+        "hardnessMohsLike": 2,
+        "porosityPermille": 500,
+        "permeabilityMs": "1e-10",
+        "permeabilityGamePermille": 0,
+        "erosionResistancePermille": 856,
+        "specificYieldPermille": 20,
+        "skupina": "jil"
+      },
+      "visualProfiles": {
+        "default": {
+          "style": "neutral",
+          "baseColor": "#bfb762",
+          "grainScalePermille": 500,
+          "layerDensityPermille": 300,
+          "irregularityPermille": 200
+        }
+      },
+      "subMaterials": null,
+      "source": "materialy_voda.json"
+    },
+    {
+      "id": 5,
+      "key": "cave_limestone",
+      "name": "Masivní jeskynní vápenec (= vápenec gen-v3)",
+      "idStatus": "active",
+      "geology": {
+        "densityKgPerM3": 2700,
+        "hardnessMohsLike": 3,
+        "porosityPermille": 50,
+        "permeabilityMs": "3e-8",
+        "permeabilityGamePermille": 246,
+        "erosionResistancePermille": 520,
+        "specificYieldPermille": 20,
+        "skupina": "vapenec"
+      },
+      "visualProfiles": {
+        "default": {
+          "style": "neutral",
+          "baseColor": "#bf9749",
+          "grainScalePermille": 500,
+          "layerDensityPermille": 300,
+          "irregularityPermille": 200
+        }
+      },
+      "subMaterials": null,
+      "source": "materialy_voda.json"
+    },
+    {
+      "id": 6,
+      "key": "granite",
+      "name": "Masivní žula (= žula gen-v3)",
+      "idStatus": "active",
+      "geology": {
+        "densityKgPerM3": 2750,
+        "hardnessMohsLike": 7,
+        "porosityPermille": 10,
+        "permeabilityMs": "1e-12",
+        "permeabilityGamePermille": 0,
+        "erosionResistancePermille": 280,
+        "specificYieldPermille": 5,
+        "skupina": "krystal"
+      },
+      "visualProfiles": {
+        "default": {
+          "style": "neutral",
+          "baseColor": "#8c236e",
+          "grainScalePermille": 500,
+          "layerDensityPermille": 300,
+          "irregularityPermille": 200
+        }
+      },
+      "subMaterials": null,
+      "source": "materialy_voda.json"
+    },
+    {
+      "id": 7,
+      "key": "diabase",
+      "name": "Diabaz (= čedič gen-v3)",
+      "idStatus": "active",
+      "geology": {
+        "densityKgPerM3": 2900,
+        "hardnessMohsLike": 6,
+        "porosityPermille": 50,
+        "permeabilityMs": "1e-9",
+        "permeabilityGamePermille": 0,
+        "erosionResistancePermille": 280,
+        "specificYieldPermille": 20,
+        "skupina": "cedic"
+      },
+      "visualProfiles": {
+        "default": {
+          "style": "neutral",
+          "baseColor": "#249248",
+          "grainScalePermille": 500,
+          "layerDensityPermille": 300,
+          "irregularityPermille": 200
+        }
+      },
+      "subMaterials": null,
+      "source": "materialy_voda.json"
+    },
+    {
+      "id": 8,
+      "key": "copper",
+      "name": "Copper",
+      "idStatus": "active",
+      "geology": {
+        "densityKgPerM3": 2750,
+        "hardnessMohsLike": 7,
+        "porosityPermille": 10,
+        "permeabilityMs": "1e-12",
+        "permeabilityGamePermille": 0,
+        "erosionResistancePermille": 280,
+        "specificYieldPermille": 5,
+        "skupina": "krystal"
+      },
+      "visualProfiles": {
+        "default": {
+          "style": "neutral",
+          "baseColor": "#808080",
+          "grainScalePermille": 500,
+          "layerDensityPermille": 300,
+          "irregularityPermille": 200
+        }
+      },
+      "subMaterials": null,
+      "source": "materialy_voda.json"
+    },
+    {
+      "id": 9,
+      "key": "iron",
+      "name": "Iron",
+      "idStatus": "active",
+      "geology": {
+        "densityKgPerM3": 2750,
+        "hardnessMohsLike": 7,
+        "porosityPermille": 10,
+        "permeabilityMs": "1e-12",
+        "permeabilityGamePermille": 0,
+        "erosionResistancePermille": 280,
+        "specificYieldPermille": 5,
+        "skupina": "krystal"
+      },
+      "visualProfiles": {
+        "default": {
+          "style": "neutral",
+          "baseColor": "#808080",
+          "grainScalePermille": 500,
+          "layerDensityPermille": 300,
+          "irregularityPermille": 200
+        }
+      },
+      "subMaterials": null,
+      "source": "materialy_voda.json"
+    },
+    {
+      "id": 10,
+      "key": "eternal_snow",
+      "name": "Věčný sníh a led (= sníh gen-v3)",
+      "idStatus": "active",
+      "geology": {
+        "densityKgPerM3": 2750,
+        "hardnessMohsLike": 7,
+        "porosityPermille": 0,
+        "permeabilityMs": null,
+        "permeabilityGamePermille": 0,
+        "erosionResistancePermille": 940,
+        "specificYieldPermille": null,
+        "skupina": "krystal"
+      },
+      "visualProfiles": {
+        "default": {
+          "style": "neutral",
+          "baseColor": "#f4f8ff",
+          "grainScalePermille": 500,
+          "layerDensityPermille": 300,
+          "irregularityPermille": 200
+        }
+      },
+      "subMaterials": null,
+      "source": "materialy_voda.json"
+    },
+    {
+      "id": 12,
+      "key": "clay_deposit",
+      "name": "Clay Deposit",
+      "idStatus": "active",
+      "geology": {
+        "densityKgPerM3": 2000,
+        "hardnessMohsLike": 2,
+        "porosityPermille": 500,
+        "permeabilityMs": "1e-10",
+        "permeabilityGamePermille": 0,
+        "erosionResistancePermille": 856,
+        "specificYieldPermille": 20,
+        "skupina": "jil"
+      },
+      "visualProfiles": {
+        "default": {
+          "style": "neutral",
+          "baseColor": "#808080",
+          "grainScalePermille": 500,
+          "layerDensityPermille": 300,
+          "irregularityPermille": 200
+        }
+      },
+      "subMaterials": null,
+      "source": "materialy_voda.json"
+    },
+    {
+      "id": 20,
+      "key": "peridotite",
+      "name": "Peridotit / dunit",
+      "idStatus": "active",
+      "geology": {
+        "densityKgPerM3": 2750,
+        "hardnessMohsLike": 7,
+        "porosityPermille": 10,
+        "permeabilityMs": "1e-12",
+        "permeabilityGamePermille": 0,
+        "erosionResistancePermille": 280,
+        "specificYieldPermille": 5,
+        "skupina": "krystal"
+      },
+      "visualProfiles": {
+        "default": {
+          "style": "neutral",
+          "baseColor": "#53593a",
+          "grainScalePermille": 500,
+          "layerDensityPermille": 300,
+          "irregularityPermille": 200
+        }
+      },
+      "subMaterials": null,
+      "source": "horniny_voda.json"
+    },
+    {
+      "id": 21,
+      "key": "kimberlite",
+      "name": "Kimberlit (komíny)",
+      "idStatus": "active",
+      "geology": {
+        "densityKgPerM3": 2750,
+        "hardnessMohsLike": 7,
+        "porosityPermille": 10,
+        "permeabilityMs": "1e-12",
+        "permeabilityGamePermille": 0,
+        "erosionResistancePermille": 280,
+        "specificYieldPermille": 5,
+        "skupina": "krystal"
+      },
+      "visualProfiles": {
+        "default": {
+          "style": "neutral",
+          "baseColor": "#1f6f5c",
+          "grainScalePermille": 500,
+          "layerDensityPermille": 300,
+          "irregularityPermille": 200
+        }
+      },
+      "subMaterials": null,
+      "source": "horniny_voda.json"
+    },
+    {
+      "id": 22,
+      "key": "lherzolite",
+      "name": "Lherzolit, olivín",
+      "idStatus": "active",
+      "geology": {
+        "densityKgPerM3": 2750,
+        "hardnessMohsLike": 7,
+        "porosityPermille": 10,
+        "permeabilityMs": "1e-12",
+        "permeabilityGamePermille": 0,
+        "erosionResistancePermille": 280,
+        "specificYieldPermille": 5,
+        "skupina": "krystal"
+      },
+      "visualProfiles": {
+        "default": {
+          "style": "neutral",
+          "baseColor": "#55752d",
+          "grainScalePermille": 500,
+          "layerDensityPermille": 300,
+          "irregularityPermille": 200
+        }
+      },
+      "subMaterials": null,
+      "source": "horniny_voda.json"
+    },
+    {
+      "id": 23,
+      "key": "eclogite",
+      "name": "Eklogit",
+      "idStatus": "active",
+      "geology": {
+        "densityKgPerM3": 2750,
+        "hardnessMohsLike": 7,
+        "porosityPermille": 10,
+        "permeabilityMs": "1e-12",
+        "permeabilityGamePermille": 0,
+        "erosionResistancePermille": 280,
+        "specificYieldPermille": 5,
+        "skupina": "krystal"
+      },
+      "visualProfiles": {
+        "default": {
+          "style": "neutral",
+          "baseColor": "#93cc69",
+          "grainScalePermille": 500,
+          "layerDensityPermille": 300,
+          "irregularityPermille": 200
+        }
+      },
+      "subMaterials": null,
+      "source": "horniny_voda.json"
+    },
+    {
+      "id": 24,
+      "key": "pyroxenite",
+      "name": "Pyroxenit",
+      "idStatus": "active",
+      "geology": {
+        "densityKgPerM3": 2750,
+        "hardnessMohsLike": 7,
+        "porosityPermille": 10,
+        "permeabilityMs": "1e-12",
+        "permeabilityGamePermille": 0,
+        "erosionResistancePermille": 280,
+        "specificYieldPermille": 5,
+        "skupina": "krystal"
+      },
+      "visualProfiles": {
+        "default": {
+          "style": "neutral",
+          "baseColor": "#6e925f",
+          "grainScalePermille": 500,
+          "layerDensityPermille": 300,
+          "irregularityPermille": 200
+        }
+      },
+      "subMaterials": null,
+      "source": "horniny_voda.json"
+    },
+    {
+      "id": 25,
+      "key": "serpentinite",
+      "name": "Serpentinit (hadec)",
+      "idStatus": "active",
+      "geology": {
+        "densityKgPerM3": 2750,
+        "hardnessMohsLike": 7,
+        "porosityPermille": 10,
+        "permeabilityMs": "1e-12",
+        "permeabilityGamePermille": 0,
+        "erosionResistancePermille": 280,
+        "specificYieldPermille": 5,
+        "skupina": "krystal"
+      },
+      "visualProfiles": {
+        "default": {
+          "style": "neutral",
+          "baseColor": "#225916",
+          "grainScalePermille": 500,
+          "layerDensityPermille": 300,
+          "irregularityPermille": 200
+        }
+      },
+      "subMaterials": null,
+      "source": "horniny_voda.json"
+    },
+    {
+      "id": 26,
+      "key": "gabbro",
+      "name": "Gabro",
+      "idStatus": "active",
+      "geology": {
+        "densityKgPerM3": 2750,
+        "hardnessMohsLike": 7,
+        "porosityPermille": 10,
+        "permeabilityMs": "1e-12",
+        "permeabilityGamePermille": 0,
+        "erosionResistancePermille": 280,
+        "specificYieldPermille": 5,
+        "skupina": "krystal"
+      },
+      "visualProfiles": {
+        "default": {
+          "style": "neutral",
+          "baseColor": "#48af43",
+          "grainScalePermille": 500,
+          "layerDensityPermille": 300,
+          "irregularityPermille": 200
+        }
+      },
+      "subMaterials": null,
+      "source": "horniny_voda.json"
+    },
+    {
+      "id": 27,
+      "key": "norite",
+      "name": "Norit / anortozit",
+      "idStatus": "active",
+      "geology": {
+        "densityKgPerM3": 2750,
+        "hardnessMohsLike": 7,
+        "porosityPermille": 10,
+        "permeabilityMs": "1e-12",
+        "permeabilityGamePermille": 0,
+        "erosionResistancePermille": 280,
+        "specificYieldPermille": 5,
+        "skupina": "krystal"
+      },
+      "visualProfiles": {
+        "default": {
+          "style": "neutral",
+          "baseColor": "#3c7541",
+          "grainScalePermille": 500,
+          "layerDensityPermille": 300,
+          "irregularityPermille": 200
+        }
+      },
+      "subMaterials": null,
+      "source": "horniny_voda.json"
+    },
+    {
+      "id": 28,
+      "key": "fe_ti_zone",
+      "name": "Fe-Ti rudní zóna (magnetit)",
+      "idStatus": "active",
+      "geology": {
+        "densityKgPerM3": 2750,
+        "hardnessMohsLike": 7,
+        "porosityPermille": 10,
+        "permeabilityMs": "1e-12",
+        "permeabilityGamePermille": 0,
+        "erosionResistancePermille": 280,
+        "specificYieldPermille": 5,
+        "skupina": "krystal"
+      },
+      "visualProfiles": {
+        "default": {
+          "style": "neutral",
+          "baseColor": "#84cc92",
+          "grainScalePermille": 500,
+          "layerDensityPermille": 300,
+          "irregularityPermille": 200
+        }
+      },
+      "subMaterials": null,
+      "source": "horniny_voda.json"
+    },
+    {
+      "id": 29,
+      "key": "granulite",
+      "name": "Granulit",
+      "idStatus": "active",
+      "geology": {
+        "densityKgPerM3": 2750,
+        "hardnessMohsLike": 7,
+        "porosityPermille": 10,
+        "permeabilityMs": "1e-12",
+        "permeabilityGamePermille": 0,
+        "erosionResistancePermille": 280,
+        "specificYieldPermille": 5,
+        "skupina": "krystal"
+      },
+      "visualProfiles": {
+        "default": {
+          "style": "neutral",
+          "baseColor": "#22593a",
+          "grainScalePermille": 500,
+          "layerDensityPermille": 300,
+          "irregularityPermille": 200
+        }
+      },
+      "subMaterials": null,
+      "source": "horniny_voda.json"
+    },
+    {
+      "id": 30,
+      "key": "amphibolite",
+      "name": "Amfibolit",
+      "idStatus": "active",
+      "geology": {
+        "densityKgPerM3": 2750,
+        "hardnessMohsLike": 7,
+        "porosityPermille": 10,
+        "permeabilityMs": "1e-12",
+        "permeabilityGamePermille": 0,
+        "erosionResistancePermille": 280,
+        "specificYieldPermille": 5,
+        "skupina": "krystal"
+      },
+      "visualProfiles": {
+        "default": {
+          "style": "neutral",
+          "baseColor": "#5aaf8b",
+          "grainScalePermille": 500,
+          "layerDensityPermille": 300,
+          "irregularityPermille": 200
+        }
+      },
+      "subMaterials": null,
+      "source": "horniny_voda.json"
+    },
+    {
+      "id": 31,
+      "key": "lower_gneiss",
+      "name": "Spodní přechodová břidlice / rula",
+      "idStatus": "active",
+      "geology": {
+        "densityKgPerM3": 2750,
+        "hardnessMohsLike": 7,
+        "porosityPermille": 10,
+        "permeabilityMs": "1e-12",
+        "permeabilityGamePermille": 0,
+        "erosionResistancePermille": 280,
+        "specificYieldPermille": 5,
+        "skupina": "krystal"
+      },
+      "visualProfiles": {
+        "default": {
+          "style": "neutral",
+          "baseColor": "#4c7569",
+          "grainScalePermille": 500,
+          "layerDensityPermille": 300,
+          "irregularityPermille": 200
+        }
+      },
+      "subMaterials": null,
+      "source": "horniny_voda.json"
+    },
+    {
+      "id": 32,
+      "key": "migmatite",
+      "name": "Migmatit",
+      "idStatus": "active",
+      "geology": {
+        "densityKgPerM3": 2750,
+        "hardnessMohsLike": 7,
+        "porosityPermille": 10,
+        "permeabilityMs": "1e-12",
+        "permeabilityGamePermille": 0,
+        "erosionResistancePermille": 280,
+        "specificYieldPermille": 5,
+        "skupina": "krystal"
+      },
+      "visualProfiles": {
+        "default": {
+          "style": "neutral",
+          "baseColor": "#7c5b8c",
+          "grainScalePermille": 500,
+          "layerDensityPermille": 300,
+          "irregularityPermille": 200
+        }
+      },
+      "subMaterials": null,
+      "source": "horniny_voda.json"
+    },
+    {
+      "id": 33,
+      "key": "orthogneiss",
+      "name": "Ortorula",
+      "idStatus": "active",
+      "geology": {
+        "densityKgPerM3": 2750,
+        "hardnessMohsLike": 7,
+        "porosityPermille": 10,
+        "permeabilityMs": "1e-12",
+        "permeabilityGamePermille": 0,
+        "erosionResistancePermille": 280,
+        "specificYieldPermille": 5,
+        "skupina": "krystal"
+      },
+      "visualProfiles": {
+        "default": {
+          "style": "neutral",
+          "baseColor": "#a22fbf",
+          "grainScalePermille": 500,
+          "layerDensityPermille": 300,
+          "irregularityPermille": 200
+        }
+      },
+      "subMaterials": null,
+      "source": "horniny_voda.json"
+    },
+    {
+      "id": 34,
+      "key": "biotite_gneiss",
+      "name": "Biotitická rula",
+      "idStatus": "active",
+      "geology": {
+        "densityKgPerM3": 2750,
+        "hardnessMohsLike": 7,
+        "porosityPermille": 10,
+        "permeabilityMs": "1e-12",
+        "permeabilityGamePermille": 0,
+        "erosionResistancePermille": 280,
+        "specificYieldPermille": 5,
+        "skupina": "krystal"
+      },
+      "visualProfiles": {
+        "default": {
+          "style": "neutral",
+          "baseColor": "#e65cf2",
+          "grainScalePermille": 500,
+          "layerDensityPermille": 300,
+          "irregularityPermille": 200
+        }
+      },
+      "subMaterials": null,
+      "source": "horniny_voda.json"
+    },
+    {
+      "id": 35,
+      "key": "two_mica_gneiss",
+      "name": "Dvojslídná rula",
+      "idStatus": "active",
+      "geology": {
+        "densityKgPerM3": 2750,
+        "hardnessMohsLike": 7,
+        "porosityPermille": 10,
+        "permeabilityMs": "1e-12",
+        "permeabilityGamePermille": 0,
+        "erosionResistancePermille": 280,
+        "specificYieldPermille": 5,
+        "skupina": "krystal"
+      },
+      "visualProfiles": {
+        "default": {
+          "style": "neutral",
+          "baseColor": "#a555a2",
+          "grainScalePermille": 500,
+          "layerDensityPermille": 300,
+          "irregularityPermille": 200
+        }
+      },
+      "subMaterials": null,
+      "source": "horniny_voda.json"
+    },
+    {
+      "id": 36,
+      "key": "granodiorite",
+      "name": "Granodiorit",
+      "idStatus": "active",
+      "geology": {
+        "densityKgPerM3": 2750,
+        "hardnessMohsLike": 7,
+        "porosityPermille": 10,
+        "permeabilityMs": "1e-12",
+        "permeabilityGamePermille": 0,
+        "erosionResistancePermille": 280,
+        "specificYieldPermille": 5,
+        "skupina": "krystal"
+      },
+      "visualProfiles": {
+        "default": {
+          "style": "neutral",
+          "baseColor": "#d88ccc",
+          "grainScalePermille": 500,
+          "layerDensityPermille": 300,
+          "irregularityPermille": 200
+        }
+      },
+      "subMaterials": null,
+      "source": "horniny_voda.json"
+    },
+    {
+      "id": 37,
+      "key": "leucogranite",
+      "name": "Světlá granitoidní žula",
+      "idStatus": "active",
+      "geology": {
+        "densityKgPerM3": 2750,
+        "hardnessMohsLike": 7,
+        "porosityPermille": 10,
+        "permeabilityMs": "1e-12",
+        "permeabilityGamePermille": 0,
+        "erosionResistancePermille": 280,
+        "specificYieldPermille": 5,
+        "skupina": "krystal"
+      },
+      "visualProfiles": {
+        "default": {
+          "style": "neutral",
+          "baseColor": "#bf4990",
+          "grainScalePermille": 500,
+          "layerDensityPermille": 300,
+          "irregularityPermille": 200
+        }
+      },
+      "subMaterials": null,
+      "source": "horniny_voda.json"
+    },
+    {
+      "id": 38,
+      "key": "pegmatite",
+      "name": "Pegmatitové žíly",
+      "idStatus": "active",
+      "geology": {
+        "densityKgPerM3": 2750,
+        "hardnessMohsLike": 7,
+        "porosityPermille": 10,
+        "permeabilityMs": "1e-12",
+        "permeabilityGamePermille": 0,
+        "erosionResistancePermille": 280,
+        "specificYieldPermille": 5,
+        "skupina": "krystal"
+      },
+      "visualProfiles": {
+        "default": {
+          "style": "neutral",
+          "baseColor": "#ff8fd0",
+          "grainScalePermille": 500,
+          "layerDensityPermille": 300,
+          "irregularityPermille": 200
+        }
+      },
+      "subMaterials": null,
+      "source": "horniny_voda.json"
+    },
+    {
+      "id": 39,
+      "key": "quartzite",
+      "name": "Krystalický kvarcit",
+      "idStatus": "active",
+      "geology": {
+        "densityKgPerM3": 2750,
+        "hardnessMohsLike": 7,
+        "porosityPermille": 10,
+        "permeabilityMs": "1e-12",
+        "permeabilityGamePermille": 0,
+        "erosionResistancePermille": 280,
+        "specificYieldPermille": 5,
+        "skupina": "krystal"
+      },
+      "visualProfiles": {
+        "default": {
+          "style": "neutral",
+          "baseColor": "#a56b80",
+          "grainScalePermille": 500,
+          "layerDensityPermille": 300,
+          "irregularityPermille": 200
+        }
+      },
+      "subMaterials": null,
+      "source": "horniny_voda.json"
+    },
+    {
+      "id": 40,
+      "key": "mica_schist",
+      "name": "Svor (granáty, slídy)",
+      "idStatus": "active",
+      "geology": {
+        "densityKgPerM3": 2500,
+        "hardnessMohsLike": 3,
+        "porosityPermille": 50,
+        "permeabilityMs": "1e-11",
+        "permeabilityGamePermille": 0,
+        "erosionResistancePermille": 760,
+        "specificYieldPermille": 10,
+        "skupina": "bridlice"
+      },
+      "visualProfiles": {
+        "default": {
+          "style": "neutral",
+          "baseColor": "#d8365d",
+          "grainScalePermille": 500,
+          "layerDensityPermille": 300,
+          "irregularityPermille": 200
+        }
+      },
+      "subMaterials": null,
+      "source": "horniny_voda.json"
+    },
+    {
+      "id": 41,
+      "key": "phyllite",
+      "name": "Fylit",
+      "idStatus": "active",
+      "geology": {
+        "densityKgPerM3": 2500,
+        "hardnessMohsLike": 3,
+        "porosityPermille": 50,
+        "permeabilityMs": "1e-11",
+        "permeabilityGamePermille": 0,
+        "erosionResistancePermille": 760,
+        "specificYieldPermille": 10,
+        "skupina": "bridlice"
+      },
+      "visualProfiles": {
+        "default": {
+          "style": "neutral",
+          "baseColor": "#8c3540",
+          "grainScalePermille": 500,
+          "layerDensityPermille": 300,
+          "irregularityPermille": 200
+        }
+      },
+      "subMaterials": null,
+      "source": "horniny_voda.json"
+    },
+    {
+      "id": 42,
+      "key": "skarn",
+      "name": "Skarn (kontakt)",
+      "idStatus": "active",
+      "geology": {
+        "densityKgPerM3": 2750,
+        "hardnessMohsLike": 7,
+        "porosityPermille": 10,
+        "permeabilityMs": "1e-12",
+        "permeabilityGamePermille": 0,
+        "erosionResistancePermille": 280,
+        "specificYieldPermille": 5,
+        "skupina": "krystal"
+      },
+      "visualProfiles": {
+        "default": {
+          "style": "neutral",
+          "baseColor": "#7d3fa0",
+          "grainScalePermille": 500,
+          "layerDensityPermille": 300,
+          "irregularityPermille": 200
+        }
+      },
+      "subMaterials": null,
+      "source": "horniny_voda.json"
+    },
+    {
+      "id": 43,
+      "key": "crystalline_transition",
+      "name": "Přechodová zóna krystalinika",
+      "idStatus": "active",
+      "geology": {
+        "densityKgPerM3": 2750,
+        "hardnessMohsLike": 7,
+        "porosityPermille": 10,
+        "permeabilityMs": "1e-12",
+        "permeabilityGamePermille": 0,
+        "erosionResistancePermille": 280,
+        "specificYieldPermille": 5,
+        "skupina": "krystal"
+      },
+      "visualProfiles": {
+        "default": {
+          "style": "neutral",
+          "baseColor": "#f2a79d",
+          "grainScalePermille": 500,
+          "layerDensityPermille": 300,
+          "irregularityPermille": 200
+        }
+      },
+      "subMaterials": null,
+      "source": "horniny_voda.json"
+    },
+    {
+      "id": 44,
+      "key": "deep_limestone",
+      "name": "Hlubinný vápenec / křída",
+      "idStatus": "active",
+      "geology": {
+        "densityKgPerM3": 2700,
+        "hardnessMohsLike": 3,
+        "porosityPermille": 50,
+        "permeabilityMs": "3e-8",
+        "permeabilityGamePermille": 246,
+        "erosionResistancePermille": 520,
+        "specificYieldPermille": 20,
+        "skupina": "vapenec"
+      },
+      "visualProfiles": {
+        "default": {
+          "style": "neutral",
+          "baseColor": "#8c6c5b",
+          "grainScalePermille": 500,
+          "layerDensityPermille": 300,
+          "irregularityPermille": 200
+        }
+      },
+      "subMaterials": null,
+      "source": "horniny_voda.json"
+    },
+    {
+      "id": 45,
+      "key": "siltstone",
+      "name": "Prachovec",
+      "idStatus": "active",
+      "geology": {
+        "densityKgPerM3": 2100,
+        "hardnessMohsLike": 3,
+        "porosityPermille": 150,
+        "permeabilityMs": "1e-9",
+        "permeabilityGamePermille": 0,
+        "erosionResistancePermille": 820,
+        "specificYieldPermille": 30,
+        "skupina": "prachovec"
+      },
+      "visualProfiles": {
+        "default": {
+          "style": "neutral",
+          "baseColor": "#bf6a2f",
+          "grainScalePermille": 500,
+          "layerDensityPermille": 300,
+          "irregularityPermille": 200
+        }
+      },
+      "subMaterials": null,
+      "source": "horniny_voda.json"
+    },
+    {
+      "id": 46,
+      "key": "conglomerate",
+      "name": "Slepenec",
+      "idStatus": "active",
+      "geology": {
+        "densityKgPerM3": 2450,
+        "hardnessMohsLike": 6,
+        "porosityPermille": 200,
+        "permeabilityMs": "1e-6",
+        "permeabilityGamePermille": 500,
+        "erosionResistancePermille": 760,
+        "specificYieldPermille": 100,
+        "skupina": "slepenec"
+      },
+      "visualProfiles": {
+        "default": {
+          "style": "neutral",
+          "baseColor": "#f2a15c",
+          "grainScalePermille": 500,
+          "layerDensityPermille": 300,
+          "irregularityPermille": 200
+        }
+      },
+      "subMaterials": null,
+      "source": "horniny_voda.json"
+    },
+    {
+      "id": 47,
+      "key": "rock_salt",
+      "name": "Kamenná sůl (dómy)",
+      "idStatus": "active",
+      "geology": {
+        "densityKgPerM3": 2160,
+        "hardnessMohsLike": 2,
+        "porosityPermille": 10,
+        "permeabilityMs": "1e-13",
+        "permeabilityGamePermille": 0,
+        "erosionResistancePermille": 880,
+        "specificYieldPermille": 5,
+        "skupina": "evaporit"
+      },
+      "visualProfiles": {
+        "default": {
+          "style": "neutral",
+          "baseColor": "#f7f2ee",
+          "grainScalePermille": 500,
+          "layerDensityPermille": 300,
+          "irregularityPermille": 200
+        }
+      },
+      "subMaterials": null,
+      "source": "horniny_voda.json"
+    },
+    {
+      "id": 48,
+      "key": "gypsum",
+      "name": "Sádrovec, anhydrit",
+      "idStatus": "active",
+      "geology": {
+        "densityKgPerM3": 2300,
+        "hardnessMohsLike": 2,
+        "porosityPermille": 10,
+        "permeabilityMs": "1e-13",
+        "permeabilityGamePermille": 0,
+        "erosionResistancePermille": 880,
+        "specificYieldPermille": 5,
+        "skupina": "evaporit"
+      },
+      "visualProfiles": {
+        "default": {
+          "style": "neutral",
+          "baseColor": "#d8b78c",
+          "grainScalePermille": 500,
+          "layerDensityPermille": 300,
+          "irregularityPermille": 200
+        }
+      },
+      "subMaterials": null,
+      "source": "horniny_voda.json"
+    },
+    {
+      "id": 49,
+      "key": "dolomite",
+      "name": "Dolomit",
+      "idStatus": "active",
+      "geology": {
+        "densityKgPerM3": 2850,
+        "hardnessMohsLike": 3,
+        "porosityPermille": 50,
+        "permeabilityMs": "3e-8",
+        "permeabilityGamePermille": 246,
+        "erosionResistancePermille": 520,
+        "specificYieldPermille": 20,
+        "skupina": "vapenec"
+      },
+      "visualProfiles": {
+        "default": {
+          "style": "neutral",
+          "baseColor": "#8c6323",
+          "grainScalePermille": 500,
+          "layerDensityPermille": 300,
+          "irregularityPermille": 200
+        }
+      },
+      "subMaterials": null,
+      "source": "horniny_voda.json"
+    },
+    {
+      "id": 50,
+      "key": "black_coal",
+      "name": "Černé uhlí (sloj)",
+      "idStatus": "active",
+      "geology": {
+        "densityKgPerM3": 1400,
+        "hardnessMohsLike": 2,
+        "porosityPermille": 80,
+        "permeabilityMs": "1e-7",
+        "permeabilityGamePermille": 333,
+        "erosionResistancePermille": 820,
+        "specificYieldPermille": 30,
+        "skupina": "uhli"
+      },
+      "visualProfiles": {
+        "default": {
+          "style": "neutral",
+          "baseColor": "#f2d07d",
+          "grainScalePermille": 500,
+          "layerDensityPermille": 300,
+          "irregularityPermille": 200
+        }
+      },
+      "subMaterials": null,
+      "source": "horniny_voda.json"
+    },
+    {
+      "id": 51,
+      "key": "shale",
+      "name": "Jílová břidlice",
+      "idStatus": "active",
+      "geology": {
+        "densityKgPerM3": 2500,
+        "hardnessMohsLike": 3,
+        "porosityPermille": 50,
+        "permeabilityMs": "1e-11",
+        "permeabilityGamePermille": 0,
+        "erosionResistancePermille": 760,
+        "specificYieldPermille": 10,
+        "skupina": "bridlice"
+      },
+      "visualProfiles": {
+        "default": {
+          "style": "neutral",
+          "baseColor": "#a5986b",
+          "grainScalePermille": 500,
+          "layerDensityPermille": 300,
+          "irregularityPermille": 200
+        }
+      },
+      "subMaterials": null,
+      "source": "horniny_voda.json"
+    },
+    {
+      "id": 52,
+      "key": "quartz_sandstone",
+      "name": "Křemenný pískovec",
+      "idStatus": "active",
+      "geology": {
+        "densityKgPerM3": 2300,
+        "hardnessMohsLike": 6,
+        "porosityPermille": 200,
+        "permeabilityMs": "1e-7",
+        "permeabilityGamePermille": 333,
+        "erosionResistancePermille": 760,
+        "specificYieldPermille": 100,
+        "skupina": "piskovec"
+      },
+      "visualProfiles": {
+        "default": {
+          "style": "neutral",
+          "baseColor": "#d8ba36",
+          "grainScalePermille": 500,
+          "layerDensityPermille": 300,
+          "irregularityPermille": 200
+        }
+      },
+      "subMaterials": null,
+      "source": "horniny_voda.json"
+    },
+    {
+      "id": 54,
+      "key": "loess",
+      "name": "Spraš a zvětraliny",
+      "idStatus": "active",
+      "geology": {
+        "densityKgPerM3": 1500,
+        "hardnessMohsLike": 2,
+        "porosityPermille": 450,
+        "permeabilityMs": "1e-7",
+        "permeabilityGamePermille": 333,
+        "erosionResistancePermille": 964,
+        "specificYieldPermille": 80,
+        "skupina": "spras"
+      },
+      "visualProfiles": {
+        "default": {
+          "style": "neutral",
+          "baseColor": "#a3a529",
+          "grainScalePermille": 500,
+          "layerDensityPermille": 300,
+          "irregularityPermille": 200
+        }
+      },
+      "subMaterials": null,
+      "source": "horniny_voda.json"
+    },
+    {
+      "id": 55,
+      "key": "hill_sand",
+      "name": "Písčité podloží pahorků",
+      "idStatus": "active",
+      "geology": {
+        "densityKgPerM3": 1700,
+        "hardnessMohsLike": 2,
+        "porosityPermille": 350,
+        "permeabilityMs": "1e-4",
+        "permeabilityGamePermille": 833,
+        "erosionResistancePermille": 970,
+        "specificYieldPermille": 260,
+        "skupina": "pisek"
+      },
+      "visualProfiles": {
+        "default": {
+          "style": "neutral",
+          "baseColor": "#6b6562",
+          "grainScalePermille": 500,
+          "layerDensityPermille": 300,
+          "irregularityPermille": 200
+        }
+      },
+      "subMaterials": null,
+      "source": "horniny_voda.json"
+    },
+    {
+      "id": 56,
+      "key": "limestone_outcrop",
+      "name": "Vápencové výchozy",
+      "idStatus": "active",
+      "geology": {
+        "densityKgPerM3": 2700,
+        "hardnessMohsLike": 3,
+        "porosityPermille": 50,
+        "permeabilityMs": "3e-8",
+        "permeabilityGamePermille": 246,
+        "erosionResistancePermille": 520,
+        "specificYieldPermille": 20,
+        "skupina": "vapenec"
+      },
+      "visualProfiles": {
+        "default": {
+          "style": "neutral",
+          "baseColor": "#826a5b",
+          "grainScalePermille": 500,
+          "layerDensityPermille": 300,
+          "irregularityPermille": 200
+        }
+      },
+      "subMaterials": null,
+      "source": "horniny_voda.json"
+    },
+    {
+      "id": 57,
+      "key": "weathered_volcanic",
+      "name": "Zvětralé vyvřeliny",
+      "idStatus": "todo_open_range",
+      "geology": {
+        "densityKgPerM3": 2200,
+        "hardnessMohsLike": 4,
+        "porosityPermille": 250,
+        "permeabilityMs": "1e-5",
+        "permeabilityGamePermille": 667,
+        "erosionResistancePermille": 760,
+        "specificYieldPermille": 100,
+        "skupina": "vulk_zvetr"
+      },
+      "visualProfiles": {
+        "default": {
+          "style": "neutral",
+          "baseColor": "#5b4744",
+          "grainScalePermille": 500,
+          "layerDensityPermille": 300,
+          "irregularityPermille": 200
+        }
+      },
+      "subMaterials": null,
+      "source": "horniny_voda.json"
+    },
+    {
+      "id": 58,
+      "key": "flysch",
+      "name": "Lesní půdy, flyš",
+      "idStatus": "todo_open_range",
+      "geology": {
+        "densityKgPerM3": 2100,
+        "hardnessMohsLike": 3,
+        "porosityPermille": 150,
+        "permeabilityMs": "1e-9",
+        "permeabilityGamePermille": 0,
+        "erosionResistancePermille": 820,
+        "specificYieldPermille": 30,
+        "skupina": "prachovec"
+      },
+      "visualProfiles": {
+        "default": {
+          "style": "neutral",
+          "baseColor": "#afa094",
+          "grainScalePermille": 500,
+          "layerDensityPermille": 300,
+          "irregularityPermille": 200
+        }
+      },
+      "subMaterials": null,
+      "source": "horniny_voda.json"
+    },
+    {
+      "id": 59,
+      "key": "sandstone_towers",
+      "name": "Pískovcové věže a stěny",
+      "idStatus": "todo_open_range",
+      "geology": {
+        "densityKgPerM3": 2300,
+        "hardnessMohsLike": 6,
+        "porosityPermille": 200,
+        "permeabilityMs": "1e-7",
+        "permeabilityGamePermille": 333,
+        "erosionResistancePermille": 760,
+        "specificYieldPermille": 100,
+        "skupina": "piskovec"
+      },
+      "visualProfiles": {
+        "default": {
+          "style": "neutral",
+          "baseColor": "#c6beb6",
+          "grainScalePermille": 500,
+          "layerDensityPermille": 300,
+          "irregularityPermille": 200
+        }
+      },
+      "subMaterials": null,
+      "source": "horniny_voda.json"
+    },
+    {
+      "id": 60,
+      "key": "weathered_granite",
+      "name": "Zvětralá žula vysočin",
+      "idStatus": "todo_open_range",
+      "geology": {
+        "densityKgPerM3": 2600,
+        "hardnessMohsLike": 5,
+        "porosityPermille": 50,
+        "permeabilityMs": "1e-6",
+        "permeabilityGamePermille": 500,
+        "erosionResistancePermille": 640,
+        "specificYieldPermille": 20,
+        "skupina": "krystal_pukl"
+      },
+      "visualProfiles": {
+        "default": {
+          "style": "neutral",
+          "baseColor": "#ddbb9b",
+          "grainScalePermille": 500,
+          "layerDensityPermille": 300,
+          "irregularityPermille": 200
+        }
+      },
+      "subMaterials": null,
+      "source": "horniny_voda.json"
+    },
+    {
+      "id": 61,
+      "key": "mountain_ridge",
+      "name": "Horské hřebeny (Šumava/Krkonoše)",
+      "idStatus": "todo_open_range",
+      "geology": {
+        "densityKgPerM3": 2750,
+        "hardnessMohsLike": 7,
+        "porosityPermille": 10,
+        "permeabilityMs": "1e-12",
+        "permeabilityGamePermille": 0,
+        "erosionResistancePermille": 280,
+        "specificYieldPermille": 5,
+        "skupina": "krystal"
+      },
+      "visualProfiles": {
+        "default": {
+          "style": "neutral",
+          "baseColor": "#6b5f52",
+          "grainScalePermille": 500,
+          "layerDensityPermille": 300,
+          "irregularityPermille": 200
+        }
+      },
+      "subMaterials": null,
+      "source": "horniny_voda.json"
+    },
+    {
+      "id": 62,
+      "key": "slope_schist",
+      "name": "Krystalické břidlice svahů",
+      "idStatus": "todo_open_range",
+      "geology": {
+        "densityKgPerM3": 2500,
+        "hardnessMohsLike": 3,
+        "porosityPermille": 50,
+        "permeabilityMs": "1e-11",
+        "permeabilityGamePermille": 0,
+        "erosionResistancePermille": 760,
+        "specificYieldPermille": 10,
+        "skupina": "bridlice"
+      },
+      "visualProfiles": {
+        "default": {
+          "style": "neutral",
+          "baseColor": "#82786e",
+          "grainScalePermille": 500,
+          "layerDensityPermille": 300,
+          "irregularityPermille": 200
+        }
+      },
+      "subMaterials": null,
+      "source": "horniny_voda.json"
+    },
+    {
+      "id": 63,
+      "key": "granite_massif",
+      "name": "Žulové masivy hřbetů",
+      "idStatus": "todo_open_range",
+      "geology": {
+        "densityKgPerM3": 2750,
+        "hardnessMohsLike": 7,
+        "porosityPermille": 10,
+        "permeabilityMs": "1e-12",
+        "permeabilityGamePermille": 0,
+        "erosionResistancePermille": 280,
+        "specificYieldPermille": 5,
+        "skupina": "krystal"
+      },
+      "visualProfiles": {
+        "default": {
+          "style": "neutral",
+          "baseColor": "#99938c",
+          "grainScalePermille": 500,
+          "layerDensityPermille": 300,
+          "irregularityPermille": 200
+        }
+      },
+      "subMaterials": null,
+      "source": "horniny_voda.json"
+    },
+    {
+      "id": 64,
+      "key": "rock_wall",
+      "name": "Strmé skalní stěny",
+      "idStatus": "todo_open_range",
+      "geology": {
+        "densityKgPerM3": 2750,
+        "hardnessMohsLike": 7,
+        "porosityPermille": 10,
+        "permeabilityMs": "1e-12",
+        "permeabilityGamePermille": 0,
+        "erosionResistancePermille": 280,
+        "specificYieldPermille": 5,
+        "skupina": "krystal"
+      },
+      "visualProfiles": {
+        "default": {
+          "style": "neutral",
+          "baseColor": "#af997b",
+          "grainScalePermille": 500,
+          "layerDensityPermille": 300,
+          "irregularityPermille": 200
+        }
+      },
+      "subMaterials": null,
+      "source": "horniny_voda.json"
+    },
+    {
+      "id": 65,
+      "key": "alpine_crystalline",
+      "name": "Vysokohorské krystalinikum",
+      "idStatus": "todo_open_range",
+      "geology": {
+        "densityKgPerM3": 2750,
+        "hardnessMohsLike": 7,
+        "porosityPermille": 10,
+        "permeabilityMs": "1e-12",
+        "permeabilityGamePermille": 0,
+        "erosionResistancePermille": 280,
+        "specificYieldPermille": 5,
+        "skupina": "krystal"
+      },
+      "visualProfiles": {
+        "default": {
+          "style": "neutral",
+          "baseColor": "#c6b499",
+          "grainScalePermille": 500,
+          "layerDensityPermille": 300,
+          "irregularityPermille": 200
+        }
+      },
+      "subMaterials": null,
+      "source": "horniny_voda.json"
+    },
+    {
+      "id": 66,
+      "key": "subalpine_scree",
+      "name": "Subalpínské pásmo (skály, sutě)",
+      "idStatus": "todo_open_range",
+      "geology": {
+        "densityKgPerM3": 1900,
+        "hardnessMohsLike": 3,
+        "porosityPermille": 300,
+        "permeabilityMs": "1e-2",
+        "permeabilityGamePermille": 1000,
+        "erosionResistancePermille": 856,
+        "specificYieldPermille": 220,
+        "skupina": "sterk"
+      },
+      "visualProfiles": {
+        "default": {
+          "style": "neutral",
+          "baseColor": "#ddd1bb",
+          "grainScalePermille": 500,
+          "layerDensityPermille": 300,
+          "irregularityPermille": 200
+        }
+      },
+      "subMaterials": null,
+      "source": "horniny_voda.json"
+    },
+    {
+      "id": 67,
+      "key": "alpine_belt",
+      "name": "Alpínský stupeň",
+      "idStatus": "todo_open_range",
+      "geology": {
+        "densityKgPerM3": 2750,
+        "hardnessMohsLike": 7,
+        "porosityPermille": 10,
+        "permeabilityMs": "1e-12",
+        "permeabilityGamePermille": 0,
+        "erosionResistancePermille": 280,
+        "specificYieldPermille": 5,
+        "skupina": "krystal"
+      },
+      "visualProfiles": {
+        "default": {
+          "style": "neutral",
+          "baseColor": "#6b6862",
+          "grainScalePermille": 500,
+          "layerDensityPermille": 300,
+          "irregularityPermille": 200
+        }
+      },
+      "subMaterials": null,
+      "source": "horniny_voda.json"
+    },
+    {
+      "id": 68,
+      "key": "alpine_granite",
+      "name": "Vysokohorský granit",
+      "idStatus": "todo_open_range",
+      "geology": {
+        "densityKgPerM3": 2750,
+        "hardnessMohsLike": 7,
+        "porosityPermille": 10,
+        "permeabilityMs": "1e-12",
+        "permeabilityGamePermille": 0,
+        "erosionResistancePermille": 280,
+        "specificYieldPermille": 5,
+        "skupina": "krystal"
+      },
+      "visualProfiles": {
+        "default": {
+          "style": "neutral",
+          "baseColor": "#82755b",
+          "grainScalePermille": 500,
+          "layerDensityPermille": 300,
+          "irregularityPermille": 200
+        }
+      },
+      "subMaterials": null,
+      "source": "horniny_voda.json"
+    },
+    {
+      "id": 69,
+      "key": "alpine_quartzite",
+      "name": "Vysokohorské kvarcity a břidlice",
+      "idStatus": "todo_open_range",
+      "geology": {
+        "densityKgPerM3": 2750,
+        "hardnessMohsLike": 7,
+        "porosityPermille": 10,
+        "permeabilityMs": "1e-12",
+        "permeabilityGamePermille": 0,
+        "erosionResistancePermille": 280,
+        "specificYieldPermille": 5,
+        "skupina": "krystal"
+      },
+      "visualProfiles": {
+        "default": {
+          "style": "neutral",
+          "baseColor": "#998e76",
+          "grainScalePermille": 500,
+          "layerDensityPermille": 300,
+          "irregularityPermille": 200
+        }
+      },
+      "subMaterials": null,
+      "source": "horniny_voda.json"
+    },
+    {
+      "id": 70,
+      "key": "extreme_ridge",
+      "name": "Extrémní hřebeny",
+      "idStatus": "todo_open_range",
+      "geology": {
+        "densityKgPerM3": 2750,
+        "hardnessMohsLike": 7,
+        "porosityPermille": 10,
+        "permeabilityMs": "1e-12",
+        "permeabilityGamePermille": 0,
+        "erosionResistancePermille": 280,
+        "specificYieldPermille": 5,
+        "skupina": "krystal"
+      },
+      "visualProfiles": {
+        "default": {
+          "style": "neutral",
+          "baseColor": "#afa894",
+          "grainScalePermille": 500,
+          "layerDensityPermille": 300,
+          "irregularityPermille": 200
+        }
+      },
+      "subMaterials": null,
+      "source": "horniny_voda.json"
+    },
+    {
+      "id": 71,
+      "key": "high_massif",
+      "name": "Velehorský masiv",
+      "idStatus": "todo_open_range",
+      "geology": {
+        "densityKgPerM3": 2750,
+        "hardnessMohsLike": 7,
+        "porosityPermille": 10,
+        "permeabilityMs": "1e-12",
+        "permeabilityGamePermille": 0,
+        "erosionResistancePermille": 280,
+        "specificYieldPermille": 5,
+        "skupina": "krystal"
+      },
+      "visualProfiles": {
+        "default": {
+          "style": "neutral",
+          "baseColor": "#ddce9b",
+          "grainScalePermille": 500,
+          "layerDensityPermille": 300,
+          "irregularityPermille": 200
+        }
+      },
+      "subMaterials": null,
+      "source": "horniny_voda.json"
+    },
+    {
+      "id": 72,
+      "key": "rock_spire",
+      "name": "Skalní věže",
+      "idStatus": "todo_open_range",
+      "geology": {
+        "densityKgPerM3": 2750,
+        "hardnessMohsLike": 7,
+        "porosityPermille": 10,
+        "permeabilityMs": "1e-12",
+        "permeabilityGamePermille": 0,
+        "erosionResistancePermille": 280,
+        "specificYieldPermille": 5,
+        "skupina": "krystal"
+      },
+      "visualProfiles": {
+        "default": {
+          "style": "neutral",
+          "baseColor": "#6b6652",
+          "grainScalePermille": 500,
+          "layerDensityPermille": 300,
+          "irregularityPermille": 200
+        }
+      },
+      "subMaterials": null,
+      "source": "horniny_voda.json"
+    },
+    {
+      "id": 73,
+      "key": "summit_pyramid",
+      "name": "Vrcholové pyramidy",
+      "idStatus": "todo_open_range",
+      "geology": {
+        "densityKgPerM3": 2750,
+        "hardnessMohsLike": 7,
+        "porosityPermille": 10,
+        "permeabilityMs": "1e-12",
+        "permeabilityGamePermille": 0,
+        "erosionResistancePermille": 280,
+        "specificYieldPermille": 5,
+        "skupina": "krystal"
+      },
+      "visualProfiles": {
+        "default": {
+          "style": "neutral",
+          "baseColor": "#827e6e",
+          "grainScalePermille": 500,
+          "layerDensityPermille": 300,
+          "irregularityPermille": 200
+        }
+      },
+      "subMaterials": null,
+      "source": "horniny_voda.json"
+    },
+    {
+      "id": 74,
+      "key": "highest_point",
+      "name": "Nejvyšší bod (skála, led)",
+      "idStatus": "todo_open_range",
+      "geology": {
+        "densityKgPerM3": 2750,
+        "hardnessMohsLike": 7,
+        "porosityPermille": 10,
+        "permeabilityMs": "1e-12",
+        "permeabilityGamePermille": 0,
+        "erosionResistancePermille": 280,
+        "specificYieldPermille": 5,
+        "skupina": "krystal"
+      },
+      "visualProfiles": {
+        "default": {
+          "style": "neutral",
+          "baseColor": "#99978c",
+          "grainScalePermille": 500,
+          "layerDensityPermille": 300,
+          "irregularityPermille": 200
+        }
+      },
+      "subMaterials": null,
+      "source": "horniny_voda.json"
+    },
+    {
+      "id": 75,
+      "key": "volcanic_conduit",
+      "name": "Sopouch (vulkanický kanál)",
+      "idStatus": "active",
+      "geology": {
+        "densityKgPerM3": 2750,
+        "hardnessMohsLike": 7,
+        "porosityPermille": 10,
+        "permeabilityMs": "1e-12",
+        "permeabilityGamePermille": 0,
+        "erosionResistancePermille": 280,
+        "specificYieldPermille": 5,
+        "skupina": "krystal"
+      },
+      "visualProfiles": {
+        "default": {
+          "style": "neutral",
+          "baseColor": "#d8401c",
+          "grainScalePermille": 500,
+          "layerDensityPermille": 300,
+          "irregularityPermille": 200
+        }
+      },
+      "subMaterials": null,
+      "source": "horniny_voda.json"
+    },
+    {
+      "id": 100,
+      "key": "diamond",
+      "name": "Diamond",
+      "idStatus": "active",
+      "geology": {
+        "densityKgPerM3": 2750,
+        "hardnessMohsLike": 7,
+        "porosityPermille": 0,
+        "permeabilityMs": null,
+        "permeabilityGamePermille": 0,
+        "erosionResistancePermille": 500,
+        "specificYieldPermille": null,
+        "skupina": "krystal"
+      },
+      "visualProfiles": {
+        "default": {
+          "style": "neutral",
+          "baseColor": "#808080",
+          "grainScalePermille": 500,
+          "layerDensityPermille": 300,
+          "irregularityPermille": 200
+        }
+      },
+      "subMaterials": null,
+      "source": "horniny_voda.json"
+    },
+    {
+      "id": 101,
+      "key": "gem",
+      "name": "Gem",
+      "idStatus": "active",
+      "geology": {
+        "densityKgPerM3": 2750,
+        "hardnessMohsLike": 7,
+        "porosityPermille": 0,
+        "permeabilityMs": null,
+        "permeabilityGamePermille": 0,
+        "erosionResistancePermille": 500,
+        "specificYieldPermille": null,
+        "skupina": "krystal"
+      },
+      "visualProfiles": {
+        "default": {
+          "style": "neutral",
+          "baseColor": "#808080",
+          "grainScalePermille": 500,
+          "layerDensityPermille": 300,
+          "irregularityPermille": 200
+        }
+      },
+      "subMaterials": null,
+      "source": "horniny_voda.json"
+    },
+    {
+      "id": 102,
+      "key": "rare_metal",
+      "name": "Rare Metal",
+      "idStatus": "active",
+      "geology": {
+        "densityKgPerM3": 2750,
+        "hardnessMohsLike": 7,
+        "porosityPermille": 0,
+        "permeabilityMs": null,
+        "permeabilityGamePermille": 0,
+        "erosionResistancePermille": 500,
+        "specificYieldPermille": null,
+        "skupina": "krystal"
+      },
+      "visualProfiles": {
+        "default": {
+          "style": "neutral",
+          "baseColor": "#808080",
+          "grainScalePermille": 500,
+          "layerDensityPermille": 300,
+          "irregularityPermille": 200
+        }
+      },
+      "subMaterials": null,
+      "source": "horniny_voda.json"
+    },
+    {
+      "id": 103,
+      "key": "fe_ti",
+      "name": "Fe Ti",
+      "idStatus": "active",
+      "geology": {
+        "densityKgPerM3": 2750,
+        "hardnessMohsLike": 7,
+        "porosityPermille": 0,
+        "permeabilityMs": null,
+        "permeabilityGamePermille": 0,
+        "erosionResistancePermille": 500,
+        "specificYieldPermille": null,
+        "skupina": "krystal"
+      },
+      "visualProfiles": {
+        "default": {
+          "style": "neutral",
+          "baseColor": "#808080",
+          "grainScalePermille": 500,
+          "layerDensityPermille": 300,
+          "irregularityPermille": 200
+        }
+      },
+      "subMaterials": null,
+      "source": "horniny_voda.json"
+    },
+    {
+      "id": 104,
+      "key": "coal",
+      "name": "Coal",
+      "idStatus": "active",
+      "geology": {
+        "densityKgPerM3": 2750,
+        "hardnessMohsLike": 7,
+        "porosityPermille": 0,
+        "permeabilityMs": null,
+        "permeabilityGamePermille": 0,
+        "erosionResistancePermille": 500,
+        "specificYieldPermille": null,
+        "skupina": "krystal"
+      },
+      "visualProfiles": {
+        "default": {
+          "style": "neutral",
+          "baseColor": "#808080",
+          "grainScalePermille": 500,
+          "layerDensityPermille": 300,
+          "irregularityPermille": 200
+        }
+      },
+      "subMaterials": null,
+      "source": "horniny_voda.json"
+    },
+    {
+      "id": 105,
+      "key": "lignite",
+      "name": "Lignite",
+      "idStatus": "active",
+      "geology": {
+        "densityKgPerM3": 1400,
+        "hardnessMohsLike": 2,
+        "porosityPermille": 80,
+        "permeabilityMs": "1e-7",
+        "permeabilityGamePermille": 333,
+        "erosionResistancePermille": 820,
+        "specificYieldPermille": 30,
+        "skupina": "uhli"
+      },
+      "visualProfiles": {
+        "default": {
+          "style": "neutral",
+          "baseColor": "#808080",
+          "grainScalePermille": 500,
+          "layerDensityPermille": 300,
+          "irregularityPermille": 200
+        }
+      },
+      "subMaterials": null,
+      "source": "horniny_voda.json"
+    },
+    {
+      "id": 106,
+      "key": "garnet",
+      "name": "Garnet",
+      "idStatus": "active",
+      "geology": {
+        "densityKgPerM3": 2750,
+        "hardnessMohsLike": 7,
+        "porosityPermille": 0,
+        "permeabilityMs": null,
+        "permeabilityGamePermille": 0,
+        "erosionResistancePermille": 500,
+        "specificYieldPermille": null,
+        "skupina": "krystal"
+      },
+      "visualProfiles": {
+        "default": {
+          "style": "neutral",
+          "baseColor": "#808080",
+          "grainScalePermille": 500,
+          "layerDensityPermille": 300,
+          "irregularityPermille": 200
+        }
+      },
+      "subMaterials": null,
+      "source": "horniny_voda.json"
+    },
+    {
+      "id": 107,
+      "key": "gold",
+      "name": "Gold",
+      "idStatus": "active",
+      "geology": {
+        "densityKgPerM3": 2750,
+        "hardnessMohsLike": 7,
+        "porosityPermille": 0,
+        "permeabilityMs": null,
+        "permeabilityGamePermille": 0,
+        "erosionResistancePermille": 500,
+        "specificYieldPermille": null,
+        "skupina": "krystal"
+      },
+      "visualProfiles": {
+        "default": {
+          "style": "neutral",
+          "baseColor": "#808080",
+          "grainScalePermille": 500,
+          "layerDensityPermille": 300,
+          "irregularityPermille": 200
+        }
+      },
+      "subMaterials": null,
+      "source": "horniny_voda.json"
+    }
+  ]
+}

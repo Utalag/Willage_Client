@@ -1,0 +1,24 @@
+{
+ "det": {
+  "bunek": 4718592,
+  "krok_xy_m": 2.0,
+  "krok_z_m": 1.0,
+  "ms": 112751.651,
+  "n_xy": 192,
+  "n_z": 128,
+  "otisk": "59e4569309aa8500",
+  "sha256": "59e4569309aa8500d88c2e23a88db380126d212159ef4109b9b95025ea3c6563"
+ },
+ "init_ms": 110.185,
+ "parametry": {
+  "k_horniny": 1.0,
+  "klima": "mirne",
+  "p82_podil": 0.5,
+  "p82_vapenec": true,
+  "start_blok": [
+   14,
+   14
+  ]
+ },
+ "seed": 49
+}

@@ -27,6 +27,19 @@ static func inst():
 @export var wet_tint := true                          ## gen-v3: mokrá půda pod povrchem tmavší (jen viditelný materiál)
 @export var data_water := true                        ## gen-v3: kreslit volnou vodu z vrstvy vody bloku (jeskyně, jezírka)
 
+@export_group("Měřítko scény (E89, E94)")
+## E94: scéna v metrech (1 jednotka = 1 m, buňka 0,5 × 0,5 × 0,5 m; stromy, stavby, kamera a mlha v metrech).
+## Na větvi e94-metry výchozí zap (Jan 2026-11-20 11:04); vyp = dnešní buňka 1 × 1 × 0,5 (`--surface.p89_meritko=false`).
+@export var p89_meritko := true
+## E94b (Jan 2026-11-20 11:39): měřítko modelů rostlin ve scéně v metrech (× výšky VYSKA_M; 0,5 → listnáč 1,75 m,
+## jehličnan 2 m, keř 0,5 m, kaktus 0,75 m). Hustota beze změny; bez p89_meritko se nepoužije.
+@export_range(0.1, 2.0, 0.05) var p94_meritko_veg := 0.5
+## E96 (Jan 2026-11-20 11:48): ostrov = jeden blok 128 × 128 m z funkce světa (16 × 16 bloků po 8 m, buňka 0,5 m) místo
+## čtyř šablon 8 m. Výchozí vyp. Projeví se při startu hry (`--surface.p96_blok128=true`).
+@export var p96_blok128 := false
+## E96: LOD přehledu bloku 128 m – při záběru kamery nad tolik metrů jedna síť sloupců 1 m bez vegetace (0 = vyp)
+@export_range(0.0, 200.0, 4.0) var p96_lod_zaber := 64.0
+
 @export_group("Duální mřížka")
 @export var dual_enabled := true                       ## duální mřížka pro povrch louky, písku a vody
 @export_range(1, 8, 1) var dual_sub := 4               ## dělení dlaždice (svah mezi středy buněk)

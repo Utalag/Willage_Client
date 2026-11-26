@@ -9,6 +9,7 @@ extends RefCounted
 const RK = preload("res://scripts/svet8/reky.gd")
 const UG = preload("res://scripts/voda/podzemi.gd")
 const VS = preload("res://scripts/voda/voda_svet.gd")
+const LI = preload("res://scripts/voda/litry.gd")   # E94: jeden tvar l → m³
 const DX := [1, -1, 0, 0, 1, 1, -1, -1]
 const DY := [0, 0, 1, -1, 1, -1, 1, -1]
 const EPS := 1e-3
@@ -339,7 +340,7 @@ static func _ponds_refresh(st: Dictionary, dirty: PackedInt32Array, cm2: float, 
 	for key in soft:
 		if hard.has(key) or not st._pd.has(key): continue
 		var comp: PackedInt32Array = st._pd[key].cells
-		var x := _pond_dict(st, comp, cm2, um, false, 0.001)
+		var x := _pond_dict(st, comp, cm2, um, false, LI.L_NA_M3)
 		st._pd[key] = x
 		var wp: bool = not x["suchá"]
 		for c in comp: pw[c] = 1 if wp and st.fill[c] >= st.hm[c] + 0.1 else 0
@@ -367,7 +368,7 @@ static func _ponds_refresh(st: Dictionary, dirty: PackedInt32Array, cm2: float, 
 	for mn in mins:
 		var comp := _pond_comp(st, mn, seen)
 		marked.append_array(comp)
-		var x := _pond_dict(st, comp, cm2, um, false, 0.001)
+		var x := _pond_dict(st, comp, cm2, um, false, LI.L_NA_M3)
 		st._pd[mn] = x
 		for c in comp: pk[c] = mn
 		if not x["suchá"]:
@@ -384,7 +385,7 @@ static func drain(st: Dictionary, comp: PackedInt32Array) -> float:
 	return d
 
 ## události plnění po vrstvách: čas = objem vrstvy / (přítok − odtok); odtok ≥ přítok → nenaplní se (ponor), žádné události
-static func fill_events(st: Dictionary, comp: PackedInt32Array, lo: float, hi: float, q: float, dr: float, cell_m2: float, u_m: float, q_to_m3: float) -> Array:
+static func fill_events(st: Dictionary, comp: PackedInt32Array, lo: float, hi: float, q: float, dr: float, cell_m2: float, u_m: float, l_na_m3: float) -> Array:
 	var ev := []; var vol := 0.0; var t := 0.0; var lev := lo
 	var net := q - dr
 	while lev < hi - 0.01:   # hladina přelivu je o pár EPS (priority-flood) nad okrajem → zbytky < 0,01 U se slijí do poslední vrstvy
@@ -395,7 +396,7 @@ static func fill_events(st: Dictionary, comp: PackedInt32Array, lo: float, hi: f
 			if st.hm[i] < nl: area += 1
 		var dv := area * cell_m2 * (nl - lev) * u_m
 		vol += dv
-		t = (t + dv / (net * q_to_m3)) if net > 0.0 else -1.0
+		t = (t + dv / (net / l_na_m3)) if net > 0.0 else -1.0
 		ev.append({"hladina_m": (nl - lo) * u_m, "plocha_m2": area * cell_m2, "objem_m3": vol, "cas_s": t})
 		lev = nl
 	return ev
@@ -587,13 +588,13 @@ static func edge_falls(st: Dictionary) -> Array:
 	return out
 
 ## tůně: souvislé oblasti fill > hm; přítok Q (l/s) = odtoky okolí do tůně + prameny v ní. Události po vrstvách U = 0,5 m.
-static func ponds(st: Dictionary, cell_m2 := 0.25, u_m := 0.5, events := true, q_to_m3 := 0.001) -> Array:
+static func ponds(st: Dictionary, cell_m2 := 0.25, u_m := 0.5, events := true, l_na_m3 := LI.L_NA_M3) -> Array:
 	var W: int = st.W; var H: int = st.H; var n := W * H
 	var seen := PackedByteArray(); seen.resize(n)
 	var out := []
 	for s in n:
 		if seen[s] == 1 or st.wall[s] == 1 or st.fill[s] <= st.hm[s] + 0.01: continue   # vodní těleso souvisle (> 5 mm); kreslí se jen hloubka ≥ 5 cm
-		out.append(_pond_dict(st, _pond_comp(st, s, seen), cell_m2, u_m, events, q_to_m3))
+		out.append(_pond_dict(st, _pond_comp(st, s, seen), cell_m2, u_m, events, l_na_m3))
 	return out
 
 ## souvislá tůň od buňky s (BFS, 8-sousedé), seen se označí
@@ -611,7 +612,7 @@ static func _pond_comp(st: Dictionary, s: int, seen: PackedByteArray) -> PackedI
 			if st.fill[j] > st.hm[j] + 0.01: seen[j] = 1; comp.append(j)
 	return comp
 
-static func _pond_dict(st: Dictionary, comp: PackedInt32Array, cell_m2: float, u_m: float, events: bool, q_to_m3: float) -> Dictionary:
+static func _pond_dict(st: Dictionary, comp: PackedInt32Array, cell_m2: float, u_m: float, events: bool, l_na_m3: float) -> Dictionary:
 	var q := 0.0; var lo := 1e9; var hi := -1e9
 	for i in comp:   # přítok = největší průtok buňkou tůně (= co odtéká přelivem; voda přitéká i přes mělký okraj < 5 cm)
 		q = maxf(q, st.ain[i]); lo = minf(lo, st.hm[i]); hi = maxf(hi, st.fill[i])
@@ -621,7 +622,7 @@ static func _pond_dict(st: Dictionary, comp: PackedInt32Array, cell_m2: float, u
 	var vy := []
 	if bool(st.L.get("q73", false)):   # E73 p73_pritok: přítok = součet výtokových buněk
 		var r73 := _vyt73(st, comp); q = r73[0]; outlet = r73[1]; vy = r73[2]
-	var ev := fill_events(st, comp, lo, hi, q, dr, cell_m2, u_m, q_to_m3) if events else []
+	var ev := fill_events(st, comp, lo, hi, q, dr, cell_m2, u_m, l_na_m3) if events else []
 	var vol := 0.0
 	for e in ev: vol = e.objem_m3
 	var d := {"cells": comp, "q_lps": q, "drain_lps": dr, "hloubka_m": (hi - lo) * u_m, "objem_m3": vol, "udalosti": ev, "suchá": q <= 0.0,

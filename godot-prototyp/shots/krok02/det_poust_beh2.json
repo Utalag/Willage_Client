@@ -1,0 +1,126 @@
+{
+ "biom_slouceni": {
+  "meritko_m": 768.0,
+  "min_plocha_m2": 90000.0,
+  "sloucenych": 0,
+  "zapnuto": false
+ },
+ "det": {
+  "bunek": 2359296,
+  "max_m": 86.0433489034488,
+  "min_m": 65.2547095866306,
+  "ms": 24347.564,
+  "otisk": "6e2a92c42cfc2b50",
+  "sha256": "6e2a92c42cfc2b502d3dbd9433ba1e5112b26d4e53eeb34d5776e4177e5ac656"
+ },
+ "gradient": {
+  "masiv": {
+   "amp_m": 6.6,
+   "amp_pozadovana_m": 6.6,
+   "detail_m": 0.75,
+   "detail_max_m": 2.0,
+   "detail_pozadovany_m": 0.75,
+   "freq_efektivni": 0.008,
+   "freq_zadana": 0.008,
+   "g87_1_m": 0.0312150394336007,
+   "gdet_1_m": 2.12716245380364,
+   "podhuri_amp_m": 2.8,
+   "podhuri_g_1_m": 0.0472653397996364,
+   "podhuri_sirit_iter": 1,
+   "podhuri_vlna_efektivni_m": 134.594046374852,
+   "podhuri_vlna_zadana_m": 48.0,
+   "sirit_iter": 0
+  },
+  "relief_0": {
+   "amp_m": 2.1,
+   "amp_pozadovana_m": 2.1,
+   "g_1_m": 0.026886856175897,
+   "sirit_iter": 0,
+   "vlna_efektivni_m": 200.0,
+   "vlna_zadana_m": 200.0
+  },
+  "relief_1": {
+   "amp_m": 0.84,
+   "amp_pozadovana_m": 0.84,
+   "g_1_m": 0.0343348357549798,
+   "sirit_iter": 0,
+   "vlna_efektivni_m": 150.0,
+   "vlna_zadana_m": 150.0
+  },
+  "relief_2": {
+   "amp_m": 7.0,
+   "amp_pozadovana_m": 7.0,
+   "g_1_m": 0.0319424066859639,
+   "sirit_iter": 0,
+   "vlna_efektivni_m": 175.0,
+   "vlna_zadana_m": 175.0
+  },
+  "relief_3": {
+   "amp_m": 16.8,
+   "amp_pozadovana_m": 16.8,
+   "g_1_m": 0.0118903486240286,
+   "sirit_iter": 0,
+   "vlna_efektivni_m": 450.0,
+   "vlna_zadana_m": 450.0
+  },
+  "relief_4": {
+   "amp_m": 2.1,
+   "amp_pozadovana_m": 2.1,
+   "g_1_m": 0.0321195186483713,
+   "sirit_iter": 0,
+   "vlna_efektivni_m": 187.5,
+   "vlna_zadana_m": 187.5
+  }
+ },
+ "init_ms": 81.059,
+ "parametry": {
+  "biom_meritko_m": 768.0,
+  "biom_min_plocha_m2": 90000.0,
+  "biom_velke_oblasti": false,
+  "detail_max_m": 2.0,
+  "klima": "poust",
+  "klima_id": "poust",
+  "klima_k_voda": 0.25,
+  "klima_priklad": true,
+  "klima_ze_seedu": false,
+  "podil": [
+   0.55,
+   0.02,
+   0.28,
+   0.08,
+   0.07
+  ],
+  "sopka_od_okraje_startu_m": 100.0,
+  "start_blok": [
+   14,
+   14
+  ]
+ },
+ "seed": 49,
+ "sopky": [
+  {
+   "H": 31.1940361326396,
+   "H_seed": 31.1940361326396,
+   "R": 114.274826137397,
+   "d": 2.99279758343394,
+   "gamma": 1.5,
+   "prumer_upati_m": 228.549652274794,
+   "rc": 12.243731371864,
+   "vyska_okoli": 64.7593023772785,
+   "x": 1692.0,
+   "y": 1769.92395019531
+  },
+  {
+   "H": 32.3295726126292,
+   "H_seed": 32.3295726126292,
+   "R": 118.43469930263,
+   "d": 3.10174247337264,
+   "gamma": 1.5,
+   "prumer_upati_m": 236.869398605261,
+   "rc": 12.689432068139,
+   "vyska_okoli": 66.8758754863321,
+   "x": 1302.34765625,
+   "y": 1737.10437011719
+  }
+ ]
+}

@@ -9,12 +9,14 @@ extends RefCounted
 ## Svět studie: sloty ostrova posunuté o OFF do kladných souřadnic (regionální funkce jsou ve světových metrech).
 ## Parametry: výchozí studie (scripts/teren/params.gd), přepsatelné z příkazové řádky --bp.klic=hodnota (např. --bp.taper_m=4).
 
+const J = preload("res://scripts/jednotky.gd")   # E94: mřížka a metry z jednoho místa
 const PR = preload("res://scripts/teren/params.gd")
 const PL = preload("res://scripts/teren/pipeline.gd")
 const WD = preload("res://scripts/teren/world.gd")
 const BP = preload("res://scripts/teren/blueprint.gd")
 const TR = preload("res://scripts/teren/tridy.gd")
-const BS := 16
+const BGZ = preload("res://scripts/teren/zaklad/block_gen.gd")   # E94: výšková mapa hory pro p94_hora_k
+const BS := J.BS
 
 static var OFF := Vector2i(3, 3)   # slot ostrova (0, 0) = slot světa (3, 3); ostrov má sloty −2..3
 static var SIZE := 8               # svět studie SIZE × SIZE slotů (ostrov −2..3 + prstenec mlhy)
@@ -46,6 +48,11 @@ const HRA := {
 	"voda_e67": false,                   # E67 (studie, jen větev e67): podzemí jako přetoky ve 3D + výstup ve stěně ostrova
 	"p67_min_vytok_render": 0.02,        # E67b: vývěr podzemní vody ve stěně / pramen slabší než tolik l/s se nekreslí (simulace beze změny)
 	"p67_min_tok_render": 0.02,          # E67b: protékající větev podzemní vody slabší než tolik l/s se v řezech nekreslí
+	"p94_hora_k": 1.0,                   # E94: převýšení hory nad její patou (1 = beze změny; strop sloupce 61 buněk = 30,5 m)
+	"p96_natazeni": 4.0,                 # E96 (jen s p96_blok128): vodorovné natažení funkce E49 (E90: 8)
+	"p96_relief": 1.0,                   # E96: reliéf kolem 20 m (E90: 3; 1 = E49 14–30 m, vejde se do sloupce 32 m)
+	"p96_dlazdice_x": 7,                 # E96: dlaždice 128 m funkce světa, ze které je ostrov
+	"p96_dlazdice_y": 4,
 }
 
 static func params() -> Dictionary:
@@ -91,6 +98,19 @@ static func build(b) -> void:
 	var bp := blueprint(b)
 	var pp: Dictionary = p.duplicate()
 	pp.surface_shift = float(p.surface_shift) + float(b.shift)
+	if b.has_meta("p96_hm"):
+		# E96: povrch z funkce světa (blok 128 m), typ bloku řídí jen geologii; cesta base_hm (E49) bez jemného šumu
+		bp.base_hm = b.get_meta("p96_hm"); bp.detail = 0.0
+	var hk := float(p.get("p94_hora_k", 1.0)) if not b.has_meta("p96_hm") else 1.0
+	if hk != 1.0 and String(bp.shape).begins_with("hora"):
+		# E94: hora START je v bloku 8 m jen ~3 m (medián) / 9 m (vrchol) nad loukou. Výšková mapa tvaru „hora“ (stejná jako
+		# blueprint.raw_height) natažená nad patou × hk, posun výšky jako ve studii, strop 61 buněk; jde cestou base_hm (E49).
+		var hm0 := BGZ.base_heightmap("hora", b.seed)
+		var lo := 1e9
+		for v in hm0: lo = minf(lo, float(v))
+		var arr := []
+		for k in 256: arr.append(minf(lo + (float(hm0[k]) - lo) * hk + float(pp.surface_shift), 61.0))
+		bp.base_hm = arr; bp.detail = 0.0
 	var ctx := PL.new_ctx(world, wslot(b.slot), bp, pp)
 	var st := PL.steps(ctx)
 	var i := 0

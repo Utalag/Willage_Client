@@ -16,6 +16,7 @@ const FN = preload("res://scripts/bp/geo_fn.gd")
 const Mat = preload("res://scripts/kopie/mat.gd")
 const SELF = preload("res://scripts/podzemi52/ug_funkce.gd")
 const CH = preload("res://scripts/voda/cas_hry.gd")   # E77: čas hry na jednom místě
+const LI = preload("res://scripts/voda/litry.gd")   # E94: jeden tvar l → m³
 const E := 1e-6
 
 class Members:
@@ -84,7 +85,7 @@ static func bands76(info: Dictionary, col: Dictionary, X: float, Y: float, s: Ve
 ## prázdný kontext; sloupce se plní add_col, pak finish
 static func _new(W: int, H: int, side: float, p: Dictionary) -> Dictionary:
 	var c := {"W": W, "H": H, "side": side, "A": side * side, "perm_min": float(p.ponor_perm), "depth_m": float(p.get("ug_hloubka_m", 6.0)),
-		"q_to_m3": float(p.get("ug_q_to_m3", 0.001)), "leak_m2": float(p.get("ug_leak_m2", 0.002)), "rezim": String(p.get("p52_rezim", "nadrz")), "perm_dno": float(p.get("p55_perm_dno", 0.05)),
+		"q_to_m3": float(p.get("ug_q_to_m3", 0.001)), "l_na_m3": LI.z_parametru(p), "leak_m2": float(p.get("ug_leak_m2", 0.002)), "rezim": String(p.get("p52_rezim", "nadrz")), "perm_dno": float(p.get("p55_perm_dno", 0.05)),
 		"okraj67": bool(p.get("p67_okraj", false)), "kras67": bool(p.get("p67_kras", true)), "rezim67": String(p.get("p67_rezim", "")),
 		"film67": float(p.get("p67_film_m", 0.5)), "prune67": bool(p.get("p67_prune", true)), "prune67_min": float(p.get("p67_prune_min", 0.1)), "slu72": bool(p.get("p72_slucovat", true)), "prus73": bool(p.get("p73_prusak_tok", false)), "slu72p": bool(p.get("p72_prusak", true)), "dosah72": float(p.get("p72_dosah_m", 0.0)), "remizy69": bool(p.get("p69_remizy", true)), "prumer70": String(p.get("p70_prumer", "pomer")), "kap71": bool(p.get("p71_kapacita", true)), "prus71": bool(p.get("p71_prusak", true)), "cas71": CH.faktor(p),
 		"cols": [], "h": PackedFloat64Array(), "wall": PackedByteArray(), "impl": SELF, "gen": 0, "NZ": 1,
@@ -217,7 +218,7 @@ static func from_cells(W: int, H: int, NZ: int, mat, top: PackedInt32Array, wall
 	var c := _new(W, H, side, p)
 	c.depth_m = float(p.ug_hloubka) * side
 	c.leak_m2 = float(p.ug_leak_q) / (side * side)
-	c.q_to_m3 = float(p.get("ug_q_to_m3", 0.001))
+	c.q_to_m3 = float(p.get("ug_q_to_m3", 0.001)); c.l_na_m3 = LI.z_parametru(p)
 	for gi in W * H:
 		if wall[gi] == 1: continue
 		c.wall[gi] = 0; c.h[gi] = top[gi] * side
@@ -373,9 +374,9 @@ static func _result(c: Dictionary, comp: PackedInt32Array, L: float, best: Array
 		var z := zmin + (i + 1) * dz
 		if (i + 1) % 4 == 0 or i == nbin - 1:
 			var v := minf(cum, vol)
-			ev.append({"z": minf(z, L), "objem_m3": v, "cas_s": (v / (net * float(c.q_to_m3))) if net > 0.0 else -1.0})
+			ev.append({"z": minf(z, L), "objem_m3": v, "cas_s": (v / (net / float(c.l_na_m3))) if net > 0.0 else -1.0})
 	if not ev.is_empty():
-		ev[-1].objem_m3 = vol; ev[-1].cas_s = (vol / (net * float(c.q_to_m3))) if net > 0.0 else -1.0
+		ev[-1].objem_m3 = vol; ev[-1].cas_s = (vol / (net / float(c.l_na_m3))) if net > 0.0 else -1.0
 	var out: Array = []
 	if not best.is_empty():
 		out = [best[0], best[1], best[2], best[3], _col_s(c, int(best[4]), String(best[3]) == "okraj")]
@@ -580,7 +581,7 @@ static func darcy(c: Dictionary, comp: PackedInt32Array, L: float, entries: Pack
 			var sw := 0.0; var sh := 0.0
 			for e in nbr[cc]: sw += float(e[1]); sh += float(e[1]) * float(h[e[0]])
 			if sw <= 0.0: continue
-			var hn := (sh + float(src.get(cc, 0.0)) / 1000.0) / sw
+			var hn := (sh + float(src.get(cc, 0.0)) / LI.L_NA_M3) / sw
 			var dv := om * (hn - float(h[cc]))
 			var nh := float(h[cc]) + dv
 			if nh > float(c.h[cc]): nh = float(c.h[cc]); seep[cc] = true   # hladina nad terénem → průsakový pramen (výtok)

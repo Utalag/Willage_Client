@@ -17,8 +17,12 @@ const TerenBP = preload("res://scripts/teren/ostrov_teren.gd")
 const TerenTridy = preload("res://scripts/teren/tridy.gd")
 const OstrovVoda = preload("res://scripts/voda/ostrov_voda.gd")
 const OstrovVodaRender = preload("res://scripts/voda/ostrov_voda_render.gd")
-const BS := 16
-const CELL_H := 0.5
+const J = preload("res://scripts/jednotky.gd")   # E89
+const Grass = preload("res://scripts/grass.gd")
+const B96 = preload("res://scripts/teren/blok96.gd")   # E96: ostrov = blok 128 m z funkce světa (p96_blok128)
+const VegG = preload("res://scripts/veg.gd")   # E96: souhrn vegetace po odebrání rostlin ve vodě
+const BS := J.BS
+const CELL_H := J.CELL_M
 const SURF_Y := 32 * CELL_H       # výchozí povrch (střed výšky)
 const CENTER := Vector2(1.0, 1.0) # střed rozložení ve slotech (start 2 × 2 = sloty 0..1)
 const RADIUS := 2.6
@@ -64,6 +68,8 @@ var voda_mi := {}                 # "voda" / "vodopad" / "mlha" → MeshInstance
 var voda_mats := {}
 var voda_batch := false           # generate_start: voda se spočítá jednou po vložení všech bloků
 var voda_log := true
+var ms96 := {}                    # E96: časy generování bloku 128 m (bloky, pole, sítě, vegetace, voda)
+var spawn96 := {}                 # E96: místo startu {dum, postava} (globální sloupce)
 func set_bevel(on: bool) -> void:
 	bevel = on
 	toon_mat.set_shader_parameter("use_bevel", on)
@@ -237,6 +243,8 @@ static func _box(st: SurfaceTool, a: Vector3, b: Vector3, with_top: bool) -> voi
 
 ## paprsek -> globální sloupec povrchu (pochod po výškové mapě), nebo null
 func cell_at_ray(origin: Vector3, dir: Vector3):
+	if scale != Vector3.ONE:
+		var rl := _ray_local(origin, dir); origin = rl[0]; dir = rl[1]
 	var p := origin
 	if dir.y < 0 and p.y > 40.0:  # přeskoč prázdný prostor nad ostrovem
 		p += dir * ((p.y - 40.0) / -dir.y)
@@ -254,6 +262,9 @@ func cell_at_ray(origin: Vector3, dir: Vector3):
 	return null
 
 func _init() -> void:
+	if not Engine.is_editor_hint() and B96.on():
+		slots = B96.slots()   # E96: 16 × 16 bloků + prstenec mlhy
+		return
 	for sx in range(-3, 5):
 		for sz in range(-3, 5):
 			if Vector2(sx + 0.5, sz + 0.5).distance_to(CENTER) <= RADIUS:
@@ -262,6 +273,28 @@ func _init() -> void:
 func _ready() -> void:
 	if Engine.is_editor_hint():
 		_editor_rebuild.call_deferred()
+	elif SurfaceParamsS.inst().p89_meritko:
+		scale = J.SCENA_DNES_M_NA_SC   # E89: scéna v metrech (buňka 0,5 × 0,5 × 0,5 m), data beze změny
+	# E94: objekty (stromy, tráva, stavby) mají rozměry v metrech → v ostrově s měřítkem se vyrovnají (×2 vodorovně)
+	VegRender.proti = protiskala()
+	VegRender.metry = scale != Vector3.ONE
+	VegRender.meritko_veg = float(SurfaceParamsS.inst().p94_meritko_veg) if VegRender.metry else 1.0   # E94b
+	Grass.proti = protiskala()
+
+## E94: měřítko, které vrátí objekt v ostrově na metry (ostrov vodorovně ×0,5 → objekt ×2); bez p89_meritko jedničky
+func protiskala() -> Vector3:
+	return Vector3(1.0 / scale.x, 1.0 / scale.y, 1.0 / scale.z)
+
+## E94: metrů na jednotku ostrova vodorovně (0,5 v metrech, 1 = dnešní scéna)
+func m_na_bunku() -> float:
+	return scale.x
+
+## E89: paprsek ze scény do místních souřadnic ostrova (bez p89_meritko beze změny)
+func _ray_local(origin: Vector3, dir: Vector3) -> Array:
+	if scale == Vector3.ONE:
+		return [origin, dir]
+	var inv := global_transform.affine_inverse()
+	return [inv * origin, inv.basis * dir]
 
 ## blok z receptu (typ, seed); unikátní blok má bonus rud
 static func make_block(kind: String, seed: int, title: String, category := "běžný") -> Block:
@@ -273,6 +306,9 @@ static func make_block(kind: String, seed: int, title: String, category := "bě�
 
 ## vygeneruje a vloží startovní bloky (pořadí = pořadí vkládání, každý se napojí na už vložené sousedy)
 func generate_start(log := true) -> void:
+	if not Engine.is_editor_hint() and B96.on():
+		_generate_b96(log)
+		return
 	voda_batch = true
 	for i in start_slots.size():
 		var kind: String = start_kinds[i] if i < start_kinds.size() else "louka"
@@ -284,6 +320,131 @@ func generate_start(log := true) -> void:
 			log_block(b)
 	voda_batch = false
 	rebuild_water()
+
+## E96: blok 128 m = 16 × 16 bloků z funkce světa. Data všech bloků nejdřív (každý se napojí na už vložené sousedy ve
+## světě studie), pak jednou pole povrchu, odkrytí, sítě a vegetace (place() by okolí 3 × 3 přestavoval po každém bloku 9×).
+func _generate_b96(log: bool) -> void:
+	var tt := Time.get_ticks_usec()
+	var t := tt
+	var spec := B96.start(TerenBP.p)
+	ms96.funkce = (Time.get_ticks_usec() - t) / 1000.0
+	t = Time.get_ticks_usec()
+	for e in spec:
+		var b := make_block(e.kind, e.seed, "Blok 128 m: " + e.kind)
+		b.slot = e.slot
+		b.set_meta("p96_hm", e.hm)
+		BlockGen.build(b, [null, null, null, null])
+		blocks[b.slot] = b
+		TerenBP.commit(b)
+		if fogs.has(b.slot):
+			fogs[b.slot].queue_free()
+			fogs.erase(b.slot)
+		var mi := MeshInstance3D.new()
+		mi.material_override = terrain_mat
+		mi.position = slot_origin(b.slot)
+		add_child(mi)
+		meshes[b.slot] = mi
+		gen_times.append(b.gen_ms)
+	ms96.bloky = (Time.get_ticks_usec() - t) / 1000.0
+	t = Time.get_ticks_usec()
+	for s in blocks: surface.build_fields(s)
+	ms96.pole = (Time.get_ticks_usec() - t) / 1000.0
+	t = Time.get_ticks_usec()
+	for s in blocks: refresh_discovered(s)
+	ms96.odkryti = (Time.get_ticks_usec() - t) / 1000.0
+	t = Time.get_ticks_usec()
+	for s in blocks: _remesh(s)
+	ms96.kostky = (Time.get_ticks_usec() - t) / 1000.0
+	t = Time.get_ticks_usec()
+	for s in blocks: surface.build_meshes(s)
+	ms96.povrch = (Time.get_ticks_usec() - t) / 1000.0
+	t = Time.get_ticks_usec()
+	rebuild_water()
+	ms96.voda = (Time.get_ticks_usec() - t) / 1000.0
+	t = Time.get_ticks_usec()
+	var wet := 0
+	for s in blocks:
+		if voda != null:   # rostliny nerostou v tůních a korytech (vegetace bloku vzniká před vodou)
+			var kept := []
+			for r in blocks[s].veg:
+				if voda.level(voda.gi_of(s, r.lx, r.ly)) < 0.0: kept.append(r)
+				else: wet += 1
+			blocks[s].veg = kept
+			blocks[s].veg_summary = VegG.summary(kept)
+		var vn := VegRender.build(veg_filtered(blocks[s]), blocks[s], occ_fn(blocks[s]), surface.field(s))
+		vn.position = slot_origin(s)
+		vn.visible = slice_z < 0
+		add_child(vn)
+		vegs[s] = vn
+	ms96.vegetace = (Time.get_ticks_usec() - t) / 1000.0
+	ms96.rostlin_ve_vode = wet
+	refresh_frames()
+	spawn96 = B96.spawn(func(g: Vector2i) -> int: return col_h(g))
+	ms96.celkem = (Time.get_ticks_usec() - tt) / 1000.0
+	if log:
+		print("E96 blok 128 m: %d bloků, %s ms, start %s" % [blocks.size(), str(ms96), str(spawn96)])
+
+## E96 LOD přehledu (lod90 z E90: sloupce 1 m, boky jen kde je soused nižší): při oddálení nad p96_lod_zaber jedna síť
+## celého bloku 128 m místo 256 bloků × (kostky, duální povrch, voda povrchu) a bez vegetace. Data z aktuálních výšek
+## bloků (výkopy se projeví), barva = třída vrchní buňky. Staví se při každém přepnutí do přehledu (výkopy mezi tím).
+const L90 = preload("res://scripts/teren/lod90.gd")
+var lod96_mi: MeshInstance3D
+var lod96_on := false
+var lod96_ms := 0.0
+var lod96_tri := 0
+
+func lod96_build() -> void:
+	var t := Time.get_ticks_usec()
+	var n := B96.N * BS / 2   # sloupců 1 m na stranu
+	var top := PackedFloat32Array(); top.resize(n * n)
+	var col := PackedColorArray(); col.resize(n * n)
+	for i in n:
+		for j in n:
+			var hb := -1; var cb := Color(0.5, 0.5, 0.5)
+			for a in 2:
+				for c in 2:
+					var g := Vector2i(i * 2 + a, j * 2 + c)
+					var h := col_h(g)
+					if h > hb:
+						hb = h
+						var s := Vector2i(g.x / BS, g.y / BS)
+						if blocks.has(s) and h > 0: cb = Mat.COLORS[blocks[s].cells[((g.x % BS) * BS + g.y % BS) * 64 + h - 1]]
+			top[i * n + j] = hb * CELL_H; col[i * n + j] = cb
+	var V := PackedVector3Array(); var Nn := PackedVector3Array(); var C := PackedColorArray()
+	for i in n:
+		for j in n:
+			var x0 := i * 2.0; var y0 := j * 2.0; var tp := top[i * n + j]
+			L90._quad(V, Nn, C, Vector3(x0, tp, y0), Vector3(x0 + 2.0, tp, y0), Vector3(x0 + 2.0, tp, y0 + 2.0), Vector3(x0, tp, y0 + 2.0), Vector3.UP, col[i * n + j])
+			for d in 4:
+				var dv: Vector2i = L90.DIRS[d]
+				var ni := i + dv.x; var nj := j + dv.y
+				var bot := top[ni * n + nj] if ni >= 0 and nj >= 0 and ni < n and nj < n else 0.0
+				if bot < tp: L90._wall(V, Nn, C, x0, y0, 2.0, d, bot, tp, L90.BARVA_BOK)
+	if lod96_mi == null:
+		lod96_mi = MeshInstance3D.new()
+		var lm: StandardMaterial3D = flat_mat.duplicate()
+		lm.cull_mode = BaseMaterial3D.CULL_DISABLED   # lod90 nemá sjednocenou orientaci trojúhelníků (E90)
+		lod96_mi.material_override = lm
+		add_child(lod96_mi)
+	lod96_mi.mesh = L90.mesh({"V": V, "N": Nn, "C": C})
+	lod96_tri = V.size() / 3
+	lod96_ms = (Time.get_ticks_usec() - t) / 1000.0
+
+## přepnutí přehled (jedna síť 1 m) ↔ bloky; volá Main po změně záběru kamery
+func lod96_set(on: bool) -> void:
+	if on == lod96_on or blocks.size() != B96.N * B96.N: return
+	lod96_on = on
+	if on: lod96_build()
+	lod96_mi.visible = on
+	for s in meshes: meshes[s].visible = not on
+	for s in vegs: vegs[s].visible = not on and slice_z < 0
+	if surface: surface.set_enabled(not on and slice_z < 0)
+
+## E96: výška povrchu globálního sloupce g (buňky), mimo ostrov 0
+func col_h(g: Vector2i) -> int:
+	var s := Vector2i(floori(g.x / float(BS)), floori(g.y / float(BS)))
+	if not blocks.has(s): return 0
+	return blocks[s].hm[(g.x - s.x * BS) * BS + (g.y - s.y * BS)]
 
 func log_block(b: Block) -> void:
 	gen_times.append(b.gen_ms)
@@ -310,6 +471,8 @@ func _editor_rebuild() -> void:
 	print("Island: náhled v editoru %d bloků za %d ms (%s)" % [blocks.size(), Time.get_ticks_msec() - t, generator])
 
 func setup() -> void:
+	if not Engine.is_editor_hint() and B96.on():
+		TerenBP.reset(B96.OFF, B96.SIZE)   # E96: svět studie 18 × 18 slotů (blok 128 m + prstenec příkopu)
 	flat_mat = StandardMaterial3D.new()
 	flat_mat.vertex_color_use_as_albedo = true
 	flat_mat.vertex_color_is_srgb = true
@@ -359,6 +522,7 @@ func setup() -> void:
 		l.modulate = Color(1, 1, 1)
 		l.outline_modulate = Color(0.35, 0.25, 0.45)
 		l.visible = false
+		l.scale = protiskala()   # E94: popisek ve scéně v metrech nezúžit
 		add_child(l)
 		preview_labels.append(l)
 
@@ -552,6 +716,7 @@ func _make_fog(s: Vector2i) -> void:
 		mat.shader = fog_shader
 		mat.set_shader_parameter("layer_alpha", 0.36 if l == layers - 1 else 0.05)
 		mat.set_shader_parameter("seed", float(l) * 1.7 + s.x * 3.1 + s.y * 5.3)
+		mat.set_shader_parameter("noise_k", 0.12 / scale.x)   # E94: stejný vzor na buňku i ve scéně v metrech
 		var mi := MeshInstance3D.new()
 		mi.mesh = pm
 		mi.material_override = mat
@@ -652,6 +817,8 @@ func hide_preview() -> void:
 
 ## paprsek z kamery -> slot (průsečík s rovinou výchozího povrchu)
 func slot_at_ray(origin: Vector3, dir: Vector3):
+	if scale != Vector3.ONE:
+		var rl := _ray_local(origin, dir); origin = rl[0]; dir = rl[1]
 	if absf(dir.y) < 0.0001:
 		return null
 	var t := (SURF_Y - origin.y) / dir.y

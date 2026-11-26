@@ -1,0 +1,41 @@
+4509bd2 | E94: plán v PROP (metry ve scéně, převod na jednotky.gd, jeden tva | 631c754f4b07783b 3452e4cdb33ddb50 db706a1c2d1b9ddb 483dc33fa9ea0a18 | souborů 81 (78 skriptů), změněno 0 | chyb 0
+a1ac989 | E94: nástroj meritko_e94.gd (otisky sítí, odkrytí, vegetace a mě� | 631c754f4b07783b 3452e4cdb33ddb50 db706a1c2d1b9ddb 483dc33fa9ea0a18 | souborů 81 (78 skriptů), změněno 0 | chyb 0
+4a66023 | E94 převod 1/…: jednotky.gd má mřížku hry (BS, BH, CELL_M), blo | 631c754f4b07783b 3452e4cdb33ddb50 db706a1c2d1b9ddb 483dc33fa9ea0a18 | souborů 81 (78 skriptů), změněno 0 | chyb 0
+51a02aa | E94 převod 2: mesher.gd bere BS, BH, CELL_H z jednotky.gd | 631c754f4b07783b 3452e4cdb33ddb50 db706a1c2d1b9ddb 483dc33fa9ea0a18 | souborů 81 (78 skriptů), změněno 0 | chyb 0
+79dff20 | E94 převod 3: island.gd bere BS, CELL_H z jednotky.gd | 631c754f4b07783b 3452e4cdb33ddb50 db706a1c2d1b9ddb 483dc33fa9ea0a18 | souborů 81 (78 skriptů), změněno 0 | chyb 0
+1369fd8 | E94 převod: veg_render.gd bere konstanty mřížky z jednotky.gd | 631c754f4b07783b 3452e4cdb33ddb50 db706a1c2d1b9ddb 483dc33fa9ea0a18 | souborů 81 (78 skriptů), změněno 0 | chyb 0
+d39812a | E94 převod: veg.gd bere konstanty mřížky z jednotky.gd | 631c754f4b07783b 3452e4cdb33ddb50 db706a1c2d1b9ddb 483dc33fa9ea0a18 | souborů 81 (78 skriptů), změněno 0 | chyb 0
+5148d2c | E94 převod: grass.gd bere konstanty mřížky z jednotky.gd | 631c754f4b07783b 3452e4cdb33ddb50 db706a1c2d1b9ddb 483dc33fa9ea0a18 | souborů 81 (78 skriptů), změněno 0 | chyb 0
+5b40bf4 | E94 převod: shore_fields.gd bere konstanty mřížky z jednotky.gd | 631c754f4b07783b 3452e4cdb33ddb50 db706a1c2d1b9ddb 483dc33fa9ea0a18 | souborů 81 (78 skriptů), změněno 0 | chyb 0
+49f1bb7 | E94 převod: dual_grid_mesher.gd bere konstanty mřížky z jednotky.g | 631c754f4b07783b 3452e4cdb33ddb50 db706a1c2d1b9ddb 483dc33fa9ea0a18 | souborů 81 (78 skriptů), změněno 0 | chyb 0
+d8e7b65 | E94 převod: ostrov_voda_render.gd bere konstanty mřížky z jednotky | 631c754f4b07783b 3452e4cdb33ddb50 db706a1c2d1b9ddb 483dc33fa9ea0a18 | souborů 81 (78 skriptů), změněno 0 | chyb 0
+9a37e75 | E94 převod: roads.gd (BS, výška buňky CELL_H místo 0.5) | 631c754f4b07783b 3452e4cdb33ddb50 db706a1c2d1b9ddb 483dc33fa9ea0a18 | souborů 81 (78 skriptů), změněno 0 | chyb 0
+4a5de6b | E94 převod: buildings.gd (BS, výška buňky CELL_H místo 0.5) | 631c754f4b07783b 3452e4cdb33ddb50 db706a1c2d1b9ddb 483dc33fa9ea0a18 | souborů 81 (78 skriptů), změněno 0 | chyb 0
+2504199 | E94 převod: road_builder.gd (výška buňky z Roads.CELL_H) | 631c754f4b07783b 3452e4cdb33ddb50 db706a1c2d1b9ddb 483dc33fa9ea0a18 | souborů 81 (78 skriptů), změněno 0 | chyb 0
+7c35678 | E94 převod: main.gd bere konstanty mřížky z jednotky.gd | 631c754f4b07783b 3452e4cdb33ddb50 db706a1c2d1b9ddb 483dc33fa9ea0a18 | souborů 81 (78 skriptů), změněno 0 | chyb 0
+74cfa79 | E94 převod: digging.gd bere konstanty mřížky z jednotky.gd | 631c754f4b07783b 3452e4cdb33ddb50 db706a1c2d1b9ddb 483dc33fa9ea0a18 | souborů 81 (78 skriptů), změněno 0 | chyb 0
+6ba7bb3 | E94 převod: discovery.gd bere konstanty mřížky z jednotky.gd | 631c754f4b07783b 3452e4cdb33ddb50 db706a1c2d1b9ddb 483dc33fa9ea0a18 | souborů 81 (78 skriptů), změněno 0 | chyb 0
+d4fce32 | E94 převod: block_gen.gd bere konstanty mřížky z jednotky.gd | 631c754f4b07783b 3452e4cdb33ddb50 db706a1c2d1b9ddb 483dc33fa9ea0a18 | souborů 81 (78 skriptů), změněno 0 | chyb 0
+8d57e92 | E94 převod: ostrov_teren.gd bere konstanty mřížky z jednotky.gd | 631c754f4b07783b 3452e4cdb33ddb50 db706a1c2d1b9ddb 483dc33fa9ea0a18 | souborů 81 (78 skriptů), změněno 0 | chyb 0
+291de69 | E94 převod: ostrov_voda.gd bere konstanty mřížky z jednotky.gd | 631c754f4b07783b 3452e4cdb33ddb50 db706a1c2d1b9ddb 483dc33fa9ea0a18 | souborů 81 (78 skriptů), změněno 0 | chyb 0
+93edfc2 | E94 převod: prenos76.gd bere konstanty mřížky z jednotky.gd | 631c754f4b07783b 3452e4cdb33ddb50 db706a1c2d1b9ddb 483dc33fa9ea0a18 | souborů 81 (78 skriptů), změněno 0 | chyb 0
+9e14bcd | E94 převod: gen3_proto.gd bere konstanty mřížky z jednotky.gd | 631c754f4b07783b 3452e4cdb33ddb50 db706a1c2d1b9ddb 483dc33fa9ea0a18 | souborů 81 (78 skriptů), změněno 0 | chyb 0
+77b48c6 | E94 převod: water_flow.gd bere konstanty mřížky z jednotky.gd | 631c754f4b07783b 3452e4cdb33ddb50 db706a1c2d1b9ddb 483dc33fa9ea0a18 | souborů 81 (78 skriptů), změněno 0 | chyb 0
+2b2dc3a | E94 převod: e66_demo.gd bere konstanty mřížky z jednotky.gd | 631c754f4b07783b 3452e4cdb33ddb50 db706a1c2d1b9ddb 483dc33fa9ea0a18 | souborů 81 (78 skriptů), změněno 0 | chyb 0
+e04e832 | E94 převod: flow_demo.gd bere konstanty mřížky z jednotky.gd | 631c754f4b07783b 3452e4cdb33ddb50 db706a1c2d1b9ddb 483dc33fa9ea0a18 | souborů 81 (78 skriptů), změněno 0 | chyb 0
+0f18939 | E94 převod: genv3_demo.gd bere konstanty mřížky z jednotky.gd | 631c754f4b07783b 3452e4cdb33ddb50 db706a1c2d1b9ddb 483dc33fa9ea0a18 | souborů 81 (78 skriptů), změněno 0 | chyb 0
+53676fb | E94 převod: main_demo.gd bere konstanty mřížky z jednotky.gd | 631c754f4b07783b 3452e4cdb33ddb50 db706a1c2d1b9ddb 483dc33fa9ea0a18 | souborů 81 (78 skriptů), změněno 0 | chyb 0
+4eb2888 | E94 převod: skryti_demo.gd bere konstanty mřížky z jednotky.gd | 631c754f4b07783b 3452e4cdb33ddb50 db706a1c2d1b9ddb 483dc33fa9ea0a18 | souborů 81 (78 skriptů), změněno 0 | chyb 0
+13730ee | E94 převod: meritko_demo.gd bere konstanty mřížky z jednotky.gd | 631c754f4b07783b 3452e4cdb33ddb50 db706a1c2d1b9ddb 483dc33fa9ea0a18 | souborů 81 (78 skriptů), změněno 0 | chyb 0
+060cad1 | E94: jeden tvar l → m³ ve studii (voda/litry.gd, dělení 1000; tok | 631c754f4b07783b 3452e4cdb33ddb50 db706a1c2d1b9ddb 483dc33fa9ea0a18 | souborů 82 (79 skriptů), změněno 11 | chyb 0
+e08b4b7 | E94: přenos jednoho tvaru l → m³ do prototypu (port_studie, 82 sou | 631c754f4b07783b 3452e4cdb33ddb50 db706a1c2d1b9ddb 483dc33fa9ea0a18 | souborů 82 (79 skriptů), změněno 0 | chyb 0
+8142d74 | E94: prenos76 a jednotky.gd převádí l → m³ přes voda/litry.gd | 631c754f4b07783b 3452e4cdb33ddb50 db706a1c2d1b9ddb 483dc33fa9ea0a18 | souborů 82 (79 skriptů), změněno 0 | chyb 0
+cef1cfe | E94: měření dopadu l → m³ (litry_e94.gd: 79 495 hodnot vody, cas | 631c754f4b07783b 3452e4cdb33ddb50 db706a1c2d1b9ddb 483dc33fa9ea0a18 | souborů 82 (79 skriptů), změněno 0 | chyb 0
+6bc7ba6 | E94: stromy, tráva, popisky a mlha v metrech (protiměřítko ostrova | 631c754f4b07783b 3452e4cdb33ddb50 db706a1c2d1b9ddb 483dc33fa9ea0a18 | souborů 82 (79 skriptů), změněno 0 | chyb 0
+b6c27e6 | E94: kamera v metrech (střed, záběr a meze zoomu × měřítko, LOD | 631c754f4b07783b 3452e4cdb33ddb50 db706a1c2d1b9ddb 483dc33fa9ea0a18 | souborů 82 (79 skriptů), změněno 0 | chyb 0
+6092e58 | E94: stavby v metrech (půdorys size_m → liché buňky, model vypln� | 631c754f4b07783b 3452e4cdb33ddb50 db706a1c2d1b9ddb 483dc33fa9ea0a18 | souborů 82 (79 skriptů), změněno 0 | chyb 0
+22d30a8 | E94: p89_meritko výchozí zap na větvi (scéna v metrech), staré ch | 631c754f4b07783b 3452e4cdb33ddb50 db706a1c2d1b9ddb 483dc33fa9ea0a18 | souborů 82 (79 skriptů), změněno 0 | chyb 0
+1a69ed9 | E94: volitelné převýšení hory p94_hora_k (výchozí 1 = beze změ | 631c754f4b07783b 3452e4cdb33ddb50 db706a1c2d1b9ddb 483dc33fa9ea0a18 | souborů 82 (79 skriptů), změněno 0 | chyb 0
+3662d8e | E94: meritko_demo s prefixem snímků, záběrem hory START izometrick | 631c754f4b07783b 3452e4cdb33ddb50 db706a1c2d1b9ddb 483dc33fa9ea0a18 | souborů 82 (79 skriptů), změněno 0 | chyb 0
+0b437ee | E94: snímky před / po (postava 1,75 m, dům 4 × 4 × 3 m; ostrov, h | 631c754f4b07783b 3452e4cdb33ddb50 db706a1c2d1b9ddb 483dc33fa9ea0a18 | souborů 82 (79 skriptů), změněno 0 | chyb 0
+DONE

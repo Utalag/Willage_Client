@@ -2,13 +2,14 @@ extends Node
 ## Hlavní demo prototypu (přesunuto z main.gd): `-- --demo` = scénář se screenshoty shots/01–22 a SELFTEST výpisy,
 ## `-- --video` = scénář pro natáčení (--write-movie --fixed-fps 30). Spouští ho demo_runner.gd jako dítě uzlu Main.
 
+const J = preload("res://scripts/jednotky.gd")   # E94: mřížka a metry z jednoho místa
 const Mat = preload("res://scripts/mat.gd")
 const BlockGen = preload("res://scripts/block_gen.gd")
 const Roads = preload("res://scripts/roads.gd")
 const Toon = preload("res://scripts/toon.gd")
 const Block = preload("res://scripts/block.gd")
 const IslandS = preload("res://scripts/island.gd")
-const BS := 16
+const BS := J.BS
 
 var m            # Main (main.gd)
 var island

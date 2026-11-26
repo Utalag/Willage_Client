@@ -1,0 +1,17 @@
+{
+ "pocet": 78,
+ "chyby": [],
+ "konflikty_k_reseni_v_kroku_3": [
+  "id 0 (vzduch): v poradi_hornin.json má id 0 dva klíče (cloud_line, map_ceiling)"
+ ],
+ "pasma_krajiny_57_74": 18,
+ "shoda_s_vodou_v4": {
+  "stejne": 75,
+  "jinak": [],
+  "chybi_v_csv": [],
+  "chybi_ve_vode": [
+   "53 Hnědé uhlí / lignit",
+   "250 voda (rezervoár v dutině)"
+  ]
+ }
+}

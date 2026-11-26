@@ -1,0 +1,193 @@
+{
+ "biom_slouceni": {
+  "meritko_m": 768.0,
+  "min_plocha_m2": 90000.0,
+  "sloucenych": 0,
+  "zapnuto": false
+ },
+ "chyb": 0,
+ "gradient": {
+  "masiv": {
+   "amp_m": 12.0,
+   "amp_pozadovana_m": 12.0,
+   "detail_m": 0.75,
+   "detail_max_m": 2.0,
+   "detail_pozadovany_m": 0.75,
+   "freq_efektivni": 0.00523710959631092,
+   "freq_zadana": 0.008,
+   "g87_1_m": 0.0215725945198954,
+   "gdet_1_m": 2.12716245380364,
+   "podhuri_amp_m": 4.0,
+   "podhuri_g_1_m": 0.0333164546132612,
+   "podhuri_sirit_iter": 1,
+   "podhuri_vlna_efektivni_m": 192.277209106931,
+   "podhuri_vlna_zadana_m": 48.0,
+   "sirit_iter": 2
+  },
+  "relief_0": {
+   "amp_m": 3.0,
+   "amp_pozadovana_m": 3.0,
+   "g_1_m": 0.0366462766645676,
+   "sirit_iter": 0,
+   "vlna_efektivni_m": 160.0,
+   "vlna_zadana_m": 160.0
+  },
+  "relief_1": {
+   "amp_m": 1.2,
+   "amp_pozadovana_m": 1.2,
+   "g_1_m": 0.0466257120801722,
+   "sirit_iter": 0,
+   "vlna_efektivni_m": 120.0,
+   "vlna_zadana_m": 120.0
+  },
+  "relief_2": {
+   "amp_m": 10.0,
+   "amp_pozadovana_m": 10.0,
+   "g_1_m": 0.0359264496711645,
+   "sirit_iter": 1,
+   "vlna_efektivni_m": 171.873134757958,
+   "vlna_zadana_m": 140.0
+  },
+  "relief_3": {
+   "amp_m": 24.0,
+   "amp_pozadovana_m": 24.0,
+   "g_1_m": 0.00816040741947902,
+   "sirit_iter": 1,
+   "vlna_efektivni_m": 680.436389926147,
+   "vlna_zadana_m": 360.0
+  },
+  "relief_4": {
+   "amp_m": 3.0,
+   "amp_pozadovana_m": 3.0,
+   "g_1_m": 0.043491235605736,
+   "sirit_iter": 0,
+   "vlna_efektivni_m": 150.0,
+   "vlna_zadana_m": 150.0
+  }
+ },
+ "init_ms": 123.61,
+ "klima_srovnani": [
+  {
+   "id": "mirne",
+   "init_ms": 129.584,
+   "k_prevyseni": 24.0,
+   "klima_k_voda": 1.0,
+   "mapa_ms": 14398.183,
+   "nazev": "mírné",
+   "otisk_1m": {
+    "bunek": 147456,
+    "krok_m": 1.0,
+    "max_m": 94.0078963374571,
+    "min_m": 67.5124522724963,
+    "otisk": "fd6239c8340bf338",
+    "sha256": "fd6239c8340bf338899a5f113de149380f8e0ede6125bc2256af79392ed9f968"
+   },
+   "podil": [
+    0.35,
+    0.1,
+    0.3,
+    0.2,
+    0.05
+   ],
+   "priklad": false
+  },
+  {
+   "id": "poust",
+   "init_ms": 80.472,
+   "k_prevyseni": 16.8,
+   "klima_k_voda": 0.25,
+   "mapa_ms": 11261.276,
+   "nazev": "poušť",
+   "otisk_1m": {
+    "bunek": 147456,
+    "krok_m": 1.0,
+    "max_m": 86.0371137446539,
+    "min_m": 65.2843735296597,
+    "otisk": "aee96e5907bbf4b5",
+    "sha256": "aee96e5907bbf4b5166773a3cf983f26de51f280101eba8481938cf1cb66761d"
+   },
+   "podil": [
+    0.55,
+    0.02,
+    0.28,
+    0.08,
+    0.07
+   ],
+   "priklad": true
+  },
+  {
+   "id": "ledovec",
+   "init_ms": 102.401,
+   "k_prevyseni": 31.2,
+   "klima_k_voda": 0.4,
+   "mapa_ms": 12347.62,
+   "nazev": "ledovec",
+   "otisk_1m": {
+    "bunek": 147456,
+    "krok_m": 1.0,
+    "max_m": 122.522012705473,
+    "min_m": 72.6615442768793,
+    "otisk": "c134c6f77bbab811",
+    "sha256": "c134c6f77bbab811f4176a1009f16c1b6b843b63346af0a795bd0b3514c29ea9"
+   },
+   "podil": [
+    0.12,
+    0.02,
+    0.18,
+    0.66,
+    0.02
+   ],
+   "priklad": true
+  }
+ ],
+ "parametry": {
+  "biom_meritko_m": 768.0,
+  "biom_min_plocha_m2": 90000.0,
+  "biom_velke_oblasti": false,
+  "detail_max_m": 2.0,
+  "klima": "mirne",
+  "klima_id": "mirne",
+  "klima_k_voda": 1.0,
+  "klima_priklad": false,
+  "klima_ze_seedu": false,
+  "podil": [
+   0.35,
+   0.1,
+   0.3,
+   0.2,
+   0.05
+  ],
+  "sopka_od_okraje_startu_m": 100.0,
+  "start_blok": [
+   14,
+   14
+  ]
+ },
+ "seed": 49,
+ "sopky": [
+  {
+   "H": 31.1940361326396,
+   "H_seed": 31.1940361326396,
+   "R": 114.274826137397,
+   "d": 2.99279758343394,
+   "gamma": 1.5,
+   "prumer_upati_m": 228.549652274794,
+   "rc": 12.243731371864,
+   "vyska_okoli": 66.3569484571516,
+   "x": 1692.0,
+   "y": 1769.92395019531
+  },
+  {
+   "H": 32.3295726126292,
+   "H_seed": 32.3295726126292,
+   "R": 118.43469930263,
+   "d": 3.10174247337264,
+   "gamma": 1.5,
+   "prumer_upati_m": 236.869398605261,
+   "rc": 12.689432068139,
+   "vyska_okoli": 68.1489739948504,
+   "x": 1302.34765625,
+   "y": 1737.10437011719
+  }
+ ]
+}

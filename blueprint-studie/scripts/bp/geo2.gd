@@ -73,11 +73,52 @@ static func zone_tops(wx: float, wy: float, p: Dictionary) -> Array:
 ## hora zvrásněná (Janova skica [11] vpravo) = antiklinála: všechny vrstvy se klenou nahoru celé (nic se neztenčí),
 ##   amplituda a_j · u klesá s hloubkou (horní vrstvy kopírují povrch, hluboké se klenou málo);
 ## sopka: všechny hranice se ke kráteru strmě zvedají a sbíhají pod vrchol (váha w(r) = (1 − r/R)^γ), uprostřed sopouch.
+## E87: masiv vyzdvižené hory – výška povrchu (buňky, s surface_shift z p) v řídicím bodě světa (wx, wy v jednotkách U,
+## střed bodu = slot · 16 + x + 0,5). Čistá funkce světa: dva bloky masivu se na švu potkají bez opravy a bez ohledu na pořadí.
+static func massif87(wx: float, wy: float, p: Dictionary) -> float:
+	var h: float = float(p.p87_zaklad) + float(p.p87_amp) * n01(p.world_seed, "MASSIF87", 0, float(p.p87_freq), wx * U, wy * U)
+	h += float(p.p87_detail) * (2.0 * n01(p.world_seed, "MASSIF87D", 0, float(p.p87_dfreq), wx * U, wy * U) - 1.0)
+	return minf(h + float(p.surface_shift), 61.0)
+
+static func is87(shape: String, p: Dictionary) -> bool:
+	return bool(p.get("p87_jadro_hory", false)) and kind_of(shape) == "hora_v"
+
+## E87: šablona povrchu bloku masivu (16 × 16) = funkce masivu v řídicích bodech
+static func massif87_block(slot: Vector2i, p: Dictionary) -> PackedFloat64Array:
+	var o := PackedFloat64Array(); o.resize(256)
+	for x in 16:
+		for y in 16: o[x * 16 + y] = massif87(slot.x * 16 + x + 0.5, slot.y * 16 + y + 0.5, p)
+	return o
+
+## E87: zdvih a vyhlazený povrch z funkce masivu rozmazané krabicí VE SVĚTĚ (žádné opakování okrajů bloku)
+static func uplift87(slot: Vector2i, p: Dictionary, ref: float, r: int) -> PackedFloat64Array:
+	var u := PackedFloat64Array(); u.resize(256)
+	for x in 16:
+		for y in 16:
+			var s := 0.0; var n := 0
+			for dx in range(-r, r + 1):
+				for dy in range(-r, r + 1):
+					s += massif87(slot.x * 16 + x + dx + 0.5, slot.y * 16 + y + dy + 0.5, p) - ref; n += 1
+			u[x * 16 + y] = s / n
+	return u
+
+## E87: hranice vrstev čisté funkce masivu (cíl po průběžném maximu ≥ 0 = to, co dá pipeline bez napojení): pro virtuálního
+## souseda při jemném vzorkování a jako cíl pro přenos odchylky přes šev
+static func bounds87(t: Array) -> Array:
+	var out := []
+	var prev := PackedFloat64Array(); prev.resize(256)
+	for k in t.size():
+		var a := PackedFloat64Array(); a.resize(256)
+		for i in 256: a[i] = maxf(float(t[k][i]), prev[i]) if k > 0 else maxf(float(t[k][i]), 0.0)
+		out.append(a); prev = a
+	return out
+
 static func targets(slot: Vector2i, hm_f: PackedFloat64Array, shape: String, seed: int, p: Dictionary, sub := {}) -> Array:
 	var kind := kind_of(shape)
 	var ref := float(p.surf_ref)
-	var u := uplift(hm_f, ref, int(p.uplift_blur))
-	var hs := uplift(hm_f, 0.0, 1)   # vyhlazený povrch
+	var m87 := is87(shape, p)
+	var u := uplift87(slot, p, ref, int(p.uplift_blur)) if m87 else uplift(hm_f, ref, int(p.uplift_blur))
+	var hs := uplift87(slot, p, 0.0, 1) if m87 else uplift(hm_f, 0.0, 1)   # vyhlazený povrch
 	var zl := []
 	for z in 3:
 		zl.append(HR.pool_zone(HR.ZONES[z], p))
@@ -86,7 +127,7 @@ static func targets(slot: Vector2i, hm_f: PackedFloat64Array, shape: String, see
 		for e in zl[z]:
 			var a := PackedFloat64Array(); a.resize(256); out.append(a)
 	var nl := out.size()
-	var bn := BG.noise(seed, "BP_STRATA2", 0, 0.12, 3)
+	var bn := BG.noise(int(p.world_seed), "BP_STRATA87", 0, 0.12, 3) if m87 else BG.noise(seed, "BP_STRATA2", 0, 0.12, 3)   # E87: šum vrstev ve světě
 	var pm: Dictionary = p.profiles
 	for x in 16:
 		for y in 16:
@@ -99,7 +140,7 @@ static func targets(slot: Vector2i, hm_f: PackedFloat64Array, shape: String, see
 				var f: Array = pm.hora_vyzdvizena   # [plášť ×u, krystalinikum na úbočí ×u, u začátku jádra, u plného jádra, buněk pod povrchem, λ sedimentů]
 				z0 += float(f[0]) * up
 				var flank := z1 + float(f[1]) * up
-				var core := maxf(flank, hs[i] - float(f[4]))
+				var core := maxf(flank, (minf(hs[i], hm_f[i]) if m87 else hs[i]) - float(f[4]))   # E87: jádro nejvýš ke skutečnému povrchu
 				z1 = lerpf(flank, core, smoothstep(float(f[2]), float(f[3]), up))
 				z2 = z1 + (zt[2] - zt[1]) * exp(-up / float(f[5]))
 			var bots := [0.0, z0, z1]; var tops := [z0, z1, z2]
@@ -136,7 +177,7 @@ static func targets(slot: Vector2i, hm_f: PackedFloat64Array, shape: String, see
 						var r := Vector2(x - 7.5, y - 7.5).length()
 						var wv := pow(clampf(1.0 - r / float(sp[0]), 0.0, 1.0), float(sp[1]))
 						b += wv * maxf(hs[i] - float(sp[4]) - b, 0.0) * lerpf(float(sp[2]), float(sp[3]), fj)
-					out[j][i] = b + float(p.strata_noise) * 0.5 * bn.get_noise_3d(x, y, j * 7.0)
+					out[j][i] = b + float(p.strata_noise) * 0.5 * (bn.get_noise_3d(wx, wy, j * 7.0) if m87 else bn.get_noise_3d(x, y, j * 7.0))
 					j += 1
 	return out
 

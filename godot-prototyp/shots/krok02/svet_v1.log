@@ -1,0 +1,17 @@
+Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+
+spojitost: bloky max 0.0 m, segmenty 0.0 m, segment↔blok 0.0, přes sopku 0.0
+sklony start: p50 4.2° p95 13.8° max 29.9°, max nad stropem -2.09° (0 vzorků)
+sklony sopka: p50 2.8° p95 20.2° max 25.5°, max nad stropem -6.98° (0 vzorků)
+sklony masiv: p50 7.2° p95 14.8° max 26.6°, max nad stropem -10.80° (0 vzorků)
+sklony start_tvar: p50 4.2° p95 13.2° max 25.3°, max nad stropem -6.54° (0 vzorků)
+sklony sopka_tvar: p50 2.8° p95 20.2° max 25.5°, max nad stropem -6.98° (0 vzorků)
+sklony masiv_tvar: p50 6.2° p95 13.2° max 20.6°, max nad stropem -13.74° (0 vzorků)
+sopka 0: H 31.2 m, vrchol 97.76 m (strop 123.0), kráter 3.20 m, nejbližší 391 m, od středu 3×3 362 m (od okraje 102 m), OK
+sopka 1: H 32.3 m, vrchol 101.20 m (strop 123.0), kráter 3.82 m, nejbližší 391 m, od středu 3×3 725 m (od okraje 493 m), OK
+oblasti výchozí seed 49: 100 úlomků, medián √ 211 m; seed 50: 99 úlomků, medián √ 203 m
+oblasti velké seed 49: 19 úlomků, medián √ 697 m; seed 50: 26 úlomků, medián √ 405 m
+mapy: Δváha/m 0.0061, Δhornina/m 0.0064, Δz/m 0.464, jiný biom (seed+1) 71.5 %
+klima: výchozí mirne, poust aee96e5907bbf4b5 ≠ mirne fd6239c8340bf338, 2× shoda=true 5196.399 ms
+čas: {"blok128_0.25_ms":3640.346,"blok128_0.5_ms":854.767,"blok128_1.0_ms":211.669,"blok128_sopka_0.5_ms":628.961,"bod_us":47.4862,"e90_3km_ms":4900.0,"init_ms":108.549,"mapa_3km_po_4m_ms":5823.308,"sloupec_us":59.59495,"vyska_us":12.8272}
+chyb celkem: 0
