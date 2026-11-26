@@ -22,6 +22,7 @@ public static class OtiskKrok3
             var sl = g.Geo.VyplnSloupec(ox + (ix + 0.5) * krokXy, oy + (iy + 0.5) * krokXy, krokZ, 128.0);
             for (int iz = 0; iz < zmax; iz++) buf[i++] = iz < sl.Length ? sl[iz] : (byte)0;
         }
+        Console.WriteLine($"  kolize cache _zs (klíč 0,25 m, jiný přesný střed útvaru): {g.Geo.Utvary.Tvorba.KolizeZs}");
         var hx = Convert.ToHexString(SHA256.HashData(buf)).ToLowerInvariant();
         return (hx[..16], buf.LongLength, sw.Elapsed.TotalMilliseconds);
     }

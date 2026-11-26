@@ -15,8 +15,9 @@ public sealed class TvorbaUtvaru
         (DruhUtvaru.Dome, "dome", 16.0, 0.35, 8.0), (DruhUtvaru.Pipe, "pipe", 20.0, 0.25, 10.0),
     };
     private readonly SvetFn _s;
-    private readonly Dictionary<(long, long), double> _zs = new();
+    private readonly Dictionary<(long, long), (double v, double cx, double cy)> _zs = new();
     private double _cx = 1e300, _cy = 1e300; private List<Utvar> _cf = new();
+    /// <summary>Kolikrát klíč round(4·c) vrátil výšku spočtenou pro jiný přesný střed (závislost na pořadí dotazů).</summary>
     public long KolizeZs { get; private set; }
 
     public TvorbaUtvaru(SvetFn s) => _s = s;
@@ -49,8 +50,8 @@ public sealed class TvorbaUtvaru
     private double Zs(double cx, double cy)
     {
         var k = ((long)Gd.Round(cx * 4.0), (long)Gd.Round(cy * 4.0));
-        if (_zs.TryGetValue(k, out var v)) return v;
-        v = _s.VyskaTvar(cx, cy); _zs[k] = v;
+        if (_zs.TryGetValue(k, out var e)) { if (e.cx != cx || e.cy != cy) KolizeZs++; return e.v; }
+        double v = _s.VyskaTvar(cx, cy); _zs[k] = (v, cx, cy);
         return v;
     }
 
