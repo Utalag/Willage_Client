@@ -10,6 +10,12 @@ public static class ModulySveta
     };
 
     public static GrafModulu Graf() => new(Vse());
+
+    /// <summary>G-3: zástupné moduly (7d, M8, M9) – průchozí; na M0–M7 nic nemění.</summary>
+    public static IReadOnlyList<IModul> Zastupne() => new IModul[] { new M6dNasycenaZona(), new M8PovrchoveJevy(), new M9Vegetace() };
+
+    /// <summary>G-3: graf pro fasádu a okno generátoru = M0–M7 + zástupné moduly.</summary>
+    public static GrafModulu GrafSeZastupnymi() => new(Vse().Concat(Zastupne()));
 }
 
 /// <summary>Společný základ: id, název, verze, závislosti a soubory jako data.</summary>
