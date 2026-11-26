@@ -63,7 +63,7 @@ Koeficienty: štěrk (subalpine_scree) 255, písek (gravel_sand) 178 (0,698), zv
 - **H2 potvrzena.** Štěrk 255 beze změny. Žula a jíl jsou těsné v obou režimech (X ≈ 1e-11 l/s na buňku, po kvantování na µl/s = 0; za 30 dnů hladina beze změny). Koeficient mění hlavně střední materiály (písek, spraš, zvětralé horniny).
 - **H3 potvrzena.** Otisky seedu 49 s příznakem vypnuto i zapnuto stejné, viz níže.
 - **H4 (částečně negativní):** exponenciální útlum se od sériového Darcyho (1/Σ 1/c) liší. Písek 5 bloků: 0,166 (násobení) vs 0,140 (série); 10 bloků: 0,027 vs 0,070. Pro tlusté vrstvy je tedy násobení „přísnější“ než fyzika, jak Jan chtěl („silná vrstva jemného písku je těsná“); jde o herní pravidlo, ne o Darcyho zákon.
-- **H5 potvrzena a opravena.** Se zaokrouhlením na nejbližší (+127) uvízl koeficient ≥ 128 na 1 LSB Q24 (nikdy 0, zbytkový tok ~6e-8). Proto se zaokrouhluje dolů: písek dosáhne T = 0 po 43 blocích, spraš po ~10 blocích (T < 1e-8). Zlatá čísla písek 1/5/10 bloků: 11711154 / 2780473 / 460804 (Q24; ověřeno nezávisle v Pythonu celými čísly).
+- **H5 potvrzena a opravena.** Se zaokrouhlením na nejbližší (+127) uvízl koeficient ≥ 128 na 1 LSB Q24 (nikdy 0, zbytkový tok ~6e-8). Proto se zaokrouhluje dolů: písek dosáhne T = 0 po 45 blocích, spraš po 9. Zlatá čísla písek 1/5/10 bloků: 11711154 / 2780473 / 460804 (Q24; ověřeno nezávisle v Pythonu celými čísly).
 
 ### Další nálezy (negativní / omezení)
 - Koeficient se v generátoru světa (hladina, prameny, profil) **nepoužívá**: ten ho nepotřebuje a tak zůstaly otisky. Použije se až u kopání a staveb (uzavřené prostory), kde bude potřeba lokální přepočet vody.
