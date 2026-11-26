@@ -25,6 +25,7 @@ return cmd switch
     "manifest" => Manifest(args, data),
     "moduly" => Moduly(data),
     "schema" => Schema(args, data),
+    "api" => Api(args, data),
     "cas" => Cas(args, data),
     "par" => Paralelne.Spust(data, args.Contains("--puvodni"), args.Skip(1).Where(s => int.TryParse(s, out _)).Select(int.Parse).DefaultIfEmpty(1).ToArray()) == 0 ? 0 : 1,
     "klima" => args[1] switch
@@ -92,6 +93,35 @@ static int Schema(string[] a, Willage.Gen.Data.DataSveta d)
     File.WriteAllText(f, json);
     Console.WriteLine("zapsáno " + f);
     return 0;
+}
+
+/// G-3: přes fasádu – „api otisky [kes]“ (porovnat s „klima otisky“), „api moduly“, „api uloz soubor.wpln [kes]“, „api nacti soubor.wpln“.
+static int Api(string[] a, Willage.Gen.Data.DataSveta d)
+{
+    string sub = a.Length > 1 ? a[1] : "otisky";
+    string? kes = sub is "uloz" ? (a.Length > 3 ? a[3] : null) : (a.Length > 2 ? a[2] : null);
+    var g = new Willage.Gen.Api.GeneratorSveta(d, kes);
+    switch (sub)
+    {
+        case "moduly":
+            foreach (var m in g.Moduly.Seznam()) Console.WriteLine($"{m.Id,-4} {m.Nazev,-30} v{m.Verze} {m.Stav,-9} parametrů {g.Moduly.Parametry(m.Id).Count,3} klíč {m.Klic[..16]}");
+            return 0;
+        case "otisky":
+            var r = g.Sluzba.Generuj();
+            var o = g.Sluzba.Otisky();
+            Console.WriteLine($"api: mapa {o.Mapa}, vodníků {o.Vodniku}, voda {o.BlokX},{o.BlokY} {o.VodaBlok} ({o.Pramenu} pramenů), klima {o.Klima}, {r.Ms:F0} ms");
+            return 0;
+        case "uloz":
+            g.Sluzba.Generuj();
+            var i = g.Sluzba.Uloz(a[2]);
+            Console.WriteLine($"uloženo {a[2]}: {new FileInfo(a[2]).Length} B, seed {i.Seed}, manifest {i.ManifestSouhrn[..16]}");
+            return 0;
+        case "nacti":
+            var n = g.Sluzba.Nacti(a[2]);
+            Console.WriteLine($"načteno {a[2]}: gen {n.GenVer}, seed {n.Seed}, potvrzena {n.Potvrzena}, rozdíly dat [{string.Join(", ", n.RozdilyDat)}], neplatné moduly [{string.Join(", ", n.NeplatneModuly)}]");
+            return 0;
+        default: return Napoveda();
+    }
 }
 
 static int Det3(string[] a, Willage.Gen.Data.DataSveta d)
