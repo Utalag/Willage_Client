@@ -593,6 +593,12 @@ Skupiny: 1 Prototyp a buildy · 2 Terén a tvar · 3 Rozlišení bloku · 4 Ská
 - **Komplikace:** Gaussovy hroudy kontinentů nefungovaly (slité, děravé vnitrozemí, moře jen u švu) → Voronoi. Ve 4 z 10 seedů spojí kontinenty šíje; ostrovy malé (< 2 km²); u švu místy rovné pobřeží; `more_v1.json` je v klíči keše i bez moře.
 - **Další krok:** otázky pro Jana v PROP (šíje, ostrovy, korekce prahu, pobřeží u švu, výchozí vše zapnuto); schválení.
 
+### 🧪 Generátor V1 krok 6d: ostrovy v průlivech, zvlněný šev, vše zapnuto výchozí, řez pobřeží (2026-11-26 11:20 · větev `gen-v1-krok06d-upravy`, `cs/Willage.Gen/Svet/{MaskaPevniny,ParametrySveta}.cs`, `data/v1/more_v1.json`, PROP `docs/sjednoceni/reporty/krok06d-prop.md`, shots `godot-prototyp/shots/krok06d/`)
+- **Směr:** Jan 10:51 + 10:54. Šíje ponechány; ostrovy v průlivech (parametry počet/poloměr/výška); okraj pásu švu zvlněn šumem (šev v moři); `more_v1.json` v klíči jen s mořem; `VseKrok06` výchozí zapnuto, výchozí hodnoty C# = JSON; kompenzace prahu moře vynechána (Jan 10:54). Nástroj `eroze rez` – svislý řez 0,25 m.
+- **Zlepšení:** pobřeží u švu zvlněné; nové výchozí otisky startu: bez eroze beze změny (krok 3 c8eeb7964d1ddd85, voda 7714d1a1d34e00ad), s erozí krok 3 0f66c994ddb2c77b, voda a48305922c8c47a8, mapa 08e6ca036c3e2322 (golden); 10 seedů: moře −0,4 až −0,7 p. b., řeky max 10–15 km, mapa 5–6 s, deterministická; testy 89/89.
+- **Komplikace:** ostrovy v průlivech jen 0–2 na seed a malé (průlivy ~1 km); zvlnění 900 m bere moře průlivům → víc šíjí (samostatné pevniny 1–2). Řez ukázal, že podzemní voda o moři neví a mořské dno nemá sedimenty.
+- **Další krok:** otázky v PROP (zvlnění 400/900 m, ostrovy, hladina podzemní vody u moře, mořské dno); merge 06 → 06d do main.
+
 ### 💡 TODO: náplavy a delty jako samostatný krok po kroku 6b (2026-11-26 9:59, Jan, bod 7)
 - Eroze kroku 6 jen odebírá. Náplavy (ukládání v jezerech a nivách) a delty u ústí do moře jako samostatný krok: stream power s depozicí (FastScape / Yuan et al.), ukládání do mapy WGER a do geologie jako nová vrstva.
 
