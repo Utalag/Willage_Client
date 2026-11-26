@@ -5,6 +5,7 @@ Stav: **revize 3**, 2026-11-26 17:20 SEČ: editor materiálů staví na Willage_
 Navazuje na `04-implementace-generatoru.md` (kroky 1–14), kapitoly `01`–`03` a reporty v `reporty/`. Výchozí bod je `main` `e2d55d2` (tag `gen-v1-prusak`: klima 7 + 7b a průsak sloučené, testy 228/228). Krok 7c (hladina podle klimatu) běží na větvi `gen-v1-krok07c-hladina-klima` a tento plán do něj nezasahuje.
 
 ### Revize 3: rozhodnutí Jana 17:12 a stav G-1
+- **Pokračování fáze 2 (Jan 21:17 [t999u]):** kroky T-1..T-4 editoru materiálů / generátoru textur jsou v [`06-plan-editor-materialu.md`](06-plan-editor-materialu.md) (E-2 → T-1, okno E-4 → T-2, varianty E-3 → T-3, uložení a napojení → T-4).
 - **Editor materiálů (fáze 2, E-2 až E-4) staví na sdíleném katalogu a VPMG z Willage_Dev `main`** (commit `3476488`, „Materials + VPMG v0“), **ne na vlastním `vzhled_materialu_v1.json`**:
   - `src/Modules/World/Willage.World.Materials`: `Data/materials-catalog-v1.json` (schemaVersion 1, sekce `geology` = fyzika, `visualProfiles` = vzhled: `style`, `baseColor`, `grainScalePermille`, `layerDensityPermille`, `irregularityPermille`), loader, odvozené hodnoty;
   - `src/Modules/World/Willage.World.Vpmg` (VPMG v0): receptura JSON (schemaVersion 1: `materialId`, `visualProfile`, `resolution`, kroky `id/type/enabled/params`), registr operací (v0: `base_fill`, `hash_grain` nad GeologyHash), deterministický runner, RGBA8 vrstvy, `tools/VpmgPreview` (materialId + seed + receptura → PNG). Ověřeno na boxu: golden `vpmg-golden-v1.json` (materiál 52, seed 0xC0FFEE00, 64 px) dává checksum 1756279408.
