@@ -8,6 +8,14 @@ string data = Path.Combine(AppContext.BaseDirectory, "Data");
 var kat = KatalogMaterialu.ZeSouboru(Path.Combine(data, "materials-catalog-v1.json"));
 var pr = new Propustnost(kat);
 
+// G-5: rychlé ladění jedné sady (--jen=G5); plný běh bez argumentu.
+if (args.FirstOrDefault(a => a.StartsWith("--jen="))?[6..] is "G5")
+{
+    TestyG5.Spust();
+    Console.WriteLine($"OK {T.Ok}, chyb {T.Chyb}");
+    return T.Chyb == 0 ? 0 : 1;
+}
+
 T.Sekce("hash: golden vectors Willage_Dev (zrcadlo HashInt3)");
 using (var g = JsonDocument.Parse(File.ReadAllText(Path.Combine(data, "geology-hash-golden-v1.json"))))
 {
@@ -85,6 +93,7 @@ TestyG1.Spust();
 TestyG2.Spust();
 TestyG3.Spust();
 TestyG4.Spust();
+TestyG5.Spust();
 
 Console.WriteLine($"OK {T.Ok}, chyb {T.Chyb}");
 return T.Chyb == 0 ? 0 : 1;
