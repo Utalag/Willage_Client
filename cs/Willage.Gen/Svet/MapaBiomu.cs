@@ -5,7 +5,9 @@ namespace Willage.Gen.Svet;
 /// <summary>svet_fn.gd: mapa biomů (stanice ze seedu) a měkké Voroného váhy. Sopky si později přepíšou bod své buňky.</summary>
 public sealed class MapaBiomu
 {
-    public const int Sopecna = 4;
+    public const int Sopecna = 4, Pahorkatina = 2, Hornatina = 3;
+    /// <summary>Biomy „kopců“ (pahorkatina, hornatina, sopečná oblast) – krok 6 vodníci.</summary>
+    public static bool JeKopec(int b) => b >= Pahorkatina;
     public readonly double S, B; public readonly int N;
     public readonly double[] X, Y; public readonly byte[] T;
 

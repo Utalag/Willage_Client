@@ -20,6 +20,9 @@ public sealed class Prameny
 
     public Prameny(IGeologie g, RegionalniHladina h, Propustnost pr, ParametryVody p) { _g = g; _h = h; _pr = pr; _p = p; }
 
+    /// <summary>Krok 6: vodníci z eroze světa (obdélník → prameny). null = vypnuto (výchozí); přidají se za prameny ze seedu.</summary>
+    public Func<double, double, double, double, IEnumerable<Pramen>>? Vodnici { get; set; }
+
     /// <summary>Prameny světových buněk, jejichž pramen leží v obdélníku [x0, x1) × [y0, y1).</summary>
     public List<Pramen> VOblasti(double x0, double y0, double x1, double y1)
     {
@@ -31,6 +34,7 @@ public sealed class Prameny
             var s = Vysledny(cx, cy);
             if (s is not null && s.X >= x0 && s.X < x1 && s.Y >= y0 && s.Y < y1) out_.Add(s);
         }
+        if (Vodnici is not null) out_.AddRange(Vodnici(x0, y0, x1, y1));
         out_.Sort((a, c) => a.X != c.X ? a.X.CompareTo(c.X) : a.Y.CompareTo(c.Y));
         return out_;
     }
