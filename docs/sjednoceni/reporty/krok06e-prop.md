@@ -43,7 +43,7 @@ Zvlnění švu: `SevZvlneniM` (400), `SevZvlneniLambdaMinM` (600), `SevZvlneniLa
 
 ### Hladina podzemní vody u moře
 Řezy 100 m (kolmo na pobřeží, 40 m moře + 60 m pevnina, seed 49, `shots/krok06e/rez_pobrezi_100m.png`): v moři a v pásu 100 m od pobřeží je hladina přesně 60 m (v moři = hladina moře, na pevnině pod povrchem), přechod do vnitrozemí je plynulý přes 600 m. Testy: 10 seedů, v moři přesně 60 m, start 3 × 3 beze změny, spojitost (krok 1 m < 3 m), bez moře beze změny.
-**Důsledek (negativní/otázka):** na pevnině 60–100 m od pobřeží je hladina vodorovně 60 m, takže u strmých břehů je hluboko pod povrchem (strmý řez: povrch až 84 m, hladina 60 m) a u pozvolných (povrch 60–72 m) blízko povrchu – u pozvolného pobřeží proto vznikají vývěry (zóna `Vyver`) v pásu kolem moře.
+**Důsledek (negativní/otázka):** na pevnině 60–100 m od pobřeží je hladina vodorovně 60 m, takže u strmých břehů je hluboko pod povrchem (strmý řez: povrch až 84 m, hladina 60 m) a u pozvolných (povrch 60–72 m) blízko povrchu – u pozvolného pobřeží se hladina může dostat k povrchu (vývěry, zóna `Vyver`); počet vývěrů u pobřeží jsem neměřil.
 
 ### Nové výchozí otisky startu (seed 49, 14,14)
 | konfigurace | krok 3 | voda 14,14 | prameny 3 × 3 |

@@ -602,7 +602,7 @@ Skupiny: 1 Prototyp a buildy · 2 Terén a tvar · 3 Rozlišení bloku · 4 Ská
 ### 🧪 Generátor V1 krok 6e: moře 35 %, hladina podzemní vody u moře, zvlnění švu jako ladící parametr (2026-11-26 11:45 · větev `gen-v1-krok06e-doladeni`, `cs/Willage.Gen/{Svet,Voda,Geologie}/`, `data/v1/{more,voda}_v1.json`, PROP `docs/sjednoceni/reporty/krok06e-prop.md`, shots `godot-prototyp/shots/krok06e/`)
 - **Směr:** Jan 11:15 + 11:22. Zvlnění švu 400 m (parametry `SevZvlneniM`, `SevZvlneniLambdaMinM/MaxM` v `more_v1.json`, v klíči); výchozí podíl moře 35 %; hladina podzemní vody = 60 m u moře a v moři, přechod 600 m (`HladinaPrechodM`); rozhodnutí 6–6e a nové pořadí (klima a biomy, předherní editor světa) do plánu 04 na větvi `docs-plan04-krok06e`.
 - **Zlepšení:** samostatné pevniny ≥ 2 v 9 z 10 seedů (dříve 3 z 10), ostrovy v průlivech 22 na 10 seedů (dříve 5); moře skutečné o 0,6–0,9 p. b. pod cílem; start beze změny bez eroze (krok 3 c8eeb7964d1ddd85, voda 7714d1a1d34e00ad), s erozí krok 3 9f32311e046f8b6a, voda 8e239a68c6d01be0, mapa 800d420bb00047de; 5–6 s, ≤ 221 MB, deterministické; testy 100/100.
-- **Komplikace:** moře je 155–680 m od startu → vazba hladiny na moře měnila start (18 → 2 prameny), proto ochrana startu pro vodu. Hladina 60 m vodorovně u pobřeží: u strmých břehů hluboko pod povrchem, u pozvolných vývěry.
+- **Komplikace:** moře je 155–680 m od startu → vazba hladiny na moře měnila start (18 → 2 prameny), proto ochrana startu pro vodu. Hladina 60 m vodorovně u pobřeží: u strmých břehů hluboko pod povrchem, u pozvolných se může přiblížit povrchu (neměřeno).
 - **TODO:** mořské usazeniny na dně spolu s náplavy a deltami (samostatný krok).
 - **Další krok:** schválení; merge 06e (a docs větve) do main dělá Willage-backend.
 
