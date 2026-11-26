@@ -3,6 +3,7 @@ using Willage.Gen.Nastroje;
 
 var data = DataSveta.Najdi(AppContext.BaseDirectory);
 args = ErozeNastroj.Volby(args);
+ErozeNastroj.D = data;
 string cmd = args.Length > 0 ? args[0] : "";
 return cmd switch
 {
@@ -22,6 +23,7 @@ return cmd switch
         "otisky" => ErozeNastroj.Otisky(args, data),
         "detail" => ErozeNastroj.Detail(args, data),
         "prameny" => ErozeNastroj.PramenyDiag(args, data),
+        "interp" => ErozeNastroj.InterpMer(args, data),
         _ => Napoveda(),
     },
     _ => Napoveda(),

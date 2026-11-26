@@ -33,7 +33,7 @@ public sealed record ParametryEroze
     public double KorytoMinSirkaM { get; init; } = 1.0;
     public double KorytoMaxHloubkaM { get; init; } = 3.0;
     /// <summary>Krok 6b: interpolace E mezi uzly: "bilinearni" (krok 6), "catmullrom", "bspline".</summary>
-    public string InterpolaceE { get; init; } = "bilinearni";
+    public string InterpolaceE { get; init; } = "catmullrom";   // krok 6b: Catmull-Rom (bez hvězd, interpoluje uzly)
 
     public int Nx => (int)Math.Round(PlanetaXM / KrokM);
     public int Ny => (int)Math.Round(PlanetaYM / KrokM);
@@ -41,6 +41,10 @@ public sealed record ParametryEroze
     public static ParametryEroze ZJson(string json) =>
         JsonSerializer.Deserialize<ParametryEroze>(json, new JsonSerializerOptions { PropertyNameCaseInsensitive = true }) ?? new();
 
-    /// <summary>Kanonický zápis pro klíč keše (pořadí vlastností je pevné).</summary>
-    public string Kanonicky() => JsonSerializer.Serialize(this);
+    /// <summary>Kanonický zápis pro klíč keše (pořadí vlastností je pevné). Krok 6b: bez parametrů jemné funkce
+    /// (interpolace, koryto, vodníci) – uloženou mapu nemění.</summary>
+    public string Kanonicky() => JsonSerializer.Serialize(this with
+    {
+        InterpolaceE = "", KorytoA = 0, KorytoC = 0, KorytoMinSirkaM = 0, KorytoMaxHloubkaM = 0, SpecifickyOdtokLsKm2 = 0, VodnikVahaKopcu = 0,
+    });
 }
