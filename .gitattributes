@@ -1,2 +1,5 @@
 # Textová data generátoru: vždy LF (SHA v manifestu katalogů a klíče keše nezávislé na autocrlf; Jan 17:24)
 godot-prototyp/data/** text eol=lf
+# Binární assety (dlaždice PNG, rgba8) – bez převodu konců řádků, jinak se změní bajty a SHA (T-2c)
+godot-prototyp/data/**/*.png binary
+godot-prototyp/data/**/*.rgba8 binary
