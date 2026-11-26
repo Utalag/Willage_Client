@@ -5,7 +5,7 @@ using Willage.Gen.Katalogy;
 namespace Willage.Gen.Planeta;
 
 /// <summary>
-/// G-3: soubor planety WPLN v1 (Deflate jako WGER). Pořadí: magie „WPLN“, verze (int), gen_ver, seed (u32), souhrn manifestu,
+/// G-3: soubor planety WPLN v1 (Deflate jako WGER). Pořadí: magie „WPLN“, verze (int), gen_ver, seed (i64), souhrn manifestu,
 /// počet položek manifestu + (cesta, velikost, sha), sada parametrů (JSON), počet klíčů + (id, klíč), potvrzeno (bool),
 /// počet úprav + úpravy (U-1, ve v1 0). Řetězce BinaryWriter (UTF-8, délka 7bit). Deterministické: stejný obsah → stejné bajty.
 /// </summary>
@@ -44,7 +44,7 @@ public static class SouborPlanety
         if (mag != Magie) throw new InvalidDataException("není soubor planety WPLN");
         int v = r.ReadInt32();
         if (v != Verze) throw new InvalidDataException($"nepodporovaná verze WPLN {v} (umím {Verze})");
-        string gen = r.ReadString(); uint seed = r.ReadUInt32(); string souhrn = r.ReadString();
+        string gen = r.ReadString(); long seed = r.ReadInt64(); string souhrn = r.ReadString();
         var man = new List<PolozkaManifestu>(); int n = r.ReadInt32();
         for (int i = 0; i < n; i++) man.Add(new PolozkaManifestu(r.ReadString(), r.ReadInt64(), r.ReadString()));
         string sada = r.ReadString();

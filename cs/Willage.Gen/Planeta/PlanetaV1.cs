@@ -12,7 +12,7 @@ public sealed record UpravaRegionu(string Druh, string Modul, double X0M, double
 public sealed record PlanetaV1
 {
     public string GenVer { get; init; } = Pipeline.KlicModulu.GenVer;
-    public uint Seed { get; init; }
+    public long Seed { get; init; }
     public string ManifestSouhrn { get; init; } = "";
     public IReadOnlyList<PolozkaManifestu> Manifest { get; init; } = Array.Empty<PolozkaManifestu>();
     /// <summary>Sada parametrů (formát willage-sada-parametru-v1), všechny hodnoty.</summary>
