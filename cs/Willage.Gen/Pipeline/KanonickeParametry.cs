@@ -46,8 +46,9 @@ public static class KanonickeParametry
 }
 
 /// <summary>
-/// Které pole ParametrySveta patří kterému modulu (každé právě jednomu – hlídá test). Pole moře (M2) se přepisují z more_v1.json
-/// (ErozePlanety.NactiMore), proto klíč M2 bere efektivní hodnoty po načtení i SHA souboru.
+/// Které pole ParametrySveta patří kterému modulu (každé právě jednomu – hlídá test). Pole moře (M2) doplní more_v1.json
+/// (ErozePlanety.NactiMore → ParametryMore.UplatniNaVychozi), jen pokud zůstala na výchozí hodnotě C# (G-2: jinak platí ParametrySveta);
+/// klíč M2 bere efektivní hodnoty po načtení i SHA souboru.
 /// </summary>
 public static class RozdeleniParametru
 {

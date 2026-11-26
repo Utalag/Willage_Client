@@ -138,7 +138,8 @@ public static class TestyG1
             var zm = Zmenene(kz, K(p, n)); var oc = Ocekavane(graf, modul);
             T.Je(S(zm) == S(oc), $"{modul} {popis}: změněno {S(zm)} (čekáno {S(oc)})");
         }
-        T.Je(Zmenene(kz, K(new ParametrySveta { PodilMore = 0.1 })).Count == 0, "PodilMore v ParametrySveta nic nemění (přepíše ho more_v1.json, jako dnes)");
+        // G-2: pole moře jdou nastavit přes ParametrySveta (more_v1.json doplní jen pole, která zůstala na výchozí hodnotě C#)
+        T.Je(S(Zmenene(kz, K(new ParametrySveta { PodilMore = 0.1 }))) == S(Ocekavane(graf, "M2")), "PodilMore v ParametrySveta → klíče M2–M7 (G-2; v G-1 ho přepsal more_v1.json)");
 
         T.Sekce("G-1: pipeline = původní Sestav (otisky beze změny)");
         var kes = Path.Combine(Path.GetTempPath(), "willage-test-kes-6d");
