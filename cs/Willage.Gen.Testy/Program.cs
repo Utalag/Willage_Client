@@ -76,6 +76,7 @@ TestyKrok06d.Spust();
 TestyKrok06e.Spust();
 TestyKrok06f.Spust();
 TestyKrok06g.Spust();
+TestyKrok07.Spust(kat);
 
 Console.WriteLine($"OK {T.Ok}, chyb {T.Chyb}");
 return T.Chyb == 0 ? 0 : 1;
