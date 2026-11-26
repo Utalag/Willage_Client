@@ -118,8 +118,50 @@ def krivky():
     fig.suptitle("A10: pole mocnosti 0–1 podle horniny (0,5 = střed rozsahu thick0…thick1)")
     fig.tight_layout(); fig.savefig(os.path.join(OUT, "a10_krivky_horniny.png"), dpi=110); plt.close()
 
-rez_a10()
-st = {"a1": rez_a1("a1", "A1: svislý řez blokem 14,14 (y = 1825 m)"), "a1b": rez_a1("a1b", "A1: svislý řez blokem 14,15 (y = 1921 m)")}
-krivky()
-json.dump(st, open(os.path.join(OUT, "a1_rezy_stat.json"), "w"), indent=1)
-print(st)
+def rez_dom(sek, nazev, fname):
+    m = META[sek]; ext = [m["x0"], m["x1"], 0, m["nz"] * m["krok_z"]]
+    fig, ax = plt.subplots(2, 1, figsize=(13, 8), sharex=True)
+    stat = {}
+    for a, kl, t in zip(ax, ("pred", "po"), ("PŘED (střed dómu 0,55–0,75 výšky, v krystaliniku)", "PO (střed dómu v pásmu sedimentů, Jan 26. 11.)")):
+        idm, lay, zp = nacti(sek, kl)
+        img = rgb_vrstvy(lay, fade=0.35)
+        n, nz = lay.shape
+        telo = 0
+        for i in range(n):
+            for k in range(nz):
+                f = int(idm[i, k]); l = int(lay[i, k])
+                if l == 0: continue
+                typ = TYP.get(f) if f != l else None
+                if typ is None and f == 0 and l != 0: typ = "kras"
+                if typ is None: continue
+                telo += 1
+                img[k, i] = TELO_BARVA[typ]
+        xs = np.linspace(m["x0"], m["x1"], len(zp), endpoint=False) + 0.5 * (m["x1"] - m["x0"]) / len(zp)
+        a.imshow(img, origin="lower", extent=ext, aspect="auto", interpolation="nearest")
+        a.plot(xs, zp * 0.67, color="k", ls="--", lw=0.7, alpha=0.6)
+        a.plot(xs, zp * 0.92, color="k", ls="--", lw=0.7, alpha=0.6)
+        a.set_title(f"{t}: buněk útvarů {telo}")
+        a.set_ylabel("z (m)")
+        a.set_ylim(0, float(zp.max()) + 2)
+        stat[kl] = telo
+    ax[1].set_xlabel("x (m), y = %.0f m; čárkovaně pásmo sedimentů (0,67–0,92 výšky povrchu sloupce); modrá = dóm (sůl), zelená skarn, oranžová žíla" % m["y0"])
+    fig.suptitle(nazev)
+    fig.tight_layout(); fig.savefig(os.path.join(OUT, fname), dpi=110); plt.close()
+    return stat
+
+if "a10" in META:
+    rez_a10()
+if "a1" in META:
+    st = {"a1": rez_a1("a1", "A1: svislý řez blokem 14,14 (y = 1825 m)"), "a1b": rez_a1("a1b", "A1: svislý řez blokem 14,15 (y = 1921 m)")}
+    json.dump(st, open(os.path.join(OUT, "a1_rezy_stat.json"), "w"), indent=1)
+    print(st)
+if os.path.isfile(os.path.join(OUT, "sum.json")) and "a10" in META:
+    krivky()
+dst = {}
+if "dom" in META:
+    dst["dom"] = rez_dom("dom", "Dóm (sůl): svislý řez y = 1917 m, střed (2069, 1917)", "a1_rez_dom_pred_po.png")
+if "dom2" in META:
+    dst["dom2"] = rez_dom("dom2", "Dóm (sůl): svislý řez y = 1943 m, střed (1889, 1943)", "a1_rez_dom2_pred_po.png")
+if dst:
+    json.dump(dst, open(os.path.join(OUT, "dom_rezy_stat.json"), "w"), indent=1)
+    print(dst)

@@ -65,4 +65,26 @@ Jan souhlasil s doporučeními ([pt907u]). Přepis do C# jen tam, kde bude potř
 5. **Šum přítomnosti `V1_PRES` se zatím nemění.**
 
 ### Dóm v sedimentech – výsledky
-(doplním po testech)
+Doplněno 2026-11-26 8:12 SEČ. Stejné 9 bloků 128 m (14–16 × 14–16), krok 2 m / 0,5 m jako A1.
+
+Objem dómu (buňky, A1 zapnuté):
+
+| řada bloků | před A1, starý střed | po A1, starý střed | po A1, střed v sedimentech | v pásmu / mimo pásmo |
+|---|---|---|---|---|
+| 14 | 35 679 | 13 654 | **30 640** | 28 783 / 1 857 |
+| 15 | 36 546 | 16 349 | **33 270** | 31 780 / 1 490 |
+| 16 | 27 242 | 10 227 | **25 215** | 24 692 / 523 |
+| **součet** | **99 467** | **40 230** (40 %) | **89 125** (90 % původního, 2,2× proti starému středu) | 85 255 / 3 870 (4,3 %) |
+
+Po ukotvení: **0 buněk dómu v nehostiteli** (i 0 v půdě, 0 pod min. hloubkou). „Mimo pásmo“ (4,3 %) jsou konce elipsoidu, které po šumu mocnosti pořád leží v hostitelské sedimentární vrstvě (skutečné hranice pásma nejsou přesně 0,67–0,92). Dóm tedy leží v hostiteli; ztráta objemu proti stavu bez A1 je teď ~10 % (ořez okrajů), ne ~60 %.
+
+Řez: `godot-prototyp/shots/krok03b/a1_rez_dom_pred_po.png` (y = 1917 m, střed 2069, 1917; v řezu 1 588 → 2 768 buněk útvarů) a `a1_rez_dom2_pred_po.png` (y = 1943 m).
+
+### Testy po ukotvení dómu (2026-11-26 8:12 SEČ)
+- **A1** (`geo_v1b --rezim=hostitele`, 9 bloků): PROŠLO, kousá nad původním kódem. Po (nový střed): 0 porušení hostitele / nikdy / hloubky / minerálu. Objem viz tabulka výše.
+- **A10** (`--rezim=sum`): PROŠLO, čísla stejná jako před úpravou dómu (šum vrstev se nemění).
+- **Vrstvy** (`--rezim=vrstvy`, 65 536 sloupců): PROŠLO, 0 křížení, 0 mezer, 0 definic < 0,25 m, součet = výška tvaru, mince na cíli 16 384 / 16 384 (čísla vrstev stejná jako před úpravou dómu – dóm není vrstva).
+- **Původní testy kroku 3** (`tools/geo_v1.gd --rezim=vse`, výchozí a1+a10+dóm v sedimentech): **0 chyb**. Řez šev 0 neshod; sopka průduch id 75 k z = 0, 3 402 buněk, těleso v 5 m id 75; tenké: definice < 0,25 m **0**, definice < 0,5 m 366, po ořezu < 0,25 m 5, < 0,5 m 8; útvary přes šev 0 neshod (28 útvarů na řezu); mince 521/1024 = 0,5088 (3σ ok). Čas: segment 8 m / 0,25 m / 128 m **3 051 ms** (krok 3: 2 614 ms); srovnání E84 606 ms vs 89 ms; `hranice` 774 ms (krok 3: 531 ms).
+- **Determinismus dvou procesů** (`geo_v1.gd --rezim=det`, mřížka 3 × 3, 2 m / 1 m, 4 718 592 buněk): oba **`bbdc0afa877d6c2e`** (128 s / 127 s). Otisk je jiný než d571153 (`59e4569309aa8500`) i než krok 3b před ukotvením dómu – očekávané (A1+A10+nový střed). Při vypnutých přepínačích a `dom_pasmo_sedimenty=false` zůstává shoda s d571153 (`72d639d2db974623` na bloku 14,14) z předešlého běhu.
+
+Do `main` ani do větve kroku 3 se nemerguje.

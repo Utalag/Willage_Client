@@ -13,14 +13,26 @@ func _uloz(cesta: String, a: PackedFloat32Array) -> void:
 	var f := FileAccess.open(cesta, FileAccess.WRITE)
 	f.store_buffer(a.to_byte_array())
 
+func _par(zaklad: Dictionary, s: String) -> Dictionary:
+	var p := zaklad.duplicate()
+	for e in s.split(",", false):
+		var kv := e.split(":")
+		var v := kv[1] != "0"
+		match kv[0]:
+			"a1": p["a1_hostitele"] = v
+			"a10": p["a10_sum_hornin"] = v
+			"dom": p["dom_pasmo_sedimenty"] = v
+	return p
+
 func _init() -> void:
 	var dat := _arg("data", "/tmp/k3b")
 	DirAccess.make_dir_recursive_absolute(dat)
 	var kz := float(_arg("z", "0.5"))
 	var meta := {}
+	var par0 := {"seed": int(_arg("seed", "49"))}
 	var sv := {
-		"pred": S.new({"seed": int(_arg("seed", "49")), "a1_hostitele": false, "a10_sum_hornin": false}),
-		"po": S.new({"seed": int(_arg("seed", "49"))}),
+		"pred": S.new(_par(par0, _arg("pred", "a1:0,a10:0,dom:0"))),
+		"po": S.new(_par(par0, _arg("po", "a1:1,a10:1,dom:1"))),
 	}
 	for sek in _arg("sekce", "").split(";", false):
 		var q := sek.split(":")

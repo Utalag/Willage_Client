@@ -14,24 +14,32 @@
   ]
  ],
  "kousa": true,
- "ms": 121570,
+ "ms": 181576,
  "ok": true,
  "po": {
   "bunek_tel": {
-   "dome": 13654,
-   "kras": 1598,
+   "dome": 30640,
+   "kras": 1570,
    "pipe": 3183,
-   "skarn": 22607,
+   "skarn": 22615,
    "zila": 4541
   },
+  "dome_mimo_pasmo": 1857,
+  "dome_nej": {
+   "n": 46,
+   "x": 2069.0,
+   "y": 1917.0,
+   "z": 73.75
+  },
+  "dome_v_pasmu": 28783,
   "podle_hostitele": {
-   "dome@44": 2079,
-   "dome@49": 50,
-   "dome@5": 7278,
-   "dome@51": 3299,
-   "dome@52": 948,
-   "kras@44": 450,
-   "kras@5": 1148,
+   "dome@44": 4090,
+   "dome@49": 584,
+   "dome@5": 19111,
+   "dome@51": 5004,
+   "dome@52": 1851,
+   "kras@44": 473,
+   "kras@5": 1097,
    "pipe@20": 577,
    "pipe@26": 179,
    "pipe@28": 181,
@@ -43,8 +51,8 @@
    "pipe@6": 832,
    "skarn@30": 9095,
    "skarn@40": 8259,
-   "skarn@44": 1234,
-   "skarn@5": 4019,
+   "skarn@44": 1272,
+   "skarn@5": 3989,
    "zila@30": 23,
    "zila@33": 1502,
    "zila@36": 698,
@@ -67,6 +75,14 @@
    "skarn": 91284,
    "zila": 4217
   },
+  "dome_mimo_pasmo": 21244,
+  "dome_nej": {
+   "n": 58,
+   "x": 2097.0,
+   "y": 1823.0,
+   "z": 60.25
+  },
+  "dome_v_pasmu": 14435,
   "podle_hostitele": {
    "dome@2": 1,
    "dome@33": 8972,
@@ -161,5 +177,56 @@
   "v_pude": {
    "dome": 1
   }
+ },
+ "stary_stred": {
+  "bunek_tel": {
+   "dome": 13654,
+   "kras": 1598,
+   "pipe": 3183,
+   "skarn": 22607,
+   "zila": 4541
+  },
+  "dome_mimo_pasmo": 2,
+  "dome_nej": {
+   "n": 36,
+   "x": 1933.0,
+   "y": 1833.0,
+   "z": 63.75
+  },
+  "dome_v_pasmu": 13652,
+  "podle_hostitele": {
+   "dome@44": 2079,
+   "dome@49": 50,
+   "dome@5": 7278,
+   "dome@51": 3299,
+   "dome@52": 948,
+   "kras@44": 450,
+   "kras@5": 1148,
+   "pipe@20": 577,
+   "pipe@26": 179,
+   "pipe@28": 181,
+   "pipe@30": 417,
+   "pipe@33": 589,
+   "pipe@36": 307,
+   "pipe@40": 99,
+   "pipe@52": 2,
+   "pipe@6": 832,
+   "skarn@30": 9095,
+   "skarn@40": 8259,
+   "skarn@44": 1234,
+   "skarn@5": 4019,
+   "zila@30": 23,
+   "zila@33": 1502,
+   "zila@36": 698,
+   "zila@40": 542,
+   "zila@6": 1776
+  },
+  "porus_hloubka": 0,
+  "porus_host": 0,
+  "porus_mineral": 0,
+  "porus_nikdy": 0,
+  "pripady": [],
+  "sloupcu": 12288,
+  "v_pude": {}
  }
 }

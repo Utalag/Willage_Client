@@ -14,25 +14,33 @@
   ]
  ],
  "kousa": true,
- "ms": 129173,
+ "ms": 193887,
  "ok": true,
  "po": {
   "bunek_tel": {
-   "dome": 10227,
-   "kras": 1791,
+   "dome": 25215,
+   "kras": 1760,
    "pipe": 3185,
-   "skarn": 26669,
+   "skarn": 26785,
    "zila": 3992
   },
+  "dome_mimo_pasmo": 523,
+  "dome_nej": {
+   "n": 46,
+   "x": 1967.0,
+   "y": 2169.0,
+   "z": 76.75
+  },
+  "dome_v_pasmu": 24692,
   "podle_hostitele": {
-   "dome@44": 3605,
-   "dome@49": 1002,
-   "dome@5": 904,
-   "dome@51": 3341,
-   "dome@52": 1375,
-   "kras@44": 1181,
-   "kras@49": 419,
-   "kras@5": 191,
+   "dome@44": 10793,
+   "dome@49": 1216,
+   "dome@5": 4675,
+   "dome@51": 4882,
+   "dome@52": 3649,
+   "kras@44": 1166,
+   "kras@49": 413,
+   "kras@5": 181,
    "pipe@20": 556,
    "pipe@26": 9,
    "pipe@28": 219,
@@ -45,7 +53,7 @@
    "pipe@7": 336,
    "skarn@30": 4932,
    "skarn@40": 16033,
-   "skarn@44": 5360,
+   "skarn@44": 5476,
    "skarn@5": 344,
    "zila@33": 1361,
    "zila@36": 301,
@@ -68,6 +76,14 @@
    "skarn": 94080,
    "zila": 3767
   },
+  "dome_mimo_pasmo": 17123,
+  "dome_nej": {
+   "n": 55,
+   "x": 1859.0,
+   "y": 2109.0,
+   "z": 66.75
+  },
+  "dome_v_pasmu": 10119,
   "podle_hostitele": {
    "dome@33": 7680,
    "dome@36": 3932,
@@ -153,6 +169,58 @@
     "z": 23.25
    }
   ],
+  "sloupcu": 12288,
+  "v_pude": {}
+ },
+ "stary_stred": {
+  "bunek_tel": {
+   "dome": 10227,
+   "kras": 1791,
+   "pipe": 3185,
+   "skarn": 26669,
+   "zila": 3992
+  },
+  "dome_mimo_pasmo": 0,
+  "dome_nej": {
+   "n": 37,
+   "x": 2095.0,
+   "y": 2063.0,
+   "z": 72.75
+  },
+  "dome_v_pasmu": 10227,
+  "podle_hostitele": {
+   "dome@44": 3605,
+   "dome@49": 1002,
+   "dome@5": 904,
+   "dome@51": 3341,
+   "dome@52": 1375,
+   "kras@44": 1181,
+   "kras@49": 419,
+   "kras@5": 191,
+   "pipe@20": 556,
+   "pipe@26": 9,
+   "pipe@28": 219,
+   "pipe@30": 230,
+   "pipe@33": 531,
+   "pipe@36": 56,
+   "pipe@40": 74,
+   "pipe@52": 2,
+   "pipe@6": 1172,
+   "pipe@7": 336,
+   "skarn@30": 4932,
+   "skarn@40": 16033,
+   "skarn@44": 5360,
+   "skarn@5": 344,
+   "zila@33": 1361,
+   "zila@36": 301,
+   "zila@40": 430,
+   "zila@6": 1900
+  },
+  "porus_hloubka": 0,
+  "porus_host": 0,
+  "porus_mineral": 0,
+  "porus_nikdy": 0,
+  "pripady": [],
   "sloupcu": 12288,
   "v_pude": {}
  }

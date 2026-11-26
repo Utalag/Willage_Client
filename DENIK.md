@@ -553,6 +553,15 @@ Skupiny: 1 Prototyp a buildy · 2 Terén a tvar · 3 Rozlišení bloku · 4 Ská
 - Usazování (Jan 20:20): v tůních, kde voda neproudí, se materiál usazuje. Odplavení i usazení závisí na rychlosti proudění (práh rychlosti pro odplavení a pro usazení podle materiálu); časy předpočítané z průtoku jako události.
 - Rozhodnutí Jan 21:14: podzemní voda může běžet na hrubší mřížce (ve svet64 32 na blok: 23 s, špička 0,7 GB místo 4 GB); povrchová voda zůstává v plném rozlišení.
 
+
+### 🧪 Generátor V1 krok 3b: útvary jen v hostitelské hornině (A1) a šum mocnosti podle horniny (A10) (2026-11-26 · `gen-v1-krok03b-hostitele-sum`, shots `shots/krok03b/`)
+- Jan 2026-11-26 schválil A1 a A10 jako doplněk kroku 3. 07:59 přerušeno (přechod prototypů na C#); v 8:04 Jan schválil doporučení a ukotvení středu dómu se dokončilo v GDScriptu. PROP: `docs/sjednoceni/reporty/krok03b-prop.md`.
+- A1: po zapnutí 0 buněk útvarů v nehostiteli (před 85–105 tis. na řadu bloků); v ornici/písku byla před jen 1 buňka, skutečná chyba byl skarn a dóm v krystaliniku.
+
+### ✅ Generátor V1 krok 3b: rozhodnutí Jana 8:04 a ukotvení středu dómu do pásma sedimentů (2026-11-26 8:12 · `gen-v1-krok03b-hostitele-sum`, shot `shots/krok03b/a1_rez_dom_pred_po.png`)
+- Jan 8:04 souhlasil: zvětralý jíl a spraš zůstanou v `nikdy`; skarn jen v karbonátech a vápnitých metamorfitech (menší objem OK); střed dómu (sůl) do sedimentů; tabulka šumu je výchozí (doladí se podle vzhledu); `V1_PRES` zatím beze změny.
+- Dóm po ukotvení: 89 125 buněk v 9 blocích (90 % objemu před A1, 2,2× proti starému středu s A1 40 230), 0 v nehostiteli. Původní testy kroku 3: 0 chyb. Determinismus dvou procesů: `bbdc0afa877d6c2e` (4 718 592 buněk).
+
 ## 3 Rozlišení bloku
 
 ### 🧪 Nastavitelné rozlišení, test 32 × 32 × 64 s buňkou 0,5³ (2026-11-17 11:50 · `--res-test`)
