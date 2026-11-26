@@ -52,7 +52,7 @@ public static class MetadataParametru
         ["ParametryVody"] = new[]
         {
             ("Obecné", new[] { "Seed", "SopkaNepropustna", "HladinaSledujeErozi" }),
-            ("Regionální hladina", new[] { "MrizkaHladinyM", "PolomerHladinyM", "HloubkaD0M", "ZesileniUdoliBeta", "HladinaPrechodM" }),
+            ("Regionální hladina", new[] { "MrizkaHladinyM", "PolomerHladinyM", "HloubkaD0M", "ZesileniUdoliBeta", "HladinaPrechodM", "HladinaBezMorskychUzlu", "HladinaPodlahaPodil", "HladinaPodlahaM" }),
             ("Profil a artéská voda", new[] { "FilmM", "MrizkaDoplnM", "PolomerDoplnM" }),
             ("Prameny", new[] { "BunkaPramenuM", "KrokKandidatuM", "PravdepodobnostBunky", "RozestupM", "SklonKontakt", "QSnih", "QKontakt", "QKras", "QVyver", "Tlakovy" }),
             ("Průsak", new[] { "PrusakKoeficient", "PrusakTlak", "PrusakSpadMax" }),

@@ -18,7 +18,7 @@ namespace Willage.Gen.Schema;
 public sealed class SchemaParametru
 {
     public const string Format = "willage-schema-parametru-v1";
-    internal static readonly JsonSerializerOptions O = new() { IncludeFields = true, WriteIndented = true };
+    internal static readonly JsonSerializerOptions O = new() { IncludeFields = true, WriteIndented = true, Converters = { new BiomJson() } };
 
     public IReadOnlyList<ParametrSchematu> Parametry { get; }
     private readonly Dictionary<string, ParametrSchematu> _podle;
