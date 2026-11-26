@@ -69,7 +69,13 @@ public sealed class SadaParametru
     public SadaParametru Nastav(string id, JsonNode? hodnota)
     {
         var (z, n) = Rozloz(id);
-        if (z == "prusak_v1.json") { _prusak = hodnota?.ToJsonString(new JsonSerializerOptions { WriteIndented = true }) ?? ""; return this; }
+        if (z == "prusak_v1.json")
+        {
+            // stejný obsah → ponechat původní text (klíč M6 bere text průsaku, formátování ho nesmí měnit)
+            if (!(hodnota is not null && _prusak.Length > 0 && JsonNode.DeepEquals(JsonNode.Parse(_prusak), hodnota)))
+                _prusak = hodnota?.ToJsonString(new JsonSerializerOptions { WriteIndented = true }) ?? "";
+            return this;
+        }
         var m = Clen(z, n);
         object? v = hodnota.Deserialize(SchemaParametru.TypClenu(m), O);
         if (m is System.Reflection.FieldInfo f) f.SetValue(_svet, v);
