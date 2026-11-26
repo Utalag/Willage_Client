@@ -14,11 +14,19 @@ public sealed class GeologieCs : IGeologie
     public GeoVrstvy Geo { get; }
     private const double C = GeologyGridConstants.CellM, Zmax = GeologyGridConstants.ColumnM;
 
+    private readonly DataSveta _d;
+
     public GeologieCs(ParametrySveta p, DataSveta d)
     {
+        _d = d;
         Svet = new SvetFn(p, d);
         Geo = new GeoVrstvy(Svet, d);
     }
+
+    private GeologieCs(SvetFn s, DataSveta d) { _d = d; Svet = s; Geo = new GeoVrstvy(s, d); }
+
+    /// <summary>Instance pro další vlákno: sdílí neměnnou funkci světa (SvetFn), vlastní keše útvarů.</summary>
+    public GeologieCs Klon() => new(Svet, _d);
 
     public double Povrch(double x, double y) => Svet.Vyska(x, y);
     public byte[] Sloupec(double x, double y) => Geo.VyplnSloupec(x, y, C, Zmax);

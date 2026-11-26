@@ -62,3 +62,18 @@ Eroze světa (krok 6), změna výchozí hustoty pramenů, četnost artéské vod
 2. Šířka přechodu mince 32 m: stačí, nebo širší (64 m) kvůli pozvolnějšímu sklonu vrstev?
 3. Cache výšky středu útvaru `_zs` (klíč 0,25 m) je převzatá kvůli bitové shodě; teoreticky závisí na pořadí dotazů (3 × 3: 0 kolizí). Navrhuji ji později nahradit přesným klíčem (změní otisk jen při kolizi).
 4. Krok 3 na 0,25 m: 18,5 s na blok na jednom vlákně. Paralelizace po sloupcích (instance na vlákno) až podle potřeby?
+
+## Rozhodnutí Jana 2026-11-26 9:32 ([pt922u]) a zapracování (9:36 SEČ)
+1. **Hustota pramenů:** výchozí čtverec **24 m**, pravděpodobnost 0,6 (`voda_v1.json` i `ParametryVody`). Svět 3 × 3: **18 pramenů** (122 /km², 16 vývěrů, 2 krasové) místo 8.
+2. **Přechod mince E82:** zůstává 32 m.
+3. **Keš výšky středu útvaru: přesný klíč** (`TvorbaUtvaru`, `ParametrySveta.UtvaryKlicGd = false`; GDScript klíč round(4·c) jen v `Puvodni()` pro porovnání). Výška okolí sopky se počítá jednou při stavbě světa, keš podle klíče nemá. Masiv si šumy z keše geo2 drží přímo, dotaz už do keše nesahá. **Otisky se nezměnily**, protože ve světě nejsou kolize: krok 3 bez oprav `bbdc0afa877d6c2e` (klíč GDScript i přesný), s opravami `c8eeb7964d1ddd85` (oba klíče), segment 2104,2104 `059d807ab04b7f00` (přesný klíč = GDScript). Test: opačné pořadí dotazů dá stejné bajty.
+4. **Paralelní výpočet 0,25 m** (`ParalelniSloupce`, instance `GeologieCs.Klon()` na vlákno, sdílená `SvetFn`, sloupec na pevném místě): blok 14,14 po 0,25 m (134 217 728 buněk), otisk **`ce6d906313af513f`** na 1, 2, 4 a 8 vláknech:
+
+| Vláken | 1 | 2 | 4 | 8 |
+|---|---|---|---|---|
+| Čas bloku 128 m | 18,9 s | 9,3 s | 4,7 s | 2,6–3,7 s |
+
+Bez oprav (`Puvodni()`): 1 vlákno = 8 vláken = `ddc93f9662db4fb8` (19,2 s / 3,4 s).
+
+**Otisky po změnách** (2 procesy, oba shodné): krok 3 `c8eeb7964d1ddd85` (beze změny), voda 14,14 **`7714d1a1d34e00ad`** (dříve `add94931c6922f9c`, změna jen hustotou pramenů 24 m; 2 prameny v bloku), blok 0,25 m `ce6d906313af513f`.
+**Testy:** C# 49/49; Godot .NET build 0 chyb; `tools/geo_cs_godot.gd` hladina C# = most 25/25, prameny bloku 13,13: 2.

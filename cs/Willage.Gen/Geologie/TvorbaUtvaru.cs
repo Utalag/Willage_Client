@@ -5,7 +5,8 @@ namespace Willage.Gen.Geologie;
 
 /// <summary>
 /// utvary.gd::features_u a _make: útvary ze světové mřížky podle druhu (rozteč, četnost, dosah), parametry z hashe.
-/// Výška tvaru ve středu útvaru se pamatuje podle klíče round(4·c) jako v GDScriptu (_zs) – viz PROP krok05 (pořadí dotazů).
+/// Výška tvaru ve středu útvaru se pamatuje podle PŘESNÉHO středu (Jan 2026-11-26 9:32, rozhodnutí 3): výsledek nezávisí
+/// na pořadí dotazů. GDScript měl klíč round(4·c) (_zs); ten jde zapnout přes ParametrySveta.UtvaryKlicGd jen pro porovnání.
 /// </summary>
 public sealed class TvorbaUtvaru
 {
@@ -15,6 +16,7 @@ public sealed class TvorbaUtvaru
         (DruhUtvaru.Dome, "dome", 16.0, 0.35, 8.0), (DruhUtvaru.Pipe, "pipe", 20.0, 0.25, 10.0),
     };
     private readonly SvetFn _s;
+    private readonly Dictionary<(double, double), double> _zsPresne = new();
     private readonly Dictionary<(long, long), (double v, double cx, double cy)> _zs = new();
     private double _cx = 1e300, _cy = 1e300; private List<Utvar> _cf = new();
     /// <summary>Kolikrát klíč round(4·c) vrátil výšku spočtenou pro jiný přesný střed (závislost na pořadí dotazů).</summary>
@@ -49,6 +51,12 @@ public sealed class TvorbaUtvaru
 
     private double Zs(double cx, double cy)
     {
+        if (!_s.P.UtvaryKlicGd)
+        {
+            if (_zsPresne.TryGetValue((cx, cy), out var pv)) return pv;
+            double nv = _s.VyskaTvar(cx, cy); _zsPresne[(cx, cy)] = nv;
+            return nv;
+        }
         var k = ((long)Gd.Round(cx * 4.0), (long)Gd.Round(cy * 4.0));
         if (_zs.TryGetValue(k, out var e)) { if (e.cx != cx || e.cy != cy) KolizeZs++; return e.v; }
         double v = _s.VyskaTvar(cx, cy); _zs[k] = (v, cx, cy);

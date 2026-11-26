@@ -13,6 +13,7 @@ return cmd switch
     "sopka" => Sopka(data),
     "prameny" => Prameny(data),
     "cas" => Cas(args, data),
+    "par" => Paralelne.Spust(data, args.Contains("--puvodni"), args.Skip(1).Where(s => int.TryParse(s, out _)).Select(int.Parse).DefaultIfEmpty(1).ToArray()) == 0 ? 0 : 1,
     _ => Napoveda(),
 };
 
@@ -22,8 +23,10 @@ static int Det3(string[] a, Willage.Gen.Data.DataSveta d)
 {
     bool opravy = a.Contains("--opravy");
     var p = opravy ? new Willage.Gen.Svet.ParametrySveta() : Willage.Gen.Svet.ParametrySveta.Puvodni();
+    if (a.Contains("--presny")) p.UtvaryKlicGd = false;
+    if (a.Contains("--klic-gd")) p.UtvaryKlicGd = true;
     var (o, n, ms) = OtiskKrok3.Spocti(p, d);
-    Console.WriteLine($"det3 {(opravy ? "opravy" : "puvodni")}: {o} {n} buněk, {ms:F0} ms");
+    Console.WriteLine($"det3 {(opravy ? "opravy" : "puvodni")} klíč {(p.UtvaryKlicGd ? "gd" : "přesný")}: {o} {n} buněk, {ms:F0} ms");
     return 0;
 }
 

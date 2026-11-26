@@ -55,6 +55,20 @@ public static class TestyKrok05
         T.Je(ni is not null && ni.Count(b => b) > 40, $"střed sopky: maska nitra {ni?.Count(b => b)} buněk");
         T.Je(go.NitroSopky(1792 + 64, 1792 + 64) is null, "mimo sopku maska null");
 
+        T.Sekce("krok 5 (Jan 9:32): přesný klíč keše útvarů a paralelní výpočet");
+        var pp = new GeologieCs(new ParametrySveta(), data);
+        var dop = ParalelniSloupce.Oblast(pp, 2104, 2104, 32, 1);
+        var zpet = new GeologieCs(new ParametrySveta(), data); var obr = new byte[dop.Length];
+        for (int ix = 31; ix >= 0; ix--)                    // opačné pořadí dotazů
+        for (int iy = 31; iy >= 0; iy--)
+            Array.Copy(zpet.Geo.VyplnSloupec(2104 + (ix + 0.5) * 0.25, 2104 + (iy + 0.5) * 0.25, 0.25, 128.0), 0, obr, (ix * 32 + iy) * 512, 512);
+        T.Je(dop.AsSpan().SequenceEqual(obr), "pořadí dotazů nemění výsledek (přesný klíč)");
+        T.Je(dop.AsSpan().SequenceEqual(ParalelniSloupce.Oblast(pp, 2104, 2104, 32, 4)), "1 vlákno = 4 vlákna (segment 8 m)");
+        T.Je(dop.AsSpan().SequenceEqual(ParalelniSloupce.Oblast(new GeologieCs(new ParametrySveta(), data), 2104, 2104, 32, 8)), "1 vlákno = 8 vláken, nová instance");
+        var gpp = ParametrySveta.Puvodni(); gpp.UtvaryKlicGd = false;
+        T.Je(Segment(new GeologieCs(gpp, data), 2104, 2104) == "059d807ab04b7f00", "přesný klíč bez oprav = GDScript (bez kolize)");
+        T.Je(new ParametryVody().BunkaPramenuM == 24.0 && pvdDef(data).BunkaPramenuM == 24.0, "výchozí čtverec pramenů 24 m (kód i voda_v1.json)");
+
         T.Sekce("krok 5: hustota pramenů parametry (čtverec, pravděpodobnost)");
         var pvd = ParametryVody.ZJson(File.ReadAllText(data.VodaV1));
         var kes = new KesGeologie(go);
@@ -63,6 +77,8 @@ public static class TestyKrok05
         T.Je(a2 >= a1 && a3 >= a1 && a2 + a3 > 2 * a1, $"víc pramenů s p = 1 ({a2}) i čtvercem 16 m ({a3}) než výchozí ({a1})");
         T.Je(N(32, 0.0) == 0, "p = 0 → žádné prameny");
     }
+
+    private static ParametryVody pvdDef(DataSveta d) => ParametryVody.ZJson(File.ReadAllText(d.VodaV1));
 
     private static string Segment(GeologieCs g, double ox, double oy)
     {

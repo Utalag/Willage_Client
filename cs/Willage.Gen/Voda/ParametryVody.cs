@@ -17,7 +17,7 @@ public sealed record ParametryVody
     public double MrizkaDoplnM { get; init; } = 8.0;
     public double PolomerDoplnM { get; init; } = 192.0;
     // prameny
-    public double BunkaPramenuM { get; init; } = 32.0;
+    public double BunkaPramenuM { get; init; } = 24.0;   // Jan 2026-11-26 9:32: 24 m / 0,6 (dříve 32 m)
     public double KrokKandidatuM { get; init; } = 2.0;
     public double PravdepodobnostBunky { get; init; } = 0.6;
     public double RozestupM { get; init; } = 8.0;

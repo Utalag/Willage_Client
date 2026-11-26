@@ -8,6 +8,8 @@ public sealed class Masiv
     private readonly ParametrySveta _p; private readonly long _sd; private readonly Sumy _s;
     public readonly double Amp, Det, Zdvih, Freq, PodAmp;
     public readonly GodotSum PodNoise;
+    // šumy z cache geo2 uložené při stavbě: dotaz už do cache nesahá (vláknově bezpečné, stejný objekt jako GDScript)
+    private readonly GodotSum _na, _nd;
 
     public Masiv(ParametrySveta p, long sd, Sumy s)
     {
@@ -25,6 +27,7 @@ public sealed class Masiv
             ga = 0.5 * Sumy.GradSumu(na, freq);
             aMax = rozpocet / ga; it++;
         }
+        _na = s.G2(sd, "MASSIF87", 0, freq); _nd = s.G2(sd, "MASSIF87D", 0, p.P87Dfreq);
         Freq = freq; Amp = Gd.Minf(aWant, aMax); Det = Gd.Minf(p.P87DetailM, p.DetailMaxM); Zdvih = p.MasivZdvihM;
         var nd = s.G2(sd, "MASSIF87D", 0, p.P87Dfreq);
         Sumy.GradSumu(nd, p.P87Dfreq);   // jen záznam v GDScriptu; volá se kvůli stejnému stavu cache
@@ -47,8 +50,8 @@ public sealed class Masiv
 
     public double H(double x, double y, bool detaily)
     {
-        double h = Zdvih + Amp * _s.N01(_sd, "MASSIF87", 0, Freq, x, y);
-        if (detaily && Det != 0.0) h += Det * (2.0 * _s.N01(_sd, "MASSIF87D", 0, _p.P87Dfreq, x, y) - 1.0);
+        double h = Zdvih + Amp * Sumy.N01(_na, x, y);
+        if (detaily && Det != 0.0) h += Det * (2.0 * Sumy.N01(_nd, x, y) - 1.0);
         return h;
     }
 }

@@ -64,6 +64,9 @@ public sealed class ParametrySveta
     /// <summary>Šířka přechodu mince E82 přes šev bloků (m); 0 = původní mince po blocích (skok na švu).</summary>
     public double P82PrechodM = 32.0;
 
+    /// <summary>Keš výšky středu útvaru s klíčem round(4·c) jako GDScript (závisí na pořadí dotazů); false = přesný klíč (Jan 9:32).</summary>
+    public bool UtvaryKlicGd = false;
+
     /// <summary>Parametry přesně jako GDScript krok 3b (opravy vypnuté) – pro ekvivalenci.</summary>
-    public static ParametrySveta Puvodni(long seed = 49) => new() { Seed = seed, P82PrechodM = 0.0 };
+    public static ParametrySveta Puvodni(long seed = 49) => new() { Seed = seed, P82PrechodM = 0.0, UtvaryKlicGd = true };
 }

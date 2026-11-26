@@ -29,6 +29,8 @@ public sealed class Sumy
         return n;
     }
 
+    public static double N01(GodotSum n, double x, double y) => Gd.Clampf(n.Noise2D(x, y) * 0.5 + 0.5, 0.0, 1.0);
+
     public double N01(long seed, string ucel, long k, double freq, double x, double y) =>
         Gd.Clampf(G2(seed, ucel, k, freq).Noise2D(x, y) * 0.5 + 0.5, 0.0, 1.0);
 
