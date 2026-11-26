@@ -44,6 +44,34 @@ public sealed class GeoVrstvy
         return um >= 0 ? um : vm;
     }
 
+    /// <summary>G-6: režim sloupce pro izolaci v náhledu M3 (jako GeoLab): vše, jen vrstvy (bez útvarů a nitra sopek), jen útvary + nitro sopek (ostatní 0).</summary>
+    public enum RezimSloupce { Vse, JenVrstvy, JenUtvary }
+
+    /// <summary>
+    /// G-6: VyplnSloupec s režimem izolace. Režim Vse dává stejné bajty jako VyplnSloupec (test). Jen pro náhledy – hra ani klíče to nečtou.
+    /// </summary>
+    public byte[] VyplnSloupecRezim(double x, double y, double krokZ, double zmax, RezimSloupce rezim)
+    {
+        var w = Svet.Vahy(x, y);
+        double zPov = Svet.VyskaW(x, y, w);
+        var hr = Vrstvy.Hranice(x, y, w, Svet.VyskaTvar(x, y), zPov);
+        var feats = Utvary.Tvorba.Features(x, y);
+        int n = (int)Math.Ceiling(zmax / krokZ);
+        var a = new byte[n];
+        for (int iz = 0; iz < n; iz++)
+        {
+            double z = (iz + 0.5) * krokZ;
+            if (z > zPov) { a[iz] = 0; continue; }
+            int vm = VrstvySloupce.VrstvaMat(z, hr);
+            if (rezim == RezimSloupce.JenVrstvy) { a[iz] = (byte)vm; continue; }
+            int sm = Sopky.Mat(x, y, z);
+            if (sm >= 0) { a[iz] = (byte)sm; continue; }
+            int um = Utvary.MatFeats(feats, x, y, z, vm, zPov, hr);
+            a[iz] = (byte)(um >= 0 ? um : rezim == RezimSloupce.JenUtvary ? 0 : vm);
+        }
+        return a;
+    }
+
     /// <summary>Sloupec po kroku krokZ do zmax (středy buněk); volitelně maska buněk nitra sopky.</summary>
     public byte[] VyplnSloupec(double x, double y, double krokZ, double zmax, bool[]? nitro = null)
     {
