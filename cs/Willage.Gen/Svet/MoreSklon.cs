@@ -69,6 +69,14 @@ public sealed class MoreSklon
         return (D(i, j) * (1 - u) + D(i + 1, j) * u) * (1 - v) + (D(i, j + 1) * (1 - u) + D(i + 1, j + 1) * u) * v;
     }
 
+    /// <summary>Krok 6e: vzdálenost k moři pro hladinu podzemní vody; start 3 × 3 je chráněn (vzdálenost se tam zvětší, takže se hladina k moři neváže – otisky startu beze změny).</summary>
+    public double VzdalenostProVodu(double x, double y)
+    {
+        double d = VzdalenostOdMore(x, y);
+        double dst = Maska.VzdalenostOdStartu(x, y);
+        return d + 1.0e5 * (1.0 - Gd.Smoothstep(_p.StartVodaOchranaM, _p.StartVodaOchranaM + _p.StartVodaPrechodM, dst));
+    }
+
     public string Kanonicky() => FormattableString.Invariant(
         $"more6d|{_p.PlanetaXM}|{_p.PlanetaYM}|{_p.HladinaMoreM}|{_p.HloubkaMoreM}|{_p.MorePrechod}|{_p.SklonKontinentu}|{_p.SklonOdPobreziM}|{_p.MrizkaVzdalenostiM}|{D0:R}|{_p.PodilMore}|{_p.OdchylkaMoreProcBodu}|{_p.KontinentuMin}|{_p.KontinentuMax}|{_p.KontinentVelikost}|{_p.Clenitost}|{_p.ClenitostSila}|{_p.SumVln}|{_p.WarpVln}|{_p.SumLambdaMinM}|{_p.SumLambdaMaxM}|{_p.WarpLambdaMinM}|{_p.WarpM}|{_p.RezervaSevuM}|{_p.SevPrechodM}|{_p.SevMekkySpad}|{_p.SevMekkyPasM}|{_p.StartPolomerM}|{_p.StartPrechodM}|{_p.StartRezerva}|{_p.MrizkaPrahuM}|{_p.OstrovuPocet}|{_p.OstrovPolomerM}|{_p.OstrovVyska}|{_p.SevZvlneniM}|{_p.SevZvlneniLambdaMinM}|{_p.SevZvlneniLambdaMaxM}|") + Maska.Kanonicky();
 

@@ -5,7 +5,7 @@ namespace Willage.Gen.Svet;
 /// <summary>Krok 6b/6c: ladicí parametry moře, kontinentů, sklonu a pánví z data/v1/more_v1.json (výchozí = hodnoty v ParametrySveta).</summary>
 public sealed record ParametryMore
 {
-    public double PodilMore { get; init; } = 0.30;
+    public double PodilMore { get; init; } = 0.35;
     public double OdchylkaMoreProcBodu { get; init; } = 5.0;
     public double HladinaMoreM { get; init; } = 60.0;
     public double HloubkaMoreM { get; init; } = 25.0;
@@ -30,7 +30,7 @@ public sealed record ParametryMore
     public int OstrovuPocet { get; init; } = 5;
     public double OstrovPolomerM { get; init; } = 700.0;
     public double OstrovVyska { get; init; } = 0.3;
-    public double SevZvlneniM { get; init; } = 900.0;
+    public double SevZvlneniM { get; init; } = 400.0;
     public double SevZvlneniLambdaMinM { get; init; } = 600.0;
     public double SevZvlneniLambdaMaxM { get; init; } = 3000.0;
     public double StartPolomerM { get; init; } = 400.0;

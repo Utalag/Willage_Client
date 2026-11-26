@@ -1,6 +1,6 @@
 {
   "_popis": "Krok 6b/6c/6d (Jan 9:59, 10:03, 10:11, 10:12, 10:25, 10:51): ladicí parametry moře, kontinentů (maska z periodického šumu), ostrovů v průlivech, zvlnění švu, sklonu a velkých pánví. Výchozí VseKrok06 = zapnuto (6d). Vstupují do klíče keše eroze (jen při zapnutém moři).",
-  "PodilMore": 0.3,
+  "PodilMore": 0.35,
   "OdchylkaMoreProcBodu": 5.0,
   "HladinaMoreM": 60.0,
   "HloubkaMoreM": 25.0,
@@ -25,7 +25,7 @@
   "OstrovuPocet": 5,
   "OstrovPolomerM": 700.0,
   "OstrovVyska": 0.3,
-  "SevZvlneniM": 900.0,
+  "SevZvlneniM": 400.0,
   "SevZvlneniLambdaMinM": 600.0,
   "SevZvlneniLambdaMaxM": 3000.0,
   "StartPolomerM": 400.0,

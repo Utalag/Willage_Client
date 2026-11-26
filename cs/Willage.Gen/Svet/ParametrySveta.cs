@@ -70,7 +70,7 @@ public sealed class ParametrySveta
     public bool More = false;
     public double PlanetaXM = 31360.0, PlanetaYM = 15616.0;
     // Jan 10:03/10:12: podíl moře 30 % ± 5 p. b. ze seedu; hladina, hloubka, sklon (6b)
-    public double PodilMore = 0.30, OdchylkaMoreProcBodu = 5.0, HladinaMoreM = 60.0, HloubkaMoreM = 25.0;
+    public double PodilMore = 0.35, OdchylkaMoreProcBodu = 5.0, HladinaMoreM = 60.0, HloubkaMoreM = 25.0;
     public double SklonKontinentu = 0.002, SklonOdPobreziM = 1400.0;
     // krok 6c (Jan 10:25): maska pevniny z periodického šumu – kontinenty, členitost, šev, start
     public int KontinentuMin = 2, KontinentuMax = 4;
@@ -80,7 +80,9 @@ public sealed class ParametrySveta
     public double MorePrechod = 0.04, RezervaSevuM = 512.0, SevPrechodM = 400.0, SevMekkySpad = 0.0, SevMekkyPasM = 1500.0;
     // krok 6d (Jan 10:51): ostrovy v průlivech, zvlněný okraj pásu švu, (kalibrace prahu vynechána, Jan 10:54)
     public int OstrovuPocet = 5;
-    public double OstrovPolomerM = 700.0, OstrovVyska = 0.3, SevZvlneniM = 900.0, SevZvlneniLambdaMinM = 600.0, SevZvlneniLambdaMaxM = 3000.0;
+    // krok 6e: hladina podzemní vody se u moře svazuje s mořem, ale ne ve startu (plná ochrana do StartVodaOchranaM od středu startu, plný účinek od +StartVodaPrechodM)
+    public double StartVodaOchranaM = 600.0, StartVodaPrechodM = 800.0;
+    public double OstrovPolomerM = 700.0, OstrovVyska = 0.3, SevZvlneniM = 400.0, SevZvlneniLambdaMinM = 600.0, SevZvlneniLambdaMaxM = 3000.0;
     public double StartPolomerM = 400.0, StartPrechodM = 1200.0, StartRezerva = 0.05;
     public double MrizkaPrahuM = 128.0, MrizkaVzdalenostiM = 64.0;
     // Jan 10:03 (b): velké pánve pro velká jezera – přepínač, výchozí vypnuto

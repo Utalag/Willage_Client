@@ -94,6 +94,8 @@ public sealed class MaskaPevniny
 
     private double Zv;   // aktuální zvednutí startu (během stavby)
 
+    public double VzdalenostOdStartu(double x, double y) => Vzd(x, y, _sx, _sy);
+
     public static double Per(double d, double per) { d %= per; if (d < 0) d += per; return Math.Min(d, per - d); }
     private double Vzd(double ax, double ay, double bx, double by) { double dx = Per(ax - bx, _p.PlanetaXM), dy = Per(ay - by, _p.PlanetaYM); return Math.Sqrt(dx * dx + dy * dy); }
 
