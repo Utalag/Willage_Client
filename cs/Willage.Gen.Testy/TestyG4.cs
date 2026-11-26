@@ -7,6 +7,9 @@ using Willage.Gen.Data;
 using Willage.Gen.Pipeline;
 using Willage.Gen.Pipeline.Moduly;
 using Willage.Gen.Svet;
+using Willage.Gen.Planeta;
+using Willage.Gen.Jadro;
+using Willage.Gen.Katalogy;
 
 namespace Willage.Gen.Testy;
 
@@ -83,6 +86,8 @@ public static class TestyG4
         bool hned = false; using (var c0 = new CancellationTokenSource()) { c0.Cancel(); try { pz.Spust(new ParametrySveta(), kes, 8, null, c0.Token); } catch (OperationCanceledException) { hned = true; } }
         T.Je(hned, "zrušený token před startem → nic se nespočítá");
 
+        Review(data, kes);
+
         T.Sekce("G-4: barvy vrstev (RGBA bez Godotu)");
         g.Moduly.Vychozi(); g.Sluzba.Generuj();
         var mv = g.Dotazy.Mapa(VrstvaMapyDto.Vyska); var mb = g.Dotazy.Mapa(VrstvaMapyDto.Biom);
@@ -95,6 +100,53 @@ public static class TestyG4
         var rb = BarvyVrstev.Rgba(BarvyVrstev.Zmensi(mb, 4));
         var barvy = Enumerable.Range(0, rb.Length / 4).Select(i => (rb[4 * i], rb[4 * i + 1], rb[4 * i + 2])).Distinct().ToList();
         T.Je(barvy.All(c => BarvyVrstev.PaletaBiomu.Contains(c)) && barvy.Count >= 3, $"biom: jen barvy palety ({barvy.Count} různých), zmenšení bere vzorek (ne průměr)");
+    }
+
+
+    /// <summary>Připomínky Willage-backendu k fasádě G-3 (body 1, 3, 4, 5, 7).</summary>
+    static void Review(DataSveta data, string kes)
+    {
+        T.Sekce("G-3 review: totožnost planety, seed, kompatibilita, katalog");
+        var tmp = Path.Combine(Path.GetTempPath(), "willage-g3r-" + Environment.ProcessId); Directory.CreateDirectory(tmp);
+        var g = new GeneratorSveta(data, kes);
+        string f1 = Path.Combine(tmp, "a.wpln");
+        var i1 = g.Sluzba.Uloz(f1);
+        var p = SouborPlanety.Nacti(f1);
+        T.Je(i1.OtiskPlanety == SouborPlanety.Otisk(p) && SouborPlanety.Otisk(SouborPlanety.ZBajtu(SouborPlanety.Bajty(p))) == i1.OtiskPlanety && i1.OtiskPlanety.Length == 64,
+            $"otisk planety = SHA kanonického obsahu, stejný po uložení a načtení ({i1.OtiskPlanety[..16]})");
+        T.Je(SouborPlanety.Otisk(p with { Potvrzena = true }) != i1.OtiskPlanety && SouborPlanety.Otisk(p with { Upravy = new[] { new UpravaRegionu("zvedni", "M2", 0, 0, 65536, 65536, "{}") } }) != i1.OtiskPlanety,
+            "otisk se změní s potvrzením i s úpravou regionu (Q16)");
+        var ex = System.Text.Json.Nodes.JsonNode.Parse(PlanetaJson.Export(p))!;
+        T.Je((string?)ex["format"] == PlanetaJson.Format && (bool)ex["zastupny"]! && (string?)ex["otisk"] == i1.OtiskPlanety && (long)ex["seed"]! == 49, "zástupný JSON export planety: formát, otisk, seed");
+        // seed 64 bit
+        var gs = new GeneratorSveta(data, kes);
+        long velky = (1L << 40) + 5;
+        gs.Moduly.Nastav("ParametrySveta.Seed", velky.ToString());
+        string f2 = Path.Combine(tmp, "b.wpln"); gs.Sluzba.Uloz(f2);
+        var gn = new GeneratorSveta(data, kes); var ni = gn.Sluzba.Nacti(f2);
+        T.Je(ni.Seed == velky && SouborPlanety.Nacti(f2).Seed == velky && SeedSveta.Hash32(49) == 49u && SeedSveta.Hash32(velky) == 5u && SeedSveta.Hash32(-1) == uint.MaxValue,
+            $"seed 2⁴⁰+5 se ve WPLN nezkrátí; 32bit seed jen přes SeedSveta.Hash32 ({SeedSveta.Hash32(velky)})");
+        // kompatibilita
+        T.Je(KompatibilitaPlanety.Urci(p) == UrovenKompatibility.Plna && KompatibilitaPlanety.Urci(p with { GenVer = "V0.9" }) == UrovenKompatibility.Nepodporovana && ni.Kompatibilita == "Plna",
+            "kompatibilita: V1.0 Plna, neznámá V0.9 Nepodporovana");
+        string f3 = Path.Combine(tmp, "c.wpln"); SouborPlanety.Uloz(f3, p with { GenVer = "V0.9" });
+        bool odm = false; try { new GeneratorSveta(data, kes).Sluzba.Nacti(f3); } catch (InvalidDataException) { odm = true; }
+        var b = SouborPlanety.Bajty(p); byte[] v2;
+        using (var ms = new MemoryStream())
+        {
+            using (var z = new System.IO.Compression.DeflateStream(new MemoryStream(b), System.IO.Compression.CompressionMode.Decompress)) z.CopyTo(ms);
+            var raw = ms.ToArray(); raw[4] = 2;   // verze formátu 2
+            using var o = new MemoryStream();
+            using (var z = new System.IO.Compression.DeflateStream(o, System.IO.Compression.CompressionLevel.Optimal, true)) z.Write(raw);
+            v2 = o.ToArray();
+        }
+        bool odm2 = false; try { SouborPlanety.ZBajtu(v2); } catch (InvalidDataException) { odm2 = true; }
+        T.Je(odm && odm2, "neznámá gen_ver i novější formát WPLN (2) odmítnuty");
+        // katalog materiálů připnutý v manifestu fasády
+        var md = g.Katalogy.Manifest();
+        T.Je(md.KatalogMaterialu.Cesta == "v1/materials-catalog-v1.json" && md.KatalogMaterialu.SchemaVersion == 1 && md.KatalogMaterialu.Sha256 == ManifestKatalogu.Spocti(data).ShaSouboru("v1/materials-catalog-v1.json"),
+            $"katalog materiálů připnutý: schemaVersion {md.KatalogMaterialu.SchemaVersion}, SHA {md.KatalogMaterialu.Sha256[..16]}");
+        Directory.Delete(tmp, true);
     }
 
     sealed class Prubeh : IProgress<ModulDto>
