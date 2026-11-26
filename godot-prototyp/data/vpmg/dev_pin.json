@@ -1,0 +1,21 @@
+{
+  "format": "willage-dev-pin-v1",
+  "repo": "Utalag/Willage_Dev",
+  "vetev": "main",
+  "commit": "34764880fa2b0f1c580558403f9ea40a29f6a1c8",
+  "popis": "Materials + VPMG v0: sdílený katalog a procedurální pipeline (#15)",
+  "katalog": {
+    "cesta": "src/Modules/World/Willage.World.Materials/Data/materials-catalog-v1.json",
+    "sha256": "9807e35257b4f69f5ddb0cd0ab4d323481ed192fd00058712c8ce0d50bf9efc0",
+    "zrcadlo": "v1/materials-catalog-v1.json",
+    "rozdil": "zrcadlo = Dev bez koncového \\n"
+  },
+  "golden": {
+    "fixture": "tests/Willage.World.Vpmg.Tests/Fixtures/vpmg-golden-v1.json",
+    "materialId": 52,
+    "seed": "0xC0FFEE00",
+    "resolution": 64,
+    "checksum": 1756279408
+  },
+  "pouziti": "Willage_Dev je jen ke čtení. Nástroj cs/Willage.Vpmg.Nastroj (net10) odkazuje projekty Dev v .willage-dev/<commit>/ (cs/Willage.Vpmg.Nastroj/priprav_dev.sh). Změna pinu = změna tohoto souboru + WillageDevCommit v csproj nástroje (test T-1 hlídá shodu)."
+}

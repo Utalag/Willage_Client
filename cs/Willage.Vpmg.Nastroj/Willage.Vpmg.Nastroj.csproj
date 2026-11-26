@@ -1,0 +1,25 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <!-- T-1 (N7): samostatný nástroj VPMG nad PŘIPNUTÝM commitem Willage_Dev (net10.0, jen ke čtení, kód Dev se nekopíruje).
+       Klient (net9: Willage.Materialy.Api, Godot) s ním mluví mimo proces (JSON řádky, režim server).
+       Připnutá kopie: ./priprav_dev.sh → ../../.willage-dev/<commit>/ ; commit = godot-prototyp/data/vpmg/dev_pin.json (test T-1 hlídá shodu). -->
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net10.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <InvariantGlobalization>true</InvariantGlobalization>
+    <Deterministic>true</Deterministic>
+    <RootNamespace>Willage.Vpmg.Nastroj</RootNamespace>
+    <WillageDevCommit>34764880fa2b0f1c580558403f9ea40a29f6a1c8</WillageDevCommit>
+    <WillageDevKoren Condition="'$(WillageDevKoren)' == ''">$(MSBuildThisFileDirectory)../../.willage-dev/$(WillageDevCommit)</WillageDevKoren>
+  </PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="$(WillageDevKoren)/src/Modules/World/Willage.World.Materials/Willage.World.Materials.csproj" />
+    <ProjectReference Include="$(WillageDevKoren)/src/Modules/World/Willage.World.Vpmg/Willage.World.Vpmg.csproj" />
+    <AssemblyMetadata Include="WillageDevCommit" Value="$(WillageDevCommit)" />
+    <AssemblyMetadata Include="WillageDevKoren" Value="$([System.IO.Path]::GetFullPath('$(WillageDevKoren)'))" />
+  </ItemGroup>
+  <Target Name="KontrolaPinuDev" BeforeTargets="CollectPackageReferences;ResolveProjectReferences">
+    <Error Condition="!Exists('$(WillageDevKoren)/.pin-ok')" Text="Chybí připnutá kopie Willage_Dev $(WillageDevCommit) v $(WillageDevKoren). Spusť cs/Willage.Vpmg.Nastroj/priprav_dev.sh" />
+  </Target>
+</Project>

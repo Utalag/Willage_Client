@@ -10,3 +10,6 @@ obj/
 # G-4: artefakty importu Godotu (CSV se importuje jako překlad); manifest dat je ignoruje
 godot-prototyp/**/*.translation
 godot-prototyp/**/*.csv.import
+
+# T-1: připnutá kopie Willage_Dev pro nástroj VPMG (obnovitelná keš, cs/Willage.Vpmg.Nastroj/priprav_dev.sh)
+.willage-dev/
