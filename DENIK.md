@@ -606,7 +606,7 @@ Skupiny: 1 Prototyp a buildy · 2 Terén a tvar · 3 Rozlišení bloku · 4 Ská
 - **TODO:** mořské usazeniny na dně spolu s náplavy a deltami (samostatný krok).
 - **Další krok:** schválení; merge 06e (a docs větve) do main dělá Willage-backend.
 
-### 🧪 Generátor V1 krok 6f: hladina podzemní vody jen v pásu 5 m od břehu (2026-11-26 11:42 · větev `gen-v1-krok06f-hladina-breh`, `cs/Willage.Gen/{Voda,Svet,Geologie}/`, `data/v1/voda_v1.json`, PROP `docs/sjednoceni/reporty/krok06f-prop.md`, shots `godot-prototyp/shots/krok06f/`)
+### 🧪 Generátor V1 krok 6f: hladina podzemní vody jen v pásu 5 m od břehu (2026-11-26 11:44 · větev `gen-v1-krok06f-hladina-breh`, `cs/Willage.Gen/{Voda,Svet,Geologie}/`, `data/v1/voda_v1.json`, PROP `docs/sjednoceni/reporty/krok06f-prop.md`, shots `godot-prototyp/shots/krok06f/`)
 - **Směr:** Jan 11:33–11:34. Přechod na hladinu moře 60 m jen v pásu `HladinaPrechodM` = 5 m od břehu, dál původní spád (krok 4). Výjimka startu odstraněna (start je stovky metrů od moře).
 - **Zlepšení:** otisky startu beze změny proti 6e (krok 3 c8eeb7964d1ddd85 / 9f32311e046f8b6a, voda 7714d1a1d34e00ad / 8e239a68c6d01be0, prameny 18 / 20); golden mapy 800d420bb00047de; testy main 100/100, větev 104/104.
 - **Komplikace:** mřížka vzdálenosti 64 m (sklon) nestačí na pás 5 m → u pobřeží se vzdálenost pro hladinu počítá z masky po 1 m.

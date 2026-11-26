@@ -14,7 +14,7 @@ Zadání: Jan 11:33 (t945u), úprava 11:34: přechod jen v pásu **5 m** od bře
 - H2: v řezu je hladina 60 m jen v moři a ~5 m od břehu, pak plynule na původní spád (ve vnitrozemí 50–100 m od břehu už původní hladina).
 - H3: golden mapy eroze 800d420bb00047de beze změny.
 
-## Výsledky (2026-11-26 11:42 SEČ)
+## Výsledky (2026-11-26 11:44 SEČ)
 
 ### Testy na main (před změnou)
 `main` 3096136: **OK 100, chyb 0** (C# `Willage.Gen.Testy`, .NET 9, Release).
