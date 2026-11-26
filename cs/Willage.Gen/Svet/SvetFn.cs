@@ -26,6 +26,8 @@ public sealed class SvetFn
     public string KlimaId { get; } = "mirne";
     /// <summary>Krok 6: eroze světa (hrubá mapa + koryta). null = vypnuto (výchozí); uplatní se jen v povrchu s detaily, tvar (VyskaTvar) nemění.</summary>
     public Willage.Gen.Eroze.IErozeSveta? Eroze { get; set; }
+    /// <summary>Krok 6b: moře a sklon kontinentu (p.More), jinak null.</summary>
+    public MoreSklon? More { get; }
 
     public SvetFn(ParametrySveta p, DataSveta data)
     {
@@ -41,6 +43,7 @@ public sealed class SvetFn
         Masiv = new Masiv(p, Sd, Sumy);
         Sopky = new Sopky(p, H, Biomy, (x, y, w) => VyskaBezSopek(x, y, w, true), Relief, SvetM, StropPovrchuM);
         Horniny = new MapaHornin(p, H, SvetM);
+        if (p.More) More = new MoreSklon(p, Sd);
     }
 
     public double[] Vahy(double x, double y) => Biomy.Vahy(x, y);
@@ -77,6 +80,7 @@ public sealed class SvetFn
             double dx = x - s[i].X, dy = y - s[i].Y, r2 = dx * dx + dy * dy;
             if (r2 < s[i].R * s[i].R) h += Sopky.Kuzel(i, Math.Sqrt(r2));
         }
+        if (More != null) h += More.Posun(x, y);
         h = Smin(h);
         if (detaily && Eroze != null) h -= Eroze.Hloubka(x, y);
         return h;

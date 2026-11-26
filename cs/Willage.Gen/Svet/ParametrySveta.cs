@@ -66,6 +66,11 @@ public sealed class ParametrySveta
 
     /// <summary>Keš výšky středu útvaru s klíčem round(4·c) jako GDScript (závisí na pořadí dotazů); false = přesný klíč (Jan 9:32).</summary>
     public bool UtvaryKlicGd = false;
+    // krok 6b (Jan 2026-11-26 9:59): moře kolem švu torusu a mírný sklon kontinentu – mění svět, výchozí vypnuto
+    public bool More = false;
+    public double PlanetaXM = 31360.0, PlanetaYM = 15616.0;
+    public double HladinaMoreM = 60.0, MorePasM = 1100.0, MorePrechodM = 300.0, HloubkaMoreM = 12.0;
+    public double PobreziSumM = 300.0, PobreziVlnaM = 1500.0, SklonKontinentu = 0.002;
 
     /// <summary>Parametry přesně jako GDScript krok 3b (opravy vypnuté) – pro ekvivalenci.</summary>
     public static ParametrySveta Puvodni(long seed = 49) => new() { Seed = seed, P82PrechodM = 0.0, UtvaryKlicGd = true };
