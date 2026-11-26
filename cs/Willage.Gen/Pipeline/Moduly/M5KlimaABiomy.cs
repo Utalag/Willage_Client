@@ -17,7 +17,8 @@ public sealed class M5KlimaABiomy : ModulZaklad
     public override string Nazev => "Klima a biomy";
     public override IReadOnlyList<string> Zavislosti => new[] { M4Eroze.Id_ };
     public override IReadOnlyList<string> Soubory => new[] { "v1/klima_v1.json" };
-    public override string Parametry(KontextBehu k) => k.Nastaveni.Klima.Kanonicky(k.Parametry.Klima);
+    /// <summary>Parametry klimatu bez dobití hladiny 7c (to patří M6, G-2).</summary>
+    public override string Parametry(KontextBehu k) => KanonickeParametry.BezVlastnosti(k.Nastaveni.Klima, RozdeleniParametru.KlimaProM6).Kanonicky(k.Parametry.Klima);
 
     public override object Spust(KontextBehu k)
     {

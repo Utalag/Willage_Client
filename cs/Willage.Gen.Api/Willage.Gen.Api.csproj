@@ -1,0 +1,13 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <!-- G-3: fasáda generátoru (bez Godotu): rozhraní, DTO a tenké služby nad Willage.Gen. Používá Godot jádro (G-4), CLI a později server. -->
+  <PropertyGroup>
+    <TargetFramework>net9.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <RootNamespace>Willage.Gen.Api</RootNamespace>
+    <Deterministic>true</Deterministic>
+  </PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Willage.Gen\Willage.Gen.csproj" />
+  </ItemGroup>
+</Project>

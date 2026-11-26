@@ -1,0 +1,2 @@
+# Textová data generátoru: vždy LF (SHA v manifestu katalogů a klíče keše nezávislé na autocrlf; Jan 17:24)
+godot-prototyp/data/** text eol=lf

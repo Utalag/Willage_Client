@@ -1,0 +1,56 @@
+[gd_scene load_steps=5 format=3]
+
+[ext_resource type="Script" path="res://scripts/cs/testy/JadroTest.cs" id="1"]
+[ext_resource type="Script" path="res://scripts/cs/Jadro/Uzly/NahledVrstvy.cs" id="2"]
+[ext_resource type="Script" path="res://scripts/cs/Jadro/Uzly/StavJadra.cs" id="3"]
+[ext_resource type="Script" path="res://scripts/cs/Jadro/Uzly/ZastupnyPanel.cs" id="4"]
+
+[node name="JadroTest" type="Node"]
+script = ExtResource("1")
+
+[node name="Okno" type="VBoxContainer" parent="."]
+offset_right = 1000.0
+offset_bottom = 700.0
+
+[node name="StavJadra" type="Label" parent="Okno"]
+script = ExtResource("3")
+
+[node name="Nahledy" type="HBoxContainer" parent="Okno"]
+size_flags_vertical = 3
+
+[node name="NahledVyska" type="TextureRect" parent="Okno/Nahledy"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(480, 240)
+script = ExtResource("2")
+
+[node name="NahledBiom" type="TextureRect" parent="Okno/Nahledy"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(480, 240)
+script = ExtResource("2")
+Vrstva = 4
+
+[node name="Zastupne" type="VBoxContainer" parent="Okno"]
+
+[node name="Z7d" type="Label" parent="Okno/Zastupne" groups=["zastupne"]]
+script = ExtResource("4")
+Funkce = "7d nasycená zóna"
+
+[node name="ZM8" type="Label" parent="Okno/Zastupne" groups=["zastupne"]]
+script = ExtResource("4")
+Funkce = "M8 povrchové jevy"
+
+[node name="ZM9" type="Label" parent="Okno/Zastupne" groups=["zastupne"]]
+script = ExtResource("4")
+Funkce = "M9 vegetace"
+
+[node name="ZU1" type="Label" parent="Okno/Zastupne" groups=["zastupne"]]
+script = ExtResource("4")
+Funkce = "U-1 regionální úpravy"
+
+[node name="ZU2" type="Label" parent="Okno/Zastupne" groups=["zastupne"]]
+script = ExtResource("4")
+Funkce = "U-2 částečný přepočet"
+
+[node name="ZNapoveda" type="Label" parent="Okno/Zastupne" groups=["zastupne"]]
+script = ExtResource("4")
+Funkce = "nápověda parametrů"

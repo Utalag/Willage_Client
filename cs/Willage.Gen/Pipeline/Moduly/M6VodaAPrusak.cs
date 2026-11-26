@@ -26,12 +26,13 @@ public sealed class M6VodaAPrusak : ModulZaklad
     public override string Nazev => "Voda a průsak";
     public override IReadOnlyList<string> Zavislosti => new[] { M3Geologie.Id_, M5KlimaABiomy.Id_ };
     public override IReadOnlyList<string> Soubory => new[] { "v1/voda_v1.json", "v1/prusak_v1.json", "v1/materials-catalog-v1.json" };
-    public override string Parametry(KontextBehu k) => KanonickeParametry.Json(k.Nastaveni.Voda) + "|prusak=" + Katalogy.ManifestKatalogu.Sha(System.Text.Encoding.UTF8.GetBytes(k.Nastaveni.PrusakJson.Replace("\r\n", "\n")));
+    public override string Parametry(KontextBehu k) => KanonickeParametry.Vlastnosti(k.Nastaveni.Klima, RozdeleniParametru.KlimaProM6) + "|" + KanonickeParametry.Json(k.Nastaveni.Voda) + "|prusak=" + Katalogy.ManifestKatalogu.Sha(System.Text.Encoding.UTF8.GetBytes(k.Nastaveni.PrusakJson.Replace("\r\n", "\n")));
 
     public override object Spust(KontextBehu k)
     {
         var e = k.Vystup<VystupEroze>(M4Eroze.Id_); var c = k.Vystup<VystupKlimatu>(M5KlimaABiomy.Id_);
-        var nap = c.Zapnuto && c.Parametry!.HladinaKlimaZapnuta ? NapajeniVody.Spocti(e.Mapa!, c.Mapa!, c.Hydrologie!, c.Vodnici, c.Parametry) : null;
+        var pk = k.Nastaveni.Klima;   // aktuální (Hladina* patří M6, výstup M5 může být z paměti se staršími Hladina*)
+        var nap = c.Zapnuto && pk.HladinaKlimaZapnuta ? NapajeniVody.Spocti(e.Mapa!, c.Mapa!, c.Hydrologie!, c.Vodnici, pk) : null;
         var kat = KatalogMaterialu.ZeSouboru(k.Data.KatalogMaterialu);
         _ = new PrusakKoeficient(kat, k.Nastaveni.PrusakJson);   // kontrola dat průsaku nad katalogem (vyhodí chybu jako dnes)
         return new VystupVody(nap, k.Nastaveni.Voda, k.Nastaveni.PrusakJson, kat);

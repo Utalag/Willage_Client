@@ -62,6 +62,21 @@ public sealed record ParametryMore
         return p;
     }
 
+    /// <summary>
+    /// G-2: zapíše parametry souboru jen do polí, která mají v p ještě výchozí hodnotu C# (ručně nastavená pole zůstanou).
+    /// Výchozí C# = more_v1.json (test 6d), výchozí svět je proto stejný jako s <see cref="Uplatni"/>.
+    /// </summary>
+    public ParametrySveta UplatniNaVychozi(ParametrySveta p)
+    {
+        var v = new ParametrySveta();
+        foreach (var pr in typeof(ParametryMore).GetProperties())
+        {
+            var f = typeof(ParametrySveta).GetField(pr.Name) ?? throw new InvalidOperationException("ParametrySveta nemá pole " + pr.Name);
+            if (Equals(f.GetValue(p), f.GetValue(v))) f.SetValue(p, pr.GetValue(this));
+        }
+        return p;
+    }
+
     /// <summary>Kanonický zápis všech ladicích parametrů (klíč keše).</summary>
     public string Kanonicky() => JsonSerializer.Serialize(this);
 }

@@ -10,5 +10,6 @@
   </PropertyGroup>
   <ItemGroup>
     <ProjectReference Include="../Willage.Gen/Willage.Gen.csproj" />
+    <ProjectReference Include="../Willage.Gen.Api/Willage.Gen.Api.csproj" />
   </ItemGroup>
 </Project>
