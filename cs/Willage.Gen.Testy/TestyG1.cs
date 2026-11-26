@@ -152,7 +152,7 @@ public static class TestyG1
             if (nazev == "výchozí") T.Je(ob == TestyKrok06d.GoldenMapaVychozi, $"výchozí: golden mapa eroze {ob}");
             T.Je(a.Vodnici.SequenceEqual(b.Vodnici) && a.Oazy.SequenceEqual(b.Oazy) && a.VodniciBezKlimatu.SequenceEqual(b.VodniciBezKlimatu),
                 $"{nazev}: vodníci {a.Vodnici.Count}, oázy {a.Oazy.Count}, vodníci bez klimatu {a.VodniciBezKlimatu.Count} shodní");
-            T.Je((a.Klima is null) == (b.Klima is null) && a.ParametryKlimatu?.Kanonicky("mirne") == b.ParametryKlimatu?.Kanonicky("mirne") && (a.Hydrologie is null) == (b.Hydrologie is null), $"{nazev}: klima {(a.Klima is null ? "vypnuto" : "zapnuto")} v obou");
+            T.Je((a.Klima is null) == (b.Klima is null) && (a.Napajeni is null) == (b.Napajeni is null) && (a.Napajeni is null || a.Napajeni.E.AsSpan().SequenceEqual(b.Napajeni!.E)) && a.ParametryKlimatu?.Kanonicky("mirne") == b.ParametryKlimatu?.Kanonicky("mirne") && (a.Hydrologie is null) == (b.Hydrologie is null), $"{nazev}: klima {(a.Klima is null ? "vypnuto" : "zapnuto")}, dobití hladiny 7c {(a.Napajeni is null ? "vypnuto" : "shodné")} v obou");
             bool sl = true; var r = new Random(7);
             for (int i = 0; i < 200; i++)
             {

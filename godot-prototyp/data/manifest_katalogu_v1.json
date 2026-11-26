@@ -1,6 +1,6 @@
 {
   "format": "willage-manifest-katalogu-v1",
-  "souhrn": "a475f75a7b1f189df6d7b33102efec5a05740fbceb76d17e78a2d6717274c024",
+  "souhrn": "9be889b744d6761d5e3ec2318cd6b08ace254b0930c9ec47d1200e035e674876",
   "soubory": [
     {
       "cesta": "klima_presety.csv",
@@ -44,8 +44,8 @@
     },
     {
       "cesta": "v1/klima_v1.json",
-      "velikost": 6243,
-      "sha256": "cff3a5f492849df4fc6223f005f21a7b17be9a89c605120c8e0e102ed230a0bf"
+      "velikost": 6518,
+      "sha256": "7aa193023d65a87ff985140a5b373d4e8eff8647491accac0b7819278962bd43"
     },
     {
       "cesta": "v1/materials-catalog-v1.json",

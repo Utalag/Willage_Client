@@ -26,6 +26,7 @@ public sealed class M7VystupPlanety : ModulZaklad
         var g = k.Vystup<GeologieCs>(M3Geologie.Id_);
         var e = k.Vystup<VystupEroze>(M4Eroze.Id_);
         var c = k.Vystup<VystupKlimatu>(M5KlimaABiomy.Id_);
+        var v = k.Vystup<VystupVody>(M6VodaAPrusak.Id_);
         g.Svet.Eroze = e.Eroze;
         SvetKrok06 s;
         if (!e.Zapnuto) s = new SvetKrok06 { Geologie = g };
@@ -33,7 +34,7 @@ public sealed class M7VystupPlanety : ModulZaklad
         else s = new SvetKrok06
         {
             Geologie = g, Mapa = e.Mapa, Eroze = e.Eroze, Vodnici = c.Vodnici, VodniciBezKlimatu = e.Vodnici, Oazy = c.Oazy,
-            Klima = new Klima.KlimaSvetaFn(c.Mapa!), Hydrologie = c.Hydrologie, ParametryKlimatu = c.Parametry,
+            Klima = new Klima.KlimaSvetaFn(c.Mapa!), Hydrologie = c.Hydrologie, ParametryKlimatu = c.Parametry, Napajeni = v.Napajeni,
         };
         var sh = new SouhrnPlanety(e.Mapa is null ? null : SouborMapy.Otisk(e.Mapa), e.Mapa?.KlicKese, c.Mapa?.Otisk(), c.Mapa?.Klic, s.Vodnici.Count, s.Oazy.Count, k.Manifest.Souhrn);
         return new VystupPlanety(s, sh);

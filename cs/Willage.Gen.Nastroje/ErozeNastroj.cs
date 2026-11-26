@@ -13,7 +13,7 @@ public static class ErozeNastroj
 {
     static readonly CultureInfo C = CultureInfo.InvariantCulture;
     /// <summary>Volby: --more (krok 6b moře + sklon), --sklon S, --interp bilinearni|catmullrom|bspline.</summary>
-    public static bool More, Panve, Vypnuto, BezKlimatu; public static long? Seed; public static double? Sklon; public static string? Interp;
+    public static bool More, Panve, Vypnuto, BezKlimatu, StareDno, BezDobiti; public static long? Seed; public static double? Sklon; public static string? Interp;
 
     public static string[] Volby(string[] a)
     {
@@ -28,6 +28,8 @@ public static class ErozeNastroj
             else if (a[i] == "--pobrezi") VodaBlok.Pobrezi = true;
             else if (a[i] == "--bez-tlaku") VodaBlok.BezTlaku = true;   // koeficient průsaku zapnut
             else if (a[i] == "--panve") Panve = true;
+            else if (a[i] == "--stare-dno") StareDno = true;   // 7c: HladinaBezMorskychUzlu = false (starý propad hladiny za břehem)
+            else if (a[i] == "--bez-dobiti") BezDobiti = true;   // 7c: hladina bez dobití klimatem (jako 7b)
             else if (a[i] == "--bez-klimatu") BezKlimatu = true;   // 7b: klima výchozí zapnuto; --bez-klimatu = stav po kroku 6
             else if (a[i] == "--vypnuto") Vypnuto = true;   // 6d: VseKrok06 je výchozí zapnuto; --vypnuto = jen --more / --panve
             else if (a[i] == "--seed") Seed = long.Parse(a[++i]);
@@ -249,7 +251,7 @@ public static class ErozeNastroj
         var (o, _, _) = OtiskKrok3.Spocti(Vz(), d, uprav: g => g.Svet.Eroze = sv.Eroze);
         int p33 = 0;
         var v = VodaBlok.Spust(true, d, svet: Vz(), geo: g => g.Svet.Eroze = sv.Eroze,
-            uprav: fn => { fn.Prameny.Vodnici = new VodniciVeSvete(sv.Vodnici, fn.Geologie).VOblasti; sv.NapojKlima(fn.Prameny); p33 = fn.Prameny.VOblasti(1792, 1792, 2176, 2176).Count; });
+            uprav: fn => { fn.Prameny.Vodnici = new VodniciVeSvete(sv.Vodnici, fn.Geologie).VOblasti; sv.NapojKlima(fn); p33 = fn.Prameny.VOblasti(1792, 1792, 2176, 2176).Count; });
         Console.WriteLine($"vše zapnuto: krok 3 {o}   voda 14,14 {v.otisk} ({v.pramenu} pramenů; 3×3: {p33})");
         return 0;
     }
@@ -312,30 +314,77 @@ public static class ErozeNastroj
         return 0;
     }
 
-    /// <summary>Krok 6d: svislý řez výchozím světem (vše zapnuto, s erozí) podél úsečky – materiály 0,25 m, povrch, surová hladina podzemní vody.</summary>
+    /// <summary>Krok 6d / 7b: svislý řez (vše zapnuto, s erozí, volitelně klima --planeta) podél úsečky – materiály 0,25 m, povrch, surová hladina, CSV s klimatem a koryty.</summary>
     public static int Rez(string[] a, DataSveta d)
     {
-        // eroze rez <kesdir> <x0> <y0> <ux> <uy> <delka_m> <vystup.bin>
+        // eroze rez <kesdir> <x0> <y0> <ux> <uy> <delka_m> <vystup.bin>  [--planeta poust] [--seed 49]
         string kes = a[2]; double x0 = double.Parse(a[3], C), y0 = double.Parse(a[4], C), ux = double.Parse(a[5], C), uy = double.Parse(a[6], C), L = double.Parse(a[7], C);
         double nrm = Math.Sqrt(ux * ux + uy * uy); ux /= nrm; uy /= nrm;
         var p = new ParametrySveta(); if (Seed is long sd) p.Seed = sd;
+        if (KlimaNastroj.Planeta is string pl) p.Klima = pl;
+        p.KlimaKrok07 = !BezKlimatu;
         // řez kdekoli na planetě: svět s planetárním svet_max_m (jako mapa eroze; start se tím nemění – krok 6)
         var pe0 = ParametryEroze.ZJson(File.ReadAllText(d.ErozeV1)); p.SvetMaxM = Math.Max(p.SvetMaxM, Math.Max(pe0.PlanetaXM, pe0.PlanetaYM) + pe0.PasProlnutiM);
         var sv = KonfiguraceSveta.Sestav(p, d, kes, 8);
         var pv = Willage.Gen.Voda.ParametryVody.ZJson(File.ReadAllText(d.VodaV1));
-        pv = VodaBlok.Priznaky(pv);
-        var fn = sv.Voda(Willage.Gen.Materialy.KatalogMaterialu.ZeSouboru(d.KatalogMaterialu), pv, VodaBlok.PrusakJson(pv, d));
+        pv = VodaBlok.Priznaky(pv) with { HladinaBezMorskychUzlu = !StareDno };
+        var kat = Willage.Gen.Materialy.KatalogMaterialu.ZeSouboru(d.KatalogMaterialu);
+        var fn = sv.Voda(kat, pv, VodaBlok.PrusakJson(pv, d));
+        if (BezDobiti) fn.Hladina.Napajeni = null;
+        // propustnost materiálů (zvodnělé buňky v obrázku): id, těleso (propustné), K m/s, název
+        var prop = new Willage.Gen.Materialy.Propustnost(kat);
+        var mat = new List<string> { "id,teleso,k_ms,klic" };
+        for (int id = 1; id < 256; id++) { var mm = kat.Najdi(id); if (mm is null) continue; mat.Add(FormattableString.Invariant($"{id},{(prop.Teleso(id) ? 1 : 0)},{mm.KMs ?? 0.0:E3},{mm.Key}")); }
+        File.WriteAllLines(Path.ChangeExtension(a[8], ".mat.csv"), mat);
         double krok = Willage.Gen.Jadro.GeologyGridConstants.CellM; int n = (int)Math.Round(L / krok);
-        using var w = new BinaryWriter(File.Create(a[8]));
+        string bin = a[8], csv = Path.ChangeExtension(bin, ".csv");
         var s0 = sv.Geologie.Sloupec(x0, y0);
-        w.Write(n); w.Write(s0.Length); w.Write(krok);
-        for (int i = 0; i < n; i++)
+        var radky = new List<string> { "s,x,y,povrch,hladina,pevnina,jemore,teplota,srazky,w,biom,hydro,eroze_m,dist_oaza_m" };
+        double? breh = null;
+        using (var w = new BinaryWriter(File.Create(bin)))
         {
-            double x = x0 + (i + 0.5) * krok * ux, y = y0 + (i + 0.5) * krok * uy;
-            w.Write(sv.Geologie.Povrch(x, y)); w.Write(fn.Hladina.Surova(x, y)); w.Write(sv.Geologie.Svet.More!.Pevnina(x, y));
-            w.Write(sv.Geologie.Sloupec(x, y));
+            w.Write(n); w.Write(s0.Length); w.Write(krok);
+            for (int i = 0; i < n; i++)
+            {
+                double s = (i + 0.5) * krok, x = x0 + s * ux, y = y0 + s * uy;
+                double pov = sv.Geologie.Povrch(x, y), hlad = fn.Hladina.Surova(x, y), kpev = sv.Geologie.Svet.More!.Pevnina(x, y);
+                bool jemore = sv.Geologie.Svet.More.JeMore(x, y, pov);
+                if (breh is null && !jemore) breh = s;
+                w.Write(pov); w.Write(hlad); w.Write(kpev);
+                w.Write(sv.Geologie.Sloupec(x, y));
+                double t = 0, pr = 0, ww = 0, er = sv.Eroze?.Hloubka(x, y) ?? 0, doa = -1;
+                int biom = -1, hydro = 0;
+                if (sv.Klima is { } kl)
+                {
+                    t = kl.Teplota(x, y); pr = kl.Srazky(x, y); ww = kl.W(x, y); biom = (int)kl.Biom(x, y);
+                    if (sv.Hydrologie is { } hk && sv.Mapa is { } mp)
+                    {
+                        var tor = mp.T;
+                        int iu = (int)Math.Round(PeriodickyPodklad.Zabal(x, tor.Nx * tor.Krok) / tor.Krok);
+                        int ju = (int)Math.Round(PeriodickyPodklad.Zabal(y, tor.Ny * tor.Krok) / tor.Krok);
+                        hydro = hk.Stav[tor.K(iu, ju)];
+                    }
+                    if (sv.Oazy.Count > 0) doa = sv.Oazy.Min(o => Math.Sqrt((o.X - x) * (o.X - x) + (o.Y - y) * (o.Y - y)));
+                }
+                radky.Add(FormattableString.Invariant($"{s:F3},{x:F3},{y:F3},{pov:F4},{hlad:F4},{kpev:F4},{(jemore ? 1 : 0)},{t:F3},{pr:F2},{ww:F4},{biom},{hydro},{er:F3},{doa:F1}"));
+            }
         }
-        Console.WriteLine(FormattableString.Invariant($"řez {n} sloupců × {s0.Length} buněk po {krok} m, od ({x0:F1}, {y0:F1}) směr ({ux:F3}, {uy:F3})"));
+        File.WriteAllLines(csv, radky);
+        Console.WriteLine(FormattableString.Invariant($"řez {n} sloupců × {s0.Length} buněk po {krok} m, od ({x0:F1}, {y0:F1}) směr ({ux:F3}, {uy:F3}), planeta {p.Klima}, klima {(p.KlimaKrok07 ? "zap" : "vyp")}, břeh s ≈ {breh ?? -1:F1} m"));
+        // prameny a oázy v pásu 200 m od úsečky
+        double x1 = x0 + L * ux, y1 = y0 + L * uy;
+        double xmin = Math.Min(x0, x1) - 200, xmax = Math.Max(x0, x1) + 200, ymin = Math.Min(y0, y1) - 200, ymax = Math.Max(y0, y1) + 200;
+        var pram = fn.Prameny.VOblasti(xmin, ymin, xmax, ymax);
+        double DistUsecky(double x, double y)
+        {
+            double vx = x1 - x0, vy = y1 - y0, t = vx * vx + vy * vy <= 0 ? 0 : Math.Clamp(((x - x0) * vx + (y - y0) * vy) / (vx * vx + vy * vy), 0, 1);
+            double dx = x0 + t * vx - x, dy = y0 + t * vy - y; return Math.Sqrt(dx * dx + dy * dy);
+        }
+        foreach (var s in pram.Where(q => DistUsecky(q.X, q.Y) <= 150).OrderBy(q => DistUsecky(q.X, q.Y)))
+            Console.WriteLine(FormattableString.Invariant($"  pramen {s.Druh} ({s.X:F1}, {s.Y:F1}) Q {s.Jmenovity:F2} l/s, {DistUsecky(s.X, s.Y):F1} m od řezu"));
+        foreach (var o in sv.Oazy.Where(q => DistUsecky(q.X, q.Y) <= 200).OrderBy(q => DistUsecky(q.X, q.Y)))
+            Console.WriteLine(FormattableString.Invariant($"  oáza ({o.X:F1}, {o.Y:F1}) Q {o.QLs:F2} l/s, {DistUsecky(o.X, o.Y):F1} m od řezu, s ≈ {(o.X - x0) * ux + (o.Y - y0) * uy:F1} m"));
+        if (pram.Count(q => DistUsecky(q.X, q.Y) <= 150) == 0) Console.WriteLine("  v pásu 150 m od řezu žádný pramen ze seedu");
         return 0;
     }
 }

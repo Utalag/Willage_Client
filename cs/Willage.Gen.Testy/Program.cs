@@ -77,6 +77,7 @@ TestyKrok06e.Spust();
 TestyKrok06f.Spust();
 TestyKrok06g.Spust();
 TestyKrok07.Spust(kat);
+TestyKrok07c.Spust(kat);
 TestyPrusak.Spust();
 TestyPrusakPobrezi.Spust();
 TestyPrusakKras.Spust();
