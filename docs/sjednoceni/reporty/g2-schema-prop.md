@@ -29,5 +29,29 @@ Dnes `ErozePlanety.NactiMore` vždy přepíše všech 36 polí moře hodnotami z
 
 Výsledky (i negativní) se doplní níže.
 
-## Výsledky
-*(doplní se po implementaci)*
+## Výsledky (26. 11. 2026)
+
+Základ: main 3466e11 (G-1 sloučeno, tag gen-v1-g1); kód cs/ a data jsou shodné s otestovaným gen-v1-g1-moduly, větev přenesena rebase.
+
+**Postaveno**
+- `cs/Willage.Gen/Schema/`: `ParametrSchematu` + `TypParametru`, `MetadataParametru` (skupiny, výslovné rozsahy, volby, jen čtení; jednotka a rozsah jinak odvozené z názvu), `SchemaParametru` (reflexe ParametrySveta / ParametryEroze / ParametryKlimatu / ParametryVody + tabulka prusak_v1.json, JSON), `SadaParametru` (výchozí z dat nebo z kódu, Nastav, Sestav → ParametrySveta + NastaveniModulu, JSON s částečnými hodnotami), `BiomJson`.
+- Nástroj `Willage.Gen.Nastroje schema [soubor] [--kontrola]`; export `docs/sjednoceni/reporty/g2/schema_parametru_v1.json` (mimo data, manifest se nemění).
+- Moře nastavitelné přes ParametrySveta/sadu (`ParametryMore.UplatniNaVychozi`); M4 bere pole M2 ze vstupu. Hladina* (dobití 7c) patří M6.
+- PNG: `docs/sjednoceni/obrazky/g2/01-schema-parametru.png` (`kresli_g2.py`).
+
+**Schéma:** 202 parametrů – M0 10, M1 42, M2 38, M3 16, M4 20, M5 29, M6 47, M7 0. Typy: Desetinne 160, Logicky 20, Cele 14, Tabulka 4 (Biomy, HorninyBiomu, Planety, průsak), Pole 2, Volba 2 (Klima z klima_presety.csv, InterpolaceE). Jen čtení 8. Rozsah z kódu 8, odhad 166. Nápověda: prázdný slot u všech.
+
+**Testy:** 338/0 (G-1 307 + G-2 31), běh 2 min 10 s. G-1 test „PodilMore v ParametrySveta nic nemění“ záměrně změněn na „mění M2–M7“.
+
+**Otisky (nezávisle `klima otisky`) = 9d4f2b8:** mapa 800d420bb00047de; klima zap: 86 vodníků, krok 3 9f32311e046f8b6a, voda 14,14 377a8210f82c856a, klima cb11da8d141a2a5e; klima vyp: 92 vodníků, voda 14,14 8e239a68c6d01be0. Segment Puvodni() 059d807ab04b7f00 (test).
+
+**Zvláštnosti a negativní nálezy**
+- `ParametryKlimatu.Planety`: výchozí v C# ≠ klima_v1.json (např. mírné SrazkyMmRok 1000 v C#, 800 v souboru) – jediný rozdíl soubor × C# (121 hodnot ze souborů). Sada „jen z kódu“ proto mění klíče M5–M7.
+- Hladina moře dvakrát: ParametrySveta.HladinaMoreM (M2) a ParametryKlimatu.HladinaMoreM (M5) – nejsou svázané.
+- PlanetaXM/YM v ParametrySveta (M2) i ParametryEroze (M4); svět planety bere eroze → pole ve světě jen čtení. Stejně SvetMaxM, BlokM, SloupecM.
+- Podil, KlimaKVoda, KlimaKHorniny vždy přepíše preset klimatu → jen čtení.
+- ParametryVody.Seed (49) je samostatný seed, nesvázaný se seedem světa.
+- `UplatniNaVychozi`: pole moře nastavené přesně na výchozí hodnotu C# dostane hodnotu ze souboru (dnes soubor = C#, takže neviditelné).
+- Reliéf M1 erozní mapa planety stále nepoužívá (zvláštnost G-1 zachována).
+- Biom nešel deserializovat (názvy parametrů konstruktoru ≠ pole) → `BiomJson`, ParametrySveta beze změny.
+- Rozsahy jsou až na 8 odhad z názvu a výchozí hodnoty – k ladění Janem; schéma rozsah nevynucuje.
