@@ -35,6 +35,9 @@ public sealed record ParametryVody
     // krok 6e/6f (Jan 11:15, 11:33–11:34): u moře = hladina moře; plynulý přechod do vnitrozemí na této vzdálenosti od břehu (m, výchozí 5); 0 = vypnuto
     public double HladinaPrechodM { get; init; } = 5.0;
 
+    // koeficient průsaku (těsnost materiálu 0–255, data prusak_v1.json): výchozí vypnuto; ovlivní jen průsak do uzavřených prostor
+    public bool PrusakKoeficient { get; init; } = false;
+
     public static ParametryVody ZJson(string json) =>
         JsonSerializer.Deserialize<ParametryVody>(json, new JsonSerializerOptions { PropertyNameCaseInsensitive = true }) ?? new();
 }

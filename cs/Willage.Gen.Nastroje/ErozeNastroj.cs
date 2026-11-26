@@ -24,6 +24,7 @@ public static class ErozeNastroj
             else if (a[i] == "--sklon") Sklon = double.Parse(a[++i], C);
             else if (a[i] == "--interp") Interp = a[++i];
             else if (a[i] == "--hladina-krok4") { PrizpusobPrameny = true; UpravaPramenu = pv => pv with { HladinaSledujeErozi = false }; }
+            else if (a[i] == "--prusak") VodaBlok.Prusak = true;   // koeficient průsaku zapnut
             else if (a[i] == "--panve") Panve = true;
             else if (a[i] == "--vypnuto") Vypnuto = true;   // 6d: VseKrok06 je výchozí zapnuto; --vypnuto = jen --more / --panve
             else if (a[i] == "--seed") Seed = long.Parse(a[++i]);

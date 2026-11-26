@@ -14,6 +14,7 @@ public sealed class DataSveta
     public string MineralyHostitele => Cesta("teren/mineraly_hostitele.json");
     public string KatalogMaterialu => Cesta("v1/materials-catalog-v1.json");
     public string VodaV1 => Cesta("v1/voda_v1.json");
+    public string PrusakV1 => Cesta("v1/prusak_v1.json");
     public string ErozeV1 => Cesta("v1/eroze_v1.json");
     public string MoreV1 => Cesta("v1/more_v1.json");
     /// <summary>Datové soubory, na kterých závisí funkce světa (krok 2) – pro klíč keše eroze.</summary>

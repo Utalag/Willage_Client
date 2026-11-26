@@ -10,13 +10,17 @@ namespace Willage.Gen.Nastroje;
 /// <summary>Krok 4 nad C# geologií: blok 128 m (mřížka 2 m, profily), otisk OtiskVody a čas.</summary>
 public static class VodaBlok
 {
+    /// <summary>Volba --prusak: zapne ParametryVody.PrusakKoeficient (otisky musí zůstat stejné).</summary>
+    public static bool Prusak;
+
     public static PodzemniVodaFn Fn(bool opravy, DataSveta d, Func<ParametryVody, ParametryVody>? uprav = null, Action<GeologieCs>? geo = null, ParametrySveta? svet = null)
     {
         var ps = svet ?? (opravy ? new ParametrySveta() : ParametrySveta.Puvodni());
         var pv = ParametryVody.ZJson(File.ReadAllText(d.VodaV1)) with { SopkaNepropustna = opravy };
+        if (Prusak) pv = pv with { PrusakKoeficient = true };
         if (uprav is not null) pv = uprav(pv);
         var g = new GeologieCs(ps, d); geo?.Invoke(g);
-        return new PodzemniVodaFn(g, KatalogMaterialu.ZeSouboru(d.KatalogMaterialu), pv);
+        return new PodzemniVodaFn(g, KatalogMaterialu.ZeSouboru(d.KatalogMaterialu), pv, pv.PrusakKoeficient ? File.ReadAllText(d.PrusakV1) : null);
     }
 
     public static (string otisk, int pramenu, double msInit, double msBlok) Spust(bool opravy, DataSveta d, int bx = 14, int by = 14, Action<PodzemniVodaFn>? uprav = null, Action<GeologieCs>? geo = null, ParametrySveta? svet = null, Func<ParametryVody, ParametryVody>? voda = null)
