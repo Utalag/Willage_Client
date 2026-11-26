@@ -9,10 +9,11 @@ namespace Willage.Gen.Nastroje;
 /// <summary>Otisk kroku 3 jako tools/geo_v1.gd::_det: svět 3 × 3 od start_m, 2 m v XY, 1 m v Z, SHA-256 bajtů (prvních 16 hex).</summary>
 public static class OtiskKrok3
 {
-    public static (string otisk, long bunek, double ms) Spocti(ParametrySveta p, DataSveta d, double krokXy = 2.0, double krokZ = 1.0, double strana = 384.0)
+    public static (string otisk, long bunek, double ms) Spocti(ParametrySveta p, DataSveta d, double krokXy = 2.0, double krokZ = 1.0, double strana = 384.0, Action<GeologieCs>? uprav = null)
     {
         var sw = Stopwatch.StartNew();
         var g = new GeologieCs(p, d);
+        uprav?.Invoke(g);
         double ox = p.StartBlok[0] * p.BlokM, oy = p.StartBlok[1] * p.BlokM;
         int n = (int)(strana / krokXy), zmax = (int)(128.0 / krokZ);
         var buf = new byte[(long)n * n * zmax]; long i = 0;
