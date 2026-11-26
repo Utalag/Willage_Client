@@ -568,6 +568,12 @@ Skupiny: 1 Prototyp a buildy · 2 Terén a tvar · 3 Rozlišení bloku · 4 Ská
 - **Komplikace:** 99,6 % času je most do GDScriptu (7,3 ms na sloupec, blok s profily 30 s). Bez β 0 pramenů; 420 z 618 artéských případů je ve slupkách sopky. Není to řešič E67.
 - **Další krok:** otázky pro Jana v `docs/sjednoceni/reporty/krok04.md`; schválení kroku.
 
+### 🧪 Generátor V1 krok 5 (nové pořadí): port geologie kroků 1–3 do C# s opravami z kroku 4 (2026-11-26 9:27 · větev `gen-v1-krok04b-geologie-cs`, `cs/Willage.Gen/{Sum,Svet,Geologie}/`, PROP `docs/sjednoceni/reporty/krok05-prop.md`, obrázek `docs/sjednoceni/reporty/krok05/rez_sev_mince.png`)
+- **Směr:** Jan 8:48 (rozhodnutí 6 ke kroku 4) a 9:06 (nové pořadí). `svet_fn.gd`, `geo_vrstvy.gd`, `utvary.gd`, `sum_hornin.gd`, `hostitele_utvaru.gd` převedené do malých C# tříd; FastNoiseLite 1.1.0 (stejná verze jako v Godotu 4.7.2) s obalem, který napodobí Godot (float souřadnice, samostatná doménová deformace). Data beze změny. `GeologieCs : IGeologie`, most `GeologieGd` jen reference. Opravy za přepínači (výchozí zap.): nitro sopky nepropustné (`SopkaNepropustna`), spojitá mince E82 přes šev (`P82PrechodM` 32 m); hustota pramenů jen parametry (čtverec, pravděpodobnost), výchozí beze změny.
+- **Zlepšení:** bitová shoda s GDScriptem: 3 600 bodů povrchu/biomu/hornin, otisk kroku 3 `bbdc0afa877d6c2e` (4 718 592 buněk), 4 segmenty 8 m po 0,25 m, otisk vody bloku 14,14 `f19006126c4b12a7`. Čas: krok 3 (3 × 3, 2 m / 1 m) 2,6 s proti 128 s (≈ 49×), segment 8 m 0,08–0,33 s proti 3,1–8,1 s (10–100×), krok 4 blok s profily 1,0 s proti ~30 s. Šev s různou mincí: rozdílné buňky mezi sousedními sloupci 30,8 → 2,6 (uvnitř bloku 3,8), skok vápence průměr 8,2 m → 0,24 m. Sopka: sevřených vrstev v nitru 29 044 → 0 a 32 554 → 26. Determinismus 2 procesů: s opravami `c8eeb7964d1ddd85` (krok 3) a `add94931c6922f9c` (voda). Testy 44/44.
+- **Komplikace:** cache výšky středu útvaru (`_zs`, klíč 0,25 m) dělá výsledek teoreticky závislý na pořadí dotazů (ve 3 × 3 0 kolizí). Blok 128 m po 0,25 m trvá 18,5 s na jednom vlákně (krok 3 není paralelní, instance není vláknově bezpečná). Nepřenesené volby, které výchozí svět nepoužívá: `biom_velke_oblasti`, `klima=ze_seedu`.
+- **Další krok:** Jan: schválit krok 5, výchozí hustotu pramenů, šířku přechodu mince; pak krok 6 (eroze světa).
+
 ## 3 Rozlišení bloku
 
 ### 🧪 Nastavitelné rozlišení, test 32 × 32 × 64 s buňkou 0,5³ (2026-11-17 11:50 · `--res-test`)
@@ -825,7 +831,7 @@ Nevyzkoušené nápady na zrychlení. Stav: 💡 návrh · 🔬 ověřuje se · 
 - 💡 **Blueprint: rezervoár a jeskyně jako vložený materiál + místní hladina (17:06):** vzduch/voda v zásobníku sloupce pod nepropustným stropem (*Arches*) a lokální hladina se bariérou jako Minecraft aquifer 1.18 [34][36]. Přesné objemy z receptu zůstanou.
 - 💡 **Blueprint: stream-power eroze a kompetence až se povolí fyzika (17:06):** Cordonnier 2016/2018 — \(\partial h/\partial t = u - k A^m S^n\), \(k\) podle pevnosti vrstvy [31][32]. Teď nepočítat (Jan 16:5x); vzorec je připravený. Plné Badlands/Landlab/GOLEM při uložení bloku přeskočit.
 
-### 💡 Port geologie kroků 1–3 do C# kvůli mostu (2026-11-26 · krok 4)
+### 💡 ~~Port geologie kroků 1–3 do C# kvůli mostu (2026-11-26 · krok 4)~~ → hotovo v kroku 5 (2026-11-26 9:27)
 - Krok 4 tráví 99,6 % času čtením sloupců z GDScriptu (`vypln_sloupec` 7,3 ms na sloupec); C# část je ~0,1 s na blok. Port `svet_fn` + `geo_vrstvy` (rozhraní `IGeologie` už existuje) by blok s profily zrychlil z ~30 s řádově na desetiny sekundy. Podle Jana [pt906u] až když bude potřeba.
 
 ## 3 Rozlišení bloku

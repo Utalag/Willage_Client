@@ -23,3 +23,42 @@ Most do GDScriptu je 99,6 % času kroku 4 (7,3 ms na sloupec). Jan rozhodl port 
 
 ## Mimo rozsah
 Eroze světa (krok 6), změna výchozí hustoty pramenů, četnost artéské vody (odloženo).
+
+## Výsledky (2026-11-26 9:27 SEČ)
+
+### Struktura (`cs/Willage.Gen`, bez Godotu)
+- `Sum/`: `FastNoiseLite.cs` (MIT, 1.1.0 f7af54b, beze změny), `GodotSum.cs` (chování Godotu), `StableHash.cs`, `Gd.cs` (smoothstep, round… jako `math_funcs.h`).
+- `Data/`: `DataSveta.cs` (cesty k `godot-prototyp/data`), `Csv.cs`.
+- `Svet/`: `ParametrySveta`, `KlimaPresety`, `HashSveta`, `Sumy`, `MapaBiomu`, `Relief`, `Masiv`, `Sopky`, `MapaHornin`, `SvetFn`.
+- `Geologie/`: `KatalogHornin`, `SumHornin`, `HostiteleUtvaru`, `Hranice`, `MinceE82`, `VrstvySloupce`, `NitroSopky`, `VNoise`, `Utvar`, `TvorbaUtvaru`, `Utvary`, `GeoVrstvy`, `GeologieCs : IGeologie`.
+- Voda: přepínač `SopkaNepropustna` v `ParametryVody`; `ProfilSloupce`, `Prameny`, `Doplnovani`, `VykonPramene` berou masku nitra sopky.
+- `cs/Willage.Gen.Nastroje` (příkazy `vyska det3 voda sevy rez sopka prameny cas`), `cs/Willage.Gen.Testy` (44/44). Godot: `VodaV1.nastav` používá `GeologieCs`, `nastav_gd` most. Nástroje GDScript: `tools/geo_cs_cas.gd`, `tools/geo_cs_godot.gd`; obrázek `tools/geo_cs_rez.py`.
+
+### Ekvivalence (opravy vypnuté, `ParametrySveta.Puvodni()`, `SopkaNepropustna=false`) – H1 potvrzena
+| Co | GDScript | C# |
+|---|---|---|
+| 3 600 bodů: povrch, tvar, biom, horniny; sopky, amplitudy | výpis `float64` | 0 rozdílů (bitově) |
+| Otisk kroku 3 (3 × 3, 2 m / 1 m) | `bbdc0afa877d6c2e` | `bbdc0afa877d6c2e` |
+| Segmenty 8 m po 0,25 m (1792,1792 / 1856,1920 / 2000,1800 / 2104,2104) | `99b4ca3f…` `0dc5e424…` `4391f413…` `059d807a…` | stejné |
+| Voda bloku 14,14 (2 m, profily) | `f19006126c4b12a7` (krok 4, most) | `f19006126c4b12a7` |
+| Hladina v Godotu: `nastav` proti `nastav_gd` | 25 bodů | 25/25 shodných |
+
+### Časy (box, jedno vlákno, Release)
+| Úloha | GDScript | C# | Poměr |
+|---|---|---|---|
+| Krok 3, 3 × 3 po 2 m / 1 m | 128 s (krok 3b) | 2,5–2,8 s | ≈ 49× |
+| Segment 8 m po 0,25 m (4 místa) | 3,1 / 8,1 / 7,4 / 8,0 s | 0,30 / 0,33 / 0,19 / 0,08 s | 10–100× (první s JIT) |
+| Blok 128 m po 0,25 m (134 M buněk) | odhad ~30 min | 18,5 s | – |
+| Krok 4, blok 14,14 s profily | ~30 s (most) | 0,9–1,1 s (+0,2 s init) | ≈ 30× |
+
+### Opravy (výchozí zapnuto)
+- **Mince E82 spojitá** (`P82PrechodM` 32 m): šev x = 2048 (různé mince), 64 párů sloupců 0,25 m přes šev: různých buněk průměr 30,8 → 2,6 (max 69 → 24), skok stropu vápence 8,2 m → 0,24 m (max 84 → 0,5). Kontrola uvnitř bloku 3,8 buněk. Švy se stejnou mincí beze změny (rozdíly ±0,03 jen u rohů). `krok05/sevy_mince.csv`, obrázek `krok05/rez_sev_mince.png`. H3 potvrzena.
+- **Nitro sopky nepropustné** (`SopkaNepropustna`): sopka 13,13 sevřených vrstev 29 044 (28 639 artéských) → 0, volná zvodeň 913 → 343 sloupců; sopka 10,13: 32 554 → 26. Výchoz v nitru sopky se nebere jako oblast doplňování.
+- **Hustota pramenů** (jen parametry, výchozí 32 m / 0,6 beze změny), svět 3 × 3: 32/0,6 → 8; 32/1,0 → 17; 24/0,6 → 18; 16/0,6 → 20; 16/1,0 → 27 pramenů (rozestup 8 m).
+- Determinismus dvou procesů s opravami: krok 3 `c8eeb7964d1ddd85`, voda 14,14 `add94931c6922f9c` (oba běhy shodné).
+
+### Otevřené otázky pro Jana
+1. Výchozí hustota pramenů: čtverec a pravděpodobnost (tabulka výše).
+2. Šířka přechodu mince 32 m: stačí, nebo širší (64 m) kvůli pozvolnějšímu sklonu vrstev?
+3. Cache výšky středu útvaru `_zs` (klíč 0,25 m) je převzatá kvůli bitové shodě; teoreticky závisí na pořadí dotazů (3 × 3: 0 kolizí). Navrhuji ji později nahradit přesným klíčem (změní otisk jen při kolizi).
+4. Krok 3 na 0,25 m: 18,5 s na blok na jednom vlákně. Paralelizace po sloupcích (instance na vlákno) až podle potřeby?
