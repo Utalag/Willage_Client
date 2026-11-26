@@ -35,7 +35,22 @@ public sealed class RegionalniHladina
         }
         double g = sh / sw;
         double l = g - _p.HloubkaD0M + _p.ZesileniUdoliBeta * (g - PovrchH(x, y));
-        return _p.HladinaSledujeErozi ? l - _g.ErozeHruba(x, y) : l;
+        l = _p.HladinaSledujeErozi ? l - _g.ErozeHruba(x, y) : l;
+        // krok 6e: u moře a v moři hladina = hladina moře, přechod do vnitrozemí smoothstep přes HladinaPrechodM od moře
+        if (_p.HladinaPrechodM > 0)
+        {
+            double hm = _g.HladinaMore;
+            if (!double.IsNaN(hm))
+            {
+                double d = _g.VzdalenostOdMore(x, y);
+                if (d < _p.HladinaPrechodM)
+                {
+                    double t = d / _p.HladinaPrechodM; t = t * t * (3.0 - 2.0 * t);
+                    l = hm + (l - hm) * t;
+                }
+            }
+        }
+        return l;
     }
 
     /// <summary>Hladina L (m), nikdy nad povrchem.</summary>

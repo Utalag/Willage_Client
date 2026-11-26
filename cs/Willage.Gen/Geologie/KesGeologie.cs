@@ -51,6 +51,8 @@ public sealed class KesGeologie : IGeologie
         return v;
     }
     public double ErozeHruba(double x, double y) => _g.ErozeHruba(x, y);
+    public double VzdalenostOdMore(double x, double y) => _g.VzdalenostOdMore(x, y);
+    public double HladinaMore => _g.HladinaMore;
 
     private readonly Dictionary<(long, long), bool[]?> _ns = new();
     public bool[]? NitroSopky(double x, double y)
