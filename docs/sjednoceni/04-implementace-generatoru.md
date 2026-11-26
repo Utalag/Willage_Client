@@ -43,21 +43,19 @@ Podrobné oddíly níže mají původní čísla; v nadpisu je uvedeno nové č�
 ### ~~Původní pořadí (2026-11-20)~~ – překonáno 2026-11-26 9:06
 
 | Krok | Obsah | Stav | Závisí na | Schválení |
-| ~~~~ |
-
----|---|---|---|---|
-| 1 | Základy: jednotky, rozměry, verze, tabulka materiálů, determinismus | částečně | – | Jan po kroku |
-| 2 | Funkce světa I: API, mapa biomů a hornin, reliéf, masiv, sopky, klima (presety) | částečně | 1 | Jan po kroku |
-| 3 | Funkce světa II: geologie a útvary | částečně | 2 | Jan po kroku |
-| 4 | Funkce světa III: podzemní voda a prameny jako funkce | částečně | 3 | Jan po kroku |
-| 5 | Vložení blueprintu a ostrov | částečně | 2–4 | Jan po kroku |
-| 6 | Buňky: slupka, kopání, rozdíl a ukládání | částečně | 5 | Jan po kroku |
-| 7 | Voda na ostrově: simulace, eroze, přepočet | částečně | 6 | Jan po kroku |
-| 8 | Povrchové jevy klimatu (písek, led, sníh, výpar, zamrzání) | jen rozhodnuto | 7 | Jan po kroku |
-| 9 | Vegetace jako funkce a vrstva změn | částečně | 7–8 | Jan po kroku |
-| 10 | Povinný test 3 × 3 a uzavření V1.0 | jen rozhodnuto | 1–9 | Jan: ano do main |
-| 11 | Kontrakt se serverem | otevřené (6.1 zápis, 6.3 backend) | 6, 10 | Jan + Willage-backend |
-| 12 | Prezentace | jen rozhodnuto (7.1 odloženo) | 10 | Jan po kroku |
+|---|---|---|---|---|
+| ~~1~~ | ~~Základy: jednotky, rozměry, verze, tabulka materiálů, determinismus~~ | ~~částečně~~ | ~~–~~ | ~~Jan po kroku~~ |
+| ~~2~~ | ~~Funkce světa I: API, mapa biomů a hornin, reliéf, masiv, sopky, klima (presety)~~ | ~~částečně~~ | ~~1~~ | ~~Jan po kroku~~ |
+| ~~3~~ | ~~Funkce světa II: geologie a útvary~~ | ~~částečně~~ | ~~2~~ | ~~Jan po kroku~~ |
+| ~~4~~ | ~~Funkce světa III: podzemní voda a prameny jako funkce~~ | ~~částečně~~ | ~~3~~ | ~~Jan po kroku~~ |
+| ~~5~~ | ~~Vložení blueprintu a ostrov~~ | ~~částečně~~ | ~~2–4~~ | ~~Jan po kroku~~ |
+| ~~6~~ | ~~Buňky: slupka, kopání, rozdíl a ukládání~~ | ~~částečně~~ | ~~5~~ | ~~Jan po kroku~~ |
+| ~~7~~ | ~~Voda na ostrově: simulace, eroze, přepočet~~ | ~~částečně~~ | ~~6~~ | ~~Jan po kroku~~ |
+| ~~8~~ | ~~Povrchové jevy klimatu (písek, led, sníh, výpar, zamrzání)~~ | ~~jen rozhodnuto~~ | ~~7~~ | ~~Jan po kroku~~ |
+| ~~9~~ | ~~Vegetace jako funkce a vrstva změn~~ | ~~částečně~~ | ~~7–8~~ | ~~Jan po kroku~~ |
+| ~~10~~ | ~~Povinný test 3 × 3 a uzavření V1.0~~ | ~~jen rozhodnuto~~ | ~~1–9~~ | ~~Jan: ano do main~~ |
+| ~~11~~ | ~~Kontrakt se serverem~~ | ~~otevřené (6.1 zápis, 6.3 backend)~~ | ~~6, 10~~ | ~~Jan + Willage-backend~~ |
+| ~~12~~ | ~~Prezentace~~ | ~~jen rozhodnuto (7.1 odloženo)~~ | ~~10~~ | ~~Jan po kroku~~ |
 
 ---
 
