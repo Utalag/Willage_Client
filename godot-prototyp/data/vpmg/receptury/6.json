@@ -1,0 +1,14 @@
+{
+  "schemaVersion": 1,
+  "materialId": 6,
+  "visualProfile": "default",
+  "resolution": 64,
+  "steps": [
+    { "id": "s1", "type": "base_fill", "enabled": true, "params": { "layer": "albedo" } },
+    { "id": "s2", "type": "palette_map", "enabled": true, "params": { "scalePermille": "320", "jitterPermille": "95" } },
+    { "id": "s3", "type": "strata", "enabled": true, "params": { "bandMinPx": "4", "bandJitterPermille": "480" } },
+    { "id": "s4", "type": "warp", "enabled": true, "params": { "strengthPermille": "460", "cellPx": "7" } },
+    { "id": "s5", "type": "smooth_noise", "enabled": true, "params": { "scalePermille": "360", "octaves": "2", "amplitudePermille": "70" } },
+    { "id": "s6", "type": "hash_grain", "enabled": true, "params": {} }
+  ]
+}

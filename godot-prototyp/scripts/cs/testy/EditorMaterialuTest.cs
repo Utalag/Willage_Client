@@ -10,7 +10,7 @@ namespace WillagePrototyp.Testy;
 
 /// <summary>
 /// T-2: test okna Editor materiálů (instancuje res://nastroje/EditorMaterialu.tscn): kontrola Dev (golden, zrcadlo), seznam a filtr,
-/// vzorek 5 materiálů (Jan 21:44; ostatní zástupné), každý náhled = nástroj, seed 0xC0FFEE00 v okně, variace seedu, návrh profilu jen pro náhled, konfigurátor kroků (vypnout, přidat, zástupné zamčené),
+/// vzorek 5 materiálů (Jan 21:44; ostatní zástupné), T-2b: receptury v1 z Dev → golden v okně, paleta, operace v1 ze schématu Dev, variace seedu, návrh profilu jen pro náhled, konfigurátor kroků (vypnout, přidat, zástupné zamčené),
 /// jiný materiál + dlaždice, odezva, a okno bez nástroje (zástupné). Snímky pod Xvfb: --snimky=složka.
 /// Spuštění: Godot_mono [--headless] --path godot-prototyp res://nastroje/testy/EditorMaterialuTest.tscn [-- --snimky=/tmp/t2]
 /// </summary>
@@ -87,35 +87,35 @@ public partial class EditorMaterialuTest : Node
         int pisku = api.Katalog.Materialy.Count(m => m.Skupina == "pisek");
         Je(O.Seznam.Seznam.ItemCount == pisku && O.Seznam.Zobrazene.All(id => api.Katalog.Material(id)!.Skupina == "pisek"), $"filtr skupiny písek: {O.Seznam.Seznam.ItemCount}");
         O.Seznam.FiltrSkupiny(SeznamMaterialu.FiltrVzorek);
-        Je(O.Profil.PodleNazvu.Count == 5 && O.Konfigurator.KrokyUzly.Count == 2 && O.Fyzika.Radku >= 11, $"uzly: profil 5 editorů, receptura 2 kroky, fyzika {O.Fyzika.Radku} řádků");
+        Je(O.Profil.PodleNazvu.Count == 6 && O.Profil.PodleNazvu["palette"].BarevVzorniku == 4 && O.Konfigurator.KrokyUzly.Count == 5 && O.Fyzika.Radku >= 11,
+            $"uzly: profil 6 editorů (paleta 4 barvy), receptura v1 trávy 5 kroků ({O.Konfigurator.KrokyUzly.Count}), fyzika {O.Fyzika.Radku} řádků");
 
-        await Hotovo(() => { });
+        // T-2b: každý materiál vzorku – výchozí receptura v1 z data/vpmg/receptury, seed goldenu → golden Dev v okně
+        await Hotovo(() => O.Konfigurator.NastavSeedUzivatel(0xC0FFEE00u));
         int c = 1;
         foreach (var m in vz)
         {
             if (st.Material != m.Id) await Hotovo(() => O.Seznam.EmitSignal(SeznamMaterialu.SignalName.MaterialVybran, m.Id));
+            var zr = api.Receptury.Zaznam(m.Id)!;
             var tm = J.Posledni["hlavni"];
-            Je(st.Material == m.Id && tm.Ok && tm.Checksum == api.Zdroj.Spust(RecepturyVpmg.Vychozi(m.Id), 49).Checksum, $"vzorek {m.Id} {m.Key}: náhled seed 49 = nástroj ({tm.Checksum})");
-            UlozTexturu(tm, $"textura-{m.Id}-{m.Key}.png");
-            await Snimek($"{c++:00}-vzorek-{m.Id}-{m.Key}.png");
+            Je(st.Material == m.Id && RecepturyVpmg.DoJson(st.Receptura) == RecepturyVpmg.DoJson(zr.Receptura) && O.Konfigurator.KrokyUzly.Count == zr.Receptura.Kroky.Count
+               && tm.Ok && tm.Checksum == zr.GoldenChecksum && O.InfoNahledu.Text.Contains("golden v1 Dev") && O.Konfigurator.Validace.Text.Contains(zr.Soubor),
+                $"vzorek {m.Id} {m.Key}: receptura v1 ({zr.Soubor}, {zr.Receptura.Kroky.Count} kroků) → {tm.Checksum} = golden Dev {zr.GoldenChecksum}");
+            UlozTexturu(tm, $"textura-v1-{m.Id}-{m.Key}.png");
+            await Snimek($"{c++:00}-v1-{m.Id}-{m.Key}.png");
         }
         await Hotovo(() => O.Seznam.EmitSignal(SeznamMaterialu.SignalName.MaterialVybran, 52));
         Je(st.Material == 6 && O.Titulek.Text.StartsWith("zástupné") && st.VyberMaterial(52) is { } ch52 && ch52.Contains("mimo vzorek"), "materiál 52 mimo vzorek: odmítnut, titulek „zástupné…“, zůstává 6");
-        await Snimek("06-mimo-vzorek-52-zastupne.png");
         await Hotovo(() => O.Seznam.EmitSignal(SeznamMaterialu.SignalName.MaterialVybran, 1));
-
-        uint REF = api.Zdroj.Spust(RecepturyVpmg.Vychozi(1), 0xC0FFEE00u).Checksum;
-        await Hotovo(() => O.Konfigurator.NastavSeedUzivatel(0xC0FFEE00u));
+        uint REF = api.Receptury.Zaznam(1)!.GoldenChecksum;
         var tg = J.Posledni["hlavni"];
         var tex = (ImageTexture)O.Nahled.Texture;
-        Je(st.Material == 1 && st.Seed == 0xC0FFEE00u && tg.Checksum == REF, $"okno: tráva 1, seed 0xC0FFEE00, 64 px → {tg.Checksum} = nástroj");
         Je(tex.GetWidth() == 128 && tex.GetImage().GetRegion(new Rect2I(0, 0, 64, 64)).GetData().SequenceEqual(tg.Rgba) && tex.GetImage().GetRegion(new Rect2I(64, 64, 64, 64)).GetData().SequenceEqual(tg.Rgba),
             "náhled: dlaždice 2×2, každá dlaždice = bajty VPMG");
         var var4 = Enumerable.Range(0, 4).Select(i => J.Posledni["var" + i].Checksum).ToList();
         Je(var4.Distinct().Count() == 4 && !var4.Contains(tg.Checksum), $"variace seedu: 4 různé checksumy ({string.Join(",", var4)})");
-        Je(O.Profil.PodleNazvu["layerDensityPermille"].GetChild<Label>(0).TooltipText.Contains("nečte") && O.Profil.PodleNazvu["grainScalePermille"].GetChild<Label>(0).TooltipText.Contains("Čte ho"),
-            "profil: layerDensity označen „v0 nečte žádná operace“, grain „čte ho zapnutý krok“");
-        await Snimek("07-trava-seed-c0ffee00.png");
+        Je(O.Profil.PodleNazvu["layerDensityPermille"].GetChild<Label>(0).TooltipText.Contains("nečte") && O.Profil.PodleNazvu["palette"].GetChild<Label>(0).TooltipText.Contains("Čte ho"),
+            "profil trávy: layerDensity „nečte žádná zapnutá operace“, palette „čte ho zapnutý krok“");
 
         // odezva
         var sw = new Stopwatch(); double suma = 0; int n = 8;
@@ -124,41 +124,42 @@ public partial class EditorMaterialuTest : Node
         Je(suma / n < 500, $"odezva < 500 ms ({suma / n:F1} ms)");
         await Hotovo(() => O.Konfigurator.NastavSeedUzivatel(0xC0FFEE00u));
 
-        // návrh profilu jen pro náhled
-        await Hotovo(() => O.Profil.PodleNazvu["grainScalePermille"].ZadejJakoUzivatel("0"));
+        // návrh profilu (paleta) jen pro náhled
+        await Hotovo(() => O.Profil.PodleNazvu["palette"].ZadejJakoUzivatel("#2F4F2F, #4A7A3A, #8FBC5A, #C8E07A"));
         var tn = J.Posledni["hlavni"];
-        Je(st.Navrh.GrainScalePermille == 0 && Jednobarevna(tn.Rgba) && O.Profil.StavNavrhu.Text.Contains("NÁVRH"), "návrh grain 0 → jednobarevný náhled, lišta profilu „NÁVRH jen pro náhled“");
-        uint jednobarevna = tn.Checksum;
-        await Hotovo(() => { O.Profil.PodleNazvu["baseColor"].ZadejJakoUzivatel("#4a7a3a"); O.Profil.PodleNazvu["grainScalePermille"].ZadejJakoUzivatel("320"); });
-        var tb = J.Posledni["hlavni"];
-        Je(st.Navrh.BaseColor == "#4a7a3a" && st.Navrh.GrainScalePermille == 320 && tb.Ok && tb.Checksum != REF && O.Titulek.Text.Contains("NÁVRH"), $"návrh baseColor #4a7a3a + grain 320 → {tb.Checksum}");
-        await Snimek("08-navrh-profilu.png");
+        Je(st.Navrh.Palette is { Count: 4 } && tn.Ok && tn.Checksum != REF && O.Profil.StavNavrhu.Text.Contains("NÁVRH") && O.Titulek.Text.Contains("NÁVRH") && O.Profil.PodleNazvu["palette"].BarevVzorniku == 4,
+            $"návrh palety (4 barvy) → {tn.Checksum}, lišta profilu „NÁVRH jen pro náhled“");
+        await Snimek("06-navrh-palety.png");
         Je(PinDev.Nacti(api.KorenDat).ZrcadloSha == shaPred, "katalog (zrcadlo) na disku beze změny");
         await Hotovo(() => O.Profil.ZrusitNavrh.EmitSignal(BaseButton.SignalName.Pressed));
-        Je(st.Navrh.Prazdny && J.Posledni["hlavni"].Checksum == REF && O.Profil.PodleNazvu["grainScalePermille"].Popis!.Hodnota == "500", "Zpět na katalog → znovu referenční bajty, editory = katalog");
+        Je(st.Navrh.Prazdny && J.Posledni["hlavni"].Checksum == REF && O.InfoNahledu.Text.Contains("golden v1 Dev"), "Zpět na katalog → znovu golden v1");
 
-        // konfigurátor kroků
-        await Hotovo(() => O.Konfigurator.KrokyUzly[1].Zapnuto.ButtonPressed = false);
-        Je(!st.Receptura.Kroky[1].Enabled && J.Posledni["hlavni"].Checksum == jednobarevna, "vypnutý hash_grain = stejné bajty jako návrh grain 0");
-        Je(O.Profil.PodleNazvu["grainScalePermille"].GetChild<Label>(0).TooltipText.Contains("nečte"), "po vypnutí hash_grain profil grain označen „nečte“");
-        await Hotovo(() => O.Konfigurator.KrokyUzly[1].Zapnuto.ButtonPressed = true);
+        // konfigurátor: nabídka z Dev schématu, krok strata s parametry z Dev
         var pop = O.Konfigurator.Pridat.GetPopup();
         int zamcenych = Enumerable.Range(0, pop.ItemCount).Count(i => pop.IsItemDisabled(i));
-        Je(pop.ItemCount == 9 && zamcenych == 7, $"nabídka přidat krok: {pop.ItemCount} položek, {zamcenych} zástupných zamčených");
-        await Hotovo(() => pop.EmitSignal(PopupMenu.SignalName.IdPressed, 1));
-        await Cekej(() => O.Konfigurator.KrokyUzly.Count == 3);
-        Je(st.Receptura.Kroky.Count == 3 && st.Receptura.Kroky[2].Type == "hash_grain" && O.Konfigurator.KrokyUzly.Count == 3 && J.Posledni["hlavni"].Ok, "přidán krok hash_grain (s3) → 3 uzly KrokReceptury, náhled OK");
-        await Hotovo(() => pop.EmitSignal(PopupMenu.SignalName.IdPressed, 3));
-        Je(st.Receptura.Kroky.Count == 3, "zástupná operace z nabídky se nepřidá");
-        await Snimek("09-receptura-tri-kroky.png");
+        Je(pop.ItemCount == 16 && zamcenych == 6, $"nabídka přidat krok: {pop.ItemCount} položek (10 z registru Dev), {zamcenych} zástupných zamčených");
+        var nab = Willage.Materialy.Api.Editor.PopisKonfiguratoruReceptury.Nabidka(api.Schema);
+        int iStrata = nab.ToList().FindIndex(x => x.Type == "strata");
+        await Hotovo(() => pop.EmitSignal(PopupMenu.SignalName.IdPressed, iStrata));
+        await Cekej(() => O.Konfigurator.KrokyUzly.Count == 6);
+        var ks = O.Konfigurator.KrokyUzly.LastOrDefault();
+        Je(st.Receptura.Kroky.Count == 6 && st.Receptura.Kroky[5].Type == "strata" && ks != null && ks.Editory.Select(e => e.Name.ToString()).SequenceEqual(new[] { "Par_bandMinPx", "Par_bandJitterPermille" })
+           && ks.Editory.All(e => e.Ovladac is LineEdit { PlaceholderText: "výchozí Dev" }) && J.Posledni["hlavni"].Ok,
+            "přidán krok strata → editory bandMinPx, bandJitterPermille ze schématu Dev (prázdné = výchozí Dev z profilu)");
+        Je(O.Profil.PodleNazvu["layerDensityPermille"].GetChild<Label>(0).TooltipText.Contains("Čte ho"), "po přidání strata profil layerDensity „čte ho zapnutý krok“");
+        await Hotovo(() => ks!.Editory[0].ZadejJakoUzivatel("6"));
+        Je(st.Receptura.Kroky[5].Params.TryGetValue("bandMinPx", out var bm) && bm == "6", "bandMinPx 6 zadán v editoru → v receptuře");
+        await Snimek("07-receptura-trava-plus-strata.png");
+        await Hotovo(() => O.Konfigurator.KrokyUzly[3].Zapnuto.ButtonPressed = false);
+        Je(!st.Receptura.Kroky[3].Enabled && J.Posledni["hlavni"].Checksum != REF, "vypnutý grass_tufts změní výstup");
 
-        // jiný materiál, dlaždice 3×3
+        // jiný materiál → jeho receptura v1, dlaždice 3×3
         await Hotovo(() => O.Seznam.EmitSignal(SeznamMaterialu.SignalName.MaterialVybran, 3));
-        await Cekej(() => O.Konfigurator.KrokyUzly.Count == 3 && st.Material == 3);
-        Je(st.Material == 3 && st.Receptura.MaterialId == 3 && st.Receptura.Kroky.Count == 3 && O.Fyzika.GetChild<Label>(1).Text == "3", "výběr materiálu 3: receptura přenesena, fyzika materiálu 3");
+        await Cekej(() => st.Material == 3 && O.Konfigurator.KrokyUzly.Count == 5);
+        Je(st.Material == 3 && RecepturyVpmg.DoJson(st.Receptura) == RecepturyVpmg.DoJson(api.Receptury.Zaznam(3)!.Receptura) && O.Fyzika.GetChild<Label>(1).Text == "3", "výběr materiálu 3: načtena jeho receptura v1 (úpravy trávy se nepřenesou), fyzika 3");
         O.Dlazdice.Select(2); O.Dlazdice.EmitSignal(OptionButton.SignalName.ItemSelected, 2);
         Je(((ImageTexture)O.Nahled.Texture).GetWidth() == 192, "dlaždice 3×3 → 192 px");
-        await Snimek("10-pisek-dlazdice-3x3.png");
+        await Snimek("08-pisek-v1-dlazdice-3x3.png");
 
         // bez nástroje → zástupné
         O.QueueFree();
@@ -170,7 +171,7 @@ public partial class EditorMaterialuTest : Node
         await Cekej(() => O2.Jadro.Info != null && O2.Jadro.Posledni.ContainsKey("hlavni") && O2.Jadro.Cekajicich == 0);
         var tz = O2.Jadro.Posledni["hlavni"];
         Je(tz.Zastupna && O2.Lista.Vpmg.Text.Contains("zástupné") && O2.Seznam.Seznam.ItemCount == 5 && O2.InfoNahledu.Text.Contains("zástupné"), "bez nástroje: okno běží, náhled zástupný (šrafy), lišta to říká");
-        await Snimek("11-bez-vpmg-zastupne.png");
+        await Snimek("09-bez-vpmg-zastupne.png");
 
         GD.Print($"OK {_ok}, chyb {_chyb}");
         GetTree().Quit(_chyb == 0 ? 0 : 1);

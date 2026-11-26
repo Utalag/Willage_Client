@@ -7,7 +7,7 @@ namespace Willage.Vpmg.Nastroj;
 
 /// <summary>
 /// Režim server: jeden JSON objekt na řádek ze stdin → jeden JSON objekt na řádek na stdout (stejné „id“).
-/// Příkazy: info, golden, katalog {zrcadlo}, kanon {receptura}, spust {receptura | materialId, seed, navrh?, rozliseni?}, konec.
+/// Příkazy: info, golden, goldeny (receptury v1), parametry (schéma operací z Dev), katalog {zrcadlo}, kanon {receptura}, spust {receptura | materialId, seed, navrh?, rozliseni?}, konec.
 /// Chyba (neznámá operace, chybný JSON …) = {"ok":false,"chyba":…}, proces běží dál.
 /// </summary>
 public sealed class ServerVpmg
@@ -43,6 +43,8 @@ public sealed class ServerVpmg
             {
                 "info" => Info(),
                 "golden" => Golden(),
+                "goldeny" => Goldeny(),
+                "parametry" => ParametryDev.Rozbor(_p),
                 "katalog" => Katalog((string)q["zrcadlo"]!),
                 "kanon" => new JsonObject { ["receptura"] = VpmgRecipeJson.ToJson(VpmgRecipeJson.Parse((string)q["receptura"]!)) },
                 "spust" => Spust(q),
@@ -74,6 +76,11 @@ public sealed class ServerVpmg
         var (oc, sp) = _p.Golden();
         return new JsonObject { ["ocekavany"] = oc, ["spocteny"] = sp, ["shoda"] = oc == sp };
     }
+
+    JsonObject Goldeny() => new()
+    {
+        ["pripady"] = new JsonArray(_p.GoldenyReceptur().Select(g => (JsonNode)new JsonObject { ["soubor"] = g.Soubor, ["ocekavany"] = g.Ocekavany, ["spocteny"] = g.Spocteny }).ToArray()),
+    };
 
     static JsonObject Katalog(string zrcadlo)
     {

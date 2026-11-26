@@ -19,6 +19,8 @@ public interface IZdrojVpmg : IDisposable
     TexturaVpmgDto Spust(RecepturaVpmgDto receptura, uint seed, NavrhProfiluDto? navrh = null);
     (uint Ocekavany, uint Spocteny) Golden();
     KontrolaZrcadlaDto KontrolaZrcadla(string zrcadlo);
+    /// <summary>T-2b: goldeny receptur v1 (fixture Dev v pinu).</summary>
+    IReadOnlyList<(string Soubor, uint Ocekavany, uint Spocteny)> Goldeny();
     /// <summary>Kanonický JSON receptury podle VpmgRecipeJson Dev (parse → ToJson).</summary>
     string Kanon(string recepturaJson);
 }

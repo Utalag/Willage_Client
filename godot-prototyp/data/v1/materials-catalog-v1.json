@@ -63,11 +63,12 @@
       },
       "visualProfiles": {
         "default": {
-          "style": "neutral",
-          "baseColor": "#808080",
-          "grainScalePermille": 500,
-          "layerDensityPermille": 300,
-          "irregularityPermille": 200
+          "style": "willage_v1",
+          "baseColor": "#7EE06A",
+          "palette": ["#98F58A", "#7EE06A", "#5BC94E", "#3FAF3C"],
+          "grainScalePermille": 180,
+          "layerDensityPermille": 120,
+          "irregularityPermille": 280
         }
       },
       "subMaterials": null,
@@ -90,11 +91,12 @@
       },
       "visualProfiles": {
         "default": {
-          "style": "neutral",
-          "baseColor": "#a8805f",
-          "grainScalePermille": 500,
-          "layerDensityPermille": 300,
-          "irregularityPermille": 200
+          "style": "willage_v1",
+          "baseColor": "#B8845A",
+          "palette": ["#D4A574", "#B8845A", "#9A6B42", "#7A5230"],
+          "grainScalePermille": 320,
+          "layerDensityPermille": 420,
+          "irregularityPermille": 360
         }
       },
       "subMaterials": null,
@@ -117,11 +119,12 @@
       },
       "visualProfiles": {
         "default": {
-          "style": "neutral",
-          "baseColor": "#f2ef9d",
-          "grainScalePermille": 500,
-          "layerDensityPermille": 300,
-          "irregularityPermille": 200
+          "style": "willage_v1",
+          "baseColor": "#E8D9C3",
+          "palette": ["#F4EDE0", "#E8D9C3", "#C9B89A", "#A89880"],
+          "grainScalePermille": 420,
+          "layerDensityPermille": 200,
+          "irregularityPermille": 480
         }
       },
       "subMaterials": null,
@@ -171,11 +174,12 @@
       },
       "visualProfiles": {
         "default": {
-          "style": "neutral",
-          "baseColor": "#bf9749",
-          "grainScalePermille": 500,
-          "layerDensityPermille": 300,
-          "irregularityPermille": 200
+          "style": "willage_v1",
+          "baseColor": "#E5E0D4",
+          "palette": ["#F2EFE8", "#E5E0D4", "#C9C4B8", "#B0AAA0"],
+          "grainScalePermille": 260,
+          "layerDensityPermille": 680,
+          "irregularityPermille": 220
         }
       },
       "subMaterials": null,
@@ -198,11 +202,12 @@
       },
       "visualProfiles": {
         "default": {
-          "style": "neutral",
-          "baseColor": "#8c236e",
-          "grainScalePermille": 500,
-          "layerDensityPermille": 300,
-          "irregularityPermille": 200
+          "style": "willage_v1",
+          "baseColor": "#A89888",
+          "palette": ["#C4B4A4", "#A89888", "#8A7A6C", "#6E6058", "#554A44"],
+          "grainScalePermille": 380,
+          "layerDensityPermille": 560,
+          "irregularityPermille": 520
         }
       },
       "subMaterials": null,

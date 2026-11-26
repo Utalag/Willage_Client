@@ -3,7 +3,7 @@ using System.Text.Json;
 namespace Willage.Gen.Materialy;
 
 /// <summary>
-/// Načte materials-catalog-v1.json Willage-backendu (Willage_Dev main 3476488, jen čtení; kopie v godot-prototyp/data/v1).
+/// Načte materials-catalog-v1.json Willage-backendu (Willage_Dev main, jen čtení; připnutý commit v data/vpmg/dev_pin.json – od T-2b 12c3e6b, mění se jen visualProfiles; kopie v godot-prototyp/data/v1).
 /// Nová ID se tu nepřidělují. Neznámé ID = těsnění (počítá se v <see cref="NeznamaId"/>).
 /// </summary>
 public sealed class KatalogMaterialu

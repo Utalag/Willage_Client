@@ -133,6 +133,7 @@ public sealed class ZdrojVpmgProces : IZdrojVpmg
             if (navrh.GrainScalePermille != null) n["grainScalePermille"] = navrh.GrainScalePermille;
             if (navrh.LayerDensityPermille != null) n["layerDensityPermille"] = navrh.LayerDensityPermille;
             if (navrh.IrregularityPermille != null) n["irregularityPermille"] = navrh.IrregularityPermille;
+            if (navrh.Palette != null) n["palette"] = new JsonArray(navrh.Palette.Select(x => (JsonNode)x).ToArray());
             q["navrh"] = n;
         }
         JsonObject o;
@@ -152,6 +153,14 @@ public sealed class ZdrojVpmgProces : IZdrojVpmg
         var o = Ok(new JsonObject { ["prikaz"] = "golden" });
         return ((uint)o["ocekavany"]!, (uint)o["spocteny"]!);
     }
+
+    /// <summary>T-2b: goldeny receptur v1 z fixture Dev v pinu (soubor, očekávaný, spočtený).</summary>
+    public IReadOnlyList<(string Soubor, uint Ocekavany, uint Spocteny)> Goldeny() =>
+        Ok(new JsonObject { ["prikaz"] = "goldeny" })["pripady"]!.AsArray().Select(x => ((string)x!["soubor"]!, (uint)x["ocekavany"]!, (uint)x["spocteny"]!)).ToList();
+
+    /// <summary>T-2b: živý rozbor parametrů operací z Dev (stejný formát jako data/vpmg/operace_dev_v1.json).</summary>
+    public string ParametryDevJson() => Ok(new JsonObject { ["prikaz"] = "parametry" }) is var o ? Ocisti(o).ToJsonString() : "";
+    static JsonObject Ocisti(JsonObject o) { o.Remove("ok"); o.Remove("id"); return o; }
 
     public KontrolaZrcadlaDto KontrolaZrcadla(string zrcadlo)
     {

@@ -87,6 +87,15 @@ public partial class EditorMaterialuOkno : Control
         for (int i = 0; i < _seedyVariaci.Count; i++) Jadro.Pozadej("var" + i, st.Receptura, _seedyVariaci[i], st.Navrh);
     }
 
+    /// <summary>T-2b: když náhled = výchozí receptura v1 + seed goldenu bez návrhu, porovná checksum s goldenem Dev.</summary>
+    string Golden(Willage.Materialy.Api.Dto.TexturaVpmgDto t)
+    {
+        var st = Jadro.Stav;
+        if (st.ZdrojReceptury is not { } z || !st.Navrh.Prazdny || st.Seed != z.GoldenSeed || st.Receptura.Resolution != z.GoldenRozliseni
+            || Willage.Materialy.Api.Sluzby.RecepturyVpmg.DoJson(st.Receptura) != Willage.Materialy.Api.Sluzby.RecepturyVpmg.DoJson(z.Receptura)) return "";
+        return t.Checksum == z.GoldenChecksum ? $"\ngolden v1 Dev {z.GoldenChecksum} ✓" : $"\nROZDÍL od goldenu v1 Dev {z.GoldenChecksum}";
+    }
+
     void PrijmiTexturu(string cil)
     {
         var t = Jadro.Posledni[cil];
@@ -94,7 +103,7 @@ public partial class EditorMaterialuOkno : Control
         {
             Nahled.Zobraz(t);
             InfoNahledu.Text = t.Zastupna ? t.Chyba ?? "zástupné"
-                : t.Ok ? $"{t.Sirka}×{t.Vyska} px · vrstva {t.Vrstva}\nchecksum {t.Checksum}\nVPMG {t.MsNastroj:F2} ms · celkem {t.MsCelkem:F1} ms\nseed {Jadro.Stav.Seed}" + (Jadro.Stav.Navrh.Prazdny ? "" : "\nNÁVRH profilu (jen náhled)")
+                : t.Ok ? $"{t.Sirka}×{t.Vyska} px · vrstva {t.Vrstva}\nchecksum {t.Checksum}\nVPMG {t.MsNastroj:F2} ms · celkem {t.MsCelkem:F1} ms\nseed {Jadro.Stav.Seed}" + (Jadro.Stav.Navrh.Prazdny ? "" : "\nNÁVRH profilu (jen náhled)") + Golden(t)
                 : "chyba VPMG: " + t.Chyba;
             InfoNahledu.Modulate = t.Ok ? Colors.White : new Color(1, 0.7f, 0.7f);
         }

@@ -1,0 +1,240 @@
+{
+  "format": "willage-vpmg-operace-dev-v1",
+  "poznamka": "GENEROVÁNO nástrojem Willage.Vpmg.Nastroj (příkaz parametry) z připnutého Willage_Dev – needitovat ručně. Typy = registr Dev, parametry = rozbor zdrojů operací (VpmgStepParams.Get*, Params.TryGetValue, VisualProfile.*). vychozi \"\" = výchozí hodnotu bere Dev z profilu (vychoziDev).",
+  "devCommit": "12c3e6b05305c9ec6d0c9ed170791643f477871f",
+  "operace": [
+    {
+      "type": "base_fill",
+      "trida": "BaseFillOperation",
+      "ctiProfil": [
+        "baseColor"
+      ],
+      "params": [
+        {
+          "nazev": "layer",
+          "druh": "text",
+          "vychozi": "albedo",
+          "vychoziDev": "\"albedo\""
+        }
+      ]
+    },
+    {
+      "type": "color_variation",
+      "trida": "ColorVariationOperation",
+      "ctiProfil": [
+        "baseColor",
+        "palette"
+      ],
+      "params": [
+        {
+          "nazev": "scalePermille",
+          "druh": "cele",
+          "vychozi": "280",
+          "vychoziDev": "280"
+        },
+        {
+          "nazev": "jitterPermille",
+          "druh": "cele",
+          "vychozi": "90",
+          "vychoziDev": "90"
+        }
+      ],
+      "aliasOf": "palette_map"
+    },
+    {
+      "type": "grass_tufts",
+      "trida": "GrassTuftsOperation",
+      "ctiProfil": [],
+      "params": [
+        {
+          "nazev": "densityPermille",
+          "druh": "cele",
+          "vychozi": "550",
+          "vychoziDev": "550"
+        },
+        {
+          "nazev": "bladeLengthPermille",
+          "druh": "cele",
+          "vychozi": "180",
+          "vychoziDev": "180"
+        },
+        {
+          "nazev": "hueJitterPermille",
+          "druh": "cele",
+          "vychozi": "120",
+          "vychoziDev": "120"
+        }
+      ]
+    },
+    {
+      "type": "hash_grain",
+      "trida": "HashGrainOperation",
+      "ctiProfil": [
+        "grainScalePermille"
+      ],
+      "params": []
+    },
+    {
+      "type": "irregularity",
+      "trida": "IrregularityWarpOperation",
+      "ctiProfil": [
+        "irregularityPermille"
+      ],
+      "params": [
+        {
+          "nazev": "strengthPermille",
+          "druh": "cele",
+          "vychozi": "",
+          "vychoziDev": "context.VisualProfile.IrregularityPermille",
+          "zProfilu": [
+            "irregularityPermille"
+          ]
+        },
+        {
+          "nazev": "cellPx",
+          "druh": "cele",
+          "vychozi": "",
+          "vychoziDev": "Math.Max(4, w / 12)"
+        }
+      ],
+      "aliasOf": "warp"
+    },
+    {
+      "type": "palette_map",
+      "trida": "PaletteMapOperation",
+      "ctiProfil": [
+        "baseColor",
+        "palette"
+      ],
+      "params": [
+        {
+          "nazev": "scalePermille",
+          "druh": "cele",
+          "vychozi": "280",
+          "vychoziDev": "280"
+        },
+        {
+          "nazev": "jitterPermille",
+          "druh": "cele",
+          "vychozi": "90",
+          "vychoziDev": "90"
+        }
+      ]
+    },
+    {
+      "type": "smooth_noise",
+      "trida": "SmoothNoiseOperation",
+      "ctiProfil": [
+        "grainScalePermille"
+      ],
+      "params": [
+        {
+          "nazev": "scalePermille",
+          "druh": "cele",
+          "vychozi": "",
+          "vychoziDev": "context.VisualProfile.GrainScalePermille",
+          "zProfilu": [
+            "grainScalePermille"
+          ]
+        },
+        {
+          "nazev": "octaves",
+          "druh": "cele",
+          "vychozi": "3",
+          "vychoziDev": "3"
+        },
+        {
+          "nazev": "amplitudePermille",
+          "druh": "cele",
+          "vychozi": "120",
+          "vychoziDev": "120"
+        }
+      ]
+    },
+    {
+      "type": "strata",
+      "trida": "StrataOperation",
+      "ctiProfil": [
+        "baseColor",
+        "irregularityPermille",
+        "layerDensityPermille",
+        "palette"
+      ],
+      "params": [
+        {
+          "nazev": "bandMinPx",
+          "druh": "cele",
+          "vychozi": "",
+          "vychoziDev": "Math.Max(2, h * 80 / Math.Max(100, density + 50))",
+          "zProfilu": [
+            "layerDensityPermille"
+          ]
+        },
+        {
+          "nazev": "bandJitterPermille",
+          "druh": "cele",
+          "vychozi": "",
+          "vychoziDev": "irregularity",
+          "zProfilu": [
+            "irregularityPermille"
+          ]
+        }
+      ]
+    },
+    {
+      "type": "value_noise",
+      "trida": "ValueNoiseOperation",
+      "ctiProfil": [
+        "grainScalePermille"
+      ],
+      "params": [
+        {
+          "nazev": "scalePermille",
+          "druh": "cele",
+          "vychozi": "",
+          "vychoziDev": "context.VisualProfile.GrainScalePermille",
+          "zProfilu": [
+            "grainScalePermille"
+          ]
+        },
+        {
+          "nazev": "octaves",
+          "druh": "cele",
+          "vychozi": "3",
+          "vychoziDev": "3"
+        },
+        {
+          "nazev": "amplitudePermille",
+          "druh": "cele",
+          "vychozi": "120",
+          "vychoziDev": "120"
+        }
+      ],
+      "aliasOf": "smooth_noise"
+    },
+    {
+      "type": "warp",
+      "trida": "WarpOperation",
+      "ctiProfil": [
+        "irregularityPermille"
+      ],
+      "params": [
+        {
+          "nazev": "strengthPermille",
+          "druh": "cele",
+          "vychozi": "",
+          "vychoziDev": "context.VisualProfile.IrregularityPermille",
+          "zProfilu": [
+            "irregularityPermille"
+          ]
+        },
+        {
+          "nazev": "cellPx",
+          "druh": "cele",
+          "vychozi": "",
+          "vychoziDev": "Math.Max(4, w / 12)"
+        }
+      ]
+    }
+  ]
+}

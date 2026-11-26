@@ -4,7 +4,9 @@ using Willage.Materialy.Api.Sluzby;
 namespace Willage.Materialy.Api.Editor;
 
 /// <summary>Jeden editor parametru kroku (nebo profilu) – druh a hodnota ze schématu operací.</summary>
-public sealed record EditorParametruPopis(string Nazev, DruhParametruVpmg Druh, string Hodnota, string Popis, IReadOnlyList<string> Moznosti, int? Min, int? Max, string Jednotka);
+/// <param name="VychoziDev">výchozí výraz Dev (prázdná hodnota = Dev ho použije); BezPrekryvu = parametr z Dev bez popisu klienta</param>
+public sealed record EditorParametruPopis(string Nazev, DruhParametruVpmg Druh, string Hodnota, string Popis, IReadOnlyList<string> Moznosti, int? Min, int? Max, string Jednotka,
+    string VychoziDev = "", bool BezPrekryvu = false);
 
 /// <summary>Popis jednoho kroku pro UI: operace, zapnuto, editory parametrů, profilové hodnoty, které operace čte.</summary>
 public sealed record KrokPopis(int Index, string Id, string Type, string Nazev, string Skupina, bool Enabled, string Popis, IReadOnlyList<EditorParametruPopis> Editory, IReadOnlyList<string> CtiProfil);
@@ -13,7 +15,7 @@ public sealed record KrokPopis(int Index, string Id, string Type, string Nazev, 
 public sealed record NabidkaOperacePopis(string Type, string Nazev, bool Zamcena, string Popis);
 
 /// <summary>
-/// T-2: z receptury a schématu operací udělá popis konfigurátoru (editory se generují, nic není ručně v UI) – stejný princip
+/// T-2 / T-2b: z receptury a schématu operací (generovaného z Dev) udělá popis konfigurátoru (editory se generují, nic není ručně v UI) – stejný princip
 /// jako G-5 (konfigurátor generovaný ze schématu G-2). Parametr kroku, který schéma nezná, se ukáže jako text (a validace ho hlásí).
 /// </summary>
 public static class PopisKonfiguratoruReceptury
@@ -31,16 +33,17 @@ public static class PopisKonfiguratoruReceptury
     {
         "style" => p.Style, "baseColor" => p.BaseColor, "grainScalePermille" => p.GrainScalePermille.ToString(System.Globalization.CultureInfo.InvariantCulture),
         "layerDensityPermille" => p.LayerDensityPermille.ToString(System.Globalization.CultureInfo.InvariantCulture),
-        "irregularityPermille" => p.IrregularityPermille.ToString(System.Globalization.CultureInfo.InvariantCulture), _ => "",
+        "irregularityPermille" => p.IrregularityPermille.ToString(System.Globalization.CultureInfo.InvariantCulture),
+        "palette" => p.PaletaText, _ => "",
     })).ToList();
 
     public static IReadOnlyList<NabidkaOperacePopis> Nabidka(SchemaOperaciVpmg s) =>
-        s.Spustitelne.Select(o => new NabidkaOperacePopis(o.Type, o.Nazev, false, o.Popis))
+        s.Spustitelne.Select(o => new NabidkaOperacePopis(o.Type, o.Nazev, false, o.Popis + (o.Params.Count > 0 ? " Parametry (Dev): " + string.Join(", ", o.Params.Select(p => p.Nazev)) : "")))
          .Concat(s.Zastupne.Select(o => new NabidkaOperacePopis(o.Type, o.Nazev + " (zástupné)", true, o.Popis))).ToList();
 
     /// <summary>Které parametry profilu čte aspoň jeden zapnutý krok (ostatní UI označí „v0 nečte žádná operace“).</summary>
     public static IReadOnlySet<string> CtenyProfil(RecepturaVpmgDto r, SchemaOperaciVpmg s) =>
         r.Kroky.Where(k => k.Enabled).SelectMany(k => s.Operace(k.Type)?.CtiProfil ?? Array.Empty<string>()).ToHashSet(StringComparer.Ordinal);
 
-    static EditorParametruPopis Editor(ParametrVpmgDto p, string h) => new(p.Nazev, p.Druh, h, p.Popis, p.Moznosti, p.Min, p.Max, p.Jednotka);
+    static EditorParametruPopis Editor(ParametrVpmgDto p, string h) => new(p.Nazev, p.Druh, h, p.Popis, p.Moznosti, p.Min, p.Max, p.Jednotka, p.VychoziDev, p.BezPrekryvu);
 }

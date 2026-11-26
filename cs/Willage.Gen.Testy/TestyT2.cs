@@ -24,9 +24,9 @@ public static class TestyT2
         T.Je(kp.Count == 2 && kp[0].Editory.Count == 1 && kp[0].Editory[0].Nazev == "layer" && kp[0].Editory[0].Hodnota == "albedo" && kp[1].Editory.Count == 0,
             "konfigurátor ze schématu: base_fill 1 editor (layer = albedo), hash_grain 0");
         var pp = PopisKonfiguratoruReceptury.Profil(st.ProfilNahledu, api.Schema);
-        T.Je(pp.Count == 5 && pp[1].Druh == DruhParametruVpmg.Barva && pp[1].Hodnota == "#d8ba36" && pp[2].Druh == DruhParametruVpmg.Cele && pp[2].Max == 1000, "editory profilu: 5 (barva, celá ‰ s rozsahem)");
+        T.Je(pp.Count == 6 && pp[1].Druh == DruhParametruVpmg.Barva && pp[1].Hodnota == "#d8ba36" && pp[2].Druh == DruhParametruVpmg.Paleta && pp[2].Hodnota == "" && pp[3].Druh == DruhParametruVpmg.Cele && pp[3].Max == 1000, "editory profilu: 6 (barva, paleta – 52 nemá, celá ‰ s rozsahem)");
         var nab = PopisKonfiguratoruReceptury.Nabidka(api.Schema);
-        T.Je(nab.Count(n => !n.Zamcena) == 2 && nab.Count(n => n.Zamcena) == 7, "nabídka přidat krok: 2 spustitelné + 7 zástupných zamčených");
+        T.Je(nab.Count(n => !n.Zamcena) == 10 && nab.Count(n => n.Zamcena) == 6, $"nabídka přidat krok: 10 spustitelných (registr Dev v1) + 6 zástupných zamčených ({nab.Count(n => !n.Zamcena)} + {nab.Count(n => n.Zamcena)})");
         T.Je(S(PopisKonfiguratoruReceptury.CtenyProfil(st.Receptura, api.Schema).OrderBy(x => x)) == "baseColor,grainScalePermille", "čtené parametry profilu: baseColor, grainScalePermille");
 
         T.Je(st.PridejKrok("roots") != null && st.PridejKrok("perlin") != null && st.Receptura.Kroky.Count == 2 && zmen == 0, "zástupná / neznámá operace odmítnuta, stav beze změny");

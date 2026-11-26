@@ -38,6 +38,26 @@ public partial class EditorParametruVpmg : HBoxContainer
                 cp.ColorChanged += c => Hlas("#" + c.ToHtml(false).ToLowerInvariant());
                 Ovladac = cp; AddChild(cp);
                 break;
+            case DruhParametruVpmg.Paleta:
+            {
+                // T-2b: paleta profilu – text „#a, #b“ + vzorník barev (vzorník je jen náhled, mění se textem)
+                var box = new VBoxContainer();
+                var le = new LineEdit { Text = p.Hodnota, CustomMinimumSize = new Vector2(240, 0), TooltipText = p.Popis, PlaceholderText = "(žádná – jen baseColor)" };
+                var vz = new HBoxContainer { Name = "Vzornik" };
+                le.TextSubmitted += t => Hlas(t);
+                le.FocusExited += () => { if (le.Text != Popis!.Hodnota) Hlas(le.Text); };
+                box.AddChild(le); box.AddChild(vz);
+                Ovladac = le; AddChild(box); Vzornik(vz, p.Hodnota);
+                break;
+            }
+            case DruhParametruVpmg.Cele when p.Hodnota == "" && p.VychoziDev != "":
+            {
+                // T-2b: hodnota není v receptuře → Dev použije výchozí výraz (z profilu / rozměru); zadáním čísla se přepíše
+                var le = new LineEdit { Text = "", PlaceholderText = "výchozí Dev", CustomMinimumSize = new Vector2(150, 0), TooltipText = p.Popis };
+                le.TextSubmitted += t => Hlas(t.Trim());
+                Ovladac = le; AddChild(le);
+                break;
+            }
             case DruhParametruVpmg.Cele:
                 var sl = new HSlider { MinValue = p.Min ?? 0, MaxValue = p.Max ?? 1000, Step = 1, Value = Cislo(p.Hodnota), CustomMinimumSize = new Vector2(150, 0), SizeFlagsVertical = SizeFlags.ShrinkCenter, TooltipText = p.Popis };
                 var sb = new SpinBox { MinValue = sl.MinValue, MaxValue = sl.MaxValue, Step = 1, Value = sl.Value, CustomMinimumSize = new Vector2(90, 0) };
@@ -53,12 +73,21 @@ public partial class EditorParametruVpmg : HBoxContainer
                 Ovladac = ob; AddChild(ob);
                 break;
             default:
-                var le = new LineEdit { Text = p.Hodnota, CustomMinimumSize = new Vector2(150, 0), TooltipText = p.Popis };
-                le.TextSubmitted += t => Hlas(t);
-                le.FocusExited += () => { if (le.Text != Popis!.Hodnota) Hlas(le.Text); };
-                Ovladac = le; AddChild(le);
+                var leT = new LineEdit { Text = p.Hodnota, CustomMinimumSize = new Vector2(150, 0), TooltipText = p.Popis };
+                leT.TextSubmitted += t => Hlas(t);
+                leT.FocusExited += () => { if (leT.Text != Popis!.Hodnota) Hlas(leT.Text); };
+                Ovladac = leT; AddChild(leT);
                 break;
         }
+        if (p.BezPrekryvu) _nazev.Modulate = new Color(1f, 0.85f, 0.5f);
+    }
+
+    /// <summary>Vzorník palety: čtverečky barev z textu „#a, #b“.</summary>
+    static void Vzornik(HBoxContainer vz, string h)
+    {
+        foreach (var c in vz.GetChildren()) c.QueueFree();
+        foreach (var x in StavEditoru.Paleta(h))
+            if (Color.HtmlIsValid(x)) vz.AddChild(new ColorRect { Color = Color.FromHtml(x), CustomMinimumSize = new Vector2(22, 14), TooltipText = x });
     }
 
     static int IndexOf(EditorParametruPopis p, string h) { for (int i = 0; i < p.Moznosti.Count; i++) if (p.Moznosti[i] == h) return i; return -1; }
@@ -76,7 +105,7 @@ public partial class EditorParametruVpmg : HBoxContainer
             case ColorPickerButton cp: cp.Color = Color.FromHtml(h); break;
             case HSlider sl: sl.Value = Cislo(h); if (GetChildCount() > 2 && GetChild(2) is SpinBox sb) sb.Value = Cislo(h); break;
             case OptionButton ob: ob.Select(Math.Max(0, IndexOf(Popis, h))); break;
-            case LineEdit le: le.Text = h; break;
+            case LineEdit le: le.Text = h; if (le.GetParent()?.GetNodeOrNull<HBoxContainer>("Vzornik") is { } vz) Vzornik(vz, h); break;
         }
         _tichy = false;
     }
@@ -92,6 +121,9 @@ public partial class EditorParametruVpmg : HBoxContainer
             case LineEdit le: le.Text = h; Hlas(h); break;
         }
     }
+
+    /// <summary>Počet barev ve vzorníku palety (testy).</summary>
+    public int BarevVzorniku => Ovladac is LineEdit le && le.GetParent()?.GetNodeOrNull<HBoxContainer>("Vzornik") is { } vz ? StavEditoru.Paleta(le.Text).Count : -1;
 
     /// <summary>Zvýraznění (návrh ≠ katalog, nebo „v0 nečte žádná operace“).</summary>
     public void Zvyrazni(Color c, string? tooltip = null) { _nazev.Modulate = c; if (tooltip != null) _nazev.TooltipText = tooltip; }

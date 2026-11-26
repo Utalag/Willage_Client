@@ -79,7 +79,8 @@ public partial class KonfiguratorReceptury : VBoxContainer
     public void ObnovValidaci()
     {
         var v = _st.Validace();
-        Validace.Text = v.Count == 0 ? $"receptura platná · {_st.Receptura.Kroky.Count(k => k.Enabled)}/{_st.Receptura.Kroky.Count} kroků zapnuto · schéma Dev schemaVersion {_st.Receptura.SchemaVersion}" : "validace: " + string.Join("; ", v);
+        Validace.Text = v.Count == 0 ? $"receptura platná · {_st.Receptura.Kroky.Count(k => k.Enabled)}/{_st.Receptura.Kroky.Count} kroků zapnuto · schéma Dev schemaVersion {_st.Receptura.SchemaVersion}"
+            + (_st.ZdrojReceptury is { } z ? $"\nvýchozí: receptury/{z.Soubor} ← Dev {System.IO.Path.GetFileName(z.ZdrojDev)}" : "\nvýchozí: v0 (base_fill + hash_grain)") : "validace: " + string.Join("; ", v);
         Validace.Modulate = v.Count == 0 ? new Color(0.7f, 1, 0.7f) : new Color(1, 0.6f, 0.6f);
     }
 

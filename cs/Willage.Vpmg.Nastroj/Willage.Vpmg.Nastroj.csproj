@@ -10,7 +10,7 @@
     <InvariantGlobalization>true</InvariantGlobalization>
     <Deterministic>true</Deterministic>
     <RootNamespace>Willage.Vpmg.Nastroj</RootNamespace>
-    <WillageDevCommit>34764880fa2b0f1c580558403f9ea40a29f6a1c8</WillageDevCommit>
+    <WillageDevCommit>12c3e6b05305c9ec6d0c9ed170791643f477871f</WillageDevCommit>
     <WillageDevKoren Condition="'$(WillageDevKoren)' == ''">$(MSBuildThisFileDirectory)../../.willage-dev/$(WillageDevCommit)</WillageDevKoren>
   </PropertyGroup>
   <ItemGroup>

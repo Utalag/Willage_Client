@@ -56,6 +56,20 @@ public sealed class PrikazyVpmg
         return (root.GetProperty("checksum").GetUInt32(), b.Checksum);
     }
 
+    /// <summary>T-2b: goldeny receptur v1 z fixture Dev v pinu (receptura i checksum z Dev, katalog = zrcadlo / embedded).</summary>
+    public IReadOnlyList<(string Soubor, uint Ocekavany, uint Spocteny)> GoldenyReceptur()
+    {
+        const string F = "tests/Willage.World.Vpmg.Tests/Fixtures/";
+        using var d = JsonDocument.Parse(File.ReadAllText(PinDev.Cesta(F + "vpmg-recipe-goldens-v1.json")));
+        uint seed = Convert.ToUInt32(d.RootElement.GetProperty("seed").GetString(), 16);
+        return d.RootElement.GetProperty("cases").EnumerateArray().Select(c =>
+        {
+            string soubor = c.GetProperty("recipeFile").GetString()!;
+            var r = VpmgRecipeJson.Parse(File.ReadAllText(PinDev.Cesta(F + "recipes/" + soubor)));
+            return (soubor, c.GetProperty("checksum").GetUInt32(), Spust(r, seed).Checksum);
+        }).ToList();
+    }
+
     /// <summary>Zrcadlo katalogu proti katalogu Dev v pinu: bajty bez koncových bílých znaků a záznamy po načtení loaderem Dev.</summary>
     public static (bool BajtyBezKonce, bool Zaznamy, int Pocet, int PocetDev, string Rozdil) KontrolaZrcadla(string zrcadlo)
     {

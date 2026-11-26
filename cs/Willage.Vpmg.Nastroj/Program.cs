@@ -4,7 +4,7 @@ using Willage.World.Vpmg.Export.Png;
 using Willage.World.Vpmg.Recipe;
 
 // T-1: nástroj VPMG nad připnutým Willage_Dev. Použití:
-//   info | golden | katalog <zrcadlo.json> | kanon <receptura.json>
+//   info | golden | goldeny | parametry [vystup.json] | katalog <zrcadlo.json> | kanon <receptura.json>
 //   spust <materialId|receptura.json> <seed> <vystup.png> [--navrh '{"baseColor":"#aabbcc"}']
 //   server            (JSON řádky stdin/stdout, viz ServerVpmg)
 // Volba --katalog <cesta> (před příkazem) = katalog ze zrcadla klienta místo embedded katalogu Dev.
@@ -26,6 +26,18 @@ switch (a[0])
         var (oc, sp) = p.Golden();
         Console.WriteLine($"golden Dev {PinDev.Commit[..7]}: očekávaný {oc}, spočtený {sp} → {(oc == sp ? "SHODA" : "ROZDÍL")}");
         return oc == sp ? 0 : 1;
+    }
+    case "goldeny":
+    {
+        var g = p.GoldenyReceptur();
+        foreach (var x in g) Console.WriteLine($"{x.Soubor}: očekávaný {x.Ocekavany}, spočtený {x.Spocteny} → {(x.Ocekavany == x.Spocteny ? "SHODA" : "ROZDÍL")}");
+        return g.All(x => x.Ocekavany == x.Spocteny) ? 0 : 1;
+    }
+    case "parametry":
+    {
+        string j = ParametryDev.Rozbor(p).ToJsonString(new System.Text.Json.JsonSerializerOptions { WriteIndented = true, Encoder = System.Text.Encodings.Web.JavaScriptEncoder.UnsafeRelaxedJsonEscaping }) + "\n";
+        if (a.Count > 1) File.WriteAllText(a[1], j); else Console.Write(j);
+        return 0;
     }
     case "katalog":
     {

@@ -2,11 +2,11 @@
   "format": "willage-dev-pin-v1",
   "repo": "Utalag/Willage_Dev",
   "vetev": "main",
-  "commit": "34764880fa2b0f1c580558403f9ea40a29f6a1c8",
-  "popis": "Materials + VPMG v0: sdílený katalog a procedurální pipeline (#15)",
+  "commit": "12c3e6b05305c9ec6d0c9ed170791643f477871f",
+  "popis": "feat(vpmg): deterministic ops v1 and Willage material profiles (#16) – předtím 3476488 (#15, VPMG v0)",
   "katalog": {
     "cesta": "src/Modules/World/Willage.World.Materials/Data/materials-catalog-v1.json",
-    "sha256": "9807e35257b4f69f5ddb0cd0ab4d323481ed192fd00058712c8ce0d50bf9efc0",
+    "sha256": "1fb24319edbf0186537d4c1c624485fdf7339c7e89d1b20e9253cecc626a6736",
     "zrcadlo": "v1/materials-catalog-v1.json",
     "rozdil": "zrcadlo = Dev bez koncového \\n"
   },
@@ -16,6 +16,10 @@
     "seed": "0xC0FFEE00",
     "resolution": 64,
     "checksum": 1756279408
+  },
+  "goldenReceptur": {
+    "fixture": "tests/Willage.World.Vpmg.Tests/Fixtures/vpmg-recipe-goldens-v1.json",
+    "slozka": "tests/Willage.World.Vpmg.Tests/Fixtures/recipes"
   },
   "pouziti": "Willage_Dev je jen ke čtení. Nástroj cs/Willage.Vpmg.Nastroj (net10) odkazuje projekty Dev v .willage-dev/<commit>/ (cs/Willage.Vpmg.Nastroj/priprav_dev.sh). Změna pinu = změna tohoto souboru + WillageDevCommit v csproj nástroje (test T-1 hlídá shodu)."
 }

@@ -1,0 +1,42 @@
+{
+  "format": "willage-vpmg-operace-prekryv-v1",
+  "devCommit": "12c3e6b05305c9ec6d0c9ed170791643f477871f",
+  "poznamka": "T-2b: KLIENTSKÝ PŘEKRYV nad generovaným operace_dev_v1.json (typy a parametry z Dev). Tady jen české názvy, skupiny, popisy, rozsahy a jednotky a zástupné návrhy pro Willage-backend. Parametr, který Dev nečte, je chyba (test T-2b); parametr Dev bez překryvu dostane obecný editor.",
+  "rozliseni": { "min": 8, "max": 512, "vychozi": 64 },
+  "profil": [
+    { "nazev": "style", "druh": "text", "popis": "styl profilu (willage_v1 / neutral) – žádná operace ho nečte" },
+    { "nazev": "baseColor", "druh": "barva", "popis": "základní barva #RRGGBB (base_fill; paleta, když chybí palette)" },
+    { "nazev": "palette", "druh": "paleta", "popis": "paleta #RRGGBB, … (palette_map, strata); prázdná = jen baseColor" },
+    { "nazev": "grainScalePermille", "druh": "cele", "min": 0, "max": 1000, "jednotka": "‰", "popis": "amplituda zrna (hash_grain) a výchozí škála smooth_noise" },
+    { "nazev": "layerDensityPermille", "druh": "cele", "min": 0, "max": 1000, "jednotka": "‰", "popis": "hustota vrstev – výchozí tloušťka pásem strata" },
+    { "nazev": "irregularityPermille", "druh": "cele", "min": 0, "max": 1000, "jednotka": "‰", "popis": "nepravidelnost – rozcuch pásem strata, výchozí síla warp" }
+  ],
+  "operace": [
+    { "type": "base_fill", "nazev": "Základní barva", "skupina": "základní vzhled", "popis": "Vyplní vrstvu barvou profilu baseColor (geologii nečte).",
+      "params": { "layer": { "popis": "cílová vrstva RGBA8 (výstup runneru = poslední vrstva)" } } },
+    { "type": "hash_grain", "nazev": "Zrno (hash)", "skupina": "struktura", "popis": "Deterministické zrno GeologyHash nad poslední vrstvou; amplituda = profil grainScalePermille." },
+    { "type": "palette_map", "nazev": "Paleta (mapování)", "skupina": "barva", "popis": "Mapuje šum na paletu profilu (palette, jinak baseColor).",
+      "params": { "scalePermille": { "min": 0, "max": 1000, "jednotka": "‰", "popis": "škála šumu palety" }, "jitterPermille": { "min": 0, "max": 1000, "jednotka": "‰", "popis": "rozptyl barvy" } } },
+    { "type": "color_variation", "nazev": "Barevná variace (alias palette_map)", "skupina": "barva", "popis": "Alias palette_map (stejná implementace v Dev).",
+      "params": { "scalePermille": { "min": 0, "max": 1000, "jednotka": "‰" }, "jitterPermille": { "min": 0, "max": 1000, "jednotka": "‰" } } },
+    { "type": "smooth_noise", "nazev": "Hladký šum (fBm)", "skupina": "struktura", "popis": "Vícoktávový celočíselný value noise přimíchaný do poslední vrstvy.",
+      "params": { "scalePermille": { "min": 0, "max": 1000, "jednotka": "‰", "popis": "škála (prázdné = profil grainScalePermille)" }, "octaves": { "min": 1, "max": 8, "popis": "počet oktáv" }, "amplitudePermille": { "min": 0, "max": 1000, "jednotka": "‰", "popis": "síla šumu" } } },
+    { "type": "value_noise", "nazev": "Value noise (alias smooth_noise)", "skupina": "struktura", "popis": "Alias smooth_noise (historický název).",
+      "params": { "scalePermille": { "min": 0, "max": 1000, "jednotka": "‰" }, "octaves": { "min": 1, "max": 8 }, "amplitudePermille": { "min": 0, "max": 1000, "jednotka": "‰" } } },
+    { "type": "strata", "nazev": "Vrstvy (strata)", "skupina": "vrstvení", "popis": "Vodorovná pásma z palety; tloušťka z layerDensityPermille, rozcuch z irregularityPermille.",
+      "params": { "bandMinPx": { "min": 1, "max": 256, "jednotka": "px", "popis": "min. tloušťka pásma (prázdné = z layerDensityPermille)" }, "bandJitterPermille": { "min": 0, "max": 1000, "jednotka": "‰", "popis": "rozptyl tloušťky (prázdné = irregularityPermille)" } } },
+    { "type": "warp", "nazev": "Zkřivení (warp)", "skupina": "tvar", "popis": "Posune pixely podle hrubého šumu (nepravidelnost hran).",
+      "params": { "strengthPermille": { "min": 0, "max": 1000, "jednotka": "‰", "popis": "síla (prázdné = irregularityPermille)" }, "cellPx": { "min": 1, "max": 256, "jednotka": "px", "popis": "velikost buňky (prázdné = max(4, šířka/12))" } } },
+    { "type": "irregularity", "nazev": "Nepravidelnost (alias warp)", "skupina": "tvar", "popis": "Alias warp (stejná implementace v Dev).",
+      "params": { "strengthPermille": { "min": 0, "max": 1000, "jednotka": "‰" }, "cellPx": { "min": 1, "max": 256, "jednotka": "px" } } },
+    { "type": "grass_tufts", "nazev": "Trsy trávy", "skupina": "organika", "popis": "Stébla trávy (tmavší u paty, zelený posun).",
+      "params": { "densityPermille": { "min": 0, "max": 1000, "jednotka": "‰", "popis": "hustota trsů" }, "bladeLengthPermille": { "min": 0, "max": 1000, "jednotka": "‰", "popis": "délka stébla (podíl výšky)" }, "hueJitterPermille": { "min": 0, "max": 1000, "jednotka": "‰", "popis": "rozptyl odstínu" } } },
+
+    { "type": "noise_field", "nazev": "Šumové pole (Perlin / Worley)", "skupina": "struktura", "zastupna": true, "popis": "zástupné: gradientní / buněčný šum (Dev má jen value noise) – návrh pro backend" },
+    { "type": "inclusions", "nazev": "Inkluze (kamínky)", "skupina": "struktura", "zastupna": true, "popis": "zástupné: hustota a velikost inkluzí – návrh pro backend" },
+    { "type": "roots", "nazev": "Kořeny a organika", "skupina": "organika", "zastupna": true, "popis": "zástupné: hustota, tloušťka, větvení kořenů – návrh pro backend" },
+    { "type": "cracks", "nazev": "Praskliny a dutiny", "skupina": "praskliny", "zastupna": true, "popis": "zástupné: praskliny, dutiny (kras, nory) – návrh pro backend" },
+    { "type": "moisture", "nazev": "Vlhkost a přechody", "skupina": "vlhkost", "zastupna": true, "popis": "zástupné: vlhkost, přechod k jinému materiálu – návrh pro backend" },
+    { "type": "watercolor", "nazev": "Akvarelové vykreslení", "skupina": "vykreslení", "zastupna": true, "popis": "zástupné: akvarelový styl (rozmytí, papír) – návrh pro backend" }
+  ]
+}

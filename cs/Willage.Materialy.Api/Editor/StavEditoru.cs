@@ -17,6 +17,7 @@ public sealed class StavEditoru
     readonly KatalogVzhledu _k;
     readonly SchemaOperaciVpmg _s;
     readonly VzorekMaterialu? _v;
+    readonly KnihovnaReceptur? _r;
 
     public byte Material { get; private set; }
     public string Profil { get; private set; } = "default";
@@ -27,12 +28,17 @@ public sealed class StavEditoru
     public event Action<string>? Zmeneno;
 
     /// <param name="vzorek">Vzorek materiálů (null = všechny); výchozí materiál = první ve vzorku.</param>
-    public StavEditoru(KatalogVzhledu katalog, SchemaOperaciVpmg schema, VzorekMaterialu? vzorek = null, byte? material = null)
+    /// <param name="receptury">T-2b: knihovna výchozích receptur (null = v0 VpmgPreview pro všechny).</param>
+    public StavEditoru(KatalogVzhledu katalog, SchemaOperaciVpmg schema, VzorekMaterialu? vzorek = null, byte? material = null, KnihovnaReceptur? receptury = null)
     {
-        _k = katalog; _s = schema; _v = vzorek;
+        _k = katalog; _s = schema; _v = vzorek; _r = receptury;
         Material = material ?? vzorek?.Materialy[0].Id ?? 52;
-        Receptura = RecepturyVpmg.Vychozi(Material, schema.RozliseniVychozi);
+        Receptura = Vychozi(Material, null);
     }
+
+    RecepturaVpmgDto Vychozi(byte m, int? roz) => _r?.Vychozi(m, roz) ?? RecepturyVpmg.Vychozi(m, roz ?? _s.RozliseniVychozi);
+    /// <summary>Odkud je výchozí receptura materiálu (soubor knihovny + zdroj v Dev), nebo null = v0.</summary>
+    public ZaznamReceptury? ZdrojReceptury => _r?.Zaznam(Material);
 
     public bool JeVeVzorku(byte id) => _v is null || _v.Obsahuje(id);
     public MaterialVzhleduDto MaterialDto => _k.Material(Material)!;
@@ -40,17 +46,18 @@ public sealed class StavEditoru
     /// <summary>Profil, jak ho vidí náhled: katalog + návrh.</summary>
     public ProfilVzhleduDto ProfilNahledu => new(Navrh.Style ?? ProfilKatalogu.Style, Navrh.BaseColor ?? ProfilKatalogu.BaseColor,
         Navrh.GrainScalePermille ?? ProfilKatalogu.GrainScalePermille, Navrh.LayerDensityPermille ?? ProfilKatalogu.LayerDensityPermille,
-        Navrh.IrregularityPermille ?? ProfilKatalogu.IrregularityPermille);
+        Navrh.IrregularityPermille ?? ProfilKatalogu.IrregularityPermille, Navrh.Palette ?? ProfilKatalogu.Palette);
 
     void Zmena(string co) { Verze++; Zmeneno?.Invoke(co); }
 
-    /// <summary>Výběr materiálu: receptura se přenese (jen materialId), profil default, návrh se zruší (patřil jinému materiálu).</summary>
+    /// <summary>Výběr materiálu: s knihovnou receptur (T-2b) se načte výchozí receptura materiálu (v1 z Dev), bez ní se přenese
+    /// (jen materialId); profil default, návrh se zruší (patřil jinému materiálu).</summary>
     public string? VyberMaterial(byte id)
     {
         if (_k.Material(id) is null) return $"materiál {id} není v katalogu";
         if (_v != null && !_v.Obsahuje(id)) return VzorekMaterialu.Zastupny(id);
         Material = id; Profil = "default"; Navrh = new();
-        Receptura = Receptura with { MaterialId = id, VisualProfile = Profil };
+        Receptura = _r != null ? Vychozi(id, Receptura.Resolution) : Receptura with { MaterialId = id, VisualProfile = Profil };
         Zmena("material"); return null;
     }
 
@@ -69,7 +76,7 @@ public sealed class StavEditoru
         Receptura = Receptura with { Resolution = r }; Zmena("rozliseni"); return null;
     }
 
-    public void VychoziReceptura() { Receptura = RecepturyVpmg.Vychozi(Material, Receptura.Resolution) with { VisualProfile = Profil }; Zmena("receptura"); }
+    public void VychoziReceptura() { Receptura = Vychozi(Material, Receptura.Resolution) with { VisualProfile = Profil }; Zmena("receptura"); }
 
     List<KrokVpmgDto> Kroky => Receptura.Kroky.ToList();
     void Kroky_(List<KrokVpmgDto> k, string co) { Receptura = Receptura with { Kroky = k }; Zmena(co); }
@@ -87,7 +94,8 @@ public sealed class StavEditoru
         if (op is null) return $"neznámá operace '{type}'";
         if (op.Zastupna) return $"operace '{type}' je zástupná – v registru Dev není (návrh pro backend)";
         int n = 1; while (Receptura.Kroky.Any(x => x.Id == "s" + n)) n++;
-        var par = op.Params.ToDictionary(p => p.Nazev, p => p.Vychozi, StringComparer.Ordinal);
+        // prázdná výchozí hodnota = Dev ji bere z profilu / rozměru → do receptury se nepíše (stejně jako receptury v1 Dev)
+        var par = op.Params.Where(p => p.Vychozi != "").ToDictionary(p => p.Nazev, p => p.Vychozi, StringComparer.Ordinal);
         var k = Kroky; k.Add(new KrokVpmgDto("s" + n, type, true, par)); Kroky_(k, "krok+"); return null;
     }
 
@@ -110,8 +118,9 @@ public sealed class StavEditoru
         var op = _s.Operace(Receptura.Kroky[i].Type);
         var p = op?.Params.FirstOrDefault(x => x.Nazev == nazev);
         if (p is null) return $"operace '{Receptura.Kroky[i].Type}' nemá parametr '{nazev}'";
-        if (Kontrola(p, hodnota) is { } ch) return ch;
+        if (hodnota != "" && Kontrola(p, hodnota) is { } ch) return ch;
         var k = Kroky; var d = new Dictionary<string, string>(k[i].Params, StringComparer.Ordinal) { [nazev] = hodnota };
+        if (hodnota == "") d.Remove(nazev); // prázdné = výchozí Dev
         k[i] = k[i] with { Params = d }; Kroky_(k, "parametr"); return null;
     }
 
@@ -129,6 +138,7 @@ public sealed class StavEditoru
             "grainScalePermille" => Navrh with { GrainScalePermille = int.Parse(hodnota, CultureInfo.InvariantCulture) is var g && g != kat.GrainScalePermille ? g : null },
             "layerDensityPermille" => Navrh with { LayerDensityPermille = int.Parse(hodnota, CultureInfo.InvariantCulture) is var l && l != kat.LayerDensityPermille ? l : null },
             "irregularityPermille" => Navrh with { IrregularityPermille = int.Parse(hodnota, CultureInfo.InvariantCulture) is var r && r != kat.IrregularityPermille ? r : null },
+            "palette" => Navrh with { Palette = Paleta(hodnota) is var pl && string.Join(",", pl) == string.Join(",", kat.Palette ?? Array.Empty<string>()) ? null : pl },
             _ => Navrh,
         };
         Zmena("navrh"); return null;
@@ -136,8 +146,12 @@ public sealed class StavEditoru
 
     public void ZrusNavrh() { if (Navrh.Prazdny) return; Navrh = new(); Zmena("navrh"); }
 
+    /// <summary>Paleta z textu „#a, #b …“ (malá písmena; prázdný text = prázdná paleta → Dev použije baseColor).</summary>
+    public static IReadOnlyList<string> Paleta(string h) => h.Split(new[] { ',', ' ', ';' }, StringSplitOptions.RemoveEmptyEntries).Select(x => x.ToUpperInvariant()).ToList();
+
     static string? Kontrola(ParametrVpmgDto p, string h) => p.Druh switch
     {
+        DruhParametruVpmg.Paleta when Paleta(h) is var pl && (pl.Count > 16 || pl.Any(x => !BarvaRe.IsMatch(x))) => $"{p.Nazev}: '{h}' není seznam #RRGGBB (max 16)",
         DruhParametruVpmg.Barva when !BarvaRe.IsMatch(h) => $"{p.Nazev}: '{h}' není barva #RRGGBB",
         DruhParametruVpmg.Cele when !int.TryParse(h, NumberStyles.Integer, CultureInfo.InvariantCulture, out _) => $"{p.Nazev}: '{h}' není celé číslo",
         DruhParametruVpmg.Cele when int.Parse(h, CultureInfo.InvariantCulture) is var v && ((p.Min is { } mi && v < mi) || (p.Max is { } ma && v > ma)) => $"{p.Nazev}: {h} mimo {p.Min}–{p.Max}",

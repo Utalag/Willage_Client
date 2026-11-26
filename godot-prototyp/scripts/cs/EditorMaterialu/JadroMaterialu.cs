@@ -50,7 +50,7 @@ public partial class JadroMaterialu : Node
         var pin = PinDev.Nacti(koren);
         IZdrojVpmg? zdroj = bez ? new ZdrojVpmgProces(System.IO.Path.Combine(koren, pin.ZrcadloCesta), "/neexistuje/Willage.Vpmg.Nastroj.dll") : null;
         Api = new MaterialyApi(koren, zdroj);
-        Stav = new StavEditoru(Api.Katalog, Api.Schema, Api.Vzorek);
+        Stav = new StavEditoru(Api.Katalog, Api.Schema, Api.Vzorek, receptury: Api.Receptury);
         _fronta = new FrontaPrace(a => Callable.From(a).CallDeferred(), "JadroMaterialu");
         // kontrola na pozadí: info nástroje, golden Dev, zrcadlo = Dev
         _fronta.Zarad("kontrola", _ =>

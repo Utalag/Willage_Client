@@ -25,7 +25,7 @@ public static class TestyT1
         var man = ManifestKatalogu.Spocti(data);
 
         // pin a zrcadlo
-        T.Je(pin.Commit == "34764880fa2b0f1c580558403f9ea40a29f6a1c8" && api.Schema.DevCommit == pin.Commit, $"pin Dev {pin.Commit[..7]} = schéma operací ({api.Schema.DevCommit[..7]})");
+        T.Je(pin.Commit == "12c3e6b05305c9ec6d0c9ed170791643f477871f" && api.Schema.DevCommit == pin.Commit && api.Schema.PrekryvCommit == pin.Commit, $"pin Dev {pin.Commit[..7]} = schéma operací ({api.Schema.DevCommit[..7]})");
         T.Je(man.ShaSouboru(pin.ZrcadloCesta) == pin.ZrcadloSha, "SHA zrcadla = manifest");
         T.Je(pin.GoldenChecksum == 1756279408u && pin.GoldenMaterial == 52 && pin.GoldenSeed == 0xC0FFEE00u && pin.GoldenRozliseni == 64, "golden v pinu = Dev (52, 0xC0FFEE00, 64 → 1756279408)");
 
@@ -39,8 +39,8 @@ public static class TestyT1
 
         // schéma operací
         var sch = api.Schema;
-        T.Je(sch.Spustitelne.Count == 2 && sch.Zastupne.Count == 7, $"schéma: 2 spustitelné + 7 zástupných ({sch.Spustitelne.Count} + {sch.Zastupne.Count})");
-        T.Je(sch.Profil.Select(p => p.Nazev).SequenceEqual(new[] { "style", "baseColor", "grainScalePermille", "layerDensityPermille", "irregularityPermille" }), "parametry profilu = MaterialVisualProfile Dev");
+        T.Je(sch.Spustitelne.Count == 10 && sch.Zastupne.Count == 6, $"schéma: 10 spustitelných + 6 zástupných ({sch.Spustitelne.Count} + {sch.Zastupne.Count})");
+        T.Je(sch.Profil.Select(p => p.Nazev).SequenceEqual(new[] { "style", "baseColor", "palette", "grainScalePermille", "layerDensityPermille", "irregularityPermille" }), "parametry profilu = MaterialVisualProfile Dev (v1 + palette)");
 
         // receptury – formát a validace (bez nástroje)
         var r52 = RecepturyVpmg.Vychozi(52);
@@ -108,7 +108,7 @@ public static class TestyT1
         T.Je(n1.Rgba[0] == 0x10 && n1.Rgba[1] == 0x20 && n1.Rgba[2] == 0x30 && n1.Rgba[^4] == 0x10, "návrh baseColor #102030 se projeví");
         T.Je(zdroj.Spust(r52, 0xC0FFEE00u).Checksum == 1756279408u, "po návrhu bez návrhu znovu golden (katalog se nezměnil)");
         T.Je(zdroj.Spust(r52, 0xC0FFEE00u, new NavrhProfiluDto(LayerDensityPermille: 900, IrregularityPermille: 900, Style: "watercolor")).Checksum == 1756279408u,
-            "v0: layerDensity / irregularity / style výstup nemění (žádná operace je nečte – negativní nález)");
+            "legacy receptura (base_fill + hash_grain): layerDensity / irregularity / style výstup nemění (ty kroky je nečtou)");
         T.Je(File.ReadAllText(k.Cesta) == File.ReadAllText(tmpZrc), "zrcadlo katalogu na disku beze změny");
 
         // chyba operace nezabije proces

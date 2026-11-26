@@ -8,7 +8,7 @@ namespace WillagePrototyp.EditorMaterialu;
 
 /// <summary>
 /// T-2: visualProfiles materiálu (style, baseColor, zrno / vrstvy / nepravidelnost ‰). Hodnoty z katalogu Dev; úprava je NÁVRH jen pro náhled
-/// (katalog ani zrcadlo se nemění, uložení návrhu až T-4). Parametr, který žádný zapnutý krok nečte, je šedý („v0 nečte žádná operace“).
+/// (katalog ani zrcadlo se nemění, uložení návrhu až T-4). Parametr, který žádný zapnutý krok nečte, je šedý („nečte žádná zapnutá operace“).
 /// </summary>
 [GlobalClass]
 public partial class ProfilVzhledu : VBoxContainer
@@ -61,7 +61,7 @@ public partial class ProfilVzhledu : VBoxContainer
         {
             bool navrh = kat[n] != nah[n];
             e.Zvyrazni(navrh ? new Color(1f, 0.85f, 0.4f) : cteny.Contains(n) ? Colors.White : new Color(0.55f, 0.55f, 0.6f),
-                (navrh ? $"NÁVRH (jen náhled): {nah[n]}, katalog {kat[n]}. " : $"katalog: {kat[n]}. ") + (cteny.Contains(n) ? "Čte ho zapnutý krok receptury." : "v0: nečte ho žádná zapnutá operace (čeká na operace backendu)."));
+                (navrh ? $"NÁVRH (jen náhled): {nah[n]}, katalog {kat[n]}. " : $"katalog: {kat[n]}. ") + (cteny.Contains(n) ? "Čte ho zapnutý krok receptury." : "nečte ho žádná zapnutá operace receptury."));
         }
         StavNavrhu.Text = _st.Navrh.Prazdny ? "profil = katalog Dev" : "NÁVRH jen pro náhled (katalog beze změny, uložení T-4)";
         StavNavrhu.Modulate = _st.Navrh.Prazdny ? new Color(0.75f, 0.75f, 0.8f) : new Color(1f, 0.85f, 0.4f);

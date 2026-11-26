@@ -14,6 +14,8 @@ public partial class KrokReceptury : PanelContainer
     public event Action<int, string, string>? Parametr;
     public KrokPopis? Popis { get; private set; }
     public CheckBox Zapnuto { get; private set; } = null!;
+    /// <summary>Editory parametrů kroku (generované ze schématu).</summary>
+    public System.Collections.Generic.List<EditorParametruVpmg> Editory { get; } = new();
 
     public static KrokReceptury Z(KrokPopis p, int pocet)
     {
@@ -45,8 +47,8 @@ public partial class KrokReceptury : PanelContainer
         {
             var ed = EditorParametruVpmg.Z(e);
             ed.Zmeneno += (n, hod) => Parametr?.Invoke(p.Index, n, hod);
-            v.AddChild(ed);
+            v.AddChild(ed); Editory.Add(ed);
         }
-        if (p.Editory.Count == 0) v.AddChild(new Label { Text = "bez parametrů (operace v0 čte jen profil)", Modulate = new Color(0.6f, 0.6f, 0.65f) });
+        if (p.Editory.Count == 0) v.AddChild(new Label { Text = "bez parametrů (operace čte jen profil)", Modulate = new Color(0.6f, 0.6f, 0.65f) });
     }
 }

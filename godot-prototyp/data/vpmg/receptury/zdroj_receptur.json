@@ -1,0 +1,62 @@
+{
+  "format": "willage-vpmg-receptury-zdroj-v1",
+  "devCommit": "12c3e6b05305c9ec6d0c9ed170791643f477871f",
+  "poznamka": "T-2b: výchozí receptury vzorku 5 materiálů = bajtové kopie receptur v1 z Willage_Dev (fixture testů VPMG, PR #16). Soubor <materialId>.json (N8). Kopie hlídá test (SHA = Dev v pinu, golden přes nástroj i fasádu). Změny receptur jdou do Dev jen jako návrh přes Willage-backend.",
+  "receptury": [
+    {
+      "materialId": 1,
+      "soubor": "1.json",
+      "zdrojDev": "tests/Willage.World.Vpmg.Tests/Fixtures/recipes/recipe-grass-v1.json",
+      "sha256": "4570a161451c982b6cf2329e86fc1e9e3204548e277833216505ac8626d5084a",
+      "golden": {
+        "seed": "0xC0FFEE00",
+        "resolution": 64,
+        "checksum": 1626840554
+      }
+    },
+    {
+      "materialId": 2,
+      "soubor": "2.json",
+      "zdrojDev": "tests/Willage.World.Vpmg.Tests/Fixtures/recipes/recipe-topsoil-v1.json",
+      "sha256": "2e0a428bf7c334c7f80bd9351645b8e46640d90b791b88dd70d0b489b4a655fc",
+      "golden": {
+        "seed": "0xC0FFEE00",
+        "resolution": 64,
+        "checksum": 2349117034
+      }
+    },
+    {
+      "materialId": 3,
+      "soubor": "3.json",
+      "zdrojDev": "tests/Willage.World.Vpmg.Tests/Fixtures/recipes/recipe-gravel-sand-v1.json",
+      "sha256": "4b3c38d13eb593a7594cab17c53873e5c950f77dc349a49a73defde65aa7ad52",
+      "golden": {
+        "seed": "0xC0FFEE00",
+        "resolution": 64,
+        "checksum": 1787062125
+      }
+    },
+    {
+      "materialId": 5,
+      "soubor": "5.json",
+      "zdrojDev": "tests/Willage.World.Vpmg.Tests/Fixtures/recipes/recipe-cave-limestone-v1.json",
+      "sha256": "d65b256030a2770213964ce25655805acea41b086af852c32cdeafcf374d6d3b",
+      "golden": {
+        "seed": "0xC0FFEE00",
+        "resolution": 64,
+        "checksum": 3569558091
+      }
+    },
+    {
+      "materialId": 6,
+      "soubor": "6.json",
+      "zdrojDev": "tests/Willage.World.Vpmg.Tests/Fixtures/recipes/recipe-granite-v1.json",
+      "sha256": "a6970d397dae511e80b77e98a9ccf4b43fc499cdf75df7ebbe56883da78aec28",
+      "golden": {
+        "seed": "0xC0FFEE00",
+        "resolution": 64,
+        "checksum": 981040943
+      }
+    }
+  ]
+}

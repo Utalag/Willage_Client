@@ -37,3 +37,10 @@ ukazuje jako zástupné položky schématu, dokud nejsou v registru.
 „Udělej zatím jen vzorek třeba 5 materiálů.“ – T-2 až T-4 pracují jen se vzorkem `data/vpmg/vzorek_materialu_v0.json`
 (1 grass, 2 topsoil, 3 gravel_sand, 5 cave_limestone, 6 granite; zdůvodnění v `reporty/t2-okno-prop.md`). Ostatní materiály jsou
 v editoru zástupné (vidět, nejde je vybrat). Rozšíření = přidat ID do souboru vzorku (žádná změna kódu).
+
+## T-2b – Dev VPMG ops v1 (Willage-backend, 22:48)
+| Krok | Větev | Obsah | Ověření |
+|---|---|---|---|
+| **T-2b** | `mat-v1-t2b-vpmg-v1` (z `mat-v1-t2-okno`) | pin Dev `12c3e6b` (PR #16: ops v1 + visualProfiles s `palette`), zrcadlo katalogu; schéma operací **generované z Dev** (`operace_dev_v1.json`, nástroj `parametry`) + klientský překryv `operace_vpmg_v1.json`; výchozí receptury vzorku = receptury v1 z Dev v `data/vpmg/receptury/<id>.json` (N8); paleta v profilu | goldeny 11/11 (52 + 5 materiálů + 5 operací) přes nástroj i fasádu; generovaný soubor = živý rozbor; otisky beze změny |
+
+Výsledky a nálezy: `reporty/t2b-vpmg-v1-prop.md`. Klíč M6 se mění (deklaruje celý katalog) – návrh pro G-řadu tamtéž.

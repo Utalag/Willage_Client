@@ -17,6 +17,8 @@ public sealed class MaterialyApi : IDisposable
     public IZdrojVpmg Zdroj { get; }
     /// <summary>Vzorek materiálů, se kterými editor pracuje (ostatní zástupné).</summary>
     public VzorekMaterialu Vzorek { get; }
+    /// <summary>T-2b: výchozí receptury (data/vpmg/receptury, kopie receptur v1 z Dev).</summary>
+    public KnihovnaReceptur Receptury { get; }
 
     public MaterialyApi(string korenDat, IZdrojVpmg? zdroj = null)
     {
@@ -24,12 +26,13 @@ public sealed class MaterialyApi : IDisposable
         Pin = PinDev.Nacti(KorenDat);
         Katalog = new KatalogVzhledu(Path.Combine(KorenDat, Pin.ZrcadloCesta));
         Vzorek = new VzorekMaterialu(Path.Combine(KorenDat, "vpmg", "vzorek_materialu_v0.json"), Katalog);
-        Schema = new SchemaOperaciVpmg(Path.Combine(KorenDat, "vpmg", "operace_vpmg_v0.json"));
+        Schema = new SchemaOperaciVpmg(Path.Combine(KorenDat, "vpmg", "operace_vpmg_v1.json"), Path.Combine(KorenDat, "vpmg", "operace_dev_v1.json"));
+        Receptury = new KnihovnaReceptur(Path.Combine(KorenDat, "vpmg", "receptury"));
         Zdroj = zdroj ?? new ZdrojVpmgProces(Katalog.Cesta);
     }
 
-    /// <summary>Receptura materiálu: zatím výchozí (VpmgPreview); naše uložené receptury přibudou v T-4 (zástupné).</summary>
-    public RecepturaVpmgDto Receptura(byte material) => RecepturyVpmg.Vychozi(material, Schema.RozliseniVychozi);
+    /// <summary>Receptura materiálu: v1 z knihovny (vzorek), jinak v0; ukládání vlastních receptur až T-4 (zástupné).</summary>
+    public RecepturaVpmgDto Receptura(byte material) => Receptury.Vychozi(material);
 
     public void Dispose() => Zdroj.Dispose();
 }

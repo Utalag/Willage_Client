@@ -6,4 +6,6 @@ Sem patří receptury VPMG pro okno 2 (editor materiálů): jeden soubor `<mater
 - VPMG se spouští jako samostatný nástroj z **připnutého commitu Willage_Dev** (rozhodnutí N7, Jan 17:24); Willage_Dev je pro nás jen ke čtení.
 - Receptury se ukládají jen tady (rozhodnutí N8). Do Willage_Dev jdou jen jako návrh přes Willage-backend; nové operace VPMG také.
 - Soubory jsou v manifestu katalogů (`data/manifest_katalogu_v1.json`); klíče světa (M0–M6) nemění, jen klíč M7 a vizuální keš.
-- Zatím prázdné (fáze 2, kroky E-2 až E-4 plánu 05).
+- **T-2b:** `1.json`, `2.json`, `3.json`, `5.json`, `6.json` = bajtové kopie receptur v1 z Willage_Dev `12c3e6b`
+  (`tests/Willage.World.Vpmg.Tests/Fixtures/recipes/recipe-*-v1.json`), index se zdrojem, SHA a goldenem v `zdroj_receptur.json`.
+  Editor je bere jako výchozí recepturu materiálu vzorku. Vlastní uložené receptury až T-4.
