@@ -1,7 +1,7 @@
 {
   "_pozn": "Krok 4 (V1.0): parametry podzemní vody a pramenů, viz docs/sjednoceni/reporty/krok04-prop.md",
   "seed": 49,
-  "mrizkaHladinyM": 8.0, "polomerHladinyM": 48.0, "hloubkaD0M": 1.5,
+  "mrizkaHladinyM": 8.0, "polomerHladinyM": 48.0, "hloubkaD0M": 1.5, "zesileniUdoliBeta": 1.0,
   "filmM": 0.5,
   "mrizkaDoplnM": 8.0, "polomerDoplnM": 192.0,
   "bunkaPramenuM": 32.0, "krokKandidatuM": 2.0, "pravdepodobnostBunky": 0.6, "rozestupM": 8.0, "sklonKontakt": 0.5,

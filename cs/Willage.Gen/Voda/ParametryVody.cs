@@ -10,6 +10,7 @@ public sealed record ParametryVody
     public double MrizkaHladinyM { get; init; } = 8.0;
     public double PolomerHladinyM { get; init; } = 48.0;
     public double HloubkaD0M { get; init; } = 1.5;
+    public double ZesileniUdoliBeta { get; init; } = 1.0;
     // profil sloupce
     public double FilmM { get; init; } = 0.5;
     // artéská voda

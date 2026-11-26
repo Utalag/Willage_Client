@@ -1,0 +1,271 @@
+{
+ "seed": 49,
+ "rezim": "vse",
+ "init_ms": 278.258,
+ "mapa": {
+  "n": 192,
+  "krok_m": 2,
+  "L_nad_povrchem": 0,
+  "vyver_podil": 0,
+  "hloubka_prumer_m": 1.509640306027399,
+  "hloubka_max_m": 6.001564,
+  "ms": 1060.3091,
+  "ms_gdscript": 590.8913
+ },
+ "sev": [
+  {
+   "sev": "x",
+   "neshod": 0,
+   "skok_pres_sev_2m": 0.19122592276856665,
+   "skok_uvnitr_2m_max": 0.18586903228471385,
+   "prameny_shoda": true,
+   "prameny": 0
+  },
+  {
+   "sev": "y",
+   "neshod": 0,
+   "skok_pres_sev_2m": 0.22996578395112977,
+   "skok_uvnitr_2m_max": 0.2255361856104372,
+   "prameny_shoda": true,
+   "prameny": 0
+  }
+ ],
+ "prameny": {
+  "pocet": 0,
+  "druhy": {},
+  "porus_vykonu": 0,
+  "na_okraji_2m": 0,
+  "po_filtru_na_okraji": 0,
+  "blize_8m": 0,
+  "seznam": [],
+  "ucpani": [],
+  "ms": 0.9598
+ },
+ "arteska": {
+  "sloupcu": 4096,
+  "sevrenych_vrstev": 4728,
+  "artesky": 638,
+  "samovolne_tekouci": 638,
+  "bez_doplnovani": 4090,
+  "overeno": 12,
+  "neovereno": 0,
+  "hladina_v_tesneni_sloupcu": 310,
+  "zavesena_sloupcu": 177,
+  "pripady": [
+   {
+    "x": 1793,
+    "y": 1793,
+    "vrstva": [
+     0,
+     2.5
+    ],
+    "material": 57,
+    "povrch": 68.40603942029574,
+    "hladina": 67.76727274129797,
+    "tlakova_vyska": 96.90396756376394,
+    "vychoz": [
+     1688,
+     1760
+    ],
+    "overeno": true
+   },
+   {
+    "x": 1793,
+    "y": 1793,
+    "vrstva": [
+     7.5,
+     12.5
+    ],
+    "material": 57,
+    "povrch": 68.40603942029574,
+    "hladina": 67.76727274129797,
+    "tlakova_vyska": 96.90396756376394,
+    "vychoz": [
+     1688,
+     1760
+    ],
+    "overeno": true
+   },
+   {
+    "x": 1793,
+    "y": 1793,
+    "vrstva": [
+     17.5,
+     22.5
+    ],
+    "material": 57,
+    "povrch": 68.40603942029574,
+    "hladina": 67.76727274129797,
+    "tlakova_vyska": 96.90396756376394,
+    "vychoz": [
+     1688,
+     1760
+    ],
+    "overeno": true
+   },
+   {
+    "x": 1793,
+    "y": 1793,
+    "vrstva": [
+     27.5,
+     32.5
+    ],
+    "material": 57,
+    "povrch": 68.40603942029574,
+    "hladina": 67.76727274129797,
+    "tlakova_vyska": 96.90396756376394,
+    "vychoz": [
+     1688,
+     1760
+    ],
+    "overeno": true
+   },
+   {
+    "x": 1793,
+    "y": 1793,
+    "vrstva": [
+     37.5,
+     42.5
+    ],
+    "material": 57,
+    "povrch": 68.40603942029574,
+    "hladina": 67.76727274129797,
+    "tlakova_vyska": 96.90396756376394,
+    "vychoz": [
+     1688,
+     1760
+    ],
+    "overeno": true
+   },
+   {
+    "x": 1793,
+    "y": 1793,
+    "vrstva": [
+     47.5,
+     52.5
+    ],
+    "material": 57,
+    "povrch": 68.40603942029574,
+    "hladina": 67.76727274129797,
+    "tlakova_vyska": 96.90396756376394,
+    "vychoz": [
+     1688,
+     1760
+    ],
+    "overeno": true
+   },
+   {
+    "x": 1793,
+    "y": 1793,
+    "vrstva": [
+     57.5,
+     62.5
+    ],
+    "material": 57,
+    "povrch": 68.40603942029574,
+    "hladina": 67.76727274129797,
+    "tlakova_vyska": 96.90396756376394,
+    "vychoz": [
+     1688,
+     1760
+    ],
+    "overeno": true
+   },
+   {
+    "x": 1795,
+    "y": 1793,
+    "vrstva": [
+     0,
+     2.25
+    ],
+    "material": 57,
+    "povrch": 68.16278615478068,
+    "hladina": 67.57094511365665,
+    "tlakova_vyska": 96.90396756376394,
+    "vychoz": [
+     1688,
+     1760
+    ],
+    "overeno": true
+   },
+   {
+    "x": 1795,
+    "y": 1793,
+    "vrstva": [
+     7.25,
+     12.25
+    ],
+    "material": 57,
+    "povrch": 68.16278615478068,
+    "hladina": 67.57094511365665,
+    "tlakova_vyska": 96.90396756376394,
+    "vychoz": [
+     1688,
+     1760
+    ],
+    "overeno": true
+   },
+   {
+    "x": 1795,
+    "y": 1793,
+    "vrstva": [
+     17.25,
+     22.25
+    ],
+    "material": 57,
+    "povrch": 68.16278615478068,
+    "hladina": 67.57094511365665,
+    "tlakova_vyska": 96.90396756376394,
+    "vychoz": [
+     1688,
+     1760
+    ],
+    "overeno": true
+   },
+   {
+    "x": 1795,
+    "y": 1793,
+    "vrstva": [
+     27.25,
+     32.25
+    ],
+    "material": 57,
+    "povrch": 68.16278615478068,
+    "hladina": 67.57094511365665,
+    "tlakova_vyska": 96.90396756376394,
+    "vychoz": [
+     1688,
+     1760
+    ],
+    "overeno": true
+   },
+   {
+    "x": 1795,
+    "y": 1793,
+    "vrstva": [
+     37.25,
+     42.25
+    ],
+    "material": 57,
+    "povrch": 68.16278615478068,
+    "hladina": 67.57094511365665,
+    "tlakova_vyska": 96.90396756376394,
+    "vychoz": [
+     1688,
+     1760
+    ],
+    "overeno": true
+   }
+  ],
+  "ms": 32747.4767,
+  "otisk_bloku": "b017a12c4686fd61"
+ },
+ "mince82": {
+  "sloupcu_s_minci": 551,
+  "L_minus_odhad_median": 0.6259416406738723,
+  "p10": -0.1092068266996904,
+  "p90": 1.0398832152113329,
+  "podil_L_nad_odhadem": 0.8892921960072595
+ },
+ "chyb": 1
+}
