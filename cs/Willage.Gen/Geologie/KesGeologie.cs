@@ -40,4 +40,14 @@ public sealed class KesGeologie : IGeologie
 
     public double VyskaTvar(double x, double y) => _g.VyskaTvar(x, y);
     public bool Mince82(double x, double y) => _g.Mince82(x, y);
+    public double Mince82Sila(double x, double y) => _g.Mince82Sila(x, y);
+    public bool VNitruSopky(double x, double y, double z) => _g.VNitruSopky(x, y, z);
+
+    private readonly Dictionary<(long, long), bool[]?> _ns = new();
+    public bool[]? NitroSopky(double x, double y)
+    {
+        var k = K(x, y);
+        if (!_ns.TryGetValue(k, out var v)) { v = _g.NitroSopky(x, y); _ns[k] = v; }
+        return v;
+    }
 }

@@ -26,4 +26,7 @@ public interface IGeologie
 
     /// <summary>Maska buněk sloupce v nitru sopky (průduch, láva, popel), nebo null mimo sopku. Krok 5: voda je bere jako těsnění.</summary>
     bool[]? NitroSopky(double x, double y) => null;
+
+    /// <summary>Leží bod (z v m) v tělese sopky?</summary>
+    bool VNitruSopky(double x, double y, double z) => false;
 }

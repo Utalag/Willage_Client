@@ -33,6 +33,8 @@ public sealed class GeologieCs : IGeologie
     public bool Mince82(double x, double y) => Geo.Mince.Sila(x, y) >= 0.5;
     public double Mince82Sila(double x, double y) => Geo.Mince.Sila(x, y);
 
+    public bool VNitruSopky(double x, double y, double z) => Geo.Sopky.Mat(x, y, z) >= 0;
+
     public bool[]? NitroSopky(double x, double y)
     {
         if (Geo.Sopky.Nejblizsi(x, y).i < 0) return null;

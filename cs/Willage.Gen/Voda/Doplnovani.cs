@@ -28,6 +28,8 @@ public sealed class Doplnovani
             if (dx * dx + dy * dy > R2) continue;
             if (_g.MaterialPovrchu(nx, ny) != material) continue;
             double h = _g.Povrch(nx, ny);
+            // krok 5: výchoz v nitru sopky není oblast doplňování (sopka je těsnění)
+            if (_p.SopkaNepropustna && _g.VNitruSopky(nx, ny, Math.Floor((h - 1e-9) / 0.25) * 0.25 + 0.125)) continue;
             if (best is null || h > best.Value.Item1) best = (h, nx, ny);
         }
         return best;

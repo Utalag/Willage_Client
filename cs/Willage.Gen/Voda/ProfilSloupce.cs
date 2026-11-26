@@ -20,7 +20,8 @@ public sealed record ProfilSloupce(double Hladina, double Povrch, Interval? Nasy
     /// Volná hladina: od L dolů přes těleso po první těsnění. Zavěšená: film nad těsněním, které leží nad L.
     /// Sevřená: běh tělesa pod volnou zónou ohraničený těsněním shora i zdola (dno sloupce = těsnění).
     /// </summary>
-    public static ProfilSloupce Spocti(byte[] sloupec, double povrch, double hladina, Propustnost pr, double film)
+    /// <param name="nitro">maska buněk nitra sopky (krok 5: těsnění), nebo null</param>
+    public static ProfilSloupce Spocti(byte[] sloupec, double povrch, double hladina, Propustnost pr, double film, bool[]? nitro = null)
     {
         int n = sloupec.Length;
         int kTop = Math.Min(n - 1, (int)Math.Floor((povrch - 1e-9) / C));   // nejvyšší pevná buňka
@@ -30,6 +31,7 @@ public sealed record ProfilSloupce(double Hladina, double Povrch, Interval? Nasy
         {
             int m = sloupec[k];
             if (k > kTop) t[k] = 0;
+            else if (nitro is not null && nitro[k]) t[k] = 2;
             else if (m == Propustnost.Vzduch) t[k] = 1;
             else t[k] = pr.Teleso(m) ? (byte)1 : (byte)2;
         }

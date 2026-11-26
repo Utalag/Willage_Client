@@ -13,13 +13,14 @@ public static class VykonPramene
 {
     public readonly record struct Vysledek(double Vykon, double Kapacita1, double TlakovaVyskaM, bool Otevreny);
 
-    /// <param name="sousede">materiály 6 sousedních buněk (nahoru, dolů, ±x, ±y)</param>
+    /// <param name="sousede">materiály 6 sousedních buněk (nahoru, dolů, ±x, ±y); −1 = nitro sopky (těsnění, krok 5)</param>
     public static Vysledek Spocti(double jmenovity, ReadOnlySpan<int> sousede, Propustnost pr, bool tlakovy, double stropTlakuM)
     {
         double cap = 0; bool otevreny = false;
         foreach (int m in sousede)
         {
             if (m == Propustnost.Vzduch) { otevreny = true; continue; }
+            if (m < 0) continue;
             cap += pr.X(m);
         }
         if (otevreny) return new Vysledek(jmenovity, double.PositiveInfinity, 0, true);

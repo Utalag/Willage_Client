@@ -79,7 +79,7 @@ public sealed class Prameny
             if (prevys < 0) continue;                       // jen zóna vývěru
             var col = _g.Sloupec(x, y);
             int kt = Math.Clamp((int)Math.Floor((pov - 1e-9) / GeologyGridConstants.CellM), 0, col.Length - 1);
-            int druh = Druh(x, y, col, kt, pov);
+            int druh = Druh(x, y, col, kt, pov, _p.SopkaNepropustna ? _g.NitroSopky(x, y) : null);
             if (druh < 0) continue;
             uint tie = GeologyHash.HashInt3((int)Math.Floor(x * 4), (int)Math.Floor(y * 4), SaltTie, seed);
             int akv = kt > 0 ? col[kt - 1] : col[kt];
@@ -97,17 +97,21 @@ public sealed class Prameny
     }
 
     /// <summary>Druh podle povrchu a horniny (pořadí E47c: sníh > kontakt > kras > vývěr); −1 = voda z těsnění nevyteče.</summary>
-    private int Druh(double x, double y, byte[] col, int kt, double pov)
+    private int Druh(double x, double y, byte[] col, int kt, double pov, bool[]? ni)
     {
+        bool N(int k) => ni is not null && ni[k];
+        bool Tel(int k) => !N(k) && _pr.Teleso(col[k]);
+        bool Tes(int k) => N(k) || _pr.Tesneni(col[k]);
+        bool Roz(int k) => !N(k) && _pr.Rozpustny(col[k]);
         int top = col[kt];
         if (top == 10) return (int)DruhPramene.Snih;
         int k1 = Math.Max(0, kt - 4);                       // 1 m pod povrchem
-        bool propNahore = _pr.Teleso(top) || _pr.Teleso(col[k1]);
+        bool propNahore = Tel(kt) || Tel(k1);
         if (propNahore && Sklon(x, y, pov) >= _p.SklonKontakt)
             for (int k = k1; k >= Math.Max(0, kt - 12); k--)  // těsnění do 3 m
-                if (_pr.Tesneni(col[k])) return (int)DruhPramene.Kontakt;
-        if (_pr.Rozpustny(top) || _pr.Rozpustny(col[k1])) return (int)DruhPramene.Kras;
-        return _pr.Teleso(top) ? (int)DruhPramene.Vyver : -1;
+                if (Tes(k)) return (int)DruhPramene.Kontakt;
+        if (Roz(kt) || Roz(k1)) return (int)DruhPramene.Kras;
+        return Tel(kt) ? (int)DruhPramene.Vyver : -1;
     }
 
     private double Sklon(double x, double y, double pov)

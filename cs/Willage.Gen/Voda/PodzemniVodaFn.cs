@@ -23,12 +23,15 @@ public sealed class PodzemniVodaFn
         Propustnost = new Propustnost(katalog);
         P = p;
         Hladina = new RegionalniHladina(Geologie, p);
-        Doplnovani = new Doplnovani(Geologie, p);
+        Doplnovani = new Doplnovani(Geologie, p);   // výchoz v nitru sopky se při SopkaNepropustna nepočítá (viz Doplnovani)
         Prameny = new Prameny(Geologie, Hladina, Propustnost, p);
     }
 
     public ProfilSloupce Profil(double x, double y) =>
-        ProfilSloupce.Spocti(Geologie.Sloupec(x, y), Geologie.Povrch(x, y), Hladina.Hladina(x, y), Propustnost, P.FilmM);
+        ProfilSloupce.Spocti(Geologie.Sloupec(x, y), Geologie.Povrch(x, y), Hladina.Hladina(x, y), Propustnost, P.FilmM, Nitro(x, y));
+
+    /// <summary>Maska nitra sopky, když je přepínač SopkaNepropustna zapnutý.</summary>
+    public bool[]? Nitro(double x, double y) => P.SopkaNepropustna ? Geologie.NitroSopky(x, y) : null;
 
     /// <summary>Tlaková výška sevřené vrstvy (= výška doplňování) nebo null.</summary>
     public double? TlakovaVyska(double x, double y, SevrenaVrstva v) => Doplnovani.Vyska(x, y, v.Material)?.vyska;
@@ -39,14 +42,15 @@ public sealed class PodzemniVodaFn
         Span<int> sous = stackalloc int[6];
         var col = Geologie.Sloupec(s.X, s.Y);
         int kz = s.Kz;
-        sous[0] = kz + 1 < col.Length && (kz + 1) * GeologyGridConstants.CellM < Geologie.Povrch(s.X, s.Y) ? col[kz + 1] : 0;
-        sous[1] = kz > 0 ? col[kz - 1] : 6;
+        var ni = Nitro(s.X, s.Y);
+        sous[0] = kz + 1 < col.Length && (kz + 1) * GeologyGridConstants.CellM < Geologie.Povrch(s.X, s.Y) ? (ni?[kz + 1] == true ? -1 : col[kz + 1]) : 0;
+        sous[1] = kz > 0 ? (ni?[kz - 1] == true ? -1 : col[kz - 1]) : 6;
         double c = GeologyGridConstants.CellM;
         int i = 2;
         foreach (var (dx, dy) in new[] { (c, 0.0), (-c, 0.0), (0.0, c), (0.0, -c) })
         {
             double nx = s.X + dx, ny = s.Y + dy;
-            sous[i++] = (kz + 0.5) * c < Geologie.Povrch(nx, ny) ? Geologie.Sloupec(nx, ny)[kz] : 0;
+            sous[i++] = (kz + 0.5) * c < Geologie.Povrch(nx, ny) ? (Nitro(nx, ny)?[kz] == true ? -1 : Geologie.Sloupec(nx, ny)[kz]) : 0;
         }
         double strop = (Doplnovani.Vyska(s.X, s.Y, s.AkviferMaterial)?.vyska ?? Hladina.Surova(s.X, s.Y)) - s.Z;
         return VykonPramene.Spocti(s.Jmenovity, sous, Propustnost, P.Tlakovy, strop);

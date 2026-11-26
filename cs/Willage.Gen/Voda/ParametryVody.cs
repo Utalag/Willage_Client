@@ -27,6 +27,8 @@ public sealed record ParametryVody
     public double QKras { get; init; } = 5.0;
     public double QVyver { get; init; } = 1.0;
     public bool Tlakovy { get; init; } = false;
+    // krok 5 (Jan 2026-11-26, rozhodnutí 3): nitro sopky (průduch, láva, popel) je pro vodu těsnění; false = krok 4
+    public bool SopkaNepropustna { get; init; } = true;
 
     public static ParametryVody ZJson(string json) =>
         JsonSerializer.Deserialize<ParametryVody>(json, new JsonSerializerOptions { PropertyNameCaseInsensitive = true }) ?? new();
