@@ -25,14 +25,27 @@ public sealed class SvetKrok06
     public ParametryKlimatu? ParametryKlimatu { get; init; }
     /// <summary>Vodníci kroku 6 (bez klimatu) – pro srovnání před/po.</summary>
     public List<Vodnik> VodniciBezKlimatu { get; init; } = new();
+    /// <summary>Krok 7c: dobití hladiny podzemní vody (null = vypnuto, hladina všude).</summary>
+    public NapajeniVody? Napajeni { get; init; }
 
     /// <summary>Podzemní voda nad tímto světem; s VseKrok06 i s vodníky.</summary>
     public PodzemniVodaFn Voda(KatalogMaterialu kat, ParametryVody pv, string? prusakJson = null)
     {
         var fn = new PodzemniVodaFn(Geologie, kat, pv, prusakJson);
         if (Mapa is not null) fn.Prameny.Vodnici = new VodniciVeSvete(Vodnici, fn.Geologie).VOblasti;
-        if (Klima is not null) NapojKlima(fn.Prameny);
+        if (Klima is not null) NapojKlima(fn);
         return fn;
+    }
+
+    /// <summary>Krok 7 + 7c: prameny podle odtoku klimatu a hladina podzemní vody podle dobití.</summary>
+    public void NapojKlima(PodzemniVodaFn fn)
+    {
+        NapojKlima(fn.Prameny);
+        if (Napajeni is { } n && ParametryKlimatu is { } pk)
+        {
+            fn.Hladina.Napajeni = n.Dobiti;
+            fn.Hladina.NapajeniSuchoM = pk.HladinaSuchoM;
+        }
     }
 
     /// <summary>Krok 7: prameny ze seedu podle odtoku klimatu (w omezené PramenWMax).</summary>
@@ -72,7 +85,8 @@ public static class KonfiguraceSveta
         var hk = HydrologieKlimatu.Spocti(m, mk, pe);
         var oazy = Oazy.Najdi(m, mk, pk, p.Seed); Oazy.Prekryj(mk, oazy, pk);
         var vod = hk.Vodnici(m, sp, pe); vod.AddRange(oazy);
+        var nap = pk.HladinaKlimaZapnuta ? NapajeniVody.Spocti(m, mk, hk, vod, pk) : null;
         return new SvetKrok06 { Geologie = g, Mapa = m, Eroze = ef, Vodnici = vod, VodniciBezKlimatu = v6, Oazy = oazy,
-            Klima = new KlimaSvetaFn(mk), Hydrologie = hk, ParametryKlimatu = pk };
+            Klima = new KlimaSvetaFn(mk), Hydrologie = hk, ParametryKlimatu = pk, Napajeni = nap };
     }
 }

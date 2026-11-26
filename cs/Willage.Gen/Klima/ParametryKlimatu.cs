@@ -57,6 +57,24 @@ public sealed record ParametryKlimatu
     public double OazaQLs { get; init; } = 3.0;
     public double OazaPolomerM { get; init; } = 96.0;
     public bool OazaVeStepi { get; init; } = false;
+    // krok 7c (Jan 13:24): hladina podzemní vody podle dobití. Existuje jen tam, kde je dobíjená (odtok w nad prahem, pobřeží, aktivní koryta,
+    // oázy a vodníci); mezi tím je tím hlubší, čím menší dobití; bez dobití (poušť) není vůbec (NaN). Vypnuto = hladina všude jako v kroku 7b.
+    public bool HladinaKlimaZapnuta { get; init; } = true;
+    /// <summary>Odtok w, pod kterým není bez jiného zdroje hladina vůbec.</summary>
+    public double HladinaWPrah { get; init; } = 0.05;
+    /// <summary>Odtok w, od kterého je hladina plně dobitá (sklonová hladina bez snížení); mezi prahem a plným smoothstep.</summary>
+    public double HladinaWPlna { get; init; } = 0.3;
+    /// <summary>Snížení hladiny (m) při nejmenším dobití nad nulou (e → 0+).</summary>
+    public double HladinaSuchoM { get; init; } = 30.0;
+    /// <summary>Pobřeží: do této vzdálenosti od moře plné dobití (m), do HladinaBrehDoM se smoothstep ztrácí.</summary>
+    public double HladinaBrehPlneM { get; init; } = 100.0;
+    public double HladinaBrehDoM { get; init; } = 400.0;
+    /// <summary>Aktivní koryta a dnešní tok mimo koryto.</summary>
+    public double HladinaKorytoPlneM { get; init; } = 48.0;
+    public double HladinaKorytoDoM { get; init; } = 160.0;
+    /// <summary>Vodníci a oázy.</summary>
+    public double HladinaZdrojPlneM { get; init; } = 96.0;
+    public double HladinaZdrojDoM { get; init; } = 250.0;
     // odtok (Turc) a voda
     public double OdtokReferenceMm { get; init; } = 315.36;   // = 10 l/s/km²
     public double PramenWMax { get; init; } = 2.0;

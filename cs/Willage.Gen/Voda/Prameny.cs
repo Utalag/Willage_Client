@@ -87,7 +87,7 @@ public sealed class Prameny
             double x = cx * b + (i + 0.5) * st, y = cy * b + (j + 0.5) * st;
             double pov = _g.Povrch(x, y);
             double prevys = _h.Surova(x, y) - pov;
-            if (prevys < 0) continue;                       // jen zóna vývěru
+            if (!(prevys >= 0)) continue;                   // jen zóna vývěru (NaN = bez hladiny, krok 7c, také ne)
             var col = _g.Sloupec(x, y);
             int kt = Math.Clamp((int)Math.Floor((pov - 1e-9) / GeologyGridConstants.CellM), 0, col.Length - 1);
             int druh = Druh(x, y, col, kt, pov, _p.SopkaNepropustna ? _g.NitroSopky(x, y) : null);
