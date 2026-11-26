@@ -35,6 +35,16 @@ public sealed record ParametryVody
     // krok 6e/6f (Jan 11:15, 11:33–11:34): u moře = hladina moře; plynulý přechod do vnitrozemí na této vzdálenosti od břehu (m, výchozí 5); 0 = vypnuto
     public double HladinaPrechodM { get; init; } = 5.0;
 
+    /// <summary>
+    /// Krok 7c (Jan 13:24): uzly světové mřížky v moři (JeMore) vstupují do váženého průměru povrchu pro regionální hladinu hladinou moře
+    /// (tlaková výška moře), ne hloubkou dna, takže mořské dno nestáhne pevninskou hladinu u břehu pod hladinu moře. false = starý výpočet (propad ~6 m za břehem).
+    /// </summary>
+    public bool HladinaBezMorskychUzlu { get; init; } = true;
+    /// <summary>Krok 7c: podíl mořských uzlů v okně hladiny, od kterého je pevninská hladina nejméně na hladině moře (podlaha); méně = podlaha klesá.</summary>
+    public double HladinaPodlahaPodil { get; init; } = 0.05;
+    /// <summary>Krok 7c: o kolik m pod hladinou moře leží podlaha při nulovém podílu moře v okně (plynulý návrat na žádnou podlahu).</summary>
+    public double HladinaPodlahaM { get; init; } = 10.0;
+
     // koeficient průsaku (těsnost materiálu 0–255, data prusak_v1.json): výchozí vypnuto; ovlivní jen průsak do uzavřených prostor
     public bool PrusakKoeficient { get; init; } = false;
 

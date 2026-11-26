@@ -42,6 +42,9 @@ public interface IGeologie
     /// <summary>Jako <see cref="VzdalenostOdMore"/> s dosahem hledání a polohou nejbližšího bodu moře (NaN, když je dál než dosah).</summary>
     (double d, double sx, double sy) BrehOdMore(double x, double y, double dosah) => (VzdalenostOdMore(x, y), double.NaN, double.NaN);
 
+    /// <summary>Krok 7c: je bod (výška <paramref name="vyska"/>) skutečné moře (JeMore: maska k &lt; 0,5 a výška pod hladinou moře)? Bez moře false.</summary>
+    bool JeMoreVyska(double x, double y, double vyska) => false;
+
     /// <summary>Krok 6e: hladina moře (m), bez moře NaN.</summary>
     double HladinaMore => double.NaN;
 }

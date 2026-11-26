@@ -64,7 +64,8 @@ public sealed class PodzemniVodaFn
             double nx = s.X + dx, ny = s.Y + dy;
             sous[i++] = (kz + 0.5) * c < Geologie.Povrch(nx, ny) ? (Nitro(nx, ny)?[kz] == true ? -1 : Geologie.Sloupec(nx, ny)[kz]) : 0;
         }
-        double strop = (Doplnovani.Vyska(s.X, s.Y, s.AkviferMaterial)?.vyska ?? Hladina.Surova(s.X, s.Y)) - s.Z;
+        double hl = Doplnovani.Vyska(s.X, s.Y, s.AkviferMaterial)?.vyska ?? Hladina.Surova(s.X, s.Y);
+        double strop = (double.IsNaN(hl) ? s.Z : hl) - s.Z;   // krok 7c: zdroj bez hladiny (oáza, vodník) – nulový tlak
         return VykonPramene.Spocti(s.Jmenovity, sous, Propustnost, P.Tlakovy, strop);
     }
 

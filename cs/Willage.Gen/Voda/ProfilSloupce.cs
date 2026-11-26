@@ -24,6 +24,8 @@ public sealed record ProfilSloupce(double Hladina, double Povrch, Interval? Nasy
     public static ProfilSloupce Spocti(byte[] sloupec, double povrch, double hladina, Propustnost pr, double film, bool[]? nitro = null)
     {
         int n = sloupec.Length;
+        // krok 7c: bez hladiny (NaN) není ve sloupci žádná nasycená, zavěšená ani sevřená voda
+        if (double.IsNaN(hladina)) return new ProfilSloupce(hladina, povrch, null, Array.Empty<Interval>(), Array.Empty<SevrenaVrstva>(), false);
         int kTop = Math.Min(n - 1, (int)Math.Floor((povrch - 1e-9) / C));   // nejvyšší pevná buňka
         // 0 vzduch nad povrchem, 1 těleso, 2 těsnění
         var t = new byte[n];
