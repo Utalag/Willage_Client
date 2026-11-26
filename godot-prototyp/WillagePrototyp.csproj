@@ -1,0 +1,12 @@
+<Project Sdk="Godot.NET.Sdk/4.7.2">
+  <!-- Godot C# fasáda prototypu (krok 4+). Logika je v ../cs/Willage.Gen (bez Godotu); tady jen most a běžci. -->
+  <PropertyGroup>
+    <TargetFramework>net9.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <EnableDynamicLoading>true</EnableDynamicLoading>
+    <RootNamespace>WillagePrototyp</RootNamespace>
+  </PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\cs\Willage.Gen\Willage.Gen.csproj" />
+  </ItemGroup>
+</Project>

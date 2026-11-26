@@ -1,0 +1,19 @@
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WillagePrototyp", "WillagePrototyp.csproj", "{6E2C5A57-6F0B-4B8B-9B0B-0B6C1C0E4A01}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		ExportDebug|Any CPU = ExportDebug|Any CPU
+		ExportRelease|Any CPU = ExportRelease|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{6E2C5A57-6F0B-4B8B-9B0B-0B6C1C0E4A01}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6E2C5A57-6F0B-4B8B-9B0B-0B6C1C0E4A01}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6E2C5A57-6F0B-4B8B-9B0B-0B6C1C0E4A01}.ExportDebug|Any CPU.ActiveCfg = ExportDebug|Any CPU
+		{6E2C5A57-6F0B-4B8B-9B0B-0B6C1C0E4A01}.ExportDebug|Any CPU.Build.0 = ExportDebug|Any CPU
+		{6E2C5A57-6F0B-4B8B-9B0B-0B6C1C0E4A01}.ExportRelease|Any CPU.ActiveCfg = ExportRelease|Any CPU
+		{6E2C5A57-6F0B-4B8B-9B0B-0B6C1C0E4A01}.ExportRelease|Any CPU.Build.0 = ExportRelease|Any CPU
+	EndGlobalSection
+EndGlobal
