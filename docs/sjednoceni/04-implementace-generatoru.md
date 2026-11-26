@@ -28,8 +28,9 @@ Stav: **návrh k odsouhlasení**, 2026-11-20 23:50 SEČ; pořadí kroků změně
 | 3 | Funkce světa II: geologie a útvary (vč. 3b) | schváleno 2026-11-26 8:16 | 2 | Jan po kroku |
 | 4 | Funkce světa III: podzemní voda a prameny jako funkce (C#) | schváleno 2026-11-26 8:48 | 3 | Jan po kroku |
 | 5 | **Port geologie do C#** s opravami z kroku 4 (nitro sopky, mince E82 bez skoku, hustota pramenů) | nové | 4 | Jan po kroku |
-| 6 | **Eroze světa**: hrubá mapa toků a eroze celé planety (~16–32 m, ze seedu, uložená s planetou) + jemný detail jako funkce; vodníci u zdrojů toků | nové (způsob 9:11) | 5 | Jan po kroku |
-| 7 | **Dokončení světa**: klima a povrchové jevy jako funkce, vegetace ze seedu jako funkce, další části funkce | nové (z dřívějších 8 a 9) | 6 | Jan po kroku |
+| 6 | **Eroze světa**: hrubá mapa toků a eroze celé planety (~16–32 m, ze seedu, uložená s planetou) + jemný detail jako funkce; vodníci u zdrojů toků; od 6b moře, kontinenty, pánve | **hotovo v kódu 6–6e, čeká na merge do main** (větev `gen-v1-krok06e-doladeni`) | 5 | Jan po kroku |
+| 7 | **Dokončení světa**: klima a biomy (teplotní pásma, srážky vč. srážkového stínu, pouště, výchozí klima planety) přes mapu s novým výpočtem vody a eroze; povrchové jevy, vegetace ze seedu jako funkce, další části funkce | nové (z dřívějších 8 a 9; pořadí doplněno 2026-11-26 11:15) | 6 | Jan po kroku |
+| 7b | **Předherní editor světa**: úpravy světa s regiony přes více bloků, přepočet závislých kroků, uložení planety; dál už jen herní změny | nové (Jan 2026-11-26 11:15) | 7 | Jan po kroku |
 | 8 | Výřezy: vložení blueprintu a ostrov (dříve 5) | částečně | 7 | Jan po kroku |
 | 9 | Buňky: slupka, kopání, rozdíl a ukládání (dříve 6) | částečně | 8 | Jan po kroku |
 | 10 | Voda na ostrově: simulace, eroze jako vrstva posunu výšky, přepočet (dříve 7) | částečně | 9 | Jan po kroku |
@@ -210,20 +211,43 @@ Podrobné oddíly níže mají původní čísla; v nadpisu je uvedeno nové č�
 
 **Proč tady:** výřezy mají vznikat z hotového světa (rozhodnutí 2026-11-26 9:06).
 
-**Stav:** rozhodnuto (2026-11-26 9:11), kód není.
+**Stav:** hotovo v kódu (kroky 6, 6b, 6c, 6d, 6e), čeká na Janovo ano k merge do main. Reporty `docs/sjednoceni/reporty/krok06-prop.md`, `krok06b-prop.md`, `krok06c-prop.md`, `krok06d-prop.md`, `krok06e-prop.md` (větve `gen-v1-krok06-eroze-sveta` → `…06b-more-sklon` → `…06c-kontinenty` → `…06d-upravy` → `…06e-doladeni`, každá z předchozí).
+
+**Rozhodnutí Jana ke kroku 6 a jeho doladění (2026-11-26 9:59–11:22), jak jsou v kódu**
+- **6 (9:11):** mapa planety 32 m (980 × 488 uzlů na torusu 31 360 × 15 616 m), priority-flood, D8, stream power (implicitní schéma), uložení v souboru WGER s klíčem keše (seed, parametry, data, svět); jemný detail Catmull-Rom nad mapou; vodníci u zdrojů toků. Hladina podzemní vody sleduje erozi.
+- **6b (9:59–10:12):** moře a mírný sklon kontinentu, šev torusu celý v moři, krok mapy 32 m, prameny a vodníci přizpůsobeny erodovanému povrchu, jezera = vyplněné prohlubně, velké pánve (přepínač), podíl moře a počet pánví jsou ladící parametry v datovém JSON a v klíči keše, odchylka podílu moře ±5 p. b. deterministicky ze seedu.
+- **6c (10:25–10:51):** nepravidelné kontinenty z masky pevniny na torusu (Voronoi 2–4 kontinentů ze seedu + periodický šum členitosti + domain warp), práh z histogramu podle cílového podílu moře; přepínač `VseKrok06` (moře, sklon, pánve 4 × 1500 m × 15 m, eroze, vodníci); starší vzorce Gaussových hrud zamítnuty (negativní výsledek v PROP 6c).
+- **6d (10:51–11:15):** šíje mezi kontinenty ponechány jako přirozená varianta; ostrovy v průlivech (parametry počet, poloměr, výška); zvlněný okraj pásu švu (šev zůstává v moři); `more_v1.json` v klíči keše jen při zapnutém moři; **`VseKrok06` výchozí zapnuto** (`ParametrySveta.Krok5()` = vše vypnuto pro starší testy); kompenzace prahu moře vynechána (odchylka ~0,5 p. b. se vejde do tolerance).
+- **6e (11:15–11:22):** výchozí podíl moře **35 %** (± 5 p. b.), zvlnění okraje pásu švu zpět **400 m** (ladící parametry `SevZvlneniM`, `SevZvlneniLambdaMinM`, `SevZvlneniLambdaMaxM` v `more_v1.json`, v klíči keše), **hladina podzemní vody svázaná s hladinou moře 60 m** (v moři a u pobřeží = 60 m, plynulý přechod do vnitrozemí přes `HladinaPrechodM` = 600 m ve `voda_v1.json`; start 3 × 3 chráněn → otisky startu bez eroze beze změny).
+- **Do TODO (nezpracováno):** náplavy a delty (ukládání sedimentu v jezerech, nivách a u ústí) a **mořské usazeniny na dně moře** jako jeden samostatný krok (stream power s depozicí, ukládání do mapy WGER).
 
 ---
 
 ## Krok 7 (nový) – Dokončení světa
 
 **Obsah**
+- **Klima a biomy přes mapu s novým výpočtem vody a eroze** (Jan 2026-11-26 11:15): teplotní pásma podle zeměpisné šířky a výšky, srážky včetně srážkového stínu hor, pouště, výchozí klima planety. Klima se překryje přes planetu z kroku 6 (moře, kontinenty, eroze, toky) a voda s erozí se přepočítá s novým klimatem (srážky určují průtok a doplňování). Dnešní presety klimatu z kroku 2 zůstávají jako ruční volba.
 - Klima a povrchové jevy (písek, led, sníh) jako funkce světa – světová část dřívějšího kroku 8.
 - Vegetace ze seedu jako funkce – světová část dřívějšího kroku 9.
 - Další části, které patří do funkce světa (doplní se při plánování kroku).
 
 **Proč tady:** svět, ze kterého se vyřezává, má být úplný. Změny na ostrově (vrstva změn) zůstávají v kroku 11.
 
-**Stav:** jen rozhodnuto.
+**Stav:** jen rozhodnuto (pořadí uvnitř kroku doplněno 2026-11-26 11:15: nejdřív klima a biomy, pak 7b).
+
+---
+
+## Krok 7b (nový) – Předherní editor světa
+
+**Obsah** (Jan 2026-11-26 11:15)
+- Editor, kterým se svět před hrou upravuje: **úpravy s regiony přes více bloků** (moře, kontinenty, pohoří, klimatická pásma, pánve, řeky), ne po jednom bloku.
+- **Přepočet závislých kroků** po úpravě: výška světa → moře a pobřeží → eroze a toky → voda a prameny → klima a biomy → vegetace (jen dotčená část, ostatní z keše; klíč keše hlídá, co se musí přepočítat).
+- **Uložení planety** (mapa eroze, úpravy regionů, parametry) jako součást planety, deterministicky ze seedu a úprav.
+- **Potom už jen herní změny:** úpravy editoru jsou součástí funkce světa, hra mění jen vrstvu změn (kroky 9–11).
+
+**Proč tady:** výřezy a ostrov se mají dělat z hotového, upraveného světa; editor potřebuje hotové klima a erozi, aby mělo co přepočítávat.
+
+**Stav:** jen rozhodnuto, kód není. Návrh se zpracuje po kroku 7 (PROP před kódem).
 
 ---
 
