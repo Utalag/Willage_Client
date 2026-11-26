@@ -11,4 +11,7 @@ public static class TexturaMapy
 
     /// <summary>Volat na hlavním vlákně (vytváří zdroj v RenderingServeru).</summary>
     public static ImageTexture Textura(MapaDto m) => ImageTexture.CreateFromImage(Obrazek(m));
+
+    /// <summary>G-6: textura z hotových RGBA8 bajtů (BarvyNahledu na vlákně fronty); hlavní vlákno.</summary>
+    public static ImageTexture ZRgba(int sirka, int vyska, byte[] rgba) => ImageTexture.CreateFromImage(Image.CreateFromData(sirka, vyska, false, Image.Format.Rgba8, rgba));
 }

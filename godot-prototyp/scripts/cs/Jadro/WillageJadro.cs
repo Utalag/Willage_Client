@@ -29,6 +29,10 @@ public partial class WillageJadro : Node
     [Signal] public delegate void PlanetaInfoEventHandler(Godot.Collections.Dictionary info);
     [Signal] public delegate void PraceSelhalaEventHandler(long uloha, string nazev, string chyba);
     [Signal] public delegate void PraceZrusenaEventHandler(long uloha, string nazev);
+    /// <summary>G-6: náhled vrstvy modulu M1–M3 hotový (DTO v PosledniNahled).</summary>
+    [Signal] public delegate void NahledModuluHotovEventHandler(long uloha, string modul, int vrstva, ImageTexture textura);
+    /// <summary>G-6: řez modulu hotový (DTO v PosledniRez, obraz řezu M3 v PosledniRezTextura, jinak null).</summary>
+    [Signal] public delegate void RezModuluHotovEventHandler(long uloha, string modul, int rezim);
     /// <summary>Zástupné: hlídání změn katalogů (okno 2 uloží vzhled → okno 1 se dozví) přijde s oknem 2; dnes se nevysílá.</summary>
     [Signal] public delegate void KatalogZmenenEventHandler(string cesta);
 
@@ -151,6 +155,47 @@ public partial class WillageJadro : Node
     public long Potvrd() => Zarad("Potvrd", _ => Gen().Sluzba.PotvrdPlanetu(), Info);
 
     void Info(PlanetaInfoDto i) { PosledniInfo = i; EmitSignal(SignalName.PlanetaInfo, DtoNaVariant.Slovnik(i)); }
+
+    // ---- G-6: náhledy M1–M3 ----
+    public NahledMapyDto? PosledniNahled { get; private set; }
+    public RezModuluDto? PosledniRez { get; private set; }
+    public ImageTexture? PosledniRezTextura { get; private set; }
+    /// <summary>Materiály (id, název, barva) – naplní se s prvním náhledem nebo řezem.</summary>
+    public System.Collections.Generic.IReadOnlyList<MaterialDto> MaterialyDto { get; private set; } = Array.Empty<MaterialDto>();
+
+    /// <summary>Mapa vrstvy modulu (VrstvaNahleduDto jako int); barvy se spočtou na vlákně fronty, textura na hlavním.</summary>
+    public long NahledModulu(string modul, int vrstva, int rozliseni = 256)
+    {
+        long id = 0;
+        id = Zarad("Nahled", _ =>
+        {
+            var n = Gen().Nahledy.Mapa(modul, (VrstvaNahleduDto)vrstva, rozliseni); var mat = Gen().Nahledy.Materialy();
+            return (n, mat, Willage.Gen.Api.Vizual.BarvyNahledu.Rgba(n, mat));
+        }, r =>
+        {
+            PosledniNahled = r.n; MaterialyDto = r.mat;
+            EmitSignal(SignalName.NahledModuluHotov, id, modul, vrstva, TexturaMapy.ZRgba(r.n.Nx, r.n.Ny, r.Item3));
+        });
+        return id;
+    }
+
+    /// <summary>Řez modulu úsečkou v metrech (na hranici fasády převod do Q16), krok v metrech, režim RezimRezuDto jako int.</summary>
+    public long RezModulu(string modul, Vector2 odM, Vector2 doM, double krokM, int rezim = 0)
+    {
+        long id = 0;
+        id = Zarad("Rez", _ =>
+        {
+            var r = Gen().Nahledy.Rez(modul, SouradniceQ16.ZMetru(odM.X, odM.Y), SouradniceQ16.ZMetru(doM.X, doM.Y), krokM, (RezimRezuDto)rezim);
+            var mat = Gen().Nahledy.Materialy();
+            return (r, mat, Willage.Gen.Api.Vizual.BarvyNahledu.RgbaRezu(r, mat));
+        }, r =>
+        {
+            PosledniRez = r.r; MaterialyDto = r.mat;
+            PosledniRezTextura = r.r.Nz > 0 ? TexturaMapy.ZRgba(r.r.Nx, r.r.Nz, r.Item3) : null;
+            EmitSignal(SignalName.RezModuluHotov, id, modul, rezim);
+        });
+        return id;
+    }
 
     /// <summary>Zruší běžící i čekající úlohy (běžící generace skončí před dalším modulem).</summary>
     public void Zrus() => _fronta?.ZrusVse();
