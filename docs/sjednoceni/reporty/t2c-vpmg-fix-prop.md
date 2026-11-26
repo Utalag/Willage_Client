@@ -1,0 +1,34 @@
+# T-2c – přepnutí na opravu VPMG v1 (Dev 42e7475) + schéma z deskriptorů Dev (PROP)
+
+Větev `mat-v1-t2c-vpmg-fix` (z `mat-v1-t2b-vpmg-v1` `bba6873`). Podnět: Willage-backend sloučil opravu VPMG v1 (PR #17, `42e7475`)
+podle návrhů A–E z T-2b: A SmoothStep v `long` / L³, B strata centrovaný šum + ClampToPaletteExtents, rovnoměrný jitter,
+grass_tufts 2D centrovaný šum, receptura žuly bez natvrdo zadaných hodnot, C deskriptory parametrů (`VpmgOperationCatalog`,
+`VpmgPreview --describe-ops`), D testy barev, E `style` rezervovaný.
+
+## Cíl
+1. Pin `12c3e6b` → `42e7475`: `dev_pin.json`, `WillageDevCommit`, zrcadlo katalogu (Dev mění visualProfiles 5 a 6), receptury
+   `data/vpmg/receptury/<id>.json` = nové fixture Dev, `zdroj_receptur.json` (SHA + nové goldeny).
+2. **Schéma operací z deskriptorů Dev** místo rozboru zdrojů: příkaz nástroje `parametry` volá `VpmgOperationCatalog.DescribeAll()`
+   (stejný zdroj jako `--describe-ops`); typ, rozsah min/max, výchozí literál, pole profilu, popis Dev. Alias (prázdné Parameters v Dev)
+   = reflexe na pole `_inner` operace v registru → parametry cílové operace. Rozbor zdrojů regexem se ruší.
+   Český překryv `operace_vpmg_v1.json` zůstává (názvy, skupiny, popisy, jednotky, zástupné návrhy); rozsahy už nenese (bere Dev).
+   Deskriptory neříkají, které pole profilu operace čte mimo výchozí hodnoty (base_fill → baseColor, hash_grain → grain,
+   palette_map / strata → palette) → doplní překryv (`ctiProfil`), test hlídá jen existenci polí; návrh pro backend.
+3. Goldeny: 52 `1756279408`; grass `756991887`, topsoil `2725408357`, gravel_sand `3628591702`, cave_limestone `2752359023`,
+   granite `917430836`; smooth_noise `2914983316`, palette_map `2821145053`, strata `2813106466`, warp `887461636`, grass_tufts `2214710167`.
+4. Srovnávací arch v0 / v1 rozbitá (12c3e6b) / v1 opravená (42e7475), dlaždice 2×2, 8× nejbližší soused; snímky okna pro 5 materiálů.
+5. Nezávazně (necommitovat): nástroj C# PNG → bezešvá neprůhledná dlaždice 128×128 + SHA-256 (podklady Gemini).
+
+## Hypotézy / měření
+| Test | Očekávání |
+|---|---|
+| goldeny | 11/11 nástroj, fasáda, okno; náhledy Dev = okno |
+| schéma | `operace_dev_v1.json` = deskriptory Dev (živě přes nástroj) = výstup `VpmgPreview --describe-ops` (porovnání polí) |
+| barvy | v1 opravená: žádné čistě žluté / modré pixely (kontrola v testu: podíl pixelů mimo rozsah palety ± jitter) |
+| svět | otisky beze změny; klíč M6 (+ navazující) se změní kvůli zrcadlu katalogu, M0–M5 ne |
+
+## Rizika
+- Deskriptory a implementace se v Dev mohou rozejít → test hlídá, že každá operace registru má deskriptor a že goldeny sedí.
+
+## Výsledky
+*(doplní se po implementaci)*
