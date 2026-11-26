@@ -84,6 +84,7 @@ TestyPrusakKras.Spust();
 TestyG1.Spust();
 TestyG2.Spust();
 TestyG3.Spust();
+TestyG4.Spust();
 
 Console.WriteLine($"OK {T.Ok}, chyb {T.Chyb}");
 return T.Chyb == 0 ? 0 : 1;
