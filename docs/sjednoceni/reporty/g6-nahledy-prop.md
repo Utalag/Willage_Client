@@ -35,4 +35,38 @@ vlastní náhled modulu (M1–M3), PohledRezu (řez úsečkou), Izolovat vrstvu 
 - Výpočet náhledu na vlákně fronty blokuje další úlohy (~stovky ms); paralelizace až když bude potřeba.
 
 ## Výsledky
-*(doplní se po implementaci)*
+Commity: 74b514a `VyplnSloupecRezim`, a2a4f8e fasáda `INahledyModulu` + `BarvyNahledu`, 68cbdb8 `TestyG6` (`--jen=G6`), 97a0950 nástroj `nahled`,
+a894cab jádro, adcb6d9 okno, 64524b4 `NahledyTest`.
+
+| Test | Výsledek |
+|---|---|
+| dotnet celá sada | **OK 482, chyb 0** (2 min 25 s); z toho G6 30/0 |
+| shoda s nástrojem | `rez` → `nahled porovnej-rez rez_opravy.bin`: **0 rozdílných buněk, 0 rozdílných povrchů** |
+| shoda s jádrem | mapy M1/M2/M3 bitově = přímé `SvetFn` / `GeologieCs` (TestyG6) |
+| izolace M3 | „vše“ 131 359 nevzduchových buněk, „jen útvary“ 1 045; kde se vše liší od jen vrstev, jen útvary = vše; `VyplnSloupecRezim(Vse)` = `VyplnSloupec` bajtově |
+| determinismus | 1 vlákno = 8 vláken; dva náhledy stejné |
+| Godot headless | NahledyTest **17/0**, GeneratorSvetaTest (G-5) **22/0**, JadroTest **12/0**, okno jako hlavní scéna i hra `--quit-after` bez chyb |
+| Godot Xvfb | NahledyTest **17/0**, 8 snímků `obrazky/g6/` |
+| úsečka kliknutím | pixely 10 → 100 v řádku 64 → (320, 2048) → (3200, 2048) m, 512 vzorků po 5,625 m |
+| otisky | mapa 800d420bb00047de; klima zap 86 vodníků, krok 3 9f32311e046f8b6a, voda 377a8210f82c856a, klima cb11da8d141a2a5e; vyp 92, voda 8e239a68c6d01be0; segment 059d807ab04b7f00 – **beze změny** |
+
+Časy (box, Godot přes frontu): M1 výška 256² 220 ms, M1 horniny 256² 423 ms, M3 materiál povrchu 128² 938 ms, řez M3 384 × 512 29 ms, profil M1 1 ms;
+dotnet M1 biom 256² 77 ms. Mapy se počítají po řádcích paralelně (`Parallel.For`, klon geologie na vlákno), výsledek nezávisí na počtu vláken.
+Celá planeta se studenou keší **8,2 s** (z G-5) – jen zaznamenáno, neladěno (Jan).
+
+Otisky vrstev 256² (`nahled otisky`): M1 Vyska 324c24f603b62066, Biom 7f59b7b4bf7f54dc, Horniny 2eab30ce998fb1ab, Sopky 2a6651ec87fb61b8,
+Masiv 3a6ef94b03321ec8, Relief a1ae0bc30597352b; M2 Pevnina 59faba0467c220b9, More c6da7dbaf1553ca9, Vyska c83aa8fc40da998e, Panve 8a39d2abd3999ab7,
+Sev 3d4d629940c1d698, RozdilM2M1 a3db1bac106051ec; M3 MaterialPovrchu 5eb5983a2c26a666, Mince 62b736b1942d6fb8.
+
+### Negativní nálezy
+1. **Výstup M3 v paměti není geologie M3**: M7 ho mutuje (`g.Svet.Eroze = e.Eroze`), první verze náhledu se proto lišila od nástroje (27/50 buněk mapy,
+   1 169 buněk řezu). Oprava: náhled M3 si staví vlastní `GeologieCs` bez eroze (keš podle klíče M3). Mutaci v jádře jsem neměnil – kandidát na úklid.
+2. `GeologieCs.MaterialPovrchu` vrací 0 (vzduch), když povrch leží v dolní polovině buňky (vzorek z = floor·C + 0,125 > povrch). Stávající chování jádra,
+   v náhledu je vidět jako tmavé tečky; nahlášeno, neměněno.
+3. M2 vrstva **Pánve je ve startovním světě 4096 m celá 0** (pánve leží jinde na planetě) – náhled je správně, ale prázdný.
+4. Podíl moře v náhledu 0,594 proti cíli masky 0,374 – cíl platí pro celou planetu, výřez 4096 m ho nesplňuje (není chyba, jen pozor při čtení čísel).
+5. M3 materiál povrchu 256² trvá ~1,7 s (> cíl 1 s), okno proto používá 128² (0,4–1 s).
+6. M1–M3 pokrývají jen 0…4096 m; řez/náhled mimo startovní svět není (riziko z PROP potvrzeno).
+
+### Zbývá (zástupné, G-7)
+Náhledy a izolace M4–M6 (eroze, klima, voda, řez s hladinou a zvodnělou zónou 7d) – v okně zůstávají označené „zástupný“.
