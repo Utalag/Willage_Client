@@ -22,23 +22,47 @@ Generátor světa (G-5), CLI (`Willage.Gen.Nastroje api …`) i případný serv
 Vstupní bod: `GeneratorSveta.Otevri(cesta)` → `Moduly`, `Sluzba`, `Dotazy`, `Katalogy`, `Vizual`, `Upravy`.
 Jedna instance = jedna planeta v paměti; není vláknově bezpečná (volající řadí volání do jedné fronty).
 
-## Soubor planety WPLN v1
-Deflate (jako WGER). Pořadí: `WPLN`, verze 1, `gen_ver` („V1.0“), seed (i64), souhrn manifestu, položky manifestu
-(cesta, velikost, SHA-256), sada parametrů (JSON `willage-sada-parametru-v1`, všechny moduly), klíče modulů (id → SHA),
-potvrzeno, úpravy s regiony (U-1, ve v1 vždy 0). Odvozené mapy (WGER, klima) nejsou v souboru – jsou to keše, které se
-z planety deterministicky přepočítají. `Nacti` vrátí rozdíly dat proti aktuálnímu manifestu a moduly s jiným klíčem.
+## Soubor planety WPLN v1 (jen autorský formát klienta)
+Deflate (jako WGER). Pořadí: `WPLN`, verze formátu 1, `gen_ver` („V1.0“), seed (**i64**, nikdy se nezkracuje), souhrn manifestu,
+položky manifestu (cesta, velikost, SHA-256), sada parametrů (JSON `willage-sada-parametru-v1`, všechny moduly), klíče modulů
+(id → SHA), potvrzeno, úpravy s regiony (U-1, obdélník v Q16 `long`, ve v1 vždy 0). Odvozené mapy (WGER, klima) nejsou
+v souboru – jsou to keše, které se z planety deterministicky přepočítají.
+- **Totožnost planety** = `SouborPlanety.Otisk` = SHA-256 kanonického textu (`SouborPlanety.Kanonicky`), **ne bajtů Deflate**.
+- **Kompatibilita** (`KompatibilitaPlanety`): formát ≤ podporovaný se čte, novější se odmítne; `gen_ver` = aktuální → Plna,
+  známá starší (`ZnameGenVer`) → Prepocet (sada se načte, moduly se přepočítají), neznámá → odmítnout.
+- Pro Dev / server je připravený **zástupný** verzovaný JSON export `PlanetaJson.Export` (`willage-planeta-export-v1`, s otiskem) – nezmrazený.
 
-## Sladění s Willage_Dev Geology.Core G0 (větev `cursor/geology-g0-g1-1ce6`, `29bffc0`, jen čtení)
-| Dev | Klient | Stav |
+## Jednotky a souřadnice
+- `SouradniceQ16` / `OblastQ16`: 2D bod / obdélník v jednotkách 2⁻¹⁶ m (`long`), převod z/do metrů jen na hranici fasády.
+  Buňka 0,25 m: `MinRohBunky(ix, iy)` (index jako Dev), `StredBunky` = roh + 0,125 m.
+- Úpravy s regiony (U-1) jsou v Q16. `PovrchM`, `KrokM` a hodnoty výšky jsou `double`/`float` **metry** (výška nad dnem sloupce
+  0–128 m, krok vzorku/mřížky) – zdokumentováno, nepřevádí se.
+- `MapaDto` je **hrubá mřížka** mapy eroze/klimatu (dnes 32 m), ne buňky 0,25 m.
+- `SloupecDto.Bunky`: 2 B na buňku (MaterialId u8 + varianta, jako Dev `ShellCellPayload`), vzorek svisle ve středu buňky
+  z = (i + 0,5) · 0,25 m, vodorovně přesně v zadaném bodě.
+- MaterialId je všude `byte`. **Kolize:** klient používá id 57 pro sopečný popel (`ParametrySveta.SopkaPopelId`), Dev má v rozsahu
+  57–74 vlastní materiály – zdokumentováno, nepřečíslováno.
+- Seed světa je `long`. 32bitový seed pro celočíselné hashe (GeologyHash, budoucí VPMG) se odvozuje jen v `Jadro/SeedSveta.Hash32`
+  (dolních 32 bitů, otisky beze změny). Šum má vlastní `StableHash.NoiseSeed`.
+
+## Vztah k Willage_Dev (jen čtení)
+- Klient na Dev **neodkazuje** (Dev net10.0 + Vogen, klient net9.0): žádná reference na `Willage.World.Geology.Core` ani jiný Dev projekt.
+- Zrcadla se drží **jen pro čtení**: `Jadro/GeologyGridConstants`, `Jadro/GeologyHash` (+ golden vektory `geology-hash-golden-v1.json`
+  z Dev `29bffc0` v testech), `data/v1/materials-catalog-v1.json` (připnutý v manifestu fasády: `schemaVersion` + SHA).
+- Shoda hlídaná testy: hash = golden vektory, perioda planety = Dev `PlanetTorus.Default` (31 360 × 15 616 m), Q16 = 65 536/m.
+
+## Zapracované připomínky Willage-backendu (G-3 review, 26. 11. 2026)
+| # | Připomínka | Jak |
 |---|---|---|
-| `FxQ16` (2⁻¹⁶ m, `long Units`) | `SouradniceQ16` v DTO, `Jadro/Q16` | stejná jednotka (65 536/m); knihovna uvnitř zatím `double` metry |
-| `GeologyHash.HashInt3/DeriveSeed/HashString` | `Jadro/GeologyHash` | stejný algoritmus, test = golden vektory Dev `geology-hash-golden-v1.json` |
-| `PlanetTorus.Default` 245 × 122 sloupců (31 360 × 15 616 m) | `eroze_v1.json` PlanetaXM/YM, `GeologyGridConstants` | shodné, hlídá test |
-| `GeologyCellIndex`, `TorusWrap` | `Eroze/Torus` (mřížka eroze), buňky 0,25 m | zatím ne – převod přijde, až fasáda začne vracet buňky |
-Návrh: až Dev vydá Geology.Core jako balíček / pinovaný commit, `SouradniceQ16` se nahradí přímo `FxQ16`
-(nebo dostane převod) a `Jadro/GeologyHash` se odkáže na Dev. Žádné změny v Dev nenavrhujeme.
+| 1 | WPLN jen autorský formát, hash z kanonického obsahu | `SouborPlanety.Otisk`, `PlanetaInfoDto.OtiskPlanety`; zástupný `PlanetaJson.Export` |
+| 2 | Neodkazovat Geology.Core, Q16 jako 2D bod, MapaDto hrubá | bez reference; dokumentace výše |
+| 3 | Seed 64 bit, 32bit odvození na jednom místě | `SeedSveta.Hash32` (oázy ho používají); WPLN i64 |
+| 4 | SloupecDto 2 B na buňku, konvence vzorkování | `SloupecDto.Bunky`, `StredBunky`/`MinRohBunky` |
+| 5 | MaterialId jako byte, kolize 57 | `BodDto`, `GrafickyBlokDto`; kolize zdokumentována |
+| 6 | Q16 na hranici aspoň pro úpravy, metry dokumentovat | `UpravaRegionu` v Q16; `RezDto`/`MapaDto` doc |
+| 7 | Verzování a připnutí katalogu | `KompatibilitaPlanety`; `ManifestDto.KatalogMaterialu` |
+| 8 | Zrcadla jen pro čtení + golden vektory | beze změny, hlídá TestyG3 |
 
-## Otázky pro Willage-backend
-1. Vyhovuje serveru WPLN jako binární soubor, nebo chcete JSON variantu (sada je už JSON)?
-2. Mají dotazy (`Sloupec`, `Mapa`) vracet rovnou typy Dev (`FxQ16`, `GeologyCellIndex`)?
-3. Seed: Dev používá `uint`, klient `long` (dnes 49) – sjednotit na `uint`?
+## Otázky pro Willage-backend (zbývající)
+1. Má zástupný JSON export planety (`willage-planeta-export-v1`) nějaký požadovaný tvar na straně Dev?
+2. Kdy a jak sjednotit kolizi materiálových id 57–74?

@@ -1,8 +1,8 @@
 namespace Willage.Gen.Api.Dto;
 
 /// <summary>
-/// Vodorovná poloha na planetě v jednotkách 2⁻¹⁶ m (stejná jednotka jako <c>FxQ16</c> v Willage_Dev Geology.Core G0).
-/// Knihovna dnes počítá v <c>double</c> metrech; převod je jen na hranici fasády.
+/// Vodorovná 2D poloha na planetě v jednotkách 2⁻¹⁶ m (stejná jednotka jako <c>FxQ16</c> v Willage_Dev, bez reference na Dev – G-3 review).
+/// Knihovna počítá v <c>double</c> metrech; převod je jen na hranici fasády.
 /// </summary>
 public readonly record struct SouradniceQ16(long X, long Y)
 {
