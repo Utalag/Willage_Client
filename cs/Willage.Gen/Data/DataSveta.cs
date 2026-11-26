@@ -16,6 +16,8 @@ public sealed class DataSveta
     public string VodaV1 => Cesta("v1/voda_v1.json");
     public string ErozeV1 => Cesta("v1/eroze_v1.json");
     public string MoreV1 => Cesta("v1/more_v1.json");
+    /// <summary>Krok 7: klima a biomy (jen při ParametrySveta.KlimaKrok07; do klíče eroze nevstupuje).</summary>
+    public string KlimaV1 => Cesta("v1/klima_v1.json");
     /// <summary>Datové soubory, na kterých závisí funkce světa (krok 2) – pro klíč keše eroze.</summary>
     public string[] SouborySveta => File.Exists(MoreV1) ? new[] { KlimaPresety, PoradiHornin, MoreV1 } : new[] { KlimaPresety, PoradiHornin };
 
