@@ -45,8 +45,8 @@ public sealed class SvetFn
         Masiv = new Masiv(p, Sd, Sumy);
         Sopky = new Sopky(p, H, Biomy, (x, y, w) => VyskaBezSopek(x, y, w, true), Relief, SvetM, StropPovrchuM);
         Horniny = new MapaHornin(p, H, SvetM);
-        if (p.More) More = new MoreSklon(p, Sd, H);
-        if (p.Panve) Panve = new Panve(p, H, More);
+        if (p.More || p.VseKrok06) More = new MoreSklon(p, Sd, H);
+        if (p.Panve || p.VseKrok06) Panve = new Panve(p, H, More);
     }
 
     public double[] Vahy(double x, double y) => Biomy.Vahy(x, y);
@@ -85,7 +85,7 @@ public sealed class SvetFn
             double dx = x - s[i].X, dy = y - s[i].Y, r2 = dx * dx + dy * dy;
             if (r2 < s[i].R * s[i].R) h += Sopky.Kuzel(i, Math.Sqrt(r2));
         }
-        if (More != null) h += More.Posun(x, y);
+        if (More != null) h = More.Aplikuj(x, y, h, NeutralM);
         if (Panve != null) h += Panve.Posun(x, y);
         h = Smin(h);
         if (detaily && eroze && Eroze != null) h -= Eroze.Hloubka(x, y);

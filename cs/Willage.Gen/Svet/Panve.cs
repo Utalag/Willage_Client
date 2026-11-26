@@ -2,7 +2,7 @@ namespace Willage.Gen.Svet;
 
 /// <summary>
 /// Krok 6b (Jan 10:03 b): několik velkých pánví v terénu pro velká jezera. Středy ze seedu (hash), jen na pevnině
-/// (s mořem: dn > P + T + R), mimo start svět (vzdálenost od středu startu > R + 300 m) a od sebe ≥ 2R.
+/// (s mořem: vzdálenost od moře > R + 300 m), mimo start svět (vzdálenost od středu startu > R + 300 m) a od sebe ≥ 2R.
 /// Profil −D·(1 − (r/R)²)², hladký. Přepínač ParametrySveta.Panve, výchozí vypnuto.
 /// </summary>
 public sealed class Panve
@@ -17,7 +17,7 @@ public sealed class Panve
         for (int i = 0; i < 256 && Stredy.Count < p.PanviPocet; i++)
         {
             double x = h.U("V1_PANEV_X", i, 0) * p.PlanetaXM, y = h.U("V1_PANEV_Y", i, 0) * p.PlanetaYM;
-            if (more is not null && more.Dn(x, y) <= more.Pas + p.MorePrechodM + _r) continue;
+            if (more is not null && more.VzdalenostOdMore(x, y) <= _r + 300.0) continue;   // krok 6c: jen na pevnině
             if (Math.Sqrt((x - sx) * (x - sx) + (y - sy) * (y - sy)) <= _r + 300.0 + p.BlokM * 1.5) continue;
             if (Stredy.Any(s => Math.Sqrt((x - s.X) * (x - s.X) + (y - s.Y) * (y - s.Y)) < 2 * _r)) continue;
             Stredy.Add((x, y));

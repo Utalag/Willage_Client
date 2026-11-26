@@ -66,20 +66,26 @@ public sealed class ParametrySveta
 
     /// <summary>Keš výšky středu útvaru s klíčem round(4·c) jako GDScript (závisí na pořadí dotazů); false = přesný klíč (Jan 9:32).</summary>
     public bool UtvaryKlicGd = false;
-    // krok 6b (Jan 2026-11-26 9:59): moře kolem švu torusu a mírný sklon kontinentu – mění svět, výchozí vypnuto
+    // krok 6b (Jan 2026-11-26 9:59): moře a mírný sklon kontinentu – mění svět, výchozí vypnuto
     public bool More = false;
     public double PlanetaXM = 31360.0, PlanetaYM = 15616.0;
-    // Jan 10:03: moře ≈ 30 % planety (PodilMore určí šířku pásu), střed pásu posunutý o StredMoreM od švu (šev i pás prolnutí v moři, start na pevnině)
-    // Jan 10:12: odchylka podílu moře ±5 p. b. ze seedu; StredMoreM < 0 = automaticky (šev i pás prolnutí RezervaSevuM v moři, start na pevnině)
-    public double PodilMore = 0.30, OdchylkaMoreProcBodu = 5.0, StredMoreM = -1.0, RezervaSevuM = 512.0;
-    public double HladinaMoreM = 60.0, MorePrechodM = 300.0, HloubkaMoreM = 25.0;
+    // Jan 10:03/10:12: podíl moře 30 % ± 5 p. b. ze seedu; hladina, hloubka, sklon (6b)
+    public double PodilMore = 0.30, OdchylkaMoreProcBodu = 5.0, HladinaMoreM = 60.0, HloubkaMoreM = 25.0;
+    public double SklonKontinentu = 0.002, SklonOdPobreziM = 1400.0;
+    // krok 6c (Jan 10:25): maska pevniny z periodického šumu – kontinenty, členitost, šev, start
+    public int KontinentuMin = 2, KontinentuMax = 4;
+    public double KontinentVelikost = 1.0, Clenitost = 1.0, ClenitostSila = 0.35;
+    public int SumVln = 48, WarpVln = 24;
+    public double SumLambdaMinM = 600.0, SumLambdaMaxM = 8000.0, WarpLambdaMinM = 2000.0, WarpM = 1200.0;
+    public double MorePrechod = 0.04, RezervaSevuM = 512.0, SevPrechodM = 400.0, SevMekkySpad = 0.4, SevMekkyPasM = 3000.0;
+    public double StartPolomerM = 400.0, StartPrechodM = 1200.0, StartRezerva = 0.05;
+    public double MrizkaPrahuM = 128.0, MrizkaVzdalenostiM = 64.0;
     // Jan 10:03 (b): velké pánve pro velká jezera – přepínač, výchozí vypnuto
     public bool Panve = false;
+    // krok 6c: „vše zapnuto“ (moře, sklon, pánve; eroze a vodníci přes KonfiguraceSveta) – výchozí vypnuto do Janova ano
+    public bool VseKrok06 = false;
     public int PanviPocet = 4;
     public double PanevPolomerM = 1500.0, PanevHloubkaM = 15.0;
-    public double PobreziSumM = 300.0, PobreziVlnaM = 1500.0, SklonKontinentu = 0.002;
-    /// <summary>Pobřežní rovina: sklon začíná až SklonOdPobreziM za pobřežím → start svět 3 × 3 má posun přesně 0 (beze změny).</summary>
-    public double SklonOdPobreziM = 1400.0;
 
     /// <summary>Parametry přesně jako GDScript krok 3b (opravy vypnuté) – pro ekvivalenci.</summary>
     public static ParametrySveta Puvodni(long seed = 49) => new() { Seed = seed, P82PrechodM = 0.0, UtvaryKlicGd = true };

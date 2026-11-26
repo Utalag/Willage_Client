@@ -3,70 +3,86 @@ using Willage.Gen.Sum;
 namespace Willage.Gen.Svet;
 
 /// <summary>
-/// Krok 6b: moře v pásu kolem švu torusu (x ≡ 0, y ≡ 0) a mírný sklon pevniny od pobřeží.
-/// d = vzdálenost ke středové čáře mořského pásu (posunuté o Stred od švu; automaticky tak, aby start byl na pevnině a šev v moři, min přes osy, periodicky),
-/// dn = d + A·šum (zvlněné pobřeží), k = smoothstep(P − T, P + T, dn) (podíl pevniny), posun O = S·max(0, dn − P) − (1 − k)·H.
-/// Sklon začíná až SklonOdPobreziM za pobřežím (pobřežní rovina; start svět má posun 0).
-/// Podíl moře f = PodilMore ± OdchylkaMoreProcBodu (ze seedu). Polovina šířky pásu P plyne z f: (Px − 2P)(Py − 2P) = (1 − f)·Px·Py (bez šumu).
+/// Krok 6c: moře a mírný sklon pevniny podle masky pevniny (MaskaPevniny, nepravidelné kontinenty na torusu).
+/// k = podíl pevniny z masky; moře: od k = 0,5 dolů se povrch plynule sníží o (H + reliéf nad neutrální výškou),
+/// při k = 0 je dno pod hladinou vždy. Pevnina (k ≥ 0,5) se nemění kromě sklonu S·max(0, D − D0), D = vzdálenost
+/// k moři z hrubé mřížky (Dijkstra 8-sousedů na torusu, bilineárně), D0 ≥ největší D ve startu → start beze změny.
 /// </summary>
 public sealed class MoreSklon
 {
     private readonly ParametrySveta _p;
-    private readonly GodotSum _n;
+    public MaskaPevniny Maska { get; }
+    private readonly float[] _d; private readonly int _nx, _ny; private readonly double _s;
+    public double D0 { get; }
 
     public MoreSklon(ParametrySveta p, long sd, HashSveta h)
     {
         _p = p;
-        _n = Sumy.Bg(sd, "V1_POBREZI", 0, 1.0 / p.PobreziVlnaM, 3);
-        // Jan 10:12: podíl moře = PodilMore ± odchylka (p. b.) deterministicky ze seedu planety
-        Podil = Math.Clamp(p.PodilMore + (2.0 * h.U("V1_MORE_PODIL", 0, 0) - 1.0) * p.OdchylkaMoreProcBodu / 100.0, 0.01, 0.9);
-        double sx = p.PlanetaXM + p.PlanetaYM;
-        Pas = (sx - Math.Sqrt(sx * sx - 4.0 * Podil * p.PlanetaXM * p.PlanetaYM)) / 4.0;
-        // střed pásu: start 3 × 3 celý na pevnině (dn > P + T), šev s pásem prolnutí celý v moři (dn < P − T)
-        double t = p.MorePrechodM, a = p.PobreziSumM;
-        double s0 = Math.Min(p.StartBlok[0], p.StartBlok[1]) * p.BlokM, s1 = (Math.Max(p.StartBlok[0], p.StartBlok[1]) + 3) * p.BlokM;   // start svět 3 × 3 od StartBlok
-        double od = Pas + t + a - s0, doo = Pas - t - a - p.RezervaSevuM;
-        Stred = p.StredMoreM >= 0 ? p.StredMoreM : 0.5 * (od + doo);
-        StartNaPevnine = Stred > od && Stred < doo;
-        StartBezPosunu = StartNaPevnine && s1 + Stred + a - Pas <= p.SklonOdPobreziM;
+        Maska = new MaskaPevniny(p, h);
+        // vzdálenost k moři na hrubé mřížce
+        _s = p.MrizkaVzdalenostiM; _nx = (int)Math.Round(p.PlanetaXM / _s); _ny = (int)Math.Round(p.PlanetaYM / _s);
+        var more = new bool[_nx * _ny];
+        Parallel.For(0, _ny, j => { for (int i = 0; i < _nx; i++) more[j * _nx + i] = Maska.K(i * _s, j * _s) < 0.5; });
+        _d = Vzdalenost(more, _nx, _ny, _s);
+        // D0: sklon začne až za startem (start 3 × 3 + jeden uzel kolem)
+        double dmax = 0, x0 = p.StartBlok[0] * p.BlokM, y0 = p.StartBlok[1] * p.BlokM;
+        for (int i = (int)Math.Floor(x0 / _s) - 1; i <= (int)Math.Ceiling((x0 + 3 * p.BlokM) / _s) + 1; i++)
+        for (int j = (int)Math.Floor(y0 / _s) - 1; j <= (int)Math.Ceiling((y0 + 3 * p.BlokM) / _s) + 1; j++)
+            dmax = Math.Max(dmax, _d[Mod(j, _ny) * _nx + Mod(i, _nx)]);
+        D0 = Math.Max(p.SklonOdPobreziM, dmax);
+        StartNaPevnine = Maska.StartMin >= Maska.Prah + p.MorePrechod;
+        StartBezPosunu = StartNaPevnine;
     }
 
-    /// <summary>Cílový podíl moře po odchylce ze seedu.</summary>
-    public double Podil { get; }
-    /// <summary>Polovina šířky mořského pásu P (m) z podílu moře.</summary>
-    public double Pas { get; }
-    /// <summary>Posun středové čáry pásu od švu (m).</summary>
-    public double Stred { get; }
-    /// <summary>Start svět 3 × 3 je celý na pevnině a šev s pásem prolnutí v moři (zaručeno geometricky, šum ořezán na ±A).</summary>
+    public double Podil => Maska.Podil;
     public bool StartNaPevnine { get; }
-    /// <summary>Start svět leží v pobřežní rovině (posun přesně 0 → svět beze změny).</summary>
     public bool StartBezPosunu { get; }
 
-    /// <summary>Kanonický zápis parametrů (klíč keše eroze).</summary>
+    private static int Mod(int a, int n) { int r = a % n; return r < 0 ? r + n : r; }
+
+    private static float[] Vzdalenost(bool[] more, int nx, int ny, double s)
+    {
+        var d = new float[nx * ny]; Array.Fill(d, float.MaxValue);
+        var q = new PriorityQueue<int, (float, int)>();
+        for (int k = 0; k < d.Length; k++) if (more[k]) { d[k] = 0; q.Enqueue(k, (0f, k)); }
+        int[] dx = { 1, -1, 0, 0, 1, 1, -1, -1 }, dy = { 0, 0, 1, -1, 1, -1, 1, -1 };
+        float[] w = { 1, 1, 1, 1, MathF.Sqrt(2), MathF.Sqrt(2), MathF.Sqrt(2), MathF.Sqrt(2) };
+        while (q.TryDequeue(out int k, out var pr))
+        {
+            if (pr.Item1 > d[k]) continue;
+            int i = k % nx, j = k / nx;
+            for (int n = 0; n < 8; n++)
+            {
+                int v = Mod(j + dy[n], ny) * nx + Mod(i + dx[n], nx);
+                float nd = d[k] + w[n] * (float)s;
+                if (nd < d[v]) { d[v] = nd; q.Enqueue(v, (nd, v)); }
+            }
+        }
+        return d;
+    }
+
+    /// <summary>Vzdálenost k moři (m), bilineárně z hrubé mřížky, periodicky.</summary>
+    public double VzdalenostOdMore(double x, double y)
+    {
+        double fx = x / _s, fy = y / _s; int i = (int)Math.Floor(fx), j = (int)Math.Floor(fy); double u = fx - i, v = fy - j;
+        double D(int a, int b) => _d[Mod(b, _ny) * _nx + Mod(a, _nx)];
+        return (D(i, j) * (1 - u) + D(i + 1, j) * u) * (1 - v) + (D(i, j + 1) * (1 - u) + D(i + 1, j + 1) * u) * v;
+    }
+
     public string Kanonicky() => FormattableString.Invariant(
-        $"more|{_p.PlanetaXM}|{_p.PlanetaYM}|{_p.HladinaMoreM}|{_p.PodilMore}|{_p.OdchylkaMoreProcBodu}|{Podil:R}|{Stred:R}|{_p.RezervaSevuM}|{_p.MorePrechodM}|{_p.HloubkaMoreM}|{_p.PobreziSumM}|{_p.PobreziVlnaM}|{_p.SklonKontinentu}|{_p.SklonOdPobreziM}");
+        $"more6c|{_p.PlanetaXM}|{_p.PlanetaYM}|{_p.HladinaMoreM}|{_p.HloubkaMoreM}|{_p.MorePrechod}|{_p.SklonKontinentu}|{_p.SklonOdPobreziM}|{_p.MrizkaVzdalenostiM}|{D0:R}|{_p.PodilMore}|{_p.OdchylkaMoreProcBodu}|{_p.KontinentuMin}|{_p.KontinentuMax}|{_p.KontinentVelikost}|{_p.Clenitost}|{_p.ClenitostSila}|{_p.SumVln}|{_p.WarpVln}|{_p.SumLambdaMinM}|{_p.SumLambdaMaxM}|{_p.WarpLambdaMinM}|{_p.WarpM}|{_p.RezervaSevuM}|{_p.SevPrechodM}|{_p.SevMekkySpad}|{_p.SevMekkyPasM}|{_p.StartPolomerM}|{_p.StartPrechodM}|{_p.StartRezerva}|{_p.MrizkaPrahuM}|") + Maska.Kanonicky();
 
-    public static double Zabal(double v, double per) { double r = v % per; return r < 0 ? r + per : r; }
+    public double Pevnina(double x, double y) => Maska.K(x, y);
 
-    /// <summary>Vzdálenost ke švu torusu se zvlněním pobřeží (m).</summary>
-    public double Dn(double x, double y)
+    /// <summary>Povrch s mořem a sklonem (před stropem povrchu). Pevnina k ≥ 0,5 jen + sklon; k = 1 a sklon 0 → h beze změny.</summary>
+    public double Aplikuj(double x, double y, double h, double neutral)
     {
-        double xs = Zabal(x + Stred, _p.PlanetaXM), ys = Zabal(y + Stred, _p.PlanetaYM);
-        double d = Math.Min(Math.Min(xs, _p.PlanetaXM - xs), Math.Min(ys, _p.PlanetaYM - ys));
-        return d + _p.PobreziSumM * Math.Clamp(_n.Noise2D(x, y), -1.0, 1.0);
+        double k = Maska.K(x, y);
+        double g = 1.0 - Gd.Smoothstep(0.0, 0.5, k);
+        double sklon = _p.SklonKontinentu * Math.Max(0.0, VzdalenostOdMore(x, y) - D0);
+        return h + sklon - g * (_p.HloubkaMoreM + Math.Max(0.0, h - neutral));
     }
 
-    /// <summary>Podíl pevniny 0 (moře) … 1 (pevnina).</summary>
-    public double Pevnina(double x, double y) => Gd.Smoothstep(Pas - _p.MorePrechodM, Pas + _p.MorePrechodM, Dn(x, y));
-
-    /// <summary>Posun výšky (m) přičtený k povrchu světa před stropem.</summary>
-    public double Posun(double x, double y)
-    {
-        double dn = Dn(x, y);
-        double k = Gd.Smoothstep(Pas - _p.MorePrechodM, Pas + _p.MorePrechodM, dn);
-        return _p.SklonKontinentu * Math.Max(0.0, dn - Pas - _p.SklonOdPobreziM) - (1.0 - k) * _p.HloubkaMoreM;
-    }
-
-    /// <summary>Moře: v mořském pásu (k &lt; 0,5) a pod hladinou moře.</summary>
+    /// <summary>Moře: k &lt; 0,5 a povrch pod hladinou moře.</summary>
     public bool JeMore(double x, double y, double vyska) => vyska < _p.HladinaMoreM && Pevnina(x, y) < 0.5;
 }

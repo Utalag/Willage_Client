@@ -17,7 +17,7 @@ public sealed class DataSveta
     public string ErozeV1 => Cesta("v1/eroze_v1.json");
     public string MoreV1 => Cesta("v1/more_v1.json");
     /// <summary>Datové soubory, na kterých závisí funkce světa (krok 2) – pro klíč keše eroze.</summary>
-    public string[] SouborySveta => new[] { KlimaPresety, PoradiHornin };
+    public string[] SouborySveta => File.Exists(MoreV1) ? new[] { KlimaPresety, PoradiHornin, MoreV1 } : new[] { KlimaPresety, PoradiHornin };
 
     /// <summary>Najde godot-prototyp/data od zadané složky nahoru.</summary>
     public static DataSveta Najdi(string odkud)
