@@ -1,0 +1,17 @@
+{
+  "_popis": "Krok 6b (Jan 9:59, 10:03, 10:11): ladicí parametry moře, sklonu kontinentu a velkých pánví. Přepínače More/Panve jsou v kódu (výchozí vypnuto). Vstupují do klíče keše eroze.",
+  "PodilMore": 0.30,
+  "OdchylkaMoreProcBodu": 5.0,
+  "StredMoreM": -1.0,
+  "RezervaSevuM": 512.0,
+  "HladinaMoreM": 60.0,
+  "MorePrechodM": 300.0,
+  "HloubkaMoreM": 25.0,
+  "PobreziSumM": 300.0,
+  "PobreziVlnaM": 1500.0,
+  "SklonKontinentu": 0.002,
+  "SklonOdPobreziM": 1400.0,
+  "PanviPocet": 4,
+  "PanevPolomerM": 1500.0,
+  "PanevHloubkaM": 15.0
+}

@@ -70,13 +70,16 @@ public sealed class ParametrySveta
     public bool More = false;
     public double PlanetaXM = 31360.0, PlanetaYM = 15616.0;
     // Jan 10:03: moře ≈ 30 % planety (PodilMore určí šířku pásu), střed pásu posunutý o StredMoreM od švu (šev i pás prolnutí v moři, start na pevnině)
-    public double PodilMore = 0.30, StredMoreM = 530.0;
+    // Jan 10:12: odchylka podílu moře ±5 p. b. ze seedu; StredMoreM < 0 = automaticky (šev i pás prolnutí RezervaSevuM v moři, start na pevnině)
+    public double PodilMore = 0.30, OdchylkaMoreProcBodu = 5.0, StredMoreM = -1.0, RezervaSevuM = 512.0;
     public double HladinaMoreM = 60.0, MorePrechodM = 300.0, HloubkaMoreM = 25.0;
     // Jan 10:03 (b): velké pánve pro velká jezera – přepínač, výchozí vypnuto
     public bool Panve = false;
     public int PanviPocet = 4;
     public double PanevPolomerM = 1500.0, PanevHloubkaM = 15.0;
     public double PobreziSumM = 300.0, PobreziVlnaM = 1500.0, SklonKontinentu = 0.002;
+    /// <summary>Pobřežní rovina: sklon začíná až SklonOdPobreziM za pobřežím → start svět 3 × 3 má posun přesně 0 (beze změny).</summary>
+    public double SklonOdPobreziM = 1400.0;
 
     /// <summary>Parametry přesně jako GDScript krok 3b (opravy vypnuté) – pro ekvivalenci.</summary>
     public static ParametrySveta Puvodni(long seed = 49) => new() { Seed = seed, P82PrechodM = 0.0, UtvaryKlicGd = true };

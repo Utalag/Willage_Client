@@ -17,5 +17,6 @@
   "KorytoA": 3.0,
   "KorytoC": 0.6,
   "KorytoMinSirkaM": 1.0,
-  "KorytoMaxHloubkaM": 3.0
+  "KorytoMaxHloubkaM": 3.0,
+  "InterpolaceE": "catmullrom"
 }

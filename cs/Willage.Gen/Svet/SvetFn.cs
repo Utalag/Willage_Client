@@ -45,7 +45,7 @@ public sealed class SvetFn
         Masiv = new Masiv(p, Sd, Sumy);
         Sopky = new Sopky(p, H, Biomy, (x, y, w) => VyskaBezSopek(x, y, w, true), Relief, SvetM, StropPovrchuM);
         Horniny = new MapaHornin(p, H, SvetM);
-        if (p.More) More = new MoreSklon(p, Sd);
+        if (p.More) More = new MoreSklon(p, Sd, H);
         if (p.Panve) Panve = new Panve(p, H, More);
     }
 
