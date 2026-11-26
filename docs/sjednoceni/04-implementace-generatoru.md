@@ -1,6 +1,6 @@
 # 04 – Implementace generátoru V1.0
 
-Stav: **návrh k odsouhlasení**, 2026-11-20 23:50 SEČ. Podklad pro stavbu nové verze generátoru podle kapitol 1–3. Žádné rozhodnutí se tu nemění ani nepřidává. Kde dokument narazí na rozpor nebo chybějící rozhodnutí, odkáže na přílohu A.
+Stav: **návrh k odsouhlasení**, 2026-11-20 23:50 SEČ; pořadí kroků změněno rozhodnutím Jana 2026-11-26 9:06 (viz Přehled kroků). Podklad pro stavbu nové verze generátoru podle kapitol 1–3. Žádné rozhodnutí se tu nemění ani nepřidává. Kde dokument narazí na rozpor nebo chybějící rozhodnutí, odkáže na přílohu A.
 
 **Verze.** Nový generátor dostane `gen_ver` = **V1.0** (tvar `Vmajor.minor` podle 6.2). Je to první verze, která staví na sjednoceném modelu, a s dnešními bloky není kompatibilní (jiná velikost bloku, výška sloupce, ukládání jen rozdílu). Proto hlavní číslo 1. Kroky 1–9 běží pod označením V1.0-vývoj. Číslo V1.0 se uzavře až po povinném testu 2.7 (krok 10).
 
@@ -17,8 +17,35 @@ Stav: **návrh k odsouhlasení**, 2026-11-20 23:50 SEČ. Podklad pro stavbu nov�
 
 ## Přehled kroků
 
+### Nové pořadí (rozhodnutí Jana 2026-11-26 9:06)
+
+**Rozhodnutí:** výřezy (ostrov) se dělají až z **hotového světa**. Nejdřív se dokončí funkce světa (port geologie do C#, eroze světa, klima a vegetace jako funkce), teprve potom vložení blueprintu, buňky a voda na ostrově. Důvod (Jan [pt914u], [pt916u]): „Výřezy pro ostrov by asi měli být až jako poslední, až bude herní svět, ze kterého se bude vyřezávat, hotový.“ Eroze na ostrově jako vrstva posunu výšky zůstává v kroku vody na ostrově (dnes krok 10).
+
 | Krok | Obsah | Stav | Závisí na | Schválení |
 |---|---|---|---|---|
+| 1 | Základy: jednotky, rozměry, verze, tabulka materiálů, determinismus | schváleno | – | Jan po kroku |
+| 2 | Funkce světa I: API, mapa biomů a hornin, reliéf, masiv, sopky, klima (presety) | schváleno | 1 | Jan po kroku |
+| 3 | Funkce světa II: geologie a útvary (vč. 3b) | schváleno 2026-11-26 8:16 | 2 | Jan po kroku |
+| 4 | Funkce světa III: podzemní voda a prameny jako funkce (C#) | schváleno 2026-11-26 8:48 | 3 | Jan po kroku |
+| 5 | **Port geologie do C#** s opravami z kroku 4 (nitro sopky, mince E82 bez skoku, hustota pramenů) | nové | 4 | Jan po kroku |
+| 6 | **Eroze světa jako funkce**: koryta, údolí, náplavy, delty – součást funkce světa, ze které se vyřezává | nové | 5 | Jan po kroku |
+| 7 | **Dokončení světa**: klima a povrchové jevy jako funkce, vegetace ze seedu jako funkce, další části funkce | nové (z dřívějších 8 a 9) | 6 | Jan po kroku |
+| 8 | Výřezy: vložení blueprintu a ostrov (dříve 5) | částečně | 7 | Jan po kroku |
+| 9 | Buňky: slupka, kopání, rozdíl a ukládání (dříve 6) | částečně | 8 | Jan po kroku |
+| 10 | Voda na ostrově: simulace, eroze jako vrstva posunu výšky, přepočet (dříve 7) | částečně | 9 | Jan po kroku |
+| 11 | Změny na ostrově: povrchové jevy a vegetace jako vrstva změn (zbytek dřívějších 8 a 9) | jen rozhodnuto | 10 | Jan po kroku |
+| 12 | Povinný test 3 × 3 a uzavření V1.0 (dříve 10) | jen rozhodnuto | 1–11 | Jan: ano do main |
+| 13 | Kontrakt se serverem (dříve 11) | otevřené | 9, 12 | Jan + Willage-backend |
+| 14 | Prezentace (dříve 12) | jen rozhodnuto | 12 | Jan po kroku |
+
+Podrobné oddíly níže mají původní čísla; v nadpisu je uvedeno nové číslo.
+
+### ~~Původní pořadí (2026-11-20)~~ – překonáno 2026-11-26 9:06
+
+| Krok | Obsah | Stav | Závisí na | Schválení |
+| ~~~~ |
+
+---|---|---|---|---|
 | 1 | Základy: jednotky, rozměry, verze, tabulka materiálů, determinismus | částečně | – | Jan po kroku |
 | 2 | Funkce světa I: API, mapa biomů a hornin, reliéf, masiv, sopky, klima (presety) | částečně | 1 | Jan po kroku |
 | 3 | Funkce světa II: geologie a útvary | částečně | 2 | Jan po kroku |
@@ -144,9 +171,59 @@ Stav: **návrh k odsouhlasení**, 2026-11-20 23:50 SEČ. Podklad pro stavbu nov�
 
 **Velikost:** střední.
 
+**Stav po implementaci:** hotovo v C# na větvi `gen-v1-krok04-podzemni-voda` (report `reporty/krok04.md`). **Schváleno Janem 2026-11-26 8:48** („podle doporučení, ale bod 5 odložit“, [pt913u]).
+
+**Rozhodnutí ke kroku 4 (Jan 2026-11-26 8:48)**
+1. Hladina jako funkce reliéfu (d₀ 1,5 m, zesílení údolí β = 1) stačí pro výchozí svět; řešič E67 zůstává pro ostrov (krok 10).
+2. Přidat hustotu pramenů; způsob se rozhodne (zatím parametr: pravděpodobnost ve čtverci a velikost čtverce).
+3. Nitro sopky je nepropustné (slupky popela uvnitř sopky nejsou artéské vrstvy).
+4. Sůl a sádrovec zůstávají krasové (propustné těleso podle E67).
+5. Četnost artéské vody: **ODLOŽENO**, zatím OK.
+6. Port geologie do C# hned (nový krok 5).
+7. Vyhladit skoky vrstev na švech bloků od mince E82.
+
 ---
 
-## Krok 5 – Vložení blueprintu a ostrov
+## Krok 5 (nový) – Port geologie do C# s opravami z kroku 4
+
+**Obsah**
+- Kroky 1–3 (funkce světa, geologie, útvary včetně 3b) převést do C# (`cs/Willage.Gen`), data beze změny. Nativní `IGeologie`; most `GeologieGd` zůstane jen jako reference.
+- Ekvivalence s GDScriptem před opravami (otisk bloku, vzorky); kde bitová shoda nejde, změřit a zapsat rozdíl.
+- Opravy za přepínači (výchozí zapnuto): nitro sopky nepropustné, spojitý přechod mince E82 mezi bloky 128 m, hustota pramenů jako parametr (výchozí hodnoty beze změny).
+
+**Proč tady:** most do GDScriptu je 99,6 % času kroku 4 (7,3 ms na sloupec). Eroze a dokončení světa budou funkci volat mnohem častěji.
+
+**Testy:** ekvivalence s GDScriptem, determinismus ve 2 procesech, řez švem před a po, čas bloku proti GDScriptu (kroky 3 i 4).
+
+---
+
+## Krok 6 (nový) – Eroze světa jako funkce
+
+**Obsah**
+- Koryta, údolí, náplavy a delty jako součást funkce světa, ze které se vyřezává. Bez uložených buněk; výřez dostane už erodovaný terén.
+- Navazuje na prameny a hladinu kroku 4 (zdroje vody) a na geologii kroku 5 (odolnost hornin).
+- Eroze během hry na ostrově (vrstva posunu výšky, 4.1) sem nepatří, zůstává v kroku 10.
+
+**Proč tady:** výřezy mají vznikat z hotového světa (rozhodnutí 2026-11-26 9:06).
+
+**Stav:** jen rozhodnuto, způsob výpočtu otevřený.
+
+---
+
+## Krok 7 (nový) – Dokončení světa
+
+**Obsah**
+- Klima a povrchové jevy (písek, led, sníh) jako funkce světa – světová část dřívějšího kroku 8.
+- Vegetace ze seedu jako funkce – světová část dřívějšího kroku 9.
+- Další části, které patří do funkce světa (doplní se při plánování kroku).
+
+**Proč tady:** svět, ze kterého se vyřezává, má být úplný. Změny na ostrově (vrstva změn) zůstávají v kroku 11.
+
+**Stav:** jen rozhodnuto.
+
+---
+
+## Krok 5 – Vložení blueprintu a ostrov (nově krok 8)
 
 **Obsah**
 - Objekty Source, Transform, Placement (E88): ostrov = seed + parametry + verze + seznam vložení v pořadí. Vložení nese souřadnice blueprintu ve světě, zrcadlení, otočení, výškový posun, režim napojení, seed a verzi zdrojového světa (1.4, 2.2).
@@ -170,7 +247,7 @@ Stav: **návrh k odsouhlasení**, 2026-11-20 23:50 SEČ. Podklad pro stavbu nov�
 
 ---
 
-## Krok 6 – Buňky: slupka, kopání, rozdíl a ukládání
+## Krok 6 – Buňky: slupka, kopání, rozdíl a ukládání (nově krok 9)
 
 **Obsah**
 - Generuje se jen zorné pole + okraj (parametr) a slupka 2–3 buněk u vzduchu a pod průhlednou vodou, buňka 0,25 m přímo z funkce (1.2, 2.3).
@@ -197,7 +274,7 @@ Stav: **návrh k odsouhlasení**, 2026-11-20 23:50 SEČ. Podklad pro stavbu nov�
 
 ---
 
-## Krok 7 – Voda na ostrově: simulace, eroze, přepočet
+## Krok 7 – Voda na ostrově: simulace, eroze, přepočet (nově krok 10)
 
 **Obsah**
 - Výchozí podzemí E67 a kras E75 zapnutý (úkol 9 v kap. 3).
@@ -209,6 +286,8 @@ Stav: **návrh k odsouhlasení**, 2026-11-20 23:50 SEČ. Podklad pro stavbu nov�
 - Výchozí voda v ustáleném stavu po vygenerování, uloží se jen odchylka v krocích 1/16 l, hodnota 0–250 = 0–15,625 l (1 B) (2.5, 1.10).
 
 **Odkud kód:** `voda/hydro68.gd`, `ostrov_voda.gd`, `ug67.gd`, `kras75.gd`, `prameny.gd`, `eroze/mech.gd` (main), `voda/async95.gd` a `tools/async_e95.gd` (`e95-async-voda`), `tools/chodby_e79.gd` (`e79-chodby-voda`), slučování E72 (`p72_*`, main).
+
+**Pozn. (2026-11-26 9:06):** eroze na ostrově jako vrstva posunu výšky zůstává v tomto kroku; eroze světa (koryta, údolí, náplavy, delty) je v novém kroku 6.
 
 **Proč tady:** simulace potřebuje buňky a rozdíl z kroku 6. Eroze jako posun výšky potřebuje hotovou vodu. Povrchové jevy klimatu (krok 8) a vegetace (krok 9) potřebují znát tůně a koryta.
 
@@ -231,7 +310,7 @@ Výchozí hra se tu mění záměrně. Vznikne nová reference otisku `voda_e66`
 
 ---
 
-## Krok 8 – Povrchové jevy klimatu (písek, led, sníh, výpar, zamrzání)
+## Krok 8 – Povrchové jevy klimatu (písek, led, sníh, výpar, zamrzání) (nově: funkce v kroku 7, změny na ostrově v kroku 11)
 
 **Obsah**
 - Po vodě na ostrově (krok 7) se z klimatu a stavu vody odvodí povrchové jevy: písek, led, sníh, výpar, zamrzání (1.15). Preset a pomalá mapa klimatu už jsou z kroku 2; tento krok je jen povrch, ne tvar reliéfu.
@@ -252,7 +331,7 @@ Výchozí hra se tu mění záměrně. Vznikne nová reference otisku `voda_e66`
 
 ---
 
-## Krok 9 – Vegetace jako funkce a vrstva změn
+## Krok 9 – Vegetace jako funkce a vrstva změn (nově: funkce v kroku 7, vrstva změn v kroku 11)
 
 **Obsah**
 - Základní porost je funkce seedu, souřadnic původu, materiálu, sklonu a výchozí vody. Hustota na m², pravidlo pro každý biom, v tůních se nevysazuje, vyhodnocuje se jen ve slupce (2.6, 1.12).
@@ -275,7 +354,7 @@ Výchozí hra se tu mění záměrně. Vznikne nová reference otisku `voda_e66`
 
 ---
 
-## Krok 10 – Povinný test 3 × 3 a uzavření V1.0
+## Krok 10 – Povinný test 3 × 3 a uzavření V1.0 (nově krok 12)
 
 **Obsah**
 - Svět 3 × 3 bloky → řez na 9 blueprintů → ostrov (náhodné pořadí, otočení, zrcadlení, aspoň jeden blueprint z jiného světa). Tři režimy spuštění: celý, jen svět, jen ostrov (2.7).
@@ -298,7 +377,7 @@ Výchozí hra se tu mění záměrně. Vznikne nová reference otisku `voda_e66`
 
 ---
 
-## Krok 11 – Kontrakt se serverem (s Willage-backend)
+## Krok 11 – Kontrakt se serverem (s Willage-backend) (nově krok 13)
 
 **Obsah**
 - Kontrakt podle 1.10: server ukládá seed, parametry, verzi, seznam vložení a rozdíl; kontrola generátorem jde vypnout (kdy běží, viz 6.3 v dalším bodě).
@@ -317,7 +396,7 @@ Výchozí hra se tu mění záměrně. Vznikne nová reference otisku `voda_e66`
 
 ---
 
-## Krok 12 – Prezentace
+## Krok 12 – Prezentace (nově krok 14)
 
 **Obsah**
 - Vykreslení čte jen data. Pevný zoom 64 voxelů 0,25 m napříč, jedno rozlišení bez LOD (2.3, 7.2).
@@ -340,14 +419,14 @@ Výchozí hra se tu mění záměrně. Vznikne nová reference otisku `voda_e66`
 
 ## Postup implementace
 
-1. Kroky se dělají **striktně po jednom v pořadí 1 → 11**. Žádné přeskakování.
+1. Kroky se dělají **striktně po jednom v pořadí 1 → 14** podle nového přehledu (2026-11-26 9:06; dříve 1 → 11). Žádné přeskakování.
 2. Každý krok má **vlastní novou větev** `gen-v1-krokNN-<název>`, vytvořenou z větve předchozího schváleného kroku (krok 1 ze `sjednoceni`).
 3. Před experimentem se napíše krátký **PROP** do `docs/sjednoceni/reporty/` (nebo do PROP kroku). Výsledky se do něj zapíšou i když jsou negativní.
 4. Malé logické commity, push jen na větev kroku. Žádné CI ani GitHub Actions, žádné zálohy složek.
 5. Po každém kroku vznikne **report** `docs/sjednoceni/reporty/krokNN.md`: co se udělalo, odkud je kód, výsledky testů s čísly, cesty k obrázkům a grafům v repu.
 6. Po reportu se čeká na **Janovo schválení**. Teprve pak začne další krok (hlídání usage, modely na Slow).
-7. Do `main` jen s Janovým výslovným ano (nejdřív po kroku 9).
-8. Krok 11 jen společně s Willage-backend.
+7. Do `main` jen s Janovým výslovným ano (nejdřív po kroku 11, dříve 9).
+8. Krok 13 (dříve 11) jen společně s Willage-backend.
 
 ---
 
