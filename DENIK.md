@@ -587,6 +587,12 @@ Skupiny: 1 Prototyp a buildy · 2 Terén a tvar · 3 Rozlišení bloku · 4 Ská
 - **Komplikace:** skutečné moře o 1,5–2 p. b. pod cílem (ostrovy). Pánve zkracují řeky (končí v jezerech). V 14,14 se jeden pramen posune o 2 m do 13,14. Rezerva pro start jen 2 × 40 m. Godot adaptér zatím ne.
 - **Další krok:** otázky pro Jana v PROP (korekce podílu moře, co zapnout výchozí, pánve, tvar pobřeží); schválení.
 
+### 🧪 Generátor V1 krok 6c: nepravidelné kontinenty z periodické masky, konfigurace „vše zapnuto“ (2026-11-26 10:45 · větev `gen-v1-krok06c-kontinenty`, `cs/Willage.Gen/Svet/{PeriodickySum,MaskaPevniny,MoreSklon}.cs`, `Eroze/{KonfiguraceSveta,Oblasti}.cs`, `data/v1/more_v1.json`, PROP `docs/sjednoceni/reporty/krok06c-prop.md`, shots `godot-prototyp/shots/krok06c/`)
+- **Směr:** Jan 10:25. Obdélník 6b nahrazen maskou pevniny na torusu: Voronoi 2–4 kontinentů (počet ze seedu, hranice buněk na švu) + periodický Fourierův šum (členitost) + domain warp; práh z histogramu = cílový podíl moře 30 % ± 5 p. b.; šev v moři, start 3 × 3 na pevnině beze změny, sklon od pobřeží. Přepínač `VseKrok06` (moře, sklon, pánve, eroze, vodníci), výchozí vypnuto.
+- **Zlepšení:** nepravidelné pobřeží, 1–3 samostatné pevniny (2–4 středy), 3–12 ostrovů; moře cíl − skutečnost −0,6 až −1,1 p. b. (6b −1,5 až −2); řeky max 9–18 km; start otisky beze změny s mořem (krok 3 c8eeb7964d1ddd85, voda 7714d1a1d34e00ad); vše zapnuto krok 3 f237940e2f749147, voda bbdd487c64daf6b7; mapa 5–6 s, ≤ 219 MB, deterministická; testy 80/80.
+- **Komplikace:** Gaussovy hroudy kontinentů nefungovaly (slité, děravé vnitrozemí, moře jen u švu) → Voronoi. Ve 4 z 10 seedů spojí kontinenty šíje; ostrovy malé (< 2 km²); u švu místy rovné pobřeží; `more_v1.json` je v klíči keše i bez moře.
+- **Další krok:** otázky pro Jana v PROP (šíje, ostrovy, korekce prahu, pobřeží u švu, výchozí vše zapnuto); schválení.
+
 ### 💡 TODO: náplavy a delty jako samostatný krok po kroku 6b (2026-11-26 9:59, Jan, bod 7)
 - Eroze kroku 6 jen odebírá. Náplavy (ukládání v jezerech a nivách) a delty u ústí do moře jako samostatný krok: stream power s depozicí (FastScape / Yuan et al.), ukládání do mapy WGER a do geologie jako nová vrstva.
 
