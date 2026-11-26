@@ -166,6 +166,8 @@ public static class TestyG1
         }
         T.Je(Segment(new PipelineSveta(data).Spust(ParametrySveta.Puvodni(), kes).Vystup<GeologieCs>("M3"), 2104, 2104) == "059d807ab04b7f00", "Puvodni(): segment geologie M3 = GDScript 059d807ab04b7f00");
 
+        var vm1 = new PipelineSveta(data).Spust(new ParametrySveta(), kes).Vystup<VystupFunkceSveta>("M1");
+        T.Je(!vm1.BezMore.IsValueCreated && vm1.Svet.More is null && vm1.Svet.Panve is null, "M1: funkce světa bez moře a pánví, staví se líně");
         T.Sekce("G-1: pipeline přepočítá jen dotčené moduly");
         var pp = new PipelineSveta(data) { Nastaveni = n0 };
         var r1 = pp.Spust(new ParametrySveta(), kes, 8);

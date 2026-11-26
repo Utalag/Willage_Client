@@ -4,8 +4,14 @@ namespace Willage.Gen.Pipeline.Moduly;
 
 /// <summary>
 /// M1 Funkce světa (krok 2): SvetFn – mapa biomů, reliéf, masiv, sopky, mapa hornin. Výstup = funkce světa bez moře a pánví
-/// (izolace „jen reliéf“; náhledy G-6). Dnešní SvetFn moře staví ve stejném konstruktoru, proto M2 staví vlastní SvetFn.
+/// (izolace „jen reliéf“; náhledy G-6), staví se líně až při prvním čtení (hotový svět ji nepotřebuje).
+/// Dnešní SvetFn moře staví ve stejném konstruktoru, proto M2 staví vlastní SvetFn.
 /// </summary>
+public sealed record VystupFunkceSveta(Lazy<SvetFn> BezMore)
+{
+    public SvetFn Svet => BezMore.Value;
+}
+
 public sealed class M1FunkceSveta : ModulZaklad
 {
     public const string Id_ = "M1";
@@ -18,6 +24,7 @@ public sealed class M1FunkceSveta : ModulZaklad
     public override object Spust(KontextBehu k)
     {
         var p = k.Parametry.Kopie(); p.More = false; p.Panve = false; p.VseKrok06 = false;
-        return new SvetFn(p, k.Data);
+        var d = k.Data;
+        return new VystupFunkceSveta(new Lazy<SvetFn>(() => new SvetFn(p, d)));
     }
 }
