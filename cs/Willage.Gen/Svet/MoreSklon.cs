@@ -67,16 +67,24 @@ public sealed class MoreSklon
     /// Ve vnitrozemí (hrubá vzdálenost k masce &gt; 32 m) stačí mřížka 64 m (už je ≫ pás 5 m).
     /// U pobřeží a v pásu k &lt; 0,5 nad hladinou se hledá JeMore po 1 m do 16 m; nenajde-li se, vrací 16 m (mimo pás přechodu).
     /// </summary>
-    public double VzdalenostOdMoreJemna(double x, double y, Func<double, double, double> vyska)
+    public double VzdalenostOdMoreJemna(double x, double y, Func<double, double, double> vyska) =>
+        BrehJemny(x, y, vyska, 16.0, out _, out _);
+
+    /// <summary>
+    /// Totéž s dosahem hledání <paramref name="dosah"/> (m, výchozí 16) a polohou nejbližšího bodu moře (JeMore) v <paramref name="sx"/>, <paramref name="sy"/>
+    /// (jen když je vrácená vzdálenost menší než dosah; jinak NaN). S dosahem 16 je výsledek shodný s <see cref="VzdalenostOdMoreJemna"/>.
+    /// </summary>
+    public double BrehJemny(double x, double y, Func<double, double, double> vyska, double dosah, out double sx, out double sy)
     {
-        if (JeMore(x, y, vyska(x, y))) return 0.0;
+        sx = double.NaN; sy = double.NaN;
+        if (JeMore(x, y, vyska(x, y))) { sx = x; sy = y; return 0.0; }
         // daleko od vrstevnice k = 0,5 ⇒ ještě dál od skutečného moře
         if (Pevnina(x, y) >= 0.5)
         {
             double d = VzdalenostOdMore(x, y);
-            if (d > 32.0) return d;
+            if (d > 2.0 * dosah) return d;
             double bestK = d;
-            const int Rk = 16;
+            int Rk = (int)Math.Ceiling(dosah);
             for (int j = -Rk; j <= Rk; j++)
             for (int i = -Rk; i <= Rk; i++)
             {
@@ -86,7 +94,7 @@ public sealed class MoreSklon
             }
             if (bestK >= Rk) return bestK;
         }
-        const int R = 16;
+        int R = (int)Math.Ceiling(dosah);
         double best = R;
         bool nasel = false;
         for (int j = -R; j <= R; j++)
@@ -94,8 +102,8 @@ public sealed class MoreSklon
         {
             if (i == 0 && j == 0) continue;
             double q = i * i + j * j; if (nasel && q >= best * best) continue;
-            if (q > R * R) continue;
-            if (JeMore(x + i, y + j, vyska(x + i, y + j))) { best = Math.Sqrt(q); nasel = true; }
+            if (q > (double)R * R) continue;
+            if (JeMore(x + i, y + j, vyska(x + i, y + j))) { best = Math.Sqrt(q); nasel = true; sx = x + i; sy = y + j; }
         }
         return nasel ? best : R;
     }

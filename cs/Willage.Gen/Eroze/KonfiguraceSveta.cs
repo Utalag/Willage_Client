@@ -27,9 +27,9 @@ public sealed class SvetKrok06
     public List<Vodnik> VodniciBezKlimatu { get; init; } = new();
 
     /// <summary>Podzemní voda nad tímto světem; s VseKrok06 i s vodníky.</summary>
-    public PodzemniVodaFn Voda(KatalogMaterialu kat, ParametryVody pv)
+    public PodzemniVodaFn Voda(KatalogMaterialu kat, ParametryVody pv, string? prusakJson = null)
     {
-        var fn = new PodzemniVodaFn(Geologie, kat, pv);
+        var fn = new PodzemniVodaFn(Geologie, kat, pv, prusakJson);
         if (Mapa is not null) fn.Prameny.Vodnici = new VodniciVeSvete(Vodnici, fn.Geologie).VOblasti;
         if (Klima is not null) NapojKlima(fn.Prameny);
         return fn;

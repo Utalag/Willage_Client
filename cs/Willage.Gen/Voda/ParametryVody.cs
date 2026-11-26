@@ -35,6 +35,33 @@ public sealed record ParametryVody
     // krok 6e/6f (Jan 11:15, 11:33–11:34): u moře = hladina moře; plynulý přechod do vnitrozemí na této vzdálenosti od břehu (m, výchozí 5); 0 = vypnuto
     public double HladinaPrechodM { get; init; } = 5.0;
 
+    // koeficient průsaku (těsnost materiálu 0–255, data prusak_v1.json): výchozí vypnuto; ovlivní jen průsak do uzavřených prostor
+    public bool PrusakKoeficient { get; init; } = false;
+
+    // pobřežní pás z koeficientu průsaku (prusak-pobrezi-prop.md): výchozí vypnuto = konstanta HladinaPrechodM
+    public bool PrusakPobrezi { get; init; } = false;
+    /// <summary>Časový horizont průsaku mořské vody do vnitrozemí (dny); šířka pásu = dosah za tuto dobu.</summary>
+    public double PobrezHorizontDni { get; init; } = 30.0;
+    /// <summary>Stálý spád (bezrozměrný) pro Darcyho rychlost v = K·i/n, když je <see cref="PrusakTlak"/> vypnutý.</summary>
+    public double PobrezSpad { get; init; } = 0.05;
+    /// <summary>
+    /// Tlak (rozdíl hydraulické výšky): průsak roste se spádem. Dutina: spád = (H − hladina) / tloušťka stěny (nejvýš <see cref="PrusakSpadMax"/>)
+    /// místo poměru výšek. Pobřeží: i = |hladina ze spádu terénu − hladina moře| / <see cref="PobrezTlakDelkaM"/>, v mezích
+    /// <see cref="PobrezSpadMin"/>…<see cref="PobrezSpadMax"/>. Vypnuto = starý model (stálý <see cref="PobrezSpad"/>, poměr výšek).
+    /// </summary>
+    public bool PrusakTlak { get; init; } = true;
+    public double PrusakSpadMax { get; init; } = 10.0;
+    public double PobrezSpadMin { get; init; } = 0.01;
+    public double PobrezSpadMax { get; init; } = 0.5;
+    /// <summary>Délka (m), na které se rozdíl hladin „projeví“ jako spád u pobřeží.</summary>
+    public double PobrezTlakDelkaM { get; init; } = 100.0;
+    /// <summary>Porozita, když ji katalog u materiálu nemá.</summary>
+    public double PobrezPorovitost { get; init; } = 0.3;
+    /// <summary>Strop šířky pásu (m); současně dosah hledání břehu, proto ≤ ~30 m.</summary>
+    public double PobrezMaxM { get; init; } = 16.0;
+    /// <summary>Hloubka pod povrchem u břehu (m), ve které se hledá nejpropustnější vrstva.</summary>
+    public double PobrezOknoM { get; init; } = 2.0;
+
     public static ParametryVody ZJson(string json) =>
         JsonSerializer.Deserialize<ParametryVody>(json, new JsonSerializerOptions { PropertyNameCaseInsensitive = true }) ?? new();
 }

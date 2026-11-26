@@ -1,0 +1,75 @@
+{
+  "_pozn": "Koeficient průsaku (těsnost) materiálu jako celé číslo 0–255: 255 = plně propustné, 0 = těsné. Pole pukliny = přidaná puklinová propustnost krasu (jen při zapnutém PrusakKoeficient / PrusakPobrezi; generátor Propustnost.X se nemění). Viz docs/sjednoceni/reporty/prusak-koef-prop.md a prusak-kras-prop.md.",
+  "vzduch": 255,
+  "bezK": 0,
+  "tridyPodleK": [
+    {
+      "kOd": 0.001,
+      "koef": 255
+    },
+    {
+      "kOd": 0.0001,
+      "koef": 178
+    },
+    {
+      "kOd": 1e-05,
+      "koef": 128
+    },
+    {
+      "kOd": 1e-06,
+      "koef": 77
+    },
+    {
+      "kOd": 1e-07,
+      "koef": 38
+    },
+    {
+      "kOd": 1e-08,
+      "koef": 20
+    },
+    {
+      "kOd": 1e-09,
+      "koef": 15
+    },
+    {
+      "kOd": 1e-10,
+      "koef": 13
+    },
+    {
+      "kOd": 1e-11,
+      "koef": 3
+    }
+  ],
+  "podleKlice": {
+    "subalpine_scree": 255,
+    "gravel_sand": 178,
+    "hill_sand": 178,
+    "clay_deposit": 13,
+    "weathered_clay": 13,
+    "granite": 0,
+    "orthogneiss": 0
+  },
+  "pukliny": {
+    "_pozn": "Krasové uhličitany: efektivní K jako písek (1e-4 m/s se přičte k matrici), koeficient 178, porozita 350 ‰ (pás 1,5–3,5 m za 30 dnů). Sádrovec a sůl zatím bez puklin.",
+    "cave_limestone": {
+      "kMs": "1e-4",
+      "koef": 178,
+      "porosityPermille": 350
+    },
+    "deep_limestone": {
+      "kMs": "1e-4",
+      "koef": 178,
+      "porosityPermille": 350
+    },
+    "dolomite": {
+      "kMs": "1e-4",
+      "koef": 178,
+      "porosityPermille": 350
+    },
+    "limestone_outcrop": {
+      "kMs": "1e-4",
+      "koef": 178,
+      "porosityPermille": 350
+    }
+  }
+}
