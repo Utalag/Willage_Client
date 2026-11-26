@@ -1,0 +1,81 @@
+{
+  "format": "willage-manifest-katalogu-v1",
+  "souhrn": "a475f75a7b1f189df6d7b33102efec5a05740fbceb76d17e78a2d6717274c024",
+  "soubory": [
+    {
+      "cesta": "klima_presety.csv",
+      "velikost": 1214,
+      "sha256": "8ce50abc68b5cf5ee82cbb0c48b94ff7131504f965b5c7eef84b1594e6e25b74"
+    },
+    {
+      "cesta": "krajina_remap_v1.csv",
+      "velikost": 955,
+      "sha256": "0d483bb984fb541e1567a655f48352dcfc38899371e84f7d6b6fe8f2e6177214"
+    },
+    {
+      "cesta": "materialy_v1.csv",
+      "velikost": 16944,
+      "sha256": "63dea2d8b8a957a12e2cf79050143f50b9d2474f489a991a433daca4842de4e9"
+    },
+    {
+      "cesta": "materialy_voda.json",
+      "velikost": 2173,
+      "sha256": "deafafd79d9f7582022a6614ef5029bfe71dd8a8203c878a8e9cec2116890323"
+    },
+    {
+      "cesta": "teren/mineraly_hostitele.json",
+      "velikost": 3259,
+      "sha256": "7ef2e24a5e7a77af63cb450d30a0a4f6273415954e8edbc9d3e8bc77f5a9399f"
+    },
+    {
+      "cesta": "teren/poradi_hornin.json",
+      "velikost": 24615,
+      "sha256": "77c22dfb5e04b1cd83a384565b4be0c6648e22af3d49ffa42edf81a72f7a3946"
+    },
+    {
+      "cesta": "teren/port_manifest.json",
+      "velikost": 10780,
+      "sha256": "49c1c3f85159228ff3f09c0fb99f273151201154db450022c32f107e3fff7805"
+    },
+    {
+      "cesta": "v1/eroze_v1.json",
+      "velikost": 447,
+      "sha256": "67fbecd62ca37ee56b3826d50cf06cedf2bec43b005d1bb337caccd3451d5e1d"
+    },
+    {
+      "cesta": "v1/klima_v1.json",
+      "velikost": 6243,
+      "sha256": "cff3a5f492849df4fc6223f005f21a7b17be9a89c605120c8e0e102ed230a0bf"
+    },
+    {
+      "cesta": "v1/materials-catalog-v1.json",
+      "velikost": 56457,
+      "sha256": "003f85ce1bfb3a00ac53651e1af9d188a645e929a180cc214687acea9c35c777"
+    },
+    {
+      "cesta": "v1/more_v1.json",
+      "velikost": 1201,
+      "sha256": "3c67d14d2af3745e2a0f68efce14704febd282ea2e467e83c763014033481f16"
+    },
+    {
+      "cesta": "v1/prusak_v1.json",
+      "velikost": 1651,
+      "sha256": "53803485b6619335dfb17b70e8914b3848fe6203eadbb95828dfa77498e5eec3"
+    },
+    {
+      "cesta": "v1/sum_hornin_v1.csv",
+      "velikost": 4151,
+      "sha256": "65004b4eeb374d3268b099526e6428b6ee6e67b1ad4750f2403f344303b4beeb"
+    },
+    {
+      "cesta": "v1/utvary_hostitele.json",
+      "velikost": 1838,
+      "sha256": "8c39371b4d9a5a547f3769f4036b2be85024eb34fd83d73cbbcef9ab69cf9ad4"
+    },
+    {
+      "cesta": "v1/voda_v1.json",
+      "velikost": 677,
+      "sha256": "9f731b3958614c4f6655624793acece8e2dd6a82cbc9c08996ad16ea66b59a8a"
+    }
+  ]
+}
