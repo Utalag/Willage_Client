@@ -1,6 +1,6 @@
 {
   "format": "willage-manifest-katalogu-v1",
-  "souhrn": "ba79f3fb912ca5baac32bfd5ac1064344510b34624fc36451b88543aa43b9553",
+  "souhrn": "b4de4ec24f2a83f503c3b506dba8b6928461896c63288d18110beb6a5ff7ea3e",
   "soubory": [
     {
       "cesta": "klima_presety.csv",
@@ -91,6 +91,11 @@
       "cesta": "vpmg/receptury/README.md",
       "velikost": 792,
       "sha256": "5594faa49c17ab753d9852c598bee9e414f1b03bfbb32e3d877a4ac615f6746a"
+    },
+    {
+      "cesta": "vpmg/vzorek_materialu_v0.json",
+      "velikost": 921,
+      "sha256": "ba65cba619a70ff50d623ccf1b26db00811ab92d800f21325076538299c0120f"
     }
   ]
 }

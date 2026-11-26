@@ -1,0 +1,277 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/cs/EditorMaterialu/EditorMaterialuOkno.cs" id="1"]
+[ext_resource type="Script" path="res://scripts/cs/EditorMaterialu/JadroMaterialu.cs" id="2"]
+[ext_resource type="Script" path="res://scripts/cs/EditorMaterialu/HorniListaMaterialu.cs" id="3"]
+[ext_resource type="Script" path="res://scripts/cs/EditorMaterialu/SeznamMaterialu.cs" id="4"]
+[ext_resource type="Script" path="res://scripts/cs/EditorMaterialu/ProfilVzhledu.cs" id="5"]
+[ext_resource type="Script" path="res://scripts/cs/EditorMaterialu/KonfiguratorReceptury.cs" id="6"]
+[ext_resource type="Script" path="res://scripts/cs/EditorMaterialu/FyzikaJenCteni.cs" id="7"]
+[ext_resource type="Script" path="res://scripts/cs/EditorMaterialu/NahledTexturyVpmg.cs" id="8"]
+[ext_resource type="Script" path="res://scripts/cs/EditorMaterialu/VariaceSeedu.cs" id="9"]
+[ext_resource type="Script" path="res://scripts/cs/Jadro/Uzly/ZastupnyPanel.cs" id="10"]
+
+[node name="EditorMaterialu" type="Control"]
+script = ExtResource("1")
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Jadro" type="Node" parent="."]
+script = ExtResource("2")
+
+[node name="Pozadi" type="Panel" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Svislo" type="VBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+offset_left = 8.0
+offset_top = 6.0
+offset_right = -8.0
+offset_bottom = -6.0
+
+[node name="HorniLista" type="HBoxContainer" parent="Svislo"]
+script = ExtResource("3")
+layout_mode = 2
+theme_override_constants/separation = 14
+
+[node name="Nazev" type="Label" parent="Svislo/HorniLista"]
+layout_mode = 2
+text = "Editor materiálů"
+tooltip_text = "Editor materiálů / generátor textur terénu (okno 2, plán 06)"
+mouse_filter = 1
+
+[node name="Pin" type="Label" parent="Svislo/HorniLista"]
+custom_minimum_size = Vector2(300, 0)
+layout_mode = 2
+text = "Dev …"
+clip_text = true
+
+[node name="Golden" type="Label" parent="Svislo/HorniLista"]
+custom_minimum_size = Vector2(330, 0)
+layout_mode = 2
+text = "golden …"
+clip_text = true
+
+[node name="Vpmg" type="Label" parent="Svislo/HorniLista"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "VPMG …"
+clip_text = true
+
+[node name="Validovat" type="Button" parent="Svislo/HorniLista"]
+layout_mode = 2
+text = "Validovat"
+
+[node name="Diff" type="Button" parent="Svislo/HorniLista"]
+layout_mode = 2
+text = "Diff"
+
+[node name="Ulozit" type="Button" parent="Svislo/HorniLista"]
+layout_mode = 2
+text = "Uložit recepturu"
+
+[node name="Export" type="Button" parent="Svislo/HorniLista"]
+layout_mode = 2
+text = "Export návrhu"
+
+[node name="Telo" type="HBoxContainer" parent="Svislo"]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_constants/separation = 10
+
+[node name="SeznamMaterialu" type="VBoxContainer" parent="Svislo/Telo"]
+script = ExtResource("4")
+custom_minimum_size = Vector2(280, 0)
+layout_mode = 2
+
+[node name="Nadpis" type="Label" parent="Svislo/Telo/SeznamMaterialu"]
+layout_mode = 2
+text = "Materiály – katalog Dev (jen čtení)"
+theme_override_colors/font_color = Color(0.6, 0.85, 1, 1)
+
+[node name="Filtr" type="OptionButton" parent="Svislo/Telo/SeznamMaterialu"]
+layout_mode = 2
+
+[node name="Hledat" type="LineEdit" parent="Svislo/Telo/SeznamMaterialu"]
+layout_mode = 2
+placeholder_text = "hledat název / key / id"
+
+[node name="Seznam" type="ItemList" parent="Svislo/Telo/SeznamMaterialu"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="Stred" type="ScrollContainer" parent="Svislo/Telo"]
+custom_minimum_size = Vector2(560, 0)
+layout_mode = 2
+horizontal_scroll_mode = 0
+
+[node name="Obsah" type="VBoxContainer" parent="Svislo/Telo/Stred"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="NadpisProfil" type="Label" parent="Svislo/Telo/Stred/Obsah"]
+layout_mode = 2
+text = "Profil vzhledu (visualProfiles katalogu Dev)"
+theme_override_colors/font_color = Color(0.6, 0.85, 1, 1)
+
+[node name="ProfilVzhledu" type="VBoxContainer" parent="Svislo/Telo/Stred/Obsah"]
+script = ExtResource("5")
+layout_mode = 2
+
+[node name="Hlava" type="HBoxContainer" parent="Svislo/Telo/Stred/Obsah/ProfilVzhledu"]
+layout_mode = 2
+
+[node name="Profily" type="OptionButton" parent="Svislo/Telo/Stred/Obsah/ProfilVzhledu/Hlava"]
+layout_mode = 2
+
+[node name="StavNavrhu" type="Label" parent="Svislo/Telo/Stred/Obsah/ProfilVzhledu/Hlava"]
+layout_mode = 2
+size_flags_horizontal = 3
+clip_text = true
+
+[node name="ZrusitNavrh" type="Button" parent="Svislo/Telo/Stred/Obsah/ProfilVzhledu/Hlava"]
+layout_mode = 2
+text = "Zpět na katalog"
+
+[node name="Editory" type="VBoxContainer" parent="Svislo/Telo/Stred/Obsah/ProfilVzhledu"]
+layout_mode = 2
+
+[node name="Oddel1" type="HSeparator" parent="Svislo/Telo/Stred/Obsah"]
+layout_mode = 2
+
+[node name="NadpisReceptura" type="Label" parent="Svislo/Telo/Stred/Obsah"]
+layout_mode = 2
+text = "Receptura VPMG (schéma Dev, operace z registru Dev)"
+theme_override_colors/font_color = Color(0.6, 0.85, 1, 1)
+
+[node name="KonfiguratorReceptury" type="VBoxContainer" parent="Svislo/Telo/Stred/Obsah"]
+script = ExtResource("6")
+layout_mode = 2
+
+[node name="Radek" type="HBoxContainer" parent="Svislo/Telo/Stred/Obsah/KonfiguratorReceptury"]
+layout_mode = 2
+
+[node name="LSeed" type="Label" parent="Svislo/Telo/Stred/Obsah/KonfiguratorReceptury/Radek"]
+layout_mode = 2
+text = "seed"
+
+[node name="Seed" type="SpinBox" parent="Svislo/Telo/Stred/Obsah/KonfiguratorReceptury/Radek"]
+custom_minimum_size = Vector2(140, 0)
+layout_mode = 2
+rounded = true
+
+[node name="LRoz" type="Label" parent="Svislo/Telo/Stred/Obsah/KonfiguratorReceptury/Radek"]
+layout_mode = 2
+text = "rozlišení"
+
+[node name="Rozliseni" type="OptionButton" parent="Svislo/Telo/Stred/Obsah/KonfiguratorReceptury/Radek"]
+layout_mode = 2
+
+[node name="Vychozi" type="Button" parent="Svislo/Telo/Stred/Obsah/KonfiguratorReceptury/Radek"]
+layout_mode = 2
+text = "Výchozí receptura"
+
+[node name="Kroky" type="VBoxContainer" parent="Svislo/Telo/Stred/Obsah/KonfiguratorReceptury"]
+layout_mode = 2
+
+[node name="Spodek" type="HBoxContainer" parent="Svislo/Telo/Stred/Obsah/KonfiguratorReceptury"]
+layout_mode = 2
+
+[node name="Pridat" type="MenuButton" parent="Svislo/Telo/Stred/Obsah/KonfiguratorReceptury/Spodek"]
+layout_mode = 2
+text = "+ Přidat krok…"
+flat = false
+
+[node name="Validace" type="Label" parent="Svislo/Telo/Stred/Obsah/KonfiguratorReceptury"]
+custom_minimum_size = Vector2(520, 0)
+layout_mode = 2
+autowrap_mode = 3
+
+[node name="Oddel2" type="HSeparator" parent="Svislo/Telo/Stred/Obsah"]
+layout_mode = 2
+
+[node name="Prednastaveni" type="Label" parent="Svislo/Telo/Stred/Obsah"]
+script = ExtResource("10")
+custom_minimum_size = Vector2(520, 0)
+layout_mode = 2
+autowrap_mode = 3
+Funkce = "přednastavení – šablony receptur (lesní / suchá / jílovitá / suťová hlína); uložení receptur T-4, operace vrstvení / organiky backend"
+
+[node name="Oddel3" type="HSeparator" parent="Svislo/Telo/Stred/Obsah"]
+layout_mode = 2
+
+[node name="NadpisFyzika" type="Label" parent="Svislo/Telo/Stred/Obsah"]
+layout_mode = 2
+text = "Fyzika (geology) – jen čtení, editor mění jen vzhled"
+theme_override_colors/font_color = Color(0.6, 0.85, 1, 1)
+
+[node name="FyzikaJenCteni" type="GridContainer" parent="Svislo/Telo/Stred/Obsah"]
+script = ExtResource("7")
+layout_mode = 2
+columns = 2
+
+[node name="Prava" type="VBoxContainer" parent="Svislo/Telo"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Titulek" type="Label" parent="Svislo/Telo/Prava"]
+layout_mode = 2
+text = "materiál"
+clip_text = true
+
+[node name="NahledRadek" type="HBoxContainer" parent="Svislo/Telo/Prava"]
+layout_mode = 2
+
+[node name="Nahled" type="TextureRect" parent="Svislo/Telo/Prava/NahledRadek"]
+script = ExtResource("8")
+custom_minimum_size = Vector2(400, 400)
+layout_mode = 2
+
+[node name="Boky" type="VBoxContainer" parent="Svislo/Telo/Prava/NahledRadek"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Dlazdice" type="OptionButton" parent="Svislo/Telo/Prava/NahledRadek/Boky"]
+layout_mode = 2
+
+[node name="InfoNahledu" type="Label" parent="Svislo/Telo/Prava/NahledRadek/Boky"]
+custom_minimum_size = Vector2(200, 0)
+layout_mode = 2
+autowrap_mode = 3
+
+[node name="NahledVrstev" type="Label" parent="Svislo/Telo/Prava/NahledRadek/Boky"]
+script = ExtResource("10")
+custom_minimum_size = Vector2(200, 0)
+layout_mode = 2
+autowrap_mode = 3
+Funkce = "náhled vrstev a řezu (runner Dev vrací jen poslední vrstvu; v0 má jedinou vrstvu albedo)"
+
+[node name="NadpisVariace" type="Label" parent="Svislo/Telo/Prava"]
+layout_mode = 2
+text = "Ukázky variací – stejný profil a receptura, jiný seed"
+theme_override_colors/font_color = Color(0.6, 0.85, 1, 1)
+
+[node name="VariaceSeedu" type="HBoxContainer" parent="Svislo/Telo/Prava"]
+script = ExtResource("9")
+layout_mode = 2
+
+[node name="MrizkaVariant" type="Label" parent="Svislo/Telo/Prava"]
+script = ExtResource("10")
+custom_minimum_size = Vector2(560, 0)
+layout_mode = 2
+autowrap_mode = 3
+Funkce = "mřížka 6 variant modelů (plochý blok, okraj ostrova, svah a schody, jáma, přechod materiálů, pod vodou) – krok T-3"

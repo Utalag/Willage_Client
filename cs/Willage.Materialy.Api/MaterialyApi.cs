@@ -15,12 +15,15 @@ public sealed class MaterialyApi : IDisposable
     public SchemaOperaciVpmg Schema { get; }
     public PinDevDto Pin { get; }
     public IZdrojVpmg Zdroj { get; }
+    /// <summary>Vzorek materiálů, se kterými editor pracuje (ostatní zástupné).</summary>
+    public VzorekMaterialu Vzorek { get; }
 
     public MaterialyApi(string korenDat, IZdrojVpmg? zdroj = null)
     {
         KorenDat = Path.GetFullPath(korenDat);
         Pin = PinDev.Nacti(KorenDat);
         Katalog = new KatalogVzhledu(Path.Combine(KorenDat, Pin.ZrcadloCesta));
+        Vzorek = new VzorekMaterialu(Path.Combine(KorenDat, "vpmg", "vzorek_materialu_v0.json"), Katalog);
         Schema = new SchemaOperaciVpmg(Path.Combine(KorenDat, "vpmg", "operace_vpmg_v0.json"));
         Zdroj = zdroj ?? new ZdrojVpmgProces(Katalog.Cesta);
     }

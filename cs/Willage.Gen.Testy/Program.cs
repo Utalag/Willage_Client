@@ -10,9 +10,9 @@ var pr = new Propustnost(kat);
 
 // G-5: rychlé ladění jedné sady (--jen=G5); plný běh bez argumentu.
 var jen = args.FirstOrDefault(a => a.StartsWith("--jen="))?[6..];
-if (jen is "G5" or "G6" or "G7" or "T1")
+if (jen is "G5" or "G6" or "G7" or "T1" or "T2")
 {
-    if (jen == "G5") TestyG5.Spust(); else if (jen == "G6") TestyG6.Spust(); else if (jen == "T1") TestyT1.Spust(); else TestyG7.Spust();
+    if (jen == "G5") TestyG5.Spust(); else if (jen == "G6") TestyG6.Spust(); else if (jen == "T1") TestyT1.Spust(); else if (jen == "T2") TestyT2.Spust(); else TestyG7.Spust();
     Console.WriteLine($"OK {T.Ok}, chyb {T.Chyb}");
     return T.Chyb == 0 ? 0 : 1;
 }
@@ -98,6 +98,7 @@ TestyG5.Spust();
 TestyG6.Spust();
 TestyG7.Spust();
 TestyT1.Spust();
+TestyT2.Spust();
 
 Console.WriteLine($"OK {T.Ok}, chyb {T.Chyb}");
 return T.Chyb == 0 ? 0 : 1;

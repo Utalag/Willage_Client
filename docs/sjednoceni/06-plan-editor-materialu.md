@@ -32,3 +32,8 @@ Stav: 2026-11-26 21:30 SEČ. Zadání Jana 21:17 [t999u]: „Udělej ten generá
 
 Nové operace VPMG (šum, vrstvení, kořeny, praskliny, vlhkost, akvarel z inspirace) píše jen Willage-backend do Dev; editor je
 ukazuje jako zástupné položky schématu, dokud nejsou v registru.
+
+## Zúžení (Jan 21:44)
+„Udělej zatím jen vzorek třeba 5 materiálů.“ – T-2 až T-4 pracují jen se vzorkem `data/vpmg/vzorek_materialu_v0.json`
+(1 grass, 2 topsoil, 3 gravel_sand, 5 cave_limestone, 6 granite; zdůvodnění v `reporty/t2-okno-prop.md`). Ostatní materiály jsou
+v editoru zástupné (vidět, nejde je vybrat). Rozšíření = přidat ID do souboru vzorku (žádná změna kódu).

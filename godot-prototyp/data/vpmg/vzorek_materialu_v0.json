@@ -1,0 +1,11 @@
+{
+  "format": "willage-vzorek-materialu-v0",
+  "poznamka": "Jan 21:44: editor materiálů / generátor textur zatím jen pro vzorek 5 materiálů. Ostatní materiály katalogu jsou v editoru vidět, ale jsou zástupné (mimo vzorek) – nejde je vybrat ani upravovat. Vzorek = hlavní povrchové a horninové materiály terénu gen-v3 (tráva, hlína, písek, vápenec, žula), každý z jiné skupiny katalogu.",
+  "materialy": [
+    { "id": 1, "key": "grass", "proc": "povrch – tráva (drn), nejčastější horní buňka" },
+    { "id": 2, "key": "topsoil", "proc": "půda – ornice / hlína (gen-v3 hlína)" },
+    { "id": 3, "key": "gravel_sand", "proc": "sediment – písek / štěrk (gen-v3 písek)" },
+    { "id": 5, "key": "cave_limestone", "proc": "sedimentární hornina – vápenec (gen-v3 vápenec, kras)" },
+    { "id": 6, "key": "granite", "proc": "vyvřelá hornina – žula (gen-v3 žula)" }
+  ]
+}

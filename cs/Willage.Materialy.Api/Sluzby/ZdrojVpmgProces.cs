@@ -29,7 +29,8 @@ public sealed class ZdrojVpmgProces : IZdrojVpmg
     {
         _zrcadlo = Path.GetFullPath(zrcadloKatalogu);
         _dll = cestaNastroje ?? Najdi(Path.GetDirectoryName(_zrcadlo)!);
-        if (_dll is null) _chyba = "zástupné: nástroj VPMG není sestaven (cs/Willage.Vpmg.Nastroj/priprav_dev.sh + dotnet build -c Release cs/Willage.Vpmg.Nastroj)";
+        if (_dll != null && !File.Exists(_dll)) _chyba = $"zástupné: nástroj VPMG {_dll} neexistuje";
+        else if (_dll is null) _chyba = "zástupné: nástroj VPMG není sestaven (cs/Willage.Vpmg.Nastroj/priprav_dev.sh + dotnet build -c Release cs/Willage.Vpmg.Nastroj)";
     }
 
     /// <summary>Hledá nástroj: proměnná WILLAGE_VPMG_NASTROJ, jinak nahoru od <paramref name="start"/> po kořen repa.</summary>
