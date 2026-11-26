@@ -7,7 +7,7 @@ namespace Willage.Gen.Planeta;
 /// <summary>
 /// G-3: soubor planety WPLN v1 (Deflate jako WGER). Pořadí: magie „WPLN“, verze (int), gen_ver, seed (i64), souhrn manifestu,
 /// počet položek manifestu + (cesta, velikost, sha), sada parametrů (JSON), počet klíčů + (id, klíč), potvrzeno (bool),
-/// počet úprav + úpravy (U-1, ve v1 0). Řetězce BinaryWriter (UTF-8, délka 7bit). Deterministické: stejný obsah → stejné bajty.
+/// počet úprav + úpravy (U-1, ve v1 0; obdélník v Q16 long). Řetězce BinaryWriter (UTF-8, délka 7bit). Deterministické: stejný obsah → stejné bajty.
 /// </summary>
 public static class SouborPlanety
 {
@@ -30,7 +30,7 @@ public static class SouborPlanety
             foreach (var (id, k) in p.Klice) { w.Write(id); w.Write(k); }
             w.Write(p.Potvrzena);
             w.Write(p.Upravy.Count);
-            foreach (var u in p.Upravy) { w.Write(u.Druh); w.Write(u.Modul); w.Write(u.X0M); w.Write(u.Y0M); w.Write(u.X1M); w.Write(u.Y1M); w.Write(u.ParametryJson); }
+            foreach (var u in p.Upravy) { w.Write(u.Druh); w.Write(u.Modul); w.Write(u.X0); w.Write(u.Y0); w.Write(u.X1); w.Write(u.Y1); w.Write(u.ParametryJson); }
         }
         return ms.ToArray();
     }
@@ -52,7 +52,7 @@ public static class SouborPlanety
         for (int i = 0; i < n; i++) kl.Add(new(r.ReadString(), r.ReadString()));
         bool pot = r.ReadBoolean();
         var up = new List<UpravaRegionu>(); n = r.ReadInt32();
-        for (int i = 0; i < n; i++) up.Add(new UpravaRegionu(r.ReadString(), r.ReadString(), r.ReadDouble(), r.ReadDouble(), r.ReadDouble(), r.ReadDouble(), r.ReadString()));
+        for (int i = 0; i < n; i++) up.Add(new UpravaRegionu(r.ReadString(), r.ReadString(), r.ReadInt64(), r.ReadInt64(), r.ReadInt64(), r.ReadInt64(), r.ReadString()));
         return new PlanetaV1 { GenVer = gen, Seed = seed, ManifestSouhrn = souhrn, Manifest = man, SadaJson = sada, Klice = kl, Potvrzena = pot, Upravy = up };
     }
 

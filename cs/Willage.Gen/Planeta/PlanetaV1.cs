@@ -2,8 +2,11 @@ using Willage.Gen.Katalogy;
 
 namespace Willage.Gen.Planeta;
 
-/// <summary>U-1 (fáze 3): úprava s regionem – zatím zástupná, WPLN v1 drží jen prázdný seznam (formát je připravený).</summary>
-public sealed record UpravaRegionu(string Druh, string Modul, double X0M, double Y0M, double X1M, double Y1M, string ParametryJson);
+/// <summary>
+/// U-1 (fáze 3): úprava s regionem – zatím zástupná, WPLN v1 drží jen prázdný seznam (formát je připravený).
+/// G-3 review: obdélník [X0, X1) × [Y0, Y1) v jednotkách Q16 (2⁻¹⁶ m, long) – stejně jako SouradniceQ16 na hranici fasády, bez double.
+/// </summary>
+public sealed record UpravaRegionu(string Druh, string Modul, long X0, long Y0, long X1, long Y1, string ParametryJson);
 
 /// <summary>
 /// G-3: obsah souboru planety WPLN v1 – co planetu jednoznačně určuje: verze generátoru, seed, verze dat (manifest),
