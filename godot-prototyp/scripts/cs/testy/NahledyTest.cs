@@ -11,7 +11,7 @@ namespace WillagePrototyp.Testy;
 
 /// <summary>
 /// G-6: test náhledů M1–M3 v okně (instancuje res://nastroje/GeneratorSveta.tscn): vrstvy, textura = BarvyNahledu, izolace,
-/// úsečka dvěma kliky, řez M1/M2 profil a M3 materiály 384 × 512 s režimy izolace, materiál pod kurzorem, M4 zástupné, otisky.
+/// úsečka dvěma kliky, řez M1/M2 profil a M3 materiály 384 × 512 s režimy izolace, materiál pod kurzorem, M7 bez náhledu, otisky.
 /// Snímky okna pod Xvfb (bez --headless): --snimky=složka.
 /// Spuštění: Godot_mono [--headless] --path godot-prototyp res://nastroje/testy/NahledyTest.tscn -- --kes=/tmp/willage-test-kes-6d [--snimky=/tmp/g6]
 /// </summary>
@@ -131,9 +131,9 @@ public partial class NahledyTest : Node
             $"dva kliky (pixel 10 → 100, řádek 64) → úsečka {O.Nahled.UseckaOdM} → {O.Nahled.UseckaDoM} m, řez {r.Nx} vzorků po {r.KrokM:F3} m");
         await Snimek("08-m3-usecka-kliky.png");
 
-        // M4: zástupné (G-7)
-        await Vyber("M4");
-        Je(!O.Nahled.VlastniNahled && !O.Rez.Plocha.Visible && O.Rez.GetNode<Control>("Zastupny").Visible && O.Nahled.GetNode<Control>("Poznamka").Visible, "M4: planeta (G-5) + zástupný řez a náhled (G-7)");
+        // M7: bez vlastního náhledu (planeta z G-5) a bez řezu (M4–M6 má od G-7 vlastní, test NahledyM4M6Test)
+        await Vyber("M7");
+        Je(!O.Nahled.VlastniNahled && !O.Rez.Plocha.Visible && O.Rez.GetNode<Control>("Zastupny").Visible && O.Nahled.GetNode<Control>("Poznamka").Visible, "M7: planeta (G-5), bez řezu");
 
         // otisky beze změny
         J.Otisky();

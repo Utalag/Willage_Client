@@ -83,9 +83,9 @@ public partial class GeneratorSvetaTest : Node
         // 3. M4: 20 editorů v 5 skupinách + náhled eroze
         { int pred = konf.Postaveni; seznam.Vyber("M4"); await Cekej(() => konf.Postaveni > pred); }
         Je(konf.Editory.Count() == 20 && konf.Popis!.Skupiny.Count == 5, $"M4: {konf.Editory.Count()} editorů v {konf.Popis?.Skupiny.Count} skupinách");
-        int mapPred = okno.Nahled.Nahled.PrijatychMap;
-        await Cekej(() => okno.Nahled.Nahled.PrijatychMap > mapPred && okno.Nahled.Nahled.Vrstva == Willage.Gen.Api.Dto.VrstvaMapyDto.Eroze);
-        Je(okno.Nahled.Nahled.Vrstva == Willage.Gen.Api.Dto.VrstvaMapyDto.Eroze && okno.Nahled.Nahled.Texture is ImageTexture, "NahledModulu: M4 → vrstva eroze, textura");
+        // G-7: M4 má vlastní náhled (výchozí vrstva VyskaPlanety), už ne vrstvu Eroze hotové planety
+        await Cekej(() => okno.Nahled.Modul == "M4" && okno.Nahled.VrstvaModulu == Willage.Gen.Api.Dto.VrstvaNahleduDto.VyskaPlanety && okno.Nahled.MapaModulu.Texture is ImageTexture);
+        Je(okno.Nahled.VlastniNahled && okno.Nahled.VrstvaModulu == Willage.Gen.Api.Dto.VrstvaNahleduDto.VyskaPlanety && okno.Nahled.MapaModulu.Texture is ImageTexture, "NahledModulu: M4 → vlastní náhled (výška planety), textura");
         await Snimek("01-okno-m4.png");
 
         // 4. změna parametru M5 přes editor → neplatné jen M5 a závislé
