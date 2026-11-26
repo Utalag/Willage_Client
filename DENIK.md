@@ -581,6 +581,15 @@ Skupiny: 1 Prototyp a buildy · 2 Terén a tvar · 3 Rozlišení bloku · 4 Ská
 - **Komplikace:** toky krátké – svět nemá velkorozměrový sklon, odtoky rozeseté → mnoho malých povodí (max 4 km²). Zapnutá eroze mění otisky a v bloku 14,14 zmizí oba prameny. Bilineární E dělá v detailu „hvězdy“; koryta při ≤ 41 l/s mělká. 16 m nad cílem paměti 500 MB. Planeta má jen 2 sopky. Godot adaptér zatím ne.
 - **Další krok:** otázky pro Jana v PROP (moře/odtok, 32 vs 16 m, přepínač, vodníci, interpolace); schválení kroku.
 
+### 🧪 Generátor V1 krok 6b: moře kolem švu, sklon kontinentu, jezera a pánve, prameny na erodovaném povrchu (2026-11-26 10:18 · větev `gen-v1-krok06b-more-sklon`, `cs/Willage.Gen/{Svet,Eroze,Voda}/`, `data/v1/more_v1.json`, PROP `docs/sjednoceni/reporty/krok06b-prop.md`, shots `godot-prototyp/shots/krok06b/`)
+- **Směr:** Jan 9:59, 10:03, 10:11, 10:12. Moře v pásu kolem švu torusu, podíl 30 % ± 5 p. b. ze seedu (šířka pásu z podílu, střed pásu automaticky: šev i pás prolnutí v moři, start na pevnině), hloubka 25 m, sklon 2 ‰ od 1,4 km za pobřežím. Odtok eroze = moře. Jezera = vyplněné prohlubně (hladina = vyplnění, WGER v2). Velké pánve za přepínačem. Parametry v `more_v1.json`, v klíči keše. Hladina podzemní vody sleduje erozi. Catmull-Rom místo bilineáru. Přepínače moře/pánve/eroze výchozí vypnuto.
+- **Zlepšení:** řeky max 14,6 km (dříve 3,3), 17 > 5 km, povodí do 33 km² (8 seedů: max 13–18 km, povodí 24–52 km²). Skutečné moře 24–32 % (seed 49: 30,2 %). S pánvemi 4 velká jezera 1,9–3,2 km², bez nich 0 (největší 0,66 km²). Start svět s mořem beze změny (`c8eeb7964d1ddd85`, `7714d1a1d34e00ad`). Se zapnutou erozí prameny nezmizí (18 → 20 ve 3 × 3). Hvězdy pryč (skok gradientu 0,58 → 0,04). Determinismus 1 = 8 vláken, 2 procesy. 5–6 s, ~220 MB. Testy 70/70.
+- **Komplikace:** skutečné moře o 1,5–2 p. b. pod cílem (ostrovy). Pánve zkracují řeky (končí v jezerech). V 14,14 se jeden pramen posune o 2 m do 13,14. Rezerva pro start jen 2 × 40 m. Godot adaptér zatím ne.
+- **Další krok:** otázky pro Jana v PROP (korekce podílu moře, co zapnout výchozí, pánve, tvar pobřeží); schválení.
+
+### 💡 TODO: náplavy a delty jako samostatný krok po kroku 6b (2026-11-26 9:59, Jan, bod 7)
+- Eroze kroku 6 jen odebírá. Náplavy (ukládání v jezerech a nivách) a delty u ústí do moře jako samostatný krok: stream power s depozicí (FastScape / Yuan et al.), ukládání do mapy WGER a do geologie jako nová vrstva.
+
 ## 3 Rozlišení bloku
 
 ### 🧪 Nastavitelné rozlišení, test 32 × 32 × 64 s buňkou 0,5³ (2026-11-17 11:50 · `--res-test`)
