@@ -3,6 +3,7 @@ extends RefCounted
 ## Čistá funkce v metrech, bez mřížky sousedů. cavity_one se nepoužívá.
 const H = preload("res://scripts/stable_hash.gd")
 const UT = preload("res://scripts/v1/utvary.gd")
+const SUM = preload("res://scripts/v1/sum_hornin.gd")
 const CESTA_PORADI := "res://data/teren/poradi_hornin.json"
 const VZDUCH := 0
 const PRUDUCH := 75
@@ -20,6 +21,7 @@ const PASMA := [
 
 var svet
 var utv
+var sum                          # šum mocnosti podle horniny (A10), data/v1/sum_hornin_v1.csv
 var katalog: Array = []           # položky úrovní 0–40
 var podle_idx := {}
 var perm0 := {}                   # id → bool (perm ≤ 0, těsnění E82)
@@ -27,6 +29,7 @@ var perm0 := {}                   # id → bool (perm ≤ 0, těsnění E82)
 func _init(s) -> void:
 	svet = s
 	_nacti_katalog()
+	sum = SUM.new(svet, bool(svet.p.get("a10_sum_hornin", true)))
 	utv = UT.new(svet, self)
 
 func _nacti_katalog() -> void:
@@ -82,7 +85,7 @@ func _zastupci(x: float, y: float, pasmo: Dictionary, w_bio: PackedFloat64Array,
 		var t0 := float(th[0]); var t1 := float(th[1] if th.size() > 1 else th[0])
 		var ix := int(r.idx)
 		var pres := smoothstep(1.0 - freq - 0.12, 1.0 - freq + 0.12, _n01("V1_PRES", ix, x, y))
-		var t := lerpf(t0, t1, _n01("V1_THICK", ix, x, y))
+		var t := lerpf(t0, t1, sum.mocnost_n01(int(r.id), ix, x, y))
 		vahy[id] = maxf(t * pres, 0.0)
 	# mapa hornin kroku 2 (jednou pro sloupec)
 	var hr: Array = hr_map if not hr_map.is_empty() else svet.horniny(x, y, w_bio)
@@ -127,14 +130,8 @@ func _zastupci(x: float, y: float, pasmo: Dictionary, w_bio: PackedFloat64Array,
 	return out
 
 func _n01(ucel: String, k: int, x: float, y: float) -> float:
-	# pomalé pole 0–1 ze světového seedu (konzistentní, bez FastNoise kvůli typům)
-	var s := 180.0
-	var i0 := floori(x / s); var j0 := floori(y / s)
-	var tx := x / s - i0; var ty := y / s - j0
-	tx = tx * tx * (3.0 - 2.0 * tx); ty = ty * ty * (3.0 - 2.0 * ty)
-	var a := _u(ucel, i0, j0, k); var b := _u(ucel, i0 + 1, j0, k)
-	var c := _u(ucel, i0, j0 + 1, k); var d := _u(ucel, i0 + 1, j0 + 1, k)
-	return lerpf(lerpf(a, b, tx), lerpf(c, d, tx), ty)
+	# pomalé pole 0–1 ze světového seedu, jedna oktáva 180 m (šum přítomnosti; bez FastNoise kvůli typům)
+	return sum.oktava(ucel, k, x, y, 180.0)
 
 ## hranice vrstev v bodě (zdola nahoru): [{id, z0, z1, definice_m}, ...]
 ## Definice sleduje vyska_tvar; nahoře se ořízne skutečným povrchem (zbytky po ořezu).

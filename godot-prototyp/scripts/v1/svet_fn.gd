@@ -73,6 +73,8 @@ static func vychozi() -> Dictionary:
 		"strop_povrchu_hladkost_m": 2.0,  # měkký strop povrchu = okraj sloupce − rezerva (hladké minimum, sklon nezvětší)
 		# geologie krok 3 (1.7, 1.8, 1.14). p82 ve V1 zapnuté; ve hře zůstává studijní přepínač vypnutý.
 		"p82_vapenec": true, "p82_podil": 0.5, "p82_pod_m": 2.0,
+		# krok 3b: útvary jen v hostitelské hornině (A1) a šum mocnosti podle horniny (A10); false = původní krok 3
+		"a1_hostitele": true, "a10_sum_hornin": true,
 		"sopka_pruduch_r_m": 2.0, "sopka_lava_id": 7, "sopka_popel_id": 57, "sopka_slupka_m": 5.0,
 	}
 
