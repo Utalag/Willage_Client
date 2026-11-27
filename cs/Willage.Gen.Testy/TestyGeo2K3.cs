@@ -157,7 +157,7 @@ public static class TestyGeo2K3
     {
         T.Sekce("GEO2 K3: rozdíl před/po K3 jen v čočce, V7 determinismus, V6 odstraněná práce (blok 64 m po 1 m)");
         const int n = 64; const double kr = 1.0; int vl = Environment.ProcessorCount;
-        var (k, r) = KontextBlokuE84.Sestav(g.Geo, kat, SadaE84.Json(d), o);
+        var (k, r) = KontextBlokuE84.Sestav(g.Geo, kat, SadaE84.Json(d), o, new MoznostiKompilace(0.5)); // K3: parita s pevnou mřížkou 0,5 m
         T.Je(r.Ok, $"kontext E84 se sestaví ({r.Zprava})");
         if (!r.Ok) return;
         Console.WriteLine($"  okraj {k.OkrajM:F3} m, připravených objektů {k.Pripravenych}");

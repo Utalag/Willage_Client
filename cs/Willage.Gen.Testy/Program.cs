@@ -26,6 +26,26 @@ if (jen == "GEO2K3B")
     Console.WriteLine($"OK {T.Ok}, chyb {T.Chyb}");
     return T.Chyb == 0 ? 0 : 1;
 }
+if (jen == "GEO2K5B")
+{
+    // blok 128 m: adaptivní × pevná mřížka hranic, výkon; --blok=ox,oy[,krokXy[,vlaken]]
+    var bo = args.FirstOrDefault(a => a.StartsWith("--blok="))?["--blok=".Length..].Split(',').Select(v => double.Parse(v, System.Globalization.CultureInfo.InvariantCulture)).ToArray() ?? new[] { 1024.0, 512.0 };
+    TestyGeo2K5.Blok(data, bo[0], bo[1], bo.Length > 3 ? (int)bo[3] : Environment.ProcessorCount, bo.Length > 2 ? bo[2] : 0.5);
+    Console.WriteLine($"OK {T.Ok}, chyb {T.Chyb}");
+    return T.Chyb == 0 ? 0 : 1;
+}
+if (jen == "GEO2K5S")
+{
+    var g5 = new Willage.Gen.Geologie.GeologieCs(new Willage.Gen.Svet.ParametrySveta(), Willage.Gen.Data.DataSveta.Najdi(AppContext.BaseDirectory));
+    foreach (var b in TestyGeo2K5.StrmeBloky(g5.Svet, 10)) Console.WriteLine($"{b.X},{b.Y}: {b.N}");
+    return 0;
+}
+if (jen == "GEO2K5")
+{
+    TestyGeo2K5.Spust(data);
+    Console.WriteLine($"OK {T.Ok}, chyb {T.Chyb}");
+    return T.Chyb == 0 ? 0 : 1;
+}
 if (jen == "GEO2K4B")
 {
     // blok 128 m: K3 (Bod po buňkách) × K4 (běhy + raster), rozdíly a výkon; --blok=ox,oy[,krokXy[,vlaken[,krokZ]]]
@@ -53,6 +73,7 @@ if (jen == "GEO2")
     TestyGeo2K2.Spust(data);
     TestyGeo2K3.Spust(data);
     TestyGeo2K4.Spust(data);
+    TestyGeo2K5.Spust(data);
     Console.WriteLine($"OK {T.Ok}, chyb {T.Chyb}");
     return T.Chyb == 0 ? 0 : 1;
 }
@@ -148,6 +169,7 @@ TestyGeo2K1b.Spust(data);
 TestyGeo2K2.Spust(data);
 TestyGeo2K3.Spust(data);
 TestyGeo2K4.Spust(data);
+TestyGeo2K5.Spust(data);
 
 Console.WriteLine($"OK {T.Ok}, chyb {T.Chyb}");
 return T.Chyb == 0 ? 0 : 1;
