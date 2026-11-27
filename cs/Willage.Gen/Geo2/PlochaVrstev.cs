@@ -9,15 +9,20 @@ namespace Willage.Gen.Geo2;
 /// vzdálenost k vrcholům (počítá se jako <see cref="Nesparovanych"/>; chyba až ~g/√2, viz PROP K1b); takový bod má <see cref="BodPlochy.Odhad"/>.
 /// K1b: pevný krok g; adaptivní mřížka 1 / 0,5 / 0,25 m s kontrolním bodem (6.3) je K5. Vláknově bezpečná, pokud je zásobník.
 /// </summary>
-public sealed class PlochaVrstev : IPlochaKontaktu
+public sealed class PlochaVrstev : IPlochaKontaktu, IPripravaBloku
 {
     private readonly ITvarZasobnikuSHranicemi _z;
     private readonly bool[] _cil;
     private readonly ConcurrentDictionary<(long, long), double[]> _uzly = new();
     public double KrokM { get; }
-    private long _nesparovanych;
-    /// <summary>Počet trojúhelníků s nespárovatelnými rohy, které padly do dosahu (diagnostika).</summary>
-    public long Nesparovanych => Interlocked.Read(ref _nesparovanych);
+    private readonly ThreadLocal<long[]> _nesparovanych = new(() => new long[1], trackAllValues: true);
+    /// <summary>Počet trojúhelníků s nespárovatelnými rohy, které padly do dosahu (diagnostika; čítač lokální vláknu, K3).</summary>
+    public long Nesparovanych => _nesparovanych.Values.Sum(v => v[0]);
+    // K3: předpočtené uzly oblasti bloku (neměnné po Priprav); mimo oblast keš _uzly
+    private double[][]? _pole; private long _pi0, _pj0; private int _pni, _pnj;
+    /// <summary>Počet předpočtených uzlů (K3) a uzlů dopočtených mimo oblast (diagnostika V6).</summary>
+    public int PredpocitanychUzlu => _pole?.Length ?? 0;
+    public int DopocitanychUzlu => _uzly.Count;
 
     public PlochaVrstev(ITvarZasobnikuSHranicemi zasobnik, IEnumerable<int> cilMaterialy, int maxId, double krokM)
     {
@@ -30,9 +35,34 @@ public sealed class PlochaVrstev : IPlochaKontaktu
     private bool JeCil(int m) => m >= 0 && m < _cil.Length && _cil[m];
 
     /// <summary>Sloučené cílové intervaly uzlu [a0, b0, a1, b1, …] zdola.</summary>
-    public double[] Uzel(long i, long j) => _uzly.GetOrAdd((i, j), k =>
+    public double[] Uzel(long i, long j)
     {
-        var s = _z.Sloupec(k.Item1 * KrokM, k.Item2 * KrokM);
+        var p = _pole;
+        if (p is not null)
+        {
+            long a = i - _pi0, b = j - _pj0;
+            if ((ulong)a < (ulong)_pni && (ulong)b < (ulong)_pnj) return p[a * _pnj + b];
+        }
+        return _uzly.GetOrAdd((i, j), k => SpoctiUzel(k.Item1, k.Item2));
+    }
+
+    /// <summary>K3: uzly celé oblasti (+1 uzel) spočtené předem, paralelně; výsledek stejný jako <see cref="Uzel"/> na vyžádání.</summary>
+    public void Priprav(OblastBloku o, int vlaken)
+    {
+        double g = KrokM;
+        long i0 = (long)Math.Floor(o.X0 / g), i1 = (long)Math.Floor(o.X1 / g) + 1, j0 = (long)Math.Floor(o.Y0 / g), j1 = (long)Math.Floor(o.Y1 / g) + 1;
+        int ni = checked((int)(i1 - i0 + 1)), nj = checked((int)(j1 - j0 + 1));
+        var pole = new double[(long)ni * nj][];
+        Parallel.For(0, ni, new ParallelOptions { MaxDegreeOfParallelism = vlaken }, a =>
+        {
+            for (int b = 0; b < nj; b++) pole[(long)a * nj + b] = SpoctiUzel(i0 + a, j0 + b);
+        });
+        _pi0 = i0; _pj0 = j0; _pni = ni; _pnj = nj; _pole = pole;
+    }
+
+    private double[] SpoctiUzel(long i, long j)
+    {
+        var s = _z.Sloupec(i * KrokM, j * KrokM);
         var o = new List<double>();
         foreach (var v in s)
         {
@@ -41,7 +71,7 @@ public sealed class PlochaVrstev : IPlochaKontaktu
             else { o.Add(v.Z0); o.Add(v.Z1); }
         }
         return o.ToArray();
-    });
+    }
 
     public bool Nejblizsi(double x, double y, double z, double rMax, out BodPlochy b)
     {
@@ -92,7 +122,7 @@ public sealed class PlochaVrstev : IPlochaKontaktu
                 }
                 return;
             }
-            Interlocked.Increment(ref _nesparovanych);
+            _nesparovanych.Value![0]++;
             Vrcholy(ax, ay, ua); Vrcholy(cx, cy, uc); Vrcholy(ex, ey, ue);
         }
 
