@@ -40,6 +40,12 @@ if (jen == "GEO2K5S")
     foreach (var b in TestyGeo2K5.StrmeBloky(g5.Svet, 10)) Console.WriteLine($"{b.X},{b.Y}: {b.N}");
     return 0;
 }
+if (jen == "GEO2K6")
+{
+    TestyGeo2K6.Spust(data);
+    Console.WriteLine($"OK {T.Ok}, chyb {T.Chyb}");
+    return T.Chyb == 0 ? 0 : 1;
+}
 if (jen == "GEO2K5")
 {
     TestyGeo2K5.Spust(data);
@@ -74,6 +80,7 @@ if (jen == "GEO2")
     TestyGeo2K3.Spust(data);
     TestyGeo2K4.Spust(data);
     TestyGeo2K5.Spust(data);
+    TestyGeo2K6.Spust(data);
     Console.WriteLine($"OK {T.Ok}, chyb {T.Chyb}");
     return T.Chyb == 0 ? 0 : 1;
 }
@@ -170,6 +177,7 @@ TestyGeo2K2.Spust(data);
 TestyGeo2K3.Spust(data);
 TestyGeo2K4.Spust(data);
 TestyGeo2K5.Spust(data);
+TestyGeo2K6.Spust(data);
 
 Console.WriteLine($"OK {T.Ok}, chyb {T.Chyb}");
 return T.Chyb == 0 ? 0 : 1;
