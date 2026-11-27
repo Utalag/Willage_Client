@@ -23,6 +23,7 @@ Upřesnění od Jana:
 | [`01-principy-a-vstupy.md`](01-principy-a-vstupy.md) | kapitola 1: pojmy, jednotky, výška sloupce, funkce světa, determinismus a verze, materiály, geologie, voda, přepočet vody, kontrakt, datový rozpočet, objektová vrstva, profil ostrova | rozhodnuto (přepočet verze 1.5 odložen, 1.11 přeskočeno) |
 | [`02-model-sveta-a-generovani.md`](02-model-sveta-a-generovani.md) | kapitola 2: pořadí kroků generátoru, rozhraní funkce světa, slupka, segment a rozdíl, výchozí voda, vegetace, test 3 × 3 | rozhodnuto |
 | [`03-otevrene-body.md`](03-otevrene-body.md) | zbývající otevřené body po kapitolách 1–2, podle původních kapitol 3–8 (voda, kopání, přenos výřezu, kontrakt WTI1 společně s Willage-backend, prezentace, plán slučování) | kostra, čeká na Jana |
+| [`06-geologie-geo2.md`](06-geologie-geo2.md) | geologie GEO2: jedna chronologie událostí (stáří, id), pravidla zásahu `nahrazuje` / `zdroje` / `prostor` / `hloubka` / `kontakt`, vzorek a původ, intervaly se zárukou detekce, rasterizace oddělená od geologie, vývoj katalogu hornin, kroky K1–K7 + D | rozhodnuto 2026-11-27 (t1028u–t1033u) |
 
 ## Pořadí bodů kapitoly 1 k projití s Janem
 

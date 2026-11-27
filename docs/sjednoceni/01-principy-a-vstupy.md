@@ -270,6 +270,7 @@ Pojmy: **blueprint** = otisk světa o velikosti bloku. To, čemu se ve studiích
 - **Vrstvy se přizpůsobují tvaru terénu.**
 - Chybějící vrstvy končí **vyklíněním**: vrstva se do strany zužuje, až zmizí. Neskončí svislou stěnou.
 - Minimální mocnost vrstvy je 1 buňka, tedy 0,25 m (Jan 2026-11-21 00:34: „buňka podle stanoveného měřítka“); dřívější zákaz vrstev < 25 cm se ruší, viz 1.7.1.
+- *doplněno (2026-11-27, Jan t1028u–t1033u):* vrstvy i útvary jsou události **jedné chronologie GEO2** (stáří + id). Překryv rozhoduje pořadí a pravidla zásahu, ne hodnota SDF. Tělesa smějí být tenčí než buňka; minimum 0,25 m platí pro vrstvy zásobníku. Celé znění: [`06-geologie-geo2.md`](06-geologie-geo2.md).
 
 ### 1.7.1 Skladba vrstev
 
