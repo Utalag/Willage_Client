@@ -15,8 +15,12 @@ public sealed record ParametryKontaktu(
 /// Členství v cíli T se čte ze stavu bodu těsně před událostí, ne ze znaménka funkce.
 /// q′ = π(q) + η·u, u = (π − q)/|π − q|; u bodu na ploše (|π − q| &lt; 2⁻¹⁰ m) normála S orientovaná přes kontakt.
 /// </summary>
-public sealed class KontaktniPasmo : IKontaktniPasmo
+public sealed class KontaktniPasmo : IKontaktniPasmo, IIntervalyKontaktu
 {
+    [ThreadStatic] private static List<(double A, double B)>? t_rozsah;
+    /// <summary>Diagnostika (lokální vláknu): vyhodnocení d̃ − w při chůzi sloupcem (K4).</summary>
+    [ThreadStatic] public static long KrokuChuze;
+
     private const double MinU = 1.0 / 1024.0;
     private readonly ParametryKontaktu _p;
     private readonly IReadOnlyList<IPlochaKontaktu> _plochy;
@@ -84,6 +88,50 @@ public sealed class KontaktniPasmo : IKontaktniPasmo
         }
         var s2 = Pred(c, index, b.X + eta * ux, b.Y + eta * uy, b.Z + eta * uz, zPov);
         return s2.Typ == TypProstoru.Pevne && _p.HostitelOkoli.Plati(s2.Material);
+    }
+
+    /// <summary>Lipschitzova konstanta f(z) = d̃ − w podél přímky: 1 (vzdálenost) + w₀·a·f·3 (|∂N/∂u| ≤ 3 u VNoise).</summary>
+    public double LipschitzF => 1.0 + _p.SirkaM * _p.AmpRel * _p.Frekvence1M * 3.0;
+
+    /// <summary>
+    /// Pásmo ve sloupci (K4, 1.7): v povolených úsecích ∩ rozsahu ploch do w_max = w₀(1 + a) jde chůzí s f = min(d̃, R_max) − w:
+    /// f/L ≥ h → přeskok o f/L (f &gt; 0 jistě, mimo pásmo), jinak [z, z + max(h, −f/L)] nejisté. Plocha bez rozsahu → celé povolené úseky nejisté.
+    /// </summary>
+    public void Sloupec(double x, double y, IReadOnlyList<(double A, double B)> povolene, double h, SegmentaceSloupce seg)
+    {
+        double wMax = _p.SirkaM * (1.0 + Math.Abs(_p.AmpRel)), L = 1.0 + _p.SirkaM * Math.Abs(_p.AmpRel) * _p.Frekvence1M * 3.0;
+        var roz = t_rozsah ??= new(); roz.Clear();
+        foreach (var pl in _plochy)
+        {
+            if (pl is IPlochaSRozsahem pr) pr.RozsahZ(x, y, wMax, roz);
+            else { foreach (var (a, b) in povolene) seg.Nejista(a, b); return; }
+        }
+        if (roz.Count == 0) return;
+        roz.Sort((a, b) => a.A.CompareTo(b.A));
+        int w = 0;
+        for (int k = 0; k < roz.Count; k++)
+            if (w > 0 && roz[k].A <= roz[w - 1].B) roz[w - 1] = (roz[w - 1].A, Math.Max(roz[w - 1].B, roz[k].B)); else roz[w++] = roz[k];
+        roz.RemoveRange(w, roz.Count - w);
+        int j = 0;
+        foreach (var (pa, pb) in povolene)
+        {
+            while (j < roz.Count && roz[j].B < pa) j++;
+            for (int k = j; k < roz.Count && roz[k].A <= pb; k++)
+            {
+                double a = Math.Max(Math.Max(pa, roz[k].A), seg.Z0), b = Math.Min(Math.Min(pb, roz[k].B), seg.Z1);
+                double z = a;
+                while (z < b)
+                {
+                    KrokuChuze++;
+                    double d = Nejblizsi(x, y, z, out var bp) ? Math.Min(bp.D, RMaxM) : RMaxM;
+                    double f = d - Sirka(x, y, z);
+                    if (f >= L * h) { z += f / L; continue; }
+                    // f < L·h: [z, z + h] může být v pásmu; hluboko v pásmu (f < 0) je celé [z, z + |f|/L] v pásmu – stejně nejisté (hostitel q′)
+                    double skok = Math.Max(h, -f / L);
+                    seg.Nejista(z, Math.Min(z + skok, b)); z += skok;
+                }
+            }
+        }
     }
 
     private static StavBodu Pred(ChronologieGeo2 c, int index, double x, double y, double z, double zPov) =>

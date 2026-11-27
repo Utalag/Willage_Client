@@ -9,7 +9,7 @@ namespace Willage.Gen.Geo2;
 /// vzdálenost k vrcholům (počítá se jako <see cref="Nesparovanych"/>; chyba až ~g/√2, viz PROP K1b); takový bod má <see cref="BodPlochy.Odhad"/>.
 /// K1b: pevný krok g; adaptivní mřížka 1 / 0,5 / 0,25 m s kontrolním bodem (6.3) je K5. Vláknově bezpečná, pokud je zásobník.
 /// </summary>
-public sealed class PlochaVrstev : IPlochaKontaktu, IPripravaBloku
+public sealed class PlochaVrstev : IPlochaKontaktu, IPripravaBloku, IPlochaSRozsahem
 {
     private readonly ITvarZasobnikuSHranicemi _z;
     private readonly bool[] _cil;
@@ -93,6 +93,38 @@ public sealed class PlochaVrstev : IPlochaKontaktu, IPripravaBloku
                 if ((k & 1) == 0 && u[k] <= 1e-9) continue;
                 lo = Math.Min(lo, u[k]); hi = Math.Max(hi, u[k]);
             }
+    }
+
+    /// <summary>
+    /// K4: kde ve sloupci může být plocha blíž než r. Buňky v dosahu r v rovině xy: rozsah z jejich trojúhelníků (stejný jako v
+    /// <see cref="Nejblizsi"/>, včetně vrcholů nespárovaných rohů) ± √(r² − d_xy²). Nadmnožina.
+    /// </summary>
+    public void RozsahZ(double x, double y, double r, List<(double A, double B)> cil)
+    {
+        double g = KrokM, r2 = r * r;
+        long i0 = (long)Math.Floor((x - r) / g), i1 = (long)Math.Floor((x + r) / g);
+        long j0 = (long)Math.Floor((y - r) / g), j1 = (long)Math.Floor((y + r) / g);
+        for (long i = i0; i <= i1; i++)
+        {
+            double x0 = i * g, x1 = x0 + g, dxc = x < x0 ? x0 - x : x > x1 ? x - x1 : 0;
+            for (long j = j0; j <= j1; j++)
+            {
+                double y0 = j * g, y1 = y0 + g, dyc = y < y0 ? y0 - y : y > y1 ? y - y1 : 0, dxy2 = dxc * dxc + dyc * dyc;
+                if (dxy2 > r2) continue;
+                double lo, hi;
+                long a = i - _pi0, c = j - _pj0;
+                if (_clo is not null && (ulong)a < (ulong)(_pni - 1) && (ulong)c < (ulong)(_pnj - 1)) { long q = a * (_pnj - 1) + c; lo = _clo[q]; hi = _chi![q]; }
+                else
+                {
+                    lo = double.PositiveInfinity; hi = double.NegativeInfinity;
+                    var u00 = Uzel(i, j); var u10 = Uzel(i + 1, j); var u11 = Uzel(i + 1, j + 1); var u01 = Uzel(i, j + 1);
+                    RozsahTrojuhelniku(u00, u10, u11, ref lo, ref hi); RozsahTrojuhelniku(u00, u11, u01, ref lo, ref hi);
+                }
+                if (lo > hi) continue;
+                double dz = Math.Sqrt(r2 - dxy2) + 1e-9;
+                cil.Add((lo - dz, hi + dz));
+            }
+        }
     }
 
     private double[] SpoctiUzel(long i, long j)
