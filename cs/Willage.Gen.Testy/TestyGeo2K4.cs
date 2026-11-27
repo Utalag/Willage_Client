@@ -455,17 +455,18 @@ public static class TestyGeo2K4
     }
 
     // ---------- blok 128 m: výkon proti K3 ----------
-    public static void Blok(string data, double ox, double oy, int vlaken, double krokXy = 0.25)
+    public static void Blok(string data, double ox, double oy, int vlaken, double krokXy = 0.25, double krokZ = 0.25)
     {
-        T.Sekce($"GEO2 K4: blok 128 × 128 m od ({ox}, {oy}), sloupce po {krokXy} m, z po 0,25 m, {vlaken} vláken: K3 (Bod po buňkách) × K4 (běhy + raster)");
+        T.Sekce($"GEO2 K4: blok 128 × 128 m od ({ox}, {oy}), sloupce po {krokXy} m, z po {krokZ} m, {vlaken} vláken: K3 (Bod po buňkách) × K4 (běhy + raster)");
         var d = DataSveta.Najdi(AppContext.BaseDirectory);
         var kat = KatalogGeo2.ZeSouboru(Path.Combine(data, "materials-catalog-v1.json"));
         var g0 = new GeologieCs(new ParametrySveta(), d);
-        int n = (int)Math.Round(128 / krokXy); const int nz = 512;
+        int n = (int)Math.Round(128 / krokXy), nz = (int)Math.Round(128 / krokZ);
         var opt = new ParallelOptions { MaxDegreeOfParallelism = vlaken };
-        var stary = new byte[(long)n * n * nz];
+        bool sStarou = krokZ == 0.25; // stará cesta vyplňuje po 0,25 m
+        var stary = new byte[sStarou ? (long)n * n * nz : 0];
         var sw = Stopwatch.StartNew();
-        Parallel.For(0, n, opt, () => g0.Klon(), (ix, _, g) =>
+        if (sStarou) Parallel.For(0, n, opt, () => g0.Klon(), (ix, _, g) =>
         {
             for (int iy = 0; iy < n; iy++)
                 Array.Copy(g.Geo.VyplnSloupec(ox + (ix + 0.5) * krokXy, oy + (iy + 0.5) * krokXy, 0.25, 128.0), 0, stary, ((long)ix * n + iy) * nz, nz);
@@ -481,13 +482,13 @@ public static class TestyGeo2K4
         for (int opak = 0; opak < 2; opak++)
         {
             long h0 = zas.VolaniHranic; sw.Restart();
-            Parallel.For(0, n, opt, ix => { for (int iy = 0; iy < n; iy++) k.Sloupec(ox + (ix + 0.5) * krokXy, oy + (iy + 0.5) * krokXy, 0, 0.25, a.AsSpan(((ix * n) + iy) * nz, nz)); });
+            Parallel.For(0, n, opt, ix => { for (int iy = 0; iy < n; iy++) k.Sloupec(ox + (ix + 0.5) * krokXy, oy + (iy + 0.5) * krokXy, 0, krokZ, a.AsSpan(((ix * n) + iy) * nz, nz)); });
             tK3 = sw.Elapsed.TotalSeconds; h3 = zas.VolaniHranic - h0; h0 = zas.VolaniHranic; sw.Restart();
             bodu = 0;
             Parallel.For(0, n, opt, () => 0L, (ix, _, s) =>
             {
                 long v0 = SloupecGeo2.VolaniBod;
-                for (int iy = 0; iy < n; iy++) k.SloupecZBehu(ox + (ix + 0.5) * krokXy, oy + (iy + 0.5) * krokXy, 0, 0.25, b.AsSpan(((ix * n) + iy) * nz, nz));
+                for (int iy = 0; iy < n; iy++) k.SloupecZBehu(ox + (ix + 0.5) * krokXy, oy + (iy + 0.5) * krokXy, 0, krokZ, b.AsSpan(((ix * n) + iy) * nz, nz));
                 return s + SloupecGeo2.VolaniBod - v0;
             }, s => Interlocked.Add(ref bodu, s));
             tK4 = sw.Elapsed.TotalSeconds; h4 = zas.VolaniHranic - h0;
@@ -501,8 +502,8 @@ public static class TestyGeo2K4
         long ruzne = 0, sStary3 = 0, sStary4 = 0; var prech = new Dictionary<(int, int), long>();
         for (long i = 0; i < a.LongLength; i++)
         {
-            if (stary[i] == (byte)a[i].Material) sStary3++;
-            if (stary[i] == (byte)b[i].Material) sStary4++;
+            if (sStarou && stary[i] == (byte)a[i].Material) sStary3++;
+            if (sStarou && stary[i] == (byte)b[i].Material) sStary4++;
             if (a[i] == b[i]) continue;
             ruzne++; var kl = (a[i].Material, b[i].Material); prech[kl] = prech.GetValueOrDefault(kl) + 1;
         }

@@ -28,9 +28,9 @@ if (jen == "GEO2K3B")
 }
 if (jen == "GEO2K4B")
 {
-    // blok 128 m: K3 (Bod po buňkách) × K4 (běhy + raster), rozdíly a výkon; --blok=ox,oy[,krokXy[,vlaken]]
+    // blok 128 m: K3 (Bod po buňkách) × K4 (běhy + raster), rozdíly a výkon; --blok=ox,oy[,krokXy[,vlaken[,krokZ]]]
     var bo = args.FirstOrDefault(a => a.StartsWith("--blok="))?["--blok=".Length..].Split(',').Select(v => double.Parse(v, System.Globalization.CultureInfo.InvariantCulture)).ToArray() ?? new[] { 1024.0, 512.0 };
-    TestyGeo2K4.Blok(data, bo[0], bo[1], bo.Length > 3 ? (int)bo[3] : Environment.ProcessorCount, bo.Length > 2 ? bo[2] : 0.25);
+    TestyGeo2K4.Blok(data, bo[0], bo[1], bo.Length > 3 ? (int)bo[3] : Environment.ProcessorCount, bo.Length > 2 ? bo[2] : 0.25, bo.Length > 4 ? bo[4] : 0.25);
     Console.WriteLine($"OK {T.Ok}, chyb {T.Chyb}");
     return T.Chyb == 0 ? 0 : 1;
 }
