@@ -71,6 +71,13 @@ public static class PravidloCile
     {
         odhad = false;
         if (!e.Hloubka.Plati(z, zPov)) return false;
+        if (!PovolujeStav(e, s)) return false;
+        return e.Kontakt is null || e.Kontakt.Plati(x, y, z, s, c, e.Index, zPov, out odhad);
+    }
+
+    /// <summary>Část pravidla, která závisí jen na stavu cíle (třída, <c>nahrazuje</c>, <c>zdroje</c>, <c>prostor</c>); bez hloubky a kontaktu.</summary>
+    public static bool PovolujeStav(KompilovanaUdalost e, in StavBodu s)
+    {
         var t = s.Trida;
         if (!OperaceSmiNaTridu(e.Operace, t)) return false;
         bool cil = t switch
@@ -80,7 +87,6 @@ public static class PravidloCile
             TridaCile.Prazdno => e.Prostor.Contains(s.Typ),
             _ => false,
         };
-        if (!cil) return false;
-        return e.Kontakt is null || e.Kontakt.Plati(x, y, z, s, c, e.Index, zPov, out odhad);
+        return cil;
     }
 }

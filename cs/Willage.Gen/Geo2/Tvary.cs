@@ -68,8 +68,9 @@ public interface ITovarnaTvaru
 }
 
 /// <summary>Tvar celého prostoru (<c>oblast</c>, <c>kontakt</c>: o zásahu rozhodnou jen pravidla).</summary>
-public sealed class TvarVsude : ITvar
+public sealed class TvarVsude : ITvar, IIntervalyTvaru
 {
+    public void Sloupec(double x, double y, SegmentaceSloupce s) { }
     public static readonly TvarVsude Instance = new();
     public bool Obsahuje(double x, double y, double z, out uint instance) { instance = 0; return true; }
 }
