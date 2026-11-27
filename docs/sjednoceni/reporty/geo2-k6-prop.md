@@ -23,3 +23,15 @@ V1 (aktivní `Deformuj` validace odmítne). Větev `geo2-k6-modifikatory` z `geo
 
 ## Rizika
 - podoba rozhraní se může v etapě D upřesnit (jen rozhraní, bez uživatelů → levná změna).
+
+## Výsledky *(2026-11-27 ~17:25)*
+Commity: `4d018f8` rozhraní `IDeformace` (+ `ObalkaOsova`, `AfinniZobrazeni`, `UsekDeformace`), `abf1b02` testy (`--jen=GEO2K6`).
+
+| Test | Výsledek |
+|---|---|
+| build | OK; produkce rozhraní nevolá |
+| V1 odmítnutí | aktivní `Deformuj` → `DEFORMACE_AZ_D`; neaktivní projde, 2000 bodů + 100 sloupců běhů stejných jako bez ní |
+| tvar rozhraní | testovací posun: 1 úsek, bod úseku ve starších souřadnicích = inverze (1e-12), zobrazení = inverze, mimo obálku identita |
+| regrese | celá sada **742 / 742 OK**, otisky GEO1 beze změny |
+
+Výkon: beze změny (žádný kód na cestě vyhodnocení). Rozhodnutí pro Jana: žádné nové; podoba rozhraní se upřesní v etapě D.
