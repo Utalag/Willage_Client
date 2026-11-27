@@ -4,7 +4,8 @@ namespace Willage.Gen.Geo2.E84;
 
 /// <summary>
 /// Přesné obálky těles E84 (2.6, K3): AABB množiny, kde <see cref="Utvary.Sdf"/> může být &lt; 0, s rezervou <see cref="Rezerva"/>.
-/// Vždy průnik s obálkou staré cesty (<see cref="Utvar.Box"/>), aby se výsledek nezměnil (dnešní ořez čočky zůstává, K3 ho neopravuje).
+/// Průnik s obálkou staré cesty (<see cref="Utvar.Box"/>) jen tam, kde ji přesná obálka stejně neprotíná; u čočky ne:
+/// stará obálka ±ra čočku ořezává (rb až 3 m může být větší než ra, natočení), GEO2 bere celé těleso (Jan t1040u, kritérium „GEO2 lepší než GEO1“).
 /// <list type="bullet">
 /// <item>komín, dóm (osový elipsoid, SDF &lt; 0 ⇔ k0 &lt; 1): ±(ra, rb, rc) kolem středu; stará obálka komínu má v xy max(ra, rc).</item>
 /// <item>čočka (natočený elipsoid s ortonormálními osami u, v, n): poloosa AABB v ose k = √Σ (r_i·e_i,k)².</item>
@@ -43,6 +44,8 @@ public static class ObalkaE84
                 return (double[])b.Clone();
         }
         double r = Rezerva;
+        if (f.K == DruhUtvaru.Cocka)
+            return new[] { P[0] - hx - r, P[1] - hy - r, P[2] - hz - r, P[0] + hx + r, P[1] + hy + r, P[2] + hz + r };
         return new[]
         {
             Math.Max(b[0], P[0] - hx - r), Math.Max(b[1], P[1] - hy - r), Math.Max(b[2], P[2] - hz - r),

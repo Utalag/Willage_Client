@@ -8,7 +8,8 @@ namespace Willage.Gen.Geo2.E84;
 /// Index těles jednoho druhu E84 po dlaždicích 8 × 8 m (3.5, K3): instance, jejichž obálka zasahuje do oblasti, ve stejném pořadí
 /// jako <see cref="TvorbaUtvaru.Features"/> (gi, pak gj). Instance se berou z veřejného <c>Features</c> v jejich středu (stará cesta
 /// se nemění, bez reflexe); parametry mřížky útvarů čte z veřejné tabulky <see cref="TvorbaUtvaru.Mrizka"/>.
-/// Kandidát v bodě musí splnit i podmínku rozsahu buněk <c>Features</c> (|gi·g − x| v dosahu r), takže výsledek je bitově stejný.
+/// Kandidát v bodě musí splnit i podmínku rozsahu buněk <c>Features</c> (|gi·g − x| v dosahu r). Rozdíl proti <c>Features</c>: čočka se bere
+/// v celé přesné obálce, ne jen v obálce staré cesty (<see cref="ObalkaE84"/>).
 /// Neměnný, vláknově bezpečný.
 /// </summary>
 public sealed class IndexUtvaruE84
@@ -57,10 +58,9 @@ public sealed class IndexUtvaruE84
             foreach (var c in tv.Features(cx, cy))
                 if (c.K == druh && c.Seed == (hsh & 0x7FFFFFFF) && c.P[0] == cx && c.P[1] == cy) { f = c; break; }
             if (f is null) throw new InvalidOperationException($"útvar {klic} ({gi}, {gj}) nenalezen ve Features – tabulka mřížky nesedí se starou cestou");
-            var b = f.Box;
-            if (b[3] < o.X0 || b[0] > o.X1 || b[4] < o.Y0 || b[1] > o.Y1) continue;
             var e = ObalkaE84.Presna(f);
             if (e[3] < e[0] || e[4] < e[1] || e[5] < e[2]) continue; // prázdná
+            if (e[3] < o.X0 || e[0] > o.X1 || e[4] < o.Y0 || e[1] > o.Y1) continue;
             pol.Add(new Polozka(f, gi, gj, e[0], e[1], e[2], e[3], e[4], e[5]));
         }
         int nx = Math.Max(1, (int)Math.Ceiling((o.X1 - o.X0) / DlazdiceM)), ny = Math.Max(1, (int)Math.Ceiling((o.Y1 - o.Y0) / DlazdiceM));
