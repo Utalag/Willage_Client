@@ -74,10 +74,29 @@ Bez odmítnutí buněk plochy (jen index + kontext): 34,6 s → 9,8 + 0,75 s. Vl
 Zbytek GEO2 K3 (profil): ~50 % `VrstvySloupce.Hranice` staré cesty (1× na sloupec, stejná práce jako stará cesta), kontakt ~12 %, tělesa ~9 %.
 
 **Negativní / omezení:**
-- Ořez čočky obálkou staré cesty (±ra, rb může být větší) zůstává kvůli bitové shodě; oprava změní výsledek, rozhodne Jan.
+- ~~Ořez čočky obálkou staré cesty zůstává kvůli bitové shodě~~ → opraveno v ceddd20 (Jan t1040u), viz níže.
 - Kras má dál obálku staré cesty (deformace šumem); úspora 0 %.
-- Výčet instancí bere `Features` ve středu instance a kopii tabulky mřížky útvarů (5 řádků). Kdyby se tabulka staré cesty změnila, `Sestav` hodí výjimku a test indexu selže; čistší je veřejná metoda staré cesty (změna staré cesty → jen se souhlasem Jana).
+- ~~Výčet instancí bere kopii tabulky mřížky útvarů~~ → e5de2b2: tabulka čtená z veřejné `TvorbaUtvaru.Mrizka` (viz níže).
 - Diagnostika `Nesparovanych` teď počítá jen vyhodnocené trojúhelníky (odmítnuté buňky ne), číslo je proto menší než v K1b; výsledky se nemění. `VolaniHranic` je mezi vlákny jen přibližný.
 - Komín: kontrakt uvádí ~60 % vyhodnocení SDF; v tomto vzorku (body do 70 m) byl podíl komínu 21,5 %. Po K3 0,4 % (40 / 2 896).
 - Měřeno na sdíleném boxu, kde od 12:44 běží cizí dlouhé procesy `grep` (2–3 jádra na 100 %, ~5 GB RAM). Absolutní časy jsou proto zašuměné (týká se i měření K1b a K2); poměry před/po jsou ze stejných běhů.
 - Dál zrychlit jde už jen omezením práce na buňku: intervaly sloupce a kontakt v intervalech (K4), adaptivní mřížka (K5).
+
+## Doplněk 1: veřejná tabulka mřížky útvarů (Jan t1039u, 2026-11-27 ~16:00)
+- e5de2b2: jediný zásah do GEO1: `TvorbaUtvaru.Mrizka` (veřejná, jen ke čtení, ze stejného pole `Grid`). `IndexUtvaruE84.Mrizka` ji čte, kopie je odstraněna.
+- Celá sada 682/682, staré otisky beze změny, GEO2 na bloku (1024, 512) po 0,25 m bitově stejné (0 různých sloupců).
+
+## Doplněk 2: kritérium „GEO2 lepší než GEO1“ a oprava ořezu čočky (Jan t1040u, 2026-11-27 ~16:05)
+**Od teď je kritérium GEO2 „lepší než GEO1“, ne shoda se starou cestou ani bitová shoda.** Rozdíl proti GEO1 se dál měří a popisuje po kategoriích (V8).
+
+- ceddd20: čočka bere celou přesnou obálku natočeného elipsoidu (bez průniku s obálkou staré cesty ±ra). GEO1 počítá čočku jen tam, kde bod leží v krychli ±ra
+  kolem středu. Poloosa rb (1,5–3 m) ale může být větší než ra (2–4 m) a natočení posune i rb a rc mimo krychli, takže GEO1 těleso ploše ořezává.
+  SDF &lt; 0 je přesně vnitřek elipsoidu z parametrů čočky, takže nové buňky jsou skutečná část tělesa.
+- Fuzz (blok 64 m): z 9 157 bodů uvnitř čoček leží 28 (0,3 %) mimo obálku GEO1. Číslo 4,8 % z `KOD-E84.md` se na tomto světě nepotvrdilo, ořez je menší.
+- Blok (1024, 512) po 0,25 m: GEO2 po opravě × před: 296 buněk v 215 sloupcích, **všechny v čočce mimo obálku GEO1** (jinde 0).
+  Přechody: ortorula → pegmatit 140, granit → pegmatit 139, granodiorit → pegmatit 16, granit → měď 1. Pegmatit 182 278 → 182 573.
+  Shoda se starou cestou se mění o 296 buněk (2 × 10⁻⁶), zaokrouhleně zůstává 99,771 %.
+- Ostatní tělesa jsou dál bitově stejná (jejich přesná obálka leží v obálce GEO1, fuzz: 0 bodů těles mimo ni).
+- Testy: celá sada 688/688, staré otisky beze změny. GEO2 testy upraveny: index × `Features` (u čočky jen ty v obálce GEO1 jako podposloupnost),
+  fuzz vykazuje ořez GEO1, rozdíl před/po smí být jen v čočce (blok 64 m: 2 buňky, obě nová čočka), V7 beze změny.
+- Výkon: stará cesta 5,5 s, GEO2 před K3 25,1 s, GEO2 K3 6,2 s + kontext 0,43 s (×1,2).
