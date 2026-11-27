@@ -15,6 +15,10 @@ public sealed class TvorbaUtvaru
         (DruhUtvaru.Zila, "zila", 10.0, 0.7, 7.0), (DruhUtvaru.Cocka, "cocka", 12.0, 0.6, 4.5), (DruhUtvaru.Kras, "kras", 14.0, 0.8, 22.0),
         (DruhUtvaru.Dome, "dome", 16.0, 0.35, 8.0), (DruhUtvaru.Pipe, "pipe", 20.0, 0.25, 10.0),
     };
+    /// <summary>Tabulka mřížky útvarů (druh, klíč, krok g, četnost, dosah hledání r), jen ke čtení; čte ji index těles GEO2 (K3).</summary>
+    public static IReadOnlyList<(DruhUtvaru Druh, string Klic, double G, double Cet, double R)> Mrizka { get; } =
+        Array.AsReadOnly(Grid.Select(t => (t.d, t.k, t.g, t.cet, t.r)).ToArray());
+
     private readonly SvetFn _s;
     private readonly Dictionary<(double, double), double> _zsPresne = new();
     private readonly Dictionary<(long, long), (double v, double cx, double cy)> _zs = new();

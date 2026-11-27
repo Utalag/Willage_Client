@@ -7,7 +7,7 @@ namespace Willage.Gen.Geo2.E84;
 /// <summary>
 /// Index těles jednoho druhu E84 po dlaždicích 8 × 8 m (3.5, K3): instance, jejichž obálka zasahuje do oblasti, ve stejném pořadí
 /// jako <see cref="TvorbaUtvaru.Features"/> (gi, pak gj). Instance se berou z veřejného <c>Features</c> v jejich středu (stará cesta
-/// se nemění, bez reflexe); parametry mřížky útvarů jsou kopií tabulky staré cesty a test je ověřuje proti <c>Features</c>.
+/// se nemění, bez reflexe); parametry mřížky útvarů čte z veřejné tabulky <see cref="TvorbaUtvaru.Mrizka"/>.
 /// Kandidát v bodě musí splnit i podmínku rozsahu buněk <c>Features</c> (|gi·g − x| v dosahu r), takže výsledek je bitově stejný.
 /// Neměnný, vláknově bezpečný.
 /// </summary>
@@ -15,15 +15,12 @@ public sealed class IndexUtvaruE84
 {
     public const double DlazdiceM = 8.0;
 
-    /// <summary>Kopie <c>TvorbaUtvaru.Grid</c>: krok mřížky g, četnost, dosah hledání r.</summary>
-    public static (string Klic, double G, double Cet, double R) Mrizka(DruhUtvaru d) => d switch
+    /// <summary>Řádek tabulky mřížky útvarů staré cesty (<see cref="TvorbaUtvaru.Mrizka"/>): klíč, krok mřížky g, četnost, dosah hledání r.</summary>
+    public static (string Klic, double G, double Cet, double R) Mrizka(DruhUtvaru d)
     {
-        DruhUtvaru.Zila => ("zila", 10.0, 0.7, 7.0),
-        DruhUtvaru.Cocka => ("cocka", 12.0, 0.6, 4.5),
-        DruhUtvaru.Kras => ("kras", 14.0, 0.8, 22.0),
-        DruhUtvaru.Dome => ("dome", 16.0, 0.35, 8.0),
-        _ => ("pipe", 20.0, 0.25, 10.0),
-    };
+        foreach (var m in TvorbaUtvaru.Mrizka) if (m.Druh == d) return (m.Klic, m.G, m.Cet, m.R);
+        throw new ArgumentOutOfRangeException(nameof(d), d, "druh není v tabulce mřížky útvarů");
+    }
 
     /// <summary>Instance s přesnou obálkou O (průnik s obálkou staré cesty) a buňkou mřížky.</summary>
     public readonly record struct Polozka(Utvar F, long Gi, long Gj, double X0, double Y0, double Z0, double X1, double Y1, double Z1);
