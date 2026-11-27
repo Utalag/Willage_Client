@@ -68,7 +68,8 @@ public sealed class KontextBloku : IGeologieGeo2
 
     public double Povrch(double x, double y) => _v.Povrch(x, y);
     public Vzorek Vzorek(double x, double y, double z) => _v.Vzorek(x, y, z);
-    public void Sloupec(double x, double y, double z0, double krokZ, Span<Vzorek> cil) => _v.Sloupec(x, y, z0, krokZ, cil);
+    /// <summary>K3 cesta: <see cref="Vzorek"/> (Bod) v každé buňce. Reference a srovnání; výchozí je <see cref="Sloupec"/> z běhů.</summary>
+    public void SloupecPoBodech(double x, double y, double z0, double krokZ, Span<Vzorek> cil) => _v.Sloupec(x, y, z0, krokZ, cil);
     public StavBodu Bod(double x, double y, double z, double zPov) => Chronologie.Bod(x, y, z, zPov);
 
     [ThreadStatic] private static List<Beh>? t_behy;
@@ -76,8 +77,11 @@ public sealed class KontextBloku : IGeologieGeo2
     /// <summary>K4: běhy sloupce přes [0, zMax) (1.7, 3.3) – segmentace s body zlomu, vzorkování nejistých oblastí po t_det/2 a půlení na ε.</summary>
     public void Behy(double x, double y, double zMax, List<Beh> cil) => SloupecGeo2.Behy(Chronologie, x, y, Povrch(x, y), zMax, cil);
 
-    /// <summary>K4: mřížka sloupce z běhů (3.4): buňka = běh přes střed, u hranice (±ε) rozhodne Bod. Výsledek ≡ <see cref="Sloupec"/> mimo tětivy &lt; t_det.</summary>
-    public void SloupecZBehu(double x, double y, double z0, double krokZ, Span<Vzorek> cil)
+    /// <summary>
+    /// Mřížka sloupce (výchozí od Jana t1043u = z běhů K4, 3.4): buňka = běh přes střed, u hranice (±ε) rozhodne Bod.
+    /// Výsledek ≡ <see cref="SloupecPoBodech"/> mimo tětivy &lt; t_det.
+    /// </summary>
+    public void Sloupec(double x, double y, double z0, double krokZ, Span<Vzorek> cil)
     {
         double zPov = Povrch(x, y), zMax = z0 + cil.Length * krokZ;
         var b = t_behy ??= new();

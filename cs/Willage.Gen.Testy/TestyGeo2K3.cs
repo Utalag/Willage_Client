@@ -112,7 +112,7 @@ public static class TestyGeo2K3
             for (int jj = 0; jj < n; jj++)
             {
                 int iy = obracene ? n - 1 - jj : jj;
-                k.Sloupec(ox + (ix + 0.5) * krokXy, oy + (iy + 0.5) * krokXy, 0, 0.25, s);
+                k.SloupecPoBodech(ox + (ix + 0.5) * krokXy, oy + (iy + 0.5) * krokXy, 0, 0.25, s); // K3 cesta (srovnání s cestou před K3)
                 otisky[ix * n + iy] = Otisk(s);
                 if (mat is not null) { long o = ((long)ix * n + iy) * nz; for (int z = 0; z < nz; z++) mat[o + z] = (byte)s[z].Material; }
                 if (vz is not null) s.CopyTo(vz.AsSpan(((ix * n) + iy) * nz, nz));

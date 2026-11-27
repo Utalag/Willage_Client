@@ -164,7 +164,7 @@ public static class TestyGeo2K5
         Vzorek[] Blok(KontextBloku k, out double t)
         {
             var v = new Vzorek[n * n * nz]; var sw = Stopwatch.StartNew();
-            Parallel.For(0, n, i => { for (int j = 0; j < n; j++) k.SloupecZBehu(o.X0 + i + 0.5, o.Y0 + j + 0.5, 0, 0.25, v.AsSpan((i * n + j) * nz, nz)); });
+            Parallel.For(0, n, i => { for (int j = 0; j < n; j++) k.Sloupec(o.X0 + i + 0.5, o.Y0 + j + 0.5, 0, 0.25, v.AsSpan((i * n + j) * nz, nz)); });
             t = sw.Elapsed.TotalSeconds; return v;
         }
         var vr = Blok(kr, out _); var va = Blok(ka, out _); var vp = Blok(kp, out _);
@@ -199,7 +199,7 @@ public static class TestyGeo2K5
             var (k, r) = KontextBlokuE84.Sestav(g.Geo, kat, SadaE84.Json(d), o, new MoznostiKompilace(krok, plna), vlaken);
             double tk = sw.Elapsed.TotalSeconds; sw.Restart();
             var v = new Vzorek[(long)n * n * nz];
-            Parallel.For(0, n, opt, i => { for (int j = 0; j < n; j++) k.SloupecZBehu(ox + (i + 0.5) * krokXy, oy + (j + 0.5) * krokXy, 0, 0.25, v.AsSpan((i * n + j) * nz, nz)); });
+            Parallel.For(0, n, opt, i => { for (int j = 0; j < n; j++) k.Sloupec(ox + (i + 0.5) * krokXy, oy + (j + 0.5) * krokXy, 0, 0.25, v.AsSpan((i * n + j) * nz, nz)); });
             vys[nazev] = (tk, sw.Elapsed.TotalSeconds, v);
             if (k.Chronologie.Udalosti[k.Chronologie.IndexUdalosti("skarn_kontakt")].Kontakt is KontaktniPasmo kp && kp.Plochy[0] is PlochaVrstevAdaptivni pa)
             {

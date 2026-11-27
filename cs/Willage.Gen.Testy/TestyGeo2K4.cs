@@ -232,7 +232,7 @@ public static class TestyGeo2K4
             {
                 double x = k.Oblast.X0 + (i / n + 0.5) * 2, y = k.Oblast.Y0 + (i % n + 0.5) * 2, zPov = k.Povrch(x, y);
                 var a = new Vzorek[nz]; var b = new Vzorek[nz];
-                k.Sloupec(x, y, 0, hz, a); k.SloupecZBehu(x, y, 0, hz, b);
+                k.SloupecPoBodech(x, y, 0, hz, a); k.Sloupec(x, y, 0, hz, b);
                 ot1[i] = TestyGeo2K3.Otisk(b);
                 long r = 0, nn = 0;
                 for (int iz = 0; iz < nz; iz++)
@@ -257,7 +257,7 @@ public static class TestyGeo2K4
         static void Ot(KontextBloku k, int n, double hz, int nz, int i, ulong[] cil)
         {
             double x = k.Oblast.X0 + (i / n + 0.5) * 2, y = k.Oblast.Y0 + (i % n + 0.5) * 2;
-            var b = new Vzorek[nz]; k.SloupecZBehu(x, y, 0, hz, b); cil[i] = TestyGeo2K3.Otisk(b);
+            var b = new Vzorek[nz]; k.Sloupec(x, y, 0, hz, b); cil[i] = TestyGeo2K3.Otisk(b);
         }
     }
 
@@ -525,13 +525,13 @@ public static class TestyGeo2K4
         for (int opak = 0; opak < 2; opak++)
         {
             long h0 = zas.VolaniHranic; sw.Restart();
-            Parallel.For(0, n, opt, ix => { for (int iy = 0; iy < n; iy++) k.Sloupec(ox + (ix + 0.5) * krokXy, oy + (iy + 0.5) * krokXy, 0, krokZ, a.AsSpan(((ix * n) + iy) * nz, nz)); });
+            Parallel.For(0, n, opt, ix => { for (int iy = 0; iy < n; iy++) k.SloupecPoBodech(ox + (ix + 0.5) * krokXy, oy + (iy + 0.5) * krokXy, 0, krokZ, a.AsSpan(((ix * n) + iy) * nz, nz)); });
             tK3 = sw.Elapsed.TotalSeconds; h3 = zas.VolaniHranic - h0; h0 = zas.VolaniHranic; sw.Restart();
             bodu = 0;
             Parallel.For(0, n, opt, () => 0L, (ix, _, s) =>
             {
                 long v0 = SloupecGeo2.VolaniBod;
-                for (int iy = 0; iy < n; iy++) k.SloupecZBehu(ox + (ix + 0.5) * krokXy, oy + (iy + 0.5) * krokXy, 0, krokZ, b.AsSpan(((ix * n) + iy) * nz, nz));
+                for (int iy = 0; iy < n; iy++) k.Sloupec(ox + (ix + 0.5) * krokXy, oy + (iy + 0.5) * krokXy, 0, krokZ, b.AsSpan(((ix * n) + iy) * nz, nz));
                 return s + SloupecGeo2.VolaniBod - v0;
             }, s => Interlocked.Add(ref bodu, s));
             tK4 = sw.Elapsed.TotalSeconds; h4 = zas.VolaniHranic - h0;
