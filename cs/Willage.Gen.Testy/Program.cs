@@ -22,6 +22,7 @@ if (jen == "GEO2")
 {
     TestyGeo2K1.Spust(data);
     TestyGeo2K1b.Spust(data);
+    TestyGeo2K2.Spust(data);
     Console.WriteLine($"OK {T.Ok}, chyb {T.Chyb}");
     return T.Chyb == 0 ? 0 : 1;
 }
@@ -114,6 +115,7 @@ TestyG6.Spust();
 TestyG7.Spust();
 TestyGeo2K1.Spust(data);
 TestyGeo2K1b.Spust(data);
+TestyGeo2K2.Spust(data);
 
 Console.WriteLine($"OK {T.Ok}, chyb {T.Chyb}");
 return T.Chyb == 0 ? 0 : 1;

@@ -66,7 +66,7 @@ public static class TestyGeo2K1
         public bool Vrstva(double x, double y, double z, out int m, out short v) => V.Vrstva(x, y, z, out m, out v);
     }
 
-    private sealed class Tovarna : ITovarnaTvaru
+    internal sealed class Tovarna : ITovarnaTvaru
     {
         private readonly KatalogGeo2 _k; private readonly bool _kontakt;
         private readonly Dictionary<string, Koule> _koule = new();
@@ -99,7 +99,7 @@ public static class TestyGeo2K1
         }
     }
 
-    private static VysledekKompilace K(string pole, KatalogGeo2 kat, bool kontakt = true, IEnumerable<string>? nikdy = null) =>
+    internal static VysledekKompilace K(string pole, KatalogGeo2 kat, bool kontakt = true, IEnumerable<string>? nikdy = null) =>
         KompilatorChronologie.Kompiluj(UdalostiJson.NactiPole(pole, nikdy), kat, new Tovarna(kat, kontakt));
 
     // ---------- katalog (kap. 8) ----------
@@ -214,7 +214,7 @@ public static class TestyGeo2K1
     }
 
     // ---------- V1 bez zlomu ----------
-    private const string V1Data = """
+    internal const string V1Data = """
     [ {"id":"sedimentace","stari":0,"operace":"Uloz","tvar":{"druh":"test_vrstvy","vrstvy":[{"do_z":0,"material":"granite"},{"do_z":30,"material":"cave_limestone"},{"do_z":100,"material":"topsoil"}]}},
       {"id":"intruze","stari":10,"operace":"Vnikni","tvar":{"druh":"test_koule","stred":[0,0,10],"r":5},
        "pravidla":{"nahrazuje":{"skupiny":["vapenec"]}},"vysledek":{"material":"granite"}},
