@@ -59,3 +59,10 @@ v měřených blocích stejné buňky jako úplná. Čas je zatížen cizími pr
    (4 / 458 752 sloupců nad τ, max 0,142 m). Výchozí zůstává zaručená varianta; přepnutí na rychlou by změkčilo V5.
 2. Listy s odhadem (vykliňování uvnitř 0,25 m): uznat jako výjimku V5 s příznakem `HraniceOdhad`, nebo přidat úroveň 0,125 m (cena).
 3. Mimo mřížku 0,25 m 4 sloupce nad τ (max 0,139 m) – kontrakt měří po 0,25 m, takže V5 splněno; uvádím pro úplnost.
+
+## Rozhodnutí Jana (2026-11-27 17:37, t1043u)
+1. Výchozí zůstává **zaručená** varianta (úplná kontrola 0,25 m); dražší kontext je přijatelný, jde jen o generování.
+2. Buňky 0,25 m s vykliňováním vrstvy uvnitř buňky (`HraniceOdhad`) jsou **uznaná výjimka V5** – zapsáno do kontraktu
+   (`06-geologie-geo2.md` V5 a 6.3, větev `geo2-kontrakt-docs`; `KONTRAKT-GEO2.md`). V5 je tím splněno: mimo výjimku 0 neshod sledu,
+   0 sloupců nad τ na mřížce 0,25 m; výjimka se vykazuje zvlášť (1807 sloupců, 768 neshod v 7 blocích).
+3. Běhy jako výchozí `KontextBloku.Sloupec` – provedeno na `geo2-vychozi` (`geo2-vychozi-prop.md`).
