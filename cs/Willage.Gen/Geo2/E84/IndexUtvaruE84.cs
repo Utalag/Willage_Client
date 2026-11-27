@@ -98,6 +98,50 @@ public sealed class IndexUtvaruE84
         return n;
     }
 
+    /// <summary>Kandidáti ve svislém sloupci (K4): jako <see cref="Kandidati"/> bez podmínky na z (pořadí <c>Features</c>).</summary>
+    public int KandidatiSloupce(double x, double y, Span<int> cil)
+    {
+        if (!Oblast.Obsahuje(x, y)) throw new InvalidOperationException($"sloupec ({x}, {y}) mimo kontext bloku {Oblast}");
+        int t = Dl(x, Oblast.X0, _nx) * _ny + Dl(y, Oblast.Y0, _ny);
+        long gi0 = Gd.Floori((x - _r) / _g), gi1 = Gd.Floori((x + _r) / _g), gj0 = Gd.Floori((y - _r) / _g), gj1 = Gd.Floori((y + _r) / _g);
+        int n = 0;
+        for (int k = _start[t]; k < _start[t + 1]; k++)
+        {
+            ref readonly var p = ref _p[_idx[k]];
+            if (p.Gi < gi0 || p.Gi > gi1 || p.Gj < gj0 || p.Gj > gj1) continue;
+            if (x < p.X0 || x > p.X1 || y < p.Y0 || y > p.Y1) continue;
+            cil[n++] = _idx[k];
+        }
+        return n;
+    }
+
+    /// <summary>
+    /// Položky, jejichž obálka je do <paramref name="r"/> od bodu (K4, vzdálenost k tělesům). Bez podmínky rozsahu buněk <c>Features</c>:
+    /// vzdálenost se měří k primitivu (2.5). Každá položka nejvýš jednou; pořadí podle indexu položky.
+    /// </summary>
+    public void Okoli(double x, double y, double z, double r, List<int> cil)
+    {
+        cil.Clear();
+        int ax = Dl(x - r, Oblast.X0, _nx), bx = Dl(x + r, Oblast.X0, _nx), ay = Dl(y - r, Oblast.Y0, _ny), by = Dl(y + r, Oblast.Y0, _ny);
+        double r2 = r * r;
+        for (int i = ax; i <= bx; i++)
+        for (int j = ay; j <= by; j++)
+        {
+            int t = i * _ny + j;
+            for (int k = _start[t]; k < _start[t + 1]; k++)
+            {
+                ref readonly var p = ref _p[_idx[k]];
+                double dx = x < p.X0 ? p.X0 - x : x > p.X1 ? x - p.X1 : 0, dy = y < p.Y0 ? p.Y0 - y : y > p.Y1 ? y - p.Y1 : 0;
+                double dz = z < p.Z0 ? p.Z0 - z : z > p.Z1 ? z - p.Z1 : 0;
+                if (dx * dx + dy * dy + dz * dz <= r2) cil.Add(_idx[k]);
+            }
+        }
+        if (ax != bx || ay != by) { cil.Sort(); int w = 0; for (int k = 0; k < cil.Count; k++) if (k == 0 || cil[k] != cil[k - 1]) cil[w++] = cil[k]; cil.RemoveRange(w, cil.Count - w); }
+    }
+
+    /// <summary>Položky, jejichž obálka v rovině xy je do <paramref name="r"/> od sloupce (K4, rozsah kontaktu ve sloupci).</summary>
+    public void OkoliSloupce(double x, double y, double r, List<int> cil) => Okoli(x, y, double.NaN, r, cil);
+
     /// <summary>Nejvíc položek v jedné dlaždici (velikost pracovního pole kandidátů).</summary>
     public int MaxVDlazdici { get; }
 }

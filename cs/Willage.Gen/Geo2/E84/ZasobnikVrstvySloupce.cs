@@ -7,7 +7,7 @@ namespace Willage.Gen.Geo2.E84;
 /// Materiál v bodě jako <see cref="VrstvySloupce.VrstvaMat"/>, index vrstvy = pořadí zdola. Pamatuje si poslední 4 sloupce
 /// v paměti lokální vláknu (K3, 3.6), takže jedna instance slouží všem vláknům bez zámků (<see cref="GeoVrstvy.Hranice"/> je čistá).
 /// </summary>
-public sealed class ZasobnikVrstvySloupce : ITvarZasobnikuSHranicemi
+public sealed class ZasobnikVrstvySloupce : ITvarZasobnikuSHranicemi, IIntervalyTvaru
 {
     private readonly GeoVrstvy _g;
     private const int N = 4; // malá paměť sloupců: bod q, q′ kontaktu a sousedé
@@ -53,5 +53,11 @@ public sealed class ZasobnikVrstvySloupce : ITvarZasobnikuSHranicemi
         var o = new IntervalVrstvy[hr.Count];
         for (int i = 0; i < hr.Count; i++) o[i] = new IntervalVrstvy(hr[i].Id, hr[i].Z0, hr[i].Z1);
         return o;
+    }
+
+    /// <summary>K4: hranice vrstev sloupce jsou body zlomu (materiál i index vrstvy jsou mezi nimi konstantní).</summary>
+    public void Sloupec(double x, double y, SegmentaceSloupce s)
+    {
+        foreach (var h in HraniceSloupce(x, y)) { s.Zlom(h.Z0); s.Zlom(h.Z1); }
     }
 }

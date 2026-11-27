@@ -1,4 +1,5 @@
 using Willage.Gen.Geologie;
+using Willage.Gen.Sum;
 
 namespace Willage.Gen.Geo2.E84;
 
@@ -44,11 +45,15 @@ public sealed class TvarE84 : ITvarSMaterialem
     }
 }
 
-/// <summary>Nitro sopek (průduch, láva, popel) z <see cref="NitroSopky.Mat"/>, jen čtení.</summary>
-public sealed class TvarSopky : ITvarSMaterialem
+/// <summary>
+/// Nitro sopek (průduch, láva, popel) z <see cref="NitroSopky.Mat"/>, jen čtení. K4: segmentace sloupce analyticky z veřejných dat
+/// (<see cref="Willage.Gen.Svet.Sopky.Seznam"/>, <c>Kuzel</c>): vrch kužele + 0,05, kráter + 0,05 (průduch), hranice slupek.
+/// </summary>
+public sealed class TvarSopky : ITvarSMaterialem, IIntervalyTvaru
 {
     private readonly NitroSopky _s;
-    public TvarSopky(NitroSopky s) => _s = s;
+    private readonly Willage.Gen.Svet.SvetFn? _svet;
+    public TvarSopky(NitroSopky s, Willage.Gen.Svet.SvetFn? svet = null) { _s = s; _svet = svet; }
     public bool Obsahuje(double x, double y, double z, out uint instance)
     {
         instance = 0;
@@ -57,4 +62,25 @@ public sealed class TvarSopky : ITvarSMaterialem
         return true;
     }
     public int Material(double x, double y, double z, uint instance) => _s.Mat(x, y, z);
+
+    public void Sloupec(double x, double y, SegmentaceSloupce seg)
+    {
+        if (_svet is null) { seg.Nejista(seg.Z0, seg.Z1); return; }
+        var (best, br2) = _s.Nejblizsi(x, y);
+        if (best < 0) return;
+        var s = _svet.Sopky.Seznam[best]; var p = _svet.P;
+        double r = Math.Sqrt(br2), h0 = s.VyskaOkoli, zPovKuz = h0 + _svet.Sopky.Kuzel(best, r);
+        seg.Zlom(zPovKuz + 0.05);
+        double rVent = Gd.Maxf(p.SopkaPruduchRM, s.Rc * 0.35);
+        if (r < rVent) seg.Zlom(h0 + s.H - s.D + 0.05);
+        double sl = Gd.Maxf(p.SopkaSlupkaM, 0.5);
+        double zMin = Math.Max(seg.Z0, 0);
+        for (long k = Math.Max(1, (long)Math.Floor((zPovKuz - seg.Z1) / sl)); ; k++)
+        {
+            double z = zPovKuz - k * sl;
+            if (z < zMin) break;
+            seg.Zlom(z);
+            seg.Nejista(z - 1e-9, z + 1e-9); // floor((zPovKuz − z)/sl) může v kraji zaokrouhlit jinak než z − k·sl
+        }
+    }
 }
