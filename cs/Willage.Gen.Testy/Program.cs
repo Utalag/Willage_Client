@@ -26,6 +26,20 @@ if (jen == "GEO2K3B")
     Console.WriteLine($"OK {T.Ok}, chyb {T.Chyb}");
     return T.Chyb == 0 ? 0 : 1;
 }
+if (jen == "GEO2K4B")
+{
+    // blok 128 m: K3 (Bod po buňkách) × K4 (běhy + raster), rozdíly a výkon; --blok=ox,oy[,krokXy[,vlaken]]
+    var bo = args.FirstOrDefault(a => a.StartsWith("--blok="))?["--blok=".Length..].Split(',').Select(v => double.Parse(v, System.Globalization.CultureInfo.InvariantCulture)).ToArray() ?? new[] { 1024.0, 512.0 };
+    TestyGeo2K4.Blok(data, bo[0], bo[1], bo.Length > 3 ? (int)bo[3] : Environment.ProcessorCount, bo.Length > 2 ? bo[2] : 0.25);
+    Console.WriteLine($"OK {T.Ok}, chyb {T.Chyb}");
+    return T.Chyb == 0 ? 0 : 1;
+}
+if (jen == "GEO2K4")
+{
+    TestyGeo2K4.Spust(data);
+    Console.WriteLine($"OK {T.Ok}, chyb {T.Chyb}");
+    return T.Chyb == 0 ? 0 : 1;
+}
 if (jen == "GEO2K3")
 {
     TestyGeo2K3.Spust(data);
@@ -38,6 +52,7 @@ if (jen == "GEO2")
     TestyGeo2K1b.Spust(data);
     TestyGeo2K2.Spust(data);
     TestyGeo2K3.Spust(data);
+    TestyGeo2K4.Spust(data);
     Console.WriteLine($"OK {T.Ok}, chyb {T.Chyb}");
     return T.Chyb == 0 ? 0 : 1;
 }
@@ -132,6 +147,7 @@ TestyGeo2K1.Spust(data);
 TestyGeo2K1b.Spust(data);
 TestyGeo2K2.Spust(data);
 TestyGeo2K3.Spust(data);
+TestyGeo2K4.Spust(data);
 
 Console.WriteLine($"OK {T.Ok}, chyb {T.Chyb}");
 return T.Chyb == 0 ? 0 : 1;
