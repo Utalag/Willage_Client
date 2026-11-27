@@ -37,5 +37,23 @@ Nový nemonolitický modul `cs/Willage.Gen/Geo2/`. Stará cesta (`GeoVrstvy`, `U
 - Kontrakt předbíhá katalog: `retired` / `replacedBy` v katalogu Willage-backend zatím nejsou. Čtou se, jen pokud tam jsou.
 - Zkušební tvary nejsou geologické tvary; ověřují pravidla, ne geometrii (ta je K1b, K4).
 
-## Výsledky
-*(doplní se po měření)*
+## Výsledky (2026-11-27 12:20)
+
+**Hotovo (K1a)** – `cs/Willage.Gen/Geo2/` (8 souborů, nová cesta vedle staré, stará `GeoVrstvy`/`Utvary` beze změny a nevolá se):
+- chronologie: řazení podle (stáří, id), shodné stáří = chyba, deformace jen jako typ (etapa D), sourozenci;
+- pravidla zásahu `nahrazuje` (materiály/skupiny, `nikdy`), `zdroje` (vrstvy/tělesa/transformace), `prostor`, `hloubka`; pravidlo cíle 2.3 (Neurčeno → jen Uloz, materiál → nahrazuje + zdroje, prázdno → jen prostor, nad povrchem / vykopáno → nikdo);
+- validace 2.4 se stabilními kódy chyb a varování (`ZpravaValidace`);
+- katalog kap. 8: stav `retired` + `replacedBy`, řetěz náhrad s detekcí cyklu, skupiny, otisk katalogu; odkaz na vyřazenou bez náhrady = chyba, s náhradou = varování a přesměrování;
+- dopředný `Bod(x,y,z)` nad rozhraními tvarů (`ITvar`, `ITvarZasobniku`, `IKontaktniPasmo` s prefixem).
+
+**Testy** (lokálně, `dotnet run -c Release -- --jen=GEO2`): **74 OK, 0 chyb** v 6 sekcích (katalog, příklad 2.7 – 12 událostí, validace, V1 sedimentace → intruze → skarn → žíla → metamorfóza, pravidlo cíle, determinismus a nezávislost na pořadí v datech). Celá sada: **598 OK, 0 chyb** (2 min 47 s), staré otisky beze změny. Kontrola citlivosti: záměrná chyba v pravidle cíle (prázdno čte i `nahrazuje`) test zachytí.
+
+**Hypotézy:** H1 (pořadí jen ze (stáří, id)) – potvrzeno testem přeházených dat. H2 (pravidlo cíle stačí místo zvláštních výjimek pro dutiny) – potvrzeno sekcí Prázdno. H3 (katalog bez pevného počtu) – masky podle `MaxId`, test s id 42/90–93. Výkon se v K1a neměří (nejsou adaptéry na skutečné tvary).
+
+**Negativa / co chybí:**
+- skutečné kontaktní pásmo 2.5 a adaptéry tvarů E84 a zásobníku `VrstvySloupce` → K1b; kompilátor bez nich hlásí `KONTAKT_K1B`;
+- testy jen nad syntetickými tvary (koule, deska, vrstvy);
+- žádný index bloku, žádné intervaly, žádný raster;
+- `idStatus: retired` / `replacedBy` zatím nejsou ve schématu katalogu backendu – GEO2 je čte, pokud jsou; změnu schématu je třeba dohodnout s Willage-backend;
+- push neproveden (token není k dispozici), do main nic.
+
