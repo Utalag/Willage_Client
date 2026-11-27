@@ -36,5 +36,48 @@
 - sdílený čítač nespárovaných trojúhelníků mezi vlákny = soupeření o cache linku → čítač lokální vláknu;
 - bod mimo kontext (q′ kontaktu za okrajem) → tvar s indexem hodí výjimku, ne tichou chybu.
 
-## Výsledky
-*(doplní se po měření)*
+## Výsledky (2026-11-27 ~15:35)
+
+Větev `geo2-k3-index` (z `geo2-k2-vzorek`): 4ec1010 PROP, 2b582d7 `KontextBloku` + předpočtené uzly plochy, 4f935eb zásobník s keší lokální vláknu,
+ac08a09 přesné obálky + index po dlaždicích + `TvarE84Index`, 99065ab testy a blok `--jen=GEO2K3B`, c677b96 odmítnutí celé buňky plochy rozsahem z,
+2f5298b výpis volání `Hranice`. Push neproběhl (token není k dispozici). Mimo `Geo2/` a `TestyGeo2*` se mění jen `Program.cs`; stará cesta nedotčena.
+
+**Testy:** GEO2 158/158 (K1a + K1b + K2 + K3), celá sada 682/682, chyb 0, staré otisky beze změny.
+
+| Kritérium | Výsledek |
+|---|---|
+| bitová shoda (celý blok (1024, 512) po 0,25 m, 134 M buněk) | 0 různých otisků sloupců (všech 20 B vzorku), 0 různých materiálů; shoda se starou cestou 99,771 % před i po |
+| bitová shoda (test, blok 64 m po 1 m) | 0 / 4 096 sloupců; blok obsahuje skarn 11 502, pegmatit 2 954, kimberlit 1 225, sůl 11 085 buněk |
+| index × `Features` | 5 druhů × 20 000 bodů: žádný zásah (SDF &lt; 0) nechybí, kandidáti jsou podposloupnost `Features` (pořadí = shody nejmenší SDF) |
+| fuzz obálek | 428 000 bodů v obálkách staré cesty, 20 810 uvnitř těles, 0 mimo přesnou obálku |
+| V7 | stejný otisk při 1 a 8 vláknech a v opačném pořadí sloupců |
+| okraj | 3,0 m (R_max + η + uzel); 0 uzlů plochy dopočtených mimo kontext |
+
+**V6 – odstraněná práce**
+| Co | Před K3 | Po K3 |
+|---|---|---|
+| vyhodnocení SDF (20 000 bodů do 70 m) | žíla 2 538, čočka 341, kras 1 610, dóm 2 838, komín 2 008 (celkem 9 335) | 522 / 92 / 1 610 / 632 / 40 (celkem 2 896, −69 %; komín −98 %) |
+| objem obálky proti staré cestě | 100 % | žíla 22 %, čočka 25 %, dóm 23 %, komín 1,3 %, kras 100 % |
+| stavby `Features` za výpočtu | na každý sloupec a vlákno | 0 (index jednou za blok, 127 instancí v bloku 64 m + okraj) |
+| uzly plochy kontaktu (blok 64 m) | 51 724–52 945 (8 keší vláken, `ConcurrentDictionary` s růstem) | 20 164 jednou, v poli |
+| `GeologieCs.Klon()` + chronologie | 1 na vlákno | 0, jedna sdílená |
+| `Hranice` bodového sloupce | – | 1,02 na sloupec (q′ kontaktu skoro vždy v keši) |
+
+**Výkon** (blok (1024, 512) po 0,25 m, 8 vláken, 3 běhy po sobě; čas K3 obsahuje i otisk sloupců testu, ~9 %):
+| Běh | stará cesta | GEO2 před K3 | GEO2 K3 (výpočet + kontext) | K3 / stará |
+|---|---|---|---|---|
+| 1 | 5,1 s | 23,4 s | 6,1 + 0,47 s | ×1,3 |
+| 2 | 5,5 s | 22,7 s | 5,4 + 0,46 s | ×1,1 |
+| 3 | 5,0 s | 22,1 s | 5,8 + 0,46 s | ×1,3 |
+
+Bez odmítnutí buněk plochy (jen index + kontext): 34,6 s → 9,8 + 0,75 s. Vlákna (blok po 0,5 m): 1 vlákno 7,3 s + kontext 2,0 s, 8 vláken 1,5 s + 0,46 s (×4,9).
+Zbytek GEO2 K3 (profil): ~50 % `VrstvySloupce.Hranice` staré cesty (1× na sloupec, stejná práce jako stará cesta), kontakt ~12 %, tělesa ~9 %.
+
+**Negativní / omezení:**
+- Ořez čočky obálkou staré cesty (±ra, rb může být větší) zůstává kvůli bitové shodě; oprava změní výsledek, rozhodne Jan.
+- Kras má dál obálku staré cesty (deformace šumem); úspora 0 %.
+- Výčet instancí bere `Features` ve středu instance a kopii tabulky mřížky útvarů (5 řádků). Kdyby se tabulka staré cesty změnila, `Sestav` hodí výjimku a test indexu selže; čistší je veřejná metoda staré cesty (změna staré cesty → jen se souhlasem Jana).
+- Diagnostika `Nesparovanych` teď počítá jen vyhodnocené trojúhelníky (odmítnuté buňky ne), číslo je proto menší než v K1b; výsledky se nemění. `VolaniHranic` je mezi vlákny jen přibližný.
+- Komín: kontrakt uvádí ~60 % vyhodnocení SDF; v tomto vzorku (body do 70 m) byl podíl komínu 21,5 %. Po K3 0,4 % (40 / 2 896).
+- Měřeno na sdíleném boxu, kde od 12:44 běží cizí dlouhé procesy `grep` (2–3 jádra na 100 %, ~5 GB RAM). Absolutní časy jsou proto zašuměné (týká se i měření K1b a K2); poměry před/po jsou ze stejných běhů.
+- Dál zrychlit jde už jen omezením práce na buňku: intervaly sloupce a kontakt v intervalech (K4), adaptivní mřížka (K5).
