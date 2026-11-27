@@ -10,9 +10,18 @@ var pr = new Propustnost(kat);
 
 // G-5: rychlé ladění jedné sady (--jen=G5); plný běh bez argumentu.
 var jen = args.FirstOrDefault(a => a.StartsWith("--jen="))?[6..];
+if (jen == "GEO2B")
+{
+    // blok 128 m: GEO2 × stará cesta a výkon (není v celé sadě, trvá déle); --blok=ox,oy volitelně
+    var bo = args.FirstOrDefault(a => a.StartsWith("--blok="))?["--blok=".Length..].Split(',').Select(v => double.Parse(v, System.Globalization.CultureInfo.InvariantCulture)).ToArray() ?? new[] { 0.0, 0.0 };
+    TestyGeo2K1b.Blok(data, bo[0], bo[1], Environment.ProcessorCount, bo.Length > 2 ? bo[2] : 1.0, bo.Length > 3 ? bo[3] : 0.5);
+    Console.WriteLine($"OK {T.Ok}, chyb {T.Chyb}");
+    return T.Chyb == 0 ? 0 : 1;
+}
 if (jen == "GEO2")
 {
     TestyGeo2K1.Spust(data);
+    TestyGeo2K1b.Spust(data);
     Console.WriteLine($"OK {T.Ok}, chyb {T.Chyb}");
     return T.Chyb == 0 ? 0 : 1;
 }
@@ -104,6 +113,7 @@ TestyG5.Spust();
 TestyG6.Spust();
 TestyG7.Spust();
 TestyGeo2K1.Spust(data);
+TestyGeo2K1b.Spust(data);
 
 Console.WriteLine($"OK {T.Ok}, chyb {T.Chyb}");
 return T.Chyb == 0 ? 0 : 1;
