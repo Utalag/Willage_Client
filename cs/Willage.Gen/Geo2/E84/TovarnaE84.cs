@@ -32,7 +32,7 @@ public sealed class TovarnaE84 : ITovarnaTvaru
         switch (u.TvarDruh)
         {
             case "zasobnik": return Str("zdroj") == "VrstvySloupce" ? Zasobnik : null;
-            case "sopka_nitro": return new TvarSopky(_g.Sopky);
+            case "sopka_nitro": return new TvarSopky(_g.Sopky, _g.Svet);
             case "elipsoid" or "deska" or "kapsle_retez":
                 return Str("z_parametru") switch
                 {
@@ -47,7 +47,8 @@ public sealed class TovarnaE84 : ITovarnaTvaru
         }
     }
 
-    private ITvar Teleso(DruhUtvaru d) => _index ? new TvarE84Index(_g, Zasobnik, d) : new TvarE84(_g, Zasobnik, d);
+    private ITvar Teleso(DruhUtvaru d) =>
+        !_index ? new TvarE84(_g, Zasobnik, d) : PrimkaE84.JeElipsoid(d) ? new TvarE84Elipsoid(_g, Zasobnik, d) : new TvarE84Index(_g, Zasobnik, d);
 
     public long SeedUdalosti(UdalostData u) =>
         u.Tvar.ValueKind == JsonValueKind.Object && u.Tvar.TryGetProperty("seed_e84", out var v) && v.ValueKind == JsonValueKind.True
