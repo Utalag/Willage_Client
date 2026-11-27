@@ -63,12 +63,14 @@ public sealed class KontaktniPasmo : IKontaktniPasmo
         return ok;
     }
 
-    public bool Plati(double x, double y, double z, in StavBodu stav, ChronologieGeo2 c, int index, double zPov)
+    public bool Plati(double x, double y, double z, in StavBodu stav, ChronologieGeo2 c, int index, double zPov, out bool odhad)
     {
+        odhad = false;
         bool vT = VCili(stav);
         if (_p.Strana == StranaKontaktu.Vne && vT) return false;
         if (_p.Strana == StranaKontaktu.Uvnitr && !vT) return false;
         if (!Nejblizsi(x, y, z, out var b)) return false;
+        odhad = b.Odhad;
         if (b.D > Sirka(x, y, z)) return false;
         if (_p.HostitelOkoli is null) return true;
         double eta = _p.HloubkaVzorkuM, ux, uy, uz;

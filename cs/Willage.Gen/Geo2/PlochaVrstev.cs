@@ -6,7 +6,7 @@ namespace Willage.Gen.Geo2;
 /// Kontaktní plocha cílových vrstev (2.5, rozhodnutí 7A): hranice sjednocení cílových vrstev jako výšková plocha na mřížce
 /// hranic s krokem g. Buňka = 2 trojúhelníky s pevnou úhlopříčkou (00–11), d̃ = přesná vzdálenost bod–trojúhelník.
 /// Dno světa (z = 0) není kontakt. Rohy s různým počtem cílových intervalů (vyklínění) nejdou spárovat: tam se měří
-/// vzdálenost k vrcholům (počítá se jako <see cref="Nesparovanych"/>; chyba až ~g/√2, viz PROP K1b).
+/// vzdálenost k vrcholům (počítá se jako <see cref="Nesparovanych"/>; chyba až ~g/√2, viz PROP K1b); takový bod má <see cref="BodPlochy.Odhad"/>.
 /// K1b: pevný krok g; adaptivní mřížka 1 / 0,5 / 0,25 m s kontrolním bodem (6.3) je K5. Vláknově bezpečná, pokud je zásobník.
 /// </summary>
 public sealed class PlochaVrstev : IPlochaKontaktu
@@ -46,7 +46,7 @@ public sealed class PlochaVrstev : IPlochaKontaktu
     public bool Nejblizsi(double x, double y, double z, double rMax, out BodPlochy b)
     {
         double g = KrokM, best2 = rMax * rMax; bool nasel = false;
-        double bx = 0, by = 0, bz = 0, nx = 0, ny = 0, nz = 1;
+        double bx = 0, by = 0, bz = 0, nx = 0, ny = 0, nz = 1; bool odh = false;
         long i0 = (long)Math.Floor((x - rMax) / g), i1 = (long)Math.Floor((x + rMax) / g);
         long j0 = (long)Math.Floor((y - rMax) / g), j1 = (long)Math.Floor((y + rMax) / g);
         for (long i = i0; i <= i1; i++)
@@ -63,12 +63,12 @@ public sealed class PlochaVrstev : IPlochaKontaktu
                 Trojuhelnik(x0, y0, u00, x1, y1, u11, x0, y1, u01);
             }
         }
-        b = new BodPlochy(bx, by, bz, nx, ny, nz, Math.Sqrt(best2));
+        b = new BodPlochy(bx, by, bz, nx, ny, nz, Math.Sqrt(best2), odh);
         return nasel;
 
-        void Zkus(double d2, double qx, double qy, double qz, double mx, double my, double mz)
+        void Zkus(double d2, double qx, double qy, double qz, double mx, double my, double mz, bool o = false)
         {
-            if (d2 < best2) { best2 = d2; bx = qx; by = qy; bz = qz; nx = mx; ny = my; nz = mz; nasel = true; }
+            if (d2 < best2) { best2 = d2; bx = qx; by = qy; bz = qz; nx = mx; ny = my; nz = mz; nasel = true; odh = o; }
         }
 
         void Trojuhelnik(double ax, double ay, double[] ua, double cx, double cy, double[] uc, double ex, double ey, double[] ue)
@@ -102,7 +102,7 @@ public sealed class PlochaVrstev : IPlochaKontaktu
             {
                 if ((k & 1) == 0 && u[k] <= 1e-9) continue;
                 double d2 = Geometrie3.D2(x, y, z, vx, vy, u[k]);
-                if (d2 < best2) Zkus(d2, vx, vy, u[k], 0, 0, (k & 1) == 0 ? -1 : 1);
+                if (d2 < best2) Zkus(d2, vx, vy, u[k], 0, 0, (k & 1) == 0 ? -1 : 1, true);
             }
         }
     }

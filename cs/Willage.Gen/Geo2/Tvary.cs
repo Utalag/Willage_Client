@@ -32,7 +32,8 @@ public interface ITvarZasobnikuSHranicemi : ITvarZasobniku
 }
 
 /// <summary>Nejbližší bod π kontaktní plochy S k bodu q: poloha, jednotková normála plochy v π, vzdálenost D = |π − q| [m].</summary>
-public readonly record struct BodPlochy(double X, double Y, double Z, double Nx, double Ny, double Nz, double D);
+/// <summary><c>Odhad</c>: vzdálenost není zaručeně ≤ e_k (např. vrcholy u vyklínění vrstvy).</summary>
+public readonly record struct BodPlochy(double X, double Y, double Z, double Nx, double Ny, double Nz, double D, bool Odhad = false);
 
 /// <summary>Kontaktní plocha S (2.5): nejbližší bod do vzdálenosti <c>rMax</c>. Chyba vzdálenosti MUSÍ být ≤ e_k.</summary>
 public interface IPlochaKontaktu
@@ -49,7 +50,8 @@ public interface ITvarSVzdalenosti : ITvar
 /// <summary>Kontaktní pásmo (kap. 2.5). Prefixový stav v q′ čte přes chronologii (události s indexem &lt; <paramref name="index"/>).</summary>
 public interface IKontaktniPasmo
 {
-    bool Plati(double x, double y, double z, in StavBodu stav, ChronologieGeo2 chronologie, int index, double zPov);
+    /// <param name="odhad">o výsledku rozhodla odhadnutá vzdálenost (→ <see cref="PriznakyVzorku.HraniceOdhad"/>)</param>
+    bool Plati(double x, double y, double z, in StavBodu stav, ChronologieGeo2 chronologie, int index, double zPov, out bool odhad);
 }
 
 /// <summary>Dodává tvary podle <c>tvar.druh</c>. Stará cesta (E84, VrstvySloupce) se napojí adaptéry (<c>Geo2.E84</c>).</summary>
