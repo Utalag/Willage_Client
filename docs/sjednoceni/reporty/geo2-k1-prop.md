@@ -48,7 +48,16 @@ Nový nemonolitický modul `cs/Willage.Gen/Geo2/`. Stará cesta (`GeoVrstvy`, `U
 
 **Testy** (lokálně, `dotnet run -c Release -- --jen=GEO2`): **74 OK, 0 chyb** v 6 sekcích (katalog, příklad 2.7 – 12 událostí, validace, V1 sedimentace → intruze → skarn → žíla → metamorfóza, pravidlo cíle, determinismus a nezávislost na pořadí v datech). Celá sada: **598 OK, 0 chyb** (2 min 47 s), staré otisky beze změny. Kontrola citlivosti: záměrná chyba v pravidle cíle (prázdno čte i `nahrazuje`) test zachytí.
 
-**Hypotézy:** H1 (pořadí jen ze (stáří, id)) – potvrzeno testem přeházených dat. H2 (pravidlo cíle stačí místo zvláštních výjimek pro dutiny) – potvrzeno sekcí Prázdno. H3 (katalog bez pevného počtu) – masky podle `MaxId`, test s id 42/90–93. Výkon se v K1a neměří (nejsou adaptéry na skutečné tvary).
+**Kritéria:**
+| Test | Výsledek |
+|---|---|
+| V1 | ✔ materiál i původ podle očekávání; skarn jen ve vápenci po normále hostitele; žíla mladší než skarn ho protne; vypnutí žíly nezmění starší body; metamorfóza nepřemění skarn (`zdroje.transformace = false`) |
+| V2 | ✔ zakázané kombinace 2.4 selžou s kódem, povolené projdou; pravidlo 2.3 pro dutinu i materiál |
+| pořadí | ✔ shodné stáří = `STARI_SHODNE`; zamíchané pole = stejné body; stejné výsledky ve vláknech |
+| katalog | ✔ všechny body kap. 8 včetně nové horniny ve skupině a změny otisku |
+| příklad 2.7 | ✔ 12 událostí bez chyby (kontakt přes zkušební továrnu) |
+| regrese | ✔ 598/598, staré otisky beze změny |
+Výkon se v K1a neměří (chybí adaptéry na skutečné tvary).
 
 **Negativa / co chybí:**
 - skutečné kontaktní pásmo 2.5 a adaptéry tvarů E84 a zásobníku `VrstvySloupce` → K1b; kompilátor bez nich hlásí `KONTAKT_K1B`;
