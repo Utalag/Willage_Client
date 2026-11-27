@@ -30,5 +30,32 @@ krok K5 v kap. 5. Větev `geo2-k5-mrizka` z `geo2-k4-intervaly`. Kritérium: GEO
 - kontrolní body jen ve středu a středech hran: mezi nimi může chyba τ překročit (měří V5 na mřížce 0,25 m i mimo);
 - víc uzlů v členitých místech → dražší kontext (měří se).
 
-## Výsledky
-*(doplní se po měření)*
+## Výsledky *(2026-11-27 ~17:10)*
+Commity: `72a957b` HledaniPlochy + pevná mřížka beze změny, `cc89f15` PlochaVrstevAdaptivni, `074d72b` volba v datech + okraj,
+`c21021a` testy. Celá sada **735 / 735 OK**, otisky GEO1 beze změny (krok 5, G-1, G-3).
+
+| Test | Výsledek |
+|---|---|
+| listy (7 bloků 64 m, skarn: granitoidy) | 1 m 84,5 %, 0,5 m 3,2 %, 0,25 m 12,2 %; listů s odhadem 2730 |
+| V5 na mřížce 0,25 m (458 752 sloupců) | **neshod sledu 0, p99 0,004, max 0,123 m, > τ 0** (mimo listy s odhadem) |
+| V5 mimo mřížku (náhodné polohy) | neshod 0, p99 0,004, max 0,139 m, **> τ 4 sloupce** |
+| V5 svahy > 20° (111 791 sl.) / rychlá mocnost (635) | max 0,118 / 0,000 m, > τ 0 |
+| listy s odhadem (≈ 0,4 % sloupců) | vrstva vykliňuje uvnitř buňky 0,25 m: neshod sledu 768 z 1807 sloupců (příznak `HraniceOdhad` jde do kontaktu) |
+| pevná 0,5 m pro srovnání | neshod sledu 1444, max 6,6 m, > τ 855 sloupců → **adaptivní je výrazně lepší** |
+| švy | 1024 kořenů v překryvu dvou kontextů, 0 rozdílů |
+| skarn proti referenci 0,125 m (11 527 buněk) | jinak: adaptivní 9, pevná 0,5 m 25 |
+| V4 E84 s adaptivní mřížkou | 0 tětiv ≥ t_det vynecháno |
+
+**Negativní výsledek:** jen kontrolní body (střed + středy hran) V5 nesplnily – 4 sloupce na mřížce 0,25 m nad τ (max 0,142 m).
+Proto přibyla úplná kontrola všech bodů 0,25 m v buňkách 1 m (`KontrolaMrizkyPo025`, výchozí zapnuto): 0 sloupců nad τ.
+
+**Výkon** (uzly = volání `Hranice` v kontextu): adaptivní 630 427 × pevná 141 148 (7 bloků); kontext 5,1 s × 1,4 s.
+Blok 128 m (kontext + blok K4): (1024, 512) pevná 3,37 s, adaptivní 3,88 s, rychlá (bez úplné kontroly) 2,92 s;
+(3000, 2000) 1,21 / 2,58 / 1,34 s. Samotný blok K4 stejný (0,14 × 0,15 s na 64 m); dražší je jen kontext. Rychlá varianta dala
+v měřených blocích stejné buňky jako úplná. Čas je zatížen cizími procesy na boxu (grep, ~2 jádra).
+
+**Rozhodnutí pro Jana (kontrakt neměním):**
+1. Úplná kontrola 0,25 m = V5 zaručeně, ale kontext ~2–4× dražší. Rychlá varianta = cena jako pevná mřížka, V5 jen statisticky
+   (4 / 458 752 sloupců nad τ, max 0,142 m). Výchozí zůstává zaručená varianta; přepnutí na rychlou by změkčilo V5.
+2. Listy s odhadem (vykliňování uvnitř 0,25 m): uznat jako výjimku V5 s příznakem `HraniceOdhad`, nebo přidat úroveň 0,125 m (cena).
+3. Mimo mřížku 0,25 m 4 sloupce nad τ (max 0,139 m) – kontrakt měří po 0,25 m, takže V5 splněno; uvádím pro úplnost.
