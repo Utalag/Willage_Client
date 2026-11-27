@@ -22,18 +22,29 @@ public static class TestyGeo2K1
     }
 
     // ---------- syntetické tvary ----------
-    private sealed class Koule : ITvarSMaterialem
+    internal sealed class Koule : ITvarSMaterialem, ITvarSVzdalenosti, IPlochaKontaktu
     {
         public double X, Y, Z, R; public int Mat;
         public bool Obsahuje(double x, double y, double z, out uint i) { i = 1; double dx = x - X, dy = y - Y, dz = z - Z; return dx * dx + dy * dy + dz * dz <= R * R; }
         public int Material(double x, double y, double z, uint i) => Mat;
+        public IPlochaKontaktu Plocha => this;
+        public bool Nejblizsi(double x, double y, double z, double rMax, out BodPlochy b)
+        {
+            double dx = x - X, dy = y - Y, dz = z - Z, r = Math.Sqrt(dx * dx + dy * dy + dz * dz);
+            b = default;
+            if (R <= 0 || r < 1e-12 || Math.Abs(r - R) > rMax) return false;
+            double k = R / r;
+            b = new BodPlochy(X + dx * k, Y + dy * k, Z + dz * k, dx / r, dy / r, dz / r, Math.Abs(r - R));
+            return true;
+        }
     }
     private sealed class Deska : ITvar
     {
         public double X0, H;
         public bool Obsahuje(double x, double y, double z, out uint i) { i = 7; return Math.Abs(x - X0) <= H; }
     }
-    private sealed class Vrstvy : ITvarZasobniku
+    /// <summary>Vodorovné vrstvy (do_z zdola); s hranicemi pro kontakt 2.5.</summary>
+    internal sealed class Vrstvy : ITvarZasobnikuSHranicemi
     {
         public List<(double doZ, int mat)> V = new();
         public bool Vrstva(double x, double y, double z, out int m, out short v)
@@ -41,20 +52,18 @@ public static class TestyGeo2K1
             for (int i = 0; i < V.Count; i++) if (z < V[i].doZ) { m = V[i].mat; v = (short)i; return true; }
             m = V[^1].mat; v = (short)(V.Count - 1); return true;
         }
-    }
-    /// <summary>Miniaturní kontakt 2.5 kolem koule cíle: vně, d ≤ šířka, hostitel_okoli čtený prefixem v q′ = π(q) + η·u.</summary>
-    private sealed class KontaktKoule : IKontaktniPasmo
-    {
-        public Koule Cil = null!; public double W, Eta; public HashSet<int> Hostitel = new();
-        public bool Plati(double x, double y, double z, in StavBodu s, PrefixVyhodnoceni pred)
+        public IReadOnlyList<IntervalVrstvy> Sloupec(double x, double y)
         {
-            double dx = x - Cil.X, dy = y - Cil.Y, dz = z - Cil.Z, r = Math.Sqrt(dx * dx + dy * dy + dz * dz);
-            double d = r - Cil.R;
-            if (d <= 0 || d > W || r < 1e-9) return false;
-            double k = (Cil.R - Eta) / r;
-            var q = pred(Cil.X + dx * k, Cil.Y + dy * k, Cil.Z + dz * k);
-            return q.Typ == TypProstoru.Pevne && Hostitel.Contains(q.Material);
+            var o = new List<IntervalVrstvy>(); double z0 = -1e9;
+            for (int i = 0; i < V.Count; i++) { double z1 = i == V.Count - 1 ? 1e9 : V[i].doZ; o.Add(new(V[i].mat, z0, z1)); z0 = z1; }
+            return o;
         }
+    }
+    /// <summary>Zásobník bez hranic (pro validaci KONTAKT_VRSTVY_BEZ_HRANIC).</summary>
+    private sealed class VrstvyBezHranic : ITvarZasobniku
+    {
+        public Vrstvy V = new();
+        public bool Vrstva(double x, double y, double z, out int m, out short v) => V.Vrstva(x, y, z, out m, out v);
     }
 
     private sealed class Tovarna : ITovarnaTvaru
@@ -80,24 +89,13 @@ public static class TestyGeo2K1
                 case "test_deska":
                     return new Deska { X0 = t.GetProperty("x0").GetDouble(), H = t.GetProperty("polotloustka").GetDouble() };
                 // příklad 2.7: geometrie není předmětem K1, stačí tvar, který nic neobsahuje (a zásobník / tvar s materiálem)
-                case "zasobnik": return new Vrstvy { V = { (1e9, Id("granite")) } };
+                case "zasobnik":
+                    var zv = new Vrstvy { V = { (1e9, Id("granite")) } };
+                    return _kontakt ? zv : new VrstvyBezHranic { V = zv };
                 case "sopka_nitro": return new Koule { R = -1, Mat = Id("granite") };
                 case "elipsoid" or "deska" or "kapsle_retez" or "pod_dnem" or "rovina_zlomu": return new Koule { R = -1 };
                 default: return null;
             }
-        }
-        public IKontaktniPasmo? Kontakt(UdalostData u)
-        {
-            if (!_kontakt) return null;
-            var ko = u.Pravidla.GetProperty("kontakt");
-            var cil = ko.GetProperty("cil");
-            var host = new HashSet<int>();
-            if (ko.TryGetProperty("hostitel_okoli", out var ho) && ho.TryGetProperty("materialy", out var hm))
-                foreach (var e in hm.EnumerateArray()) host.Add(Id(e.GetString()!));
-            Koule? c = null;
-            if (cil.TryGetProperty("udalosti", out var cu)) foreach (var e in cu.EnumerateArray()) if (_koule.TryGetValue(e.GetString()!, out var x)) c = x;
-            return new KontaktKoule { Cil = c ?? new Koule { R = -1 }, W = ko.GetProperty("sirka_m").GetDouble(),
-                Eta = ho.ValueKind == JsonValueKind.Object && ho.TryGetProperty("hloubka_vzorku_m", out var h) ? h.GetDouble() : 0.125, Hostitel = host };
         }
     }
 
@@ -164,7 +162,8 @@ public static class TestyGeo2K1
                 "O1: skarn jen v karbonátech, amfibolit ne");
         }
         var bez = KompilatorChronologie.Kompiluj(sada, kat, new Tovarna(kat, kontakt: false));
-        T.Je(!bez.Ok && bez.Zprava.Obsahuje("KONTAKT_K1B"), "bez implementace kontaktu: chyba KONTAKT_K1B (K1b)");
+        T.Je(!bez.Ok && bez.Zprava.Obsahuje("KONTAKT_VRSTVY_BEZ_HRANIC") && !bez.Zprava.Obsahuje("KONTAKT_K1B"),
+            "kontakt na vrstvy se zásobníkem bez hranic: KONTAKT_VRSTVY_BEZ_HRANIC (zástupný KONTAKT_K1B už není)");
     }
 
     // ---------- validace 2.4 ----------

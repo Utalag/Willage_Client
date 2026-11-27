@@ -1,3 +1,5 @@
+using Willage.Gen.Sum;
+
 namespace Willage.Gen.Geo2;
 
 /// <summary>Prostorový popis materiálové události nebo oblasti transformace. K1: bodový test; závorky a intervaly přidá K4 (kap. 2.6, 2.8).</summary>
@@ -19,23 +21,48 @@ public interface ITvarZasobniku
     bool Vrstva(double x, double y, double z, out int material, out short vrstva);
 }
 
-/// <summary>Stav bodu těsně před danou událostí (pro <c>hostitel_okoli</c>, kap. 2.5).</summary>
-public delegate StavBodu PrefixVyhodnoceni(double x, double y, double z);
+/// <summary>Vrstva sloupce zdola: materiál a interval [Z0, Z1) v m (po ořezu povrchem).</summary>
+public readonly record struct IntervalVrstvy(int Material, double Z0, double Z1);
 
-/// <summary>Kontaktní pásmo (kap. 2.5). Implementace je krok K1b; kompilátor bez ní událost s <c>kontakt</c> odmítne.</summary>
-public interface IKontaktniPasmo
+/// <summary>Zásobník, který umí vydat hranice vrstev sloupce (mřížka hranic 6.3, pro kontakt 2.5).</summary>
+public interface ITvarZasobnikuSHranicemi : ITvarZasobniku
 {
-    bool Plati(double x, double y, double z, in StavBodu stav, PrefixVyhodnoceni predUdalosti);
+    /// <summary>Vrstvy sloupce (x, y) zdola nahoru. Volající seznam nemění.</summary>
+    IReadOnlyList<IntervalVrstvy> Sloupec(double x, double y);
 }
 
-/// <summary>Dodává tvary podle <c>tvar.druh</c>. Stará cesta (E84, VrstvySloupce) se sem napojí adaptéry v K1b.</summary>
+/// <summary>Nejbližší bod π kontaktní plochy S k bodu q: poloha, jednotková normála plochy v π, vzdálenost D = |π − q| [m].</summary>
+public readonly record struct BodPlochy(double X, double Y, double Z, double Nx, double Ny, double Nz, double D);
+
+/// <summary>Kontaktní plocha S (2.5): nejbližší bod do vzdálenosti <c>rMax</c>. Chyba vzdálenosti MUSÍ být ≤ e_k.</summary>
+public interface IPlochaKontaktu
+{
+    bool Nejblizsi(double x, double y, double z, double rMax, out BodPlochy b);
+}
+
+/// <summary>Těleso, které umí vzdálenost k primitivu bez šumu (2.5, 2.6 <c>Vzdalenost(q)</c>). Jen taková tělesa smí být cílem kontaktu.</summary>
+public interface ITvarSVzdalenosti : ITvar
+{
+    IPlochaKontaktu Plocha { get; }
+}
+
+/// <summary>Kontaktní pásmo (kap. 2.5). Prefixový stav v q′ čte přes chronologii (události s indexem &lt; <paramref name="index"/>).</summary>
+public interface IKontaktniPasmo
+{
+    bool Plati(double x, double y, double z, in StavBodu stav, ChronologieGeo2 chronologie, int index, double zPov);
+}
+
+/// <summary>Dodává tvary podle <c>tvar.druh</c>. Stará cesta (E84, VrstvySloupce) se napojí adaptéry (<c>Geo2.E84</c>).</summary>
 public interface ITovarnaTvaru
 {
     /// <summary><see cref="ITvar"/>, <see cref="ITvarZasobniku"/>, nebo null = neznámý druh.</summary>
     object? Vytvor(UdalostData udalost);
 
-    /// <summary>Implementace kontaktního pásma, nebo null = zatím není (K1b).</summary>
-    IKontaktniPasmo? Kontakt(UdalostData udalost);
+    /// <summary>Výška konečného povrchu (pro bod q′ v jiném sloupci), nebo null = povrch bodu q (syntetické testy).</summary>
+    Func<double, double, double>? Povrch => null;
+
+    /// <summary>Seed šumu události (šířka kontaktu N). Výchozí: z id události, nezávislý na pořadí.</summary>
+    long SeedUdalosti(UdalostData udalost) => StableHash.Fnv1a64("geo2:" + udalost.Id);
 }
 
 /// <summary>Tvar celého prostoru (<c>oblast</c>, <c>kontakt</c>: o zásahu rozhodnou jen pravidla).</summary>

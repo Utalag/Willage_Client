@@ -16,6 +16,7 @@ public sealed class ZpravaValidace
     public IEnumerable<Hlaseni> Chyby => _h.Where(h => h.Zavaznost == Zavaznost.Chyba);
     public void Chyba(string kod, string? udalost, string text) => _h.Add(new(Zavaznost.Chyba, kod, udalost, text));
     public void Varovani(string kod, string? udalost, string text) => _h.Add(new(Zavaznost.Varovani, kod, udalost, text));
+    public int PocetChyb => _h.Count(h => h.Zavaznost == Zavaznost.Chyba);
     public bool Obsahuje(string kod) => _h.Any(h => h.Kod == kod);
     public void Pridej(IEnumerable<Hlaseni> h) => _h.AddRange(h);
     public override string ToString() => string.Join("\n", _h);

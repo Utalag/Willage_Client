@@ -45,7 +45,10 @@ internal sealed class CteniPravidel
     { _o = o; _z = z; _nikdy = nikdy; _udalosti = udalosti; }
 
     public sealed record Vysledek(FiltrMaterialu? Nahrazuje, HashSet<int>? NahrazujeIds, ZdrojeZasahu? Zdroje, HashSet<TypProstoru> Prostor,
-        Hloubka Hloubka, bool MaKontakt, List<string> OdkazyNaUdalosti);
+        Hloubka Hloubka, bool MaKontakt, List<string> OdkazyNaUdalosti)
+    {
+        public ParametryKontaktu? Kontakt { get; init; }
+    }
 
     public Vysledek Cti(UdalostData u, Operace op, int stari)
     {
@@ -106,10 +109,10 @@ internal sealed class CteniPravidel
         if (ma("hloubka")) hl = CtiHloubku(p.GetProperty("hloubka"), u.Id);
         if (op == Operace.Odstran && hl.MinM is null) _z.Chyba("HLOUBKA_POVINNA", u.Id, "Odstran: hloubka.min_m je povinná (2.4)");
 
-        bool kont = false;
-        if (ma("kontakt")) { kont = true; CtiKontakt(p.GetProperty("kontakt"), u.Id, stari, odkazy); }
+        bool kont = false; ParametryKontaktu? kontakt = null;
+        if (ma("kontakt")) { kont = true; kontakt = CtiKontakt(p.GetProperty("kontakt"), u.Id, stari, odkazy); }
 
-        return new Vysledek(nahr, nahrIds, zdr, prostor, hl, kont, odkazy);
+        return new Vysledek(nahr, nahrIds, zdr, prostor, hl, kont, odkazy) { Kontakt = kontakt };
     }
 
     public (FiltrMaterialu, HashSet<int>) CtiFiltr(JsonElement e, string udalost, string kde, bool ignorujNikdy)
@@ -197,10 +200,13 @@ internal sealed class CteniPravidel
         return h;
     }
 
-    /// <summary>Kontrola struktury kontaktu (2.5). Vyhodnocení dodá továrna (K1b).</summary>
-    private void CtiKontakt(JsonElement e, string udalost, int stari, List<string> odkazy)
+    /// <summary>Kontrola a čtení kontaktu (2.5). Při chybě null (hlášení je v ZpravaValidace).</summary>
+    private ParametryKontaktu? CtiKontakt(JsonElement e, string udalost, int stari, List<string> odkazy)
     {
-        if (e.ValueKind != JsonValueKind.Object) { _z.Chyba("KONTAKT_TYP", udalost, "kontakt musí být objekt"); return; }
+        if (e.ValueKind != JsonValueKind.Object) { _z.Chyba("KONTAKT_TYP", udalost, "kontakt musí být objekt"); return null; }
+        int chyb0 = _z.PocetChyb;
+        var cilVrstvy = new HashSet<int>(); var cilUdalosti = new List<string>();
+        var hostAno = new List<int>(); bool maHost = false; double eta = 0.125, amp = 0, frek = 0, sirka = 0;
         foreach (var x in e.EnumerateObject()) if (!KliceKontakt.Contains(x.Name)) _z.Chyba("NEZNAMY_KLIC", udalost, $"kontakt: {x.Name}");
         if (!e.TryGetProperty("cil", out var cil) || cil.ValueKind != JsonValueKind.Object) _z.Chyba("KONTAKT_CIL", udalost, "kontakt.cil chybí");
         else
@@ -208,8 +214,8 @@ internal sealed class CteniPravidel
             int n = 0;
             foreach (var x in cil.EnumerateObject())
             {
-                if (x.Name == "vrstvy") foreach (var k in x.Value.EnumerateArray()) { if (_o.Material(k.GetString() ?? "", udalost, "kontakt.cil.vrstvy") is not null) n++; }
-                else if (x.Name == "udalosti") foreach (var k in x.Value.EnumerateArray()) { if (OdkazNaStarsi(k.GetString() ?? "", udalost, stari, "kontakt.cil.udalosti")) { n++; odkazy.Add(k.GetString()!); } }
+                if (x.Name == "vrstvy") foreach (var k in x.Value.EnumerateArray()) { if (_o.Material(k.GetString() ?? "", udalost, "kontakt.cil.vrstvy") is int cv) { n++; cilVrstvy.Add(cv); } }
+                else if (x.Name == "udalosti") foreach (var k in x.Value.EnumerateArray()) { if (OdkazNaStarsi(k.GetString() ?? "", udalost, stari, "kontakt.cil.udalosti")) { n++; odkazy.Add(k.GetString()!); cilUdalosti.Add(k.GetString()!); } }
                 else _z.Chyba("NEZNAMY_KLIC", udalost, $"kontakt.cil: {x.Name}");
             }
             if (n == 0) _z.Chyba("KONTAKT_CIL", udalost, "kontakt.cil nemá žádný platný cíl");
@@ -217,24 +223,30 @@ internal sealed class CteniPravidel
         string str = e.TryGetProperty("strana", out var s) ? s.GetString() ?? "" : "";
         if (str is not ("vne" or "uvnitr" or "obe")) _z.Chyba("KONTAKT_STRANA", udalost, $"kontakt.strana: {str}");
         if (!e.TryGetProperty("sirka_m", out var w) || w.ValueKind != JsonValueKind.Number || w.GetDouble() <= 0) _z.Chyba("KONTAKT_SIRKA", udalost, "kontakt.sirka_m > 0 [m]");
+        else sirka = w.GetDouble();
         if (e.TryGetProperty("modulace", out var mo))
         {
             foreach (var x in mo.EnumerateObject())
             {
-                if (x.Name == "amp_rel") { var a = x.Value.GetDouble(); if (a < 0 || a >= 1) _z.Chyba("KONTAKT_MODULACE", udalost, "modulace.amp_rel ∈ [0, 1)"); }
-                else if (x.Name == "frekvence_1_m") { if (x.Value.GetDouble() < 0) _z.Chyba("KONTAKT_MODULACE", udalost, "modulace.frekvence_1_m ≥ 0 [1/m]"); }
+                if (x.Name == "amp_rel") { var a = x.Value.GetDouble(); amp = a; if (a < 0 || a >= 1) _z.Chyba("KONTAKT_MODULACE", udalost, "modulace.amp_rel ∈ [0, 1)"); }
+                else if (x.Name == "frekvence_1_m") { frek = x.Value.GetDouble(); if (frek < 0) _z.Chyba("KONTAKT_MODULACE", udalost, "modulace.frekvence_1_m ≥ 0 [1/m]"); }
                 else _z.Chyba("NEZNAMY_KLIC", udalost, $"kontakt.modulace: {x.Name}");
             }
         }
         if (e.TryGetProperty("hostitel_okoli", out var ho))
         {
+            maHost = true;
             foreach (var x in ho.EnumerateObject())
             {
-                if (x.Name == "materialy") foreach (var k in x.Value.EnumerateArray()) _o.Material(k.GetString() ?? "", udalost, "hostitel_okoli");
-                else if (x.Name == "skupiny") foreach (var k in x.Value.EnumerateArray()) _ = _o.Skupina(k.GetString() ?? "", udalost, "hostitel_okoli").ToList();
-                else if (x.Name == "hloubka_vzorku_m") { if (x.Value.GetDouble() <= 0) _z.Chyba("KONTAKT_ETA", udalost, "hloubka_vzorku_m > 0 [m]"); }
+                if (x.Name == "materialy") { foreach (var k in x.Value.EnumerateArray()) if (_o.Material(k.GetString() ?? "", udalost, "hostitel_okoli") is int hm) hostAno.Add(hm); }
+                else if (x.Name == "skupiny") { foreach (var k in x.Value.EnumerateArray()) hostAno.AddRange(_o.Skupina(k.GetString() ?? "", udalost, "hostitel_okoli")); }
+                else if (x.Name == "hloubka_vzorku_m") { eta = x.Value.GetDouble(); if (eta <= 0) _z.Chyba("KONTAKT_ETA", udalost, "hloubka_vzorku_m > 0 [m]"); }
                 else _z.Chyba("NEZNAMY_KLIC", udalost, $"hostitel_okoli: {x.Name}");
             }
         }
+        if (_z.PocetChyb != chyb0) return null;
+        var strana = str switch { "vne" => StranaKontaktu.Vne, "uvnitr" => StranaKontaktu.Uvnitr, _ => StranaKontaktu.Obe };
+        var host = maHost ? new FiltrMaterialu(false, hostAno, Array.Empty<int>(), Array.Empty<int>(), true, _o.MaxId) : null;
+        return new ParametryKontaktu(cilVrstvy, cilUdalosti, strana, sirka, amp, frek, host, eta);
     }
 }

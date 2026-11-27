@@ -22,7 +22,7 @@ public sealed class KompilovanaUdalost
 
 /// <summary>
 /// Jedna chronologie GEO2 (kap. 1): události seřazené podle (stáří, id), dopředné vyhodnocení bodu bez deformací (1.6).
-/// K1 prochází všechny události; index těles a kontext bloku jsou K3.
+/// K1 prochází všechny události; index těles a kontext bloku jsou K3. Kontakt (2.5) čte prefix přes <see cref="BodPred"/>.
 /// </summary>
 public sealed class ChronologieGeo2
 {
@@ -30,10 +30,17 @@ public sealed class ChronologieGeo2
     public KonfiguraceGeo2 Konfigurace { get; }
     public long OtiskKatalogu { get; }
 
-    public ChronologieGeo2(IReadOnlyList<KompilovanaUdalost> udalosti, KonfiguraceGeo2 konfigurace, long otiskKatalogu)
+    /// <summary>Konečný povrch pro bod v jiném sloupci (q′ kontaktu), nebo null = povrch volajícího bodu.</summary>
+    public Func<double, double, double>? Povrch { get; }
+
+    public ChronologieGeo2(IReadOnlyList<KompilovanaUdalost> udalosti, KonfiguraceGeo2 konfigurace, long otiskKatalogu,
+        Func<double, double, double>? povrch = null)
     {
-        Udalosti = udalosti; Konfigurace = konfigurace; OtiskKatalogu = otiskKatalogu;
+        Udalosti = udalosti; Konfigurace = konfigurace; OtiskKatalogu = otiskKatalogu; Povrch = povrch;
     }
+
+    /// <summary>Stav bodu po všech událostech; povrch z <see cref="Povrch"/> (musí být zadaný).</summary>
+    public StavBodu Bod(double x, double y, double z) => BodPred(Udalosti.Count, x, y, z, Povrch!(x, y));
 
     public int IndexUdalosti(string id)
     {
@@ -53,9 +60,7 @@ public sealed class ChronologieGeo2
         {
             var e = Udalosti[i];
             if (!Zasah(e, x, y, z, out uint inst, out int matVrstvy, out short vrstva)) continue;
-            int idx = i;
-            PrefixVyhodnoceni? pred = e.Kontakt is null ? null : (px, py, pz) => BodPred(idx, px, py, pz, zPov);
-            if (!PravidloCile.Povoluje(e, s, x, y, z, zPov, pred)) continue;
+            if (!PravidloCile.Povoluje(e, s, x, y, z, zPov, this)) continue;
             s = Proved(e, s, x, y, z, inst, matVrstvy, vrstva);
         }
         return s;

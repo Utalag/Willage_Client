@@ -67,7 +67,7 @@ public static class PravidloCile
         _ => false,
     };
 
-    public static bool Povoluje(KompilovanaUdalost e, in StavBodu s, double x, double y, double z, double zPov, PrefixVyhodnoceni? pred)
+    public static bool Povoluje(KompilovanaUdalost e, in StavBodu s, double x, double y, double z, double zPov, ChronologieGeo2 c)
     {
         if (!e.Hloubka.Plati(z, zPov)) return false;
         var t = s.Trida;
@@ -80,6 +80,6 @@ public static class PravidloCile
             _ => false,
         };
         if (!cil) return false;
-        return e.Kontakt is null || (pred is not null && e.Kontakt.Plati(x, y, z, s, pred));
+        return e.Kontakt is null || e.Kontakt.Plati(x, y, z, s, c, e.Index, zPov);
     }
 }

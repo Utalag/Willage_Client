@@ -2,6 +2,12 @@ using System.Text.Json;
 
 namespace Willage.Gen.Geo2;
 
+/// <summary>Volby kompilace, které nejsou součástí dat událostí. <c>KrokMrizkyHranicM</c>: pevný krok mřížky hranic pro kontakt (K1b; adaptivní 6.3 je K5).</summary>
+public sealed record MoznostiKompilace(double KrokMrizkyHranicM = 0.5)
+{
+    public static readonly MoznostiKompilace Vychozi = new();
+}
+
 public sealed record VysledekKompilace(ChronologieGeo2? Chronologie, ZpravaValidace Zprava)
 {
     public bool Ok => Chronologie is not null;
@@ -15,8 +21,9 @@ public static class KompilatorChronologie
 {
     private static readonly HashSet<string> KliceVysledku = new(StringComparer.Ordinal) { "material", "material_z_tvaru", "mapa", "prostor", "mineralizace" };
 
-    public static VysledekKompilace Kompiluj(SadaUdalosti sada, KatalogGeo2 katalog, ITovarnaTvaru tovarna)
+    public static VysledekKompilace Kompiluj(SadaUdalosti sada, KatalogGeo2 katalog, ITovarnaTvaru tovarna, MoznostiKompilace? moznosti = null)
     {
+        moznosti ??= MoznostiKompilace.Vychozi;
         var z = new ZpravaValidace();
         z.Pridej(sada.Zprava.Hlaseni);
         z.Pridej(katalog.Zprava.Hlaseni);
@@ -70,9 +77,8 @@ public static class KompilatorChronologie
             else if (op == Operace.Uloz && tvar is not ITvarZasobniku) z.Chyba("TVAR_TYP", u.Id, "Uloz potřebuje zásobník vrstev");
             else if (op != Operace.Uloz && tvar is not ITvar) z.Chyba("TVAR_TYP", u.Id, "tvar musí být ITvar");
             if (ku.MaterialZTvaru && tvar is not ITvarSMaterialem) z.Chyba("TVAR_BEZ_MATERIALU", u.Id, "material_z_tvaru vyžaduje tvar s materiálem");
-            IKontaktniPasmo? kontakt = null;
-            if (pr.MaKontakt && (kontakt = tovarna.Kontakt(u)) is null)
-                z.Chyba("KONTAKT_K1B", u.Id, "kontaktní pásmo zatím není implementované (krok K1b)");
+            IKontaktniPasmo? kontakt = pr.Kontakt is null ? null
+                : SestavKontakt(u, pr.Kontakt, vystup, indexy, sada.Konfigurace, katalog, tovarna, moznosti, z);
             if (op == Operace.Transformuj && pr.NahrazujeIds is not null)
             {
                 var klice = ku.Mapa.Keys.ToHashSet();
@@ -91,7 +97,35 @@ public static class KompilatorChronologie
             });
         }
         if (z.MaChyby) return new VysledekKompilace(null, z);
-        return new VysledekKompilace(new ChronologieGeo2(vystup, sada.Konfigurace, katalog.Otisk), z);
+        return new VysledekKompilace(new ChronologieGeo2(vystup, sada.Konfigurace, katalog.Otisk, tovarna.Povrch), z);
+    }
+
+    /// <summary>
+    /// Kontakt 2.5 z plochy cílových vrstev (zásobník s hranicemi) a ploch cílových těles (jen starší, aktivní, s vzdáleností).
+    /// Validace: <c>KONTAKT_TAU</c> (τ &gt; e_k u vrstev), <c>KONTAKT_VRSTVY_BEZ_HRANIC</c>, <c>KONTAKT_CIL_BEZ_VZDALENOSTI</c>, <c>KONTAKT_BEZ_PLOCHY</c>.
+    /// </summary>
+    private static IKontaktniPasmo? SestavKontakt(UdalostData u, ParametryKontaktu p, List<KompilovanaUdalost> starsi,
+        Dictionary<string, int> indexy, KonfiguraceGeo2 kf, KatalogGeo2 katalog, ITovarnaTvaru tovarna, MoznostiKompilace m, ZpravaValidace z)
+    {
+        var plochy = new List<IPlochaKontaktu>(); var cilIdx = new List<int>(); int chyb0 = z.PocetChyb;
+        if (p.CilVrstvy.Count > 0)
+        {
+            if (kf.TauM > kf.TolerancKontaktuM)
+                z.Chyba("KONTAKT_TAU", u.Id, $"kontakt na vrstvy vyžaduje tau_m ≤ tolerancKontaktu_m ({kf.TauM} > {kf.TolerancKontaktuM})");
+            var zas = starsi.FirstOrDefault(e => e.Operace == Operace.Uloz)?.Zasobnik;
+            if (zas is ITvarZasobnikuSHranicemi zh) plochy.Add(new PlochaVrstev(zh, p.CilVrstvy, katalog.MaxId, m.KrokMrizkyHranicM));
+            else z.Chyba("KONTAKT_VRSTVY_BEZ_HRANIC", u.Id, "zásobník nevydává hranice vrstev (kontakt na kontakt.cil.vrstvy)");
+        }
+        foreach (var id in p.CilUdalosti)
+        {
+            if (!indexy.TryGetValue(id, out int ix) || ix >= starsi.Count) continue; // neaktivní: varování ODKAZ_NEAKTIVNI už je
+            cilIdx.Add(ix);
+            if (starsi[ix].Tvar is ITvarSVzdalenosti tv) plochy.Add(tv.Plocha);
+            else z.Chyba("KONTAKT_CIL_BEZ_VZDALENOSTI", u.Id, $"tvar cíle {id} neumí vzdálenost k primitivu (2.5, 2.6)");
+        }
+        if (plochy.Count == 0 && z.PocetChyb == chyb0) z.Chyba("KONTAKT_BEZ_PLOCHY", u.Id, "kontakt nemá žádnou aktivní cílovou plochu");
+        if (z.PocetChyb != chyb0) return null;
+        return new KontaktniPasmo(p, plochy, cilIdx, tovarna.SeedUdalosti(u), kf.TolerancKontaktuM, katalog.MaxId);
     }
 
     private sealed record CastVysledku(int? Material, bool MaterialZTvaru, Dictionary<int, int> Mapa, TypProstoru Prostor);
