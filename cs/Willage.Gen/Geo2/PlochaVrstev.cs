@@ -9,7 +9,7 @@ namespace Willage.Gen.Geo2;
 /// vzdálenost k vrcholům (počítá se jako <see cref="Nesparovanych"/>; chyba až ~g/√2, viz PROP K1b); takový bod má <see cref="BodPlochy.Odhad"/>.
 /// K1b: pevný krok g; adaptivní mřížka 1 / 0,5 / 0,25 m s kontrolním bodem (6.3) je K5. Vláknově bezpečná, pokud je zásobník.
 /// </summary>
-public sealed class PlochaVrstev : IPlochaKontaktu, IPripravaBloku, IPlochaSRozsahem
+public sealed class PlochaVrstev : IPlochaKontaktu, IPripravaBloku, IPlochaSRozsahem, IPlochaSUzly
 {
     private readonly ITvarZasobnikuSHranicemi _z;
     private readonly bool[] _cil;
@@ -25,6 +25,7 @@ public sealed class PlochaVrstev : IPlochaKontaktu, IPripravaBloku, IPlochaSRozs
     /// <summary>Počet předpočtených uzlů (K3) a uzlů dopočtených mimo oblast (diagnostika V6).</summary>
     public int PredpocitanychUzlu => _pole?.Length ?? 0;
     public int DopocitanychUzlu => _uzly.Count;
+    public double OkrajBunkyM => KrokM;
 
     public PlochaVrstev(ITvarZasobnikuSHranicemi zasobnik, IEnumerable<int> cilMaterialy, int maxId, double krokM)
     {
@@ -34,7 +35,6 @@ public sealed class PlochaVrstev : IPlochaKontaktu, IPripravaBloku, IPlochaSRozs
         foreach (var m in cilMaterialy) if (m >= 0 && m < _cil.Length) _cil[m] = true;
     }
 
-    private bool JeCil(int m) => m >= 0 && m < _cil.Length && _cil[m];
 
     /// <summary>Sloučené cílové intervaly uzlu [a0, b0, a1, b1, …] zdola.</summary>
     public double[] Uzel(long i, long j)
@@ -66,33 +66,11 @@ public sealed class PlochaVrstev : IPlochaKontaktu, IPripravaBloku, IPlochaSRozs
             {
                 double l = double.PositiveInfinity, h = double.NegativeInfinity;
                 var u00 = pole[(long)a * nj + b]; var u10 = pole[(long)(a + 1) * nj + b]; var u11 = pole[(long)(a + 1) * nj + b + 1]; var u01 = pole[(long)a * nj + b + 1];
-                RozsahTrojuhelniku(u00, u10, u11, ref l, ref h); RozsahTrojuhelniku(u00, u11, u01, ref l, ref h);
+                HledaniPlochy.RozsahTrojuhelniku(u00, u10, u11, ref l, ref h); HledaniPlochy.RozsahTrojuhelniku(u00, u11, u01, ref l, ref h);
                 lo[(long)a * (nj - 1) + b] = l; hi[(long)a * (nj - 1) + b] = h;
             }
         });
         _pi0 = i0; _pj0 = j0; _pni = ni; _pnj = nj; _clo = lo; _chi = hi; _pole = pole;
-    }
-
-    /// <summary>Rozsah z všech bodů, které <c>Trojuhelnik</c> v <see cref="Nejblizsi"/> vyhodnotí (stejné vynechání dna světa).</summary>
-    private static void RozsahTrojuhelniku(double[] ua, double[] uc, double[] ue, ref double lo, ref double hi)
-    {
-        if (ua.Length == 0 && uc.Length == 0 && ue.Length == 0) return;
-        if (ua.Length == uc.Length && uc.Length == ue.Length)
-        {
-            for (int k = 0; k < ua.Length; k++)
-            {
-                double ha = ua[k], hc = uc[k], he = ue[k];
-                if ((k & 1) == 0 && ha <= 1e-9 && hc <= 1e-9 && he <= 1e-9) continue;
-                lo = Math.Min(lo, Math.Min(ha, Math.Min(hc, he))); hi = Math.Max(hi, Math.Max(ha, Math.Max(hc, he)));
-            }
-            return;
-        }
-        foreach (var u in new[] { ua, uc, ue })
-            for (int k = 0; k < u.Length; k++)
-            {
-                if ((k & 1) == 0 && u[k] <= 1e-9) continue;
-                lo = Math.Min(lo, u[k]); hi = Math.Max(hi, u[k]);
-            }
     }
 
     /// <summary>
@@ -118,7 +96,7 @@ public sealed class PlochaVrstev : IPlochaKontaktu, IPripravaBloku, IPlochaSRozs
                 {
                     lo = double.PositiveInfinity; hi = double.NegativeInfinity;
                     var u00 = Uzel(i, j); var u10 = Uzel(i + 1, j); var u11 = Uzel(i + 1, j + 1); var u01 = Uzel(i, j + 1);
-                    RozsahTrojuhelniku(u00, u10, u11, ref lo, ref hi); RozsahTrojuhelniku(u00, u11, u01, ref lo, ref hi);
+                    HledaniPlochy.RozsahTrojuhelniku(u00, u10, u11, ref lo, ref hi); HledaniPlochy.RozsahTrojuhelniku(u00, u11, u01, ref lo, ref hi);
                 }
                 if (lo > hi) continue;
                 double dz = Math.Sqrt(r2 - dxy2) + 1e-9;
@@ -127,23 +105,19 @@ public sealed class PlochaVrstev : IPlochaKontaktu, IPripravaBloku, IPlochaSRozs
         }
     }
 
-    private double[] SpoctiUzel(long i, long j)
+    /// <summary>Interpolované cílové intervaly v (x, y) (V5), nebo null u nespárovatelných rohů.</summary>
+    public double[]? Interpoluj(double x, double y)
     {
-        var s = _z.Sloupec(i * KrokM, j * KrokM);
-        var o = new List<double>();
-        foreach (var v in s)
-        {
-            if (!JeCil(v.Material) || !(v.Z1 > v.Z0)) continue;
-            if (o.Count > 0 && Math.Abs(o[^1] - v.Z0) < 1e-9) o[^1] = v.Z1;
-            else { o.Add(v.Z0); o.Add(v.Z1); }
-        }
-        return o.ToArray();
+        double g = KrokM; long i = (long)Math.Floor(x / g), j = (long)Math.Floor(y / g);
+        return HledaniPlochy.Interpolace(x, y, i * g, j * g, g, Uzel(i, j), Uzel(i + 1, j), Uzel(i + 1, j + 1), Uzel(i, j + 1));
     }
+
+    private double[] SpoctiUzel(long i, long j) => HledaniPlochy.CiloveIntervaly(_z, _cil, i * KrokM, j * KrokM);
 
     public bool Nejblizsi(double x, double y, double z, double rMax, out BodPlochy b)
     {
-        double g = KrokM, best2 = rMax * rMax; bool nasel = false;
-        double bx = 0, by = 0, bz = 0, nx = 0, ny = 0, nz = 1; bool odh = false;
+        double g = KrokM;
+        var h = new HledaniPlochy(x, y, z, rMax);
         long i0 = (long)Math.Floor((x - rMax) / g), i1 = (long)Math.Floor((x + rMax) / g);
         long j0 = (long)Math.Floor((y - rMax) / g), j1 = (long)Math.Floor((y + rMax) / g);
         for (long i = i0; i <= i1; i++)
@@ -154,7 +128,7 @@ public sealed class PlochaVrstev : IPlochaKontaktu, IPripravaBloku, IPlochaSRozs
             {
                 double y0 = j * g, y1 = y0 + g;
                 double dyc = y < y0 ? y0 - y : y > y1 ? y - y1 : 0;
-                if (dxc * dxc + dyc * dyc > best2) continue;
+                if (dxc * dxc + dyc * dyc > h.Best2) continue;
                 if (_clo is not null)
                 {
                     // K3: celá buňka dál než nejlepší (s rezervou na zaokrouhlení) → žádný trojúhelník by nevyhrál (d2 < best2)
@@ -163,55 +137,14 @@ public sealed class PlochaVrstev : IPlochaKontaktu, IPripravaBloku, IPlochaSRozs
                     {
                         long q = a * (_pnj - 1) + c; double lo = _clo[q], hi = _chi![q];
                         double dzb = z < lo ? lo - z : z > hi ? z - hi : 0;
-                        if (dxc * dxc + dyc * dyc + dzb * dzb > best2 * (1 + 1e-9) + 1e-12) continue;
+                        if (dxc * dxc + dyc * dyc + dzb * dzb > h.Best2 * (1 + 1e-9) + 1e-12) continue;
                     }
                 }
-                var u00 = Uzel(i, j); var u10 = Uzel(i + 1, j); var u11 = Uzel(i + 1, j + 1); var u01 = Uzel(i, j + 1);
-                Trojuhelnik(x0, y0, u00, x1, y0, u10, x1, y1, u11);
-                Trojuhelnik(x0, y0, u00, x1, y1, u11, x0, y1, u01);
+                h.Bunka(x0, y0, x1, y1, Uzel(i, j), Uzel(i + 1, j), Uzel(i + 1, j + 1), Uzel(i, j + 1));
             }
         }
-        b = new BodPlochy(bx, by, bz, nx, ny, nz, Math.Sqrt(best2), odh);
-        return nasel;
-
-        void Zkus(double d2, double qx, double qy, double qz, double mx, double my, double mz, bool o = false)
-        {
-            if (d2 < best2) { best2 = d2; bx = qx; by = qy; bz = qz; nx = mx; ny = my; nz = mz; nasel = true; odh = o; }
-        }
-
-        void Trojuhelnik(double ax, double ay, double[] ua, double cx, double cy, double[] uc, double ex, double ey, double[] ue)
-        {
-            if (ua.Length == 0 && uc.Length == 0 && ue.Length == 0) return;
-            if (ua.Length == uc.Length && uc.Length == ue.Length)
-            {
-                for (int k = 0; k < ua.Length; k++)
-                {
-                    double ha = ua[k], hc = uc[k], he = ue[k];
-                    if ((k & 1) == 0 && ha <= 1e-9 && hc <= 1e-9 && he <= 1e-9) continue; // dno světa
-                    double lo = Math.Min(ha, Math.Min(hc, he)), hi = Math.Max(ha, Math.Max(hc, he));
-                    double dzc = z < lo ? lo - z : z > hi ? z - hi : 0;
-                    if (dzc * dzc > best2) continue;
-                    double d2 = Geometrie3.NejblizsiNaTrojuhelniku(x, y, z, ax, ay, ha, cx, cy, hc, ex, ey, he, out var qx, out var qy, out var qz);
-                    if (d2 < best2)
-                    {
-                        var (mx, my, mz) = Geometrie3.Normala(ax, ay, ha, cx, cy, hc, ex, ey, he);
-                        Zkus(d2, qx, qy, qz, mx, my, mz);
-                    }
-                }
-                return;
-            }
-            _nesparovanych.Value![0]++;
-            Vrcholy(ax, ay, ua); Vrcholy(cx, cy, uc); Vrcholy(ex, ey, ue);
-        }
-
-        void Vrcholy(double vx, double vy, double[] u)
-        {
-            for (int k = 0; k < u.Length; k++)
-            {
-                if ((k & 1) == 0 && u[k] <= 1e-9) continue;
-                double d2 = Geometrie3.D2(x, y, z, vx, vy, u[k]);
-                if (d2 < best2) Zkus(d2, vx, vy, u[k], 0, 0, (k & 1) == 0 ? -1 : 1, true);
-            }
-        }
+        if (h.Nesparovanych > 0) _nesparovanych.Value![0] += h.Nesparovanych;
+        b = h.Vysledek;
+        return h.Nasel;
     }
 }
