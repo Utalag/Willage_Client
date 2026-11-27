@@ -27,7 +27,11 @@ public static class Geo2Zaklad
         _ => TridaCile.MimoGeologii,
     };
 
-    public static bool ZkusOperaci(string? s, out Operace o) => Enum.TryParse(s, false, out o) && Enum.IsDefined(o);
+    public static bool ZkusOperaci(string? s, out Operace o)
+    {
+        o = default;
+        return s is not null && Enum.GetNames<Operace>().Contains(s) && Enum.TryParse(s, false, out o);
+    }
 
     /// <summary>Typy prostoru, které smí stát v pravidle <c>prostor</c> nebo ve <c>vysledek.prostor</c>.</summary>
     public static bool ZkusTypDutiny(string? s, out TypProstoru t)
