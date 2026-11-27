@@ -186,6 +186,8 @@ public static class TestyGeo2K3
         double c = stary.Length;
         Console.WriteLine($"  buněk {stary.LongLength:N0}; shoda se starou cestou: před K3 {100.0 * shodaPred / c:F3} %, po K3 {100.0 * shodaPo / c:F3} %");
         Console.WriteLine($"  bitově: různých otisků sloupců (20 B vzorku) {ruzne}, různých materiálů {ruzneM}");
+        var zas = (ZasobnikVrstvySloupce)k.Chronologie.Udalosti[0].Zasobnik!;
+        Console.WriteLine($"  V6 volání Hranice (bodové sloupce) po K3: {zas.VolaniHranic:N0} = {zas.VolaniHranic / (double)(n * n):F2} na sloupec");
         Console.WriteLine($"  čas: stará cesta {tStary:F1} s; GEO2 před K3 {tPred:F1} s (×{tPred / tStary:F1}); GEO2 K3 {tPo:F1} s + kontext {tKontext:F2} s (×{(tPo + tKontext) / tStary:F1})");
         T.Je(ruzne == 0 && ruzneM == 0 && shodaPred == shodaPo, "blok: GEO2 po K3 bitově == před K3");
     }
