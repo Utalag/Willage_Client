@@ -41,7 +41,7 @@ kritéria V4, V7, krok K4 v kap. 5. Větev `geo2-k4-intervaly` z `geo2-k3-index`
 - sourozenci `nejmensi_sdf` (parita E84): vítěz se může měnit uvnitř tětivy, vzorkuje se, podlimitní změny smí zaniknout.
 
 ## Výsledky
-*Doplněno 2026-11-27 ~17:10. Větev `geo2-k4-intervaly`, commity fe131ff … (malé, po vrstvách). Lokální testy, bez CI. Měření při cizí zátěži
+*Doplněno 2026-11-27 ~16:40. Větev `geo2-k4-intervaly`, commity fe131ff … (malé, po vrstvách). Lokální testy, bez CI. Měření při cizí zátěži
 (dva cizí procesy `grep` od 12:57 drží ~2 jádra a ~5 GB RAM, nejsou moje, nezabíjel jsem je) → časy berte jako ±15 %.*
 
 **Co je hotové (kód):**
