@@ -70,6 +70,7 @@ kritéria V4, V7, krok K4 v kap. 5. Větev `geo2-k4-intervaly` z `geo2-k3-index`
 | závorky E84 | 10⁶ bodů na druh: těleso ⊆ O bez výjimky (žíla 23 354, čočka 174 098, kras 25 940, dóm 187 934, komín 262 361 bodů v tělese); elipsoidy V = O |
 | V4 E84 | 256 náhodných sloupců bloku (1024, 512), hustý `Bod` po 1/64 m (2,1·10⁶ bodů): 0 rozdílů; 12,1 běhu a 58 `Bod` na sloupec |
 | V4 šumová deska | tloušťky t_det·{0,5; 0,99; 1; 1,01; 2}, sklon 0/30/60/80°: 0 vynechaných tětiv ≥ t_det (podlimitní se většinou také najdou) |
+| V4 fuzz 10⁵ těles | natočené elipsoidy, r od t_det/2 do 1,56 m, 2 sloupce na těleso (náhodný + těsně u obrysu = téměř tečný): 45 333 tětiv ≥ t_det, 0 vynechaných; 92 029 podlimitních, `Bod` je má všechny (doplněno 27. 11.) |
 | kontakt na těleso | syntetický natočený elipsoid + aureola s `hostitel_okoli`: V4 0 rozdílů; skarn vzniká |
 | kontakt na dóm E84 | sada E84 + syntetická událost aureoly dómu (Transformuj vápence → dolomit): zkompiluje se, V4 1 rozdíl v 1 tětivě 1/64 m (podlimitní), 0 ≥ t_det |
 | raster == Bod | blok 32 × 32 sloupců, 0,25 i 0,125 m: 0 rozdílů |

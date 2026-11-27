@@ -34,6 +34,7 @@ public static class TestyGeo2K4
         V4(k, "E84 blok (1024, 512)", 16, 128, 7);
         Raster(k);
         TestSumoveDesky(kat);
+        FuzzTeles(kat);
         KontaktNaTeleso(kat);
         KontaktNaDom(kat, d, g);
     }
@@ -396,6 +397,48 @@ public static class TestyGeo2K4
             Console.WriteLine($"  sklon {sklon,2}°, T = {kt:F2}·t_det: tětiv ≥ t_det {tetiv,4}, vynechaných {vynech}; menších {malych} (nalezeno {malychNalez})");
             T.Je(vynech == 0 && (kt < 1 || tetiv > 0), $"deska sklon {sklon}°, T = {kt}·t_det: žádná tětiva ≥ t_det nevynechána");
         }
+    }
+
+    /// <summary>
+    /// V4 fuzz ≥ 10⁵ těles: natočené elipsoidy s r_min od t_det/2, sloupce náhodně v půdorysu i těsně u obrysu (téměř tečné průniky).
+    /// Reference = přesná tětiva sloupce; tětiva ≥ t_det musí mít v bězích materiál tělesa.
+    /// </summary>
+    private static void FuzzTeles(KatalogGeo2 kat)
+    {
+        T.Sekce("GEO2 K4: fuzz 10⁵ elipsoidů (r_min od t_det/2, téměř tečné sloupce): tětivy ≥ t_det nalezeny");
+        const string ud = "[" + Vapenec + ",{\"id\":\"e\",\"stari\":5,\"operace\":\"Vnikni\",\"tvar\":{\"druh\":\"test_elipsoid\",\"x\":0,\"y\":0,\"z\":50,\"r0\":1,\"r1\":1,\"r2\":1},\"vysledek\":{\"material\":\"quartzite\"}}]";
+        var tv = new TovarnaK4(kat);
+        var r = KompilatorChronologie.Kompiluj(UdalostiJson.NactiPole(ud), kat, tv);
+        T.Je(r.Ok, $"syntetika se zkompiluje ({r.Zprava})");
+        if (!r.Ok) return;
+        var c = r.Chronologie!; var e = (ElipsoidK4)tv.Tvary["e"]; int iq = kat.PodleKlice("quartzite")!.Id;
+        var rnd = new Random(59); var b = new List<Beh>(); long tetiv = 0, vynech = 0, tecnych = 0, malych = 0, malychBod = 0;
+        for (int t = 0; t < 100_000; t++)
+        {
+            e.B = Baze(rnd); e.R0 = 0.0625 + rnd.NextDouble() * 1.5; e.R1 = 0.0625 + rnd.NextDouble() * 1.5; e.R2 = 0.0625 + rnd.NextDouble() * 1.5;
+            e.Cx = rnd.NextDouble() - 0.5; e.Cy = rnd.NextDouble() - 0.5; e.Cz = 40 + rnd.NextDouble() * 20;
+            double rm = Math.Max(e.R0, Math.Max(e.R1, e.R2));
+            for (int s = 0; s < 2; s++)
+            {
+                double x = e.Cx + (rnd.NextDouble() * 2 - 1) * rm, y = e.Cy + (rnd.NextDouble() * 2 - 1) * rm;
+                if (s == 1)
+                {
+                    // k obrysu: půlení mezi středem a bodem bez tětivy
+                    double ux = x - e.Cx, uy = y - e.Cy, lo = 0, hi = 1;
+                    bool Ma(double q) => PrunikyPrimky.Elipsoid(Primka.Svisla(e.Cx + q * ux * 2, e.Cy + q * uy * 2), e.Cx, e.Cy, e.Cz, e.B, e.R0, e.R1, e.R2, 1, out _, out _);
+                    if (!Ma(1)) { for (int k = 0; k < 40; k++) { double m = 0.5 * (lo + hi); if (Ma(m)) lo = m; else hi = m; } }
+                    double q2 = lo * (1 - 1e-4 * rnd.NextDouble()); x = e.Cx + q2 * ux * 2; y = e.Cy + q2 * uy * 2; tecnych++;
+                }
+                if (!PrunikyPrimky.Elipsoid(Primka.Svisla(x, y), e.Cx, e.Cy, e.Cz, e.B, e.R0, e.R1, e.R2, 1, out var a0, out var a1)) continue;
+                SloupecGeo2.Behy(c, x, y, 100, 100, b);
+                bool nalez = b.Any(q => q.Stav.Material == iq && q.Z1 > a0 && q.Z0 < a1);
+                if (a1 - a0 >= 0.125) { tetiv++; if (!nalez) vynech++; }
+                else { malych++; if (c.Vzorek(x, y, 0.5 * (a0 + a1), 100).Material == iq) malychBod++; }
+            }
+        }
+        Console.WriteLine($"  sloupců s tětivou ≥ t_det {tetiv:N0}, vynechaných {vynech}; podlimitních {malych:N0} (Bod je má {malychBod:N0}); u obrysu {tecnych:N0}");
+        T.Je(vynech == 0 && tetiv > 30_000, "fuzz 10⁵ elipsoidů: žádná tětiva ≥ t_det nevynechána");
+        T.Je(malychBod == malych, "podlimitní tětivy (< t_det) Bod najde");
     }
 
     private const string KontaktJson = """
