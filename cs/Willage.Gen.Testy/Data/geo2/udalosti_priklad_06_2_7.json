@@ -1,0 +1,427 @@
+{
+ "schema": "willage.udalosti.v2",
+ "verze": 3,
+ "konfigurace": {
+  "minTloustkaDetekce_m": 0.125,
+  "tolerancKontaktu_m": 0.125,
+  "tau_m": 0.125,
+  "vyskaDetailnihoVoxelu_m": 0.125
+ },
+ "nikdy": [
+  "topsoil",
+  "gravel_sand",
+  "loess",
+  "weathered_clay"
+ ],
+ "udalosti": [
+  {
+   "id": "zasobnik",
+   "stari": 0,
+   "operace": "Uloz",
+   "tvar": {
+    "druh": "zasobnik",
+    "zdroj": "VrstvySloupce",
+    "mrizka": "adaptivni"
+   },
+   "vyskyt": {
+    "druh": "jedna"
+   }
+  },
+  {
+   "id": "granitoid_intruze",
+   "stari": 10,
+   "operace": "Vnikni",
+   "aktivni": false,
+   "tvar": {
+    "druh": "elipsoid",
+    "polomery_m": [
+     60,
+     40,
+     30
+    ],
+    "sum": {
+     "druh": "posun",
+     "amp_m": 2.0,
+     "frekvence_1_m": 0.05
+    }
+   },
+   "vyskyt": {
+    "druh": "mrizka",
+    "G": 512,
+    "p": 0.3,
+    "sul": 11
+   },
+   "pravidla": {
+    "nahrazuje": {
+     "skupiny": [
+      "krystal",
+      "vapenec",
+      "bridlice",
+      "piskovec"
+     ]
+    },
+    "zdroje": {
+     "vrstvy": true,
+     "telesa": "zadna",
+     "transformace": true
+    },
+    "prostor": [],
+    "hloubka": {
+     "min_m": 30
+    }
+   },
+   "vysledek": {
+    "material": "granite"
+   }
+  },
+  {
+   "id": "skarn_kontakt",
+   "stari": 20,
+   "operace": "Transformuj",
+   "tvar": {
+    "druh": "kontakt"
+   },
+   "pravidla": {
+    "nahrazuje": {
+     "materialy": [
+      "deep_limestone",
+      "cave_limestone",
+      "dolomite"
+     ]
+    },
+    "zdroje": {
+     "vrstvy": true,
+     "telesa": "zadna",
+     "transformace": false
+    },
+    "kontakt": {
+     "cil": {
+      "vrstvy": [
+       "granite",
+       "granodiorite",
+       "leucogranite",
+       "granite_massif"
+      ],
+      "udalosti": [
+       "granitoid_intruze"
+      ]
+     },
+     "strana": "vne",
+     "sirka_m": 1.5,
+     "modulace": {
+      "amp_rel": 0.5,
+      "frekvence_1_m": 0.5
+     },
+     "hostitel_okoli": {
+      "materialy": [
+       "granite",
+       "granodiorite",
+       "leucogranite",
+       "granite_massif"
+      ],
+      "hloubka_vzorku_m": 0.125
+     }
+    }
+   },
+   "vysledek": {
+    "mapa": {
+     "deep_limestone": "skarn",
+     "cave_limestone": "skarn",
+     "dolomite": "skarn"
+    }
+   }
+  },
+  {
+   "id": "cocka_pegmatit",
+   "stari": 30,
+   "operace": "Vnikni",
+   "tvar": {
+    "druh": "elipsoid",
+    "z_parametru": "cocka",
+    "obalka": "max_polomer"
+   },
+   "vyskyt": {
+    "druh": "mrizka",
+    "z_parametru": "cocka"
+   },
+   "pravidla": {
+    "nahrazuje": {
+     "skupiny": [
+      "krystal"
+     ]
+    },
+    "zdroje": {
+     "vrstvy": true,
+     "telesa": [
+      "granitoid_intruze"
+     ],
+     "transformace": true
+    },
+    "prostor": []
+   },
+   "vysledek": {
+    "material": "pegmatite"
+   },
+   "sourozenci": "unie"
+  },
+  {
+   "id": "zila_kremen",
+   "stari": 40,
+   "operace": "Vnikni",
+   "tvar": {
+    "druh": "deska",
+    "z_parametru": "zila",
+    "sum": {
+     "druh": "posun_kolmo",
+     "amp_m": 0.3,
+     "frekvence_1_m": 0.35
+    }
+   },
+   "vyskyt": {
+    "druh": "mrizka",
+    "z_parametru": "zila"
+   },
+   "pravidla": {
+    "nahrazuje": {
+     "skupiny": [
+      "krystal"
+     ],
+     "materialy": [
+      "skarn",
+      "pegmatite"
+     ]
+    },
+    "zdroje": {
+     "vrstvy": true,
+     "telesa": [
+      "granitoid_intruze",
+      "cocka_pegmatit"
+     ],
+     "transformace": true
+    },
+    "prostor": []
+   },
+   "vysledek": {
+    "material": "quartzite",
+    "mineralizace": {
+     "tabulka": "mineraly_hostitele"
+    }
+   }
+  },
+  {
+   "id": "solny_dom",
+   "stari": 50,
+   "operace": "Vnikni",
+   "tvar": {
+    "druh": "elipsoid",
+    "z_parametru": "dome"
+   },
+   "vyskyt": {
+    "druh": "mrizka",
+    "z_parametru": "dome"
+   },
+   "pravidla": {
+    "nahrazuje": {
+     "materialy": [
+      "rock_salt",
+      "gypsum",
+      "dolomite",
+      "deep_limestone",
+      "cave_limestone",
+      "siltstone",
+      "shale",
+      "conglomerate",
+      "quartz_sandstone"
+     ]
+    },
+    "zdroje": {
+     "vrstvy": true,
+     "telesa": "zadna",
+     "transformace": true
+    },
+    "prostor": []
+   },
+   "vysledek": {
+    "material": "rock_salt"
+   }
+  },
+  {
+   "id": "komin_kimberlit",
+   "stari": 60,
+   "operace": "Vnikni",
+   "tvar": {
+    "druh": "elipsoid",
+    "z_parametru": "pipe",
+    "obalka": "presna"
+   },
+   "vyskyt": {
+    "druh": "mrizka",
+    "z_parametru": "pipe"
+   },
+   "pravidla": {
+    "nahrazuje": "*",
+    "zdroje": {
+     "vrstvy": true,
+     "telesa": "starsi",
+     "transformace": true
+    },
+    "prostor": []
+   },
+   "vysledek": {
+    "material": "kimberlite"
+   }
+  },
+  {
+   "id": "kras",
+   "stari": 70,
+   "operace": "Odstran",
+   "tvar": {
+    "druh": "kapsle_retez",
+    "z_parametru": "kras",
+    "sum": {
+     "druh": "posun_3d",
+     "amp_m": 0.25,
+     "frekvence_1_m": 0.5
+    }
+   },
+   "vyskyt": {
+    "druh": "mrizka",
+    "z_parametru": "kras"
+   },
+   "pravidla": {
+    "nahrazuje": {
+     "materialy": [
+      "deep_limestone",
+      "cave_limestone",
+      "dolomite"
+     ]
+    },
+    "zdroje": {
+     "vrstvy": true,
+     "telesa": "zadna",
+     "transformace": false
+    },
+    "hloubka": {
+     "min_m": 2.0
+    }
+   },
+   "vysledek": {
+    "prostor": "DutinaKras"
+   }
+  },
+  {
+   "id": "sopka",
+   "stari": 80,
+   "operace": "Vnikni",
+   "tvar": {
+    "druh": "sopka_nitro",
+    "zdroj": "NitroSopky"
+   },
+   "vyskyt": {
+    "druh": "seznam",
+    "zdroj": "Sopky"
+   },
+   "pravidla": {
+    "nahrazuje": "*",
+    "ignoruj_nikdy": true,
+    "zdroje": {
+     "vrstvy": true,
+     "telesa": "starsi",
+     "transformace": true
+    },
+    "prostor": [
+     "DutinaKras",
+     "DutinaJina"
+    ]
+   },
+   "vysledek": {
+    "material_z_tvaru": true
+   }
+  },
+  {
+   "id": "vyplen_jeskyne",
+   "stari": 90,
+   "operace": "Vypln",
+   "tvar": {
+    "druh": "pod_dnem",
+    "udalost": "kras",
+    "vyska_m": 0.4,
+    "sum": {
+     "druh": "posun_svisle",
+     "amp_m": 0.15,
+     "frekvence_1_m": 1.0
+    }
+   },
+   "pravidla": {
+    "prostor": [
+     "DutinaKras"
+    ]
+   },
+   "vysledek": {
+    "material": "clay_deposit"
+   }
+  },
+  {
+   "id": "zlom_budouci",
+   "stari": 100,
+   "operace": "Deformuj",
+   "aktivni": false,
+   "tvar": {
+    "druh": "rovina_zlomu",
+    "bod_m": [
+     0,
+     0,
+     0
+    ],
+    "normala": [
+     0.6,
+     0,
+     0.8
+    ],
+    "posun_m": [
+     0,
+     3,
+     -2
+    ],
+    "polomer_m": 200
+   },
+   "vyskyt": {
+    "druh": "mrizka",
+    "G": 1024,
+    "p": 0.1,
+    "sul": 101
+   }
+  },
+  {
+   "id": "metamorfoza_regionalni_budouci",
+   "stari": 5,
+   "operace": "Transformuj",
+   "aktivni": false,
+   "tvar": {
+    "druh": "oblast"
+   },
+   "pravidla": {
+    "nahrazuje": {
+     "materialy": [
+      "shale",
+      "siltstone"
+     ]
+    },
+    "zdroje": {
+     "vrstvy": true,
+     "telesa": "zadna",
+     "transformace": false
+    },
+    "hloubka": {
+     "min_m": 400
+    }
+   },
+   "vysledek": {
+    "mapa": {
+     "shale": "phyllite",
+     "siltstone": "mica_schist"
+    }
+   }
+  }
+ ]
+}
