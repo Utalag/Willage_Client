@@ -66,4 +66,20 @@ public sealed class KontextBloku : IGeologieGeo2
     public Vzorek Vzorek(double x, double y, double z) => _v.Vzorek(x, y, z);
     public void Sloupec(double x, double y, double z0, double krokZ, Span<Vzorek> cil) => _v.Sloupec(x, y, z0, krokZ, cil);
     public StavBodu Bod(double x, double y, double z, double zPov) => Chronologie.Bod(x, y, z, zPov);
+
+    [ThreadStatic] private static List<Beh>? t_behy;
+
+    /// <summary>K4: běhy sloupce přes [0, zMax) (1.7, 3.3) – segmentace s body zlomu, vzorkování nejistých oblastí po t_det/2 a půlení na ε.</summary>
+    public void Behy(double x, double y, double zMax, List<Beh> cil) => SloupecGeo2.Behy(Chronologie, x, y, Povrch(x, y), zMax, cil);
+
+    /// <summary>K4: mřížka sloupce z běhů (3.4): buňka = běh přes střed, u hranice (±ε) rozhodne Bod. Výsledek ≡ <see cref="Sloupec"/> mimo tětivy &lt; t_det.</summary>
+    public void SloupecZBehu(double x, double y, double z0, double krokZ, Span<Vzorek> cil)
+    {
+        double zPov = Povrch(x, y), zMax = z0 + cil.Length * krokZ;
+        var b = t_behy ??= new();
+        SloupecGeo2.Behy(Chronologie, x, y, zPov, Math.Max(zMax, 1e-9), b);
+        if (b.Count == 0) { for (int k = 0; k < cil.Length; k++) cil[k] = Chronologie.Vzorek(x, y, z0 + (k + 0.5) * krokZ, zPov); return; }
+        var c = Chronologie;
+        Rasterizace.DoMrizky(b, z0, krokZ, cil, z => c.Vzorek(x, y, z, zPov));
+    }
 }
