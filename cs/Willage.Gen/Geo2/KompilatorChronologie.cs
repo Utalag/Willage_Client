@@ -2,8 +2,12 @@ using System.Text.Json;
 
 namespace Willage.Gen.Geo2;
 
-/// <summary>Volby kompilace, které nejsou součástí dat událostí. <c>KrokMrizkyHranicM</c>: pevný krok mřížky hranic pro kontakt (K1b; adaptivní 6.3 je K5).</summary>
-public sealed record MoznostiKompilace(double KrokMrizkyHranicM = 0.5)
+/// <summary>
+/// Volby kompilace, které nejsou součástí dat událostí. <c>KrokMrizkyHranicM</c>: null = mřížka hranic podle dat zásobníku
+/// (<c>tvar.mrizka</c>: <c>adaptivni</c> výchozí, 6.3, K5; <c>pevna</c> = 0,5 m); číslo = vynucená pevná mřížka s tímto krokem (testy, srovnání).
+/// <c>KontrolaMrizkyPo025</c>: adaptivní buňka 1 m se kontroluje ve všech bodech po 0,25 m (V5 zaručeně); false = jen střed a středy hran (rychlejší).
+/// </summary>
+public sealed record MoznostiKompilace(double? KrokMrizkyHranicM = null, bool KontrolaMrizkyPo025 = true)
 {
     public static readonly MoznostiKompilace Vychozi = new();
 }
@@ -63,6 +67,12 @@ public static class KompilatorChronologie
         else if (platne.Count > 0 && platne[0].op != Operace.Uloz) z.Chyba("ULOZ_NENI_PRVNI", ulozy[0].u.Id, "Uloz musí mít nejmenší stáří");
 
         // 4) pravidla, výsledek, tvar
+        string mrizka = "adaptivni";
+        if (ulozy.Count == 1 && ulozy[0].u.Tvar.ValueKind == JsonValueKind.Object && ulozy[0].u.Tvar.TryGetProperty("mrizka", out var mz))
+        {
+            mrizka = mz.ValueKind == JsonValueKind.String ? mz.GetString() ?? "" : "";
+            if (mrizka is not ("adaptivni" or "pevna")) z.Chyba("MRIZKA_NEZNAMA", ulozy[0].u.Id, $"tvar.mrizka: \"adaptivni\" nebo \"pevna\" ({mz})");
+        }
         var cteni = new CteniPravidel(odk, z, nikdy, info);
         var indexy = new Dictionary<string, int>(StringComparer.Ordinal);
         for (int i = 0; i < platne.Count; i++) indexy[platne[i].u.Id] = i;
@@ -78,7 +88,7 @@ public static class KompilatorChronologie
             else if (op != Operace.Uloz && tvar is not ITvar) z.Chyba("TVAR_TYP", u.Id, "tvar musí být ITvar");
             if (ku.MaterialZTvaru && tvar is not ITvarSMaterialem) z.Chyba("TVAR_BEZ_MATERIALU", u.Id, "material_z_tvaru vyžaduje tvar s materiálem");
             IKontaktniPasmo? kontakt = pr.Kontakt is null ? null
-                : SestavKontakt(u, pr.Kontakt, vystup, indexy, sada.Konfigurace, katalog, tovarna, moznosti, z);
+                : SestavKontakt(u, pr.Kontakt, vystup, indexy, sada.Konfigurace, katalog, tovarna, moznosti, mrizka, z);
             if (op == Operace.Transformuj && pr.NahrazujeIds is not null)
             {
                 var klice = ku.Mapa.Keys.ToHashSet();
@@ -105,7 +115,7 @@ public static class KompilatorChronologie
     /// Validace: <c>KONTAKT_TAU</c> (τ &gt; e_k u vrstev), <c>KONTAKT_VRSTVY_BEZ_HRANIC</c>, <c>KONTAKT_CIL_BEZ_VZDALENOSTI</c>, <c>KONTAKT_BEZ_PLOCHY</c>.
     /// </summary>
     private static IKontaktniPasmo? SestavKontakt(UdalostData u, ParametryKontaktu p, List<KompilovanaUdalost> starsi,
-        Dictionary<string, int> indexy, KonfiguraceGeo2 kf, KatalogGeo2 katalog, ITovarnaTvaru tovarna, MoznostiKompilace m, ZpravaValidace z)
+        Dictionary<string, int> indexy, KonfiguraceGeo2 kf, KatalogGeo2 katalog, ITovarnaTvaru tovarna, MoznostiKompilace m, string mrizka, ZpravaValidace z)
     {
         var plochy = new List<IPlochaKontaktu>(); var cilIdx = new List<int>(); int chyb0 = z.PocetChyb;
         if (p.CilVrstvy.Count > 0)
@@ -113,7 +123,10 @@ public static class KompilatorChronologie
             if (kf.TauM > kf.TolerancKontaktuM)
                 z.Chyba("KONTAKT_TAU", u.Id, $"kontakt na vrstvy vyžaduje tau_m ≤ tolerancKontaktu_m ({kf.TauM} > {kf.TolerancKontaktuM})");
             var zas = starsi.FirstOrDefault(e => e.Operace == Operace.Uloz)?.Zasobnik;
-            if (zas is ITvarZasobnikuSHranicemi zh) plochy.Add(new PlochaVrstev(zh, p.CilVrstvy, katalog.MaxId, m.KrokMrizkyHranicM));
+            if (zas is ITvarZasobnikuSHranicemi zh)
+                plochy.Add(m.KrokMrizkyHranicM is double g ? new PlochaVrstev(zh, p.CilVrstvy, katalog.MaxId, g)
+                    : mrizka == "pevna" ? new PlochaVrstev(zh, p.CilVrstvy, katalog.MaxId, 0.5)
+                    : new PlochaVrstevAdaptivni(zh, p.CilVrstvy, katalog.MaxId, kf.TauM, m.KontrolaMrizkyPo025));
             else z.Chyba("KONTAKT_VRSTVY_BEZ_HRANIC", u.Id, "zásobník nevydává hranice vrstev (kontakt na kontakt.cil.vrstvy)");
         }
         foreach (var id in p.CilUdalosti)

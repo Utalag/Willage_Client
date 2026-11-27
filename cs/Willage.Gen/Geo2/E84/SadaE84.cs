@@ -48,7 +48,7 @@ public static class SadaE84
         var ud = new JsonArray
         {
             new JsonObject { ["id"] = "zasobnik", ["stari"] = 0, ["operace"] = "Uloz",
-                ["tvar"] = new JsonObject { ["druh"] = "zasobnik", ["zdroj"] = "VrstvySloupce" } },
+                ["tvar"] = new JsonObject { ["druh"] = "zasobnik", ["zdroj"] = "VrstvySloupce", ["mrizka"] = "adaptivni" } },
             new JsonObject { ["id"] = "skarn_kontakt", ["stari"] = 20, ["operace"] = "Transformuj",
                 ["tvar"] = new JsonObject { ["druh"] = "kontakt", ["seed_e84"] = true },
                 ["pravidla"] = new JsonObject

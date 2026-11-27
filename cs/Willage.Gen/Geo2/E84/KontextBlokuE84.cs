@@ -13,6 +13,6 @@ public static class KontextBlokuE84
         var t = new TovarnaE84(g, indexBloku: true);
         var r = KompilatorChronologie.Kompiluj(UdalostiJson.Nacti(json), kat, t, moznosti);
         if (!r.Ok) return (null!, r);
-        return (KontextBloku.Sestav(r.Chronologie!, oblast, moznosti.KrokMrizkyHranicM, vlaken), r);
+        return (KontextBloku.Sestav(r.Chronologie!, oblast, moznosti.KrokMrizkyHranicM ?? 0.5, vlaken), r);
     }
 }

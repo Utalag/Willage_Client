@@ -41,10 +41,14 @@ public sealed class KontextBloku : IGeologieGeo2
     /// <summary>Okraj kontextu [m]: Σ (R_max + η) přes kontaktní pásma (prefix může obsahovat starší kontakt) + krok mřížky hranic.</summary>
     public static double Okraj(ChronologieGeo2 c, double krokMrizkyM)
     {
-        double o = krokMrizkyM;
+        double o = krokMrizkyM, bunka = 0;
         foreach (var e in c.Udalosti)
-            if (e.Kontakt is KontaktniPasmo k) o += k.RMaxM + k.Parametry.HloubkaVzorkuM;
-        return o;
+            if (e.Kontakt is KontaktniPasmo k)
+            {
+                o += k.RMaxM + k.Parametry.HloubkaVzorkuM;
+                foreach (var p in k.Plochy) if (p is IPlochaSUzly u) bunka = Math.Max(bunka, u.OkrajBunkyM);
+            }
+        return o + Math.Max(0, bunka - krokMrizkyM); // K5: adaptivní kořen 1 m
     }
 
     public static KontextBloku Sestav(ChronologieGeo2 c, OblastBloku oblast, double krokMrizkyM, int vlaken = 0)
