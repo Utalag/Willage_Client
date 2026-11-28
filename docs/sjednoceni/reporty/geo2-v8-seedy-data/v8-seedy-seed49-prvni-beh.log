@@ -1,0 +1,93 @@
+- GEO2 V8: rozdíly GEO2 × GEO1, seedy [49, 7, 100], bloky 128 m, sloupce po 0,25 m, z po 0,25 m, 24 vláken
+- GEO2 V8 seed 49
+  blok (1024, 512) [náhodné]: 134 217 728 buněk, různých 307 804 (0,2293 %), otevřené 0; čas kontext 1,75 s, GEO1 3,12 s, GEO2 sloupce 1,66 s (max vlákno, bez klasifikace V8)
+  blok (3000, 2000) [náhodné]: 134 217 728 buněk, různých 371 282 (0,2766 %), otevřené 0; čas kontext 1,12 s, GEO1 3,13 s, GEO2 sloupce 1,03 s (max vlákno, bez klasifikace V8)
+  blok (0, 0) [náhodné]: 134 217 728 buněk, různých 206 427 (0,1538 %), otevřené 0; čas kontext 1,10 s, GEO1 2,63 s, GEO2 sloupce 1,44 s (max vlákno, bez klasifikace V8)
+  blok (2048, 1024) [náhodné]: 134 217 728 buněk, různých 1 000 745 (0,7456 %), otevřené 0; čas kontext 1,30 s, GEO1 3,01 s, GEO2 sloupce 1,21 s (max vlákno, bez klasifikace V8)
+  blok (512, 3072) [náhodné]: 134 217 728 buněk, různých 1 341 175 (0,9993 %), otevřené 0; čas kontext 1,37 s, GEO1 3,08 s, GEO2 sloupce 1,78 s (max vlákno, bez klasifikace V8)
+  blok (1856, 1024) [šev mince x = 1920]: 134 217 728 buněk, různých 1 561 179 (1,1632 %), otevřené 0; čas kontext 1,19 s, GEO1 2,88 s, GEO2 sloupce 1,76 s (max vlákno, bez klasifikace V8)
+  blok (1984, 2560) [šev mince x = 2048]: 134 217 728 buněk, různých 2 257 781 (1,6822 %), otevřené 0; čas kontext 1,38 s, GEO1 3,65 s, GEO2 sloupce 6,27 s (max vlákno, bez klasifikace V8)
+  blok (1664, 1728) [hornatina / strmé]: 134 217 728 buněk, různých 4 267 (0,0032 %), otevřené 0; čas kontext 1,26 s, GEO1 2,86 s, GEO2 sloupce 3,25 s (max vlákno, bez klasifikace V8)
+  blok (3904, 1344) [hornatina / strmé]: 134 217 728 buněk, různých 1 530 174 (1,1401 %), otevřené 0; čas kontext 1,39 s, GEO1 3,27 s, GEO2 sloupce 3,42 s (max vlákno, bez klasifikace V8)
+  blok (1673, 1705) [svah sopky]: 134 217 728 buněk, různých 30 795 (0,0229 %), otevřené 0; čas kontext 1,19 s, GEO1 2,66 s, GEO2 sloupce 1,98 s (max vlákno, bez klasifikace V8)
+  blok (1710, 1705) [okraj sopky]: 134 217 728 buněk, různých 354 966 (0,2645 %), otevřené 0; čas kontext 1,33 s, GEO1 2,91 s, GEO2 sloupce 2,04 s (max vlákno, bez klasifikace V8)
+  --- kategorie: buněk, různých, podíl; verdikty (počet buněk) ---
+  náhodné                   671 088 640  3 227 433   0.4809 %  zlepšení 984, dle kontraktu 3 154 395, tolerance 72 054, otevřené 0 (0.0000 %)
+  šev mince x = 1920        134 217 728  1 561 179   1.1632 %  zlepšení 21, dle kontraktu 1 535 818, tolerance 25 340, otevřené 0 (0.0000 %)
+  šev mince x = 2048        134 217 728  2 257 781   1.6822 %  zlepšení 505, dle kontraktu 2 248 040, tolerance 9 236, otevřené 0 (0.0000 %)
+  hornatina / strmé         268 435 456  1 534 441   0.5716 %  zlepšení 1 179, dle kontraktu 1 489 273, tolerance 43 989, otevřené 0 (0.0000 %)
+  svah sopky                134 217 728     30 795   0.0229 %  zlepšení 0, dle kontraktu 30 702, tolerance 93, otevřené 0 (0.0000 %)
+  okraj sopky               134 217 728    354 966   0.2645 %  zlepšení 0, dle kontraktu 341 922, tolerance 13 044, otevřené 0 (0.0000 %)
+  CELKEM                  1 476 395 008  8 966 595   0.6073 %  zlepšení 2 689, dle kontraktu 8 800 150, tolerance 163 756, otevřené 0 (0.0000 %)
+  --- kvalita skarnu vůči kontraktu (sloupce se skarnem v aspoň jednom systému; pásmo [0,625; 2,375] m eukleidovsky, O1) ---
+  GEO1: skarn 9 549 367 buněk; v nekarbonátu (porušení O1) 8 898 790 (93.1872 %); tlustší než pásmo 0 (0.0000 %); díry v pásmu karbonátu 1 497 (0.1668 % karbonátu v pásmu 897 361); s odhadem hranice 5 372
+  GEO2: skarn 712 382 buněk; v nekarbonátu (porušení O1) 0 (0.0000 %); tlustší než pásmo 0 (0.0000 %); díry v pásmu karbonátu 2 (0.0002 % karbonátu v pásmu 887 063); s odhadem hranice 15 896
+  --- příčiny (celkem), podíl z různých a ze všech buněk ---
+  SkarnJenKarbonaty        DleKontraktu     8 758 588  97.6802 % z různých   0.5932 % ze všech
+  SkarnHraniceOdhad        Tolerance          150 049   1.6734 % z různých   0.0102 % ze všech
+  HostitelSkarn            DleKontraktu        36 820   0.4106 % z různých   0.0025 % ze všech
+  SkarnVPasmuTolerance     Tolerance           13 707   0.1529 % z různých   0.0009 % ze všech
+  PravidloZdroje           DleKontraktu         2 872   0.0320 % z různých   0.0002 % ze všech
+  PoradiTeles              DleKontraktu         1 868   0.0208 % z různých   0.0001 % ze všech
+  SkarnDiraGeo1            Zlepseni             1 497   0.0167 % z různých   0.0001 % ze všech
+  CockaObalka              Zlepseni             1 192   0.0133 % z různých   0.0001 % ze všech
+  SkarnHostitelOkoli       DleKontraktu             2   0.0000 % z různých   0.0000 % ze všech
+  --- zdroj GEO1 → zdroj GEO2 × příčina ---
+  Skarn   → Vrstva  SkarnJenKarbonaty           8 684 112
+  Skarn   → Vrstva  SkarnHraniceOdhad             140 102
+  Skarn   → Cocka   SkarnJenKarbonaty              31 038
+  Skarn   → Zila    SkarnJenKarbonaty              26 720
+  Dome    → Skarn   HostitelSkarn                  26 433
+  Skarn   → Pipe    SkarnJenKarbonaty              16 718
+  Vrstva  → Skarn   SkarnVPasmuTolerance           13 690
+  Kras    → Skarn   HostitelSkarn                  10 387
+  Vrstva  → Skarn   SkarnHraniceOdhad               9 945
+  Kras    → Dome    PravidloZdroje                  2 872
+  Vrstva  → Skarn   SkarnDiraGeo1                   1 497
+  Cocka   → Pipe    PoradiTeles                     1 316
+  Vrstva  → Cocka   CockaObalka                     1 042
+  Dome    → Pipe    PoradiTeles                       260
+  Zila    → Pipe    PoradiTeles                       195
+  Skarn   → Cocka   CockaObalka                       150
+  Skarn   → Pipe    PoradiTeles                        76
+  Zila    → Cocka   PoradiTeles                        21
+  Skarn   → Vrstva  SkarnVPasmuTolerance               17
+  Skarn   → Kras    SkarnHraniceOdhad                   2
+  Skarn   → Vrstva  SkarnHostitelOkoli                  2
+  --- přechody materiálu GEO1 → GEO2 (prvních 15) ---
+  skarn              → mica_schist           5 267 632
+  skarn              → amphibolite           3 556 532
+  skarn              → pegmatite                57 908
+  rock_salt          → skarn                    26 433
+  skarn              → kimberlite               16 794
+  cave_limestone     → skarn                    13 843
+  map_ceiling        → skarn                    10 387
+  dolomite           → skarn                     9 492
+  map_ceiling        → rock_salt                 2 872
+  deep_limestone     → skarn                     1 797
+  pegmatite          → kimberlite                1 443
+  granite            → pegmatite                   637
+  rock_salt          → kimberlite                  260
+  orthogneiss        → pegmatite                   254
+  granodiorite       → pegmatite                    84
+  --- příklady (x, y, z, GEO1 → GEO2) ---
+  CockaObalka: (1129,12, 533,12, 12,62) granite→pegmatite; (1129,12, 533,38, 12,62) granite→pegmatite; (1129,12, 533,62, 12,62) granite→pegmatite; (1124,62, 533,12, 14,62) granite→pegmatite; (1124,62, 533,38, 14,62) granite→pegmatite
+  SkarnJenKarbonaty: (1134,38, 589,12, 11,12) skarn→amphibolite; (1134,38, 589,12, 11,38) skarn→amphibolite; (1134,38, 589,12, 11,62) skarn→amphibolite; (1134,38, 589,12, 11,88) skarn→amphibolite; (1134,38, 589,12, 12,12) skarn→amphibolite
+  SkarnDiraGeo1: (1050,38, 513,12, 26,38) cave_limestone→skarn; (1050,62, 512,88, 26,38) cave_limestone→skarn; (1050,62, 512,88, 26,62) cave_limestone→skarn; (1050,62, 513,12, 26,38) cave_limestone→skarn; (1050,88, 512,62, 26,38) cave_limestone→skarn
+  SkarnVPasmuTolerance: (1050,38, 513,88, 26,38) cave_limestone→skarn; (1050,38, 514,12, 26,38) cave_limestone→skarn; (1050,62, 513,38, 26,38) cave_limestone→skarn; (1050,62, 513,62, 26,38) cave_limestone→skarn; (1050,62, 513,88, 26,38) cave_limestone→skarn
+  SkarnHraniceOdhad: (1055,62, 530,88, 26,38) cave_limestone→skarn; (1055,62, 530,88, 26,62) cave_limestone→skarn; (1055,62, 530,88, 26,88) cave_limestone→skarn; (1055,62, 531,12, 26,38) cave_limestone→skarn; (1055,62, 531,12, 26,62) cave_limestone→skarn
+  SkarnHostitelOkoli: (3942,62, 1378,88, 37,12) skarn→cave_limestone; (3944,12, 1382,12, 37,38) skarn→cave_limestone
+  PoradiTeles: (1060,88, 582,12, 26,38) skarn→kimberlite; (1060,88, 582,12, 26,62) skarn→kimberlite; (1060,88, 582,38, 26,38) skarn→kimberlite; (1060,88, 582,38, 26,62) skarn→kimberlite; (1103,12, 530,38, 22,12) pegmatite→kimberlite
+  HostitelSkarn: (1066,12, 634,62, 27,62) map_ceiling→skarn; (1066,12, 634,88, 27,38) map_ceiling→skarn; (1066,12, 635,12, 27,12) map_ceiling→skarn; (1066,12, 635,12, 27,38) map_ceiling→skarn; (1066,12, 635,38, 26,88) map_ceiling→skarn
+  PravidloZdroje: (1073,38, 598,88, 29,62) map_ceiling→rock_salt; (1073,38, 598,88, 29,88) map_ceiling→rock_salt; (1073,38, 599,12, 29,38) map_ceiling→rock_salt; (1073,38, 599,12, 29,62) map_ceiling→rock_salt; (1073,38, 599,12, 29,88) map_ceiling→rock_salt
+dotnet.exe : Unhandled exception. System.ArgumentException: The path is empty. (Parameter 'path')
+At C:\Users\krejc\AppData\Local\Temp\ps-script-c98026b4-0d2a-41ff-8cbe-b76332a3f1c8.ps1:666 char:1
++ & $dotnet $dll --jen=GEO2V8 --seedy=49,7,100 --csv=(Join-Path $logDir ...
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (Unhandled excep...rameter 'path'):String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+   at System.IO.Path.GetFullPath(String path)
+   at Willage.Gen.Testy.TestyGeo2V8.Spust(String data, Double[] jedenBlok, Double krokXy, Int32 vlaken, String csv, Int
+64[] seedy) in C:\dev\Willage_Client\cs\Willage.Gen.Testy\TestyGeo2V8.cs:line 130
+   at Program.<Main>$(String[] args)

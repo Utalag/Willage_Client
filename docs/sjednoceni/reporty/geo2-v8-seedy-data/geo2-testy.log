@@ -1,0 +1,111 @@
+- GEO2 K1: katalog (kap. 8)
+- GEO2 K1: příklad 2.7 z kontraktu (12 událostí)
+- GEO2 K1: validace (1.3, 2.4)
+- GEO2 K1: V1 bez zlomu (sedimentace → intruze → skarn → žíla), syntetické tvary
+- GEO2 K1: pravidlo cíle 2.3 (materiál → nahrazuje + zdroje, prázdno → jen prostor)
+- GEO2 K1: pořadí v datech nemá význam, determinismus ve vláknech
+- GEO2 K1b: kontakt na rovinu vrstev (d̃ eukleidovsky, ne svisle)
+- GEO2 K1b: modulace šířky w = w₀(1 + a·N(f·q))
+- GEO2 K1b: strana vne / uvnitr / obe
+- GEO2 K1b: hostitel_okoli prefixem (stav těsně před kontaktem)
+- GEO2 K1b: kontakt na těleso (cil.udalosti) a sjednocení s vrstvami
+- GEO2 K1b: validace kontaktu (bez zástupného KONTAKT_K1B)
+- GEO2 K1b: kontakt ve vláknech (sdílená plocha vrstev)
+- GEO2 K1b: adaptéry VrstvySloupce / E84 / sopky (jen čtení staré cesty)
+- GEO2 K1b: chyba d̃ na skutečných hranicích VrstvySloupce (měření)
+  g = 1 m: |d̃ − d̃ref| medián 0,000, p99 0,027, max 0,243 m; jen jedna plocha v dosahu 0; nespárovaných trojúhelníků 88
+  g = 0,5 m: |d̃ − d̃ref| medián 0,000, p99 0,000, max 0,063 m; jen jedna plocha v dosahu 0; nespárovaných trojúhelníků 118
+  g = 0,25 m: |d̃ − d̃ref| medián 0,000, p99 0,000, max 0,034 m; jen jedna plocha v dosahu 0; nespárovaných trojúhelníků 163
+- GEO2 K2: zápis vzorku podle tabulky 3.1
+- GEO2 K2: V1 – všechna pole 3.1 (příklady kontraktu)
+- GEO2 K2: kompaktní Vzorek
+  Vzorek 20 B (Unsafe 20 B), pracovní StavBodu 44 B, dnešní sloupec 1 B na buňku
+- GEO2 K2: příznak HraniceOdhad
+  blok (1024, 512) po 2 m: bodů se skarnem 7 583, z toho s HraniceOdhad 90 (1,19 %)
+- GEO2 K2: Historie(p) jako přepočet
+  skutečný svět: bodů s PocetTransformaci > 1: 0
+- GEO2 K2: typ prostoru pro vodu (dutina × vzduch bez povrchu), výkopy
+  40 sloupců s dutinou: buněk 20 462, krasových dutin GEO2 156, shoda tříd s dnešní vodou 100,000 %, horních částečných buněk 18
+- GEO2 K3: index těles po dlaždicích 8 m proti Features staré cesty
+  Zila   instancí   48, max v dlaždici   4; vyhodnocení SDF na 20 000 bodů: Features  2 538 → index    522 ( 79,4 % ušetřeno), zásahů 30
+  Cocka  instancí   22, max v dlaždici   3; vyhodnocení SDF na 20 000 bodů: Features    341 → index     92 ( 73,0 % ušetřeno), zásahů 37, kandidátů mimo obálku staré cesty 0
+  Kras   instancí   37, max v dlaždici   6; vyhodnocení SDF na 20 000 bodů: Features  1 610 → index  1 610 (  0,0 % ušetřeno), zásahů 80
+  Dome   instancí    9, max v dlaždici   3; vyhodnocení SDF na 20 000 bodů: Features  2 838 → index    632 ( 77,7 % ušetřeno), zásahů 289
+  Pipe   instancí    2, max v dlaždici   1; vyhodnocení SDF na 20 000 bodů: Features  2 008 → index     40 ( 98,0 % ušetřeno), zásahů 17
+- GEO2 K3: přesné obálky (fuzz proti SDF)
+  Zila   bodů 160 000, uvnitř tělesa 1 848, mimo obálku staré cesty 0 (0,0 %), objem obálky staré cesty → přesné 21,9 %
+  Cocka  bodů 80 000, uvnitř tělesa 9 157, mimo obálku staré cesty 28 (0,3 %), objem obálky staré cesty → přesné 25,5 %
+  Kras   bodů 120 000, uvnitř tělesa 5 018, mimo obálku staré cesty 0 (0,0 %), objem obálky staré cesty → přesné 100,0 %
+  Dome   bodů 28 000, uvnitř tělesa 3 644, mimo obálku staré cesty 0 (0,0 %), objem obálky staré cesty → přesné 24,6 %
+  Pipe   bodů 8 000, uvnitř tělesa 91, mimo obálku staré cesty 0 (0,0 %), objem obálky staré cesty → přesné 2,2 %
+- GEO2 K3: rozdíl před/po K3 jen v čočce, V7 determinismus, V6 odstraněná práce (blok 64 m po 1 m)
+  okraj 3,000 m, připravených objektů 6
+  buněk 2 097 152, různých vzorků po opravě čočky 2 (v čočce mimo obálku staré cesty 2, jinde 0; nově čočka 2); skarn 11 502, pegmatit 2 956, kimberlit 1 225, sůl 11 085
+  V6 uzly plochy kontaktu: před K3 59 598 (součet keší 24 vláken), po K3 předpočteno 20 164, dopočteno mimo oblast 0
+- GEO2 K4: průniky obecné přímky s primitivy závorek (proti bodovému testu)
+  bodů 1 600 000, nesouhlasí 0
+- GEO2 K4: vzdálenost bod–elipsoid (Eberly) proti hrubé síle
+  max |Σ(π_i/r_i)² − 1| = 1,80E-014, max (d − hrubá síla) = 0,00E+000 m, max |1 − |u·n|| = 1,78E-015
+- GEO2 K4: závorky V ⊆ těleso ⊆ O těles E84 (fuzz 10⁶ bodů na druh)
+  Zila   bodů v tělese    23 354, mimo O 0; V = ∅
+  Cocka  bodů v tělese   174 098, mimo O 0; bodů uvnitř tětivy 174 098, z nich mimo těleso 0
+  Kras   bodů v tělese    25 940, mimo O 0; V = ∅
+  Dome   bodů v tělese   187 934, mimo O 0; bodů uvnitř tětivy 187 934, z nich mimo těleso 0
+  Pipe   bodů v tělese   262 361, mimo O 0; bodů uvnitř tětivy 262 361, z nich mimo těleso 0
+  V4 E84 blok (1024, 512): 256 sloupců, hustých bodů 2 096 380, různých 0 v 0 tětivách (max 0,0000 m), tětiv ≥ t_det 0; běhů na sloupec 12,1, Bod na sloupec 58
+- GEO2 K4: rasterizace běhů (3.4) = Bod ve středu buňky; V7
+  krok z 0,25 m: buněk 524 288, různých od Bod 0, z toho ve tětivě ≥ t_det 0
+  krok z 0,125 m: buněk 1 048 576, různých od Bod 0, z toho ve tětivě ≥ t_det 0
+- GEO2 K4: syntetická šumová deska (V = ∅, O = deska ± A): garantovaná detekce ≥ t_det po h = t_det/2
+  sklon  0°, T = 0,50·t_det: tětiv ≥ t_det    0, vynechaných 0; menších 60 (nalezeno 58)
+  sklon  0°, T = 0,99·t_det: tětiv ≥ t_det   10, vynechaných 0; menších 50 (nalezeno 50)
+  sklon  0°, T = 1,00·t_det: tětiv ≥ t_det   25, vynechaných 0; menších 35 (nalezeno 35)
+  sklon  0°, T = 1,01·t_det: tětiv ≥ t_det   38, vynechaných 0; menších 22 (nalezeno 22)
+  sklon  0°, T = 2,00·t_det: tětiv ≥ t_det   60, vynechaných 0; menších 0 (nalezeno 0)
+  sklon 30°, T = 0,50·t_det: tětiv ≥ t_det    0, vynechaných 0; menších 60 (nalezeno 60)
+  sklon 30°, T = 0,99·t_det: tětiv ≥ t_det   48, vynechaných 0; menších 12 (nalezeno 12)
+  sklon 30°, T = 1,00·t_det: tětiv ≥ t_det   48, vynechaných 0; menších 12 (nalezeno 12)
+  sklon 30°, T = 1,01·t_det: tětiv ≥ t_det   51, vynechaných 0; menších 9 (nalezeno 9)
+  sklon 30°, T = 2,00·t_det: tětiv ≥ t_det   60, vynechaných 0; menších 0 (nalezeno 0)
+  sklon 60°, T = 0,50·t_det: tětiv ≥ t_det   15, vynechaných 0; menších 45 (nalezeno 45)
+  sklon 60°, T = 0,99·t_det: tětiv ≥ t_det   60, vynechaných 0; menších 0 (nalezeno 0)
+  sklon 60°, T = 1,00·t_det: tětiv ≥ t_det   60, vynechaných 0; menších 0 (nalezeno 0)
+  sklon 60°, T = 1,01·t_det: tětiv ≥ t_det   60, vynechaných 0; menších 0 (nalezeno 0)
+  sklon 60°, T = 2,00·t_det: tětiv ≥ t_det   60, vynechaných 0; menších 0 (nalezeno 0)
+  sklon 80°, T = 0,50·t_det: tětiv ≥ t_det   33, vynechaných 0; menších 1 (nalezeno 1)
+  sklon 80°, T = 0,99·t_det: tětiv ≥ t_det   36, vynechaných 0; menších 0 (nalezeno 0)
+  sklon 80°, T = 1,00·t_det: tětiv ≥ t_det   35, vynechaných 0; menších 0 (nalezeno 0)
+  sklon 80°, T = 1,01·t_det: tětiv ≥ t_det   35, vynechaných 0; menších 0 (nalezeno 0)
+  sklon 80°, T = 2,00·t_det: tětiv ≥ t_det   36, vynechaných 0; menších 0 (nalezeno 0)
+- GEO2 K4: fuzz 10⁵ elipsoidů (r_min od t_det/2, téměř tečné sloupce): tětivy ≥ t_det nalezeny
+  sloupců s tětivou ≥ t_det 45 333, vynechaných 0; podlimitních 92 029 (Bod je má 92 029); u obrysu 100 000
+- GEO2 K4: kontakt na těleso (syntetický natočený elipsoid, vzdálenost Eberly) v intervalech
+  V4 kontakt na elipsoid: 256 sloupců, hustých bodů 1 638 127, různých 0 v 0 tětivách (max 0,0000 m), tětiv ≥ t_det 0; běhů na sloupec 2,6, Bod na sloupec 26
+  běhů skarnu v řezu y = 0,3: 18
+- GEO2 K4: kontakt na těleso E84 (dóm soli, syntetická událost aureoly) v intervalech
+  dóm [-9,8, 2104,8, 21,6] – [0,8, 2111,3, 34,5]
+  V4 E84 + aureola dómu: 144 sloupců, hustých bodů 354 663, různých 1 v 1 tětivách (max 0,0156 m), tětiv ≥ t_det 0; běhů na sloupec 13,0, Bod na sloupec 87
+  běhů aureoly v řezu středem dómu: 46
+- GEO2 K5: V5 chyba cílových hranic (skarn: granitoidy) proti přesnému Hranice, adaptivní × pevná 0,5 m
+  listy adaptivní: 1 m 84,5 %, 0,5 m 3,2 %, 0,25 m 12,2 % (s odhadem 2730); uzlů adaptivní 630 421 × pevná 141 148; kontext 2,50 s × 0,60 s (7 bloků)
+  adaptivní, mřížka 0,25 m: sloupců 458 752, neshod sledu 0, p99 0,004, max 0,123 m, > τ 0; v listech s odhadem 1807 (neshod 768, max 0,000 m)
+  adaptivní, mimo mřížku:   sloupců 458 752, neshod sledu 0, p99 0,004, max 0,139 m, > τ 4; v listech s odhadem 1825 (neshod 763, max 7,150 m)
+  adaptivní, svah > 20°:    sloupců 111 791, neshod sledu 0, p99 0,005, max 0,118 m, > τ 0; v listech s odhadem 681 (neshod 40, max 0,000 m)
+  adaptivní, rychlá mocnost:sloupců     635, neshod sledu 0, p99 0,000, max 0,000 m, > τ 0; v listech s odhadem 294 (neshod 0, max 0,000 m)
+  pevná 0,5, mřížka 0,25 m: sloupců 458 752, neshod sledu 1444, p99 0,001, max 6,602 m, > τ 855; v listech s odhadem 0 (neshod 0, max 0,000 m)
+  pevná 0,5, mimo mřížku:   sloupců 458 752, neshod sledu 1452, p99 0,001, max 7,757 m, > τ 1599; v listech s odhadem 0 (neshod 0, max 0,000 m)
+- GEO2 K5: švy bloků – listy a uzly kořenů v překryvu dvou kontextů bitově stejné
+  kořenů ve švu 1024, rozdílných 0
+- GEO2 K5: kontakt (skarn) s adaptivní mřížkou × pevná 0,5 m proti referenci 0,125 m; V4; výkon
+  skarn v referenci 0,125 m 11 527 buněk; jinak než reference: adaptivní 9, pevná 0,5 m 25; buněk s příznakem odhadu (adaptivní) 115
+  čas: kontext adaptivní 0,35 s × pevná 0,08 s; blok 64 m po 1 m (K4 běhy + raster) adaptivní 0,04 s × pevná 0,05 s
+  V4 E84 adaptivní mřížka: 256 sloupců, hustých bodů 2 096 390, různých 5 v 2 tětivách (max 0,0469 m), tětiv ≥ t_det 0; běhů na sloupec 11,9, Bod na sloupec 52
+- GEO2 K6: V1 – aktivní Deformuj odmítnuta, neaktivní nemění Bod ani běhy
+- GEO2 K6: tvar rozhraní IDeformace (testovací posun)
+- GEO2 V8: sopka – raster z běhů == Bod u povrchu kuželu (regrese zlomu zPovKuz)
+  buněk 29 277, raster ≠ Bod 0
+- GEO2 V8: SkarnJine – okraj plochy cíle, hostitel_okoli v q′ (regrese)
+  (3942,625, 1378,875, 37,125): GEO1 skarn, GEO2 cave_limestone, D 0,412, odhad False, pásmo platí False
+  (3944,125, 1382,125, 37,375): GEO1 skarn, GEO2 cave_limestone, D 0,341, odhad False, pásmo platí False
+  vzorek 2 m: buněk 2 097 152, různých 23 880, otevřených 0
+OK 228, chyb 0
