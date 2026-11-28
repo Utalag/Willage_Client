@@ -71,6 +71,8 @@ public sealed class TvarSopky : ITvarSMaterialem, IIntervalyTvaru
         var s = _svet.Sopky.Seznam[best]; var p = _svet.P;
         double r = Math.Sqrt(br2), h0 = s.VyskaOkoli, zPovKuz = h0 + _svet.Sopky.Kuzel(best, r);
         seg.Zlom(zPovKuz + 0.05);
+        seg.Zlom(zPovKuz); // pod zPovKuz je hloubka ≥ 0 (k ≥ 0), nad ním k = −1 (popel) až do zPovKuz + 0,05; Nejista kvůli floor v kraji
+        seg.Nejista(zPovKuz - 1e-9, zPovKuz + 1e-9);
         double rVent = Gd.Maxf(p.SopkaPruduchRM, s.Rc * 0.35);
         if (r < rVent) seg.Zlom(h0 + s.H - s.D + 0.05);
         double sl = Gd.Maxf(p.SopkaSlupkaM, 0.5);

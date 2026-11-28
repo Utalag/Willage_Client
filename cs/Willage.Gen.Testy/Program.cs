@@ -40,6 +40,28 @@ if (jen == "GEO2K5S")
     foreach (var b in TestyGeo2K5.StrmeBloky(g5.Svet, 10)) Console.WriteLine($"{b.X},{b.Y}: {b.N}");
     return 0;
 }
+if (jen == "GEO2V8R")
+{
+    TestyGeo2V8.RegreseSopka(data);
+TestyGeo2V8.RegreseSkarnJine(data);
+    Console.WriteLine($"OK {T.Ok}, chyb {T.Chyb}");
+    return T.Chyb == 0 ? 0 : 1;
+}
+if (jen == "GEO2V8L")
+{
+    var bo = args.First(a => a.StartsWith("--blok="))["--blok=".Length..].Split(',').Select(v => double.Parse(v, System.Globalization.CultureInfo.InvariantCulture)).ToArray();
+    Willage.Gen.Testy.V8.V8Ladeni.Sloupec(data, bo[0], bo[1], bo[2], bo[3]);
+    return 0;
+}
+if (jen == "GEO2V8")
+{
+    // V8: rozdíly GEO2 × GEO1 po kategoriích; --blok=ox,oy[,krokXy[,vlaken]] jen jeden blok; --csv=cesta
+    var bo = args.FirstOrDefault(a => a.StartsWith("--blok="))?["--blok=".Length..].Split(',').Select(v => double.Parse(v, System.Globalization.CultureInfo.InvariantCulture)).ToArray();
+    var csv = args.FirstOrDefault(a => a.StartsWith("--csv="))?["--csv=".Length..];
+    TestyGeo2V8.Spust(data, bo is { Length: >= 2 } ? bo : null, bo is { Length: > 2 } ? bo[2] : 0.25, bo is { Length: > 3 } ? (int)bo[3] : Environment.ProcessorCount, csv);
+    Console.WriteLine($"OK {T.Ok}, chyb {T.Chyb}");
+    return T.Chyb == 0 ? 0 : 1;
+}
 if (jen == "GEO2K6")
 {
     TestyGeo2K6.Spust(data);
@@ -81,6 +103,8 @@ if (jen == "GEO2")
     TestyGeo2K4.Spust(data);
     TestyGeo2K5.Spust(data);
     TestyGeo2K6.Spust(data);
+    TestyGeo2V8.RegreseSopka(data);
+TestyGeo2V8.RegreseSkarnJine(data);
     Console.WriteLine($"OK {T.Ok}, chyb {T.Chyb}");
     return T.Chyb == 0 ? 0 : 1;
 }
@@ -178,6 +202,8 @@ TestyGeo2K3.Spust(data);
 TestyGeo2K4.Spust(data);
 TestyGeo2K5.Spust(data);
 TestyGeo2K6.Spust(data);
+TestyGeo2V8.RegreseSopka(data);
+TestyGeo2V8.RegreseSkarnJine(data);
 
 Console.WriteLine($"OK {T.Ok}, chyb {T.Chyb}");
 return T.Chyb == 0 ? 0 : 1;
