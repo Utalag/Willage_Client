@@ -54,6 +54,38 @@ public sealed class ChronologieGeo2
     /// <summary>Stav bodu po událostech s indexem &lt; <paramref name="pocet"/> (prefixové vyhodnocení, kap. 2.5).</summary>
     public StavBodu BodPred(int pocet, double x, double y, double z, double zPov) => Pruchod(pocet, x, y, z, zPov, null);
 
+    private bool[]? _prefixBezHloubky;
+
+    /// <summary>Žádná z prvních <paramref name="pocet"/> událostí nemá pravidlo hloubky (hodnota zPov pak ovlivní jen test „nad povrchem“).</summary>
+    private bool PrefixBezHloubky(int pocet)
+    {
+        var a = _prefixBezHloubky;
+        if (a is null)
+        {
+            a = new bool[Udalosti.Count + 1]; a[0] = true;
+            for (int i = 0; i < Udalosti.Count; i++) a[i + 1] = a[i] && Udalosti[i].Hloubka is { MinM: null, MaxM: null };
+            _prefixBezHloubky = a;
+        }
+        return a[pocet];
+    }
+
+    /// <summary>
+    /// Stav bodu před událostí <paramref name="pocet"/> v JINÉM sloupci (q′ kontaktu): přesný povrch (<see cref="Povrch"/>) se počítá, jen když
+    /// není jisté, že bod leží pod povrchem. Jisté je to tehdy, když z ≤ dolní mez povrchu ze zásobníku (vrstvy jsou ořezané povrchem) a prefix nemá
+    /// pravidlo hloubky – pak povrch rozhoduje jen test „nad povrchem“, výsledek je bitově stejný jako s přesným povrchem.
+    /// </summary>
+    public StavBodu BodPredSPovrchemSloupce(int pocet, double x, double y, double z, double zNahradni)
+    {
+        var pov = Povrch;
+        if (pov is null) return Pruchod(pocet, x, y, z, zNahradni, null);
+        if (PrefixBezHloubky(pocet) && Udalosti.Count > 0 && Udalosti[0].Zasobnik is IZasobnikSDolniMezi dm)
+        {
+            double lo = dm.DolniMezPovrchu(x, y);
+            if (z <= lo) return Pruchod(pocet, x, y, z, lo, null);
+        }
+        return Pruchod(pocet, x, y, z, pov(x, y), null);
+    }
+
     /// <summary>Vzorek 3.1 v bodě (povrch z <see cref="Povrch"/>).</summary>
     public Vzorek Vzorek(double x, double y, double z) => Geo2.Vzorek.Z(Bod(x, y, z));
 

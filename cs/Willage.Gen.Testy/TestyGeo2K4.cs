@@ -552,6 +552,8 @@ public static class TestyGeo2K4
         }
         string M(int id) => kat.PodleId(id)?.Klic ?? id.ToString();
         double c = a.LongLength;
+        ulong OtiskBloku(Vzorek[] v) { ulong h = 14695981039346656037UL; for (int o = 0; o < v.Length; o += nz) h = unchecked((h ^ TestyGeo2K3.Otisk(v.AsSpan(o, nz))) * 1099511628211UL); return h; }
+        Console.WriteLine($"  otisk celého bloku (po sloupcích): K3 {OtiskBloku(a):X16}, K4 {OtiskBloku(b):X16}");
         Console.WriteLine($"  buněk {a.LongLength:N0}; K4 raster ≠ K3 Bod: {ruzne:N0} ({100.0 * ruzne / c:F4} %); shoda materiálu se starou cestou K3 {100.0 * sStary3 / c:F3} %, K4 {100.0 * sStary4 / c:F3} %");
         foreach (var kv in prech.OrderByDescending(q => q.Value).Take(6)) Console.WriteLine($"    {M(kv.Key.Item1),-16} → {M(kv.Key.Item2),-16} {kv.Value,8:N0}");
         Console.WriteLine($"  Bod na sloupec K4 {bodu / (double)(n * n):F1} (K3 {nz}); běhů {ul.Behu:N0} = {ul.Behu / (double)(n * n):F1} na sloupec, paleta {ul.Paleta}; uložení {ul.Bajtu / 1048576.0:F1} MiB proti hustým vzorkům {a.LongLength * Vzorek.Velikost / 1048576.0:F0} MiB");

@@ -135,5 +135,5 @@ public sealed class KontaktniPasmo : IKontaktniPasmo, IIntervalyKontaktu
     }
 
     private static StavBodu Pred(ChronologieGeo2 c, int index, double x, double y, double z, double zPov) =>
-        c.BodPred(index, x, y, z, c.Povrch?.Invoke(x, y) ?? zPov);
+        c.BodPredSPovrchemSloupce(index, x, y, z, zPov);
 }
