@@ -17,7 +17,7 @@ Odkazy na soubory `PODKLADY.md`, `KOD-E84.md`, `mereni/…` míří do studie Wi
   Tato v3 je právě to zapracování.
 - **2026-11-27 ~12:04, Jan t1032u, t1033u:** **v3 schválena jako implementační kontrakt**, „pusť se do toho“.
   Doplněna kap. 8 (vývoj katalogu hornin), schválená současně s v3. Zapisuje se do `docs/sjednoceni/06-geologie-geo2.md`.
-- **2026-11-28, Jan t1046u (pro V8, krok K7):** potvrzena tři pravidla, ve kterých GEO2 záměrně neodpovídá GEO1: `HostitelSkarn`, `PravidloZdroje`, `PoradiTeles` (7.3), a kritérium smazání staré cesty „V8: 0 otevřených buněk na ≥ 3 seedech × 11 bloků“ (7.3). Výkonový práh pro smazání (návrh ×1,5 GEO1) Jan teprve rozhodne.
+- **2026-11-28, Jan t1046u (pro V8, krok K7):** potvrzena tři pravidla, ve kterých GEO2 záměrně neodpovídá GEO1: `HostitelSkarn`, `PravidloZdroje`, `PoradiTeles` (7.3), a kritérium smazání staré cesty „V8: 0 otevřených buněk na ≥ 3 seedech × 11 bloků“ (7.3). Výkonový limit ×1,5 GEO1 je jen doporučení (t1047u), ne kritérium smazání.
 
 ### 0.2 Princip: spojitá geologie, voxel je jen reprezentace
 
@@ -658,7 +658,9 @@ Zdroj: zpráva V8, `docs/sjednoceni/reporty/geo2-v8-prop.md` (větev `geo2-v8-ro
 | **PravidloZdroje** | Událost smí odebrat jen zdroje z `zdroje.telesa` (2.3). Kras (nejmladší) nesmí odebrat dóm | vítěz = nejmenší SDF, kras dóm odebere | 2 872 buněk (0,03 %) |
 | **PoradiTeles** | Překryv těles rozhoduje **stáří** události (2.7, 1.3), ne nejmenší SDF (komín > čočka / dóm / žíla) | nejmenší SDF | 1 868 buněk (0,02 %) |
 
-**Kritérium smazání staré cesty (část kap. 7.1 bod 12, krok K7):** V8 hlásí **0 otevřených buněk** (rozdíl bez vysvětlené příčiny) na pevné sadě bloků pro nejméně **3 seedy světa × 11 bloků**; každá nová příčina musí být vysvětlená a zařazená (zlepšení / dle kontraktu / tolerance). Ostatní kritéria (zejména výkonový práh, voda a M3 na běhy, otisky GEO1 → GEO2) zůstávají nepotvrzená do dalšího rozhodnutí Jana.
+**Kritérium smazání staré cesty (část kap. 7.1 bod 12, krok K7):** V8 hlásí **0 otevřených buněk** (rozdíl bez vysvětlené příčiny) na pevné sadě bloků pro nejméně **3 seedy světa × 11 bloků**; každá nová příčina musí být vysvětlená a zařazená (zlepšení / dle kontraktu / tolerance). **Výkon (Jan 2026-11-28 t1047u):** limit „výchozí GEO2 ≤ ×1,5 GEO1“ je jen **doporučený cíl**, ne pevné kritérium smazání staré cesty. Měření se vykazuje (medián, rozptyl, vzdálenost od doporučení), smazání se kvůli němu nezastavuje.
+
+Ostatní kritéria (voda a M3 na běhy, otisky GEO1 → GEO2) zůstávají nepotvrzená do dalšího rozhodnutí Jana.
 
 Otevřené otázky k tomuto kontraktu **nezůstávají**. v3 schválena 2026-11-27 (Jan t1032u, t1033u).
 
