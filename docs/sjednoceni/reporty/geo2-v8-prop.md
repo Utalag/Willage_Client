@@ -68,7 +68,7 @@ před opravou 1 171 rozdílů, po opravě 0. Po opravě sopky: svah sopky 0,023 
 | `PoradiTeles` | dle kontraktu (stáří, 2.7) | 1 868 | 0,02 % | překryv těles rozhoduje stáří, ne nejmenší SDF (komín > čočka / dóm / žíla) |
 | `SkarnDiraGeo1` | **zlepšení (měřeno)** | 1 496 | 0,017 % | v karbonátu uvnitř jistého pásma (D < 0,625 m) GEO1 skarn nemá, GEO2 ano |
 | `CockaObalka` | **zlepšení (měřeno)** | 1 192 | 0,013 % | oprava obálky čočky (GEO1 ořezává) |
-| `SkarnHostitelOkoli` | dle kontraktu (2.5, R5) – k potvrzení | 2 | 0,00002 % | GEO1 skarn, GEO2 karbonát; D < 0,625 m, ale `hostitel_okoli` v q′ = π + η·u je za bočním okrajem plochy cíle ortorula (prošetřeno, `geo2-skarnjine-prop.md`) |
+| `SkarnHostitelOkoli` | dle kontraktu (2.5, R5; Jan t1051u: nechat, q′ neměnit) | 2 | 0,00002 % | GEO1 skarn, GEO2 karbonát; D < 0,625 m, ale `hostitel_okoli` v q′ = π + η·u je za bočním okrajem plochy cíle ortorula (prošetřeno, `geo2-skarnjine-prop.md`) |
 | `SkarnJine` | **otevřené** | 0 | 0 % | po prošetření žádná buňka |
 
 Nezávislé měření kvality skarnu proti kontraktu (sloupce se skarnem v aspoň jednom systému; pásmo po normále [0,625; 2,375] m, O1):
@@ -96,7 +96,7 @@ nástroje (`Willage.Gen.Nastroje`), otisky G-1 / G-3 / krok 5.
 | # | Kritérium | Stav |
 |---|---|---|
 | 1 | V1–V8 splněna (V9 / etapa D se nevyžaduje) | V1–V7 ano (K1–K6), V8 tato zpráva |
-| 2 | **V8: otevřených buněk = 0** na pevné sadě bloků (CSV v repu) pro nejméně 3 seedy světa × 11 bloků; každá nová příčina vysvětlená | teď 2 buňky z 1,48 mld. (1 seed) → prošetřit `SkarnJine`, přidat seedy |
+| 2 | **V8: otevřených buněk = 0** na pevné sadě bloků (CSV v repu) pro nejméně 3 seedy světa × 11 bloků; každá nová příčina vysvětlená | na 1 seedu 0 otevřených (2 buňky zařazeny jako `SkarnHostitelOkoli`, Jan t1051u); zbývá ≥ 2 další seedy |
 | 3 | Všechny „dle kontraktu“ přechody (top 10 podle počtu) Jan podepsal; O1 je podepsané | O1 ano, ostatní k potvrzení |
 | 4 | **Doporučení (Jan t1047u, ne pevné kritérium):** výkon GEO2 (výchozí, kontext + sloupce) kolem ×1,5 GEO1 na blocích z V6, medián z ≥ 5 opakování; vykazuje se, smazání nezastavuje | měřeno v `geo2-vykon-prop.md`: 5 z 11 bloků ≤ ×1,5 |
 | 5 | Voda, M3, M7, API a nástroje čtou z GEO2 (běhy), žádný produkční kód nevolá `GeoVrstvy.Bod` / `VyplnSloupec` | ne (K7) |
@@ -109,6 +109,10 @@ nástroje (`Willage.Gen.Nastroje`), otisky G-1 / G-3 / krok 5.
 - **Schváleno:** kritérium 2 – 0 otevřených buněk na ≥ 3 seedech × 11 bloků. Kritérium 4 (výkonový práh ×1,5 GEO1) **Jan teprve rozhodne** (po profilování, viz `geo2-vykon-prop.md`).
 - **Zadáno hned:** prošetřit 2 buňky `SkarnJine` (blok 3904, 1344) – viz `geo2-skarnjine-prop.md` (větev `geo2-skarnjine`).
 - Kritérium 3 v tabulce výše: O1 + tři pravidla = podepsáno; zbývá případný nový přechod z dalších seedů.
+
+### Rozhodnutí Jana t1051u (2026-11-28 13:11 Europe/Prague)
+- **`SkarnHostitelOkoli` zatím nechat dle kontraktu.** Definici q′ = π + η·u (2.5, R5) **neměnit**. Dvě buňky v bloku (3904, 1344) zůstávají vysvětlené touto příčinou (viz `geo2-skarnjine-prop.md`). Případnou změnu q′ Jan otevře, jen kdyby další seedy ukázaly víc takových buněk.
+- Úspory výkonu U1 a U2 odloženy na později; U3 zůstává nedoporučená (zapsáno do deníku, blok C.7; `geo2-profil-prop.md`).
 
 ### Rozhodnutí pro Jana (původní návrh, stav viz výše)
 1. Potvrdit seznam „dle kontraktu“ změn (kromě O1): `HostitelSkarn`, `PravidloZdroje`, `PoradiTeles`.

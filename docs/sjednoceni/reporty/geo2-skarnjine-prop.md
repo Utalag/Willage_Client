@@ -46,5 +46,5 @@ Mapa hornin má v těchto místech boční hranici: v sloupci buňky je ve vrstv
 **V8 blok (3904, 1344) znovu:** 134 217 728 buněk, různých 1 530 174 (1,1401 %), zlepšení 1 178, dle kontraktu 1 485 155 (z toho `SkarnHostitelOkoli` 2), tolerance 43 841, **otevřené 0**.
 Nezávislé měření kvality skarnu stále hlásí 2 „díry v pásmu karbonátu“ GEO2 (0,0015 % karbonátu v pásmu 136 069), protože nepočítá `hostitel_okoli`; jsou to tytéž 2 buňky.
 
-## Rozhodnutí pro Jana
-Kontrakt 2.5 / R5 to dovoluje (tento okraj je dán definicí q′ po 0,125 m směrem k π). Chceš to nechat (2 buňky z 1,48 mld.; skarn tam chybí do 0,4 m od granitu na okraji plochy), nebo změnit definici q′ tak, aby `u` byla normála plochy v π (pak by q′ zůstalo v hostiteli a „díry“ by zmizely, změna kontraktu a nová měření V3/V8)? Doporučení: nechat, dokud jiné seedy neukážou víc takových buněk.
+## Rozhodnutí Jana t1051u (2026-11-28 13:11 Europe/Prague)
+**`SkarnHostitelOkoli` zatím nechat dle kontraktu (2.5, R5). Definici q′ = π + η·u neměnit.** 2 buňky z 1,48 mld. zůstávají dírou skarnu v karbonátu na bočním okraji plochy cíle; není to chyba implementace. Příčina je podepsaná jako „dle kontraktu“. Případnou změnu q′ (např. `u` = normála plochy v π) Jan otevře jen tehdy, když další seedy ukážou víc takových buněk.
