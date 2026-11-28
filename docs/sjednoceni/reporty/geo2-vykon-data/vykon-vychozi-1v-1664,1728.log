@@ -1,0 +1,9 @@
+- GEO2 výkon [vychozi_1v_1664,1728]: GEO1 / K3 / výchozí GEO2, 3 opakování, sloupce po 0.5 m, 1 vláken
+  zátěž na začátku: load 4.31, cizí procesy CPU 198 %: PID 297041 99 % grep -o .\{0,700\}vhodné i pro absolvent; PID 295547 99 % grep -o .\{0,1500\}vhodné i pro absolven
+  blok (1664, 1728) [zadaný] load před 4.31, cizí CPU 198 %
+    Geo1         kontext 0.00 + sloupce 3.42 = celkem 3.42 s (min 3.39, max 3.43, rozptyl 1 %); kontrolní součet stejný ve všech opakováních
+    K3           kontext 1.79 + sloupce 14.44 = celkem 16.25 s (min 16.22, max 16.39, rozptyl 1 %); kontrolní součet stejný ve všech opakováních
+    Geo2Vychozi  kontext 7.70 + sloupce 8.78 = celkem 16.48 s (min 16.32, max 16.80, rozptyl 3 %); kontrolní součet stejný ve všech opakováních
+    poměr mediánů: K3 / GEO1 ×4.75, výchozí / GEO1 ×4.82, výchozí / K3 ×1.01
+  zátěž na konci: load 3.26, cizí procesy CPU 198 %: PID 297041 99 % grep -o .\{0,700\}vhodné i pro absolvent; PID 295547 99 % grep -o .\{0,1500\}vhodné i pro absolven
+OK 3, chyb 0
