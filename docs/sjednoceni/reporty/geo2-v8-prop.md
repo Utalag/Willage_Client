@@ -103,7 +103,13 @@ nástroje (`Willage.Gen.Nastroje`), otisky G-1 / G-3 / krok 5.
 | 7 | Souběžný provoz za přepínačem `GeologieV2` po dobu určenou Janem (návrh: jedno plné vygenerování světa a jedna herní relace bez hlášené geologické chyby) | ne |
 | 8 | Smazání jedním commitem na vlastní větvi, testy a zbývající otisky bez změny, návrat = `git revert` | – |
 
-### Rozhodnutí pro Jana
+### Rozhodnutí Jana t1046u (2026-11-28 12:30 Europe/Prague)
+- **Schváleno:** pravidla `HostitelSkarn`, `PravidloZdroje`, `PoradiTeles` jako „dle kontraktu“ (zapsáno do `06-geologie-geo2.md` 7.3 na větvi `geo2-kontrakt-docs`, commit `f988b94`).
+- **Schváleno:** kritérium 2 – 0 otevřených buněk na ≥ 3 seedech × 11 bloků. Kritérium 4 (výkonový práh ×1,5 GEO1) **Jan teprve rozhodne** (po profilování, viz `geo2-vykon-prop.md`).
+- **Zadáno hned:** prošetřit 2 buňky `SkarnJine` (blok 3904, 1344) – viz `geo2-skarnjine-prop.md` (větev `geo2-skarnjine`).
+- Kritérium 3 v tabulce výše: O1 + tři pravidla = podepsáno; zbývá případný nový přechod z dalších seedů.
+
+### Rozhodnutí pro Jana (původní návrh, stav viz výše)
 1. Potvrdit seznam „dle kontraktu“ změn (kromě O1): `HostitelSkarn`, `PravidloZdroje`, `PoradiTeles`.
 2. Potvrdit kritérium 2 (0 otevřených, ≥ 3 seedy) a výkonový práh ×1,5 (kritérium 4).
 3. Zda se mají 2 buňky `SkarnJine` prošetřit hned, nebo až při měření více seedů.
