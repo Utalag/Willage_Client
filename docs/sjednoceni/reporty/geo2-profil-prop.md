@@ -19,7 +19,7 @@ Srovnání s GEO1 stejného bloku (stejný nástroj) kvůli tomu, co je společn
 - Každá navržená úspora: příčina z profilu (% času), proč je bitově stejná (důkaz / kontrola), odhad zisku (min / max, z podílu času), riziko, pracnost.
 - Nic se neimplementuje ani nemění; měřicí nástroj `--jen=GEO2PROFIL` je jediná nová kódová změna.
 
-## Výsledky (2026-11-28 13:05, Europe/Prague)
+## Výsledky (2026-11-28 13:01, Europe/Prague)
 
 Nástroj: `--jen=GEO2PROFIL --blok=ox,oy --cesta=geo1|geo2|hranice|hranice8 [--opak=N]`; `dotnet-trace collect --format speedscope` (vzorkování, 8 vláken) a souhrny v `geo2-profil-data/pf-*.txt` (inkluzivní a vlastní časy). Produkční kód **beze změny** (`git diff geo2-vychozi -- cs/Willage.Gen` prázdný).
 Cizí `grep` PID 295547 / 297041 běžely dál (~198 % CPU, nezabity).
