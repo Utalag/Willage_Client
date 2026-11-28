@@ -26,3 +26,25 @@ BEZ změny výsledku (nebo s rozdílem v toleranci 0,125 m, zdokumentovaným); z
 ## Rizika
 - Zásobník jiného druhu než `VrstvySloupce` (jiný tvar zásobníku) nemusí mít horní hranici ≤ povrch → zkrat jen přes rozhraní, které to garantuje (jen `ZasobnikVrstvySloupce`).
 - Zátěž boxu cizími procesy zkresluje čas → před/po měřit střídavě, uvést zátěž.
+
+## Výsledky *(2026-11-28 ~03:05)*
+Commity: `PROP` před experimentem, přesný zkrat povrchu (`IZasobnikSDolniMezi`, `ChronologieGeo2.BodPredSPovrchemSloupce`, `KontaktniPasmo.Pred`) + otisk bloku v `GEO2K4B`.
+
+**Shoda: bitově stejná.** Otisk celého bloku (po sloupcích, 134 217 728 buněk na blok) před a po je shodný ve 4 blocích:
+(1024, 512) `CB5E93702313A0E2`, (3000, 2000) `F9696D1DFD21AC63`, (0, 0) `0F956A8A505FB87F`, (3904, 1344) `395D525F269149CE`; K3 == K4 v každém.
+Celá sada **742 / 742 OK**, otisky GEO1 beze změny. Rozdíl výsledku: **0** (žádná tolerance nebyla potřeba).
+
+**Výkon** (K4 běhy + raster, blok 128 m, sloupce 0,25 m, 8 vláken; box zatížen cizími `grep` PID 295547 / 297041, load 4–8; střídavě před / po na stejném stavu boxu):
+| Blok | před (`geo2-vychozi`) | po | poměr K4 / K3 před → po |
+|---|---|---|---|
+| (1024, 512) skarn, 3 měření | 5,5; 5,2; 5,4 s (medián 5,4) | 3,7; 3,8; 3,2 s (medián 3,7) | ×1,24 → ×0,90 |
+| (3000, 2000) | 2,4 s | 2,8 s | v šumu (load 7,7) |
+| (0, 0) | 2,5 s | 2,5 s | beze změny |
+
+Skarnový blok je o ~ 31 % rychlejší (medián 5,4 → 3,7 s) a už není pomalejší než K3 (`Sloupec` po bodech 4,1–4,4 s). Ostatní bloky beze změny (povrch v hostiteli okolí se tam skoro nevolá).
+Odpovídá zkoušce horní meze (3,6–3,9 s s neplatným zkratem): zkrat zachytil prakticky celý výpočet povrchu.
+
+**Co zbývá v pásmu** (profil před úpravou, kap. Výchozí stav): `Nejblizsi` ~ 10 % a `Plati` bez povrchu; dominuje `VrstvySloupce.Hranice` (GEO1, ~ 56 % času) – ten je společný oběma cestám (GEO1 platí totéž) a mimo rozsah tohoto bodu (GEO1 se nemění).
+Negativní / neprovedeno: úprava `Nejblizsi` (rozsah plochy předem) nebyla dělána, protože cíl (skarnový blok ne pomalejší než K3) je splněn jedním zkratem.
+
+**Rozhodnutí pro Jana:** žádné. Změna je čistě výkonová a výsledek je bitově stejný.
