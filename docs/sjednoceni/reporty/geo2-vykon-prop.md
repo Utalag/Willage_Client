@@ -109,3 +109,5 @@ Kontext adaptivní mřížky je při 1 vlákně 7,56–7,70 s proti ~1,6–2,0 s
 - Výchozí GEO2 je na rovině/náhodných blocích blízko prahu nebo pod ním (×1,19–1,48) a srovnatelné s K3 (×0,71–1,25). Na skarnu bez zkratů pásma nad prahem (×2,36, ×1,25 K3); po `geo2-kontakt-rychle` ×1,43 a ×1,00 K3.
 - Na hornatině a sopce je GEO2 pomalejší než GEO1 (×1,65–2,99), ale často rychlejší než K3 (K3 tam trvá 10–12 s). Výjimka (3904, 1344): GEO2 je pomalejší i proti K3 (×1,77).
 - Sloučení zlevnění kontaktu do výchozí větve má smysl (skarn, bitově stejný výsledek z bodu 2). Práh ×1,5 GEO1 na všech blocích tím ale nespadne. Jestli práh zůstane podmínkou smazání GEO1, je potřeba ještě zlevnit hornatinu / (3904, 1344), nebo práh upravit (např. ≤ ×1,5 GEO1 na náhodných + ≤ K3 na strmých).
+
+**Poznámka (Jan t1047u, 2026-11-28):** limit ×1,5 GEO1 je jen **doporučení**, ne pevné kritérium smazání staré cesty. Čísla výše se berou jako vzdálenost od doporučení; profil a návrhy úspor viz `geo2-profil-prop.md` (větev `geo2-profil`).
