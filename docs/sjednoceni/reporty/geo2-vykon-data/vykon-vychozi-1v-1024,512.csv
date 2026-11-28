@@ -1,0 +1,4 @@
+stitek;kategorie;x;y;cesta;kontext_median;sloupce_median;celkem_median;celkem_min;celkem_max;relrozptyl;load_pred;cpu_cizi_pred
+vychozi_1v_1024,512;zadaný;1024;512;Geo1;0.0000;3.8138;3.8138;3.7257;3.8720;0.0384;10.35;198.1000
+vychozi_1v_1024,512;zadaný;1024;512;K3;1.7391;6.0766;7.8122;7.7569;7.8266;0.0089;10.35;198.1000
+vychozi_1v_1024,512;zadaný;1024;512;Geo2Vychozi;7.5552;7.1179;14.6727;14.5534;14.8444;0.0198;10.35;198.1000

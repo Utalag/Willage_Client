@@ -1,0 +1,59 @@
+- GEO2 výkon [vychozi_8v]: GEO1 / K3 / výchozí GEO2, 5 opakování, sloupce po 0.25 m, 8 vláken
+  zátěž na začátku: load 6.04, cizí procesy CPU 199 %: PID 295547 99 % grep -o .\{0,1500\}vhodné i pro absolven; PID 297041 99 % grep -o .\{0,700\}vhodné i pro absolvent
+  blok (1024, 512) [náhodné] load před 6.04, cizí CPU 199 %
+    Geo1         kontext 0.00 + sloupce 3.15 = celkem 3.15 s (min 3.07, max 3.71, rozptyl 20 %); kontrolní součet stejný ve všech opakováních
+    K3           kontext 0.63 + sloupce 5.32 = celkem 5.93 s (min 5.47, max 6.51, rozptyl 18 %); kontrolní součet stejný ve všech opakováních
+    Geo2Vychozi  kontext 1.86 + sloupce 5.50 = celkem 7.44 s (min 6.75, max 8.09, rozptyl 18 %); kontrolní součet stejný ve všech opakováních
+    poměr mediánů: K3 / GEO1 ×1.88, výchozí / GEO1 ×2.36, výchozí / K3 ×1.25
+  blok (3000, 2000) [náhodné] load před 9.27, cizí CPU 199 %
+    Geo1         kontext 0.00 + sloupce 3.88 = celkem 3.88 s (min 3.64, max 4.08, rozptyl 12 %); kontrolní součet stejný ve všech opakováních
+    K3           kontext 0.41 + sloupce 5.95 = celkem 6.46 s (min 5.65, max 64.73, rozptyl 915 %); kontrolní součet stejný ve všech opakováních
+    Geo2Vychozi  kontext 1.63 + sloupce 2.98 = celkem 4.61 s (min 4.32, max 4.93, rozptyl 13 %); kontrolní součet stejný ve všech opakováních
+    poměr mediánů: K3 / GEO1 ×1.67, výchozí / GEO1 ×1.19, výchozí / K3 ×0.71
+  blok (0, 0) [náhodné] load před 7.07, cizí CPU 198 %
+    Geo1         kontext 0.00 + sloupce 3.98 = celkem 3.98 s (min 3.26, max 4.13, rozptyl 22 %); kontrolní součet stejný ve všech opakováních
+    K3           kontext 0.53 + sloupce 3.86 = celkem 4.39 s (min 4.22, max 18.06, rozptyl 315 %); kontrolní součet stejný ve všech opakováních
+    Geo2Vychozi  kontext 1.98 + sloupce 3.19 = celkem 5.15 s (min 4.94, max 5.79, rozptyl 17 %); kontrolní součet stejný ve všech opakováních
+    poměr mediánů: K3 / GEO1 ×1.10, výchozí / GEO1 ×1.30, výchozí / K3 ×1.17
+  blok (2048, 1024) [náhodné] load před 8.62, cizí CPU 198 %
+    Geo1         kontext 0.00 + sloupce 3.54 = celkem 3.54 s (min 3.18, max 3.85, rozptyl 19 %); kontrolní součet stejný ve všech opakováních
+    K3           kontext 0.43 + sloupce 3.62 = celkem 4.07 s (min 3.99, max 4.60, rozptyl 15 %); kontrolní součet stejný ve všech opakováních
+    Geo2Vychozi  kontext 1.91 + sloupce 3.05 = celkem 4.98 s (min 4.23, max 5.09, rozptyl 17 %); kontrolní součet stejný ve všech opakováních
+    poměr mediánů: K3 / GEO1 ×1.15, výchozí / GEO1 ×1.41, výchozí / K3 ×1.22
+  blok (512, 3072) [náhodné] load před 9.94, cizí CPU 198 %
+    Geo1         kontext 0.00 + sloupce 3.14 = celkem 3.14 s (min 3.06, max 3.65, rozptyl 19 %); kontrolní součet stejný ve všech opakováních
+    K3           kontext 0.45 + sloupce 3.87 = celkem 4.35 s (min 4.06, max 4.45, rozptyl 9 %); kontrolní součet stejný ve všech opakováních
+    Geo2Vychozi  kontext 1.86 + sloupce 2.70 = celkem 4.64 s (min 4.27, max 4.77, rozptyl 11 %); kontrolní součet stejný ve všech opakováních
+    poměr mediánů: K3 / GEO1 ×1.39, výchozí / GEO1 ×1.48, výchozí / K3 ×1.07
+  blok (1856, 1024) [šev mince x = 1920] load před 10.40, cizí CPU 198 %
+    Geo1         kontext 0.00 + sloupce 3.49 = celkem 3.49 s (min 3.27, max 3.68, rozptyl 12 %); kontrolní součet stejný ve všech opakováních
+    K3           kontext 0.44 + sloupce 4.35 = celkem 4.79 s (min 4.27, max 6.09, rozptyl 38 %); kontrolní součet stejný ve všech opakováních
+    Geo2Vychozi  kontext 1.75 + sloupce 2.85 = celkem 4.69 s (min 4.36, max 4.95, rozptyl 12 %); kontrolní součet stejný ve všech opakováních
+    poměr mediánů: K3 / GEO1 ×1.37, výchozí / GEO1 ×1.34, výchozí / K3 ×0.98
+  blok (1984, 2560) [šev mince x = 2048] load před 10.29, cizí CPU 198 %
+    Geo1         kontext 0.00 + sloupce 3.99 = celkem 3.99 s (min 3.75, max 4.19, rozptyl 11 %); kontrolní součet stejný ve všech opakováních
+    K3           kontext 0.44 + sloupce 5.90 = celkem 6.33 s (min 6.10, max 47.14, rozptyl 649 %); kontrolní součet stejný ve všech opakováních
+    Geo2Vychozi  kontext 1.74 + sloupce 6.18 = celkem 7.92 s (min 7.72, max 8.50, rozptyl 10 %); kontrolní součet stejný ve všech opakováních
+    poměr mediánů: K3 / GEO1 ×1.58, výchozí / GEO1 ×1.98, výchozí / K3 ×1.25
+  blok (1664, 1728) [hornatina / strmé] load před 7.63, cizí CPU 198 %
+    Geo1         kontext 0.00 + sloupce 3.39 = celkem 3.39 s (min 2.69, max 3.42, rozptyl 22 %); kontrolní součet stejný ve všech opakováních
+    K3           kontext 0.46 + sloupce 11.62 = celkem 12.06 s (min 11.45, max 12.84, rozptyl 11 %); kontrolní součet stejný ve všech opakováních
+    Geo2Vychozi  kontext 1.81 + sloupce 7.23 = celkem 9.14 s (min 8.58, max 10.11, rozptyl 17 %); kontrolní součet stejný ve všech opakováních
+    poměr mediánů: K3 / GEO1 ×3.55, výchozí / GEO1 ×2.69, výchozí / K3 ×0.76
+  blok (3904, 1344) [hornatina / strmé] load před 9.59, cizí CPU 198 %
+    Geo1         kontext 0.00 + sloupce 3.52 = celkem 3.52 s (min 3.33, max 3.76, rozptyl 12 %); kontrolní součet stejný ve všech opakováních
+    K3           kontext 0.43 + sloupce 5.50 = celkem 5.93 s (min 5.79, max 6.37, rozptyl 10 %); kontrolní součet stejný ve všech opakováních
+    Geo2Vychozi  kontext 1.61 + sloupce 8.90 = celkem 10.53 s (min 10.20, max 11.23, rozptyl 10 %); kontrolní součet stejný ve všech opakováních
+    poměr mediánů: K3 / GEO1 ×1.68, výchozí / GEO1 ×2.99, výchozí / K3 ×1.77
+  blok (1673, 1705) [svah sopky] load před 8.53, cizí CPU 198 %
+    Geo1         kontext 0.00 + sloupce 2.97 = celkem 2.97 s (min 2.78, max 3.16, rozptyl 13 %); kontrolní součet stejný ve všech opakováních
+    K3           kontext 0.54 + sloupce 10.43 = celkem 10.92 s (min 10.20, max 11.45, rozptyl 11 %); kontrolní součet stejný ve všech opakováních
+    Geo2Vychozi  kontext 1.73 + sloupce 4.61 = celkem 6.57 s (min 6.00, max 101.53, rozptyl 1453 %); kontrolní součet stejný ve všech opakováních
+    poměr mediánů: K3 / GEO1 ×3.68, výchozí / GEO1 ×2.22, výchozí / K3 ×0.60
+  blok (1710, 1705) [okraj sopky] load před 5.26, cizí CPU 198 %
+    Geo1         kontext 0.00 + sloupce 3.75 = celkem 3.75 s (min 3.29, max 4.02, rozptyl 19 %); kontrolní součet stejný ve všech opakováních
+    K3           kontext 0.44 + sloupce 9.22 = celkem 9.65 s (min 9.09, max 10.02, rozptyl 10 %); kontrolní součet stejný ve všech opakováních
+    Geo2Vychozi  kontext 2.03 + sloupce 4.16 = celkem 6.19 s (min 5.80, max 15.17, rozptyl 152 %); kontrolní součet stejný ve všech opakováních
+    poměr mediánů: K3 / GEO1 ×2.58, výchozí / GEO1 ×1.65, výchozí / K3 ×0.64
+  zátěž na konci: load 9.14, cizí procesy CPU 198 %: PID 297041 99 % grep -o .\{0,700\}vhodné i pro absolvent; PID 295547 99 % grep -o .\{0,1500\}vhodné i pro absolven
+OK 33, chyb 0
