@@ -21,6 +21,16 @@ public interface ITvarZasobniku
     bool Vrstva(double x, double y, double z, out int material, out short vrstva);
 }
 
+/// <summary>
+/// Zásobník, jehož vrstvy jsou ořezané povrchem téhož světa: horní hranice posledního intervalu v (x, y) je DOLNÍ MEZ povrchu
+/// (min(z1, zPov) ≤ zPov). Slouží k přesnému zkratu „bod je jistě pod povrchem“ bez výpočtu povrchu (kontakt, host okolí).
+/// </summary>
+public interface IZasobnikSDolniMezi
+{
+    /// <summary>Dolní mez povrchu v (x, y) [m]; −∞ = žádná (prázdný sloupec).</summary>
+    double DolniMezPovrchu(double x, double y);
+}
+
 /// <summary>Vrstva sloupce zdola: materiál a interval [Z0, Z1) v m (po ořezu povrchem).</summary>
 public readonly record struct IntervalVrstvy(int Material, double Z0, double Z1);
 
