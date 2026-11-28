@@ -21,7 +21,7 @@ V nezávislém měření kvality skarnu to odpovídá 2 „dírám v pásmu karb
 - Otevřených buněk v bloku (3904, 1344) = 0 po opravě nebo zařazení s vysvětlením.
 - Žádný jiný blok se nezhorší (V8 na ostatních se neřeší hned; opravená logika nesmí změnit výsledek GEO2 mimo ověřené buňky bez vysvětlení: otisk GEO2 bloku před × po).
 
-## Výsledky (2026-11-28 12:40, Europe/Prague)
+## Výsledky (2026-11-28 12:37, Europe/Prague)
 
 **Příčina (změřeno, obě buňky):** není to chyba GEO2 vůči kontraktu. Podmínku kontaktu 2.5 `d̃ ≤ w ∧ strana ∧ hostitel_okoli(q′)` splňují strana (vně granitu) i šířka (D = 0,412 a 0,341 m, w = 1,436 a 1,729 m, bez odhadu), selhává jen **`hostitel_okoli` v q′ = π + η·u** (R5, η = 0,125 m).
 
