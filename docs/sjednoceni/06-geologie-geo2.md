@@ -17,6 +17,7 @@ Odkazy na soubory `PODKLADY.md`, `KOD-E84.md`, `mereni/…` míří do studie Wi
   Tato v3 je právě to zapracování.
 - **2026-11-27 ~12:04, Jan t1032u, t1033u:** **v3 schválena jako implementační kontrakt**, „pusť se do toho“.
   Doplněna kap. 8 (vývoj katalogu hornin), schválená současně s v3. Zapisuje se do `docs/sjednoceni/06-geologie-geo2.md`.
+- **2026-11-28, Jan t1046u (pro V8, krok K7):** potvrzena tři pravidla, ve kterých GEO2 záměrně neodpovídá GEO1: `HostitelSkarn`, `PravidloZdroje`, `PoradiTeles` (7.3), a kritérium smazání staré cesty „V8: 0 otevřených buněk na ≥ 3 seedech × 11 bloků“ (7.3). Výkonový práh pro smazání (návrh ×1,5 GEO1) Jan teprve rozhodne.
 
 ### 0.2 Princip: spojitá geologie, voxel je jen reprezentace
 
@@ -645,6 +646,19 @@ Do konečného dokumentu (`docs/sjednoceni/…`) se zapíší až po Janově pot
 | **O2** | Geometrie a voxel jsou oddělené. Tělesa tenčí než 0,125 m jsou dovolená kdekoli. 0,125 m je výchozí mez záruky detekce intervalů, ne zákaz. Žádná chyba validace za tenkost. `Bod` je vždy přesný. `okraje_se_zuzuji` se nevyžaduje | 0.2, 2.8, 3.4 |
 | **O3** | Čtyři samostatné parametry, všechny výchozí 0,125 m: `minTloustkaDetekce_m`, `tolerancKontaktu_m`, `tau_m`, `vyskaDetailnihoVoxelu_m`. Změna rozlišení voxelů nemění geometrii ani ostatní pravidla | 0.2, 2.7 |
 | **4** | GEO2 je zdroj spojité geologické geometrie a její historie. Voxelová mřížka je jen jedna z možných reprezentací | 0.2 |
+
+
+### 7.3 Rozhodnutí z V8 (Jan 2026-11-28 t1046u)
+
+Zdroj: zpráva V8, `docs/sjednoceni/reporty/geo2-v8-prop.md` (větev `geo2-v8-rozdily`). Rozdíl proti staré cestě GEO1 je v těchto případech **záměrná změna sémantiky**, ne chyba GEO2:
+
+| Pravidlo | Znění (GEO2 platí) | Starý GEO1 | Rozsah ve V8 (1,476 mld. buněk, 11 bloků, 1 seed) |
+|---|---|---|---|
+| **HostitelSkarn** | Skarn vzniká jen v hostiteli, který pravidla události skarnu připouštějí (materiál v bodě, `HostOk`). Těleso (dóm, kras), které skarn jako hostitele nepřipouští, ho nenahrazuje | vloží dóm / kras do hostitele „vrstva“ i přes skarn | 36 820 buněk (0,41 % rozdílů) |
+| **PravidloZdroje** | Událost smí odebrat jen zdroje z `zdroje.telesa` (2.3). Kras (nejmladší) nesmí odebrat dóm | vítěz = nejmenší SDF, kras dóm odebere | 2 872 buněk (0,03 %) |
+| **PoradiTeles** | Překryv těles rozhoduje **stáří** události (2.7, 1.3), ne nejmenší SDF (komín > čočka / dóm / žíla) | nejmenší SDF | 1 868 buněk (0,02 %) |
+
+**Kritérium smazání staré cesty (část kap. 7.1 bod 12, krok K7):** V8 hlásí **0 otevřených buněk** (rozdíl bez vysvětlené příčiny) na pevné sadě bloků pro nejméně **3 seedy světa × 11 bloků**; každá nová příčina musí být vysvětlená a zařazená (zlepšení / dle kontraktu / tolerance). Ostatní kritéria (zejména výkonový práh, voda a M3 na běhy, otisky GEO1 → GEO2) zůstávají nepotvrzená do dalšího rozhodnutí Jana.
 
 Otevřené otázky k tomuto kontraktu **nezůstávají**. v3 schválena 2026-11-27 (Jan t1032u, t1033u).
 
