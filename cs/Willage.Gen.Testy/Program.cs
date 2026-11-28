@@ -40,6 +40,13 @@ if (jen == "GEO2K5S")
     foreach (var b in TestyGeo2K5.StrmeBloky(g5.Svet, 10)) Console.WriteLine($"{b.X},{b.Y}: {b.N}");
     return 0;
 }
+if (jen == "GEO2PROFIL")
+{
+    string? A(string k) => args.FirstOrDefault(a => a.StartsWith(k))?[k.Length..];
+    var bo = A("--blok=")!.Split(',').Select(v => double.Parse(v, System.Globalization.CultureInfo.InvariantCulture)).ToArray();
+    Willage.Gen.Testy.Vykon.VykonProfil.Spust(data, bo[0], bo[1], A("--cesta=") ?? "geo2", int.Parse(A("--opak=") ?? "2"), 0.25, Environment.ProcessorCount);
+    return 0;
+}
 if (jen == "GEO2VYKON")
 {
     // výkon GEO1 / K3 / výchozí GEO2 na blocích V8; --opak=N --csv=cesta --stitek=text --blok=ox,oy[,krokXy[,vlaken]] (jinak všechny bloky)
