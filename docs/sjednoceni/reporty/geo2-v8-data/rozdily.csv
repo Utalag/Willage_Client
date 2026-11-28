@@ -1,9 +1,11 @@
 kategorie;zdroj_geo1;zdroj_geo2;pricina;verdikt;bunek
-náhodné;Vrstva;Skarn;SkarnDiraGeo1;Zlepseni;563
-náhodné;Vrstva;Skarn;SkarnVPasmuTolerance;Tolerance;3996
+náhodné;Vrstva;Skarn;SkarnDiraGeo1;Zlepseni;177
+náhodné;Vrstva;Skarn;SkarnVPasmuTolerance;Tolerance;930
+náhodné;Vrstva;Skarn;SkarnHraniceOdhad;Tolerance;3452
 náhodné;Vrstva;Cocka;CockaObalka;Zlepseni;752
-náhodné;Skarn;Vrstva;SkarnJenKarbonaty;DleKontraktu;3171202
+náhodné;Skarn;Vrstva;SkarnJenKarbonaty;DleKontraktu;3103535
 náhodné;Skarn;Vrstva;SkarnVPasmuTolerance;Tolerance;5
+náhodné;Skarn;Vrstva;SkarnHraniceOdhad;Tolerance;67667
 náhodné;Skarn;Cocka;CockaObalka;Zlepseni;55
 náhodné;Skarn;Cocka;SkarnJenKarbonaty;DleKontraktu;9298
 náhodné;Skarn;Zila;SkarnJenKarbonaty;DleKontraktu;6899
@@ -17,18 +19,21 @@ náhodné;Dome;Pipe;PoradiTeles;DleKontraktu;252
 náhodné;Kras;Skarn;HostitelSkarn;DleKontraktu;6607
 náhodné;Kras;Dome;PravidloZdroje;DleKontraktu;1111
 šev mince x = 1920;Vrstva;Cocka;CockaObalka;Zlepseni;21
-šev mince x = 1920;Skarn;Vrstva;SkarnJenKarbonaty;DleKontraktu;1538382
+šev mince x = 1920;Skarn;Vrstva;SkarnJenKarbonaty;DleKontraktu;1513042
+šev mince x = 1920;Skarn;Vrstva;SkarnHraniceOdhad;Tolerance;25340
 šev mince x = 1920;Skarn;Cocka;SkarnJenKarbonaty;DleKontraktu;9401
 šev mince x = 1920;Skarn;Zila;SkarnJenKarbonaty;DleKontraktu;10894
 šev mince x = 1920;Skarn;Pipe;SkarnJenKarbonaty;DleKontraktu;1982
 šev mince x = 1920;Zila;Cocka;PoradiTeles;DleKontraktu;2
 šev mince x = 1920;Zila;Pipe;PoradiTeles;DleKontraktu;50
 šev mince x = 1920;Kras;Dome;PravidloZdroje;DleKontraktu;447
-šev mince x = 2048;Vrstva;Skarn;SkarnDiraGeo1;Zlepseni;723
-šev mince x = 2048;Vrstva;Skarn;SkarnVPasmuTolerance;Tolerance;5089
+šev mince x = 2048;Vrstva;Skarn;SkarnDiraGeo1;Zlepseni;426
+šev mince x = 2048;Vrstva;Skarn;SkarnVPasmuTolerance;Tolerance;3635
+šev mince x = 2048;Vrstva;Skarn;SkarnHraniceOdhad;Tolerance;1751
 šev mince x = 2048;Vrstva;Cocka;CockaObalka;Zlepseni;79
-šev mince x = 2048;Skarn;Vrstva;SkarnJenKarbonaty;DleKontraktu;2234629
-šev mince x = 2048;Skarn;Vrstva;SkarnVPasmuTolerance;Tolerance;7
+šev mince x = 2048;Skarn;Vrstva;SkarnJenKarbonaty;DleKontraktu;2230786
+šev mince x = 2048;Skarn;Vrstva;SkarnVPasmuTolerance;Tolerance;6
+šev mince x = 2048;Skarn;Vrstva;SkarnHraniceOdhad;Tolerance;3844
 šev mince x = 2048;Skarn;Cocka;SkarnJenKarbonaty;DleKontraktu;4427
 šev mince x = 2048;Skarn;Zila;SkarnJenKarbonaty;DleKontraktu;5661
 šev mince x = 2048;Skarn;Pipe;SkarnJenKarbonaty;DleKontraktu;5164
@@ -38,34 +43,31 @@ náhodné;Kras;Dome;PravidloZdroje;DleKontraktu;1111
 šev mince x = 2048;Dome;Skarn;HostitelSkarn;DleKontraktu;218
 šev mince x = 2048;Kras;Skarn;HostitelSkarn;DleKontraktu;1380
 šev mince x = 2048;Kras;Dome;PravidloZdroje;DleKontraktu;244
-hornatina / strmé;Sopka;Sopka;PovrchTolerance;Tolerance;3531
-hornatina / strmé;Sopka;Sopka;SopkaRozdil;Otevrene;18186
-hornatina / strmé;Vrstva;Skarn;SkarnDiraGeo1;Zlepseni;1471
-hornatina / strmé;Vrstva;Skarn;SkarnVPasmuTolerance;Tolerance;13290
+hornatina / strmé;Vrstva;Skarn;SkarnDiraGeo1;Zlepseni;893
+hornatina / strmé;Vrstva;Skarn;SkarnVPasmuTolerance;Tolerance;9126
+hornatina / strmé;Vrstva;Skarn;SkarnHraniceOdhad;Tolerance;4742
 hornatina / strmé;Vrstva;Cocka;CockaObalka;Zlepseni;190
-hornatina / strmé;Skarn;Vrstva;SkarnJenKarbonaty;DleKontraktu;1498283
-hornatina / strmé;Skarn;Vrstva;SkarnVPasmuTolerance;Tolerance;40
-hornatina / strmé;Skarn;Vrstva;SkarnJine;Otevrene;17
+hornatina / strmé;Skarn;Vrstva;SkarnJenKarbonaty;DleKontraktu;1468221
+hornatina / strmé;Skarn;Vrstva;SkarnVPasmuTolerance;Tolerance;5
+hornatina / strmé;Skarn;Vrstva;SkarnHraniceOdhad;Tolerance;30112
+hornatina / strmé;Skarn;Vrstva;SkarnJine;Otevrene;2
 hornatina / strmé;Skarn;Cocka;CockaObalka;Zlepseni;95
 hornatina / strmé;Skarn;Cocka;SkarnJenKarbonaty;DleKontraktu;5169
 hornatina / strmé;Skarn;Zila;SkarnJenKarbonaty;DleKontraktu;2212
 hornatina / strmé;Skarn;Pipe;SkarnJenKarbonaty;DleKontraktu;2869
-hornatina / strmé;Skarn;Kras;SkarnVPasmuTolerance;Tolerance;1
-hornatina / strmé;Skarn;Kras;SkarnJine;Otevrene;1
+hornatina / strmé;Skarn;Kras;SkarnHraniceOdhad;Tolerance;2
 hornatina / strmé;Cocka;Pipe;PoradiTeles;DleKontraktu;430
 hornatina / strmé;Zila;Pipe;PoradiTeles;DleKontraktu;14
 hornatina / strmé;Dome;Skarn;HostitelSkarn;DleKontraktu;6881
 hornatina / strmé;Dome;Pipe;PoradiTeles;DleKontraktu;8
 hornatina / strmé;Kras;Skarn;HostitelSkarn;DleKontraktu;2400
 hornatina / strmé;Kras;Dome;PravidloZdroje;DleKontraktu;1070
-svah sopky;Sopka;Sopka;PovrchTolerance;Tolerance;2931
-svah sopky;Sopka;Sopka;SopkaRozdil;Otevrene;15873
-svah sopky;Skarn;Vrstva;SkarnJenKarbonaty;DleKontraktu;30600
+svah sopky;Skarn;Vrstva;SkarnJenKarbonaty;DleKontraktu;30507
+svah sopky;Skarn;Vrstva;SkarnHraniceOdhad;Tolerance;93
 svah sopky;Skarn;Cocka;SkarnJenKarbonaty;DleKontraktu;186
 svah sopky;Skarn;Zila;SkarnJenKarbonaty;DleKontraktu;9
-okraj sopky;Sopka;Sopka;PovrchTolerance;Tolerance;1416
-okraj sopky;Sopka;Sopka;SopkaRozdil;Otevrene;15993
-okraj sopky;Skarn;Vrstva;SkarnJenKarbonaty;DleKontraktu;351068
+okraj sopky;Skarn;Vrstva;SkarnJenKarbonaty;DleKontraktu;338024
+okraj sopky;Skarn;Vrstva;SkarnHraniceOdhad;Tolerance;13044
 okraj sopky;Skarn;Cocka;SkarnJenKarbonaty;DleKontraktu;2557
 okraj sopky;Skarn;Zila;SkarnJenKarbonaty;DleKontraktu;1045
 okraj sopky;Skarn;Pipe;SkarnJenKarbonaty;DleKontraktu;295

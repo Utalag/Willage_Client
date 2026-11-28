@@ -9,6 +9,23 @@ namespace Willage.Gen.Testy.V8;
 /// <summary>Porovná jeden blok 128 m: GEO1 <c>VyplnSloupec</c> × GEO2 výchozí <c>KontextBloku.Sloupec</c>, rozdíly klasifikuje.</summary>
 public static class V8Blok
 {
+    /// <summary>Kvalita skarnu (tloušťka pásma, O1, díry) obou systémů ve sloupci se skarnem; drahé, proto jen tam.</summary>
+    private static void Kvalita(GeologieCs g, KontextBloku k, PodkladyKlasifikace pod, V8Soucty s, double x, double y, byte[] m1, Vzorek[] v2)
+    {
+        var w = g.Svet.Vahy(x, y); double zp = g.Svet.VyskaW(x, y, w);
+        var hr = g.Geo.Vrstvy.Hranice(x, y, w, g.Svet.VyskaTvar(x, y), zp);
+        for (int iz = 0; iz < Nz; iz++)
+        {
+            double z = (iz + 0.5) * KrokZ; if (z > zp) break;
+            int vm = VrstvySloupce.VrstvaMat(z, hr); bool karb = vm >= 0 && vm < pod.Karbonat.Length && pod.Karbonat[vm];
+            bool s1 = m1[iz] == pod.SkarnId, s2 = v2[iz].Material == pod.SkarnId;
+            if (!karb && !s1 && !s2) continue;
+            bool je = pod.Skarn.Nejblizsi(x, y, z, 4.0, out var b); double d = je ? b.D : double.PositiveInfinity; bool od = je && b.Odhad;
+            s.Kvalita1.Bunka(s1, karb, m1[iz] == vm, d, od);
+            s.Kvalita2.Bunka(s2, karb, v2[iz].Material == vm, d, od);
+        }
+    }
+
     public const int Nz = 512;
     public const double KrokZ = 0.25;
 
@@ -34,6 +51,8 @@ public static class V8Blok
                 k.Sloupec(x, y, 0, KrokZ, v2);
                 s.Bunek += Nz;
                 List<Hranice>? hr = null; List<Utvar>? feats = null; double zPov1 = 0;
+                bool maSkarn = false; for (int iz = 0; iz < Nz && !maSkarn; iz++) maSkarn = m1[iz] == pod.SkarnId || v2[iz].Material == pod.SkarnId;
+                if (maSkarn) Kvalita(g, k, pod, s, x, y, m1, v2);
                 for (int iz = 0; iz < Nz; iz++)
                 {
                     if (m1[iz] == v2[iz].Material) continue;

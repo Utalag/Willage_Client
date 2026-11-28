@@ -19,6 +19,9 @@ public static class V8Zprava
             long G(Verdikt x) => v.GetValueOrDefault(x);
             Console.WriteLine($"  {n,-22} {s.Bunek,14:N0} {s.Ruznych,10:N0} {P(s.Ruznych, s.Bunek),10}  zlepšení {G(Verdikt.Zlepseni):N0}, dle kontraktu {G(Verdikt.DleKontraktu):N0}, tolerance {G(Verdikt.Tolerance):N0}, otevřené {G(Verdikt.Otevrene):N0} ({P(G(Verdikt.Otevrene), s.Bunek)})");
         }
+        Console.WriteLine("  --- kvalita skarnu vůči kontraktu (sloupce se skarnem v aspoň jednom systému; pásmo [0,625; 2,375] m eukleidovsky, O1) ---");
+        foreach (var (nz, q) in new[] { ("GEO1", vse.Kvalita1), ("GEO2", vse.Kvalita2) })
+            Console.WriteLine($"  {nz}: skarn {q.SkarnBunek:N0} buněk; v nekarbonátu (porušení O1) {q.SkarnVNekarbonatu:N0} ({P(q.SkarnVNekarbonatu, q.SkarnBunek)}); tlustší než pásmo {q.SkarnTlustsi:N0} ({P(q.SkarnTlustsi, q.SkarnBunek)}); díry v pásmu karbonátu {q.Diry:N0} ({P(q.Diry, q.KarbonatuVPasmu)} karbonátu v pásmu {q.KarbonatuVPasmu:N0}); s odhadem hranice {q.Odhad:N0}");
         Console.WriteLine("  --- příčiny (celkem), podíl z různých a ze všech buněk ---");
         foreach (var kv in vse.PodlePriciny().OrderByDescending(q => q.Value))
             Console.WriteLine($"  {kv.Key,-24} {Verdikty.Z(kv.Key),-13} {kv.Value,12:N0} {P(kv.Value, vse.Ruznych),10} z různých {P(kv.Value, vse.Bunek),10} ze všech");

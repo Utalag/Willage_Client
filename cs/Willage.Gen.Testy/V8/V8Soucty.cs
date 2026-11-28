@@ -4,6 +4,7 @@ namespace Willage.Gen.Testy.V8;
 public sealed class V8Soucty
 {
     public long Bunek, Ruznych;
+    public readonly V8Kvalita Kvalita1 = new(), Kvalita2 = new();
     public readonly Dictionary<(Zdroj, Zdroj, Pricina), long> Pary = new();
     public readonly Dictionary<(int, int), long> Prechody = new();
     public readonly Dictionary<Pricina, List<(double X, double Y, double Z, int M1, int M2)>> Priklady = new();
@@ -19,7 +20,7 @@ public sealed class V8Soucty
 
     public void Slouc(V8Soucty o)
     {
-        Bunek += o.Bunek; Ruznych += o.Ruznych;
+        Bunek += o.Bunek; Ruznych += o.Ruznych; Kvalita1.Slouc(o.Kvalita1); Kvalita2.Slouc(o.Kvalita2);
         foreach (var kv in o.Pary) Pary[kv.Key] = Pary.GetValueOrDefault(kv.Key) + kv.Value;
         foreach (var kv in o.Prechody) Prechody[kv.Key] = Prechody.GetValueOrDefault(kv.Key) + kv.Value;
         foreach (var kv in o.Priklady)
