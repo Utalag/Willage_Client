@@ -98,7 +98,7 @@ nástroje (`Willage.Gen.Nastroje`), otisky G-1 / G-3 / krok 5.
 | 1 | V1–V8 splněna (V9 / etapa D se nevyžaduje) | V1–V7 ano (K1–K6), V8 tato zpráva |
 | 2 | **V8: otevřených buněk = 0** na pevné sadě bloků (CSV v repu) pro nejméně 3 seedy světa × 11 bloků; každá nová příčina vysvětlená | teď 2 buňky z 1,48 mld. (1 seed) → prošetřit `SkarnJine`, přidat seedy |
 | 3 | Všechny „dle kontraktu“ přechody (top 10 podle počtu) Jan podepsal; O1 je podepsané | O1 ano, ostatní k potvrzení |
-| 4 | Výkon GEO2 (výchozí, kontext + sloupce) ne horší než ×1,5 GEO1 na blocích z V6, medián z ≥ 5 opakování na nezatíženém boxu | bod 3 zadání (měření) |
+| 4 | **Doporučení (Jan t1047u, ne pevné kritérium):** výkon GEO2 (výchozí, kontext + sloupce) kolem ×1,5 GEO1 na blocích z V6, medián z ≥ 5 opakování; vykazuje se, smazání nezastavuje | měřeno v `geo2-vykon-prop.md`: 5 z 11 bloků ≤ ×1,5 |
 | 5 | Voda, M3, M7, API a nástroje čtou z GEO2 (běhy), žádný produkční kód nevolá `GeoVrstvy.Bod` / `VyplnSloupec` | ne (K7) |
 | 6 | Zlaté otisky GEO1 (G-1, G-3, krok 5) nahrazeny otisky GEO2 s Janovým schválením; starý otisk archivován jako hash v dokumentu | ne |
 | 7 | Souběžný provoz za přepínačem `GeologieV2` po dobu určenou Janem (návrh: jedno plné vygenerování světa a jedna herní relace bez hlášené geologické chyby) | ne |
