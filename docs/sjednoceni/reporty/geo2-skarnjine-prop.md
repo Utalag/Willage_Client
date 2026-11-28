@@ -1,6 +1,6 @@
 # PROP GEO2: prošetření 2 otevřených buněk `SkarnJine` (blok 3904, 1344; Jan t1046u, bod 1)
 
-*Zapsáno před experimentem 2026-11-28 12:36 (Europe/Prague). Větev `geo2-skarnjine` z `geo2-v8-rozdily`.*
+*Zapsáno před experimentem 2026-11-28 12:30 (Europe/Prague). Větev `geo2-skarnjine` z `geo2-v8-rozdily`.*
 
 ## Výchozí stav (z V8)
 Z 1,476 mld. porovnaných buněk (11 bloků, 1 seed) zůstávají 2 buňky v blok (3904, 1344) [hornatina / strmé] s příčinou `SkarnJine`, verdikt **otevřené**: GEO1 = skarn (zdroj Skarn), GEO2 = vrstva (karbonát), bez příznaku odhadu hranice.

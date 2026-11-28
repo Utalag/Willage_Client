@@ -9,6 +9,9 @@ namespace Willage.Gen.Testy.V8;
 /// <summary>Porovná jeden blok 128 m: GEO1 <c>VyplnSloupec</c> × GEO2 výchozí <c>KontextBloku.Sloupec</c>, rozdíly klasifikuje.</summary>
 public static class V8Blok
 {
+    /// <summary>Otevřené buňky (verdikt Otevrene) pro ladění; naplní se v Porovnej, vypíše Spust.</summary>
+    public static readonly System.Collections.Concurrent.ConcurrentBag<(double X, double Y, double Z, Pricina Pricina)> Otevrene = new();
+
     /// <summary>Kvalita skarnu (tloušťka pásma, O1, díry) obou systémů ve sloupci se skarnem; drahé, proto jen tam.</summary>
     private static void Kvalita(GeologieCs g, KontextBloku k, PodkladyKlasifikace pod, V8Soucty s, double x, double y, byte[] m1, Vzorek[] v2)
     {
@@ -65,7 +68,8 @@ public static class V8Blok
                     double dh = double.PositiveInfinity; foreach (var h in hr) dh = Math.Min(dh, Math.Min(Math.Abs(z - h.Z0), Math.Abs(z - h.Z1)));
                     int vm = z > zPov1 ? -1 : VrstvySloupce.VrstvaMat(z, hr);
                     var rb = new RozdilBunky(x, y, z, m1[iz], v2[iz].Material, Zdroj1.Urci(g.Geo, feats!, hr, x, y, z, zPov1), z2.Urci(v2[iz]), zPov1, k.Povrch(x, y), dh, vm);
-                    s.Pridej(rb, Klasifikator.Urci(rb, pod));
+                    var pc = Klasifikator.Urci(rb, pod); if (Verdikty.Z(pc) == Verdikt.Otevrene) Otevrene.Add((x, z: z, y: y, pc) is var q ? (q.Item1, q.Item3, q.Item2, q.pc) : default);
+                    s.Pridej(rb, pc);
                 }
             }
             return (g, s);
