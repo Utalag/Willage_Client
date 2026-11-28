@@ -1,6 +1,6 @@
 # PROP GEO2 V8: zpráva rozdílů GEO2 × GEO1 po kategoriích + kritéria smazání staré cesty
 
-*Zapsáno před experimentem 2026-11-28 ~02:40 (Jan t1044u, bod 1). Větev `geo2-v8-rozdily` z `geo2-vychozi`. Kontrakt `06-geologie-geo2.md`
+*Zapsáno před experimentem 2026-11-28 ~02:20 (Jan t1044u, bod 1). Větev `geo2-v8-rozdily` z `geo2-vychozi`. Kontrakt `06-geologie-geo2.md`
 V8 (rozdílová zpráva po kategoriích), K7, rozhodnutí 12A. **Kritérium je „GEO2 lepší než GEO1“, ne přesná shoda.***
 
 ## Cíl
@@ -33,7 +33,7 @@ V8 (rozdílová zpráva po kategoriích), K7, rozhodnutí 12A. **Kritérium je �
 - Příčiny se mohou překrývat (buňka u hranice vrstvy i u skarnu): zařazuji první platnou v pevném pořadí (v PROP výsledcích uvedeno).
 - Verdikt „zlepšení“ je jen tak silný, jak měření D / obálky; u pořadí těles je to „dle kontraktu“, ne „lépe“.
 
-## Výsledky *(2026-11-28 ~03:30)*
+## Výsledky *(2026-11-28 ~02:35)*
 Commity: `a09a5cc` nástroj, `9ad69f6` příčina SkarnHraniceOdhad, `035c575` **oprava K4 nalezená V8** (sopka), kvalita skarnu, výsledky.
 Data: `docs/sjednoceni/reporty/geo2-v8-data/rozdily.csv` (kategorie × zdroj GEO1 × zdroj GEO2 × příčina × verdikt × buněk).
 Měření: 11 bloků 128 m (1,476 mld. buněk, sloupce 0,25 m, z po 0,25 m), `--jen=GEO2V8`; výstup bitově stejný při 1 a 8 vláknech (md5 shodný).
