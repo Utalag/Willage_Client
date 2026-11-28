@@ -40,6 +40,12 @@ if (jen == "GEO2K5S")
     foreach (var b in TestyGeo2K5.StrmeBloky(g5.Svet, 10)) Console.WriteLine($"{b.X},{b.Y}: {b.N}");
     return 0;
 }
+if (jen == "GEO2V8L")
+{
+    var bo = args.First(a => a.StartsWith("--blok="))["--blok=".Length..].Split(',').Select(v => double.Parse(v, System.Globalization.CultureInfo.InvariantCulture)).ToArray();
+    Willage.Gen.Testy.V8.V8Ladeni.Sloupec(data, bo[0], bo[1], bo[2], bo[3]);
+    return 0;
+}
 if (jen == "GEO2V8")
 {
     // V8: rozdíly GEO2 × GEO1 po kategoriích; --blok=ox,oy[,krokXy[,vlaken]] jen jeden blok; --csv=cesta

@@ -10,7 +10,7 @@ public enum Pricina : byte
 {
     PovrchTolerance, HranicVrstvyTolerance,
     CockaObalka,
-    SkarnJenKarbonaty, SkarnPasmoDelsi, SkarnDiraGeo1, SkarnVPasmuTolerance, SkarnJine,
+    SkarnJenKarbonaty, SkarnPasmoDelsi, SkarnDiraGeo1, SkarnVPasmuTolerance, SkarnHraniceOdhad, SkarnJine,
     PoradiTeles, HostitelSkarn, PravidloZdroje,
     SopkaRozdil, KrasRozdil,
     Nevysvetleno,
@@ -21,7 +21,7 @@ public static class Verdikty
 {
     public static Verdikt Z(Pricina p) => p switch
     {
-        Pricina.PovrchTolerance or Pricina.HranicVrstvyTolerance or Pricina.SkarnVPasmuTolerance => Verdikt.Tolerance,
+        Pricina.PovrchTolerance or Pricina.HranicVrstvyTolerance or Pricina.SkarnVPasmuTolerance or Pricina.SkarnHraniceOdhad => Verdikt.Tolerance,
         Pricina.CockaObalka or Pricina.SkarnPasmoDelsi or Pricina.SkarnDiraGeo1 => Verdikt.Zlepseni,
         Pricina.SkarnJenKarbonaty or Pricina.PoradiTeles or Pricina.HostitelSkarn or Pricina.PravidloZdroje => Verdikt.DleKontraktu,
         _ => Verdikt.Otevrene,
@@ -71,7 +71,9 @@ public static class Klasifikator
 
     private static Pricina Skarn(in RozdilBunky r, PodkladyKlasifikace p)
     {
-        double d = p.Skarn.Nejblizsi(r.X, r.Y, r.Z, 4.0, out var b) ? b.D : double.PositiveInfinity;
+        bool je = p.Skarn.Nejblizsi(r.X, r.Y, r.Z, 4.0, out var b);
+        if (je && b.Odhad) return Pricina.SkarnHraniceOdhad; // uznaná výjimka V5 (Jan t1043u): vykliňování vrstvy uvnitř buňky 0,25 m
+        double d = je ? b.D : double.PositiveInfinity;
         double lo = PodkladyKlasifikace.W0 * (1 - PodkladyKlasifikace.A) - PodkladyKlasifikace.Ek, hi = PodkladyKlasifikace.W0 * (1 + PodkladyKlasifikace.A) + PodkladyKlasifikace.Ek;
         if (r.Z1 == Zdroj.Skarn)
         {
