@@ -38,7 +38,7 @@ Blok 128 m, sloupce po 0,25 m, z po 0,25 m (512 buněk na sloupec).
 
 # VÝSLEDKY (zapsáno 2026-11-28, Europe/Prague)
 
-Data: `geo2-v8-seedy-data/` [1]–[8]. Měřeno na Janově PC „Utalag“ (Windows, **24 vláken**, bez cizí zátěže; **jiný hardware než box**, časy se s časy z boxu nesrovnávají). Větev `geo2-v8-seedy` (základ 39d80d7), clone veřejného repa bez tokenu. `--jen=GEO2`: **OK 228, chyb 0** [6].
+Data: `geo2-v8-seedy-data/` [1]–[9]. Měřeno na Janově PC „Utalag“ (Windows, **24 vláken**, bez cizí zátěže; **jiný hardware než box**, časy se s časy z boxu nesrovnávají). Větev `geo2-v8-seedy` (základ 39d80d7), clone veřejného repa bez tokenu. `--jen=GEO2`: **OK 228, chyb 0** [6].
 
 ## 1. Otevřené buňky a rozdíly na seed
 Pevná sada 11 bloků × 128 m × 0,25 m = 1 476 395 008 buněk na seed.
@@ -97,22 +97,21 @@ Dopad na smazání GEO1: podmínka správnosti je splněna (0 otevřených). Vý
 ## 5. Negativní výsledky
 - **Pád na prázdné cestě `--csv` (Windows).** První běh (seedy 49,7,100) spadl na `System.ArgumentException: The path is empty` v `TestyGeo2V8.Spust`; log [5], `hotovo.txt` [3] (výstup -532462766 = neošetřená .NET výjimka). Opraveno `Path.GetFullPath` (commit 39d80d7); generátoru se to netýká, šlo jen o testovací nástroj. Měření ale kvůli tomu bylo nutné opakovat.
 - **Běh ztracený restartem PC.** Společný běh pro seedy 7 a 100 byl přerušen restartem PC: log [2] (`v8-seedy.log`) má kompletní seedy 49 a 7 a u seedu 100 jen 4 bloky z 11. Seed 100 se spustil znovu samostatně (`v8-seedy-seed100.log` [4], `hotovo-seed100.txt`, exit 0) a je kompletní. Čísla seedu 100 v tomto PROP jsou z opakování [4].
-- `casy.csv` [8a] zůstal po posledním běhu jen se seedem 100 (zápis po seedu přepisuje); kompletní časy proto vznikly z logů do `casy-vsechny-seedy.csv`. Chyba nástroje: zapisovat časy po seedu do samostatného souboru.
+- `casy.csv` [8] zůstal po posledním běhu jen se seedem 100 (zápis po seedu přepisuje); kompletní časy proto vznikly z logů do `casy-vsechny-seedy.csv`. Chyba nástroje: zapisovat časy po seedu do samostatného souboru.
 - `CopyToBox` z PC nešel (cesta mimo povolený kořen), data se přenesla přes výstup příkazu. Surové logy přeměření [9] zůstaly na PC; do repa je krátké shrnutí.
 - Kontext (`KontextBlokuE84.Sestav`) a klasifikace V8 nejsou v čase „GEO2 sloupce“; srovnání s GEO1 je tedy mírně příznivé pro GEO2 (o 0,9–1,8 s kontextu navíc).
 
 ## 6. Zdroje a data
-V `geo2-v8-seedy-data/`:
-1. `v8-seedy.log` — běh seedů 49, 7 (kompletní) a 100 (přerušen po 4 blocích)
-2. `v8-seedy-seed100.log` — seed 100, opakování, kompletní
-3. `v8-seedy-seed49-prvni-beh.log` — první běh, pád na prázdné `--csv` (seed 49 kompletní před pádem)
-4. `hotovo.txt`, `hotovo-seed100.txt` — exit kódy a časy
-5. `geo2-testy.log` — `--jen=GEO2`, OK 228, chyb 0
-6. `rozdily-seed-49.csv`, `rozdily-seed-7.csv`, `rozdily-seed-100.csv` — kategorie × zdroje × příčina × verdikt × počet buněk
-7. `casy.csv` (jen seed 100) a `casy-vsechny-seedy.csv` (33 řádků)
-8. `remeras/README.md` — přeměření bloku (1664, 1728) seed 7
-
-Odkazy [1]–[9] v textu: [1] `v8-seedy.log`; [2] totéž (seed 7, 49); [3] `hotovo*.txt`; [4] `v8-seedy-seed100.log`; [5] `v8-seedy-seed49-prvni-beh.log`; [6] `geo2-testy.log`; [7] dřívější V8 na boxu, `geo2-v8-prop.md`; [8] `casy*.csv`; [9] `remeras/README.md`.
+Soubory v `geo2-v8-seedy-data/`, citované v textu:
+- [1] `v8-seedy.log` — seedy 49 a 7 kompletní, seed 100 přerušen restartem po 4 blocích
+- [2] `rozdily-seed-49.csv`, `rozdily-seed-7.csv`, `rozdily-seed-100.csv` — kategorie × zdroj × příčina × verdikt × počet buněk
+- [3] `hotovo.txt`, `hotovo-seed100.txt` — exit kódy a časy konců
+- [4] `v8-seedy-seed100.log` — seed 100, opakování, kompletní
+- [5] `v8-seedy-seed49-prvni-beh.log` — první běh, pád na prázdné `--csv` (seed 49 kompletní před pádem)
+- [6] `geo2-testy.log` — `--jen=GEO2`, OK 228, chyb 0
+- [7] `docs/sjednoceni/reporty/geo2-v8-prop.md` — dřívější V8 na boxu (seed 49)
+- [8] `casy.csv` (po posledním běhu jen seed 100) a `casy-vsechny-seedy.csv` (33 řádků z logů)
+- [9] `remeras/README.md` — přeměření bloku (1664, 1728) seed 7 (dva běhy)
 
 ## 7. Další kroky
 1. Jan rozhodne, zda výkonové špičky GEO2 (až ~19 s na blok seedu 7) jsou před smazáním GEO1 překážka; ×1,5 je jen doporučení.
