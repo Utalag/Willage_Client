@@ -37,14 +37,14 @@ public static class V8Zprava
             Console.WriteLine($"  {kv.Key}: " + string.Join("; ", kv.Value.Select(e => $"({e.X:F2}, {e.Y:F2}, {e.Z:F2}) {M(e.M1)}→{M(e.M2)}")));
     }
 
-    public static void Csv(string cesta, IReadOnlyList<(string Kategorie, V8Soucty S)> kat)
+    public static void Csv(string cesta, IReadOnlyList<(string Kategorie, V8Soucty S)> kat, long seed)
     {
-        Directory.CreateDirectory(Path.GetDirectoryName(cesta)!);
-        var sb = new StringBuilder("kategorie;zdroj_geo1;zdroj_geo2;pricina;verdikt;bunek\n");
+        Directory.CreateDirectory(Path.GetDirectoryName(Path.GetFullPath(cesta))!);
+        var sb = new StringBuilder("seed;kategorie;zdroj_geo1;zdroj_geo2;pricina;verdikt;bunek\n");
         foreach (var (n, s) in kat)
             foreach (var kv in s.Pary.OrderBy(q => q.Key))
-                sb.Append($"{n};{kv.Key.Item1};{kv.Key.Item2};{kv.Key.Item3};{Verdikty.Z(kv.Key.Item3)};{kv.Value}\n");
-        foreach (var (n, s) in kat) sb.Append($"{n};CELKEM_BUNEK;;;;{s.Bunek}\n");
+                sb.Append($"{seed};{n};{kv.Key.Item1};{kv.Key.Item2};{kv.Key.Item3};{Verdikty.Z(kv.Key.Item3)};{kv.Value}\n");
+        foreach (var (n, s) in kat) sb.Append($"{seed};{n};CELKEM_BUNEK;;;;{s.Bunek}\n");
         File.WriteAllText(cesta, sb.ToString());
     }
 }

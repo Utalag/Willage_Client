@@ -55,10 +55,11 @@ if (jen == "GEO2V8L")
 }
 if (jen == "GEO2V8")
 {
-    // V8: rozdíly GEO2 × GEO1 po kategoriích; --blok=ox,oy[,krokXy[,vlaken]] jen jeden blok; --csv=cesta
-    var bo = args.FirstOrDefault(a => a.StartsWith("--blok="))?["--blok=".Length..].Split(',').Select(v => double.Parse(v, System.Globalization.CultureInfo.InvariantCulture)).ToArray();
-    var csv = args.FirstOrDefault(a => a.StartsWith("--csv="))?["--csv=".Length..];
-    TestyGeo2V8.Spust(data, bo is { Length: >= 2 } ? bo : null, bo is { Length: > 2 } ? bo[2] : 0.25, bo is { Length: > 3 } ? (int)bo[3] : Environment.ProcessorCount, csv);
+    // V8: rozdíly GEO2 × GEO1 po kategoriích; --seedy=49,7,100 (výchozí 49); --blok=ox,oy[,krokXy[,vlaken]] jen jeden blok; --csv=cesta nebo adresář
+    string? A(string k) => args.FirstOrDefault(a => a.StartsWith(k))?[k.Length..];
+    var bo = A("--blok=")?.Split(',').Select(v => double.Parse(v, System.Globalization.CultureInfo.InvariantCulture)).ToArray();
+    var seedy = (A("--seedy=") ?? A("--seed="))?.Split(',').Select(long.Parse).ToArray();
+    TestyGeo2V8.Spust(data, bo is { Length: >= 2 } ? bo : null, bo is { Length: > 2 } ? bo[2] : 0.25, bo is { Length: > 3 } ? (int)bo[3] : Environment.ProcessorCount, A("--csv="), seedy);
     Console.WriteLine($"OK {T.Ok}, chyb {T.Chyb}");
     return T.Chyb == 0 ? 0 : 1;
 }

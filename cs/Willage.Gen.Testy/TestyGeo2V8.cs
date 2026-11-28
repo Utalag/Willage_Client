@@ -6,7 +6,7 @@ using Willage.Gen.Testy.V8;
 
 namespace Willage.Gen.Testy;
 
-/// <summary>V8: rozdílová zpráva GEO2 × GEO1 po kategoriích (<c>--jen=GEO2V8</c>, volitelně <c>--blok=ox,oy[,krokXy]</c> jen jeden blok).</summary>
+/// <summary>V8: rozdílová zpráva GEO2 × GEO1 po kategoriích (<c>--jen=GEO2V8 --seedy=49,7,100</c>, volitelně <c>--blok=ox,oy[,krokXy[,vlaken]]</c>).</summary>
 public static class TestyGeo2V8
 {
     public static List<(string Kategorie, double X, double Y)> Kategorie(SvetFn s)
@@ -91,27 +91,59 @@ public static class TestyGeo2V8
         T.Je(V8Blok.Otevrene.IsEmpty, "vzorek bloku (3904, 1344) po 2 m: 0 otevřených buněk");
     }
 
-    public static void Spust(string data, double[]? jedenBlok, double krokXy, int vlaken, string? csv)
+    public static void Spust(string data, double[]? jedenBlok, double krokXy, int vlaken, string? csv, long[]? seedy = null)
     {
-        T.Sekce($"GEO2 V8: rozdíly GEO2 × GEO1 po kategoriích (bloky 128 m, sloupce po {krokXy} m, z po 0,25 m, {vlaken} vláken)");
+        seedy ??= new long[] { 49 };
+        T.Sekce($"GEO2 V8: rozdíly GEO2 × GEO1, seedy [{string.Join(", ", seedy)}], bloky 128 m, sloupce po {krokXy} m, z po 0,25 m, {vlaken} vláken");
         var d = DataSveta.Najdi(AppContext.BaseDirectory);
         var kat = KatalogGeo2.ZeSouboru(Path.Combine(data, "materials-catalog-v1.json"));
-        var g = new GeologieCs(new ParametrySveta(), d);
-        var bloky = jedenBlok is null ? Kategorie(g.Svet) : new List<(string, double, double)> { ("zadaný", jedenBlok[0], jedenBlok[1]) };
-        var podle = new Dictionary<string, V8Soucty>(); var poradi = new List<string>();
-        foreach (var (nazev, x, y) in bloky)
+        var casCsv = new System.Text.StringBuilder("seed;kategorie;x;y;kontext_s;geo1_s;geo2_sloupce_s;otevrene;ruznych;bunek\n");
+        foreach (var seed in seedy)
         {
-            var sw = System.Diagnostics.Stopwatch.StartNew();
-            var s = V8Blok.Porovnej(g, kat, d, x, y, krokXy, vlaken);
-            if (!podle.TryGetValue(nazev, out var cil)) { podle[nazev] = cil = new V8Soucty(); poradi.Add(nazev); }
-            cil.Slouc(s);
-            Console.WriteLine($"  blok ({x}, {y}) [{nazev}]: {s.Bunek:N0} buněk, různých {s.Ruznych:N0} ({100.0 * s.Ruznych / s.Bunek:F4} %), {sw.Elapsed.TotalSeconds:F1} s");
+            while (V8Blok.Otevrene.TryTake(out _)) { }
+            T.Sekce($"GEO2 V8 seed {seed}");
+            var g = new GeologieCs(new ParametrySveta { Seed = seed }, d);
+            var bloky = jedenBlok is null ? Kategorie(g.Svet) : new List<(string, double, double)> { ("zadaný", jedenBlok[0], jedenBlok[1]) };
+            var podle = new Dictionary<string, V8Soucty>(); var poradi = new List<string>();
+            foreach (var (nazev, x, y) in bloky)
+            {
+                int pred = 0; foreach (var _ in V8Blok.Otevrene) pred++;
+                var v = V8Blok.Mer(g, kat, d, x, y, krokXy, vlaken);
+                var s = v.Soucty;
+                if (!podle.TryGetValue(nazev, out var cil)) { podle[nazev] = cil = new V8Soucty(); poradi.Add(nazev); }
+                cil.Slouc(s);
+                int ote = 0; foreach (var _ in V8Blok.Otevrene) ote++; ote -= pred;
+                Console.WriteLine($"  blok ({x}, {y}) [{nazev}]: {s.Bunek:N0} buněk, různých {s.Ruznych:N0} ({100.0 * s.Ruznych / s.Bunek:F4} %), otevřené {ote}; čas kontext {v.KontextS:F2} s, GEO1 {v.Geo1S:F2} s, GEO2 sloupce {v.Geo2SloupceS:F2} s (max vlákno, bez klasifikace V8)");
+                casCsv.Append(string.Join(';', seed.ToString(System.Globalization.CultureInfo.InvariantCulture), nazev,
+                    x.ToString(System.Globalization.CultureInfo.InvariantCulture), y.ToString(System.Globalization.CultureInfo.InvariantCulture),
+                    v.KontextS.ToString("F4", System.Globalization.CultureInfo.InvariantCulture),
+                    v.Geo1S.ToString("F4", System.Globalization.CultureInfo.InvariantCulture),
+                    v.Geo2SloupceS.ToString("F4", System.Globalization.CultureInfo.InvariantCulture),
+                    ote, s.Ruznych, s.Bunek)).Append('\n');
+            }
+            foreach (var o in V8Blok.Otevrene.OrderBy(o => o.X).ThenBy(o => o.Y).ThenBy(o => o.Z).Take(50))
+                Console.WriteLine($"  seed {seed} otevřená buňka: x {o.X:F3}, y {o.Y:F3}, z {o.Z:F3}, {o.Pricina}");
+            var vysl = poradi.Select(n => (n, podle[n])).ToList();
+            V8Zprava.Vypis(vysl, kat);
+            if (csv is not null)
+            {
+                var dir = Path.GetDirectoryName(Path.GetFullPath(csv));
+                var stem = Path.GetFileNameWithoutExtension(csv);
+                var ext = Path.GetExtension(csv);
+                if (string.IsNullOrEmpty(ext)) { dir = Path.GetFullPath(csv); stem = "rozdily"; ext = ".csv"; }
+                V8Zprava.Csv(Path.Combine(dir!, $"{stem}-seed-{seed}{ext}"), vysl, seed);
+            }
+            var vse = new V8Soucty(); foreach (var (_, s) in vysl) vse.Slouc(s);
+            var ot = vse.PodleVerdiktu().GetValueOrDefault(Verdikt.Otevrene);
+            Console.WriteLine($"  seed {seed}: otevřených buněk {ot:N0} z {vse.Bunek:N0} ({100.0 * ot / Math.Max(vse.Bunek, 1):F6} %)");
+            T.Je(vse.Bunek > 0 && vse.PodleVerdiktu().Values.Sum() == vse.Ruznych, $"seed {seed}: součet verdiktů = všechny různé buňky");
         }
-        foreach (var o in V8Blok.Otevrene.OrderBy(o => o.X).ThenBy(o => o.Y).ThenBy(o => o.Z).Take(50)) Console.WriteLine($"  otevřená buňka: x {o.X:F3}, y {o.Y:F3}, z {o.Z:F3}, {o.Pricina}");
-        var vysl = poradi.Select(n => (n, podle[n])).ToList();
-        V8Zprava.Vypis(vysl, kat);
-        if (csv is not null) V8Zprava.Csv(csv, vysl);
-        var vse = new V8Soucty(); foreach (var (_, s) in vysl) vse.Slouc(s);
-        T.Je(vse.Bunek > 0 && vse.PodleVerdiktu().Values.Sum() == vse.Ruznych, "součet verdiktů = všechny různé buňky");
+        if (csv is not null)
+        {
+            var dir = Path.GetDirectoryName(Path.GetFullPath(csv));
+            if (string.IsNullOrEmpty(Path.GetExtension(csv))) dir = Path.GetFullPath(csv);
+            Directory.CreateDirectory(dir!);
+            File.WriteAllText(Path.Combine(dir!, "casy.csv"), casCsv.ToString());
+        }
     }
 }

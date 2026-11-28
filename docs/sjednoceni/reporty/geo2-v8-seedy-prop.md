@@ -19,7 +19,7 @@ Stejná sada jako V8 (`TestyGeo2V8.Kategorie`):
 Blok 128 m, sloupce po 0,25 m, z po 0,25 m (512 buněk na sloupec).
 
 ## Postup
-1. Na boxu: větev, rozšíření `--jen=GEO2V8 --seedy=49,7,100` (čas GEO1 a GEO2 zvlášť na blok, CSV po seedu).
+1. Na boxu: větev, rozšíření `--jen=GEO2V8 --seedy=49,7,100` (čas GEO1 a GEO2 zvlášť na blok, CSV po seedu). Čas GEO1 = stěnový čas paralelního `VyplnSloupec`; čas GEO2 sloupce = maximum času vlákna jen na `Sloupec` (bez klasifikace V8); kontext = `KontextBlokuE84.Sestav`. CSV: `rozdily-seed-{seed}.csv` a `casy.csv`.
 2. Na Janově PC (Windows 11): clone veřejného `https://github.com/Utalag/Willage_Client` do `C:\dev\Willage_Client` **bez tokenu**, checkout `geo2-v8-seedy`, `dotnet build` Release, `--jen=GEO2` (kontrola, že testy na Windows projdou), potom V8 na 3 seedech. Výstup do `docs/sjednoceni/reporty/geo2-v8-seedy-data/`.
 3. Výsledky zkopírovat na box (`CopyToBox`), zapsat sem včetně negativních, commit a push z boxu. Nic do main. Na Janově PC se nemění nic mimo `C:\dev\Willage_Client`.
 
