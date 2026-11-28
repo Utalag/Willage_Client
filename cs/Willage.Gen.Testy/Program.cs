@@ -53,6 +53,14 @@ if (jen == "GEO2V8L")
     Willage.Gen.Testy.V8.V8Ladeni.Sloupec(data, bo[0], bo[1], bo[2], bo[3]);
     return 0;
 }
+if (jen == "GEO2HRBENCH")
+{
+    // mikro-měření GeoVrstvy.Hranice (jednovláknově): --seed=7 --blok=x,y[,pocet]
+    string? A(string k) => args.FirstOrDefault(a => a.StartsWith(k))?[k.Length..];
+    var bo = A("--blok=")!.Split(',').Select(v => double.Parse(v, System.Globalization.CultureInfo.InvariantCulture)).ToArray();
+    TestyGeo2Pomaly.HraniceBench(long.Parse(A("--seed=") ?? "49"), bo[0], bo[1], bo.Length > 2 ? (int)bo[2] : 100000);
+    return 0;
+}
 if (jen == "GEO2POMALY")
 {
     // diagnostika pomalého bloku; --seed=7 --blok=ox,oy[,krokXy[,vlaken]] [--csv=soubor]

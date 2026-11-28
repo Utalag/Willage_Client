@@ -25,7 +25,7 @@ public static class TestyGeo2Pomaly
         double tKontext = sw.Elapsed.TotalSeconds;
         int n = (int)Math.Round(128 / krokXy), N = n * n;
         var cas = new double[N]; var bod = new int[N]; var chuze = new int[N]; var alok = new long[N]; var behy = new int[N]; var plati = new int[N]; var nejbl = new int[N]; var pred = new int[N]; var dot = new int[N]; var hran = new int[N]; var hranMs = new float[N]; var zp = new float[N];
-        var cpuVlakno = new List<double>();
+        var cpuVlakno = new List<double>(); var otisky = new ulong[N];
         ZasobnikVrstvySloupce.DiagCas = true;
         sw.Restart();
         Parallel.For(0, n, new ParallelOptions { MaxDegreeOfParallelism = vlaken }, () => (new Vzorek[512], new List<Beh>(), 0.0, Environment.CurrentManagedThreadId), (ix, _, st) =>
@@ -39,10 +39,13 @@ public static class TestyGeo2Pomaly
                 alok[i] = GC.GetAllocatedBytesForCurrentThread() - a0; bod[i] = (int)(SloupecGeo2.VolaniBod - b0); chuze[i] = (int)(KontaktniPasmo.KrokuChuze - c0);
                 cas[i] = s2.Elapsed.TotalSeconds; plati[i] = (int)(KontaktniPasmo.DiagPlati - p0); nejbl[i] = (int)(KontaktniPasmo.DiagNejblizsi - n0); pred[i] = (int)(KontaktniPasmo.DiagPred - r0); dot[i] = (int)(ZasobnikVrstvySloupce.DiagDotazy - d0); hran[i] = (int)(ZasobnikVrstvySloupce.DiagHranic - h0); hranMs[i] = (float)((ZasobnikVrstvySloupce.DiagTiku - t0) * 1e3 / Stopwatch.Frequency); t += cas[i]; zp[i] = (float)k.Povrch(x, y);
                 k.Behy(x, y, 128, bl); behy[i] = bl.Count;
+                ulong h = 0xCBF29CE484222325; foreach (var bt in System.Runtime.InteropServices.MemoryMarshal.AsBytes<Vzorek>(v2)) h = (h ^ bt) * 0x100000001B3; otisky[i] = h;
             }
             return (v2, bl, t, id);
         }, st => { lock (cpuVlakno) cpuVlakno.Add(st.Item3); });
         double wall = sw.Elapsed.TotalSeconds;
+        ulong otisek = 0; for (int i = 0; i < N; i++) otisek ^= (otisky[i] + (ulong)i * 0x9E3779B97F4A7C15UL) * 0xBF58476D1CE4E5B9UL;
+        Console.WriteLine($"  OTISK bloku (výstup GEO2 po sloupcích, FNV-1a, XOR přes sloupce): {otisek:X16}");
         Console.WriteLine($"- seed {seed}, blok ({ox}, {oy}), {n}×{n} sloupců, {vlaken} vláken: kontext {tKontext:F2} s, sloupce stěna {wall:F2} s, součet času sloupců {cas.Sum():F2} s");
         Console.WriteLine($"  součet času po vláknech: max {cpuVlakno.Max():F2} s, min {cpuVlakno.Min():F2} s");
         var idx = Enumerable.Range(0, N).OrderByDescending(i => cas[i]).ToArray(); double tot = cas.Sum();
@@ -74,6 +77,23 @@ public static class TestyGeo2Pomaly
             var ci = System.Globalization.CultureInfo.InvariantCulture;
             for (int i = 0; i < N; i++) w.WriteLine(string.Join(';', (ox + (i / n + 0.5) * krokXy).ToString("F3", ci), (oy + (i % n + 0.5) * krokXy).ToString("F3", ci), (cas[i] * 1e3).ToString("F4", ci), bod[i], chuze[i], behy[i], alok[i] / 1000, zp[i].ToString("F2", ci), plati[i], nejbl[i], pred[i], dot[i], hran[i], hranMs[i].ToString("F4", ci)));
         }
+    }
+
+    /// <summary>Mikro-měření <c>GeoVrstvy.Hranice</c> na n bodech z oblasti 128 × 128 m (jedno vlákno, po zahřátí).</summary>
+    public static void HraniceBench(long seed, double ox, double oy, int pocet)
+    {
+        var g = new GeologieCs(new ParametrySveta { Seed = seed }, DataSveta.Najdi(AppContext.BaseDirectory));
+        var rnd = new Random(1); var xs = new double[pocet]; var ys = new double[pocet];
+        for (int i = 0; i < pocet; i++) { xs[i] = ox + rnd.NextDouble() * 128; ys[i] = oy + rnd.NextDouble() * 128; }
+        for (int i = 0; i < 2000; i++) g.Geo.Hranice(xs[i], ys[i]);
+        long a0 = GC.GetAllocatedBytesForCurrentThread(); var sw = Stopwatch.StartNew(); long vrs = 0;
+        for (int i = 0; i < pocet; i++) vrs += g.Geo.Hranice(xs[i], ys[i]).Count;
+        double s = sw.Elapsed.TotalSeconds;
+        Console.WriteLine($"- Hranice seed {seed}, oblast ({ox}, {oy}): {pocet} volání, {s * 1e6 / pocet:F2} µs/volání, {(GC.GetAllocatedBytesForCurrentThread() - a0) / (double)pocet / 1e3:F1} kB/volání, vrstev v průměru {vrs / (double)pocet:F1}");
+        var w = g.Svet.Vahy(xs[0], ys[0]); sw.Restart();
+        for (int i = 0; i < pocet; i++) { g.Svet.Vahy(xs[i], ys[i]); } Console.WriteLine($"  Svet.Vahy {sw.Elapsed.TotalSeconds * 1e6 / pocet:F2} µs"); sw.Restart();
+        double q = 0; for (int i = 0; i < pocet; i++) q += g.Svet.VyskaW(xs[i], ys[i], g.Svet.Vahy(xs[i], ys[i])); Console.WriteLine($"  Vahy+VyskaW {sw.Elapsed.TotalSeconds * 1e6 / pocet:F2} µs"); sw.Restart();
+        for (int i = 0; i < pocet; i++) q += g.Svet.VyskaTvar(xs[i], ys[i]); Console.WriteLine($"  VyskaTvar {sw.Elapsed.TotalSeconds * 1e6 / pocet:F2} µs ({q:F0})");
     }
 
     private static double Korel(double[] a, double[] b)
