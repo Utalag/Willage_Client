@@ -91,8 +91,16 @@ public static class TestyGeo2V8
         T.Je(V8Blok.Otevrene.IsEmpty, "vzorek bloku (3904, 1344) po 2 m: 0 otevřených buněk");
     }
 
+    private static string? AdresarCsv(string? csv)
+    {
+        if (string.IsNullOrWhiteSpace(csv)) return null;
+        var full = Path.GetFullPath(csv);
+        return string.IsNullOrEmpty(Path.GetExtension(full)) ? full : Path.GetDirectoryName(full);
+    }
+
     public static void Spust(string data, double[]? jedenBlok, double krokXy, int vlaken, string? csv, long[]? seedy = null)
     {
+        if (string.IsNullOrWhiteSpace(csv)) csv = null;
         seedy ??= new long[] { 49 };
         T.Sekce($"GEO2 V8: rozdíly GEO2 × GEO1, seedy [{string.Join(", ", seedy)}], bloky 128 m, sloupce po {krokXy} m, z po 0,25 m, {vlaken} vláken");
         var d = DataSveta.Najdi(AppContext.BaseDirectory);
@@ -125,25 +133,22 @@ public static class TestyGeo2V8
                 Console.WriteLine($"  seed {seed} otevřená buňka: x {o.X:F3}, y {o.Y:F3}, z {o.Z:F3}, {o.Pricina}");
             var vysl = poradi.Select(n => (n, podle[n])).ToList();
             V8Zprava.Vypis(vysl, kat);
-            if (csv is not null)
+            var dirSeed = AdresarCsv(csv);
+            if (dirSeed is not null)
             {
-                var dir = Path.GetDirectoryName(Path.GetFullPath(csv));
-                var stem = Path.GetFileNameWithoutExtension(csv);
-                var ext = Path.GetExtension(csv);
-                if (string.IsNullOrEmpty(ext)) { dir = Path.GetFullPath(csv); stem = "rozdily"; ext = ".csv"; }
-                V8Zprava.Csv(Path.Combine(dir!, $"{stem}-seed-{seed}{ext}"), vysl, seed);
+                Directory.CreateDirectory(dirSeed);
+                V8Zprava.Csv(Path.Combine(dirSeed, $"rozdily-seed-{seed}.csv"), vysl, seed);
             }
             var vse = new V8Soucty(); foreach (var (_, s) in vysl) vse.Slouc(s);
             var ot = vse.PodleVerdiktu().GetValueOrDefault(Verdikt.Otevrene);
             Console.WriteLine($"  seed {seed}: otevřených buněk {ot:N0} z {vse.Bunek:N0} ({100.0 * ot / Math.Max(vse.Bunek, 1):F6} %)");
             T.Je(vse.Bunek > 0 && vse.PodleVerdiktu().Values.Sum() == vse.Ruznych, $"seed {seed}: součet verdiktů = všechny různé buňky");
         }
-        if (csv is not null)
+        var dirCasy = AdresarCsv(csv);
+        if (dirCasy is not null)
         {
-            var dir = Path.GetDirectoryName(Path.GetFullPath(csv));
-            if (string.IsNullOrEmpty(Path.GetExtension(csv))) dir = Path.GetFullPath(csv);
-            Directory.CreateDirectory(dir!);
-            File.WriteAllText(Path.Combine(dir!, "casy.csv"), casCsv.ToString());
+            Directory.CreateDirectory(dirCasy);
+            File.WriteAllText(Path.Combine(dirCasy, "casy.csv"), casCsv.ToString());
         }
     }
 }
