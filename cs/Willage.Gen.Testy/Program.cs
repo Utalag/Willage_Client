@@ -40,6 +40,18 @@ if (jen == "GEO2K5S")
     foreach (var b in TestyGeo2K5.StrmeBloky(g5.Svet, 10)) Console.WriteLine($"{b.X},{b.Y}: {b.N}");
     return 0;
 }
+if (jen == "GEO2VYKON")
+{
+    // výkon GEO1 / K3 / výchozí GEO2 na blocích V8; --opak=N --csv=cesta --stitek=text --blok=ox,oy[,krokXy[,vlaken]] (jinak všechny bloky)
+    string? A(string k) => args.FirstOrDefault(a => a.StartsWith(k))?[k.Length..];
+    var bo = A("--blok=")?.Split(',').Select(v => double.Parse(v, System.Globalization.CultureInfo.InvariantCulture)).ToArray();
+    int opak = int.Parse(A("--opak=") ?? "5");
+    double krok = bo is { Length: > 2 } ? bo[2] : double.Parse(A("--krok=") ?? "0.25", System.Globalization.CultureInfo.InvariantCulture);
+    int vl = bo is { Length: > 3 } ? (int)bo[3] : int.Parse(A("--vlaken=") ?? Environment.ProcessorCount.ToString());
+    Willage.Gen.Testy.Vykon.VykonMereni.Spust(data, opak, krok, vl, bo, A("--csv="), A("--stitek=") ?? "m");
+    Console.WriteLine($"OK {T.Ok}, chyb {T.Chyb}");
+    return T.Chyb == 0 ? 0 : 1;
+}
 if (jen == "GEO2K6")
 {
     TestyGeo2K6.Spust(data);
