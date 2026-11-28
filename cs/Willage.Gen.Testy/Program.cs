@@ -43,6 +43,7 @@ if (jen == "GEO2K5S")
 if (jen == "GEO2V8R")
 {
     TestyGeo2V8.RegreseSopka(data);
+TestyGeo2V8.RegreseSkarnJine(data);
     Console.WriteLine($"OK {T.Ok}, chyb {T.Chyb}");
     return T.Chyb == 0 ? 0 : 1;
 }
@@ -103,6 +104,7 @@ if (jen == "GEO2")
     TestyGeo2K5.Spust(data);
     TestyGeo2K6.Spust(data);
     TestyGeo2V8.RegreseSopka(data);
+TestyGeo2V8.RegreseSkarnJine(data);
     Console.WriteLine($"OK {T.Ok}, chyb {T.Chyb}");
     return T.Chyb == 0 ? 0 : 1;
 }
@@ -201,6 +203,7 @@ TestyGeo2K4.Spust(data);
 TestyGeo2K5.Spust(data);
 TestyGeo2K6.Spust(data);
 TestyGeo2V8.RegreseSopka(data);
+TestyGeo2V8.RegreseSkarnJine(data);
 
 Console.WriteLine($"OK {T.Ok}, chyb {T.Chyb}");
 return T.Chyb == 0 ? 0 : 1;

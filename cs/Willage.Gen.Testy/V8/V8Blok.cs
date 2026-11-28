@@ -41,7 +41,7 @@ public static class V8Blok
         var kp = (KontaktniPasmo)c.Udalosti[c.IndexUdalosti("skarn_kontakt")].Kontakt!;
         var karbonat = new bool[kat.MaxId + 1];
         foreach (var kl in SadaE84.Karbonaty) { var m = kat.PodleKlice(kl); if (m is not null) karbonat[m.Id] = true; }
-        var pod = new PodkladyKlasifikace { Skarn = kp.Plochy[0], IndexCocek = IndexUtvaruE84.Sestav(g0.Svet, DruhUtvaru.Cocka, o), Utvary = g0.Geo.Utvary, Karbonat = karbonat, SkarnId = kat.PodleKlice("skarn")!.Id };
+        var pod = new PodkladyKlasifikace { Skarn = kp.Plochy[0], IndexCocek = IndexUtvaruE84.Sestav(g0.Svet, DruhUtvaru.Cocka, o), Utvary = g0.Geo.Utvary, Karbonat = karbonat, SkarnId = kat.PodleKlice("skarn")!.Id, Pasmo = kp, Chron = c, IdxSkarn = c.IndexUdalosti("skarn_kontakt") };
         int n = (int)Math.Round(128 / krokXy);
         var celkem = new V8Soucty(); object zamek = new();
         Parallel.For(0, n, new ParallelOptions { MaxDegreeOfParallelism = vlaken }, () => (g0.Klon(), new V8Soucty()), (ix, _, st) =>
@@ -68,7 +68,7 @@ public static class V8Blok
                     double dh = double.PositiveInfinity; foreach (var h in hr) dh = Math.Min(dh, Math.Min(Math.Abs(z - h.Z0), Math.Abs(z - h.Z1)));
                     int vm = z > zPov1 ? -1 : VrstvySloupce.VrstvaMat(z, hr);
                     var rb = new RozdilBunky(x, y, z, m1[iz], v2[iz].Material, Zdroj1.Urci(g.Geo, feats!, hr, x, y, z, zPov1), z2.Urci(v2[iz]), zPov1, k.Povrch(x, y), dh, vm);
-                    var pc = Klasifikator.Urci(rb, pod); if (Verdikty.Z(pc) == Verdikt.Otevrene) Otevrene.Add((x, z: z, y: y, pc) is var q ? (q.Item1, q.Item3, q.Item2, q.pc) : default);
+                    var pc = Klasifikator.Urci(rb, pod); if (Verdikty.Z(pc) == Verdikt.Otevrene) Otevrene.Add((x, y, z, pc));
                     s.Pridej(rb, pc);
                 }
             }

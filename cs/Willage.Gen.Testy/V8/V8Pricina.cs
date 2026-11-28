@@ -10,7 +10,7 @@ public enum Pricina : byte
 {
     PovrchTolerance, HranicVrstvyTolerance,
     CockaObalka,
-    SkarnJenKarbonaty, SkarnPasmoDelsi, SkarnDiraGeo1, SkarnVPasmuTolerance, SkarnHraniceOdhad, SkarnJine,
+    SkarnJenKarbonaty, SkarnPasmoDelsi, SkarnDiraGeo1, SkarnVPasmuTolerance, SkarnHraniceOdhad, SkarnHostitelOkoli, SkarnJine,
     PoradiTeles, HostitelSkarn, PravidloZdroje,
     SopkaRozdil, KrasRozdil,
     Nevysvetleno,
@@ -22,6 +22,7 @@ public static class Verdikty
     public static Verdikt Z(Pricina p) => p switch
     {
         Pricina.PovrchTolerance or Pricina.HranicVrstvyTolerance or Pricina.SkarnVPasmuTolerance or Pricina.SkarnHraniceOdhad => Verdikt.Tolerance,
+        Pricina.SkarnHostitelOkoli => Verdikt.DleKontraktu,
         Pricina.CockaObalka or Pricina.SkarnPasmoDelsi or Pricina.SkarnDiraGeo1 => Verdikt.Zlepseni,
         Pricina.SkarnJenKarbonaty or Pricina.PoradiTeles or Pricina.HostitelSkarn or Pricina.PravidloZdroje => Verdikt.DleKontraktu,
         _ => Verdikt.Otevrene,
@@ -40,6 +41,9 @@ public sealed class PodkladyKlasifikace
     public required Utvary Utvary { get; init; }
     public required bool[] Karbonat { get; init; }
     public required int SkarnId { get; init; }
+    public required KontaktniPasmo Pasmo { get; init; }
+    public required ChronologieGeo2 Chron { get; init; }
+    public required int IdxSkarn { get; init; }
 }
 
 public static class Klasifikator
@@ -80,10 +84,25 @@ public static class Klasifikator
             if (r.VrstvaId >= 0 && r.VrstvaId < p.Karbonat.Length && !p.Karbonat[r.VrstvaId]) return Pricina.SkarnJenKarbonaty;
             if (d > hi) return Pricina.SkarnPasmoDelsi;
             if (d >= lo) return Pricina.SkarnVPasmuTolerance;
-            return Pricina.SkarnJine;
+            return HostitelOkoliSelhal(r, p) ? Pricina.SkarnHostitelOkoli : Pricina.SkarnJine;
         }
         if (d < lo) return Pricina.SkarnDiraGeo1;
         if (d <= hi) return Pricina.SkarnVPasmuTolerance;
         return Pricina.SkarnJine;
+    }
+
+    /// <summary>
+    /// Skarn GEO1 v jistém pásmu (d &lt; dolní mez), GEO2 ne: jediná podmínka kontaktu 2.5, která selhává, je <c>hostitel_okoli</c> v q′ = π + η·u (R5). Na okraji plochy cíle
+    /// (boční hranice horniny) padne q′ o η = 0,125 m za okraj do jiné horniny. Silný test: strana, dosah a šířka pásma platí, <c>Plati</c> přesto vrací false.
+    /// </summary>
+    private static bool HostitelOkoliSelhal(in RozdilBunky r, PodkladyKlasifikace p)
+    {
+        var kp = p.Pasmo;
+        if (kp.Parametry.HostitelOkoli is null) return false;
+        var st = p.Chron.BodPred(p.IdxSkarn, r.X, r.Y, r.Z, r.ZPov2);
+        bool vT = kp.VCili(st);
+        if (kp.Parametry.Strana == StranaKontaktu.Vne && vT || kp.Parametry.Strana == StranaKontaktu.Uvnitr && !vT) return false;
+        if (!kp.Nejblizsi(r.X, r.Y, r.Z, out var b) || b.D > kp.Sirka(r.X, r.Y, r.Z)) return false;
+        return !kp.Plati(r.X, r.Y, r.Z, st, p.Chron, p.IdxSkarn, r.ZPov2, out _);
     }
 }

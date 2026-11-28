@@ -68,7 +68,8 @@ před opravou 1 171 rozdílů, po opravě 0. Po opravě sopky: svah sopky 0,023 
 | `PoradiTeles` | dle kontraktu (stáří, 2.7) | 1 868 | 0,02 % | překryv těles rozhoduje stáří, ne nejmenší SDF (komín > čočka / dóm / žíla) |
 | `SkarnDiraGeo1` | **zlepšení (měřeno)** | 1 496 | 0,017 % | v karbonátu uvnitř jistého pásma (D < 0,625 m) GEO1 skarn nemá, GEO2 ano |
 | `CockaObalka` | **zlepšení (měřeno)** | 1 192 | 0,013 % | oprava obálky čočky (GEO1 ořezává) |
-| `SkarnJine` | **otevřené** | 2 | 0,00002 % | GEO1 skarn, GEO2 karbonát, bez odhadu hranice – neprošetřeno (2 buňky, blok (3904, 1344)) |
+| `SkarnHostitelOkoli` | dle kontraktu (2.5, R5) – k potvrzení | 2 | 0,00002 % | GEO1 skarn, GEO2 karbonát; D < 0,625 m, ale `hostitel_okoli` v q′ = π + η·u je za bočním okrajem plochy cíle ortorula (prošetřeno, `geo2-skarnjine-prop.md`) |
+| `SkarnJine` | **otevřené** | 0 | 0 % | po prošetření žádná buňka |
 
 Nezávislé měření kvality skarnu proti kontraktu (sloupce se skarnem v aspoň jednom systému; pásmo po normále [0,625; 2,375] m, O1):
 

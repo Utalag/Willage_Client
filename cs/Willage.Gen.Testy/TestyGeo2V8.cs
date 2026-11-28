@@ -56,6 +56,41 @@ public static class TestyGeo2V8
         T.Je(bunek > 10_000 && ruzne == 0, "sopka: raster z běhů == Bod u povrchu kuželu");
     }
 
+    /// <summary>
+    /// Regrese `SkarnJine` (blok 3904, 1344): 2 buňky, kde GEO1 dává skarn, GEO2 karbonát. Příčina není chyba GEO2: v q′ = π + η·u (kontrakt 2.5, R5) je za bočním okrajem granitové plochy
+    /// ortorula, `hostitel_okoli` selže. Test: obě buňky GEO1 skarn / GEO2 karbonát, klasifikace SkarnHostitelOkoli, a vzorek bloku po 2 m nemá otevřenou buňku.
+    /// </summary>
+    public static void RegreseSkarnJine(string data)
+    {
+        T.Sekce("GEO2 V8: SkarnJine – okraj plochy cíle, hostitel_okoli v q′ (regrese)");
+        var d = DataSveta.Najdi(AppContext.BaseDirectory); var kat = KatalogGeo2.ZeSouboru(Path.Combine(data, "materials-catalog-v1.json"));
+        var g = new GeologieCs(new ParametrySveta(), d);
+        double ox = 3904, oy = 1344;
+        var bunky = new[] { (X: 3942.625, Y: 1378.875, Z: 37.125), (X: 3944.125, Y: 1382.125, Z: 37.375) };
+        var (k, r) = Willage.Gen.Geo2.E84.KontextBlokuE84.Sestav(g.Geo, kat, Willage.Gen.Geo2.E84.SadaE84.Json(d), OblastBloku.Ctverec(ox, oy, 128), null, Environment.ProcessorCount);
+        T.Je(r.Ok, "kontext bloku (3904, 1344)");
+        if (!r.Ok) return;
+        var c = k.Chronologie; int iu = c.IndexUdalosti("skarn_kontakt"); var kp = (KontaktniPasmo)c.Udalosti[iu].Kontakt!; int skarn = kat.PodleKlice("skarn")!.Id;
+        var v = new Vzorek[512];
+        foreach (var b in bunky)
+        {
+            var m1 = g.Geo.VyplnSloupec(b.X, b.Y, 0.25, 128); k.Sloupec(b.X, b.Y, 0, 0.25, v);
+            int iz = (int)Math.Floor(b.Z / 0.25);
+            double zp = k.Povrch(b.X, b.Y); var st = c.BodPred(iu, b.X, b.Y, b.Z, zp);
+            bool je = kp.Nejblizsi(b.X, b.Y, b.Z, out var bp);
+            bool plati = kp.Plati(b.X, b.Y, b.Z, st, c, iu, zp, out bool odhad);
+            Console.WriteLine($"  ({b.X}, {b.Y}, {b.Z}): GEO1 {kat.PodleId(m1[iz])?.Klic}, GEO2 {kat.PodleId(v[iz].Material)?.Klic}, D {bp.D:F3}, odhad {odhad}, pásmo platí {plati}");
+            T.Je(m1[iz] == skarn && v[iz].Material != skarn, $"buňka ({b.X}, {b.Y}, {b.Z}): GEO1 skarn, GEO2 ne");
+            T.Je(je && !odhad && bp.D < 0.625 && !plati, $"buňka ({b.X}, {b.Y}, {b.Z}): D < 0,625 m bez odhadu, pásmo neplatí (selhává hostitel_okoli)");
+            T.Je(v[iz].Material == c.Vzorek(b.X, b.Y, b.Z, zp).Material, $"buňka ({b.X}, {b.Y}, {b.Z}): raster == Bod");
+        }
+        while (V8Blok.Otevrene.TryTake(out _)) { }
+        var s = V8Blok.Porovnej(g, kat, d, ox, oy, 2.0, Environment.ProcessorCount);
+        var pc = s.PodlePriciny();
+        Console.WriteLine($"  vzorek 2 m: buněk {s.Bunek:N0}, různých {s.Ruznych:N0}, otevřených {V8Blok.Otevrene.Count}");
+        T.Je(V8Blok.Otevrene.IsEmpty, "vzorek bloku (3904, 1344) po 2 m: 0 otevřených buněk");
+    }
+
     public static void Spust(string data, double[]? jedenBlok, double krokXy, int vlaken, string? csv)
     {
         T.Sekce($"GEO2 V8: rozdíly GEO2 × GEO1 po kategoriích (bloky 128 m, sloupce po {krokXy} m, z po 0,25 m, {vlaken} vláken)");
@@ -72,6 +107,7 @@ public static class TestyGeo2V8
             cil.Slouc(s);
             Console.WriteLine($"  blok ({x}, {y}) [{nazev}]: {s.Bunek:N0} buněk, různých {s.Ruznych:N0} ({100.0 * s.Ruznych / s.Bunek:F4} %), {sw.Elapsed.TotalSeconds:F1} s");
         }
+        foreach (var o in V8Blok.Otevrene.OrderBy(o => o.X).ThenBy(o => o.Y).ThenBy(o => o.Z).Take(50)) Console.WriteLine($"  otevřená buňka: x {o.X:F3}, y {o.Y:F3}, z {o.Z:F3}, {o.Pricina}");
         var vysl = poradi.Select(n => (n, podle[n])).ToList();
         V8Zprava.Vypis(vysl, kat);
         if (csv is not null) V8Zprava.Csv(csv, vysl);
