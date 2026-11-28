@@ -22,6 +22,9 @@ public sealed class ZasobnikVrstvySloupce : ITvarZasobnikuSHranicemi, IIntervaly
     }
     [ThreadStatic] private static Kes? t_kes;
     private long _hranic;
+    /// <summary>Diagnostika (lokální vláknu): dotazy na sloupec hranic, volání <see cref="GeoVrstvy.Hranice"/> (míjení paměti) a jejich čas v ticích (jen s <see cref="DiagCas"/>).</summary>
+    [ThreadStatic] public static long DiagDotazy, DiagHranic, DiagTiku;
+    public static bool DiagCas;
     /// <summary>Počet volání <see cref="GeoVrstvy.Hranice"/> pro bodový sloupec (diagnostika V6; jen přibližně při více vláknech).</summary>
     public long VolaniHranic => Interlocked.Read(ref _hranic);
 
@@ -31,9 +34,12 @@ public sealed class ZasobnikVrstvySloupce : ITvarZasobnikuSHranicemi, IIntervaly
     {
         var k = t_kes ??= new Kes();
         if (!ReferenceEquals(k.Vlastnik, this)) k.Pro(this);
+        DiagDotazy++;
         for (int i = 0; i < N; i++) if (k.Cx[i] == x && k.Cy[i] == y) return k.Hr[i];
         int d = k.Dalsi; k.Dalsi = (d + 1) % N;
-        k.Hr[d] = _g.Hranice(x, y); k.Cx[d] = x; k.Cy[d] = y;
+        if (DiagCas) { long t0 = System.Diagnostics.Stopwatch.GetTimestamp(); k.Hr[d] = _g.Hranice(x, y); DiagTiku += System.Diagnostics.Stopwatch.GetTimestamp() - t0; }
+        else k.Hr[d] = _g.Hranice(x, y);
+        k.Cx[d] = x; k.Cy[d] = y; DiagHranic++;
         _hranic++;
         return k.Hr[d];
     }

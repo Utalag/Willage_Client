@@ -20,6 +20,8 @@ public sealed class KontaktniPasmo : IKontaktniPasmo, IIntervalyKontaktu
     [ThreadStatic] private static List<(double A, double B)>? t_rozsah;
     /// <summary>Diagnostika (lokální vláknu): vyhodnocení d̃ − w při chůzi sloupcem (K4).</summary>
     [ThreadStatic] public static long KrokuChuze;
+    /// <summary>Diagnostika (lokální vláknu): volání <see cref="Plati"/>, <see cref="Nejblizsi"/> a <see cref="Pred"/> (hostitel okolí).</summary>
+    [ThreadStatic] public static long DiagPlati, DiagNejblizsi, DiagPred;
 
     private const double MinU = 1.0 / 1024.0;
     private readonly ParametryKontaktu _p;
@@ -61,6 +63,7 @@ public sealed class KontaktniPasmo : IKontaktniPasmo, IIntervalyKontaktu
     /// <summary>Nejbližší bod S přes všechny plochy cíle (shoda: dřívější plocha v pořadí cíle).</summary>
     public bool Nejblizsi(double x, double y, double z, out BodPlochy b)
     {
+        DiagNejblizsi++;
         b = default; bool ok = false; double r = RMaxM;
         foreach (var pl in _plochy)
             if (pl.Nejblizsi(x, y, z, r, out var c) && (!ok || c.D < b.D)) { b = c; ok = true; r = c.D; }
@@ -69,7 +72,7 @@ public sealed class KontaktniPasmo : IKontaktniPasmo, IIntervalyKontaktu
 
     public bool Plati(double x, double y, double z, in StavBodu stav, ChronologieGeo2 c, int index, double zPov, out bool odhad)
     {
-        odhad = false;
+        odhad = false; DiagPlati++;
         bool vT = VCili(stav);
         if (_p.Strana == StranaKontaktu.Vne && vT) return false;
         if (_p.Strana == StranaKontaktu.Uvnitr && !vT) return false;
@@ -134,6 +137,9 @@ public sealed class KontaktniPasmo : IKontaktniPasmo, IIntervalyKontaktu
         }
     }
 
-    private static StavBodu Pred(ChronologieGeo2 c, int index, double x, double y, double z, double zPov) =>
-        c.BodPredSPovrchemSloupce(index, x, y, z, zPov);
+    private static StavBodu Pred(ChronologieGeo2 c, int index, double x, double y, double z, double zPov)
+    {
+        DiagPred++;
+        return c.BodPredSPovrchemSloupce(index, x, y, z, zPov);
+    }
 }

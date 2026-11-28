@@ -53,6 +53,14 @@ if (jen == "GEO2V8L")
     Willage.Gen.Testy.V8.V8Ladeni.Sloupec(data, bo[0], bo[1], bo[2], bo[3]);
     return 0;
 }
+if (jen == "GEO2POMALY")
+{
+    // diagnostika pomalého bloku; --seed=7 --blok=ox,oy[,krokXy[,vlaken]] [--csv=soubor]
+    string? A(string k) => args.FirstOrDefault(a => a.StartsWith(k))?[k.Length..];
+    var bo = A("--blok=")!.Split(',').Select(v => double.Parse(v, System.Globalization.CultureInfo.InvariantCulture)).ToArray();
+    TestyGeo2Pomaly.Spust(data, long.Parse(A("--seed=") ?? "49"), bo[0], bo[1], bo.Length > 2 ? bo[2] : 0.25, bo.Length > 3 ? (int)bo[3] : Environment.ProcessorCount, A("--csv="));
+    return 0;
+}
 if (jen == "GEO2V8")
 {
     // V8: rozdíly GEO2 × GEO1 po kategoriích; --seedy=49,7,100 (výchozí 49); --blok=ox,oy[,krokXy[,vlaken]] jen jeden blok; --csv=cesta nebo adresář
